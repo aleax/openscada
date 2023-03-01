@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="../index.html"><img alt="OpenSCADA" src="../../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="../index.html"><img src="../../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/Vision</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/Vision.html" title="Модули/Vision (93% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Vision.html" title="Модулі/Vision (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/Vision.html" title="Модули/Vision (90% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Vision.html" title="Модулі/Vision (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> </td>
 <td> Operation user interface (Qt)
 </td>
-<td> 8.0 </td>
+<td> 8.6 </td>
 <td> GPL2 </td>
 <td> ui_Vision.so </td>
 <td> en,uk,ru,de </td>
@@ -126,7 +126,8 @@
 </p>
 <ul><li> Tree of the widgets libraries. Using the navigator you can quickly find the needed widget or library and to do with them necessary operations. The following operations are implemented: add, delete, copy, call for settings of the widgets and libraries, cleaning and call for visual editing of the widget. For flexible control, the context menu is supported with the following items:
 <ul><li> "New library" — creation of the new library.</li>
-<li> "Add visual item" — adding of the visual element to the library.</li>
+<li> "Add visual item" — adding of the visual element to the library-widget.</li>
+<li> "... from the Library" — submenu of adding of the visual element from other libraries to the library-widget.</li>
 <li> "Delete visual item" — deleting of the visual element from the library.</li>
 <li> "Clear visual item changes" — clearing of the visual element with the inheritance of modified properties or setting them by default.</li>
 <li> "Lower down visual item changes" — lowering down of the visual element changes to the parent, that will be used by other inheritances.</li>
@@ -143,6 +144,7 @@
 <ul><li> "Run project" — starting up of the chosen project execution.</li>
 <li> "New project" — creation of the new project.</li>
 <li> "Add visual item" — adding of the visual element to the project-page.</li>
+<li> "... from the Library" — submenu of adding of the visual element from other libraries to the project-page.</li>
 <li> "Delete visual item" — deleting of the visual element from the project-page.</li>
 <li> "Clear visual item changes" — clearing of the visual element with the inheritance of modified properties or setting them by default.</li>
 <li> "Lower down visual item changes" — lowering down of the visual element changes to the parent, that will be used by other inheritances.</li>
@@ -267,7 +269,7 @@
 </p><p>To edit properties of the visual elements there are two dialogues. The first dialogue allows you to edit the properties of containers of the visual elements, (Fig.2.b) — widgets libraries and projects. The second dialogue serves to edit the properties of the visual elements (Fig.2.d). Changes, made in the dialogues, at once, get to the VCA engine. To save these changes to the database, or restore from the database, it is necessary to use the appropriate tools of the main development window.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:622px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg.png"><img class="thumbimage" height="631" src="../files/Vision_wlbpg.png" width="620" /></a>  <div class="thumbcaption">Fig.2.b. Dialogue of editing of the properties of the containers of the visual elements.</div></div></div></div>
-<p>With the help of the main tab of that dialog you can set:
+<p>With the help of the main tab of that dialog you can obtain:
 </p>
 <ul><li> State of the elements' container, that is: "Enabled", database of the container (with tracking the availability of the data in different storages and providing the sequentially removing duplicates), usage counter, date and time of the last modification.</li></ul>
 <dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The objects still support of specifying the spare storage addresses with tables before you rename the table in the standard form "<b>wlb_{ObjID}</b>" for the widget libraries and "<b>prj_{ObjID}</b>" for the projects.</dd></dl>
@@ -278,18 +280,23 @@
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg_diag.png"><img class="thumbimage" height="382" src="../files/Vision_wlbpg_diag.png" width="773" /></a>  <div class="thumbcaption">Fig.2.c. Tab "Diagnostics" of the project.</div></div></div></div>
 <p>From this tab you can, for obtain the diagnostic messages: select the time, refresh to the current tiem and select the size-deep.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:615px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wdg.png"><img class="thumbimage" height="770" src="../files/Vision_wdg.png" width="613" /></a>  <div class="thumbcaption">Fig.2.d. Dialogue of editing of the properties of the visual elements.</div></div></div></div>
-<p>With the help of the main tab of that dialog you can set:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:616px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wdg.png"><img class="thumbimage" height="789" src="../files/Vision_wdg.png" width="614" /></a>  <div class="thumbcaption">Fig.2.d. Dialogue of editing of the properties of the visual elements.</div></div></div></div>
+<p>With the help of the main tab of that dialog you can obtain:
 </p>
-<ul><li> State of the element, that is: "Enabled", parent widget, page type (for pages of the project), usage counter, date and time of the last modification.</li>
-<li> Identifier, root, path, name and description of the element.</li></ul>
+<ul><li> State of the element; for information: "Enabled", counter of the use, date of the last modification, state of the calculation procedure; for control: icon, "Enabled", the page type (for pages), parent element.</li>
+<li> Identifier, root, path, name and description of the element.</li>
+<li> Periodic processing in milliseconds — for common control of the periodic processing of any element including ones who have not any calculation procedure, but that value can be used in the cascade for child elements. There reserved the special values:
+<ul><li> <b>0</b> — if you want the session period processing;</li>
+<li> <b>-1</b> — if you want to use the parent widget/page/project processing period in the cascade;</li>
+<li> <b>-2</b> — for disable the periodic processing in whole.</li></ul></li></ul>
 <p>Dialogue of editing the properties of the containers of the visual elements contains two tabs: configuration tab of the the main parameters (Fig.2.b) and configuration tab of the container resources (Fig.2.e).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:395px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg_mime.png"><img class="thumbimage" height="545" src="../files/Vision_wlbpg_mime.png" width="393" /></a>  <div class="thumbcaption">Fig.2.e. Editing tab of the container resources of the visual element.</div></div></div></div>
-<p>Dialogue of editing the properties of the visual elements contains four tabs: configuration tab of the main parameters (Fig.2.b), tab of the element attributes (Fig.2.f), tab of the element processing (Fig.2.g) and tab of the element links (Fig.2.h). At different levels of the visual elements hierarchy some tabs can be available, but some are not.
+<p>Dialogue of editing the properties of the visual elements contains four tabs: configuration tab of the main parameters (Fig.2.b), tab of the element attributes (Fig.2.f), tab of the element processing (Fig.2.g) and tab of the element links (Fig.2.h). At different levels of the visual elements hierarchy some tabs can be available, but some are not. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The attribute name's rows in the "Processing" tab after the first one treat as help.
+</p><p>Text attribute fields support the syntax highlighting, the rules are transmitted in the form of regular expressions from the control interface or can be builtin to the text value as a commentary in <a href="../API.html#SnthHgl" title="Special:MyLanguage/Documents/API">the XML-tag "SnthHgl"</a>.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:631px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wdg_attr.png"><img class="thumbimage" height="529" src="../files/Vision_wdg_attr.png" width="629" /></a>  <div class="thumbcaption">Fig.2.f. Attributes tab of the editing dialogue of the properties of the visual element.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:772px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wdg_prc.png"><img class="thumbimage" height="631" src="../files/Vision_wdg_prc.png" width="770" /></a>  <div class="thumbcaption">Fig.2.g. Processing tab of the editing dialogue of the properties of the visual element.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:772px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wdg_prc.png"><img class="thumbimage" height="661" src="../files/Vision_wdg_prc.png" width="770" /></a>  <div class="thumbcaption">Fig.2.g. Processing tab of the editing dialogue of the properties of the visual element.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:631px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wdg_lnk.png"><img class="thumbimage" height="577" src="../files/Vision_wdg_lnk.png" width="629" /></a>  <div class="thumbcaption">Fig.2.g. Links tab of the editing dialog of the properties of the visual element.</div></div></div></div>
 <h3><span class="mw-headline" id="Styles"><span class="mw-headline-number">2.1</span> Styles</span></h3>
 <p>It knows that people can have individual features in the perception of graphical information. If these features are not taken into account, it is possible to obtain the rejection and abruption of the user to the interface of VC. This rejection and abruption can lead to fatal errors in the management of TP, as well as traumatize the human by the continuous work with the interface. In SCADA systems, arrangements have been made that regulate the requirements for creating the unified UI interface, which is normally perceived by most people. This is practically eliminates the features of people with some deviations.
@@ -951,20 +958,23 @@ An example of editing a frame based on this primitive is shown in Figure 2.a, an
 <p>To set up own behavior in non-obvious situations, the module provides the ability to configure individual parameters through the control interface of OpenSCADA (Fig.6).
 </p>
 <ul><li> Module state: "Running", number of individual displays in the library of Qt and main widows list.</li>
-<li> Station of the VCA engine of the remote OpenSCADA and the link to the configuration page of the external OpenSCADA stations.</li>
+<li> Exit when closing the last running project — useful for solutions that are immediately launched on the project interface.</li>
+<li> Reset widget styles to common — required for some widget styles like "gtk" in some specific widgets in run mode, like buttons for the background color and images.</li>
+<li> Lifetime and maximum number of the cached pages. The visualiser provides acceleration of the user interface placing previously opened pages into the cache, to control the storage time and maximum number of the pages in which this properties are intended. Indication of the zero value in general excludes cleaning the cache.</li>
+<li> The link to the configuration page of the external OpenSCADA stations and the station of the VCA-engine of the remote OpenSCADA, where reserved the special items:
+<ul><li> "&lt;Local&gt;" — the current local station;</li>
+<li> "&lt;Select&gt;" — use for querying the station together user and password at the module generic call, useful at presence of many control stations and for opening several of them simultaneously.</li></ul></li>
 <li> Starting user — points on behalf of what user to open the module window without requiring the password, for local station. For remote station it is points to an user different from the typical one, pointed into the host configuration.</li>
 <li> User password (remote station) — password of the user different from the typical one, pointed into the host configuration.</li>
-<li> Connection recovery time, in seconds — indicates the time that the lost remote connection is restored.</li>
-<li> Lifetime and maximum number of the cached pages. The visualizer provides acceleration of the user interface placing previously opened pages into the cache, to control the storage time and maximum number of the pages in which this properties are intended. Indication of the zero value in general excludes cleaning the cache.</li>
-<li> List of the projects for launch, separated by symbol ';', for their automatic execution with the launch of the module. To provide the possibility to indicate the opening of the window of the project execution on the desired display of many display systems, the recording format of the project "PrjName-1" is provided, where 1 — the number of the target display. To connect to the background or another open session use "<b>ses_ {SesID}</b>".</li>
-<li> Exit when closing the last running project — useful for solutions that are immediately launched on the project interface.</li>
-<li> Reset widget styles to common — required for some widget styles like "gtk" in some specific widgets in run mode, like buttons for the background color and images.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1057px;"><a class="image" href="http://oscada.org/wiki/File:Vision_cfg.png"><img class="thumbimage" height="567" src="../files/Vision_cfg.png" width="1055" /></a>  <div class="thumbcaption">Fig.6. Configuration page of the module.</div></div></div></div>
+<li> Connection recovery time, in seconds (remote station) — indicates the time that the lost remote connection is restored.</li>
+<li> List of the projects for launch, separated by symbol ';', for their automatic execution with the launch of the module. To provide the possibility to indicate the opening of the window of the project execution on the desired display of many display systems, the recording format of the project "PrjName-1" is provided, where 1 — the number of the target display. To connect to the background or another open session use "<b>ses_ {SesID}</b>".</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The display selection function is possible for non-virtual and non-duplicate desktops, that is, when using xinerma or NVidia in the appropriate mode. Technically, the Qt-function <i>screen()</i> should return various display widget objects by their numbers.</dd></dl>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:921px;"><a class="image" href="http://oscada.org/wiki/File:Vision_cfg.png"><img class="thumbimage" height="568" src="../files/Vision_cfg.png" width="919" /></a>  <div class="thumbcaption">Fig.6. Configuration page of the module.</div></div></div></div>
 
 
 
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/en">Modules/Vision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/en">Modules/Vision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> </td></tr></table></body>
 </html>

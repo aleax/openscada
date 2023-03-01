@@ -1340,7 +1340,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
     string u, l;
     if(sw) { u = sw->ownerSess()->reqUser(); l = sw->ownerSess()->reqLang(); }
 
-    //Make document after time set
+    //Make document after the time set
     if(cfg.id() == "time" && (cfg.getI() != prev.getI() || (!cfg.getI() && prev.getI()))) {
 	if(!cfg.getI() && prev.getI()) cfg.setI(prev.getI(),false,true);
 	try {

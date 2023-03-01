@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="../index.html"><img alt="OpenSCADA" src="../../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="../index.html"><img src="../../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/ModBus</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/ModBus.html" title="Модули/ModBus (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/ModBus.html" title="Модулі/ModBus (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/ModBus.html" title="Модули/ModBus (92% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/ModBus.html" title="Модулі/ModBus (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 3.4 </td>
+<td> 3.6 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -50,7 +50,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 2.9 </td>
+<td> 2.10 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -65,8 +65,9 @@
 <tr>
 <td colspan="9"> Provides implementation of the ModBus protocols. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.
 <ul><li> <b>Total complexity:</b> &gt; 20 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
-<li> <b>To Do:</b></li></ul>
-<dl><dd> - append the option 'L' for the register bytes in little-endian (LE) instead the standard big-endian (BE) order.</dd></dl>
+<li> <b><a href="../To_do.html" title="Special:MyLanguage/Works/To do">To Do</a>:</b></li></ul>
+<dl><dd> + adapt to the new common-unified <a href="../User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">output transport connection function outAt()</a> in the controller object transport address field;</dd>
+<dd> + append by the option "e" for the register endian switch to LE for generic and BE for strings.</dd></dl>
 </td></tr></table>
 <p>ModBus — communication protocol based on the client-server architecture. It was developed by Modicon for using in the programmable logic controllers (PLC). It became the de facto standard in the industry and is widely used for the connection of industrial electronic equipment. Used to transfer data via serial line RS-485, RS-422, RS-232, and network TCP/IP. Currently supported non-profit organization ModBus-IDA.
 </p><p>There are three modes of the protocol: ModBus/RTU, ModBus/ASCII and ModBus/TCP. The first two use the serial communication lines (mostly RS-485, less RS-422/RS-232), the last uses TCP/IP network to transfer data.
@@ -205,7 +206,7 @@
 <li> <b>C{N}[w]</b>, <b>CI{N}[w]</b>, <b>C:{N}[:w]</b>, <b>CI:{N}[:w]</b> — coil and input coil.</li></ul></dd>
 <dd>Where:
 <ul><li> <b>{N}</b> — ModBus device's data address (decimal, hexadecimal or octal) [0...65535];</li>
-<li> <b>w~</b> — flags: write mode 'w', registers order inversion '~'.</li></ul></dd>
+<li> <b>w~e</b> — flags: write mode 'w', registers order inversion '~', register 'e'ndian toggle (to LE in generic and BE for strings).</li></ul></dd>
 <dd>Examples:
 <dl><dd>"R0x300w" — register access;</dd>
 <dd>"C100w" — coil access, allowed to write;</dd>
@@ -271,7 +272,7 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <h3><span class="mw-headline" id="Controller_object"><span class="mw-headline-number">3.1</span> Controller object</span></h3>
 <p>To add a data source of ModBus the controller object of OpenSCADA creates and configures. An example of a configuration tab for a controller object of this type is shown in Figure 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_cntr.png"><img class="thumbimage" height="837" src="../files/ModBus_cntr.png" width="808" /></a>  <div class="thumbcaption">Fig.8. Configuration tab of a controller object.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_cntr.png"><img class="thumbimage" height="909" src="../files/ModBus_cntr.png" width="773" /></a>  <div class="thumbcaption">Fig.8. Configuration tab of a controller object.</div></div></div></div>
 <p>Using this tab you can set:
 </p>
 <ul><li> The state of the controller object, as follows: Status, "Enabled", "Running" and the name of the database containing the configuration.</li></ul>
@@ -281,7 +282,9 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <li> Names of tables of storing the configuration of the parameters of the controller object for standard and logical types.</li>
 <li> Policy of scheduling and priority of the data acquisition task.</li>
 <li> ModBus protocol, used for requesting the real device (TCP/IP, RTU or ASCII).</li>
-<li> Address of the output transport from a list of configured <a href="../Program_manual.html#TransportOut" title="Special:MyLanguage/Documents/Program manual">output transports</a> in the "Transports" subsystem of OpenSCADA. Default port of the ModuBus/TCP is 502. The field may be set to empty and be changed at the runtime.</li>
+<li> Address of <a href="../Program_manual.html#TransportOut" title="Special:MyLanguage/Documents/Program manual">the output transport</a> using the unified connection with navigation. Default port of the ModuBus/TCP is 502. The field may be set to empty and be changed at the runtime. Format of the address is:
+<ul><li> "<b>{TrModule}.[out_]{TrID}[:{TrAddr}]</b>" — typical output with automatic creation <i>TrID</i> at it missing and providing <i>TrAddr</i>;</li>
+<li> "<b>{TrModule}.in_{TrID}:{RemConId}</b>" — initiative input with the connection identifier in <i>RemConId</i>.</li></ul></li>
 <li> ModBus destination node. In the case of protocols RTU and ASCII this is the unique address of the physical device, and when TCP/IP this is the identifier of the unity.</li>
 <li> Merging of the data fragments. Standard functions <b>1</b>-<b>4</b> let to request at once multiple adjacent registers or bits. This strategy often allows to optimize the traffic and time. However, the required registers are not always located adjacent to each other, this option allows you to gather them in blocks of up to 100 registers, or 1600 bits.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Installing of this parameter must be approached with caution, since not all devices support access to the registers between fragments.</dd></dl>
@@ -302,14 +305,14 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <h4><span class="mw-headline" id="Standard_.28std.29"><span class="mw-headline-number">3.2.1</span> Standard (std)</span></h4>
 <p>Main page of configuration parameters of the standard type is shown in Figure 9.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:670px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm.png"><img class="thumbimage" height="656" src="../files/ModBus_prm.png" width="668" /></a>  <div class="thumbcaption">Fig.9. Configuration tab of the standard parameter type.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:779px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm.png"><img class="thumbimage" height="676" src="../files/ModBus_prm.png" width="777" /></a>  <div class="thumbcaption">Fig.9. Configuration tab of the standard parameter type.</div></div></div></div>
 <p>One attribute line in the parameter of the attributes list can be written as "<b>{dt}:{numb}[:{flg}[:{id}[:{name}]]]</b>".<br />
 Where:
 </p>
 <ul><li> <i>dt</i> — Modbus data type ("R"—register[3,6(16)], "C"—coil[1,5(15)], "RI" — input register[4], "CI"—input coil[2]);</li></ul>
-<dl><dd>"R" and "RI" can be expanded by the suffixes: "i2"—Int16, "i4"—Int32, "i8"—Int64, "u2"—UInt16, "u4"—UInt32, "f"—Float, "d"—Double, "b5"—Bit5, "b"—Bit in address, "s"—String (size by default is 10 and up to 100 registers);</dd></dl>
+<dl><dd>"R" and "RI" can be expanded by the suffixes: "i2"—Int16, "i4"—Int32, "i8"—Int64, "u2"—UInt16, "u4"—UInt32, "f"—Float, "d"—Double, "b5"—Bit5, "b"—Bit in address, "s[CHARSET]"—String (size by default is 10 and up to 100 registers);</dd></dl>
 <ul><li> <i>numb</i> — ModBus data address of the device (decimal, hexadecimal or octal) [0...65535];</li>
-<li> <i>flg</i> — flags: read/write mode (r-read, w-write), strict requesting mode (not combining) 's', registers order inversion '~';</li>
+<li> <i>flg</i> — flags: read/write mode (r-read, w-write), strict requesting mode (not combining) 's', registers order inversion '~', register 'e'ndian toggle (to LE in generic and BE for strings);</li>
 <li> <i>id</i> — identifier of the created attribute;</li>
 <li> <i>name</i> — name of the created attribute.</li></ul>
 <p>Examples:
@@ -332,9 +335,9 @@ Where:
 Where:
 </p>
 <ul><li> <i>dt</i> — ModBus data type ("R"—register[3,6(16)], "C"—coil[1,5(15)], "RI"—input register[4], "CI"—input coil[2]);</li></ul>
-<dl><dd>"R" and "RI" can be expanded by the suffixes: "i2"—Int16, "i4"—Int32, "i8"—Int64, "u2"—UInt16, "u4"—UInt32, "f"—Float, "d"—Double, "b5"—Bit5, "b"—Bit in address, "s"—String (size by default is 10 and up to 100 registers);</dd></dl>
+<dl><dd>"R" and "RI" can be expanded by the suffixes: "i2"—Int16, "i4"—Int32, "i8"—Int64, "u2"—UInt16, "u4"—UInt32, "f"—Float, "d"—Double, "b5"—Bit5, "b"—Bit in address, "s[CHARSET]"—String (size by default is 10 and up to 100 registers);</dd></dl>
 <ul><li> <i>numb</i> — ModBus data address of the device (decimal, hexadecimal or octal) [0...65535];</li>
-<li> <i>flg</i> — flags: read/write mode (r-read; w-write), registers order inversion '~'.</li></ul>
+<li> <i>flg</i> — flags: read/write mode (r-read; w-write), registers order inversion '~', register 'e'ndian toggle (to LE in generic and BE for strings).</li></ul>
 <p>Examples:
 </p>
 <dl><dd>"R:0x300:rw" — register access;</dd>
@@ -381,5 +384,5 @@ Where:
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/en">Modules/ModBus/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/en">Modules/ModBus/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> </td></tr></table></body>
 </html>

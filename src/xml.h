@@ -42,6 +42,7 @@ class XMLNode
     public:
 	//Data
 	enum LoadFlgs {
+	    LD_NO		= 0x00,		//No flag
 	    LD_Full		= 0x01,		//Load XML full
 	    LD_NoTxtSpcRemEnBeg	= 0x02,		//Do not remove spaces from begin and end tag's text, for not full mode
 	};

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 18:22+0300\n"
+"POT-Creation-Date: 2023-02-16 10:54+0200\n"
 "PO-Revision-Date: 2020-10-25 10:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team:  <uk@li.org>\n"
@@ -74,8 +74,8 @@ msgstr "Пріоритет обрання"
 msgid "Source"
 msgstr "Джерело"
 
-msgid "Passive;Passive param. attribute;Active param. attribute"
-msgstr "Пасивний;Пасивний атрибут параметру;Активний атрибут параметру"
+msgid "Passive;DAQ Attribute;Active DAQ Attribute (DEPRECATED)"
+msgstr "Пасивний;DAQ Атрибут;Активний DAQ Атрибут (ЗАСТАРІЛЕ)"
 
 msgid "Data combining mode"
 msgstr "Режим поєднання даних"
@@ -185,8 +185,7 @@ msgid "Redundancy"
 msgstr "Резервування"
 
 msgid "Overtime of the reserve history reload at start, days"
-msgstr ""
-"Глибина примусового перевантаження історії резерву при запуску, в добах."
+msgstr "Глибина примусового перевантаження історії резерву при запуску, в добах."
 
 msgid "Message archivers"
 msgstr "Архіватори повідомлень"
@@ -350,8 +349,7 @@ msgid "Requested %d records for time %s."
 msgstr "Запитано %d записів протягом %s."
 
 #, c-format
-msgid ""
-"The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
+msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
 "Не підтримується вставка дуже старих повідомлень у режимі прив'язки до сітки "
 "%lld (%lld-%lld)."
@@ -609,8 +607,7 @@ msgstr "Таблиці у БД, але не відкриті на цей час.
 msgid "Load the program from this DB"
 msgstr "Завантажити програму з цієї БД"
 
-msgid ""
-"Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
+msgid "Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr "Кодування даних у БД. Наприклад: UTF-8, KOI8-R, KOI8-U ... ."
 
 msgid ""
@@ -777,10 +774,6 @@ msgstr "Елемент %d шляху '%s' відсутній!"
 #, c-format
 msgid "Error accessing item '%s'!"
 msgstr "Помилка доступу до елементу '%s'!"
-
-#, c-format
-msgid "Warning element '%s'! %s"
-msgstr "Попередження елементу '%s'! %s"
 
 #, c-format
 msgid "Node: %s"
@@ -1143,6 +1136,10 @@ msgstr "%s: Помилка ідентифікатору або IO %d!"
 msgid "Error getting object from non-object IO %d!"
 msgstr "Помилка отримання об'єкту з не об'єктного IO %d!"
 
+#, c-format
+msgid "Closing the iconv handler error '%s (%d)'!"
+msgstr "Помилка закриття тримача iconv '%s (%d)'!"
+
 msgid "Storage address in the format \"{DB module}.{DB name}\"."
 msgstr "Адреса сховища у форматі \"{Модуль БД}.{Ім'я БД}\"."
 
@@ -1160,18 +1157,18 @@ msgstr ""
 msgid ""
 "Schedule wrotes in seconds periodic form or in the standard CRON form.\n"
 "The seconds periodic form is one real number (1.5, 1e-3).\n"
-"Cron is the standard form \"* * * * *\".\n"
-"  Where items by order:\n"
+"CRON is the standard form \"* * * * *\".\n"
+"  Where items by the order:\n"
 "    - minutes (0-59);\n"
 "    - hours (0-23);\n"
 "    - days (1-31);\n"
 "    - month (1-12);\n"
 "    - week day (0[Sunday]-6).\n"
-"  Where an item variants:\n"
+"  Where the item variants:\n"
 "    - \"*\" - any value;\n"
-"    - \"1,2,3\" - allowed values list;\n"
-"    - \"1-5\" - raw range of allowed values;\n"
-"    - \"*/2\" - range divider for allowed values.\n"
+"    - \"1,2,3\" - list of the allowed values;\n"
+"    - \"1-5\" - raw range of the allowed values;\n"
+"    - \"*/2\" - divider to the all allowed values range.\n"
 "Examples:\n"
 "  \"1e-3\" - call with a period of one millisecond;\n"
 "  \"* * * * *\" - each minute;\n"
@@ -1182,24 +1179,25 @@ msgstr ""
 "Планування записується у формі секундної періодичності або у формі стандарту "
 "CRON.\n"
 "Секундна форма це одне реальне число (1.5, 1e-3).\n"
-"Форма стандарту Cron це \"* * * * *\".\n"
+"Форма стандарту CRON це \"* * * * *\".\n"
 "  Де елементи по черзі:\n"
 "    - хвилини (0-59);\n"
 "    - години (0-23);\n"
 "    - дні (1-31);\n"
 "    - місяці (1-12);\n"
-"    - дні тижня (0[Неділя]-6).  Де варіанти елементу:\n"
+"    - дні тижня (0[Неділя]-6).\n"
+"  Де варіанти елементу:\n"
 "    - \"*\" - будь яке значення;\n"
 "    - \"1,2,3\" - дозволені значення;\n"
 "    - \"1-5\" - діапазон дозволених значень;\n"
-"    - \"*/2\" - дільник діапазону дозволених значень.\n"
+"    - \"*/2\" - дільник загального діапазону дозволених значень.\n"
 "Приклади:\n"
 "  \"1e-3\" - періодичний виклик з однією мілісекундою;\n"
 "  \"* * * * *\" - кожна хвилина;\n"
-"  \"10 23 * * *\" - тільки 23я година та 10а хвилина будь якого дня та "
+"  \"10 23 * * *\" - лише 23я година та 10а хвилина будь якого дня та "
 "місяця;\n"
 "  \"*/2 * * * *\" - для хвилин: 0,2,4,...,56,58;\n"
-"  \"* 2-4 * * *\" - для будь якої хвилини у годині від 2 до 4(включно)."
+"  \"* 2-4 * * *\" - для будь якої хвилини у годинах від 2 до 4(включно)."
 
 msgid ""
 "Task priority level (-1...199), where:\n"
@@ -1219,6 +1217,20 @@ msgstr ""
 "для \"root\"."
 
 msgid ""
+"Address format of the output transport using the unified connection:\n"
+"  \"{TrModule}.[out_]{TrID}[:{TrAddr}]\" - typical output with automatic "
+"creation <TrID> at it missing and providing <TrAddr>;\n"
+"  \"{TrModule}.in_{TrID}:{RemConId}\" - initiative input with the connection "
+"identifier in <RemConId>."
+msgstr ""
+"Формат адреси вихідного транспорту із використанням уніфікованого "
+"підключення:\n"
+"  \"{TrModule}.[out_]{TrID}[:{TrAddr}]\" - типовий вихідний із автоматичним "
+"створенням <TrID> за його відсутності та наданні <TrAddr>;\n"
+"  \"{TrModule}.in_{TrID}:{RemConId}\" - ініціативний вхідний із "
+"ідентифікатором підключення у <RemConId>."
+
+msgid ""
 "Specifies the category of the requested messages.\n"
 "Use template's symbols for group selection:\n"
 "  '*' - any substring;\n"
@@ -1231,6 +1243,10 @@ msgstr ""
 "  '*' - будь який підрядок;\n"
 "  '?' - будь який символ.\n"
 "Регулярний вираз включається між символами '/' (/mod_(System|LogicLev)/)."
+
+#, c-format
+msgid "Closing the thread %d error '%s (%d)'!"
+msgstr "Помилка закриття потоку %d - '%s (%d)'!"
 
 #, c-format
 msgid ""
@@ -1386,8 +1402,7 @@ msgstr "2:Збір зупинено."
 msgid "Parameter: "
 msgstr "Параметр: "
 
-msgid ""
-"The type changing leads to lose some data of the specific configurations."
+msgid "The type changing leads to lose some data of the specific configurations."
 msgstr "Зміна типу потягне за собою втрату даних специфічних конфігурацій."
 
 msgid "Inclusion"
@@ -1416,6 +1431,9 @@ msgstr "Шаблон параметра: "
 
 msgid "Template"
 msgstr "Шаблон"
+
+msgid "The name's rows after the first one treat as help."
+msgstr "Рядки ім'я після першого опрацьовуються як допомога."
 
 msgid ""
 "Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object;"
@@ -1466,33 +1484,48 @@ msgstr "Показати атрибути"
 msgid "Error, recursive linking."
 msgstr "Помилка, рекурсивне підключення."
 
+msgid "val:Constant value"
+msgstr "val:Стале значення"
+
 msgid ""
-"Address to the DAQ attribute writes in the form \"{Type}.{Cntr}.{Prm}[."
-"{PrmN}].{Attr}\", where:\n"
-"    Type,Cntr,Prm,Attr - DAQ: type, controller object, parameter and "
-"attribute.\n"
-"  Link's template, of the column \"Value\" on the template forming side, "
+"Address to the DAQ attribute is written in the forms:\n"
+"  \"{Type}.{Cntr}.{Prm}[.{PrmN}].{Attr}\";\n"
+"  \"prm:/{Type}/{Cntr}/{Prm}[/{PrmN}]/{Attr}\";\n"
+"  \"val:Constant value\".\n"
+"Where:\n"
+"  {Type},{Cntr},{Prm},{Attr} - DAQ type, controller object, parameter and "
+"attribute;\n"
+"  \"prm:\" - prefix of the ordinal form path where you can use the "
+"relativity by '.' and '..';\n"
+"  \"val:\" - prefix of the constant value in links.\n"
+"\n"
+"Link's template, of the column \"Value\" on the template forming side, "
 "writes in the form \"{Parameter}|{attribute}\", where:\n"
-"    Parameter - specifies the parameter's name as the attribute's "
+"  {Parameter} - specifies the parameter's name as the attribute's "
 "container;\n"
-"    attribute - attributes with the equal value <Parameter> will be grouped "
-"and will be appointed only by the indication of the attributes' container,\n"
-"                and the individual attributes will be associated with the "
-"attributes of the container in accordance with this field.\n"
-"Constant link value writes in the form \"val:{Constant}\".\n"
+"  {attribute} - attributes with the equal value <Parameter> will be grouped "
+"and will be appointed only by the indication of the attributes' container, "
+"and the individual attributes will be associated with the attributes of the "
+"container in accordance with this field.\n"
 msgstr ""
-"Адреса до DAQ атрибутів записується у формі \"{Type}.{Cntr}.{Prm}[.{PrmN}]."
-"{Attr}\", де:\n"
-"    Type,Cntr,Prm,Attr - DAQ: тип, об'єкт контролеру, параметр та атрибут.\n"
-"  Шаблон зв'язку, стовпчику \"Значення\" на боці формування шаблону, "
+"Адреса до DAQ атрибутів записується у формах:\n"
+"  \"{Type}.{Cntr}.{Prm}[.{PrmN}].{Attr}\";\n"
+"  \"prm:/{Type}/{Cntr}/{Prm}[/{PrmN}]/{Attr}\";\n"
+"  \"val:Стале значення\".\n"
+"Де:\n"
+"  {Type},{Cntr},{Prm},{Attr} - DAQ тип, об'єкт контролеру, параметр та "
+"атрибут;\n"
+"  \"prm:\" - префікс типової форми шляху де можливе використання відносність "
+"із \".\" та \"..\";\n"
+"  \"val:\" - префікс сталого значення через зв'язки.\n"
+"\n"
+"Шаблон зв'язку, стовпчику \"Значення\" на боці формування шаблону, "
 "записується у формі \"{Parameter}|{attribute}\", де:\n"
-"    Parameter - вказує ім'я параметру як контейнеру атрибутів;\n"
-"    attribute - атрибути з однаковим значенням <Parameter> будуть "
+"  {Parameter} - вказує ім'я параметру як контейнеру атрибутів;\n"
+"  {attribute} - атрибути з однаковим значенням <Parameter> будуть "
 "групуватися та дозволять призначатися визначенням тільки контейнеру "
-"атрибутів,\n"
-"                а окремі атрибути будуть пов'язані з атрибутами контейнеру "
+"атрибутів, а окремі атрибути будуть пов'язані з атрибутами контейнеру "
 "відповідно до поля <attribute>.\n"
-"Зв'язок на постійне значення записується у формі \"val:{Constant}\".\n"
 
 #, c-format
 msgid "Error starting the template '%s'."
@@ -1926,6 +1959,10 @@ msgid "Error the configuration file '%s': %s"
 msgstr "Помилка конфігураційного файлу '%s': %s"
 
 #, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr "Помилка закриття файлу %d - '%s (%d)'!"
+
+#, c-format
 msgid "Error loading the configuration file '%s'."
 msgstr "Помилка завантаження конфігураційного файлу '%s'."
 
@@ -1946,8 +1983,7 @@ msgid "Error writing the configuration file '%s': %s"
 msgstr "Помилка запису до конфігураційного файлу '%s': %s"
 
 #, c-format
-msgid ""
-"Impossible to hold the project lock! Seems the project '%s' already running."
+msgid "Impossible to hold the project lock! Seems the project '%s' already running."
 msgstr "Неможливо захопити замок проєкту! Схоже проєкт '%s' вже виконується."
 
 msgid "Loading."
@@ -2003,6 +2039,10 @@ msgstr "Програму перевано!"
 msgid "Unknown signal %d!"
 msgstr "Невідомий сигнал %d!"
 
+#, c-format
+msgid "Closing the file %p error '%s (%d)'!"
+msgstr "Помилка закриття файлу %p - '%s (%d)'!"
+
 msgid "Timeouted !!!"
 msgstr "Час очікування вичерпано!!!"
 
@@ -2031,7 +2071,7 @@ msgstr "Вичерпано час запуску задачі '%s'!"
 
 #, c-format
 msgid "Timeout of the task '%s' !!!"
-msgstr "Вичерпано час завданняі '%s' !!!"
+msgstr "Вичерпано час завдання '%s' !!!"
 
 #, c-format
 msgid "Task '%s' is not stopped!"
@@ -2060,6 +2100,10 @@ msgstr "Резервна станція '%s' недоступна."
 msgid "System clock changed to '%s'. Correction the cron '%s' target!"
 msgstr "Системний годинник змінено у '%s'. Корекція цілі крону '%s'!"
 
+#, c-format
+msgid "Closing the pipe %p error '%s (%d)'!"
+msgstr "Помилка закриття каналу %p - '%s (%d)'!"
+
 msgid "1:Request is not an object!"
 msgstr "1:Запит не є об'єкт!"
 
@@ -2073,55 +2117,6 @@ msgstr "%s станція: \"%s\""
 
 msgid "Station"
 msgstr "Станція"
-
-msgid "Station name"
-msgstr "Ім'я станції"
-
-msgid "Program"
-msgstr "Програма"
-
-msgid "Version"
-msgstr "Версія"
-
-msgid "Host name"
-msgstr "Ім'я хосту"
-
-msgid "System user"
-msgstr "Системний користувач"
-
-msgid "Operation system"
-msgstr "Операційна система"
-
-msgid "CPU"
-msgstr "CPU"
-
-msgid "Main CPUs set"
-msgstr "Основний набір процессорів"
-
-msgid ""
-"To set up the processors you use, write a row of numbers separated by a ':' "
-"character.\n"
-"Processor numbers start at 0."
-msgstr ""
-"Для встановлення використовуваних процесорів записуйте рядок номерів, "
-"поділених символом ':'.\n"
-"Номера процесорів починаються з 0."
-
-msgid "Tasks planning clock"
-msgstr "Годинник планування задач"
-
-msgid "Number of phases of the task invoking"
-msgstr "Кількість фаз виклику задач"
-
-msgid ""
-"To set up phasing of the task invoking in the determined phases number, <= 0 "
-"to set optimal, 1 to disable the tasks phasing."
-msgstr ""
-"Для встановлення фазування виклику задач у визначену кількість фаз, <= 0 для "
-"встановлення оптимально, 1 для вимкнення фазування задач."
-
-msgid "Internal charset"
-msgstr "Внутрішнє кодування"
 
 msgid "Configuration file"
 msgstr "Конфігураційний файл"
@@ -2150,21 +2145,18 @@ msgstr "Робоча БД"
 msgid "Work DB address in the format \"{DB module}.{DB name}\"."
 msgstr "Адреса Робочої БД у форматі \"{Модуль БД}.{Ім'я БД}\"."
 
-msgid "Save the program at exit"
-msgstr "Зберігати програму при виході"
+msgid "Save the program at exit, with the period"
+msgstr "Зберігати програму при виході, за періодом"
 
 msgid "Select for the program automatic saving to DB on exit."
 msgstr "Вибрати для автоматичного збереження програми у БД під час виходу."
 
-msgid "Period the program saving"
-msgstr "Період збереження програми"
-
 msgid ""
-"Use not a zero period (seconds) to periodically save program changes to the "
-"DB."
+"Use not a zero period in seconds to periodically save program changes to the "
+"storage."
 msgstr ""
-"Використати не нульовий період (секунди) для періодичного збереження змін "
-"частин програми у БД."
+"Використати не нульовий період у секундах для періодичного збереження змін "
+"частин програми у сховку."
 
 msgid "Set modification for the calculated objects"
 msgstr "Встановлювати модифікацію для обчислювальних об'єктів"
@@ -2180,9 +2172,6 @@ msgstr ""
 "Але незручно у режимі розробки, постійно нагадуючи про необхідність "
 "збереження."
 
-msgid "Least level"
-msgstr "Найменший рівень"
-
 msgid "Least messages level which is procesed by the program."
 msgstr "Найменший рівень повідомлень, які обробляються програмою."
 
@@ -2197,6 +2186,61 @@ msgstr "До стандартного виходу помилок(stderr)"
 
 msgid "To archive"
 msgstr "До архіву"
+
+msgid "Environment"
+msgstr "Оточення"
+
+msgid "Program"
+msgstr "Програма"
+
+msgid "System"
+msgstr "Система"
+
+msgid "System time"
+msgstr "Системний час"
+
+msgid "System planning clock"
+msgstr "Системний годинник планування"
+
+msgid "System user"
+msgstr "Системний користувач"
+
+msgid "System locale charset."
+msgstr "Системне кодування локалі."
+
+msgid ""
+"Complete locale information with language, country and charset in the view "
+"\"en_GB.UTF-8\"."
+msgstr ""
+"Повна інформація щодо локалі із мовою, країною та кодуванням у вигляді "
+"\"uk_UA.UTF-8\"."
+
+msgid "Host name"
+msgstr "Ім'я хосту"
+
+msgid "CPU"
+msgstr "ЦП"
+
+msgid ""
+"Main CPUs set.\n"
+"To set up the processors you use, write a row of numbers separated by the "
+"character ':'.\n"
+"Processor numbers start at 0."
+msgstr ""
+"Основний набір процесорів.\n"
+"Для встановлення використовуваних процесорів записуйте рядок номерів, "
+"поділених символом ':'.\n"
+"Номера процесорів починаються з 0."
+
+msgid "Number of phases of the task invoking"
+msgstr "Кількість фаз виклику задач"
+
+msgid ""
+"To set up phasing of the task invoking in the determined phases number,\n"
+" <= 0 to set optimal, 1 to disable the tasks phasing."
+msgstr ""
+"Для встановлення фазування виклику завдань у визначену кількість фаз,\n"
+" <= 0 для встановлення оптимально, 1 для вимкнення фазування задач."
 
 msgid "Subsystems"
 msgstr "Підсистеми"
@@ -2357,16 +2401,16 @@ msgid "See to the messages"
 msgstr "Перегляд повідомлень"
 
 #, c-format
-msgid "%dx%0.3gGHz"
-msgstr "%dx%0.3gГГц"
-
-#, c-format
 msgid "Real-time %s"
 msgstr "Реального часу %s"
 
 #, c-format
 msgid "Monotonic %s"
 msgstr "Монотонний %s"
+
+#, c-format
+msgid "%dx%0.3gGHz"
+msgstr "%dx%0.3gГГц"
 
 #, c-format
 msgid "Spent time %s[%s]."
@@ -2439,9 +2483,6 @@ msgstr "Контекстів перекладу %d."
 msgid "<<<Unmatched sources>>>\n"
 msgstr "<<<Незбіг джерел!!!>>>\n"
 
-msgid "<<<Translation changed>>>\n"
-msgstr "<<<Переклад змінено>>>\n"
-
 #, c-format
 msgid "Clearing the equel to base translation '%s' for '%s'."
 msgstr "Очищення перекладів, які однакові до бази '%s' щодо '%s'."
@@ -2484,6 +2525,10 @@ msgstr "Пароль запитів"
 msgid "Level of lifting"
 msgstr "Рівень підняття"
 
+#, c-format
+msgid "Error the output address '%s'!"
+msgstr "Помилка вихідної адреси '%s'!"
+
 msgid "Error finding and creating new input transports."
 msgstr "Помилка пошуку та створення нових вхідних транспортів."
 
@@ -2513,15 +2558,14 @@ msgstr ""
 "\n"
 
 #, c-format
-msgid "Error the remote host '%s'!"
-msgstr "Помилка віддаленого хосту '%s'!"
-
-#, c-format
 msgid "External hosts of %s"
 msgstr "Зовнішні хости %s"
 
 msgid "User;System;User and System"
 msgstr "Корист.;Системн.;Корист. та Системн."
+
+msgid "Initial connection identifier to what bind for control."
+msgstr "Ідентифікатор ініціативного підключення до якого зв'язуватися для керування."
 
 msgid "New external host"
 msgstr "Новий зовнішній хост"
@@ -2580,12 +2624,16 @@ msgid "Error deletion the node: %s"
 msgstr "Помилка видалення вузла: %s"
 
 #, c-format
-msgid "Error removing the assigned node/connection: %s"
-msgstr "Помилка видалення призначеного вузла/підключення: %s"
+msgid "The initiative connection '%s' is not presented!"
+msgstr "Ініціативне підключення '%s' відсутнє!"
 
 #, c-format
-msgid "Error connection the new assigned node: %s"
-msgstr "Помилка підключення нового призначеного вузла: %s"
+msgid "Error connection the new associated node: %s"
+msgstr "Помилка підключення нового асоційованого вузла: %s"
+
+#, c-format
+msgid "Error removing the associated node/connection: %s"
+msgstr "Помилка видалення асоційованого вузла/підключення: %s"
 
 msgid "Input transport: "
 msgstr "Вхідний транспорт: "
@@ -2599,11 +2647,14 @@ msgstr "БД транспорту"
 msgid "IO log"
 msgstr "Лог ВВ"
 
-msgid "Log length and block limit"
-msgstr "Довжина логу та обмеження блоку"
+msgid "Log length, block limit, type"
+msgstr "Логу довжина, обмеження блоку, тип"
 
 msgid "Use zero for the log disabling."
 msgstr "Використовуйте нуль для вимкнення логу."
+
+msgid "Binary & Text;Binary;Text"
+msgstr "Бінарне і Текст;Бінарне;Текст"
 
 msgid "Log"
 msgstr "Лог"
@@ -2617,6 +2668,10 @@ msgstr "Підключено. "
 #, c-format
 msgid "Established %s, last %s. "
 msgstr "Встановлено %s, останнє %s. "
+
+#, c-format
+msgid "Initiative connection ID '%s'. "
+msgstr "ІД ініціативного підключення '%s'. "
 
 #, c-format
 msgid "Transport protocol '%s' is missing"
@@ -2920,3 +2975,4 @@ msgstr "Встановлено назву проєкту у:"
 
 msgid "already started."
 msgstr "вже запущено."
+

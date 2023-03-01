@@ -150,6 +150,9 @@ msgstr "ВВ"
 msgid "Identifier"
 msgstr "Идентификатор"
 
+msgid "The name's rows after the first one treat as help."
+msgstr ""
+
 msgid "Type"
 msgstr "Тип"
 
@@ -170,6 +173,7 @@ msgstr "Скрытый"
 msgid "Default"
 msgstr "Умолчание"
 
+#, c-format
 msgid ""
 "Size source %s, bytecode %s; Registers totally %d, constants %d, internal "
 "functions' %d; Functions external %d, internal %d."

@@ -156,6 +156,9 @@ msgstr "IO"
 msgid "Identifier"
 msgstr "Identifikator"
 
+msgid "The name's rows after the first one treat as help."
+msgstr "Die Namenszeilen nach der ersten behandeln als Hilfe."
+
 msgid "Type"
 msgstr "Typ"
 
@@ -177,6 +180,7 @@ msgstr "Versteckt"
 msgid "Default"
 msgstr "Standard"
 
+#, c-format
 msgid ""
 "Size source %s, bytecode %s; Registers totally %d, constants %d, internal "
 "functions' %d; Functions external %d, internal %d."

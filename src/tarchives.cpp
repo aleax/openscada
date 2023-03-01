@@ -76,8 +76,8 @@ TArchiveS::TArchiveS( ) :
     elAval.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
     elAval.fldAdd(new TFld("START",trS("To start"),TFld::Boolean,0,"1","0"));
     elAval.fldAdd(new TFld("SrcMode",trS("Source"),TFld::Integer,TFld::Selectable,"1","0",
-	TSYS::strMess("%d;%d;%d",TVArchive::Passive,TVArchive::PassiveAttr,TVArchive::ActiveAttr).c_str(),
-	_("Passive;Passive param. attribute;Active param. attribute")));
+	TSYS::strMess("%d;%d;%d",TVArchive::Passive,TVArchive::DAQAttr,TVArchive::ActiveAttr).c_str(),
+	_("Passive;DAQ Attribute;Active DAQ Attribute (DEPRECATED)")));
     elAval.fldAdd(new TFld("Source",trS("Source"),TFld::String,0,"100"));
     elAval.fldAdd(new TFld("CombMode",trS("Data combining mode"),TFld::Integer,TFld::Selectable,"1","0",
 	TSYS::strMess("%d;%d;%d;%d",TVArchive::MovAver,TVArchive::LastVal,TVArchive::MinVal,TVArchive::MaxVal).c_str(),

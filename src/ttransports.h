@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttransports.h
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,8 +21,10 @@
 #ifndef TTRANSPORTS_H
 #define TTRANSPORTS_H
 
-#define STR_VER		18		//TransportS type modules version
+#define STR_VER		19		//TransportS type modules version
 #define STR_ID		"Transport"
+#define STR_IN_PREF	"in_"
+#define STR_OUT_PREF	"out_"
 
 #include <string>
 
@@ -77,7 +79,8 @@ class TTransportIn : public TCntrNode, public TConfig
 	virtual void stop( );
 	virtual int writeTo( const string &sender, const string &data )	{ return 0; }
 
-	vector<AutoHD<TTransportOut> > assTrs( bool checkForCleanDisabled = false );	//Assigned transports
+	vector<AutoHD<TTransportOut> > associateTrs( bool checkForCleanDisabled = false );	//Associated output transports
+	AutoHD<TTransportOut> associateTr( const string &id );	//Getting the associated output transport at that connection ID
 
 	// IO log
 	int logLen( )	{ return mLogLen; }
@@ -90,9 +93,9 @@ class TTransportIn : public TCntrNode, public TConfig
 
     protected:
 	//Methods
-	string assTrO( const string &addr );	//Assign new output transport
+	string associateTrO( const string &addr );	//Associated new output transport
 
-	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+	void cntrCmdProc( XMLNode *opt );		//Control interface command process
 
 	void preEnable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
@@ -116,11 +119,11 @@ class TTransportIn : public TCntrNode, public TConfig
 	char	&mStart;
 	string	mDB;
 
-	ResMtx	assTrRes, mLogRes;
-	vector<AutoHD<TTransportOut> >	mAssTrO;
+	ResMtx	associateTrRes, mLogRes;
+	vector<AutoHD<TTransportOut> >	mAssociateTrO;
 
 	// IO log
-	int		mLogLen, mLogItLim, mLogLstDt;
+	int		mLogLen, mLogItLim, mLogLstDt, mLogTp;
 	time_t		mLogLstDtTm;
 	deque<string>	mLog;
 };
@@ -135,7 +138,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	TTransportOut( const string &id, const string &db, TElem *el );
 	virtual ~TTransportOut( );
 
-	virtual bool isNetwork( )	{ return true; }
+	bool isNetwork( );
 
 	TCntrNode &operator=( const TCntrNode &node );
 
@@ -218,7 +221,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	ResMtx	mReqRes, mLogRes;
 
 	// IO log
-	int		mLogLen, mLogItLim, mLogLstDt;
+	int		mLogLen, mLogItLim, mLogLstDt, mLogTp;
 	time_t		mLogLstDtTm;
 	deque<string>	mLog;
 };
@@ -234,6 +237,8 @@ class TTypeTransport: public TModule
 	//Methods
 	TTypeTransport( const string &id );
 	virtual ~TTypeTransport( );
+
+	virtual bool isNetwork( )	{ return true; }
 
 	// Input transports
 	void inList( vector<string> &list ) const		{ chldList(mIn, list); }
@@ -264,9 +269,9 @@ class TTypeTransport: public TModule
 	void load_( );
 	void save_( );
 
-	virtual TTransportIn  *In( const string &name, const string &db )
+	virtual TTransportIn  *In( const string &id, const string &stor )
 	{ throw TError(nodePath().c_str(),_("Input transport is not supported!")); }
-	virtual TTransportOut *Out( const string &name, const string &db )
+	virtual TTransportOut *Out( const string &id, const string &stor )
 	{ throw TError(nodePath().c_str(),_("Output transport is not supported!")); }
 
     private:
@@ -287,6 +292,7 @@ class TTransportS : public TSubSYS
 	    public:
 		//Data
 		enum Mode { User = 0, System, UserSystem };
+
 		//Methods
 		ExtHost( const string &iUserOpen, const string &iid, const string &iname = "", const string &itransp = "",
 			 const string &iaddr = "", const string &iuser = "", const string &ipass = "", uint8_t iUpRiseLev = 0 ) :
@@ -307,6 +313,8 @@ class TTransportS : public TSubSYS
 		time_t	mdf;		//Modify time, for detect the reconnection need
 	};
 
+	enum LogType { LTP_BinaryText = 0, LTP_Binary, LTP_Text };
+
 	//Methods
 	TTransportS( );
 	~TTransportS( );
@@ -315,6 +323,8 @@ class TTransportS : public TSubSYS
 	int subVer( ) const	{ return STR_VER; }
 	void inTrList( vector<string> &ls );
 	void outTrList( vector<string> &ls );
+
+	AutoHD<TTransportOut> outAt( const string &addr );	//Common output transport connection
 
 	// External hosts
 	string extHostsDB( );
@@ -341,6 +351,8 @@ class TTransportS : public TSubSYS
     protected:
 	void load_( );
 	void save_( );
+
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     private:
 	//Methods

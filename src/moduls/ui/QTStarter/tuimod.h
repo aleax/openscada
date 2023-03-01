@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTStarter file: tuimod.h
 /***************************************************************************
- *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -49,6 +49,7 @@ class QSplashScreen;
 class QListWidget;
 class QPushButton;
 class QMenu;
+class QLabel;
 
 using namespace OSCADA;
 
@@ -90,6 +91,7 @@ protected:
 
 private:
     //Attributes
+    QLabel	*logo;
     QListWidget	*prjsLs;
     QPushButton	*prjsBt;
 
@@ -172,6 +174,8 @@ private:
     int64_t	mouseBtPress;
     QObject	*mouseBtRecv;
     QMouseEvent	mouseBtHold;
+
+    string	sessPrjToRestore;
 };
 
 //*************************************************
@@ -182,6 +186,7 @@ class TUIMod: public TUI
 public:
     //Data
     enum SplashFlag { SPLSH_NULL = 0, SPLSH_START, SPLSH_STOP };
+    enum SessCntrFlg { RestartIfRunning = 0, RestartAnyway, RestartImmediately, RestartNever };
 
     //Methods
     TUIMod( string name );
@@ -197,6 +202,7 @@ public:
     string palette( )	{ return mPalette; }
     string styleSheets( ) { return mStyleSheets; }
     bool closeToTray( )	{ return mCloseToTray; }
+    int sessCntr( bool reload = false );
 
     void setStartMod( const string &vl )	{ mStartMod = vl; modif(); }
     void setStyle( const string &vl )		{ mStyle = vl; modif(); mQtLookMdf = true; }
@@ -204,10 +210,14 @@ public:
     void setPalette( const string &vl )		{ mPalette = vl; modif(); mQtLookMdf = true; }
     void setStyleSheets( const string &vl )	{ mStyleSheets = vl; modif(); mQtLookMdf = true; }
     void setCloseToTray( bool vl )		{ mCloseToTray = vl; modif(); }
+    void setSessCntr( int vl )			{ mSessCntr = vl; modif(); }
+
     void modStart( );
     void modStop( );
 
     void splashSet( SplashFlag flg = SPLSH_NULL );
+
+    string sess( const string &proj = "", int *md = NULL );
 
 public:
     //Attributes
@@ -234,6 +244,7 @@ private:
 
     //Attributes
     bool	hideMode, mEndRun, mStartCom, mCloseToTray;
+    int		mSessCntr;
     MtxString	mStartMod, mStyle, mFont, mPalette, mStyleSheets;
 
     TElem	elLF;

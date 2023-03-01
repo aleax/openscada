@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -95,12 +95,16 @@ TMess::~TMess( )
 void TMess::setMessLevel( int level )
 {
     mMessLevel = vmax(Debug, vmin(Crit,level));
+
+    SYS->sysModifFlgs |= TSYS::MDF_MESS;
     SYS->modif();
 }
 
 void TMess::setLogDirect( int dir )
 {
     mLogDir = dir;
+
+    SYS->sysModifFlgs |= TSYS::MDF_MESS;
     SYS->modif();
 }
 
@@ -236,6 +240,7 @@ void TMess::setLangBase( const string &vl )
 
     mLangBase = tvl + ((off<vl.size())?";" + vl.substr(off):"");
 
+    SYS->sysModifFlgs |= TSYS::MDF_TR;
     SYS->modif();
 
     //Setting to the translation languages by default
@@ -259,6 +264,7 @@ void TMess::setTranslDyn( bool val, bool plan )
     if(plan) mTranslDynPlan = val;
     else mTranslDyn = mTranslDynPlan = val;
 
+    SYS->sysModifFlgs |= TSYS::MDF_TR;
     SYS->modif();
 }
 
@@ -276,6 +282,7 @@ void TMess::setTranslEnMan( bool vl, bool passive )
 
     mTranslSet = false;
 
+    SYS->sysModifFlgs |= TSYS::MDF_TR;
     SYS->modif();
 }
 
@@ -782,10 +789,12 @@ void TMess::setSelDebCats( const string &vl )
 	debugCats[curCat] = true;
 	selectDebugCats.push_back(curCat);
     }
+
+    SYS->sysModifFlgs |= TSYS::MDF_DBG;
     SYS->modif();
 }
 
-void TMess::setLang( const string &lng, bool init )
+void TMess::setLang( const string &lng )
 {
     char *prvLng = NULL;
     if((prvLng=getenv("LANGUAGE")) && strlen(prvLng)) setenv("LANGUAGE", lng.c_str(), 1);
@@ -808,8 +817,8 @@ void TMess::setLang( const string &lng, bool init )
 
     mConvCode = !(tLng == "C" || (mLangCode.getVal() == "en" && (IOCharSet == "ISO-8859-1" || IOCharSet == "ANSI_X3.4-1968" || IOCharSet == "ASCII" || IOCharSet == "US-ASCII")));
 
-    if(init) SYS->sysModifFlgs &= ~TSYS::MDF_LANG;
-    else { SYS->sysModifFlgs |= TSYS::MDF_LANG; SYS->modif(); }
+    SYS->sysModifFlgs |= TSYS::MDF_LANG;
+    SYS->modif();
 }
 
 string TMess::codeConv( const string &fromCH, const string &toCH, const string &mess )
@@ -827,9 +836,8 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 # endif
     char	outbuf[1000], *obuf;
     size_t ilen, olen, chwrcnt = 0;
-    iconv_t hd;
 
-    hd = iconv_open(toCH.c_str(), fromCH.c_str());
+    iconv_t hd = iconv_open(toCH.c_str(), fromCH.c_str());
     if(hd == (iconv_t)(-1)) {
 	//mess_crit("IConv", _("Error opening 'iconv': %s"), strerror(errno));	//But there can be a recursion for a wrong charset.
 	return mess;
@@ -850,7 +858,8 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 	if(obuf > outbuf) buf.append(outbuf, obuf-outbuf);
 	if(rez == (size_t)(-1) && errno == EILSEQ) { buf += '?'; ilen--; ibuf++; chwrcnt++; }
     }
-    iconv_close(hd);
+    if(iconv_close(hd) != 0)
+	mess_warning("IConv", _("Closing the iconv handler error '%s (%d)'!"), strerror(errno), errno);
 
     //Deadlock possible on the error message print
     //if(chwrcnt)	mess_err("IConv", _("Error converting %d symbols from '%s' to '%s' for the message part: '%s'(%d)"),
@@ -924,7 +933,7 @@ void TMess::load( )
 {
     //Load params from command line
     string argVl;
-    if((argVl=SYS->cmdOpt("lang")).size()) setLang(argVl, true);
+    if((argVl=SYS->cmdOpt("lang")).size()) setLang(argVl);
     if((argVl=SYS->cmdOpt("messLev")).size()) {
 	int i = s2i(argVl);
 	if(i >= Debug && i <= Emerg) setMessLevel(i);
@@ -935,12 +944,14 @@ void TMess::load( )
     setMessLevel(s2i(TBDS::genPrmGet(SYS->nodePath()+"MessLev",i2s(messLevel()))));
     setSelDebCats(TBDS::genPrmGet(SYS->nodePath()+"SelDebCats",selDebCats()));
     setLogDirect(s2i(TBDS::genPrmGet(SYS->nodePath()+"LogTarget",i2s(logDirect()))));
-    setLang(TBDS::genPrmGet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg), true);
+    setLang(TBDS::genPrmGet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg));
     if((argVl=TBDS::genPrmGet(SYS->nodePath()+"LangBase")).size() ||
 	    (argVl=TBDS::genPrmGet(SYS->nodePath()+"Lang2CodeBase")).size())	//????[v1.0] Remove, loading the deprecated parameter
 	setLangBase(argVl);
     setTranslDyn(s2i(TBDS::genPrmGet(SYS->nodePath()+"TranslDyn",i2s(translDyn()))), false);
     setTranslEnMan(translDyn() || s2i(TBDS::genPrmGet(SYS->nodePath()+"TranslEnMan",i2s(translEnMan()))), true);
+
+    SYS->sysModifFlgs = TSYS::MDF_NONE;
 }
 
 void TMess::unload( )
@@ -957,14 +968,18 @@ void TMess::unload( )
 
 void TMess::save( )
 {
-    TBDS::genPrmSet(SYS->nodePath()+"MessLev",i2s(messLevel()),"root",TBDS::OnlyCfg);
-    TBDS::genPrmSet(SYS->nodePath()+"SelDebCats",selDebCats(),"root",TBDS::OnlyCfg);
-    TBDS::genPrmSet(SYS->nodePath()+"LogTarget",i2s(logDirect()),"root",TBDS::OnlyCfg);
+    if(SYS->sysModifFlgs&TSYS::MDF_MESS) {
+	TBDS::genPrmSet(SYS->nodePath()+"MessLev",i2s(messLevel()),"root",TBDS::OnlyCfg);
+	TBDS::genPrmSet(SYS->nodePath()+"LogTarget",i2s(logDirect()),"root",TBDS::OnlyCfg);
+    }
+    if(SYS->sysModifFlgs&TSYS::MDF_DBG) TBDS::genPrmSet(SYS->nodePath()+"SelDebCats",selDebCats(),"root",TBDS::OnlyCfg);
     if(SYS->sysModifFlgs&TSYS::MDF_LANG) TBDS::genPrmSet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg);
-    TBDS::genPrmSet(SYS->nodePath()+"LangBase",langBase(),"root",TBDS::OnlyCfg);
-    TBDS::genPrmSet(SYS->nodePath()+"Lang2CodeBase","","root",TBDS::OnlyCfg);	//????[v1.0] Remove, cleaning up the deprecated parameter
-    TBDS::genPrmSet(SYS->nodePath()+"TranslDyn",i2s(translDyn(true)),"root",TBDS::OnlyCfg);
-    TBDS::genPrmSet(SYS->nodePath()+"TranslEnMan",i2s(translEnMan()),"root",TBDS::OnlyCfg);
+    if(SYS->sysModifFlgs&TSYS::MDF_TR) {
+	TBDS::genPrmSet(SYS->nodePath()+"LangBase",langBase(),"root",TBDS::OnlyCfg);
+	TBDS::genPrmSet(SYS->nodePath()+"Lang2CodeBase","","root",TBDS::OnlyCfg);	//????[v1.0] Remove, cleaning up the deprecated parameter
+	TBDS::genPrmSet(SYS->nodePath()+"TranslDyn",i2s(translDyn(true)),"root",TBDS::OnlyCfg);
+	TBDS::genPrmSet(SYS->nodePath()+"TranslEnMan",i2s(translEnMan()),"root",TBDS::OnlyCfg);
+    }
 }
 
 string TMess::labStor( bool nogen )
@@ -983,18 +998,18 @@ string TMess::labSecCRON( )
 {
     return _("Schedule wrotes in seconds periodic form or in the standard CRON form.\n"
 	     "The seconds periodic form is one real number (1.5, 1e-3).\n"
-	     "Cron is the standard form \"* * * * *\".\n"
-	     "  Where items by order:\n"
+	     "CRON is the standard form \"* * * * *\".\n"
+	     "  Where items by the order:\n"
 	     "    - minutes (0-59);\n"
 	     "    - hours (0-23);\n"
 	     "    - days (1-31);\n"
 	     "    - month (1-12);\n"
 	     "    - week day (0[Sunday]-6).\n"
-	     "  Where an item variants:\n"
+	     "  Where the item variants:\n"
 	     "    - \"*\" - any value;\n"
-	     "    - \"1,2,3\" - allowed values list;\n"
-	     "    - \"1-5\" - raw range of allowed values;\n"
-	     "    - \"*/2\" - range divider for allowed values.\n"
+	     "    - \"1,2,3\" - list of the allowed values;\n"
+	     "    - \"1-5\" - raw range of the allowed values;\n"
+	     "    - \"*/2\" - divider to the all allowed values range.\n"
 	     "Examples:\n"
 	     "  \"1e-3\" - call with a period of one millisecond;\n"
 	     "  \"* * * * *\" - each minute;\n"
@@ -1012,6 +1027,13 @@ string TMess::labTaskPrior( )
 	     "  0         - standard userspace priority;\n"
 	     "  1...99    - realtime priority level (round-robin), often allowed only for \"root\";\n"
 	     "  100...199 - realtime priority level (FIFO), often allowed only for \"root\".");
+}
+
+string TMess::labStdOutTrs( )
+{
+    return _("Address format of the output transport using the unified connection:\n"
+	     "  \"{TrModule}.[out_]{TrID}[:{TrAddr}]\" - typical output with automatic creation <TrID> at it missing and providing <TrAddr>;\n"
+	     "  \"{TrModule}.in_{TrID}:{RemConId}\" - initiative input with the connection identifier in <RemConId>.");
 }
 
 string TMess::labMessCat( )

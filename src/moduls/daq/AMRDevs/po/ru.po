@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.AMRDevs 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-01 11:07+0300\n"
+"POT-Creation-Date: 2022-07-15 20:16+0300\n"
 "PO-Revision-Date: 2010-02-16 16:54+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -191,6 +191,10 @@ msgstr "Ответ: '%s'"
 #, c-format
 msgid "Error: '%s': '%s'"
 msgstr "Ошибка: '%s': '%s'"
+
+#, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr ""
 
 #, c-format
 msgid "15:Response PDU size (%d from %d) error."

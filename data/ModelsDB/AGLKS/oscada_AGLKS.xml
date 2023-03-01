@@ -8,7 +8,7 @@
 	Description of the internal parameters of the station.
 	The station is the OpenSCADA program.
 	-->
-	<prm id="StName">AGLKS</prm>
+	<prm id="StName">AGLCS</prm><prm id="StName_uk">АГЛКС</prm><prm id="StName_ru">АГЛКС</prm>
 	<prm id="WorkDB">SQLite.GenDB</prm>
 	<prm id="LogTarget">10</prm>
 	<prm id="LangBase">en_US.UTF-8;uk_UA.UTF-8;ru_RU.UTF-8</prm>

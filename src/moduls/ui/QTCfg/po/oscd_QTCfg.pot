@@ -246,6 +246,28 @@ msgstr ""
 msgid "Press for stopping the cycled refreshing of the page content."
 msgstr ""
 
+#, c-format
+msgid "Append to favorite for '%s'"
+msgstr ""
+
+msgid "The button to toggle the current page as favorite"
+msgstr ""
+
+msgid "Press to toggle the current page as favorite."
+msgstr ""
+
+msgid "Favorite"
+msgstr ""
+
+msgid "Go to favorite"
+msgstr ""
+
+msgid "The button-menu to go the favorite page"
+msgstr ""
+
+msgid "Press to go the favorite page."
+msgstr ""
+
 msgid "&About"
 msgstr ""
 
@@ -394,6 +416,13 @@ msgid ""
 "Continue other nodes?"
 msgstr ""
 
+#, c-format
+msgid "Remove from favorite for '%s'"
+msgstr ""
+
+msgid "Clear the list"
+msgstr ""
+
 msgid "List of messages in the status bar:"
 msgstr ""
 
@@ -418,6 +447,12 @@ msgid "Manual"
 msgstr ""
 
 msgid "The manual '%1' was not found offline or online!"
+msgstr ""
+
+msgid "Find"
+msgstr ""
+
+msgid "Find next"
 msgstr ""
 
 msgid "<EVAL>"
@@ -565,17 +600,33 @@ msgid "%s| '%s' inserted for the record %d."
 msgstr ""
 
 #, c-format
+msgid "%s| '%s' moved for the record %d to %d."
+msgstr ""
+
+#, c-format
 msgid "%s| '%s' deleted for the record '%s'."
 msgstr ""
 
 #, c-format
-msgid "%s| '%s' moved for the record %d to %d."
+msgid "%s| '%s' user command '%s(%s)' to the record '%s'."
 msgstr ""
 
-msgid "Saving an image"
+msgid "Enter a string to search:"
 msgstr ""
 
-msgid "Loading an image"
+msgid "Searching a string"
+msgstr ""
+
+msgid "Case sensitively"
+msgstr ""
+
+msgid "Save image"
+msgstr ""
+
+msgid "Load image"
+msgstr ""
+
+msgid "Clear image"
 msgstr ""
 
 msgid "Saving the picture"
@@ -599,11 +650,19 @@ msgid "Error opening the file '%s'\n"
 msgstr ""
 
 #, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr ""
+
+#, c-format
 msgid "Error image file '%s'\n"
 msgstr ""
 
 #, c-format
 msgid "%s| '%s' uploaded by the picture '%s'."
+msgstr ""
+
+#, c-format
+msgid "%s| '%s' cleared."
 msgstr ""
 
 #, c-format
@@ -628,28 +687,13 @@ msgstr ""
 msgid "Picture is not set!"
 msgstr ""
 
-msgid "Find"
-msgstr ""
-
-msgid "Find next"
-msgstr ""
-
 msgid "Apply"
 msgstr ""
 
 msgid "Cursor = (%1:%2)"
 msgstr ""
 
-msgid "Enter a string to search:"
-msgstr ""
-
-msgid "Searching a string"
-msgstr ""
-
 msgid "Backward"
-msgstr ""
-
-msgid "Case sensitively"
 msgstr ""
 
 msgid "Whole words"
@@ -713,7 +757,7 @@ msgstr ""
 msgid "Module options"
 msgstr ""
 
-msgid "Timeouts of checking connections '{fail}:{good}', seconds"
+msgid "Timeouts of the connection checking '{fail}:{good}', seconds"
 msgstr ""
 
 msgid "Initial path of the configurator"
@@ -725,7 +769,7 @@ msgstr ""
 msgid "ToolTip limit, zero to disable"
 msgstr ""
 
-msgid "Go to the configuration of the list of remote stations"
+msgid "Go to configuration of the remote OpenSCADA hosts list"
 msgstr ""
 
 msgid "Page"

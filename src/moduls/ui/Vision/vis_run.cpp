@@ -948,7 +948,8 @@ void VisRun::exportDiag( const string &idg )
 	    }
 	    //  Save to file
 	    bool fOK = (write(fd,CSVr.data(),CSVr.size()) == (int)CSVr.size());
-	    ::close(fd);
+	    if(::close(fd) != 0)
+		mess_warning(mod->nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), fd, strerror(errno), errno);
 	    if(!fOK) mod->postMess(mod->nodePath().c_str(), QString(_("Error writing to: %1.")).arg(fileName), TVision::Error, this);
 	}
 	// Export to image
@@ -1006,7 +1007,7 @@ void VisRun::exportDoc( const string &idoc )
 	    XMLNode *curNode = &docTree;
 	    vector<unsigned> treeStk;
 	    treeStk.push_back(0);
-	    while(!(!curNode->parent() && treeStk.back() >= curNode->childSize())) {
+	    while(curNode->parent() || treeStk.back() < curNode->childSize()) {
 		if(treeStk.back() < curNode->childSize()) {
 		    curNode = curNode->childGet(treeStk.back());
 		    treeStk.push_back(0);
@@ -1047,8 +1048,8 @@ void VisRun::exportDoc( const string &idoc )
 			    }
 			    if(cellAllow) rez += "\x0D\x0A";
 			}
-			rez += "\x0D\x0A";
 		    }
+		    rez += "\x0D\x0A";
 		}
 		curNode = curNode->parent();
 		treeStk.pop_back();
@@ -1061,7 +1062,8 @@ void VisRun::exportDoc( const string &idoc )
 	bool fOK = true;
 	if(rez.empty())	mod->postMess(mod->nodePath().c_str(),QString(_("No data to export.")),TVision::Error,this);
 	else fOK = (write(fd,rez.data(),rez.size()) == (int)rez.size());
-	::close(fd);
+	if(::close(fd) != 0)
+	    mess_warning(mod->nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), fd, strerror(errno), errno);
 	if(!fOK) mod->postMess(mod->nodePath().c_str(), QString(_("Error writing to: %1.")).arg(fileName), TVision::Error, this);
     }
 }
@@ -1123,7 +1125,7 @@ void VisRun::exportTable( const string &itbl )
 	    QTableWidgetItem *tit;
 	    for(int iC = 0; iC < wdg->columnCount(); iC++)
 		rez += "\""+((tit=wdg->horizontalHeaderItem(iC))?tit->text().toStdString():string(""))+"\";";
-	    rez += "\n";
+	    rez += "\x0D\x0A";
 	    for(int iR = 0; iR < wdg->rowCount(); iR++) {
 		for(int iC = 0; iC < wdg->columnCount(); iC++) {
 		    QVariant vl = (tit=wdg->item(iR,iC)) ? tit->data(Qt::DisplayRole) : QVariant();
@@ -1131,13 +1133,14 @@ void VisRun::exportTable( const string &itbl )
 		    else if(vl.type() == QVariant::String) rez += "\""+TSYS::strEncode(vl.toString().toStdString(),TSYS::SQL,"\"")+"\";";
 		    else rez += vl.toString().toStdString()+";";
 		}
-		rez += "\n";
+		rez += "\x0D\x0A";
 	    }
 	}
 	bool fOK = true;
 	if(rez.empty())	mod->postMess(mod->nodePath().c_str(),QString(_("No data to export.")),TVision::Error,this);
 	else fOK = (write(fd,rez.data(),rez.size()) == (int)rez.size());
-	::close(fd);
+	if(::close(fd) != 0)
+	    mess_warning(mod->nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), fd, strerror(errno), errno);
 	if(!fOK) mod->postMess(mod->nodePath().c_str(), QString(_("Error writing to: %1.")).arg(fileName), TVision::Error, this);
     }
 }
@@ -2060,7 +2063,8 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
 	int hd = open(comProc.c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles(true));
 	if(hd >= 0) {
 	    fOK = write(hd, props().data(), props().size()) == (ssize_t)props().size();
-	    ::close(hd);
+	    if(::close(hd) != 0)
+		mess_warning(mod->nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	}
 	if(!fOK) {
 	    mess_err((mod->nodePath()+"/sesRun_"+owner()->workSess()).c_str(), _("Error function of the notificator '%s': %s"), comProc.c_str(), strerror(errno));
@@ -2237,7 +2241,11 @@ void VisRun::Notify::commCall( string &res, string &resTp, const string &mess, c
     if(ntfPlay || comIsExtScript) {
 	resFile = "sesRun_"+owner()->workSess()+"_res"+i2s(tp);
 	int hdRes = res.size() ? open(resFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles()) : -1;
-	if(hdRes >= 0) { write(hdRes, res.data(), res.size()); ::close(hdRes); }
+	if(hdRes >= 0) {
+	    write(hdRes, res.data(), res.size());
+	    if(::close(hdRes) != 0)
+		mess_warning(mod->nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hdRes, strerror(errno), errno);
+	}
 	else resFile = "";
     }
 

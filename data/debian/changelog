@@ -1,3 +1,9 @@
+openscada (0.9.6-1) LTS; urgency=low
+
+  * Update 6 of OpenSCADA 0.9 LTS.
+
+ -- Roman Savochenko <roman@oscada.org>  Wed, 01 Mar 2023 20:00:00 +0200
+
 openscada (0.9.5-1) LTS; urgency=low
 
   * Update 5 of OpenSCADA 0.9 LTS.

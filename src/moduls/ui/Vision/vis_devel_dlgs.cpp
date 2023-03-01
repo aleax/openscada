@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_dlgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,6 +38,7 @@
 #include <QMessageBox>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QMenuBar>
 
 #include "../QTStarter/lib_qtgen.h"
 #include "vis_widgs.h"
@@ -101,11 +102,9 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
 
     obj_ico = new QPushButton(tab_w);
     obj_ico->setObjectName("/obj/cfg/ico");
-    obj_ico->setToolTip(_("Item icon. Click to download another."));
     obj_ico->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum));
     obj_ico->setIconSize(QSize(icoSize(5),icoSize(5)));
     obj_ico->setAutoDefault(false);
-    connect(obj_ico, SIGNAL(released()), this, SLOT(selectIco()));
     glay->addWidget(obj_ico, 0, 0, 3, 1);
 
     lab = new QLabel(_("Status:"), tab_w);
@@ -375,7 +374,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
     XMLNode req("get");
 
     XMLNode info_req("info");
-    info_req.setAttr("path",ed_it);
+    info_req.setAttr("path", ed_it);
 
     if(owner()->cntrIfCmd(info_req) || !info_req.childSize()) {
 	mod->postMess(mod->nodePath().c_str(), QString(_("Error getting the node '%1' information.")).arg(ed_it.c_str()),TVision::Error, this);
@@ -475,14 +474,38 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 		}
 	}
 	// Icon
-	gnd = TCntrNode::ctrId(root,obj_ico->objectName().toStdString(),true);
+	gnd = TCntrNode::ctrId(root, obj_ico->objectName().toStdString(), true);
 	ico_modif = gnd && s2i(gnd->attr("acs"))&SEC_WR;
 	if(gnd) {
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req) && (sval = TSYS::strDecode(req.text(),TSYS::base64)).size() &&
 		    ico_t.loadFromData((const uchar*)sval.data(),sval.size()))
+	    {
 		obj_ico->setIcon(QPixmap::fromImage(ico_t));
-	    else obj_ico->setIcon(QIcon());
+		obj_ico->setProperty("img", ico_t);
+
+		//  Icon menu
+		QMenu *imgMenu = new QMenu;
+		QAction *it = NULL;
+		if(!ico_t.isNull()) {
+		    it = new QAction(_("Save image"), this);
+		    it->setObjectName("save");
+		    imgMenu->addAction(it);
+		}
+		if(ico_modif) {
+		    it = new QAction(_("Load image"), this);
+		    it->setObjectName("load");
+		    imgMenu->addAction(it);
+		    if(!ico_t.isNull()) {
+			it = new QAction(_("Clear image"),this);
+			it->setObjectName("clear");
+			imgMenu->addAction(it);
+		    }
+		}
+		obj_ico->setMenu(imgMenu);
+		if(imgMenu)
+		    connect(imgMenu, SIGNAL(triggered(QAction*)), this, SLOT(doIco(QAction*)));
+	    } else obj_ico->setIcon(QIcon());
 	}
 	// Permition
 	string wstr;
@@ -739,32 +762,50 @@ void LibProjProp::tabChanged( int itb )
     }
 }
 
-void LibProjProp::selectIco( )
+//?!?! Move to some common code of own image implementation
+void LibProjProp::doIco( QAction *it )
 {
-    QImage ico_t;
+    if(!it) return;
 
-    if(!ico_modif)	return;
+    try {
+	bool update = false;
 
-    QString fileName = owner()->getFileName(_("Downloading the image icon"),"",_("Images (*.png *.jpg)"));
-    if(fileName.isEmpty())	return;
-    if(!ico_t.load(fileName)) {
-	mod->postMess(mod->nodePath().c_str(), QString(_("Error downloading the icon image '%1'.")).arg(fileName), TVision::Warning, this);
-	return;
-    }
+	if(it->objectName() == "save") {
+	    QString fileName = QFileDialog::getSaveFileName(this,_("Saving the picture"),"img.png",_("Images (*.png *.xpm *.jpg)"));
+	    if(!fileName.isEmpty() && !obj_ico->property("img").value<QImage>().save(fileName))
+		throw TError(mod->nodePath().c_str(), _("Error saving to the file '%s'."), fileName.toStdString().c_str());
+	}
+	else if(it->objectName() == "load") {
+	    QString fileName = owner()->getFileName(_("Loading the picture"),"",_("Images (*.png *.jpg)"));
+	    if(fileName.isEmpty())	return;
 
-    obj_ico->setIcon(QPixmap::fromImage(ico_t));
+	    QImage ico_t;
+	    if(!ico_t.load(fileName))
+		throw TError(mod->nodePath().c_str(), _("Error loading the picture '%s'."), fileName.toStdString().c_str());
 
-    QByteArray ba;
-    QBuffer buffer(&ba);
-    buffer.open(QIODevice::WriteOnly);
-    ico_t.save(&buffer, "PNG");
+	    QByteArray ba;
+	    QBuffer buffer(&ba);
+	    buffer.open(QIODevice::WriteOnly);
+	    ico_t.save(&buffer, "PNG");
 
-    XMLNode req("set");
-    req.setAttr("path", ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl))->
-	setText(TSYS::strEncode(string(ba.data(),ba.size()),TSYS::base64,"\n"));
-    if(owner()->cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	    XMLNode req("set");
+	    req.setAttr("path", ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl))->
+		setText(TSYS::strEncode(string(ba.data(),ba.size()),TSYS::base64,"\n"));
+	    if(owner()->cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(), req.text().c_str());
 
-    is_modif = true;
+	    update = true;
+	}
+	else if(it->objectName() == "clear") {
+	    XMLNode req("set");
+	    req.setAttr("path", ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl))->setText("");
+	    if(owner()->cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(), req.text().c_str());
+
+	    update = true;
+	}
+
+	if(update) { showDlg(ed_it, true); is_modif = true; }
+
+    } catch(TError &err) { mod->postMess(err.cat.c_str(), err.mess.c_str(), TVision::Error, this); }
 }
 
 void LibProjProp::isModify( QObject *snd )
@@ -882,7 +923,7 @@ void LibProjProp::loadMimeData( )
 {
     if(!mimeDataTable->selectedItems().empty()) {
 	InputDlg dlg(this, windowIcon(),
-	    QString(_("Are you sure of loading a mime to selected item '%1'?")).arg(mimeDataTable->selectedItems()[0]->text()),
+	    QString(_("Are you sure of loading data to selected item '%1'?")).arg(mimeDataTable->selectedItems()[0]->text()),
 		    _("Loading the data"), false, false);
 	if(dlg.exec() != QDialog::Accepted) return;
     }
@@ -1034,12 +1075,10 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     glay->setSpacing(6);
     obj_ico = new QPushButton(tab_w);
     obj_ico->setObjectName("/wdg/cfg/ico");
-    obj_ico->setToolTip(_("Item icon. Click to download another."));
     obj_ico->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
     obj_ico->setIconSize(QSize(icoSize(5),icoSize(5)));
     obj_ico->setAutoDefault(false);
-    connect(obj_ico, SIGNAL(released()), this, SLOT(selectIco()));
-    glay->addWidget(obj_ico,0,0,4,1);
+    glay->addWidget(obj_ico, 0, 0, 4, 1);
 
     lab = new QLabel(_("Status:"), tab_w);
     glay->addWidget(lab, 0, 1);
@@ -1134,6 +1173,14 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     connect(obj_descr, SIGNAL(apply()), this, SLOT(isModify()));
     glay->addWidget(obj_descr, 5, 0, 1, 4);
 
+    lab_proc_perG = new QLabel(_("Periodic processing, milliseconds:"), tab_w);
+    lab_proc_perG->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
+    glay->addWidget(lab_proc_perG, 6, 0);
+    proc_perG = new LineEdit(tab_w, LineEdit::Text, false, false);
+    proc_perG->setObjectName("/wdg/cfg/procPer");
+    connect(proc_perG, SIGNAL(apply()), this, SLOT(isModify()));
+    glay->addWidget(proc_perG, 6, 1, 1, 3);
+
     grp->setLayout(glay);
     dlg_lay->addWidget(grp, 1, 0);
 
@@ -1176,7 +1223,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
 						<< _("Configuration") << _("Configuration template"));
     glay->addWidget(obj_attr_cfg, 0, 0, 1, 2);
 
-    buttAttrAdd = new QPushButton(_("Add attribute"),attr_cf_fr); 
+    buttAttrAdd = new QPushButton(_("Add attribute"),attr_cf_fr);
     connect(buttAttrAdd, SIGNAL(clicked()), this, SLOT(addAttr()));
     glay->addWidget(buttAttrAdd, 1, 0);
     buttAttrDel = new QPushButton(_("Delete attribute"),attr_cf_fr);
@@ -1192,9 +1239,10 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     glay->setMargin(9);
     glay->setSpacing(6);
 
-    lab = new QLabel(_("Period of the calculating, milliseconds:"),wdg_proc_fr);
-    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
-    glay->addWidget(lab, 1, 0);
+    //????[v1.0] Remove at moving to the main tab in proc_perG
+    lab_proc_per = new QLabel(_("Period of the calculating, milliseconds:"),wdg_proc_fr);
+    lab_proc_per->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
+    glay->addWidget(lab_proc_per, 1, 0);
     proc_per = new LineEdit(wdg_proc_fr, LineEdit::Text, false, false);
     proc_per->setObjectName("/proc/calc/per");
     connect(proc_per, SIGNAL(apply()), this, SLOT(isModify()));
@@ -1348,14 +1396,38 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	}else obj_tmstmp->setText("");*/
 
 	// Icon
-	gnd = TCntrNode::ctrId(root,obj_ico->objectName().toStdString(),true);
+	gnd = TCntrNode::ctrId(root, obj_ico->objectName().toStdString(), true);
 	ico_modif = gnd && s2i(gnd->attr("acs"))&SEC_WR;
 	if(gnd) {
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req) && (sval = TSYS::strDecode(req.text(),TSYS::base64)).size() &&
 		    ico_t.loadFromData((const uchar*)sval.data(),sval.size()))
+	    {
 		obj_ico->setIcon(QPixmap::fromImage(ico_t));
-	    else obj_ico->setIcon(QIcon());
+		obj_ico->setProperty("img", ico_t);
+
+		//  Icon menu
+		QMenu *imgMenu = new QMenu;
+		QAction *it = NULL;
+		if(!ico_t.isNull()) {
+		    it = new QAction(_("Save image"), this);
+		    it->setObjectName("save");
+		    imgMenu->addAction(it);
+		}
+		if(ico_modif) {
+		    it = new QAction(_("Load image"), this);
+		    it->setObjectName("load");
+		    imgMenu->addAction(it);
+		    if(!ico_t.isNull()) {
+			it = new QAction(_("Clear image"),this);
+			it->setObjectName("clear");
+			imgMenu->addAction(it);
+		    }
+		}
+		obj_ico->setMenu(imgMenu);
+		if(imgMenu)
+		    connect(imgMenu, SIGNAL(triggered(QAction*)), this, SLOT(doIco(QAction*)));
+	    } else obj_ico->setIcon(QIcon());
 	}
 	// Id
 	gnd = TCntrNode::ctrId(root,obj_id->objectName().toStdString(),true);
@@ -1394,6 +1466,15 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    }
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_descr->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) obj_descr->setText(req.text().c_str());
+	}
+	//Periodic processing
+	gnd = TCntrNode::ctrId(root,proc_perG->objectName().toStdString(),true);
+	lab_proc_perG->setVisible(gnd); proc_perG->setVisible(gnd);
+	proc_perG->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
+	if(gnd) {
+	    proc_perG->setToolTip(gnd->attr("help").c_str());
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(proc_perG->objectName().toStdString(),TSYS::PathEl));
+	    if(!owner()->cntrIfCmd(req)) proc_perG->setValue(req.text().c_str());
 	}
 
 	// Special fields
@@ -1453,7 +1534,7 @@ void VisItProp::tabChanged( int itb )
 
 	    // Get node information
 	    XMLNode info_req("info");
-	    info_req.setAttr("path",ed_it);
+	    info_req.setAttr("path", ed_it);
 	    if(owner()->cntrIfCmd(info_req) || !info_req.childSize()) {
 		mod->postMess(mod->nodePath().c_str(),
 			QString(_("Error getting the node '%1' information.")).arg(ed_it.c_str()),TVision::Error, this);
@@ -1469,7 +1550,9 @@ void VisItProp::tabChanged( int itb )
 		for(unsigned iW = 0; iW < req.childSize(); iW++)
 		    wlst.push_back(req.childGet(iW)->text());
 		    //wlst.push_back(req.childGet(iW)->attr("id"));
+
 	    //  Fill table
+	    gnd = TCntrNode::ctrId(root, obj_attr_cfg->objectName().toStdString(), true);
 	    //  Delete no present root items
 	    for(int iR = 0; iR < obj_attr_cfg->topLevelItemCount(); iR++) {
 		unsigned iW;
@@ -1513,14 +1596,26 @@ void VisItProp::tabChanged( int itb )
 		    if(iR < root_it->childCount()) cur_it = root_it->child(iR);
 		    else cur_it = new QTreeWidgetItem(root_it);
 		    cur_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable|Qt::ItemIsSelectable);
-		    cur_it->setText(0,req.childGet("id","id")->childGet(iL)->text().c_str());
-		    cur_it->setData(0,Qt::UserRole,cur_it->text(0));
-		    cur_it->setText(1,req.childGet("id","name")->childGet(iL)->text().c_str());
-		    cur_it->setData(2,Qt::DisplayRole,s2i(req.childGet("id","type")->childGet(iL)->text()));
-		    cur_it->setText(3,req.childGet("id","wa")->childGet(iL)->text().c_str());
-		    cur_it->setData(4,Qt::DisplayRole,(bool)s2i(req.childGet("id","proc")->childGet(iL)->text()));
-		    cur_it->setData(5,Qt::DisplayRole,s2i(req.childGet("id","cfg")->childGet(iL)->text()));
-		    cur_it->setText(6,req.childGet("id","cfgtmpl")->childGet(iL)->text().c_str());
+
+		    cur_it->setText(0, req.childGet("id","id")->childGet(iL)->text().c_str());
+		    cur_it->setData(0, Qt::UserRole, cur_it->text(0));
+
+		    cur_it->setText(1, req.childGet("id","name")->childGet(iL)->text().c_str());
+		    XMLNode *nameRow = gnd ? gnd->childGet("id","name") : NULL;
+		    if(nameRow && nameRow->attr("help").size()) {
+			cur_it->setData(1, Qt::ToolTipRole, nameRow->attr("help").c_str());
+			cur_it->setData(1, Qt::WhatsThisRole, nameRow->attr("help").c_str());
+		    }
+
+		    cur_it->setData(2, Qt::DisplayRole, s2i(req.childGet("id","type")->childGet(iL)->text()));
+
+		    cur_it->setText(3, req.childGet("id","wa")->childGet(iL)->text().c_str());
+
+		    cur_it->setData(4, Qt::DisplayRole, (bool)s2i(req.childGet("id","proc")->childGet(iL)->text()));
+
+		    cur_it->setData(5, Qt::DisplayRole, s2i(req.childGet("id","cfg")->childGet(iL)->text()));
+
+		    cur_it->setText(6, req.childGet("id","cfgtmpl")->childGet(iL)->text().c_str());
 		}
 	    }
 	    //  Load types and configurations
@@ -1541,6 +1636,7 @@ void VisItProp::tabChanged( int itb )
 	    if(!proc_per->isEdited()) {
 		proc_per->setValue("");
 		gnd = TCntrNode::ctrId(root,proc_per->objectName().toStdString(),true);
+		lab_proc_per->setVisible(gnd); proc_per->setVisible(gnd);
 		proc_per->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 		if(gnd) {
 		    proc_per->setToolTip(gnd->attr("help").c_str());
@@ -1617,33 +1713,50 @@ void VisItProp::progChanged( )
     }
 }
 
-void VisItProp::selectIco( )
+//?!?! Move to some common code of own image implementation
+void VisItProp::doIco( QAction *it )
 {
-    QImage ico_t;
+    if(!it) return;
 
-    if(!ico_modif)	return;
+    try {
+	bool update = false;
 
-    QString fileName = owner()->getFileName(_("Downloading the image icon"),"",_("Images (*.png *.jpg)"));
+	if(it->objectName() == "save") {
+	    QString fileName = QFileDialog::getSaveFileName(this,_("Saving the picture"),"img.png",_("Images (*.png *.xpm *.jpg)"));
+	    if(!fileName.isEmpty() && !obj_ico->property("img").value<QImage>().save(fileName))
+		throw TError(mod->nodePath().c_str(), _("Error saving to the file '%s'."), fileName.toStdString().c_str());
+	}
+	else if(it->objectName() == "load") {
+	    QString fileName = owner()->getFileName(_("Loading the picture"),"",_("Images (*.png *.jpg)"));
+	    if(fileName.isEmpty())	return;
 
-    if(fileName.isEmpty())	return;
-    if(!ico_t.load(fileName)) {
-	mod->postMess(mod->nodePath().c_str(), QString(_("Error downloading the icon image '%1'.")).arg(fileName), TVision::Warning, this);
-	return;
-    }
+	    QImage ico_t;
+	    if(!ico_t.load(fileName))
+		throw TError(mod->nodePath().c_str(), _("Error loading the picture '%s'."), fileName.toStdString().c_str());
 
-    obj_ico->setIcon(QPixmap::fromImage(ico_t));
+	    QByteArray ba;
+	    QBuffer buffer(&ba);
+	    buffer.open(QIODevice::WriteOnly);
+	    ico_t.save(&buffer, "PNG");
 
-    QByteArray ba;
-    QBuffer buffer(&ba);
-    buffer.open(QIODevice::WriteOnly);
-    ico_t.save(&buffer,"PNG");
+	    XMLNode req("set");
+	    req.setAttr("path", ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl))->
+		setText(TSYS::strEncode(string(ba.data(),ba.size()),TSYS::base64,"\n"));
+	    if(owner()->cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(), req.text().c_str());
 
-    XMLNode req("set");
-    req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl))->
-	setText(TSYS::strEncode(string(ba.data(),ba.size()),TSYS::base64,"\n"));
-    if(owner()->cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	    update = true;
+	}
+	else if(it->objectName() == "clear") {
+	    XMLNode req("set");
+	    req.setAttr("path", ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl))->setText("");
+	    if(owner()->cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(), req.text().c_str());
 
-    is_modif = true;
+	    update = true;
+	}
+
+	if(update) { showDlg(ed_it, true); is_modif = true; }
+
+    } catch(TError &err) { mod->postMess(err.cat.c_str(), err.mess.c_str(), TVision::Error, this); }
 }
 
 void VisItProp::isModify( QObject *snd )
@@ -1666,9 +1779,9 @@ void VisItProp::isModify( QObject *snd )
 	req.setText(((QComboBox*)snd)->currentText().toStdString());
 	update = true;
     }
-    else if(oname == obj_name->objectName() || oname == proc_per->objectName() || oname == obj_parent->objectName()) {
+    else if(oname == obj_name->objectName() || oname == proc_perG->objectName() || oname == proc_per->objectName() || oname == obj_parent->objectName()) {
 	req.setText(((LineEdit*)snd)->value().toStdString());
-	update = (oname == obj_parent->objectName() || oname == proc_per->objectName());
+	update = (oname == obj_parent->objectName() || oname == proc_perG->objectName() || oname == proc_per->objectName());
     }
     else if(oname == obj_descr->objectName() || oname == proc_text->objectName()) {
 	req.setText(((TextEdit*)snd)->text().toStdString());
@@ -1859,25 +1972,39 @@ void VisItProp::ItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
 
 QWidget *VisItProp::ItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    QWidget *w_del = NULL;
+    QWidget *wDel = NULL;
     if(!index.isValid()) return 0;
 
     QVariant value = index.data(Qt::EditRole);
 
     if(index.parent().isValid()) {
-	if(index.column() == 2 || index.column() == 5) w_del = new QComboBox(parent);
+	if(index.column() == 1) {
+	    wDel = new QTextEdit(parent);
+#if QT_VERSION >= 0x050A00
+	    ((QTextEdit*)wDel)->setTabStopDistance(40);
+#else
+	    ((QTextEdit*)wDel)->setTabStopWidth(40);
+#endif
+	    ((QTextEdit*)wDel)->setLineWrapMode(QTextEdit::NoWrap);
+	    ((QTextEdit*)wDel)->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	    ((QTextEdit*)wDel)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	    //((QTextEdit*)wDel)->resize(parent->width(), ((QTextEdit*)wDel)->height());
+	}
+	else if(index.column() == 2 || index.column() == 5) wDel = new QComboBox(parent);
 	else {
 	    QItemEditorFactory factory;
-	    w_del = factory.createEditor(value.type(),parent);
+	    wDel = factory.createEditor(value.type(),parent);
 	}
     }
 
-    return w_del;
+    return wDel;
 }
 
 void VisItProp::ItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-    if(index.column() == 2 || index.column() == 5) {
+    if(index.column() == 1)
+	((QTextEdit*)editor)->setPlainText(index.data(Qt::DisplayRole).toString());
+    else if(index.column() == 2 || index.column() == 5) {
 	QComboBox *comb = dynamic_cast<QComboBox*>(editor);
 	QStringList types = index.model()->index(0,0).data(Qt::UserRole+((index.column()==5)?1:0)).toStringList();
 	for(int iL = 0; iL < types.size(); iL++)
@@ -1890,7 +2017,9 @@ void VisItProp::ItemDelegate::setEditorData(QWidget *editor, const QModelIndex &
 
 void VisItProp::ItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
-    if(index.column() == 2 || index.column() == 5) {
+    if(index.column() == 1)
+	model->setData(index, ((QTextEdit*)editor)->toPlainText(), Qt::EditRole);
+    else if(index.column() == 2 || index.column() == 5) {
 	QComboBox *comb = dynamic_cast<QComboBox*>(editor);
 	model->setData(index,comb->itemData(comb->currentIndex()),Qt::EditRole);
     }
@@ -1899,4 +2028,30 @@ void VisItProp::ItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *
 	model->setData(index,(bool)comb->currentIndex(),Qt::EditRole);
     }
     else QItemDelegate::setModelData(editor, model, index);
+}
+
+bool VisItProp::ItemDelegate::eventFilter( QObject *object, QEvent *event )
+{
+    if(dynamic_cast<QTextEdit*>(object)) {
+	QTextEdit *ted = dynamic_cast<QTextEdit*>(object);
+	if(event->type() == QEvent::KeyPress)
+	    switch(static_cast<QKeyEvent *>(event)->key()) {
+		case Qt::Key_Enter:
+		case Qt::Key_Return:
+		    if(static_cast<QKeyEvent *>(event)->text() == "<REFORWARD>") return false;
+		    if(!(QApplication::keyboardModifiers()&Qt::ControlModifier)) {
+			emit commitData(ted);
+			emit closeEditor(ted, QAbstractItemDelegate::SubmitModelCache);
+			return true;
+		    }
+		    QCoreApplication::postEvent(object,
+				new QKeyEvent(QEvent::KeyPress,static_cast<QKeyEvent *>(event)->key(),Qt::NoModifier,"<REFORWARD>"));
+		    return true;
+		case Qt::Key_Escape:
+		    emit closeEditor(ted, QAbstractItemDelegate::RevertModelCache);
+		    return true;
+	    }
+    }
+
+    return QItemDelegate::eventFilter(object, event);
 }

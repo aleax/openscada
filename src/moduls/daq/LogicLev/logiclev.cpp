@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.LogicLev file: logiclev.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@
 #define MOD_NAME	trS("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.6.11"
+#define MOD_VER		"2.7.3"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -151,7 +151,7 @@ string TMdContr::getStatus( )
     if(startStat() && !redntUse()) {
 	if(callSt)	rez += TSYS::strMess(_("Calculation. "));
 	if(period())	rez += TSYS::strMess(_("Calculation with the period %s. "), tm2s(1e-9*period()).c_str());
-	else rez += TSYS::strMess(_("Next calculation by the cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	else rez += TSYS::strMess(_("Next calculation by the CRON '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	rez += TSYS::strMess(_("Spent time %s[%s]. "),
 	    tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
     }
@@ -379,7 +379,6 @@ void TMdPrm::enable( )
     if(isFullEn) TParamContr::enable();
 
     vector<string> als;
-
     try {
 	if(isPRefl()) {
 	    vector<string> list;
@@ -387,12 +386,14 @@ void TMdPrm::enable( )
 	    if(!prmRefl->freeStat()) {
 		prmRefl->at().vlList(list);
 		for(unsigned iL = 0; iL < list.size(); iL++) {
-		    if(!vlPresent(list[iL]))
-			pEl.fldAdd(new TFld(list[iL].c_str(),prmRefl->at().vlAt(list[iL]).at().fld().descr().c_str(),
-			    prmRefl->at().vlAt(list[iL]).at().fld().type(),
-			    TVal::DirWrite|TVal::DirRead|(prmRefl->at().vlAt(list[iL]).at().fld().flg()&TFld::NoWrite)));
+		    if(!vlPresent(list[iL])) {
+			pEl.fldAdd(new TFld(prmRefl->at().vlAt(list[iL]).at().fld()));
+			AutoHD<TVal> pVal = vlAt(list[iL]);
+			pVal.at().fld().setFlg(pVal.at().fld().flg()|TVal::DirWrite|TVal::DirRead);
+		    }
 		    als.push_back(list[iL]);
 		}
+		if(!AutoHD<TParamContr>(*prmRefl).at().enableStat()) prmRefl->free();
 
 		isProc = true;
 	    }
@@ -412,7 +413,7 @@ void TMdPrm::enable( )
 		chkLnkNeed = tmpl->initLnks();
 
 		//Load IO
-		loadIO(true);
+		loadIO();
 
 		//Init system attributes identifiers
 		idFreq	= tmpl->ioId("f_frq");
@@ -475,7 +476,7 @@ void TMdPrm::load_( )
     if(enableStat()) loadIO();
 }
 
-void TMdPrm::loadIO( bool force )
+void TMdPrm::loadIO( )
 {
     if(!isStd() || !tmpl->func()) return;
 
@@ -537,18 +538,7 @@ void TMdPrm::vlGet( TVal &val )
 
     if(owner().redntUse()) return;
 
-    if(val.name() != "err") {
-	try {
-	    if(isPRefl() && !prmRefl->freeStat()) val.set(prmRefl->at().vlAt(val.name()).at().get(), 0, true);
-	    else if(isStd() && tmpl->func() && (idErr < 0 || tmpl->getS(idErr) != EVAL_STR)) {
-		int id_lnk = tmpl->lnkId(val.name());
-		if(id_lnk >= 0 && !tmpl->lnkActive(id_lnk)) id_lnk = -1;
-		if(id_lnk < 0) val.set(tmpl->get(tmpl->ioId(val.name())), 0, true);
-		else val.set(tmpl->lnkInput(id_lnk), 0, true);
-	    }
-	} catch(TError &err) { }
-    }
-    else {
+    if(val.name() == "err") {
 	if(isStd() && tmpl->func() && idErr >= 0) {
 	    if(tmpl->getS(idErr) != EVAL_STR) val.setS(tmpl->getS(idErr), 0, true);
 	} else val.setS("0", 0, true);
@@ -582,8 +572,8 @@ void TMdPrm::vlArchMake( TVal &val )
     TParamContr::vlArchMake(val);
 
     if(val.arch().freeStat()) return;
-    val.arch().at().setSrcMode(TVArchive::ActiveAttr);
-    val.arch().at().setPeriod(SYS->archive().at().valPeriod()*1000);
+    val.arch().at().setSrcMode(TVArchive::DAQAttr);
+    val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
     val.arch().at().setHardGrid(true);
     val.arch().at().setHighResTm(true);
 }
@@ -646,7 +636,19 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 
 void TMdPrm::calc( bool first, bool last, double frq )
 {
-    if(isPRefl() && (!first || prmRefl->freeStat())) enable();
+    if(isPRefl()) {
+	if(prmRefl->freeStat()) enable();
+	if(!prmRefl->freeStat()) {
+	    AutoHD<TVal> pVal;
+	    vector<string> ls;
+	    prmRefl->at().vlList(ls);
+	    for(unsigned iEl = 0; iEl < ls.size(); iEl++)
+		try {
+		    if((pVal=vlAt(ls[iEl])).at().isCfg()) continue;
+		    pVal.at().set(prmRefl->at().vlAt(ls[iEl]).at().get(), 0, true);
+		} catch(TError&) { }
+	}
+    }
 
     if(!isStd() || !tmpl->func()) return;
     try {
@@ -672,6 +674,9 @@ void TMdPrm::calc( bool first, bool last, double frq )
 	//Put output links
 	tmpl->outputLinks();
 
+	//Put values to the attributes and archives in the passive archiving mode
+	tmpl->archAttrs(this);
+
 	//Put fixed system attributes
 	if(idNm >= 0 && tmpl->ioMdf(idNm))	setName(tmpl->getS(idNm));
 	if(idDscr >= 0 && tmpl->ioMdf(idDscr))	setDescr(tmpl->getS(idDscr));
@@ -685,7 +690,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
     //Service commands process
     string a_path = opt->attr("path");
-    if(a_path.substr(0,6) == "/serv/") {
+    if(a_path.find("/serv/") == 0) {
 	if(a_path == "/serv/tmplAttr") {
 	    if(!isStd() || !tmpl->func()) throw TError(nodePath().c_str(),_("Error or non-template parameter."));
 	    if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
@@ -741,7 +746,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		cfg("PRM").setS(opt->text());
 	    } catch(...) { disable(); throw; }
     }
-    else if(a_path == "/prm/cfg/prmp_lst" && ctrChkNode(opt)) SYS->daq().at().ctrListPrmAttr(opt, cfg("PSRC").getS(), true, '.');
+    else if(a_path == "/prm/cfg/prmp_lst" && ctrChkNode(opt))	SYS->daq().at().ctrListPrmAttr(opt, cfg("PSRC").getS(), true, '.');
     else if(isStd() && tmpl->func() && tmpl->TPrmTempl::Impl::cntrCmdProc(opt))	;
     else TParamContr::cntrCmdProc(opt);
 }

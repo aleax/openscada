@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 18:22+0300\n"
+"POT-Creation-Date: 2023-02-16 10:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,7 +71,7 @@ msgstr ""
 msgid "Source"
 msgstr ""
 
-msgid "Passive;Passive param. attribute;Active param. attribute"
+msgid "Passive;DAQ Attribute;Active DAQ Attribute (DEPRECATED)"
 msgstr ""
 
 msgid "Data combining mode"
@@ -689,10 +689,6 @@ msgid "Error accessing item '%s'!"
 msgstr ""
 
 #, c-format
-msgid "Warning element '%s'! %s"
-msgstr ""
-
-#, c-format
 msgid "Node: %s"
 msgstr ""
 
@@ -1032,6 +1028,10 @@ msgstr ""
 msgid "Error getting object from non-object IO %d!"
 msgstr ""
 
+#, c-format
+msgid "Closing the iconv handler error '%s (%d)'!"
+msgstr ""
+
 msgid "Storage address in the format \"{DB module}.{DB name}\"."
 msgstr ""
 
@@ -1045,18 +1045,18 @@ msgstr ""
 msgid ""
 "Schedule wrotes in seconds periodic form or in the standard CRON form.\n"
 "The seconds periodic form is one real number (1.5, 1e-3).\n"
-"Cron is the standard form \"* * * * *\".\n"
-"  Where items by order:\n"
+"CRON is the standard form \"* * * * *\".\n"
+"  Where items by the order:\n"
 "    - minutes (0-59);\n"
 "    - hours (0-23);\n"
 "    - days (1-31);\n"
 "    - month (1-12);\n"
 "    - week day (0[Sunday]-6).\n"
-"  Where an item variants:\n"
+"  Where the item variants:\n"
 "    - \"*\" - any value;\n"
-"    - \"1,2,3\" - allowed values list;\n"
-"    - \"1-5\" - raw range of allowed values;\n"
-"    - \"*/2\" - range divider for allowed values.\n"
+"    - \"1,2,3\" - list of the allowed values;\n"
+"    - \"1-5\" - raw range of the allowed values;\n"
+"    - \"*/2\" - divider to the all allowed values range.\n"
 "Examples:\n"
 "  \"1e-3\" - call with a period of one millisecond;\n"
 "  \"* * * * *\" - each minute;\n"
@@ -1074,11 +1074,21 @@ msgid ""
 msgstr ""
 
 msgid ""
+"Address format of the output transport using the unified connection:\n"
+"  \"{TrModule}.[out_]{TrID}[:{TrAddr}]\" - typical output with automatic creation <TrID> at it missing and providing <TrAddr>;\n"
+"  \"{TrModule}.in_{TrID}:{RemConId}\" - initiative input with the connection identifier in <RemConId>."
+msgstr ""
+
+msgid ""
 "Specifies the category of the requested messages.\n"
 "Use template's symbols for group selection:\n"
 "  '*' - any substring;\n"
 "  '?' - any character.\n"
 "Regular expression enclosed between the symbols '/' (/mod_(System|LogicLev)/)."
+msgstr ""
+
+#, c-format
+msgid "Closing the thread %d error '%s (%d)'!"
 msgstr ""
 
 #, c-format
@@ -1232,6 +1242,9 @@ msgstr ""
 msgid "Template"
 msgstr ""
 
+msgid "The name's rows after the first one treat as help."
+msgstr ""
+
 msgid "Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object;Integer numbers selection;Real numbers selection;Strings selection"
 msgstr ""
 
@@ -1277,14 +1290,22 @@ msgstr ""
 msgid "Error, recursive linking."
 msgstr ""
 
+msgid "val:Constant value"
+msgstr ""
+
 msgid ""
-"Address to the DAQ attribute writes in the form \"{Type}.{Cntr}.{Prm}[.{PrmN}].{Attr}\", where:\n"
-"    Type,Cntr,Prm,Attr - DAQ: type, controller object, parameter and attribute.\n"
-"  Link's template, of the column \"Value\" on the template forming side, writes in the form \"{Parameter}|{attribute}\", where:\n"
-"    Parameter - specifies the parameter's name as the attribute's container;\n"
-"    attribute - attributes with the equal value <Parameter> will be grouped and will be appointed only by the indication of the attributes' container,\n"
-"                and the individual attributes will be associated with the attributes of the container in accordance with this field.\n"
-"Constant link value writes in the form \"val:{Constant}\".\n"
+"Address to the DAQ attribute is written in the forms:\n"
+"  \"{Type}.{Cntr}.{Prm}[.{PrmN}].{Attr}\";\n"
+"  \"prm:/{Type}/{Cntr}/{Prm}[/{PrmN}]/{Attr}\";\n"
+"  \"val:Constant value\".\n"
+"Where:\n"
+"  {Type},{Cntr},{Prm},{Attr} - DAQ type, controller object, parameter and attribute;\n"
+"  \"prm:\" - prefix of the ordinal form path where you can use the relativity by '.' and '..';\n"
+"  \"val:\" - prefix of the constant value in links.\n"
+"\n"
+"Link's template, of the column \"Value\" on the template forming side, writes in the form \"{Parameter}|{attribute}\", where:\n"
+"  {Parameter} - specifies the parameter's name as the attribute's container;\n"
+"  {attribute} - attributes with the equal value <Parameter> will be grouped and will be appointed only by the indication of the attributes' container, and the individual attributes will be associated with the attributes of the container in accordance with this field.\n"
 msgstr ""
 
 #, c-format
@@ -1579,6 +1600,10 @@ msgid "Error the configuration file '%s': %s"
 msgstr ""
 
 #, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr ""
+
+#, c-format
 msgid "Error loading the configuration file '%s'."
 msgstr ""
 
@@ -1651,6 +1676,10 @@ msgstr ""
 msgid "Unknown signal %d!"
 msgstr ""
 
+#, c-format
+msgid "Closing the file %p error '%s (%d)'!"
+msgstr ""
+
 msgid "Timeouted !!!"
 msgstr ""
 
@@ -1704,6 +1733,10 @@ msgstr ""
 msgid "System clock changed to '%s'. Correction the cron '%s' target!"
 msgstr ""
 
+#, c-format
+msgid "Closing the pipe %p error '%s (%d)'!"
+msgstr ""
+
 msgid "1:Request is not an object!"
 msgstr ""
 
@@ -1716,47 +1749,6 @@ msgid "%s station: \"%s\""
 msgstr ""
 
 msgid "Station"
-msgstr ""
-
-msgid "Station name"
-msgstr ""
-
-msgid "Program"
-msgstr ""
-
-msgid "Version"
-msgstr ""
-
-msgid "Host name"
-msgstr ""
-
-msgid "System user"
-msgstr ""
-
-msgid "Operation system"
-msgstr ""
-
-msgid "CPU"
-msgstr ""
-
-msgid "Main CPUs set"
-msgstr ""
-
-msgid ""
-"To set up the processors you use, write a row of numbers separated by a ':' character.\n"
-"Processor numbers start at 0."
-msgstr ""
-
-msgid "Tasks planning clock"
-msgstr ""
-
-msgid "Number of phases of the task invoking"
-msgstr ""
-
-msgid "To set up phasing of the task invoking in the determined phases number, <= 0 to set optimal, 1 to disable the tasks phasing."
-msgstr ""
-
-msgid "Internal charset"
 msgstr ""
 
 msgid "Configuration file"
@@ -1786,16 +1778,13 @@ msgstr ""
 msgid "Work DB address in the format \"{DB module}.{DB name}\"."
 msgstr ""
 
-msgid "Save the program at exit"
+msgid "Save the program at exit, with the period"
 msgstr ""
 
 msgid "Select for the program automatic saving to DB on exit."
 msgstr ""
 
-msgid "Period the program saving"
-msgstr ""
-
-msgid "Use not a zero period (seconds) to periodically save program changes to the DB."
+msgid "Use not a zero period in seconds to periodically save program changes to the storage."
 msgstr ""
 
 msgid "Set modification for the calculated objects"
@@ -1804,9 +1793,6 @@ msgstr ""
 msgid ""
 "Most suitable for the production systems together with the previous configuration properties, for the calculation context saving.\n"
 "But it is inconvinient in the development mode, all time reminding for the saving need."
-msgstr ""
-
-msgid "Least level"
 msgstr ""
 
 msgid "Least messages level which is procesed by the program."
@@ -1822,6 +1808,50 @@ msgid "To stderr"
 msgstr ""
 
 msgid "To archive"
+msgstr ""
+
+msgid "Environment"
+msgstr ""
+
+msgid "Program"
+msgstr ""
+
+msgid "System"
+msgstr ""
+
+msgid "System time"
+msgstr ""
+
+msgid "System planning clock"
+msgstr ""
+
+msgid "System user"
+msgstr ""
+
+msgid "System locale charset."
+msgstr ""
+
+msgid "Complete locale information with language, country and charset in the view \"en_GB.UTF-8\"."
+msgstr ""
+
+msgid "Host name"
+msgstr ""
+
+msgid "CPU"
+msgstr ""
+
+msgid ""
+"Main CPUs set.\n"
+"To set up the processors you use, write a row of numbers separated by the character ':'.\n"
+"Processor numbers start at 0."
+msgstr ""
+
+msgid "Number of phases of the task invoking"
+msgstr ""
+
+msgid ""
+"To set up phasing of the task invoking in the determined phases number,\n"
+" <= 0 to set optimal, 1 to disable the tasks phasing."
 msgstr ""
 
 msgid "Subsystems"
@@ -1946,15 +1976,15 @@ msgid "See to the messages"
 msgstr ""
 
 #, c-format
-msgid "%dx%0.3gGHz"
-msgstr ""
-
-#, c-format
 msgid "Real-time %s"
 msgstr ""
 
 #, c-format
 msgid "Monotonic %s"
+msgstr ""
+
+#, c-format
+msgid "%dx%0.3gGHz"
 msgstr ""
 
 #, c-format
@@ -2020,9 +2050,6 @@ msgstr ""
 msgid "<<<Unmatched sources>>>\n"
 msgstr ""
 
-msgid "<<<Translation changed>>>\n"
-msgstr ""
-
 #, c-format
 msgid "Clearing the equel to base translation '%s' for '%s'."
 msgstr ""
@@ -2065,6 +2092,10 @@ msgstr ""
 msgid "Level of lifting"
 msgstr ""
 
+#, c-format
+msgid "Error the output address '%s'!"
+msgstr ""
+
 msgid "Error finding and creating new input transports."
 msgstr ""
 
@@ -2092,14 +2123,13 @@ msgid ""
 msgstr ""
 
 #, c-format
-msgid "Error the remote host '%s'!"
-msgstr ""
-
-#, c-format
 msgid "External hosts of %s"
 msgstr ""
 
 msgid "User;System;User and System"
+msgstr ""
+
+msgid "Initial connection identifier to what bind for control."
 msgstr ""
 
 msgid "New external host"
@@ -2149,11 +2179,15 @@ msgid "Error deletion the node: %s"
 msgstr ""
 
 #, c-format
-msgid "Error removing the assigned node/connection: %s"
+msgid "The initiative connection '%s' is not presented!"
 msgstr ""
 
 #, c-format
-msgid "Error connection the new assigned node: %s"
+msgid "Error connection the new associated node: %s"
+msgstr ""
+
+#, c-format
+msgid "Error removing the associated node/connection: %s"
 msgstr ""
 
 msgid "Input transport: "
@@ -2168,10 +2202,13 @@ msgstr ""
 msgid "IO log"
 msgstr ""
 
-msgid "Log length and block limit"
+msgid "Log length, block limit, type"
 msgstr ""
 
 msgid "Use zero for the log disabling."
+msgstr ""
+
+msgid "Binary & Text;Binary;Text"
 msgstr ""
 
 msgid "Log"
@@ -2185,6 +2222,10 @@ msgstr ""
 
 #, c-format
 msgid "Established %s, last %s. "
+msgstr ""
+
+#, c-format
+msgid "Initiative connection ID '%s'. "
 msgstr ""
 
 #, c-format

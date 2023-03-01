@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../../en/files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="../index.html"><img alt="OpenSCADA" src="../../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="../index.html"><img src="../../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/Serial</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSerial&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Serial" title="Modules/Serial">Modules/Serial</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Serial.html" title="Modules/Serial (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Serial.html" title="Модулі/Serial (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSerial&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Serial" title="Modules/Serial">Modules/Serial</a> and the translation is 97% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Serial.html" title="Modules/Serial (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Serial.html" title="Модулі/Serial (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -40,12 +40,12 @@
 <td> Транспорт </td>
 <td> Роман Савоченко<br />&nbsp;&nbsp;<font size="-2"><i>Максим Кочетков (2016)</i></font> </td>
 <td> Предоставляет транспорт основанный на последовательных интерфейсах. Используется для обмена данными через последовательные интерфейсы типа RS232, RS485, GSM и похожие.
-<ul><li> <b>Сделать (To Do):</b></li></ul>
+<ul><li> <b><a href="../../en/To_do.html" title="Special:MyLanguage/Works/To do">Задачи (To Do)</a>:</b></li></ul>
 <dl><dd> - проверить режим модема и добавить к нему поле ввода PIN.</dd></dl>
 </td></tr></table>
 <p>Модуль предоставляет в программу поддержку транспортов, основанных на последовательных интерфейсах типа RS232, RS485, GSM и похожие. Поддерживаются входные и выходные транспорты. Добавить новые входные и выходные интерфейсы можно посредством конфигурации транспортной подсистемы в любом конфигураторе OpenSCADA.
 </p><p>Модулем, в режиме модема, поддерживается смешанный режим работы, который предусматривает наличие входного транспорта, ожидающего внешних подключений, а также выходного транспорта на том-же устройстве. Т.е. входной транспорт будет игнорировать все запросы при наличии установленного выходным транспортом соединения, в тоже время выходной транспорт не будет осуществлять попыток установить соединение при наличии подключения к входному транспорту или соединения другого выходного транспорта, например, с другим номером телефона.
-</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> В обычном режиме последовательного интерфейса не допускается многократное использование одного и того-же порта во входных и выходных транспортах. Глобальное блокирование последовательного устройства не осуществляется в виду неоднозначности этого процесса на системном уровне, а многократное использование может привести к непредсказуемым и сложно-уловимым проблемам. При необходимости организации локального последовательного канала с парой связанных портов рекомендуется использование команды "<b>$ socat -d -d pty,raw,echo=0,perm=0666 pty,raw,echo=0,perm=0666</b>".
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> В обычном режиме последовательного интерфейса не допускается многократное использование одного и того-же порта во входных и выходных транспортах. Глобальное блокирование последовательного устройства не осуществляется в виду неоднозначности этого процесса на системном уровне, а многократное использование может привести к непредсказуемым и сложно-уловимым проблемам. При необходимости организации локального последовательного канала с парой связанных портов рекомендуется использование команды <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">socat -d -d pty,raw,echo=0,perm=0666 pty,raw,echo=0,perm=0666</span>.
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
@@ -111,31 +111,32 @@
 </p><p>Главная вкладка страницы конфигурации выходного последовательного интерфейса изображёна на рисунке 3.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:680px;"><a class="image" href="http://oscada.org/wiki/File:Serial_out_ru.png"><img class="thumbimage" height="578" src="../files/Serial_out_ru.png" width="678" /></a>  <div class="thumbcaption">Рис.3. Главная вкладка страницы конфигурации выходного последовательного интерфейса.</div></div></div></div>
-<p>С помощью этого диалога можно установить:
+<p>Using this dialog you can set:
 </p>
-<ul><li> Состояние транспорта, а именно: статус, "Подключение" и имя БД, содержащей конфигурацию.</li>
-<li> Идентификатор, имя и описание транспорта.</li>
-<li> Адрес интерфейса в формате строки: "<b>{dev}:{spd}:{format}[:{opts}[:{modTel}]]</b>", где:
-<ul><li> <i>dev</i> — адрес последовательного устройства (/dev/ttyS0);</li>
-<li> <i>spd</i> — скорость последовательного устройства из ряда: 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 500000, 576000 или 921600;</li>
-<li> <i>format</i> — формат асинхронных данных "<b>{размер}{чётность}{стоп}</b>" (8N1, 7E1, 5O2, ...);</li>
-<li> <i>opts</i> — различные параметры, в основном для управления потоком, разделённые символом ',':
-<ul><li> "[-]h" — аппаратное (CRTSCTS);</li>
-<li> "[-]s" — программное (IXON|IXOFF);</li>
-<li> "rts" — использование RTS сигнала для передачи(false) и проверки на эхо, для сырого RS-485;</li>
-<li> "rts1" — использование RTS сигнала для передачи(true) и проверки на эхо, для сырого RS-485;</li>
-<li> "rtsne" — использование RTS сигнала для передачи(false) без проверки на эхо, для сырого RS-485;</li>
-<li> "rts1ne" — использование RTS сигнала для передачи(true) без проверки на эхо, для сырого RS-485;</li>
-<li> "[-]RS485" — использовать RS-485 режим, посредством TIOCSRS485.</li></ul></li>
-<li> <i>modTel</i> — телефон модема, присутствие этого поля переключает транспорт на работу в режиме модема.</li></ul></li>
-<li> Временные интервалы интерфейса в формате строки: "<b>{conn}:{symbol}[-{NextReqMult}][:{KeepAliveTm}[:{rtsDelay1}:{rtsDelay2}]]</b>", где:
-<ul><li> <i>conn</i> — максимальное время ожидания ответа подключения, в миллисекундах — т.е. ответа от удалённого устройства;</li>
-<li> <i>symbol</i> — максимальное время одного символа, используется для обнаружения окончания фрейма и таймаута следующего запроса, в миллисекундах;</li>
-<li> <i>NextReqMult</i> — множитель времени следующего запроса к времени символа <i>symbol</i>, 4 по умолчанию;</li>
-<li> <i>KeepAliveTm</i> — таймаут жизни для перезапуска транспорта, в секундах; используйте значение &lt; 0 для останова транспорта после отсутствия ответа на любой запрос;</li>
-<li> <i>rtsDelay1</i> — задержка между включением передатчика сигналом RTS и началом передачи, в миллисекундах;</li>
-<li> <i>rtsDelay2</i> — задержка между окончанием передачи и отключением передатчика сигналом RTS, в миллисекундах.</li></ul></li>
-<li> Не отключать при обработке. Иногда закрытие открытого устройства может быть разрушительным, например, на ПЛК LP от ICP-DAS, и вы можете предотвратить это данной опцией.</li></ul>
+<ul><li> The state of transport, that is: status, "Connect" and name of the database, containing the configuration.</li>
+<li> Identifier, name and description of the transport.</li>
+<li> Address of the transport in the format "<b>{dev}:{spd}:{format}[:{opts}[:{modTel}]]</b>", where:
+<ul><li> <i>dev</i> — address of the serial device (/dev/ttyS0);</li>
+<li> <i>spd</i> — speed of the serial devices from a number: 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 500000, 576000 or 921600;</li>
+<li> <i>format</i> — asynchronous data format "<b>{size}{parity}{stop}</b>" (8N1, 7E1, 5O2, ...);</li>
+<li> <i>opts</i> — different options, mostly for flow control, separated by ',':
+<ul><li> "[-]h" — hardware (CRTSCTS);</li>
+<li> "[-]s" — software (IXON|IXOFF);</li>
+<li> "rts" — using of the RTS signal for transferring(false) and checking for echo, for raw RS-485;</li>
+<li> "rts1" — using of the RTS signal for transferring(true) and checking for echo, for raw RS-485;</li>
+<li> "rtsne" — using of the RTS signal for transferring(false) and without checking for echo, for raw RS-485;</li>
+<li> "rts1ne" — using of the RTS signal for transferring(true) and without checking for echo, for raw RS-485;</li>
+<li> "[-]RS485" — using RS-485 mode, through TIOCSRS485.</li></ul></li>
+<li> <i>modTel</i> — modem phone, presence of this field switches transport to work in the modem mode.</li></ul></li>
+<li> Time intervals of the interface in format of the string "<b>{conn}:{symbol}[-{NextReqMult}][:{KeepAliveTm}[:{rtsDelay1}:{rtsDelay2}]]</b>", where:
+<ul><li> <i>conn</i> — maximum time of waiting the connecting response, in milliseconds;</li>
+<li> <i>symbol</i> — maximum time of one symbol, used for the frame end detection, in milliseconds;</li>
+<li> <i>NextReqMult</i> — next request's multiplicator to the <i>symbol</i> time, 4 by default;</li>
+<li> <i>KeepAliveTm</i> — keep alive timeout to restart the transport, in seconds; use the value &lt; 0 for stopping the transport after missing response at each request;</li>
+<li> <i>rtsDelay1</i> — delay between the transmitter activation with RTS signal and start up of the transmission, in milliseconds;</li>
+<li> <i>rtsDelay2</i> — delay between the transmitting and disconnecting the transmitter with RTS signal, in milliseconds.</li></ul></li></ul>
+<dl><dd> Can be prioritatile specified into the address field as the second global argument, as such "<b>/dev/rfcomm0:9600||1000:40-20</b>".</dd></dl>
+<ul><li> Do not disconnect at processing. Sometimes the closing of an open device can be destructive, for example, on an ICP-DAS LP PLC, and you can prevent it with this option.</li></ul>
 <p>Транспорт поддерживает возможность работы в режиме модема. Данный режим включается наличием пятого параметра адреса и подразумевает осуществление звонка по телефону, указанному этим параметром, в момент запуска транспорта. После установки связи с удалённым модемом все запросы передачи направляются станции за удалённым модемом. Отключение сеанса связи, с остановкой транспорта, осуществляется по таймауту активности.
 </p><p>Для настройки модема выходного транспорта предусмотрена специальная вкладка "Модем" (рис.4).
 </p>
@@ -172,15 +173,14 @@
 </p><p>Проверить латентность канала обмена, и тем самым оптимально настроить время дожидания-символа, можно с помощью интерфейса вкладки "Запрос" выходного транспорта. Для этого необходимо указать образцовый запрос соответствующего протокола, указать "Ожидать таймаут", отослать запрос и проконтролировать его целостность. Для получения более репрезентативного результата необходимо запрос повторить несколько раз. Если наблюдается получение неполных ответов, то время символа необходимо увеличить, иначе можно уменьшить.
 </p><p>На встроенном оборудовании последовательных интерфейсов RS232/422/485 можно добиться низкого уровня латентности — вплоть до единиц миллисекунд. Однако, на высоко-нагруженных системах с множеством задач в приоритете реального времени, латентность может стать недетерминированной, в связи с исполнением потока обслуживания событий ядра Linux в низком приоритете. Для решения этой проблемы необходимо установить высокий приоритет этим потокам, что можно сделать с помощью скрипта, поместив его, например, в "/etc/rc.local":
 </p>
-<pre style="white-space: pre-wrap;">
-#!/bin/sh
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c">#!/bin/sh</span>
 
-# Setting the high priority for events kernel threads to rise the serial interfaces reaction
-events=`ps -Ao pid,comm | sed -n '/[ ]*\([^ ]\)[ ]*events\/[0-9]/s//\1/p'`
-for ie in $events; do
-  chrt -pr 21 $ie
-done
-</pre>
+<span class="c"># Setting the high priority for events kernel threads to rise the serial interfaces reaction</span>
+<span class="nv">events</span><span class="o">=</span><span class="sb">`</span>ps -Ao pid,comm <span class="p">|</span> sed -n <span class="s1">'/[ ]*\([^ ]\)[ ]*events\/[0-9]/s//\1/p'</span><span class="sb">`</span>
+<span class="k">for</span> ie in <span class="nv">$events</span><span class="p">;</span> <span class="k">do</span>
+  chrt -pr <span class="m">21</span> <span class="nv">$ie</span>
+<span class="k">done</span>
+</pre></div>
 <p>Этот скрипт не имеет смысла для ядер Linux реального времени, с патчем PREEMPT_RT, поскольку все потоки прерываний и событий там уже запускаются в приоритете реального времени.
 </p><p>На внешнем оборудовании последовательных интерфейсов, например, в переходниках USB-&gt;RS232/422/485, может возникнуть проблема высокой латентности, связанная с особенностью аппаратной реализации или его драйвера. Решать эту проблему нужно путём изучения настроек этого оборудования или установкой большого времени ожидания- символа!
 </p><p>Похожим образом определяется и оптимальное время подключения, а именно: установить время подключения в значение по умолчанию для данной скорости (ставится при смене скорости в адресе), снять "Ожидать таймаут", отослать запрос. Если ответ пришёл то берём измеренное время отклика устройства, удваиваем и устанавливаем полученное значение, как время подключения. Необоснованное превышение времени подключения приведёт к большим ожиданиям в случае отсутствия устройства, а также срабатывания защитных таймаутов внутренних процедур!
@@ -189,25 +189,23 @@ done
 <h3><span class="mw-headline" id=".D0.92.D0.B8.D1.80.D1.82.D1.83.D0.B0.D0.BB.D1.8C.D0.BD.D1.8B.D0.B5.2F.D0.BB.D0.BE.D0.BA.D0.B0.D0.BB.D1.8C.D0.BD.D1.8B.D0.B5_.D0.BF.D0.BE.D1.81.D0.BB.D0.B5.D0.B4.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D0.BD.D1.8B.D0.B5_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.8B"><span class="mw-headline-number">4.1</span> Виртуальные/локальные последовательные интерфейсы</span></h3>
 <p>Часто для локальной проверки, без физического оборудования, необходима пара портов подключенных в одну сеть. Создание таких портов и выполнение множества других операций над последовательным потоком позволяет выполнять утилита <b>socat</b>. Например, для создания двух связанных портов нужно выполнить команду, которая создаст их и сообщит адреса:
 </p>
-<pre style="white-space: pre-wrap;">
-$ socat -d -d pty,raw,echo=0,perm=0666 pty,raw,echo=0,perm=0666
-2013/07/02 16:37:29 socat[10402] N PTY is /dev/pts/6
-2013/07/02 16:37:30 socat[10402] N PTY is /dev/pts/7
-2013/07/02 16:37:30 socat[10402] N starting data transfer loop with FDs [3,3] and [5,5]
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>socat -d -d pty,raw,echo<span class="o">=</span>0,perm<span class="o">=</span><span class="m">0666</span> pty,raw,echo<span class="o">=</span>0,perm<span class="o">=</span>0666
+<span class="c">#2013/07/02 16:37:29 socat[10402] N PTY is /dev/pts/6</span>
+<span class="c">#2013/07/02 16:37:30 socat[10402] N PTY is /dev/pts/7</span>
+<span class="c">#2013/07/02 16:37:30 socat[10402] N starting data transfer loop with FDs [3,3] and [5,5]</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D0.B1.D1.80.D0.BE.D1.81_.D0.BF.D0.BE.D1.81.D0.BB.D0.B5.D0.B4.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B8.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D0.B0_.D1.87.D0.B5.D1.80.D0.B5.D0.B7_.D1.81.D0.B5.D1.82.D1.8C_Ethernet"><span class="mw-headline-number">4.2</span> Проброс последовательного интерфейса через сеть Ethernet</span></h3>
 <p>В некоторых случаях бывает полезным пробросить порт последовательного интерфейса удалённой машины на локальный порт, например, для опроса устройств, подключенных к последовательному интерфейсу удалённой машины. Конечно, если установить на удалённую машину OpenSCADA в конфигурации ПЛК, то можно будет сразу выполнять обработку этих данных, предварительное буферирование/архивирование и т.д., но иногда оборудование может быть сложным для запуска OpenSCADA, где и спасает возможность проброса последовательного потока через сеть. Для решения этой задачи можно воспользоваться той-же утилитой <b>socat</b> или <b>remserial</b>, <b>ser2net</b>, какую удастся собрать и запустить на удалённой машине. Примеры проброса последовательного порта:
 </p>
-<pre style="white-space: pre-wrap;">
-# Создание сокета на порту 5555 удалённой машине, для порта /dev/ttyS0
-$ socat tcp-l:5555,reuseaddr,fork file:/dev/ttyS0,raw
-# Подключение к сокету отражённого порта удалённой машины и формирование файла отражённого локального интерфейса
-$ socat -d -d pty,raw,echo=0,perm=0666 tcp:192.168.2.4:5555,mss=1400
-2013/07/04 10:09:09 socat[12947] N PTY is /dev/pts/4
-2013/07/04 10:09:09 socat[12947] N opening connection to AF=2 192.168.2.4:5555
-2013/07/04 10:09:09 socat[12947] N successfully connected from local address AF=2 192.168.2.61:33493
-2013/07/04 10:09:09 socat[12947] N starting data transfer loop with FDs [3,3] and [5,5]
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c"># Создание сокета на порту 5555 удалённой машине, для порта /dev/ttyS0</span>
+socat tcp-l:5555,reuseaddr,fork file:/dev/ttyS0,raw
+<span class="c"># Подключение к сокету отражённого порта удалённой машины и формирование файла отражённого локального интерфейса</span>
+socat -d -d pty,raw,echo<span class="o">=</span>0,perm<span class="o">=</span><span class="m">0666</span> tcp:192.168.2.4:5555,mss<span class="o">=</span>1400
+<span class="c">#2013/07/04 10:09:09 socat[12947] N PTY is /dev/pts/4</span>
+<span class="c">#2013/07/04 10:09:09 socat[12947] N opening connection to AF=2 192.168.2.4:5555</span>
+<span class="c">#2013/07/04 10:09:09 socat[12947] N successfully connected from local address AF=2 192.168.2.61:33493</span>
+<span class="c">#2013/07/04 10:09:09 socat[12947] N starting data transfer loop with FDs [3,3] and [5,5]</span>
+</pre></div>
 <p>В случае с "socat", а возможно и других утилит, можно на клиентской стороне опустить запуск драйвера EthernetTCP-&gt;Serial и подключаться из OpenSCADA прямо на TCP-порт удалённого устройства.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> В работе через драйвер EthernetTCP-&gt;Serial есть особенность, которая связанна с наличием двух таймаутов подключения: один в драйвере, а другой в <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a>. Важно чтобы значение этого таймаута в <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a> был больше чем в драйвере иначе возможно смещение и получение запоздалых ответов от предыдущих запросов.
 </p><p>Многие производители промышленного коммуникационного оборудования выпускают готовые конвертеры из Ethernet в RS-232/422/485, которые могут использоваться с OpenSCADA таким-же образом. Комментарии и перечень конвертеров с которыми работа OpenSCADA проверена:
@@ -220,5 +218,5 @@ $ socat -d -d pty,raw,echo=0,perm=0666 tcp:192.168.2.4:5555,mss=1400
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Serial/ru">Modules/Serial/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Serial/ru">Modules/Serial/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> </td></tr></table></body>
 </html>

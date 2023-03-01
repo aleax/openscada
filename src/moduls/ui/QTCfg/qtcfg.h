@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: qtcfg.h
 /***************************************************************************
- *   Copyright (C) 2004-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2004-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -122,6 +122,9 @@ class ConfApp: public QMainWindow
     Q_OBJECT
 
     public:
+    //Data
+    enum FavUpd { Fav_Reload = 1, Fav_List = 2, Fav_Sel = 4 };
+
     //Methods
     ConfApp( string open_user );
     ~ConfApp( );
@@ -161,6 +164,9 @@ class ConfApp: public QMainWindow
     void pageRefresh( int tm = 0 );
     void pageCyclRefrStart( );
     void pageCyclRefrStop( );
+    void favToggle( );
+    void favUpd( unsigned opts );
+    void favGo( );
 
     void stMessChanged( const QString &mess );
     void stHistCall( );
@@ -213,6 +219,7 @@ private:
     // View ListItem with recursive processing of the ControllArea
     void viewChildRecArea( QTreeWidgetItem *i, bool upTree = false );
     QTreeWidgetItem *getExpandTreeWIt( const string &path );
+    string getTreeWItNmPath( const string &path );
 
     // Update structure and put service labels
     bool upStruct( XMLNode &w_nd, const XMLNode &n_nd );
@@ -245,6 +252,7 @@ private:
 
     QAction	*actClose, *actQuit,
 		*actUp, *actPrev, *actNext,
+		*actFavToggle, *actFav,
 		*actUpdate, *actStartUpd, *actStopUpd,
 		*actDBLoad, *actDBLoadF, *actDBSave, *actDBSaveF,
 		*actItAdd, *actItDel,
@@ -258,16 +266,15 @@ private:
 
     QToolBar	*toolBar, *QTStarter;
 
+    QImage	favToggleAdd, favToggleDel;
+
     XMLNode	pgInfo, genReqs;
     XMLNode	*root;
     string	selPath,
 		copyBuf;	//Copy buffer
 
     int		queSz;
-    vector<string> prev;
-    vector<string> next;
-
-    vector<string> stMess;
+    vector<string> prev, next, favs, stMess;
 
     int		inHostReq;
     map<string, SCADAHost*> hosts;

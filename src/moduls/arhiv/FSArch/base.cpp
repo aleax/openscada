@@ -66,6 +66,11 @@ ModArch::ModArch( const string &name) : TTypeArchivator(MOD_ID), noArchLimit(fal
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 }
 
+ModArch::~ModArch( )
+{
+    try { modStop(); } catch(...) { }
+}
+
 void ModArch::postEnable( int flag )
 {
     TModule::postEnable(flag);
@@ -83,11 +88,6 @@ void ModArch::postEnable( int flag )
 	elPackfl.fldAdd(new TFld("PRM2","Parameter 2",TFld::String,TFld::NoFlag,"20"));
 	elPackfl.fldAdd(new TFld("PRM3","Parameter 3",TFld::String,TFld::NoFlag,"20"));
     }
-}
-
-ModArch::~ModArch( )
-{
-    try { modStop(); } catch(...) { }
 }
 
 string ModArch::filesDB( )	{ return SYS->workDB()+"." MOD_ID "_Pack"; }

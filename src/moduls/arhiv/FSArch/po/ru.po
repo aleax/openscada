@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-26 09:41+0200\n"
+"POT-Creation-Date: 2022-07-15 20:11+0300\n"
 "PO-Revision-Date: 2007-10-21 22:21+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -44,8 +44,13 @@ msgstr "Ошибка проверки архиватора сообщений '%
 msgid "Error checking the value archiver '%s'."
 msgstr "Ошибка проверки архиватора значений '%s'."
 
+#, c-format
 msgid "Cannot create the archive directory '%s'."
 msgstr "Невозможно создать директорию архива '%s'."
+
+#, fuzzy, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr "Ошибка чтения файла '%s' для смещения %d!"
 
 #, c-format
 msgid "The value archiver '%s' uses the same folder '%s' as an other archiver."
@@ -70,6 +75,7 @@ msgstr "Архив не запущен!"
 msgid "Error creating a new archive file '%s'!"
 msgstr "Ошибка создания файла архива '%s'!"
 
+#, c-format
 msgid "The archive directory '%s' is not present."
 msgstr "Директория архива '%s' отсутствует."
 
@@ -254,6 +260,10 @@ msgstr "Ошибка создания файла '%s': %s(%d)."
 #, c-format
 msgid "Error header of the file '%s'!"
 msgstr "Ошибка в заголовке файла '%s'!"
+
+#, fuzzy, c-format
+msgid "Closing the file %p error '%s (%d)'!"
+msgstr "Ошибка чтения файла '%s' для смещения %d!"
 
 #, c-format
 msgid "The archive file '%s' is not mine."

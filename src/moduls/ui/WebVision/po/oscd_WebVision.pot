@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-29 10:44+0300\n"
+"POT-Creation-Date: 2022-12-23 19:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr ""
 
 msgid "Resource not found"
 msgstr ""
@@ -29,6 +33,12 @@ msgid "Unknown command: %s."
 msgstr ""
 
 msgid "Content is missing."
+msgstr ""
+
+msgid "The table is wrong or empty"
+msgstr ""
+
+msgid "Error parsing the document"
 msgstr ""
 
 msgid "Fill image type is not supported."
@@ -65,6 +75,9 @@ msgid "kHz"
 msgstr ""
 
 msgid "Hz"
+msgstr ""
+
+msgid "The document is wrong or empty"
 msgstr ""
 
 #, c-format
@@ -174,6 +187,21 @@ msgid "Alarm level: %1"
 msgstr ""
 
 msgid "Notificator %1"
+msgstr ""
+
+msgid "Field for printing and exporting data."
+msgstr ""
+
+msgid "Main Page"
+msgstr ""
+
+msgid "Document %1"
+msgstr ""
+
+msgid "Table %1"
+msgstr ""
+
+msgid "No data for export!"
 msgstr ""
 
 #, c-format

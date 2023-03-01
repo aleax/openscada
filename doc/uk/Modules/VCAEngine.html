@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../../en/files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="../index.html"><img alt="OpenSCADA" src="../../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="../index.html"><img src="../../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/Рушій Середовища Візуалізації та Управління (СВУ)</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVCAEngine&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/VCAEngine" title="Modules/VCAEngine">Modules/VCAEngine</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/VCAEngine.html" title="Modules/VCAEngine (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/VCAEngine.html" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (100% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVCAEngine&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/VCAEngine" title="Modules/VCAEngine">Modules/VCAEngine</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/VCAEngine.html" title="Modules/VCAEngine (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/VCAEngine.html" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (88% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Рушій Середовища Візуалізації та Управління
 </td>
-<td> 7.8 </td>
+<td> 7.11 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -45,7 +45,7 @@
 <tr>
 <td colspan="9"> Загальний рушій середовища візуалізації та керування.
 <ul><li> <b>Спонсорування, завершення механізму отримання змін виконанням візуалізатору без зайвих запитів та втрати даних на 1.5 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> Вінницька Птахофабрика</li>
-<li> <b>Зробити (To Do):</b></li></ul>
+<li> <b><a href="../../en/To_do.html" title="Special:MyLanguage/Works/To do">Завдання (To Do)</a>:</b></li></ul>
 <dl><dd> - доповнити користувацьке API редагування файлів растром (PNG, JPEG, GIF), посередництвом LibGD2, та векторно (SVG):
 <dl><dd>+ доповнити завантаженням та збереженням змін зображень до таблиці сеансу та із процедур користувача, дозволяє редагувати SVG (XML);</dd>
 <dd>- реалізувати основні функції об'єкту GD (у <a href="../Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">Special.FLibSYS</a>).</dd></dl></dd>
@@ -55,10 +55,11 @@
 <dd> - реалізувати фонове виконання редагованих сторінок у режимі розробки, для візуального формування діаграм спільно із <a href="../Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a> та DAQ-джерелами загалом.</dd>
 <dd> ... <i>також для <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> та <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a></i> ...</dd>
 <dd> - додати глобальне меню простору користувача за допомогою специфічних до проєкту властивостей;</dd>
-<dd> - розробити формування блокових діаграм (динамічними кадрами) із графічного інтерфейсу.</dd></dl>
+<dd> - розробити формування блокових діаграм (динамічними кадрами) із графічного інтерфейсу;</dd>
+<dd> * адаптувати бібліотеки віджетів та проєкти СВУ до копіювання між хостами.</dd></dl>
 </td></tr></table>
 <p>Модуль надає до OpenSCADA рушій середовища візуалізації та управління (СВУ). Сам модуль не реалізує візуалізації СВУ, а містить дані відповідно до концепції "Модель/дані – Інтерфейс". Візуалізація даних цього модуля виконується модулями візуалізації СВУ, наприклад, модулем <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> та <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a>.
-</p><p>Середовище візуалізації та управління (СВУ) є невід'ємною складовою SCADA системи. Воно застосовується на клієнтських станціях з метою доступного представлення інформації про об'єкт управління та видачі керуючого впливу на об'єкт. У різних практичних ситуаціях та умовах можуть застосовуватися СВУ, побудовані на різних принципах візуалізації. Наприклад, це можуть бути бібліотеки віджетів Qt, GTK+, wxWidgets або гіпертекстові механізми на основі технологій HTML, XHTML, XML, CSS та JavaScript або сторонні додатки візуалізації, реалізовані на різних мовах програмування Java, Python та інше. Будь-який з цих принципів має свої переваги та недоліки, комбінація яких може стати непереборною перепоною у можливості використання СВУ у тому або іншому практичному випадку. Наприклад, технології на кшталт бібліотеки Qt дозволяють створювати високопродуктивні СВУ, що безсумнівно важливо для станцій оператору управління технологічним процесом (ТП). Однак, необхідність інсталяції даного клієнтського ПЗ може зробити його використання неможливим у окремих випадках. З іншого боку, Web-технології не потребують інсталяції на клієнтські системи та є гранично багатоплатформними (достатньо вказати посилання на Web-сервер у будь-якому Web-браузері), що найбільш важливо для різних інженерних та адміністративних станцій. З іншого боку, продуктивність та надійність таких інтерфейсів нижче, що практично виключає їх використання на станціях оператору ТП.
+</p><p>Середовище візуалізації та управління (СВУ) є невід'ємною складовою SCADA системи. Воно застосовується на клієнтських станціях з метою доступного представлення інформації про об'єкт управління та видачі керуючого впливу на об'єкт. У різних практичних ситуаціях та умовах можуть застосовуватися СВУ, побудовані на різних принципах візуалізації. Наприклад, це можуть бути бібліотеки віджетів Qt, GTK+, wxWidgets або гіпертекстові механізми на основі технологій HTML, XHTML, XML, CSS та JavaScript або сторонні додатки візуалізації, реалізовані на різних мовах програмування Java, Python та інше. Будь-який з цих принципів має свої переваги та недоліки, комбінація яких може стати непереборною перепоною у можливості використання СВУ у тому або іншому практичному випадку. Наприклад, технології на кшталт бібліотеки Qt дозволяють створювати високопродуктивні СВУ, що безсумнівно важливо для станцій оператору управління технологічним процесом (ТП). Однак необхідність інсталяції даного клієнтського ПЗ може унеможливити його використання у окремих випадках. З іншого боку, Web-технології не потребують інсталяції на клієнтські системи та є гранично багатоплатформними (достатньо вказати посилання на Web-сервер у будь-якому Web-браузері), що найбільш важливо для різних інженерних та адміністративних станцій. З іншого боку, продуктивність та надійність таких інтерфейсів нижче, що практично виключає їх використання на станціях оператору ТП.
 </p><p>OpenSCADA має гранично гнучку архітектуру, яка дозволяє створювати зовнішні інтерфейси, у тому числі й користувацькі, на будь-якій основі та смак. Наприклад, середовище конфігурації OpenSCADA доступне як на Qt-бібліотеці, так і на Web-основі.
 </p><p>У той-же час, незалежне створення реалізацій СВУ на різній основі може потягти за собою неможливість використання даних конфігурації однієї СВУ на іншій. Що незручно та обмежено з користувацького боку, а також витратно у плані реалізації та подальшої підтримки.
 </p><p>З метою запобігання цих проблем, а також створення у найкоротший термін повного спектру різних типів СВУ, засновано <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA" title="Special:MyLanguage/Sub-projects/VCA">проєкт створення концепції СВУ</a>. Результатом цього проєкту став даний модуль рушія(моделі даних) СВУ, а також модулі безпосередньої візуалізації <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> та <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a>.
@@ -90,24 +91,11 @@
 </ul>
 </li>
 <li class="toclevel-2 tocsection-13"><a href="#.D0.92.D0.B8.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D0.B0.D0.BD.D0.BD.D1.8F_.D0.91.D0.94_.D0.B4.D0.BB.D1.8F_.D0.B7.D0.B1.D0.B5.D1.80.D1.96.D0.B3.D0.B0.D0.BD.D0.BD.D1.8F_.D0.B1.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA_.D0.B2.D1.96.D0.B4.D0.B6.D0.B5.D1.82.D1.96.D0.B2_.D1.82.D0.B0_.D0.BF.D1.80.D0.BE.D1.94.D0.BA.D1.82.D1.96.D0.B2"><span class="tocnumber">3.10</span> <span class="toctext">Використання БД для зберігання бібліотек віджетів та проєктів</span></a></li>
-<li class="toclevel-2 tocsection-14"><a href="#API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D1.82.D0.B0_.D1.81.D0.B5.D1.80.D0.B2.D1.96.D1.81.D0.BD.D1.96_.D1.96.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D0.B8_OpenSCADA"><span class="tocnumber">3.11</span> <span class="toctext"><span>API користувацького програмування та сервісні інтерфейси OpenSCADA</span></span></a>
-<ul>
-<li class="toclevel-3"><a href="#API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">3.11.1</span> <span class="toctext"><span>API користувацького програмування</span></span></a></li>
-<li class="toclevel-3"><a href="#.D0.A1.D0.B5.D1.80.D0.B2.D1.96.D1.81.D0.BD.D1.96_.D1.96.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D0.B8_OpenSCADA"><span class="tocnumber">3.11.2</span> <span class="toctext">Сервісні інтерфейси OpenSCADA</span></a>
-<ul>
-<li class="toclevel-4"><a href="#.D0.94.D0.BE.D1.81.D1.82.D1.83.D0.BF_.D0.B4.D0.BE_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D1.8C_.D0.B0.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82.D1.96.D0.B2_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.96.D0.B2_.D0.B2.D1.96.D0.B7.D1.83.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.97_.28.D0.B2.D1.96.D0.B4.D0.B6.D0.B5.D1.82.D0.B8.29"><span class="tocnumber">3.11.2.1</span> <span class="toctext">Доступ до значень атрибутів елементів візуалізації (віджети)</span></a></li>
-<li class="toclevel-4"><a href="#.D0.93.D1.80.D1.83.D0.BF.D0.BE.D0.B2.D0.B8.D0.B9_.D0.B4.D0.BE.D1.81.D1.82.D1.83.D0.BF_.D0.B4.D0.BE_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D1.8C_.D0.B0.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82.D1.96.D0.B2_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.96.D0.B2_.D0.B2.D1.96.D0.B7.D1.83.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.97_.28.D0.B2.D1.96.D0.B4.D0.B6.D0.B5.D1.82.D0.B0.D0.BC.29"><span class="tocnumber">3.11.2.2</span> <span class="toctext">Груповий доступ до значень атрибутів елементів візуалізації (віджетам)</span></a></li>
-<li class="toclevel-4"><a href="#.D0.94.D0.BE.D1.81.D1.82.D1.83.D0.BF_.D0.B4.D0.BE_.D1.81.D1.82.D0.BE.D1.80.D1.96.D0.BD.D0.BE.D0.BA_.D1.81.D0.B5.D0.B0.D0.BD.D1.81.D1.83"><span class="tocnumber">3.11.2.3</span> <span class="toctext">Доступ до сторінок сеансу</span></a></li>
-<li class="toclevel-4"><a href="#.D0.A3.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D1.96.D0.BD.D0.BD.D1.8F_.D1.81.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.94.D1.8E"><span class="tocnumber">3.11.2.4</span> <span class="toctext">Управління сигналізацією</span></a></li>
-<li class="toclevel-4"><a href="#.D0.9C.D0.B0.D0.BD.D1.96.D0.BF.D1.83.D0.BB.D1.8F.D1.86.D1.96.D1.8F_.D1.81.D0.B5.D0.B0.D0.BD.D1.81.D0.B0.D0.BC.D0.B8_.D0.BF.D1.80.D0.BE.D1.94.D0.BA.D1.82.D1.96.D0.B2"><span class="tocnumber">3.11.2.5</span> <span class="toctext">Маніпуляція сеансами проєктів</span></a></li>
-<li class="toclevel-4"><a href="#.D0.93.D1.80.D1.83.D0.BF.D0.BE.D0.B2.D0.B8.D0.B9_.D0.B7.D0.B0.D0.BF.D0.B8.D1.82_.D0.B4.D0.B5.D1.80.D0.B5.D0.B2.D0.B0_.D0.B1.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA_.D0.B2.D1.96.D0.B4.D0.B6.D0.B5.D1.82.D1.96.D0.B2"><span class="tocnumber">3.11.2.6</span> <span class="toctext">Груповий запит дерева бібліотек віджетів</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">3.11</span> <span class="toctext"><span>API користувацького програмування</span></span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#.D0.A1.D0.B5.D1.80.D0.B2.D1.96.D1.81.D0.BD.D1.96_.D0.BA.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4.D0.B8-.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97_.D0.86.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.83_.D0.A3.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D1.96.D0.BD.D0.BD.D1.8F"><span class="tocnumber">3.12</span> <span class="toctext">Сервісні команди-функції Інтерфейсу Управління</span></a></li>
 </ul>
 </li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toclevel-1 tocsection-15"><a href="#.D0.9A.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F_.D0.B7.D0.B0_.D0.BF.D0.BE.D1.81.D0.B5.D1.80.D0.B5.D0.B4.D0.BD.D0.B8.D1.86.D1.82.D0.B2.D0.BE.D0.BC_.D1.96.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.83_.D1.83.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D1.96.D0.BD.D0.BD.D1.8F_OpenSCADA"><span class="tocnumber">4</span> <span class="toctext">Конфігурація модуля за посередництвом інтерфейсу управління OpenSCADA</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#.D0.9A.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F_.D0.B7.D0.B0_.D0.BF.D0.BE.D1.81.D0.B5.D1.80.D0.B5.D0.B4.D0.BD.D0.B8.D1.86.D1.82.D0.B2.D0.BE.D0.BC_.D1.96.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.83_.D1.83.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D1.96.D0.BD.D0.BD.D1.8F_OpenSCADA"><span class="tocnumber">4</span> <span class="toctext">Конфігурація модуля за посередництвом інтерфейсу управління OpenSCADA</span></a></li>
 </ul>
 </div>
 
@@ -235,7 +223,7 @@
 <ul><li> "Сторінка верхнього рівня" -&gt; "Сторінка нижнього рівня"</li>
 <li> "Віджет нижнього рівня" -&gt; "Віджет верхнього рівня"</li></ul>
 <p>Така політика дозволяє обходити сторінки відповідно до їх ієрархії, а повідомленням у віджетах "спливати" нагору за одну ітерацію.
-</p><p>Сеанси підтримують багатомовність на рівні <a href="../../en/API.html#CntrNode" title="Special:MyLanguage/Documents/API">інтерфейсу управління OpenSCADA</a>, яка залежить від значень загальних атрибутів "lang" та "user", та які візуалізатор може встановлювати згідно до своєї мови. Ця функція вмикається <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">динамічним перекладом повідомлень OpenSCADA</a>.
+</p><p>Сеанси підтримують багатомовність на рівні <a href="../API.html#CntrNode" title="Special:MyLanguage/Documents/API">інтерфейсу управління OpenSCADA</a>, яка залежить від значень загальних атрибутів "lang" та "user", та які візуалізатор може встановлювати згідно до своєї мови. Ця функція вмикається <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">динамічним перекладом повідомлень OpenSCADA</a>.
 </p><p><br />
 </p>
 <h3><span class="mw-headline" id=".D0.A1.D1.82.D0.B8.D0.BB.D1.96"><span class="mw-headline-number">3.4</span> Стилі</span></h3>
@@ -437,6 +425,10 @@
 <td colspan="2"> <i>Події квітація на боці візуалізатору.</i>
 </td></tr>
 <tr>
+<td> ws_alarmChange </td>
+<td> Сповіщає щодо зміни статусу порушення, атрибут "alarmSt".
+</td></tr>
+<tr>
 <td> ws_alarmLev </td>
 <td> Квітація всіх порушень всіма способами та типами сповіщення.
 </td></tr>
@@ -585,19 +577,18 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <p>Механізм "Обробка подій за допомогою обчислювальної процедури віджета" заснований на атрибуті "event" та користувацькій процедурі обчислення, на мові програмування OpenSCADA. Події, по мірі надходження, акумулюються у атрибуті "event" до моменту виклику обчислювальної процедури. Обчислювальна процедура викликається з вказаним періодом обчислення віджета та отримує значення атрибуту "event" у вигляді переліку подій. У процедурі обчислення, користувач може: проаналізувати, обробити та виключити оброблені події з переліку, а також додати до переліку нові події. Решта подій, після виконання процедури, та нові аналізуються на предмет відповідності умовам виклику сценарієм первинного механізму, після чого, події, що залишилися, передаються на верхній за ієрархією віджет, для обробки ним, при цьому здійснюється доповнення шляху події згідно до ієрархії проникнення.
 </p><p>Вмістом атрибуту "event" є перелік подій формату "<b>{event}:{evSrc}</b>", з подією у окремому рядку. Наведемо приклад процедури обробки події на Java-подібній мові користувацького програмування OpenSCADA:
 </p>
-<pre style="white-space: pre-wrap;">
-for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
-  if(sval == "ws_BtPress:/cvt_light") alarmSt = 0x1000001;
-  else if(sval == "ws_BtPress:/cvt_alarm") alarmSt = 0x1000002;
-  else if(sval == "ws_BtPress:/cvt_sound") alarmSt = 0x1000004;
-  else ev_rez += sval+"\n";
-}
-event = ev_rez;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="k">for</span><span class="p">(</span><span class="nx">ev_rez</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span> <span class="nx">off</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="nx">sval</span><span class="o">=</span><span class="nx">event</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">"\n"</span><span class="p">,</span><span class="nx">off</span><span class="p">)).</span><span class="nx">length</span><span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">sval</span> <span class="o">==</span> <span class="s2">"ws_BtPress:/cvt_light"</span><span class="p">)</span> <span class="nx">alarmSt</span> <span class="o">=</span> <span class="mh">0x1000001</span><span class="p">;</span>
+  <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">sval</span> <span class="o">==</span> <span class="s2">"ws_BtPress:/cvt_alarm"</span><span class="p">)</span> <span class="nx">alarmSt</span> <span class="o">=</span> <span class="mh">0x1000002</span><span class="p">;</span>
+  <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">sval</span> <span class="o">==</span> <span class="s2">"ws_BtPress:/cvt_sound"</span><span class="p">)</span> <span class="nx">alarmSt</span> <span class="o">=</span> <span class="mh">0x1000004</span><span class="p">;</span>
+  <span class="k">else</span> <span class="nx">ev_rez</span> <span class="o">+=</span> <span class="nx">sval</span><span class="o">+</span><span class="s2">"\n"</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">event</span> <span class="o">=</span> <span class="nx">ev_rez</span><span class="p">;</span>
+</pre></div>
 <p><br />
 </p>
 <h3><span class="mw-headline" id=".D0.A1.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.8F"><span class="mw-headline-number">3.6</span> <span id="Alarms" title="#Alarms">Сигналізація</span></span></h3>
-<p>Важливим елементом будь-якого інтерфейсу візуалізації є сповіщення користувача про порушення — сигналізація. Для спрощення сприйняття, а також через тісний зв'язок візуалізації та сповіщення (як правило, сповіщення доповнюють візуалізацію) вирішено інтегрувати інтерфейс сповіщень у інтерфейс візуалізації. Для цього, у всіх віджетах, передбачається два додаткових атрибути рівня сеансу: "alarm" та "alarmSt". Атрибут "alarm" використовується для формування сигналу віджетом згідно до його логіки, а атрибут "alarmSt" використовується для контролю за фактом сигналізації гілки дерева сеансу.
+<p><span id="Alarms" title="#Alarms">Важливим елементом</span> будь-якого інтерфейсу візуалізації є сповіщення користувача про порушення — сигналізація. Для спрощення сприйняття, а також через тісний зв'язок візуалізації та сповіщення (як правило, сповіщення доповнюють візуалізацію) вирішено інтегрувати інтерфейс сповіщень у інтерфейс візуалізації. Для цього, у всіх віджетах, передбачається два додаткових атрибути рівня сеансу: "alarm" та "alarmSt". Атрибут "alarm" використовується для формування сигналу віджетом згідно до його логіки, а атрибут "alarmSt" використовується для контролю за фактом сигналізації гілки дерева сеансу.
 </p><p>Атрибут "alarm" є рядком, який має наступний формат: "<b>{lev}|{categ}|{message}|{type}|{tp_arg}</b>"<br />
 Де:
 </p>
@@ -626,39 +617,36 @@ event = ev_rez;
 </p><p>Квітація здійснюється шляхом вказання кореня гілки віджетів та типів сповіщення, що дозволяє реалізувати квітацію на боці візуалізатору як за групами, наприклад, за об'єктом сигналізації, так і індивідуально за об'єктом джерела. При цьому можна незалежно квитувати різні типи сигналізацій. Встановлення квітації здійснюється простою модифікацією атрибуту "alarmSt".
 </p><p>Приклад скрипту, для роботи з сигналами, приведено нижче:
 </p>
-<pre style="white-space: pre-wrap;">
-//Виокремлення факту наявності сигналізацій різних способів-типів сповіщення
-cvt_light_en = alarmSt&amp;0x100; cvt_alarm_en = alarmSt&amp;0x200; cvt_sound_en = alarmSt&amp;0x400;
-//Виокремлення факту наявності несквітованих сигналізацій різних способів сповіщення
-cvt_light_active = alarmSt&amp;0x10000; cvt_alarm_active = alarmSt&amp;0x20000; cvt_sound_active = alarmSt&amp;0x40000;
-//Обробка подій кнопок квітації та квітація різних способів сповіщення
-for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
-  if(sval == "ws_BtPress:/cvt_light") alarmSt = 0x1000001;
-  else if(sval == "ws_BtPress:/cvt_alarm") alarmSt = 0x1000002;
-  else if(sval == "ws_BtPress:/cvt_sound") alarmSt = 0x1000004;
-  else ev_rez += sval + "\n";
-}
-event = ev_rez;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c1">//Виокремлення факту наявності сигналізацій різних способів-типів сповіщення</span>
+<span class="nx">cvt_light_en</span> <span class="o">=</span> <span class="nx">alarmSt</span><span class="o">&amp;</span><span class="mh">0x100</span><span class="p">;</span> <span class="nx">cvt_alarm_en</span> <span class="o">=</span> <span class="nx">alarmSt</span><span class="o">&amp;</span><span class="mh">0x200</span><span class="p">;</span> <span class="nx">cvt_sound_en</span> <span class="o">=</span> <span class="nx">alarmSt</span><span class="o">&amp;</span><span class="mh">0x400</span><span class="p">;</span>
+<span class="c1">//Виокремлення факту наявності несквітованих сигналізацій різних способів сповіщення</span>
+<span class="nx">cvt_light_active</span> <span class="o">=</span> <span class="nx">alarmSt</span><span class="o">&amp;</span><span class="mh">0x10000</span><span class="p">;</span> <span class="nx">cvt_alarm_active</span> <span class="o">=</span> <span class="nx">alarmSt</span><span class="o">&amp;</span><span class="mh">0x20000</span><span class="p">;</span> <span class="nx">cvt_sound_active</span> <span class="o">=</span> <span class="nx">alarmSt</span><span class="o">&amp;</span><span class="mh">0x40000</span><span class="p">;</span>
+<span class="c1">//Обробка подій кнопок квітації та квітація різних способів сповіщення</span>
+<span class="k">for</span><span class="p">(</span><span class="nx">ev_rez</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span> <span class="nx">off</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="nx">sval</span><span class="o">=</span><span class="nx">event</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">"\n"</span><span class="p">,</span><span class="nx">off</span><span class="p">)).</span><span class="nx">length</span><span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">sval</span> <span class="o">==</span> <span class="s2">"ws_BtPress:/cvt_light"</span><span class="p">)</span> <span class="nx">alarmSt</span> <span class="o">=</span> <span class="mh">0x1000001</span><span class="p">;</span>
+  <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">sval</span> <span class="o">==</span> <span class="s2">"ws_BtPress:/cvt_alarm"</span><span class="p">)</span> <span class="nx">alarmSt</span> <span class="o">=</span> <span class="mh">0x1000002</span><span class="p">;</span>
+  <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">sval</span> <span class="o">==</span> <span class="s2">"ws_BtPress:/cvt_sound"</span><span class="p">)</span> <span class="nx">alarmSt</span> <span class="o">=</span> <span class="mh">0x1000004</span><span class="p">;</span>
+  <span class="k">else</span> <span class="nx">ev_rez</span> <span class="o">+=</span> <span class="nx">sval</span> <span class="o">+</span> <span class="s2">"\n"</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">event</span> <span class="o">=</span> <span class="nx">ev_rez</span><span class="p">;</span>
+</pre></div>
 <p><b>Зовнішні методи сповіщення</b><br />
 Основним та типовим способом сповіщення є дисплейна світлова сигналізація аварійними кольорами та їх динамікою у елементів візуалізації, яка присутня завжди та не потребує специфічної конфігурації. Однак, часто потрібні сповіщення зовнішнього типу, наприклад: зовнішньою лампою, бузером PC або "ревуном", довільним звуком, синтезованою мовою та інше.
 </p><p>Для здійснення такої можливості, зовнішні способи сповіщення, та відповідні до них типи сповіщення, вільно описуються для серверу візуалізації та самого візуалізатору. На боці серверу візуалізації описується формування/отримання ресурсу сповіщення та саме сповіщення. На боці візуалізатору описується сповіщення згідно ресурсам серверу візуалізації.
 </p><p>Опис правил та сценаріїв зовнішнього сповіщення здійснюється за допомогою користувацьких атрибутів текстового типу для сторінок проєкту візуалізації, які застосовуються при відкритті цих сторінок. Тобто, потенційно, для кожної відкриваної сторінки можна описати власні правила сповіщення, хоча, зазвичай достатньо та описуються загальні правила сповіщення на головній сторінці проєкту — сторінці, яка відкривається одноразово та не закривається при роботі:
 </p>
 <ul><li> Для серверу/рушія візуалізації, атрибутом "notify{N}" у форматі:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-//flags=notifyServ[{DL}][|resource[|queue[|qMergeMess]]];
-//resStatic={ResourceFile}
-if(doRes) { Текст команди формування ресурсу. }
-if(doNtf) { Текст команди сповіщення. }
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre><span class="c1">//flags=notifyServ[{DL}][|resource[|queue[|qMergeMess]]];</span>
+<span class="c1">//resStatic={ResourceFile}</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doRes</span><span class="p">)</span> <span class="p">{</span> <span class="nx">Текст</span> <span class="nx">команди</span> <span class="nx">формування</span> <span class="nx">ресурсу</span><span class="p">.</span> <span class="p">}</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doNtf</span><span class="p">)</span> <span class="p">{</span> <span class="nx">Текст</span> <span class="nx">команди</span> <span class="nx">сповіщення</span><span class="p">.</span> <span class="p">}</span>
+</pre></div>
 <ul><li> Для візуалізатору, атрибутом "notifyVis[Vision|WebVision]{N}" у форматі:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-//flags=notify[{DL}][|resource[|queue[|quietanceRet]]];
-//name={Ім'я сповіщувача}
-//ico={Ім'я іконки}
-{ Текст команди сповіщення для будь-якого або конкретного візуалізатору. }
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre><span class="c1">//flags=notify[{DL}][|resource[|queue[|quietanceRet]]];</span>
+<span class="c1">//name={Ім'я сповіщувача}</span>
+<span class="c1">//ico={Ім'я іконки}</span>
+<span class="p">{</span> <span class="nx">Текст</span> <span class="nx">команди</span> <span class="nx">сповіщення</span> <span class="nx">для</span> <span class="nx">будь</span><span class="o">-</span><span class="nx">якого</span> <span class="nx">або</span> <span class="nx">конкретного</span> <span class="nx">візуалізатору</span><span class="p">.</span> <span class="p">}</span>
+</pre></div>
 <p>Прапорці:
 </p>
 <ul><li> <i>notify[{DL}]</i>, <i>notifyServ[{DL}]</i> — включає сповіщення з повтором через час <i>DL</i>, якщо вказано; для <i>DL</i> = 0 повтор здійснюється одразу.</li>
@@ -682,147 +670,140 @@ if(doNtf) { Текст команди сповіщення. }
 <ul><li> Бузер на боці візуалізатору або серверу візуалізації:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x02"</li>
 <li> notifyVisVision1 | notify1 = </li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify|notifyServ
-if(en) SYS.system("beep -f 1000 -l 1000000 &amp;", true);
-else if((beepPID=SYS.system("pidof beep")).toInt()) SYS.system("kill "+beepPID); </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify|notifyServ</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">en</span><span class="p">)</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"beep -f 1000 -l 1000000 &amp;"</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="k">else</span> <span class="k">if</span><span class="p">((</span><span class="nx">beepPID</span><span class="o">=</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"pidof beep"</span><span class="p">)).</span><span class="nx">toInt</span><span class="p">())</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"kill "</span><span class="o">+</span><span class="nx">beepPID</span><span class="p">);</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision1 | notify1 = </li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify|notifyServ
-if test $en = 1; then
-	beep -f 1000 -l 1000000 &amp;
-else
-	beepPID=$(pidof beep)
-	if test "x$beepPID"&nbsp;!= "x"; then kill $beepPID; fi
-fi </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify|notifyServ</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$en</span> <span class="o">=</span> 1<span class="p">;</span> <span class="k">then</span>
+	beep -f <span class="m">1000</span> -l <span class="m">1000000</span> <span class="p">&amp;</span>
+<span class="k">else</span>
+	<span class="nv">beepPID</span><span class="o">=</span><span class="k">$(</span>pidof beep<span class="k">)</span>
+	<span class="k">if</span> <span class="nb">test</span> <span class="s2">"x</span><span class="nv">$beepPID</span><span class="s2">"</span> !<span class="o">=</span> <span class="s2">"x"</span><span class="p">;</span> <span class="k">then</span> <span class="nb">kill</span> <span class="nv">$beepPID</span><span class="p">;</span> <span class="k">fi</span>
+<span class="k">fi</span>
+</pre></div>
 <ul><li> Повторюване програвання готового звукового файлу, одного загального, на боці візуалізатору або серверу візуалізації:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x04"</li>
 <li> notify2 | notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|notifyServ2
-if(en) SYS.system("play -q alarm.ogg");</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|notifyServ2</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">en</span><span class="p">)</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"play -q alarm.ogg"</span><span class="p">);</span>
+</pre></div>
 <dl><dd><ul><li> notify2 | notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify2|notifyServ2
-if test $en = 1; then play -q alarm.ogg; fi</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify2|notifyServ2</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$en</span> <span class="o">=</span> 1<span class="p">;</span> <span class="k">then</span> play -q alarm.ogg<span class="p">;</span> <span class="k">fi</span>
+</pre></div>
 <ul><li> Програвання індивідуального, для джерела, звукового файлу, на боці візуалізатору:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x04|res:al_prm1"</li>
 <li> notify2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=queue</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=queue</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|queue
-if(doNtf &amp;&amp; en &amp;&amp; res.length) {
-  SYS.fileWrite("tmpPlay", res);
-  SYS.system("play -q tmpPlay");
-  SYS.fileRemove("tmpPlay");
-}</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|queue</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doNtf</span> <span class="o">&amp;&amp;</span> <span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"play -q tmpPlay"</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify2|queue
-if test $doNtf = 1 -a $en = 1 -a -s $res; then play -q $res; fi
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify2|queue</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doNtf</span> <span class="o">=</span> <span class="m">1</span> -a <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
+</pre></div>
 <ul><li> Синтез мови індивідуального сповіщення, для джерела, на боці візуалізатору:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm|Текстове повідомлення синтезу мови|0x04"</li>
 <li> notify2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=queue</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=queue</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 = </li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|queue
-if(doNtf &amp;&amp; en &amp;&amp; mess.length) {
-  SYS.fileWrite("tmpForSpeech", mess);
-  SYS.system("festival --tts tmpForSpeech");
-  SYS.fileRemove("tmpForSpeech");
-}
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|queue</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doNtf</span> <span class="o">&amp;&amp;</span> <span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="nx">mess</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpForSpeech"</span><span class="p">,</span> <span class="nx">mess</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"festival --tts tmpForSpeech"</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpForSpeech"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 = </li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify2|queue
-if test $doNtf = 1 -a $en = 1 -a "x"&nbsp;!= "x$mess"; then
-  echo $mess &gt; tmpForSpeech
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify2|queue</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doNtf</span> <span class="o">=</span> <span class="m">1</span> -a <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a <span class="s2">"x"</span> !<span class="o">=</span> <span class="s2">"x</span><span class="nv">$mess</span><span class="s2">"</span><span class="p">;</span> <span class="k">then</span>
+  <span class="nb">echo</span> <span class="nv">$mess</span> &gt; tmpForSpeech
   festival --tts tmpForSpeech
   rm tmpForSpeech
-fi
-</pre>
+<span class="k">fi</span>
+</pre></div>
 <ul><li> Приготування звукового файлу, одного загального, та його програвання на боці візуалізатору або серверу візуалізації:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x04"</li>
 <li> notify2 = </li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|notifyServ2|resource
-if(doRes) res = SYS.fileRead("alarm.ogg");  //Вставити сюди інший метод генерації
-if(doNtf &amp;&amp; en &amp;&amp; res.length) {
-  SYS.fileWrite("tmpPlay", res);
-  SYS.system("play -q tmpPlay");
-  SYS.fileRemove("tmpPlay");
-}</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|notifyServ2|resource</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doRes</span><span class="p">)</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRead</span><span class="p">(</span><span class="s2">"alarm.ogg"</span><span class="p">);</span>  <span class="c1">//Вставити сюди інший метод генерації</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doNtf</span> <span class="o">&amp;&amp;</span> <span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"play -q tmpPlay"</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 <dl><dd><ul><li> notify2 = </li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify2|notifyServ2|resource
-if test $doRes = 1; then cp -f alarm.ogg $res; fi  #Вставити сюди інший метод генерації
-if test $doNtf = 1 -a $en = 1 -a -s $res; then play -q $res; fi
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify2|notifyServ2|resource</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doRes</span> <span class="o">=</span> 1<span class="p">;</span> <span class="k">then</span> cp -f alarm.ogg <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>  <span class="c">#Вставити сюди інший метод генерації</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doNtf</span> <span class="o">=</span> <span class="m">1</span> -a <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|resource
-if(en &amp;&amp; res.length) {
-  SYS.fileWrite("tmpPlay", res);
-  SYS.system("play -q tmpPlay");
-  SYS.fileRemove("tmpPlay");
-}</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|resource</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"play -q tmpPlay"</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify2|resource
-if test $en = 1 -a -s $res; then play -q $res; fi
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify2|resource</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
+</pre></div>
 <ul><li> Приготування індивідуального, для джерела сповіщення, звукового файлу через синтез мови, на боці візуалізатору або серверу візуалізації:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm|Текстове повідомлення синтезу мови|0x04"</li>
 <li> notify2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|notifyServ2|queue
-if(doRes &amp;&amp; mess.length) {
- SYS.fileWrite("tmpText", mess);
- SYS.system("text2wave tmpText -o tmpWAV");
- res = SYS.fileRead("tmpWAV");
- SYS.fileRemove("tmpText"); SYS.fileRemove("tmpWAV");
-}
-if(doNtf &amp;&amp; en &amp;&amp; res.length) {
- SYS.fileWrite("tmpPlay", res);
- SYS.system("play -q tmpPlay");
- SYS.fileRemove("tmpPlay");
-}</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|notifyServ2|queue</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doRes</span> <span class="o">&amp;&amp;</span> <span class="nx">mess</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpText"</span><span class="p">,</span> <span class="nx">mess</span><span class="p">);</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"text2wave tmpText -o tmpWAV"</span><span class="p">);</span>
+ <span class="nx">res</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRead</span><span class="p">(</span><span class="s2">"tmpWAV"</span><span class="p">);</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpText"</span><span class="p">);</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpWAV"</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doNtf</span> <span class="o">&amp;&amp;</span> <span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"play -q tmpPlay"</span><span class="p">);</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 <dl><dd><ul><li> notify2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify2|notifyServ2|queue
-if test $doRes = 1 -a "x"&nbsp;!= "x$mess"; then
- echo $mess &gt; tmpText
- text2wave tmpText -o $res
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify2|notifyServ2|queue</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doRes</span> <span class="o">=</span> <span class="m">1</span> -a <span class="s2">"x"</span> !<span class="o">=</span> <span class="s2">"x</span><span class="nv">$mess</span><span class="s2">"</span><span class="p">;</span> <span class="k">then</span>
+ <span class="nb">echo</span> <span class="nv">$mess</span> &gt; tmpText
+ text2wave tmpText -o <span class="nv">$res</span>
  rm tmpText
-fi
-if test $doNtf = 1 -a $en = 1 -a -s $res; then play -q $res; fi
-</pre>
+<span class="k">fi</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doNtf</span> <span class="o">=</span> <span class="m">1</span> -a <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|queue
-if(en &amp;&amp; res.length) {
- SYS.fileWrite("tmpPlay", res);
- SYS.system("play -q tmpPlay");
- SYS.fileRemove("tmpPlay");
-}</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|queue</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"play -q tmpPlay"</span><span class="p">);</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify2|queue
-if test $en = 1 -a -s $res; then play -q $res; fi
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify2|queue</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
+</pre></div>
 <p><br />
 </p>
 <h3><span class="mw-headline" id=".D0.A3.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D1.96.D0.BD.D0.BD.D1.8F_.D0.BF.D1.80.D0.B0.D0.B2.D0.B0.D0.BC.D0.B8"><span class="mw-headline-number">3.7</span> Управління правами</span></h3>
@@ -846,7 +827,7 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 </p><p>Для задоволення можливості доступу до архівам, згідно до пункту 3, зв'язки виконують перевірку типу атрибуту та, у випадку підключення до "Адреси", до значення поміщається адреса зв'язку.
 </p><p>У термінах СВУ, динамічні зв'язки та конфігурація динаміки є одним процесом, для опису конфігурації якого передбачено вкладку "Обробка" віджетів. Вкладка містить таблицю конфігурації властивостей атрибутів та текст процедури обчислення віджету.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1062px;"><a class="image" href="http://oscada.org/wiki/File:VCA_wdg_proc_uk.png"><img class="thumbimage" height="769" src="../files/VCA_wdg_proc_uk.png" width="1060" /></a>  <div class="thumbcaption">Рисунок. Вкладка "Обробка" сторінки конфігурації віджета.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1074px;"><a class="image" href="http://oscada.org/wiki/File:VCA_wdg_proc_uk.png"><img class="thumbimage" height="766" src="../files/VCA_wdg_proc_uk.png" width="1072" /></a>  <div class="thumbcaption">Рисунок. Вкладка "Обробка" сторінки конфігурації віджета.</div></div></div></div>
 <p>Крім полів конфігурації атрибутів, у таблиці передбачається стовпчик "Обробка", для вибіркового використання атрибутів у обчислювальній процедурі віджета, та стовпчика "Конфігурація", "Конфігураційний шаблон" для опису конфігурації зв'язків.
 </p><p>Якщо у стовпчику "Обробка" стоїть true, то у обчислювальній процедурі стає доступною змінна <i>{ідентифікатор віджета}_{ідентифікатор атрибуту}</i>, наприклад <i>cw_value</i>.
 </p><p>Стовпчик "Конфігурація" дозволяє вказати тип зв'язку атрибуту віджета:
@@ -874,8 +855,7 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 <ul><li> отримання даних вхідних зв'язків;</li>
 <li> виконання обчислення процедури віджету;</li>
 <li> передача значень за вихідними зв'язками.</li></ul>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Період обчислення віджету у значені по замовченню "-1" означає ланцюгове використання значення періоду власника віджету до першого позитивного значення, або періоду обчислення проєкту.
-</p><p>На рисунку представлено вкладку зв'язків з груповим призначенням атрибутів, шляхом указання тільки параметру. На наступному рисунку представлено індивідуальне призначення атрибутів.
+<p>На рисунку представлено вкладку зв'язків з груповим призначенням атрибутів, шляхом указання тільки параметру. На наступному рисунку представлено індивідуальне призначення атрибутів.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:767px;"><a class="image" href="http://oscada.org/wiki/File:VCA_wdg_lnk_grp_uk.png"><img class="thumbimage" height="477" src="../files/VCA_wdg_lnk_grp_uk.png" width="765" /></a>  <div class="thumbcaption">Рисунок. Вкладка "Зв'язки" сторінки конфігурації віджету з груповим призначенням атрибутів шляхом вказання тільки параметру.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:767px;"><a class="image" href="http://oscada.org/wiki/File:VCA_wdg_lnk_attr_uk.png"><img class="thumbimage" height="508" src="../files/VCA_wdg_lnk_attr_uk.png" width="765" /></a>  <div class="thumbcaption">Рисунок. Вкладка "Зв'язки" сторінки конфігурації віджету з індивідуальним призначенням атрибутів.</div></div></div></div>
@@ -1765,12 +1745,12 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 <td>
 <p>Структура та вміст таблиці у вигляді XML:
 </p>
-<pre style="white-space: pre-wrap;">
-&lt;tbl&gt;
-&lt;h&gt;&lt;s&gt;{Заголовок1}&lt;/s&gt;&lt;s&gt;{Заголовок2}&lt;/s&gt;&lt;/h&gt;
-&lt;r&gt;&lt;s&gt;{Рядок1Стовпчик1Рядок}&lt;/s&gt;&lt;i&gt;{Рядок1Стовпчик2Ціле}&lt;/i&gt;&lt;/r&gt;
-&lt;r&gt;&lt;b&gt;{Рядок2Стовпчик1Логічне}&lt;/b&gt;&lt;r&gt;{Рядок2Стовпчик2Реальне}&lt;/r&gt;&lt;/r&gt;
-&lt;/tbl&gt;</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;tbl&gt;</span>
+<span class="nt">&lt;h&gt;&lt;s&gt;</span>{Заголовок1}<span class="nt">&lt;/s&gt;&lt;s&gt;</span>{Заголовок2}<span class="nt">&lt;/s&gt;&lt;/h&gt;</span>
+<span class="nt">&lt;r&gt;&lt;s&gt;</span>{Рядок1Стовпчик1Рядок}<span class="nt">&lt;/s&gt;&lt;i&gt;</span>{Рядок1Стовпчик2Ціле}<span class="nt">&lt;/i&gt;&lt;/r&gt;</span>
+<span class="nt">&lt;r&gt;&lt;b&gt;</span>{Рядок2Стовпчик1Логічне}<span class="nt">&lt;/b&gt;&lt;r&gt;</span>{Рядок2Стовпчик2Реальне}<span class="nt">&lt;/r&gt;&lt;/r&gt;</span>
+<span class="nt">&lt;/tbl&gt;</span>
+</pre></div>
 <p>Теги:
 </p>
 <dl><dd>"tbl" — Таблиця, властивості таблиці загалом:
@@ -2628,10 +2608,10 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 <td>
 <p>Шаблон документу у XHTML, починаючи з тегу "body" та включаючи процедурні вставки:
 </p>
-<pre style="white-space: pre-wrap;">
-&lt;body docProcLang="JavaLikeCalc.JavaScript"&gt;
-  &lt;h1&gt;Значення&lt;?dp return wCod+1.314;?&gt;&lt;/h1&gt;
-&lt;/body&gt;</pre> 
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;body</span> <span class="na">docProcLang=</span><span class="s">"JavaLikeCalc.JavaScript"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;h1&gt;</span>Значення<span class="cp">&lt;?dp return wCod+1.314;?&gt;</span><span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</pre></div> 
 </td></tr>
 <tr>
 <td> doc </td>
@@ -2979,31 +2959,30 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 <dd><i>IO_VAL</i> — значення атрибуту.</dd></dl></dd></dl>
 <p><br />
 </p>
-<h3><span class="mw-headline" id="API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D1.82.D0.B0_.D1.81.D0.B5.D1.80.D0.B2.D1.96.D1.81.D0.BD.D1.96_.D1.96.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D0.B8_OpenSCADA"><span class="mw-headline-number">3.11</span> <span id="UserAPI" title="#UserAPI">API користувацького програмування та сервісні інтерфейси OpenSCADA</span></span></h3>
-<h4><span class="mw-headline" id="API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">3.11.1</span> <span id="UserAPI" title="#UserAPI">API користувацького програмування</span></span></h4>
+<h3><span class="mw-headline" id="API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">3.11</span> <span id="UserAPI" title="#UserAPI">API користувацького програмування</span></span></h3>
 <p>API користувацького програмування рушія візуалізації безпосередньо представлено об'єктами OpenSCADA, що формують користувацький інтерфейс, а саме "Сеансом" та "Віджетами-сторінками". Для користувача ці об'єкти надають набір функцій управління:
 </p>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_VCAEngine_uk.png" title="Об&#039;єктна модель користувача модуля VCAEngine."><img alt="Об&#039;єктна модель користувача модуля VCAEngine." height="238" src="../files/Oscada_UserOM_VCAEngine_uk.png" width="360" /></a></div>
 <p><b>Об'єкт "Сеанс" ( this.ownerSess() )</b>
 </p>
 <ul><li> <i>string user( )</i> — поточний користувач сеансу.</li>
-<li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — квітує порушення <i>wpath</i> з шаблоном <i>quit_tmpl</i>. Якщо <i>wpath</i> це порожній рядок то здійснюється глобальна квітація. У рядку <i>wpath</i>, через символ ';', може бути перелічено адреси декількох віджетів. При встановлені <i>ret</i> здійснюється повернення квітації.</li>
+<li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — стишує порушення <i>wpath</i> з шаблоном <i>quit_tmpl</i>. Якщо <i>wpath</i> це порожній рядок то здійснюється глобальне стишення. У рядку <i>wpath</i>, через символ ';', може бути перелічено адреси декількох віджетів. При встановлені <i>ret</i> здійснюється повернення квітації.</li>
 <li> <i>int reqTm( )</i> — час останнього запиту у секундах від епохи 1.1.1970.</li>
 <li> <i>string reqUser( )</i> — користувач останнього запиту.</li>
 <li> <i>string reqLang( )</i> — мова останнього запиту.</li>
 <li> <i>int userActTm( )</i> — час останньої дії користувача у секундах від епохи 1.1.1970.</li>
-<li> <i>bool uiCmd( string cmd, string prm, string src )</i> — надсилає UI команду керування сторінками, як то: "open", "next", "prev"; детальніше дивиться у <a href="#Events">секції подій</a>. Ця функція має бути приоритетною для використання у керуванні сторінками перед прямим записом до атрибутів сторінок "pgOpen" та "pgOpenSrc", оскільки це єдиний метод коректної роботи з <a href="#Project">лінкованими сторінками</a>.</li></ul>
+<li> <i>bool uiCmd( string cmd, string prm, string src )</i> — надсилає UI команду керування сторінками, як то: "open", "next", "prev"; детальніше дивиться у <a href="#Events">секції подій</a>. Ця функція має бути пріоритетною для використання у керуванні сторінками перед прямим записом до атрибутів сторінок "pgOpen" та "pgOpenSrc", оскільки це єдиний метод коректної поводження з <a href="#Project">лінкованими сторінками</a>.</li>
+<li> <i>int period( bool isReal = false )</i> — отримання періоду опрацювання сеансу, <i>isReal</i> для реального періоду.</li></ul>
 <p><b>Об'єкт "Віджет" (this)</b>
 </p>
 <ul><li> <i>TCntrNodeObj ownerSess( )</i> — об'єкт сеансу даного віджету.</li>
 <li> <i>TCntrNodeObj ownerPage( )</i> — об'єкт батьківської сторінки даного віджету.</li>
 <li> <i>TCntrNodeObj ownerWdg( bool base = false )</i> — об'єкт батьківського віджету даного віджету. При указанні <i>base</i> буде повернено й об'єкти сторінок.</li>
 <li> <i>TCntrNodeObj wdgAdd( string wid, string wname, string parent )</i> — додає віджет <i>wid</i> з ім'ям <i>wname</i> на основі бібліотечного віджету <i>parent</i>.</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-//Додає новий віджет на основі віджету текстового примітиву
-nw = this.wdgAdd("nw", "Новий віджет", "/wlb_originals/wdg_Text");
-nw.attrSet("geomX", 50).attrSet("geomY", 50);
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre><span class="c1">//Додає новий віджет на основі віджету текстового примітиву</span>
+<span class="nx">nw</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">wdgAdd</span><span class="p">(</span><span class="s2">"nw"</span><span class="p">,</span> <span class="s2">"Новий віджет"</span><span class="p">,</span> <span class="s2">"/wlb_originals/wdg_Text"</span><span class="p">);</span>
+<span class="nx">nw</span><span class="p">.</span><span class="nx">attrSet</span><span class="p">(</span><span class="s2">"geomX"</span><span class="p">,</span> <span class="mi">50</span><span class="p">).</span><span class="nx">attrSet</span><span class="p">(</span><span class="s2">"geomY"</span><span class="p">,</span> <span class="mi">50</span><span class="p">);</span>
+</pre></div>
 <ul><li> <i>bool wdgDel( string wid )</i> — видаляє віджет <i>wid</i>.</li>
 <li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — підключається до дочірнього або глобального віджету, за посередництвом шляху <i>byPath</i>. У випадку глобального підключення можна використати абсолютний або відносний шлях до віджету. Точкою відліку абсолютної адреси виступає об'єкт кореня модуля "VCAEngine", а значить, першим елементом абсолютної адреси є ідентифікатор сеансу, який опускається. Відносна адреса бере відлік від поточного віджету. Спеціальним елементом відносної адреси є елемент вищестоящого вузла "..".</li>
 <li> <i>Array attrList()</i> — перелік атрибутів віджету.</li>
@@ -3012,13 +2991,17 @@ nw.attrSet("geomX", 50).attrSet("geomY", 50);
 <li> <i>TCntrNodeObj attrSet( string attr, ElTp vl, bool toSess = false )</i> — встановлює значення <i>vl</i> у атрибут віджету <i>attr</i> або сеанс, для <i>toSess</i>. Повертає поточний об'єкт, для конкатенації функцій встановлення.</li>
 <li> <i>string link( string attr, bool prm = false )</i> — посилання атрибуту віджету <i>attr</i>. При встановленні <i>prm</i> запитує посилання групи атрибутів (параметр), представлене вказаним атрибутом.</li>
 <li> <i>string linkSet( string attr, string vl, bool prm = false )</i> — встановлює посилання атрибуту віджету <i>attr</i>. При встановленні <i>prm</i> здійснює встановлення посилання групи атрибутів (параметр), представленого вказаним атрибутом.</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-//Встановлює посилання восьмого тренду параметром
-this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre><span class="c1">//Встановлює посилання восьмого тренду параметром</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">linkSet</span><span class="p">(</span><span class="s2">"el8.name"</span><span class="p">,</span> <span class="s2">"prm:/LogicLev/experiment/Pi"</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+</pre></div>
 <ul><li> <i>string {resource,mime}( string addr, string MIME = "" )</i> — ресурс об'єкту за адресою <i>addr</i> (пряме посилання на ресурс або атрибут віджету з цим посиланням) з типом <i>MIME</i>, з таблиці сеансу або джерела. Призначено для редагування ресурсу об'єкта та підставлення його у контексті сеансу, наприклад, зображень SVG.</li>
 <li> <i>int {resourceSet,mimeSet}( string addr, string data, string MIME = "" )</i> — встановлює ресурс об'єкту у <i>data</i> з типом <i>MIME</i> за адресою <i>addr</i>.</li>
-<li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — формує повідомлення програми <i>mess</i> з категорією — шлях до даного віджету.</li></ul>
+<li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — формує повідомлення програми <i>mess</i> з категорією — шлях до даного віджету.</li>
+<li> <i>int calcPer( int set = EVAL )</i> — отримання, та встановлення за <i>set</i> не EVAL, щодо актуального періоду обчислення-опрацювання. Зарезервовано наступні спеціальні значення:
+<ul><li> <b>0</b> — якщо бажаєте періодичного опрацювання сеансу;</li>
+<li> <b>-1</b> — якщо бажаєте використати період опрацювання батьківського віджету/сторінки/проєкту каскадно;</li>
+<li> <b>-2</b> — для цілковитого вимкнення періодичного опрацювання.</li>
+<li> <b>-3</b> — відсутній період часу сеансу, отримання проєктного.</li></ul></li></ul>
 <p><b>Об'єкт "Віджет", примітиву "Документ" (this)</b>
 </p>
 <ul><li> <i>string getArhDoc( int nDoc)</i> — текст документу архіву на глибині <i>nDoc</i> (0-{aSize-1}).</li></ul>
@@ -3214,144 +3197,324 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 <td> Вхід </td>
 <td>
 </td></tr></table>
-<h4><span class="mw-headline" id=".D0.A1.D0.B5.D1.80.D0.B2.D1.96.D1.81.D0.BD.D1.96_.D1.96.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D0.B8_OpenSCADA"><span class="mw-headline-number">3.11.2</span> Сервісні інтерфейси OpenSCADA</span></h4>
-<p>Сервісні інтерфейси це інтерфейси доступу до OpenSCADA за посередництвом <a href="../../en/API.html#CntrNode" title="Special:MyLanguage/Documents/API">інтерфейсу управління OpenSCADA</a>. Даний механізм покладено у основу всіх механізмів обміну всередині OpenSCADA, реалізованих за посередництвом слабких зв'язків та стандартного протоколу обміну OpenSCADA.
+<p><br />
 </p>
-<h5><span class="mw-headline" id=".D0.94.D0.BE.D1.81.D1.82.D1.83.D0.BF_.D0.B4.D0.BE_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D1.8C_.D0.B0.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82.D1.96.D0.B2_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.96.D0.B2_.D0.B2.D1.96.D0.B7.D1.83.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.97_.28.D0.B2.D1.96.D0.B4.D0.B6.D0.B5.D1.82.D0.B8.29"><span class="mw-headline-number">3.11.2.1</span> Доступ до значень атрибутів елементів візуалізації (віджети)</span></h5>
-<p>З метою надання уніфікованого, групового та порівняно швидкого доступу до значень атрибутів візуальних елементів, передбачено сервісну функція візуального елементу "/serv/attr" та команди отримання-установки значень атрибутів:
+<h3><span class="mw-headline" id=".D0.A1.D0.B5.D1.80.D0.B2.D1.96.D1.81.D0.BD.D1.96_.D0.BA.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4.D0.B8-.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97_.D0.86.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.83_.D0.A3.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D1.96.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">3.12</span> Сервісні команди-функції Інтерфейсу Управління</span></h3>
+<p>Сервісні функції — це інтерфейс доступу до OpenSCADA із зовнішніх систем посередництвом <a href="../API.html#CntrNode" title="Special:MyLanguage/Documents/API">Інтерфейсу Управління</a>. Цей механізм покладено в основу усього обміну всередині OpenSCADA, реалізованого шляхом слабких зв'язків та <a href="../Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">власного протоколу обміну OpenSCADA</a>.
+</p><p><b><u>Загальні віджети</u></b><br />
 </p>
-<ul><li> отримання: <b>&lt;get path="/UI/VCAEngine/{wdg_addr}/%2fserv%2fattr"/&gt;</b>;</li>
-<li> установка: <b>&lt;set path="/UI/VCAEngine/{wdg_addr}/%2fserv%2fattr"/&gt;</b>.</li></ul>
-<p><b>Таблиця.</b> Атрибути команд отримання та встановлення атрибутів візуальних елементів
+<dl><dd><b><u>Отримання значень визначених або всіх візуальних атрибутів віджету</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;get path="/UI/VCAEngine/<b>{wAddr}</b>/%2fserv%2fattr"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
+<ul><li> <i>wAddr</i> — локальна адреса віджету, на кшталт "/wlb_AGLKS/wdg_CM101/wdg_ElFigure1";</li>
+<li> <i>attributes</i> — лише запитані атрибути у тегах "el" із тільки одним атрибутом ідентифікатору "id"; можлива цілковита відсутність тегів атрибутів для запиту усіх наявних.</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/UI/VCAEngine/{wAddr}/%2fserv%2fattr" rez="<b>0</b>"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
+<ul><li> <i>attributes</i> — опрацьовувані атрибути у тегах "el": <i>&lt;el id="<b>{ID}</b>" p="<b>{pos}</b>" act="<b>{active}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
+<ul><li> <i>ID</i> — ідентифікатор атрибуту;</li>
+<li> <i>pos</i> — позиція-індекс атрибуту для стандартних;</li>
+<li> <i>active</i> — стан активності атрибуту, лише для прямого запиту;</li>
+<li> <i>value</i> — значення атрибуту.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/wlb_AGLKS/wdg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"id"</span><span class="nt">&gt;</span>ElFigure1<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"path"</span><span class="nt">&gt;</span>/wlb_AGLKS/wdg_CM101/wdg_ElFigure1<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"parent"</span><span class="nt">&gt;</span>/wlb_originals/wdg_ElFigure<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"owner"</span><span class="nt">&gt;</span>root:UI<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span><span class="nt">&gt;</span>948<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>ElFigure<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"dscr"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
+</pre></div>
+<dl><dd><b><u>Встановлення групи значень визначених атрибутів віджетів</u></b><br /></dd>
+<dd>ЗАП[<b>root-UI</b>]: <i>&lt;set path="/UI/VCAEngine/<b>{wAddr}</b>/%2fserv%2fattr"&gt;<b>{attributes}</b>&lt;/set&gt;</i>
+<ul><li> <i>wAddr</i> — локальна адреса віджету у модулі, на кшталт "/wlb_AGLKS/wdg_CM101/wdg_ElFigure1";</li>
+<li> <i>attributes</i> — атрибути зі значеннями у тегах "el": <i>&lt;el id="<b>{ID}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
+<ul><li> <i>ID</i> — ідентифікатор атрибуту;</li>
+<li> <i>value</i> — встановлюване значення атрибуту.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/wlb_AGLKS/wdg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>Нова назва<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"dscr"</span><span class="nt">&gt;</span>Новий опис<span class="nt">&lt;/el&gt;</span>
+<span class="nt">&lt;/set&gt;</span>
+</pre></div>
+<dl><dd><b><u>Отримання значень візуальних атрибутів гілки віджетів, оптимізовано для мереж</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;get path="/UI/VCAEngine/<b>{wAddr}</b>/%2fserv%2fattrBr" /&gt;</i>
+<ul><li> <i>wAddr</i> — локальна адреса віджету у модулі, на кшталт "/wlb_AGLKS/wdg_CM101/wdg_ElFigure1".</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/UI/VCAEngine/{wAddr}/%2fserv%2fattrBr" rez="<b>0</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/get&gt;</i>
+<ul><li> <i>attributes</i> — опрацьовані атрибути у тегах "el": <i>&lt;el id="<b>{ID}</b>" p="<b>{pos}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
+<ul><li> <i>ID</i> — ідентифікатор атрибуту;</li>
+<li> <i>pos</i> — позиція-індекс атрибуту для стандартних;</li>
+<li> <i>value</i> — значення атрибуту.</li></ul></li>
+<li> <i>widgets</i> — дочірні віджети у тегах "w": <i>&lt;w id="<b>{ID}</b>" lnkPath="<b>{lnkPath}</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/w&gt;</i>
+<ul><li> <i>ID</i> — ідентифікатор віджету;</li>
+<li> <i>lnkPath</i> — шлях до пов'язаного віджету для дочірніх віджетів бібліотек віджетів.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/wlb_AGLKS/wdg_CM101/%2fserv%2fattrBr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"id"</span><span class="nt">&gt;</span>CM101<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"path"</span><span class="nt">&gt;</span>/wlb_AGLKS/wdg_CM101<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"parent"</span><span class="nt">&gt;</span>/wlb_originals/wdg_Box<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"owner"</span><span class="nt">&gt;</span>root:UI<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span><span class="nt">&gt;</span>948<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>Box<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>КМ101<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;w</span> <span class="na">id=</span><span class="s">"AT101_1"</span> <span class="na">lnkPath=</span><span class="s">"/wlb_mnEls/wdg_cooler"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"id"</span><span class="nt">&gt;</span>AT101_1<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"path"</span><span class="nt">&gt;</span>/wlb_AGLKS/wdg_CM101/wdg_AT101_1<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"parent"</span><span class="nt">&gt;</span>/wlb_mnEls/wdg_cooler<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"owner"</span><span class="nt">&gt;</span>root:UI<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span><span class="nt">&gt;</span>948<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>ElFigure<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>АТ101 1<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;/w&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
+</pre></div>
+<p><b><u>Бібліотеки віджетів</u></b><br />
 </p>
-<table class="wikitable">
-
-<tr>
-<th> Ідентифікатор </th>
-<th> Ім'я </th>
-<th> Значення
-</th></tr>
-<tr>
-<td colspan="3"> <i>Команда запиту візуальних атрибутів віджету: <b>&lt;get path="/UI/VCAEngine/{wdg_addr}/%2fserv%2fattr"/&gt;</b></i>
-</td></tr>
-<tr>
-<td> tm </td>
-<td> Час-лічильник змін </td>
-<td> Встановлення часу-лічильника змін для запиту тільки атрибутів, що змінилися.
-</td></tr>
-<tr>
-<td> &lt;el id="{attr}" p="{a_id}"&gt;{val}&lt;/el&gt; </td>
-<td> Формування дочірніх елементів з результатами атрибутів </td>
-<td> У дочірньому елементі вказуються: строковий ідентифікатор <i>attr</i>, індекс <i>a_id</i> та значення <i>val</i> атрибуту.
-</td></tr>
-<tr>
-<td colspan="3"> <i>Команда встановлення візуальних атрибутів віджету: <b>&lt;set path="/UI/VCAEngine/{wdg_addr}/%2fserv%2fattr"/&gt;</b></i>
-</td></tr>
-<tr>
-<td> &lt;el id="{attr}"&gt;{val}&lt;/el&gt; </td>
-<td> Встановлення атрибутів </td>
-<td> У дочірніх елементах вказується: строковий ідентифікатор <i>attr</i> та значення <i>val</i> атрибуту.
-</td></tr>
-<tr>
-<td colspan="3"> <i>Команда активації-створення специфічного до візуалізатору атрибуту: <b>&lt;activate path="/UI/VCAEngine/{wdg_addr}/%2fserv%2fattr/{attrId}" aNm="{Name}" aTp="{Type} aFlg="{Flags}"/&gt;</b></i>
-</td></tr>
-<tr>
-<td> attrId </td>
-<td> Ідентифікатор атрибуту </td>
-<td>
-</td></tr>
-<tr>
-<td> aNm </td>
-<td> Ім'я атрибуту </td>
-<td>
-</td></tr>
-<tr>
-<td> aTp </td>
-<td> Тип атрибуту </td>
-<td>
-</td></tr>
-<tr>
-<td> aFlg </td>
-<td> Прапорці атрибуту </td>
-<td>
-</td></tr></table>
-<h5><span class="mw-headline" id=".D0.93.D1.80.D1.83.D0.BF.D0.BE.D0.B2.D0.B8.D0.B9_.D0.B4.D0.BE.D1.81.D1.82.D1.83.D0.BF_.D0.B4.D0.BE_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D1.8C_.D0.B0.D1.82.D1.80.D0.B8.D0.B1.D1.83.D1.82.D1.96.D0.B2_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.96.D0.B2_.D0.B2.D1.96.D0.B7.D1.83.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.97_.28.D0.B2.D1.96.D0.B4.D0.B6.D0.B5.D1.82.D0.B0.D0.BC.29"><span class="mw-headline-number">3.11.2.2</span> Груповий доступ до значень атрибутів елементів візуалізації (віджетам)</span></h5>
-<p>З метою оптимізації трафіку мережевої взаємодії шляхом виключення мілких запитів та використання одного великого, передбачено груповий запит значень атрибутів візуальних елементів. Групування даного запиту передбачає запит атрибутів всієї гілки віджету, включаючи й вкладені елементи. Для даного запиту передбачено сервісну команду "/serv/attrBr". Запит даної сервісної команди еквівалентний сервісній команді "/serv/attr" та виглядає наступним чином:<br />
-<b>&lt;get path="/UI/VCAEngine/{wdg_addr}/%2fserv%2fattrBr"/&gt;</b>
+<dl><dd><b><u>Отримання дерева віджетів бібліотек, оптимізовано для мереж</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;get path="/UI/VCAEngine/%2fserv%2fwlbBr" item="<b>{item}</b>" disIconsW="<b>{disIconsW}</b>" disIconsCW="<b>{disIconsCW}</b>" /&gt;</i>
+<ul><li> <i>item</i> — елемент бібліотеки отримання, як шлях "wlb_<b>{WLib}</b>[/wdg_<b>{Wdg}</b>[/wdg_<b>{ChildWdg}</b>]]", для порожнього отримуватиметься все дерево;</li>
+<li> <i>disIconsW</i> — вимкнути отримання даних іконки для віджетів [0|1];</li>
+<li> <i>disIconsCW</i> — вимкнути отримання даних іконки для дочірніх віджетів [0|1].</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/UI/VCAEngine/%2fserv%2fwlbBr" item="{item}" disIconsW="{disIconsW}" disIconsCW="{disIconsCW}" rez="<b>0</b>"&gt;<b>{wlibs}</b>&lt;/get&gt;</i>
+<ul><li> <i>wlibs</i> — бібліотеки віджетів у тегах "wlb": <i>&lt;wlb id="{ID}" doc="{doc}"&gt;{name} <b>{icon}</b> <b>{widgets}</b>&lt;/wlb&gt;</i>
+<ul><li> <i>icon</i> — тег "icon" із даними цієї іконки кодоване Base64;</li>
+<li> <i>widgets</i> — теги "w" із описом бібліотек віджетів: <i>&lt;w id="{ID}" doc="{doc}" parent="<b>{parent}</b>"&gt;{name} {icon} <b>{widgets}</b>&lt;/w&gt;</i>
+<ul><li> <i>parent</i> — адреса батька віджету;</li>
+<li> <i>widgets</i> — теги "сw" із описом дочірніх віджетів: <i>&lt;cw id="{ID}" doc="{doc}"&gt;{name} {icon}&lt;/cw&gt;</i></li></ul></li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">disIconsCW=</span><span class="s">"1"</span> <span class="na">disIconsW=</span><span class="s">"1"</span> <span class="na">item=</span><span class="s">"/wlb_AGLKS"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fwlbBr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;wlb</span> <span class="na">id=</span><span class="s">"AGLKS"</span><span class="nt">&gt;</span>АГЛКС
+    <span class="nt">&lt;ico&gt;</span>iVBORw0KGgoAA...AAAElFTkSuQmCC<span class="nt">&lt;/ico&gt;</span>
+    <span class="nt">&lt;w</span> <span class="na">id=</span><span class="s">"CM101"</span> <span class="na">parent=</span><span class="s">"/wlb_originals/wdg_Box"</span><span class="nt">&gt;</span>КМ101
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"AT101_1"</span><span class="nt">&gt;</span>АТ101 1<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"AT101_2"</span><span class="nt">&gt;</span>АТ101 1<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"C101_1"</span><span class="nt">&gt;</span>C101/1<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"C101_2"</span><span class="nt">&gt;</span>C101/1<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"C101_3"</span><span class="nt">&gt;</span>C101/1<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"CM101"</span><span class="nt">&gt;</span>CM101<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"CM101_1"</span><span class="nt">&gt;</span>CM101_1<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"CM101_2"</span><span class="nt">&gt;</span>CM101_2<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"ElFigure1"</span><span class="nt">&gt;</span>ElFigure1<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"ElFigure2"</span><span class="nt">&gt;</span>ElFigure2<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"ElFigure3"</span><span class="nt">&gt;</span>ElFigure3<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"ElFigure4"</span><span class="nt">&gt;</span>ElFigure4<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"ElFigure5"</span><span class="nt">&gt;</span>ElFigure5<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"ElFigure6"</span><span class="nt">&gt;</span>ElFigure6<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"ElFigure7"</span><span class="nt">&gt;</span>ElFigure7<span class="nt">&lt;/cw&gt;</span>
+    <span class="nt">&lt;/w&gt;</span>
+    <span class="nt">&lt;w</span> <span class="na">id=</span><span class="s">"KCH_MN1"</span> <span class="na">parent=</span><span class="s">"/wlb_originals/wdg_Box"</span><span class="nt">&gt;</span>KCH_MN1
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"BC1"</span><span class="nt">&gt;</span>Кульовий кран<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"BC2"</span><span class="nt">&gt;</span>Кульовий кран<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"BC21"</span><span class="nt">&gt;</span>Кульовий кран<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"BC22"</span><span class="nt">&gt;</span>Кульовий кран<span class="nt">&lt;/cw&gt;</span>
+    <span class="nt">&lt;/w&gt;</span>
+    <span class="nt">&lt;w</span> <span class="na">id=</span><span class="s">"comprEn"</span> <span class="na">parent=</span><span class="s">"/wlb_originals/wdg_ElFigure"</span><span class="nt">&gt;</span>Робота компресора<span class="nt">&lt;/w&gt;</span>
+  <span class="nt">&lt;/wlb&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
+</pre></div>
+<p><b><u>Проєкти СВУ</u></b><br />
 </p>
-<dl><dd><i>tm</i> — час-лічильник змін. Встановлення часу-лічильника змін для запиту тільки змінений атрибутів.<br /></dd></dl>
-<p>Результат:
+<dl><dd><b><u>Отримання переліку проєктів розширене деякими опціями</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;get path="/UI/VCAEngine/[%2fbr%2fprj_|%2fprm%2fcfg%2fprj]" chkUserPerm="<b>{chkUserPerm}</b>" getChPgN="<b>{getChPgN}</b>" noName="<b>{noName}</b>" /&gt;</i>
+<ul><li> <i>chkUserPerm</i> — перевірка прав користувача перед включенням до переліку [0|1];</li>
+<li> <i>getChPgN</i> — запит кількості дочірніх сторінок у проєктах [0|1];</li>
+<li> <i>noName</i> — не повертати назви сторінок [0|1].</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/UI/VCAEngine/[%2fbr%2fprj_|%2fprm%2fcfg%2fprj]" chkUserPerm="{chkUserPerm}" getChPgN="{getChPgN}" noName="{noName}" rez="<b>0</b>"&gt;<b>{projects}</b>&lt;/get&gt;</i>
+<ul><li> <i>projects</i> — перелік проєктів у тегах "el", де назва у тексті тегу та ідентифікатор у атрибуті "id". Розширено додатковими атрибутами:
+<ul><li> "chPgN" — кількість дочірніх сторінок у проєкті за встановлення "getChPgN".</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">getChPgN=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fbr%2fprj_"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">chPgN=</span><span class="s">"2"</span> <span class="na">id=</span><span class="s">"AGLKS"</span><span class="nt">&gt;</span>АГЛКС<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">chPgN=</span><span class="s">"2"</span> <span class="na">id=</span><span class="s">"archBrowser"</span><span class="nt">&gt;</span>Огляд архівів<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">chPgN=</span><span class="s">"2"</span> <span class="na">id=</span><span class="s">"tmplSO"</span><span class="nt">&gt;</span>Групи сигналізації (шаблон)<span class="nt">&lt;/el&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
+</pre></div>
+<dl><dd><b><u>Перевірка доступу на читання проєкту від користувача запиту</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;read path="/UI/VCAEngine/prj_<b>{proj}</b>/%2fserv%2faccess" /&gt;</i>
+<ul><li> <i>proj</i> — ідентифікатор проєкту.</li></ul></dd>
+<dd>ВІДП: <i>&lt;read path="/UI/VCAEngine/prj_{proj}/%2fserv%2faccess" rez="<b>0</b>"&gt;<b>{access}</b>&lt;/get&gt;</i>
+<ul><li> <i>access</i> — статус наявності доступу [0|1].</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;read</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/prj_AGLKS/%2fserv%2faccess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/read&gt;</span>
+</pre></div>
+<p><b><u>Сеанси проєктів</u></b><br />
 </p>
-<dl><dd><i>&lt;el id="{attr}" p="{a_id}"&gt;{val}&lt;/el&gt;</i> — елементи з результатами атрибутів. У елементі вказуються: строковий ідентифікатор <i>attr</i>, індекс <i>a_id</i> та значення <i>val</i> атрибуту.</dd>
-<dd><i>&lt;w id="{wid}" lnkPath="{lnk_path}"&gt;{childs+attrs}&lt;/w&gt;</i> — елементи з дочірніми віджетами та їх атрибутами. У елементі вказуються: ідентифікатор дочірнього віджету <i>wid</i> та шлях віджету, на який посилається даний віджет якщо він є посиланням <i>lnk_path</i>.</dd></dl>
-<h5><span class="mw-headline" id=".D0.94.D0.BE.D1.81.D1.82.D1.83.D0.BF_.D0.B4.D0.BE_.D1.81.D1.82.D0.BE.D1.80.D1.96.D0.BD.D0.BE.D0.BA_.D1.81.D0.B5.D0.B0.D0.BD.D1.81.D1.83"><span class="mw-headline-number">3.11.2.3</span> Доступ до сторінок сеансу</span></h5>
-<p>З метою уніфікації та оптимізації доступу до сторінок, передбачено сервісну функцію сеансу "/serv/pg" та команди:
-</p>
-<ul><li> запит переліку відкритих сторінок: <b>&lt;openlist path="/UI/VCAEngine/ses_{Session}/%2fserv%2fpg"/&gt;</b>;</li>
-<li> відкриття сторінки: <b>&lt;open path="/UI/VCAEngine/ses_{Session}/%2fserv%2fpg"/&gt;</b>;</li>
-<li> закриття сторінки: <b>&lt;close path="/UI/VCAEngine/ses_{Session}/%2fserv%2fpg"/&gt;</b>.</li></ul>
-<p>Результатом запиту переліку відкритих сторінок є дочірні елементи <b>&lt;el&gt;{OpPage}&lt;/el&gt;</b>, що містять повний шлях відкритої сторінки. Крім переліку відкритих сторінок запит повертає значення поточного лічильника обчислення сеансу, у атрибуті <i>tm</i>. Якщо даний атрибут встановлюється при запиті, то, для кожної відкритої сторінки, повертається перелік змінених, з моменту вказаного значення лічильника, віджетів відкритої сторінки.
-</p>
-<h5><span class="mw-headline" id=".D0.A3.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D1.96.D0.BD.D0.BD.D1.8F_.D1.81.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.94.D1.8E"><span class="mw-headline-number">3.11.2.4</span> Управління сигналізацією</span></h5>
-<p>Для надання механізму глобального контролю за сигналізацією сеансу, передбачено сервісну функцію сеансу "/serv/alarm" та команди:
-</p>
-<ul><li> запит статусу сигналів: <b>&lt;get path="/UI/VCAEngine/ses_{Session}/%2fserv%2falarm"/&gt;</b>;</li>
-<li> квітація сигналів: <b>&lt;quietance path="/UI/VCAEngine/ses_{Session}/%2fserv%2falarm"/&gt;</b>.</li></ul>
-<p>Запит статусу сигналів повертає узагальнений стан сигналів, а також ресурс сповіщення, якщо атрибут "mode" дорівнює "resource". Результатом запиту ресурсу сповіщення, зазвичай, є звуковий файл, для відтворення. В той-же час, забезпечується відстеження послідовності сигналізації та квітації окремих ресурсів сповіщення.
-</p><p>Запит на квітацію виконує квітацію, вказаного у атрибуті <i>wdg</i>, віджету, згідно до шаблону у атрибуті <i>tmpl</i>.
-</p>
-<h5><span class="mw-headline" id=".D0.9C.D0.B0.D0.BD.D1.96.D0.BF.D1.83.D0.BB.D1.8F.D1.86.D1.96.D1.8F_.D1.81.D0.B5.D0.B0.D0.BD.D1.81.D0.B0.D0.BC.D0.B8_.D0.BF.D1.80.D0.BE.D1.94.D0.BA.D1.82.D1.96.D0.B2"><span class="mw-headline-number">3.11.2.5</span> Маніпуляція сеансами проєктів</span></h5>
-<p>Для надання уніфікованого механізму маніпуляції сеансами, модулем рушія СВУ (VCAEngine), для візуалізаторів СВУ, передбачено сервісну функцію "/serv/sess" та команди:
-</p>
-<ul><li> запиту переліку відкритих сеансів: <b>&lt;list path="/UI/VCAEngine/%2fserv%2fsess"/&gt;</b>;</li>
-<li> підключення-створення нового сеансу: <b>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess"/&gt;</b>; </li>
-<li> відключення-видалення сеансу: <b>&lt;disconnect path="/UI/VCAEngine/%2fserv%2fsess"/&gt;</b>.</li></ul>
-<p><b>Таблиця.</b> Атрибути команд механізму маніпуляції сеансами
-</p>
-<table class="wikitable">
-
-<tr>
-<th> Ідентифікатор </th>
-<th> Ім'я </th>
-<th> Значення
-</th></tr>
-<tr>
-<td colspan="3"> <i>Команда запиту переліку відкритих сеансів для проєкту: <b>&lt;list path="/UI/VCAEngine/%2fserv%2fsess"/&gt;</b></i>
-</td></tr>
-<tr>
-<td> prj </td>
-<td> Визначення проєкту </td>
-<td> Визначає проєкт, для якого повертати перелік відкритих сеансів.
-</td></tr>
-<tr>
-<td> &lt;el&gt;{Session}&lt;/el&gt; </td>
-<td> Контроль переліку сеансів </td>
-<td> У дочірніх елементах вказуються сеанси, відкриті для запитаного проєкту.
-</td></tr>
-<tr>
-<td colspan="3"> <i>Команда підключення-відкриття сеансу: <b>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess"/&gt;</b></i>
-</td></tr>
-<tr>
-<td> sess </td>
-<td> Встановлення та контроль ім'я сеансу </td>
-<td> Якщо атрибут визначений, то здійснюється підключення до чинного сеансу, інакше — створення нового сеансу. У випадку відкриття нового сеансу, до даного атрибуту поміщається його ім'я.
-</td></tr>
-<tr>
-<td> prj </td>
-<td> Встановлення імені проєкту </td>
-<td> Використовується для відкриття нового сеансу для вказаного проєкту та коли атрибут <i>sess</i> не вказано.
-</td></tr>
-<tr>
-<td colspan="3"> <i>Команда відключення-закриття сеансу: <b>&lt;disconnect path="/UI/VCAEngine/%2fserv%2fsess"/&gt;</b></i>
-</td></tr>
-<tr>
-<td> sess </td>
-<td> Встановлення імені сеансу </td>
-<td> Вказує ім'я сеансу від якого виконується відключення або закриття. Сеанси, що не є фоновими, та до яких не підключено жодного візуалізатору, автоматично закриваються.
-</td></tr></table>
-<h5><span class="mw-headline" id=".D0.93.D1.80.D1.83.D0.BF.D0.BE.D0.B2.D0.B8.D0.B9_.D0.B7.D0.B0.D0.BF.D0.B8.D1.82_.D0.B4.D0.B5.D1.80.D0.B5.D0.B2.D0.B0_.D0.B1.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA_.D0.B2.D1.96.D0.B4.D0.B6.D0.B5.D1.82.D1.96.D0.B2"><span class="mw-headline-number">3.11.2.6</span> Груповий запит дерева бібліотек віджетів</span></h5>
-<p>З метою оптимізації продуктивності локальної та, особливо, мережевої взаємодії, передбачено сервісну функцію "/serv/wlbBr" та команду запиту дерева бібліотек віджетів: <b>&lt;get path="/UI/VCAEngine/%2fserv%2fwlbBr"/&gt;</b>. Результатом запиту є дерево з елементами бібліотек віджетів — теги <i>wlb</i>. Всередині тегів бібліотек віджетів міститься тег іконки <i>ico</i> та теги віджетів бібліотеки <i>w</i>. Теги віджетів, своєю чергою, містять тег іконки та теги дочірніх віджетів <i>cw</i>.
-</p><p><br />
+<dl><dd><b><u>Отримання переліку сеансів визначеного проєкту СВУ</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;list path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" /&gt;</i>
+<ul><li> <i>project</i> — ідентифікатор запитаного проєкту.</li></ul></dd>
+<dd>ВІДП: <i>&lt;list path="/UI/VCAEngine/%2fserv%2fsess" prj="{project}" rez="<b>0</b>"&gt;<b>{sessions}</b>&lt;/list&gt;</i>
+<ul><li> <i>sessions</i> — сеанси у тегах "el".</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;list</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fsess"</span> <span class="na">prj=</span><span class="s">"AGLKS"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el&gt;</span>AGLKS<span class="nt">&lt;/el&gt;</span>
+<span class="nt">&lt;/list&gt;</span>
+</pre></div>
+<dl><dd><b><u>Підключення до визначеного проєкту СВУ або сеансу проєкту</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" sess="<b>{session}</b>" userChange="<b>{userChange}</b>" /&gt;</i>
+<ul><li> <i>project</i> — ідентифікатор запитаного проєкту, порожнє при підключені до наявного сеансу;</li>
+<li> <i>session</i> — ідентифікатор вже наявного сеансу, порожнє для створення нового сеансу;</li>
+<li> <i>userChange</i> — ознака зміни користувача [0|1], тобто для оновлення інформації користувача.</li></ul></dd>
+<dd>ВІДП: <i>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" sess="<b>{session}</b>" userChange="{userChange}" rez="<b>0</b>" conId="<b>{conId}</b>" userIsRoot="<b>{userIsRoot}</b>" /&gt;</i>
+<ul><li> <i>conId</i> — ідентифікатор підключення сеансу, використовується у подальших запитах;</li>
+<li> <i>project</i> — ідентифікатор проєкту успішно підключеного сеансу;</li>
+<li> <i>session</i> — ідентифікатор новоствореного сеансу успішно підключеного проєкту;</li>
+<li> <i>userIsRoot</i> — користувач має права суперкористувача [0|1].</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;connect</span> <span class="na">conId=</span><span class="s">"50860885"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fsess"</span> <span class="na">prj=</span><span class="s">"AGLKS"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">sess=</span><span class="s">"AGLKS"</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="na">userIsRoot=</span><span class="s">"1"</span> <span class="nt">/&gt;</span>
+</pre></div>
+<dl><dd><b><u>Відключення від визначеного сеансу проєкту СВУ</u></b><br /></dd>
+<dd>Сеанси із нульовою кількістю підключень тут також закриваються.<br /></dd>
+<dd>ЗАП: <i>&lt;disconnect path="/UI/VCAEngine/%2fserv%2fsess" sess="<b>{session}</b>" conId="<b>{conId}</b>" /&gt;</i>
+<ul><li> <i>session</i> — ідентифікатор наявного сеансу;</li>
+<li> <i>conId</i> — ідентифікатор підключення сеансу.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;disconnect</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fsess"</span> <span class="na">sess=</span><span class="s">"AGLKS"</span> <span class="na">conId=</span><span class="s">"50860885"</span> <span class="nt">/&gt;</span>
+</pre></div>
+<dl><dd><b><u>Отримання переліку відкритих сторінок сеансу проєкту</u></b><br /></dd>
+<dd>ЗАП[<b>{owner}-{grp}</b>]: <i>&lt;openlist path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2fpg" conId="<b>{conId}</b>" tm="<b>{clock}</b>" /&gt;</i>
+<ul><li> <i>owner</i>, <i>grp</i> — доступ на читання для власника проєкту або користувача у групі та відповідно до прав проєкту;</li>
+<li> <i>session</i> — ідентифікатор сеансу;</li>
+<li> <i>conId</i> — ідентифікатор підключення сеансу;</li>
+<li> <i>clock</i> — значення внутрішнього лічильника (цикл життя) від попереднього опрацьованого запиту, для перевірки змінених.</li></ul></dd>
+<dd>ВІДП: <i>&lt;openlist path="/UI/VCAEngine/ses_{session}/%2fserv%2fpg" conId="{conId}" tm="<b>{clock}</b>" rez="<b>0</b>"&gt;<b>{pages}</b>&lt;/openlist&gt;</i>
+<ul><li> <i>clock</i> — значення внутрішнього лічильника (цикл життя) - 1 на час запиту;</li>
+<li> <i>pages</i> — сторінки у тегах "pg": <i>&lt;pg pgGrp="<b>{pgGrp}</b>" updWdg="<b>{nUpdWdgs}</b>"&gt;<b>{ID}</b>&lt;/pg&gt;</i>
+<ul><li> <i>ID</i> — ідентифікатор сторінки;</li>
+<li> <i>pgGrp</i> — група сторінок для раннього обчислення включення сторінок;</li>
+<li> <i>nUpdWdgs</i> — кількість оновлених віджетів після останнього запиту та для непорожнього "clock".</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;openlist</span> <span class="na">conId=</span><span class="s">"52760577"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/%2fserv%2fpg"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"1403"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;pg&gt;</span>/ses_AGLKS/pg_so<span class="nt">&lt;/pg&gt;</span>
+  <span class="nt">&lt;pg</span> <span class="na">pgGrp=</span><span class="s">"so"</span><span class="nt">&gt;</span>/ses_AGLKS/pg_so/pg_1/pg_mn/pg_1<span class="nt">&lt;/pg&gt;</span>
+  <span class="nt">&lt;pg</span> <span class="na">pgGrp=</span><span class="s">"cntr"</span><span class="nt">&gt;</span>/ses_AGLKS/pg_control/pg_ElCadr<span class="nt">&lt;/pg&gt;</span>
+<span class="nt">&lt;/openlist&gt;</span>
+</pre></div>
+<dl><dd><b><u>Відкриття або закриття визначеної сторінки сеансу проєкту</u></b><br /></dd>
+<dd>ЗАП[<b>{owner}-{grp}</b>]: <i>&lt;[open|close] path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2fpg" pg="<b>{page}</b>" /&gt;</i>
+<ul><li> <i>owner</i>, <i>grp</i> — доступ на запис для власника проєкту або користувача у групі та відповідно до прав проєкту;</li>
+<li> <i>session</i> — ідентифікатор сеансу;</li>
+<li> <i>page</i> — адреса сторінки у контексті сеансу, на кшталт "/ses_AGLKS/pg_so/pg_1/pg_mn/pg_1".</li></ul></dd></dl>
+<dl><dd><b><u>Отримання статусу сигналізації та ресурсу сповіщення для сеансу проєкту</u></b><br /></dd>
+<dd>ЗАП[<b>{owner}-{grp}</b>]: <i>&lt;get path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2falarm" mode="<b>{mode}</b>" tp="<b>{typeNtf}</b>" wdg="<b>{widget}</b>" /&gt;</i>
+<ul><li> <i>owner</i>, <i>grp</i> — доступ на читання для власника проєкту або користувача у групі та відповідно до прав проєкту;</li>
+<li> <i>session</i> — ідентифікатор сеансу;</li>
+<li> <i>mode</i> — режим запиту, лише "resource" для отримання ресурсів сповіщення та пусто тільки статус;</li>
+<li> <i>typeNtf</i> — тип сповіщення для отримання ресурсу, дивіться <a href="#Alarms">секцію сигналізації</a>;</li>
+<li> <i>widget</i> — адреса віджету для формування ресурсу сповіщення, порожньо для глобального.</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/UI/VCAEngine/ses_{session}/%2fserv%2falarm" mode="{mode}" tp="{typeNtf}" rez="<b>0</b>" alarmSt="<b>{alarmSt}</b>" tm="<b>{clock}</b>" wdg="<b>{widget}</b>" resTp="<b>{resTp}</b>" mess="<b>{message}</b>" lang="<b>{language}</b>"&gt;<b>{resource}</b>&lt;/get&gt;</i>
+<ul><li> <i>alarmSt</i> — статус сигналізації як описано у <a href="#Alarms">секції сигналізації</a>;</li>
+<li> <i>clock</i> — значення внутрішнього лічильника (цикл життя) при формуванні ресурсу сповіщення;</li>
+<li> <i>widget</i> — адреса віджету джерела при формуванні ресурсу сповіщення;</li>
+<li> <i>message</i> — повідомлення сповіщення із тексту;</li>
+<li> <i>language</i> — мова сповіщення, переважно для "message";</li>
+<li> <i>resTp</i> — тип ресурсу сповіщення;</li>
+<li> <i>resource</i> — ресурс сповіщення кодований Base64 для бінарних даних.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/%2fserv%2falarm"</span> <span class="na">mode=</span><span class="s">"resource"</span> <span class="na">tp=</span><span class="s">"1"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span>
+     <span class="na">alarmSt=</span><span class="s">"460554"</span> <span class="na">tm=</span><span class="s">"0"</span> <span class="na">resTp=</span><span class="s">"audio/ogg;73.3428"</span> <span class="na">lang=</span><span class="s">"en_US.UTF-8"</span><span class="nt">&gt;</span>
+T2dnUwACA...Dg6gwAjo+PAQ==
+<span class="nt">&lt;/get&gt;</span>
+</pre></div>
+<dl><dd><b><u>Стишення-квітація сповіщення сигналізації сеансу проєкту</u></b><br /></dd>
+<dd>ЗАП[<b>{owner}-{grp}</b>]: <i>&lt;quietance path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2falarm" wdg="<b>{widget}</b>" tmpl="<b>{template}</b>" ret="<b>{return}</b>" /&gt;</i>
+<ul><li> <i>owner</i>, <i>grp</i> — доступ на читання для власника проєкту або користувача у групі та відповідно до прав проєкту;</li>
+<li> <i>session</i> — ідентифікатор сеансу;</li>
+<li> <i>widget</i> — адреса віджету для стишення сповіщення, пусто для глобального;</li>
+<li> <i>template</i> — шаблон сповіщення, тобто бітова збірка відповідно до типів стишуваних сповіщень;</li>
+<li> <i>return</i> — ознака повернення сповіщення, тобто стишення вимикається.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;quietance</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/%2fserv%2falarm"</span> <span class="na">tmpl=</span><span class="s">"7"</span> <span class="nt">/&gt;</span>
+</pre></div>
+<dl><dd><b><u>Отримання значень модифікованих візуальних атрибутів віджету сеансу</u></b><br /></dd>
+<dd>Перевизначає загальний сервісний запит віджетів "<i>&lt;get path='/UI/VCAEngine/{wAddr}/%2fserv%2fattr' /&gt;</i>" щодо специфіки сеансу.<br /></dd>
+<dd>ЗАП: <i>&lt;get path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattr" tm="<b>{clock}</b>" /&gt;</i>
+<ul><li> <i>wAddr</i> — локальна адреса віджету сеансу, на кшталт "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
+<li> <i>clock</i> — значення внутрішнього лічильника (цикл життя) від попереднього опрацьованого запиту, для перевірки змінених; за нульового значення примусово додаються сервісні-віртуальні атрибути: "perm", "name".</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/UI/VCAEngine/ses_{wAddr}/%2fserv%2fattr" tm="{clock}" rez="<b>0</b>"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
+<ul><li> <i>attributes</i> — модифіковані від "clock" атрибути у тегах "el": <i>&lt;el id="<b>{ID}</b>" p="<b>{pos}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
+<ul><li> <i>ID</i> — ідентифікатор атрибуту;</li>
+<li> <i>pos</i> — позиція-індекс атрибуту для стандартних;</li>
+<li> <i>value</i> — значення атрибуту.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span> <span class="na">p=</span><span class="s">"-3"</span><span class="nt">&gt;</span>6<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>ElFigure<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"en"</span> <span class="na">p=</span><span class="s">"5"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"active"</span> <span class="na">p=</span><span class="s">"6"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomX"</span> <span class="na">p=</span><span class="s">"7"</span><span class="nt">&gt;</span>488<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomY"</span> <span class="na">p=</span><span class="s">"8"</span><span class="nt">&gt;</span>250<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomW"</span> <span class="na">p=</span><span class="s">"9"</span><span class="nt">&gt;</span>16<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomH"</span> <span class="na">p=</span><span class="s">"10"</span><span class="nt">&gt;</span>100<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomXsc"</span> <span class="na">p=</span><span class="s">"13"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomYsc"</span> <span class="na">p=</span><span class="s">"14"</span><span class="nt">&gt;</span>0.75<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomZ"</span> <span class="na">p=</span><span class="s">"11"</span><span class="nt">&gt;</span>-9<span class="nt">&lt;/el&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
+</pre></div>
+<dl><dd><b><u>Встановлення групи значень визначених атрибутів віджету сеансу</u></b><br /></dd>
+<dd>Перевизначає загальний сервісний запит віджетів "<i>&lt;set path='/UI/VCAEngine/{wAddr}/%2fserv%2fattr' /&gt;</i>"  щодо специфіки сеансу на кшталт опрацювання атрибуту "event" та виявлення активності-неактивності користувача.<br /></dd>
+<dd>ЗАП[<b>{owner}-{grp}</b>]: <i>&lt;set path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattr" noUser="<b>{noUser}</b>"&gt;<b>{attributes}</b>&lt;/set&gt;</i>
+<ul><li> <i>owner</i>, <i>grp</i> — доступ на запис для власника проєкту або користувача у групі та відповідно до прав проєкту;</li>
+<li> <i>wAddr</i> — локальна адреса віджету сеансу, на кшталт "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
+<li> <i>noUser</i> — не маркувати це як активність користувача;</li>
+<li> <i>attributes</i> —  атрибути зі значеннями у тегах "el": <i>&lt;el id="<b>{ID}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
+<ul><li> <i>ID</i> — ідентифікатор атрибуту;</li>
+<li> <i>value</i> — встановлюване значення атрибуту.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>Нова назва<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"dscr"</span><span class="nt">&gt;</span>Новий опис<span class="nt">&lt;/el&gt;</span>
+<span class="nt">&lt;/set&gt;</span>
+</pre></div>
+<dl><dd><b><u>Активація атрибуту для використання у якості візуального та його створення за відсутності</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;activate path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattr%2f<b>{aID}</b>" aNm="<b>{aName}</b>" aTp="<b>{aType}</b>" aFlg="<b>{aFlags}</b>" aVls="<b>{aValues}</b>" aNms="<b>{aNames}</b>"&gt;<b>{aDef}</b>&lt;/activate&gt;</i>
+<ul><li> <i>wAddr</i> — локальна адреса віджету сеансу, на кшталт "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
+<li> <i>aID</i> — ідентифікатор атрибуту сеансу;</li>
+<li> <i>aName</i> — ім'я атрибуту при його створені;</li>
+<li> <i>aType</i> — тип атрибуту при його створені, дивіться <a href="../API.html#TFld" title="Special:MyLanguage/Documents/API">об'єкт TFld</a>;</li>
+<li> <i>aFlags</i> — прапорці атрибуту при його створені, дивіться <a href="../API.html#TFld" title="Special:MyLanguage/Documents/API">об'єкт TFld</a>;</li>
+<li> <i>aDef</i> — типове значення атрибуту при його створені;</li>
+<li> <i>aValues</i> — значення атрибуту для вибіркових типів при його створені;</li>
+<li> <i>aNames</i> — назви значень атрибуту для вибіркових типів при його створені.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;activate</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/%2fserv%2fattr%2frunWin"</span> <span class="na">aNm=</span><span class="s">"Вікно виконання"</span> <span class="na">aTp=</span><span class="s">"1"</span> <span class="na">aFlg=</span><span class="s">"1"</span> <span class="na">aVls=</span><span class="s">"0;1;2"</span> <span class="na">aNms=</span><span class="s">"Original size;Maximize;Full screen"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/activate&gt;</span>
+</pre></div>
+<dl><dd><b><u>Отримання значень візуальних атрибутів гілки віджету сеансу, оптимізовано для мереж</u></b><br /></dd>
+<dd>Перевизначає загальний сервісний запит віджетів "<i>&lt;get path='/UI/VCAEngine/{wAddr}/%2fserv%2fattrBr' /&gt;</i>"  щодо специфіки сеансу.<br /></dd>
+<dd>ЗАП: <i>&lt;get path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattrBr" tm="<b>{clock}</b>" FullTree="<b>{FullTree}</b>" /&gt;</i>
+<ul><li> <i>wAddr</i> — локальна адреса віджету сеансу, на кшталт "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
+<li> <i>clock</i> — значення внутрішнього лічильника (цикл життя) від попереднього опрацьованого запиту, для перевірки змінених; за нульового значення примусово додаються сервісні-віртуальні атрибути: "perm", "name".</li>
+<li> <i>fullTree</i> — отримання повного дерева віджетів незалежно від наявності змін, без атрибутів.</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/UI/VCAEngine/ses_{wAddr}/%2fserv%2fattrBr" tm="{clock}" FullTree="{FullTree}" rez="<b>0</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/get&gt;</i>
+<ul><li> <i>attributes</i> — опрацьовані атрибути у тегах "el": <i>&lt;el id="<b>{ID}</b>" p="<b>{pos}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
+<ul><li> <i>ID</i> — ідентифікатор атрибуту;</li>
+<li> <i>pos</i> — позиція-індекс атрибуту для стандартних;</li>
+<li> <i>value</i> — значення атрибуту.</li></ul></li>
+<li> <i>widgets</i> — дочірні віджети у тегах "w": <i>&lt;w id="<b>{ID}</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/w&gt;</i>
+<ul><li> <i>ID</i> — ідентифікатор віджету.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/%2fserv%2fattrBr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span> <span class="na">p=</span><span class="s">"-4"</span><span class="nt">&gt;</span>CM101<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span> <span class="na">p=</span><span class="s">"-3"</span><span class="nt">&gt;</span>6<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>Box<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"en"</span> <span class="na">p=</span><span class="s">"5"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"active"</span> <span class="na">p=</span><span class="s">"6"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomX"</span> <span class="na">p=</span><span class="s">"7"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomY"</span> <span class="na">p=</span><span class="s">"8"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomW"</span> <span class="na">p=</span><span class="s">"9"</span><span class="nt">&gt;</span>900<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomH"</span> <span class="na">p=</span><span class="s">"10"</span><span class="nt">&gt;</span>580<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;w</span> <span class="na">id=</span><span class="s">"AT101_1"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span> <span class="na">p=</span><span class="s">"-3"</span><span class="nt">&gt;</span>6<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>ElFigure<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"en"</span> <span class="na">p=</span><span class="s">"5"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"active"</span> <span class="na">p=</span><span class="s">"6"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomX"</span> <span class="na">p=</span><span class="s">"7"</span><span class="nt">&gt;</span>338<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomY"</span> <span class="na">p=</span><span class="s">"8"</span><span class="nt">&gt;</span>320<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomW"</span> <span class="na">p=</span><span class="s">"9"</span><span class="nt">&gt;</span>80<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomH"</span> <span class="na">p=</span><span class="s">"10"</span><span class="nt">&gt;</span>100<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;/w&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
+</pre></div>
+<dl><dd><b><u>Отримання значення специфічного до сеансу атрибуту віджету сеансу</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;get path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattrSess%2f<b>{aID}</b>" /&gt;</i>
+<ul><li> <i>wAddr</i> — локальна адреса віджету сеансу, на кшталт "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
+<li> <i>aID</i> — ідентифікатор специфічного до сеансу атрибуту.</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/UI/VCAEngine/ses_{wAddr}/%2fserv%2fattrSess%2f{aID}" rez="<b>0</b>"&gt;<b>{value}</b>&lt;/get&gt;</i>
+<ul><li> <i>value</i> — значення атрибуту.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/%2fserv%2fattrSess%2ftestA"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>тестове значення<span class="nt">&lt;/get&gt;</span>
+</pre></div>
+<dl><dd><b><u>Встановлення значення специфічного до сеансу атрибуту віджету сеансу</u></b><br /></dd>
+<dd>ЗАП[<b>{owner}-{grp}</b>]: <i>&lt;set path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattrSess%2f<b>{aID}</b>"&gt;<b>{value}</b>&lt;/get&gt;</i>
+<ul><li> <i>owner</i>, <i>grp</i> — доступ на запис для власника проєкту або користувача у групі та відповідно до прав проєкту;</li>
+<li> <i>wAddr</i> — локальна адреса віджету сеансу, на кшталт "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
+<li> <i>aID</i> — ідентифікатор специфічного до сеансу атрибуту;</li>
+<li> <i>value</i> — значення атрибуту.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/%2fserv%2fattrSess%2ftestA"</span><span class="nt">&gt;</span>тестове значення<span class="nt">&lt;/set&gt;</span>
+</pre></div>
+<p><br />
 </p>
 <h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F_.D0.B7.D0.B0_.D0.BF.D0.BE.D1.81.D0.B5.D1.80.D0.B5.D0.B4.D0.BD.D0.B8.D1.86.D1.82.D0.B2.D0.BE.D0.BC_.D1.96.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.83_.D1.83.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D1.96.D0.BD.D0.BD.D1.8F_OpenSCADA"><span class="mw-headline-number">4</span> Конфігурація модуля за посередництвом інтерфейсу управління OpenSCADA</span></h2>
 <p>За посередництвом інтерфейсу управління OpenSCADA компоненти, які його використовують, можна конфігурувати з будь-якого конфігуратору OpenSCADA. Даним модулем надається інтерфейс доступу до всіх об'єктів даних СВУ. Головна вкладка конфігураційної сторінки модуля надає доступ до бібліотек віджетів та проєктів (рис.4.1). Вкладка "Сеанси" надає доступ до відкритих сеансів проєктів (рис.4.2).
@@ -3389,18 +3552,22 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 <li> Період обрахунку сеансу.</li>
 <li> Поточний стиль проєкту.</li>
 <li> Перелік відкритих сторінок.</li></ul>
-<p>Сторінки конфігурації візуальних елементів, розташованих у різних контейнерах, можуть сильно відрізнятися, однак, ця різниця полягає у наявності або відсутності окремих вкладок. Головна вкладка візуальних елементів фактично всюди однакова, відрізняючись на одне конфігураційне поле та три у сеансі (рис.4.8). У сторінок присутні вкладки дочірніх сторінок та вкладених віджетів. У контейнерних віджетів міститься вкладка вкладених віджетів. Всі візуальні елементи містять вкладку атрибутів (рис.4.9), крім логічних контейнерів проєктів. Елементи, на рівні яких можна формувати користувацьку процедуру та визначати зв'язки, містять вкладки "Обробка" (рис.4.10) та "Зв'язки" (рис.4.11).
+<p>Сторінки конфігурації візуальних елементів, розташованих у різних контейнерах, можуть сильно відрізнятися, однак, ця різниця полягає у наявності або відсутності окремих вкладок. Головна вкладка візуальних елементів фактично всюди однакова, відрізняючись на одне конфігураційне поле та три у сеансі (рис.4.8). У сторінок присутні вкладки дочірніх сторінок та вкладених віджетів. У контейнерних віджетів міститься вкладка вкладених віджетів. Всі візуальні елементи містять вкладку атрибутів (рис.4.9), крім логічних контейнерів проєктів. Елементи, на рівні яких можна формувати користувацьку процедуру та визначати зв'язки, містять вкладки "Обробка" (рис.4.10) та "Зв'язки" (рис.4.11). <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Рядки ім'я атрибуту у вкладці "Обробка" після першого опрацьовуються як допомога.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:809px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_main_uk.png"><img class="thumbimage" height="743" src="../files/VCAeng_vit_main_uk.png" width="807" /></a>  <div class="thumbcaption">Рис.4.8. Головна вкладка конфігурації візуальних елементів.</div></div></div></div>
-<p>За допомогою цієї сторінки можна встановити:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:866px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_main_uk.png"><img class="thumbimage" height="766" src="../files/VCAeng_vit_main_uk.png" width="864" /></a>  <div class="thumbcaption">Рис.4.8. Головна вкладка конфігурації візуальних елементів.</div></div></div></div>
+<p>За допомогою цієї сторінки можна отримати:
 </p>
-<ul><li> Стан елементу, а саме: "Ввімкнено", кількість використання, батьківський елемент та перехід до нього, дата та час останьої модифікації.</li>
-<li> Стан режиму сеансу виконання: "Відкрито", "Обробка" та використано часу при виконанні піддерева та елемента, у <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">режимі налагодження</a>.</li>
+<ul><li> Стан елементу; щодо інформації: "Ввімкнено", кількість використання, дата останньої модифікації, стан обчислювальної процедури; щодо контролю: "Включений", тип сторінки (для сторінок), батьківський елемент та перехід до нього.</li>
+<li> Стан елементу у режимі сеансу виконання; щодо інформації: модифікація, період періодичного опрацювання, "Опрацювання", використано часу при виконанні піддерева та елементу у <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">режимі налагодження</a>, "Відкрито"; щодо контролю: "Відкрито", "Опрацювання".</li>
 <li> Ідентифікатор, тип, корінь, шлях, ім'я, опис та іконка елементу.</li>
+<li> Періодичне опрацювання у мілісекундах — для загального контролю періодичного опрацювання будь якого елементу включно із тими, які не мають процедури опрацювання, але це значення може бути використане дочірніми елементами у каскаді. Зарезервовано наступні спеціальні значення:
+<ul><li> <b>0</b> — якщо бажаєте періодичного опрацювання сеансу;</li>
+<li> <b>-1</b> — якщо бажаєте використати період опрацювання батьківського віджету/сторінки/проєкту каскадно;</li>
+<li> <b>-2</b> — для цілковитого вимкнення періодичного опрацювання.</li></ul></li>
 <li> Команда — очистити зміни.</li>
 <li> Команда — опустити зміни віджета його предку.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:837px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_attr_uk.png"><img class="thumbimage" height="740" src="../files/VCAeng_vit_attr_uk.png" width="835" /></a>  <div class="thumbcaption">Рис.4.9. Вкладка атрибутів візуальних елементів.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1048px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_proc_uk.png"><img class="thumbimage" height="808" src="../files/VCAeng_vit_proc_uk.png" width="1046" /></a>  <div class="thumbcaption">Рис.4.10. Вкладка обробки візуальних елементів.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:944px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_proc_uk.png"><img class="thumbimage" height="766" src="../files/VCAeng_vit_proc_uk.png" width="942" /></a>  <div class="thumbcaption">Рис.4.10. Вкладка обробки візуальних елементів.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1087px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_lnk_uk.png"><img class="thumbimage" height="563" src="../files/VCAeng_vit_lnk_uk.png" width="1085" /></a>  <div class="thumbcaption">Рис.4.11. Вкладка зв'язків візуальних елементів.</div></div></div></div>
 
 
@@ -3408,5 +3575,5 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/uk">Modules/VCAEngine/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/uk">Modules/VCAEngine/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> </td></tr></table></body>
 </html>

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: vcaengine.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.10.3"
+#define MOD_VER		"7.11.0"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -125,7 +125,7 @@ void Engine::postEnable( int flag )
     wdg_el.fldAdd(new TFld("PARENT",trS("Parent widget"),TFld::String,TFld::NoFlag,"200"));
     wdg_el.fldAdd(new TFld("PR_TR",trS("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
     wdg_el.fldAdd(new TFld("PROC",trS("Procedure text and language"),TFld::String,TFld::TransltText,"1000000"));
-    wdg_el.fldAdd(new TFld("PROC_PER",trS("Period of the procedure calculating"),TFld::Integer,TFld::NoFlag,"5","-1"));
+    wdg_el.fldAdd(new TFld("PROC_PER",trS("Period of the procedure calculating"),TFld::Integer,TFld::NoFlag,"5",i2s(Widget::PerVal_Parent).c_str()));
     wdg_el.fldAdd(new TFld("ATTRS",trS("Changed attributes"),TFld::String,TFld::NoFlag,"10000"));
     wdg_el.fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
@@ -133,6 +133,7 @@ void Engine::postEnable( int flag )
     inclwdg_el.fldAdd(new TFld("IDW",trS("Widget identifier"),TFld::String,TCfg::Key,"100"));
     inclwdg_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,"30"));
     inclwdg_el.fldAdd(new TFld("PARENT",trS("Parent widget"),TFld::String,TFld::NoFlag,"200"));
+    inclwdg_el.fldAdd(new TFld("PROC_PER",trS("Period of the procedure calculating"),TFld::Integer,TFld::NoFlag,"5",i2s(Widget::PerVal_Parent).c_str()));
     inclwdg_el.fldAdd(new TFld("ATTRS",trS("Changed attributes"),TFld::String,TFld::NoFlag,"10000"));
 
     //Make widget's IO DB structure: {LibWidgetIO,ProjPageIO}(__IDW__, __ID__, __IDC__, IO_VAL, SELF_FLG, CFG_TMPL, CFG_VAL)
@@ -175,7 +176,7 @@ void Engine::postEnable( int flag )
     page_el.fldAdd(new TFld("PARENT",trS("Parent widget"),TFld::String,TFld::NoFlag,"200"));
     page_el.fldAdd(new TFld("PR_TR",trS("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
     page_el.fldAdd(new TFld("PROC",trS("Procedure text and language"),TFld::String,TFld::TransltText,"1000000"));
-    page_el.fldAdd(new TFld("PROC_PER",trS("Period of the procedure calculating"),TFld::Integer,TFld::NoFlag,"5","-1"));
+    page_el.fldAdd(new TFld("PROC_PER",trS("Period of the procedure calculating"),TFld::Integer,TFld::NoFlag,"5",i2s(Widget::PerVal_Parent).c_str()));
     page_el.fldAdd(new TFld("FLGS",trS("Flags"),TFld::Integer,TFld::NoFlag,"1","0"));
     page_el.fldAdd(new TFld("ATTRS",trS("Changed attributes"),TFld::String,TFld::NoFlag,"10000"));
     page_el.fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec));
@@ -554,7 +555,7 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 	//????[v1.0] Remove - temporary placed to clean up the existing DBs, to early fix from using Values and Names for unproper types.
 	else if(IO_VAL.size() >= 2 && IO_VAL.compare(IO_VAL.size()-2,2,"||") == 0) attr.at().setS(IO_VAL.substr(0,IO_VAL.size()-2));
 
-	attr.at().setFlgSelf((Attr::SelfAttrFlgs)((selfFlg&(~Attr::VizerSpec))|(attr.at().flgSelf()&Attr::VizerSpec)));
+	attr.at().setFlgSelf((Attr::SelfAttrFlgs)selfFlg);	//((selfFlg&(~Attr::VizerSpec))|(attr.at().flgSelf()&Attr::VizerSpec)));
 
 	attr.at().setCfgTempl((selfFlg&Attr::FromStyle)?cEl.cfg("CFG_TMPL").getS(TCfg::ExtValOne):cEl.cfg("CFG_TMPL").getS());
 
@@ -619,8 +620,8 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	}
     }
 
-    if(!ldGen) {
-	//Clear no present IO for main io table
+    if(!ldGen && !SYS->cfgCtx()) {
+	//Clearing no present IO for main io table
 	cEl.cfgViewAll(false);
 	for(int fldCnt = 0; TBDS::dataSeek(fullDB+"_io",nodePath()+tbl+"_io",fldCnt++,cEl); ) {
 	    string sid = cEl.cfg("ID").getS();
@@ -722,9 +723,9 @@ void Engine::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/serv/wlbBr" && ctrChkNode(opt,"get")) {
 	bool disIconsCW	= s2i(opt->attr("disIconsCW"));
 	bool disIconsW	= s2i(opt->attr("disIconsW"));
-	string item = opt->attr("item");
+	string item = opt->attr("item"), tVl;
 	string upd_lb   = TSYS::pathLev(item, 0);
-	if(upd_lb.size() > 4 && upd_lb.substr(0,4) != "wlb_")	return;
+	if(upd_lb.size() && upd_lb.find("wlb_") != 0)	return;
 	if(upd_lb.size() > 4)	upd_lb = upd_lb.substr(4);
 	string upd_wdg  = TSYS::pathLev(item, 1);
 	if(upd_wdg.size() > 4)	upd_wdg = upd_wdg.substr(4);
@@ -739,7 +740,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    AutoHD<WidgetLib> wlb = wlbAt(ls[iWlb]);
 	    XMLNode *wlbN = opt->childAdd("wlb")->setAttr("id",ls[iWlb])->setText(trD(wlb.at().name()));
 	    wlbN->setAttr("doc", TUIS::docKeyGet(wlb.at().descr()));
-	    wlbN->childAdd("ico")->setText(wlb.at().ico());
+	    if((tVl=wlb.at().ico()).size()) wlbN->childAdd("ico")->setText(tVl);
 
 	    //  Widgets
 	    vector<string> wls;
@@ -748,7 +749,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		if(!upd_wdg.empty() && upd_wdg != wls[iW])	continue;
 		AutoHD<LWidget> w = wlb.at().at(wls[iW]);
 		XMLNode *wN = wlbN->childAdd("w")->setAttr("id",wls[iW])->setAttr("parent",w.at().parentAddr())->setText(trD(w.at().name()));
-		wN->childAdd("ico")->setText(disIconsW?"":w.at().ico());
+		if((tVl=disIconsW?"":w.at().ico()).size()) wN->childAdd("ico")->setText(tVl);
 
 		//  Child widgets
 		vector<string> cwls;
@@ -757,8 +758,8 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		    for(unsigned iC = 0; iC < cwls.size(); iC++) {
 			if(!upd_wdgi.empty() && upd_wdgi != cwls[iC])	continue;
 			AutoHD<CWidget> cw = w.at().wdgAt(cwls[iC]);
-			wN->childAdd("cw")->setAttr("id",cwls[iC])->setText(trD(cw.at().name()))->
-			    childAdd("ico")->setText(disIconsCW?"":cw.at().ico());//   (cwls.size()>=100)?"":cw.at().ico());
+			XMLNode *cwN = wN->childAdd("cw")->setAttr("id",cwls[iC])->setText(trD(cw.at().name()));
+			if((tVl=disIconsCW?"":cw.at().ico()).size()) cwN->childAdd("ico")->setText(tVl); //   (cwls.size()>=100)?"":cw.at().ico());
 		    }
 	    }
 	}

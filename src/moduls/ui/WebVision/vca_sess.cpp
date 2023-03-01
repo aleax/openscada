@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebVision file: vca_sess.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>	   *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>	   *
  *		   2007-2012 by Lysenko Maxim, <mlisenko@oscada.org>	   *
  *		   2007-2008 by Yashina Kseniya, <ksu@oscada.org>	   *
  *									   *
@@ -23,6 +23,7 @@
 #include <fcntl.h>
 #include <stdint.h>
 #include <string.h>
+#include <errno.h>
 
 #include <algorithm>
 
@@ -97,7 +98,8 @@ void VCASess::getReq( SSess &ses )
 	if((hd=open("WebVisionVCA.html",O_RDONLY)) >= 0) {
 	    char buf[prmStrBuf_SZ];
 	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) ses.page.append(buf, len);
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	} else ses.page = WebVisionVCA_html;
 	ses.page = mod->trMessReplace(ses.page);
 	// User replace
@@ -513,6 +515,40 @@ void VCAFormEl::getReq( SSess &ses )
 	req.setAttr("path", ((nURLoff==string::npos)?ses.url:ses.url.substr(0,nURLoff))+"/%2fserv%2fattr");
 	req.childAdd("el")->setAttr("id","value")->setText("");
 	mod->cntrIfCmd(req, ses);
+    }
+    else if(type == F_TABLE) {
+	int off = ses.url.size();
+	string fileNm = TSYS::pathLevEnd(ses.url, 0, true, &off),
+		wAddr = ses.url.substr(0, off+1),
+		fileExt = TSYS::strParseEnd(fileNm, 0, ".");
+
+	// Obtaining the table content
+	XMLNode req("get"); req.setAttr("path", wAddr+"/%2fattr%2fitems");
+
+	if(fileExt != "csv")
+	    ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("Resource not found"))+"</div>\n", "404 Not Found");
+	else if(mod->cntrIfCmd(req,ses) || sTrm(req.text()).empty())
+	    ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("The table is wrong or empty"))+"</div>\n", "404 Not Found");
+	else try {
+	    XMLNode xproc("tbl");
+	    xproc.load(req.text(), XMLNode::LD_NO, Mess->charset());
+
+	    for(int iR = 0; iR < xproc.childSize(); ++iR) {
+		XMLNode *rO = xproc.childGet(iR);
+		for(int iC = 0; iC < rO->childSize(); ++iC) {
+		    XMLNode *cO = rO->childGet(iC);
+		    if(rO->name() == "h" || cO->name() == "s" || cO->name() == "t")
+			ses.page += "\""+TSYS::strEncode(cO->text(),TSYS::SQL,"\"")+"\";";
+		    else ses.page += cO->text()+";";
+		}
+		ses.page += "\x0D\x0A";
+	    }
+
+	    ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type:text/csv");
+	}
+	catch(TError&) {
+	    ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("Error parsing the document"))+"</div>\n", "404 Not Found");
+	}
     }
     else ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("Resource not found"))+"</div>\n", "404 Not Found");
 }
@@ -6478,7 +6514,7 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 {
     if(type == FD_TRND) {
 	int64_t tTimeGrnd = tTime - (int64_t)(1e6*tSize);
-	curTime = vmax(vmin(itm,tTime),tTimeGrnd);
+	curTime = vmax(vmin(itm,tTime), tTimeGrnd);
 
 	holdCur = (curTime==tTime);
 
@@ -6490,12 +6526,15 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 	//Update trend's current values
 	for(unsigned iP = 0; iP < trnds.size(); iP++) {
 	    int vpos = trnds[iP].val(curTime);
+	    if(trnds[iP].val().size() && vpos == trnds[iP].val().size())	//!!!! Compensate the one point outward the size
+		vpos = trnds[iP].val().size() - 1;
+
 	    double val = EVAL_REAL;
-	    if(!(!trnds[iP].val().size() || curTime < trnds[iP].valBeg() ||
-		(!tTimeCurent && vpos >= (int)trnds[iP].val().size())))
+	    if(trnds[iP].val().size() && curTime >= trnds[iP].valBeg() &&
+		(tTimeCurent || vpos < (int)trnds[iP].val().size()))
 	    {
 		vpos = vmax(0,vmin((int)trnds[iP].val().size()-1,vpos));
-		if( vpos && trnds[iP].val()[vpos].tm > curTime ) vpos--;
+		if(vpos && trnds[iP].val()[vpos].tm > curTime) vpos--;
 		val = trnds[iP].val()[vpos].val;
 	    }
 	    if(val != trnds[iP].curVal())
@@ -6823,6 +6862,124 @@ VCADocument::~VCADocument( )
 
 string VCADocument::objName( )	{ return VCAObj::objName()+":VCADocument"; }
 
+void VCADocument::getReq( SSess &ses )
+{
+    int off = ses.url.size();
+    string fileNm = TSYS::pathLevEnd(ses.url, 0, true, &off),
+	    wAddr = ses.url.substr(0, off+1),
+	    fileExt = TSYS::strParseEnd(fileNm, 0, ".");
+
+    // Obtaining the document parts
+    XMLNode req("CntrReqs"); req.setAttr("path", wAddr);
+    req.childAdd("get")->setAttr("path", "/%2fattr%2fdoc");
+    req.childAdd("get")->setAttr("path", "/%2fattr%2fstyle");
+    req.childAdd("get")->setAttr("path", "/%2fattr%2ffont");
+
+    if(fileExt != "html" && fileExt != "csv")
+	ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("Resource not found"))+"</div>\n", "404 Not Found");
+    else if(mod->cntrIfCmd(req,ses) || sTrm(req.childGet(0)->text()).empty())
+	ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("The document is wrong or empty"))+"</div>\n", "404 Not Found");
+    else try {
+	// Generating the document
+	const char *XHTML_entity =
+	    "<!DOCTYPE xhtml [\n"
+	    "  <!ENTITY nbsp \"&#160;\" >\n"
+	    "]>\n";
+	XMLNode xproc("body");
+	xproc.load(string(XHTML_entity)+req.childGet(0)->text(), XMLNode::LD_Full, Mess->charset());
+
+	if(fileExt == "html") {
+	    string font = req.childGet(2)->text();
+
+	    ses.page = "<?xml version='1.0' ?>\n"
+		"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n"
+		"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
+		"<head>\n"
+		"  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
+		"  <style type='text/css'>\n"+
+		" * { font-family: "+TSYS::strParse(font,0," ",NULL,true)+"; "
+		"font-size: "+TSYS::strParse(font,1," ",NULL,true)+"pt; "+
+		(s2i(TSYS::strParse(font,2," ",NULL,true))?"font-weight: bold; ":"")+
+		(s2i(TSYS::strParse(font,3," ",NULL,true))?"font-style: italic; ":"")+
+		"}\n"
+		" big { font-size: 120%; }\n"+
+		" small { font-size: 90%; }\n"+
+		" h1 { font-size: 200%; }\n"+
+		" h2 { font-size: 150%; }\n"+
+		" h3 { font-size: 120%; }\n"+
+		" h4 { font-size: 105%; }\n"+
+		" h5 { font-size: 95%; }\n"+
+		" h6 { font-size: 70%; }\n"+
+		" u,b,i { font-size: inherit; }\n"+
+		" sup,sub { font-size: 80%; }\n"+
+		" th { font-weight: bold; }\n"+req.childGet(1)->text()+"</style>\n"
+		"</head>\n"+
+		xproc.save(XMLNode::Clean, Mess->charset())+
+		"</html>";
+
+	    ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type:text/html;charset="+Mess->charset());
+	}
+	else if(fileExt == "csv") {
+	    XMLNode *curNode = &xproc;
+	    vector<unsigned> treeStk;
+	    treeStk.push_back(0);
+	    int tblCnt = 0;
+	    while(curNode->parent() || treeStk.back() < curNode->childSize()) {
+		if(treeStk.back() < curNode->childSize()) {
+		    curNode = curNode->childGet(treeStk.back());
+		    treeStk.push_back(0);
+		    if(strcasecmp(curNode->name().c_str(),"table") != 0 || !s2i(curNode->attr("export"))) continue;
+		    map<int, int> rowSpn;
+		    XMLNode *tblN = NULL, *tblRow;
+		    string val;
+		    for(int iSt = 0; iSt < 4; iSt++) {
+			switch(iSt) {
+			    case 0: tblN = curNode->childGet("thead", 0, true);	break;
+			    case 1: tblN = curNode->childGet("tbody", 0, true);	break;
+			    case 2: tblN = curNode->childGet("tfoot", 0, true);	break;
+			    case 3: tblN = curNode;				break;
+			    default: tblN = NULL;
+			}
+			if(!tblN) continue;
+			//  Rows process
+			for(unsigned iN = 0; iN < tblN->childSize(); iN++) {
+			    if(strcasecmp(tblN->childGet(iN)->name().c_str(),"tr") != 0) continue;
+			    tblRow = tblN->childGet(iN);
+			    bool cellAllow = false;
+			    for(unsigned iC = 0, iCl = 0; iC < tblRow->childSize(); iC++) {
+				if(!(strcasecmp(tblRow->childGet(iC)->name().c_str(),"th") == 0 ||
+					strcasecmp(tblRow->childGet(iC)->name().c_str(),"td") == 0))
+				    continue;
+				cellAllow = true;
+				while(rowSpn[iCl] > 1) { ses.page += ";"; rowSpn[iCl]--; iCl++; }
+				rowSpn[iCl] = s2i(tblRow->childGet(iC)->attr("rowspan",false));
+				val = tblRow->childGet(iC)->text(true, true);
+				for(size_t iSz = 0; (iSz=val.find("\"",iSz)) != string::npos; iSz += 2)
+				    val.replace(iSz, 1, 2, '"');
+				ses.page += "\"" + sTrm(val) + "\";";
+				//   Colspan process
+				int colSpan = s2i(tblRow->childGet(iC)->attr("colspan",false));
+				for(int iCs = 1; iCs < colSpan; iCs++) ses.page += ";";
+				iCl++;
+			    }
+			    if(cellAllow) ses.page += "\x0D\x0A";
+			}
+		    }
+		    ses.page += "\x0D\x0A";
+		}
+		curNode = curNode->parent();
+		treeStk.pop_back();
+		treeStk.back()++;
+	    }
+
+	    ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type:text/csv");
+	}
+    }
+    catch(TError&) {
+	ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("Error parsing the document"))+"</div>\n", "404 Not Found");
+    }
+}
+
 void VCADocument::setAttrs( XMLNode &node, const SSess &ses )
 {
     for(unsigned iA = 0; iA < node.childSize(); iA++) {
@@ -6837,7 +6994,7 @@ void VCADocument::setAttrs( XMLNode &node, const SSess &ses )
 		    "]>\n";
 		XMLNode xproc("body");
 		try {
-		    xproc.load(string(XHTML_entity)+reqEl->text(), true, Mess->charset());
+		    xproc.load(string(XHTML_entity)+reqEl->text(), XMLNode::LD_Full, Mess->charset());
 		    reqEl->setText(xproc.save(XMLNode::Clean,Mess->charset()));
 		}
 		catch(TError &err)

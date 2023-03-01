@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="index.html"><img src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/Program manual</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Program_manual.html" title="Документы/Руководство по программе (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Program_manual.html" title="Документы/Руководство по программе (98% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
@@ -486,34 +486,29 @@
 </p><p>Let's start the observing with configuration of the OpenSCADA system parameters that are placed in the six tabs of the root page of the station:
 </p>
 <ul><li> The tab "Station" contains basic information and configuration fields of the station, Figure 4a. List the fields provided and comment on them:
-<ul><li> <i>Identifier</i> — contains information about the station's identifier. It is specified by the command line parameter "--station". When loading it is sought a section in the configuration file appropriate to the station identifier, and if not detected, it uses the first available one.</li>
-<li> <i>Station name</i> — indicates the localized station's name. It is specified by the command line parameter "--statName".</li>
-<li> <i>Program</i> — contains information on the program name. Usually it is OpenSCADA or name of a solution based on OpenSCADA.</li>
-<li> <i>Version</i> — contains information on the current version of the program.</li>
-<li> <i>Host name</i> — contains information on the name of the machine that runs the station.</li>
-<li> <i>System user</i> — contains information about the user from whose the program is executed in the operational system (OS).</li>
-<li> <i>Operation system</i> — contains information about the name and version of OS, OS kernel on which the program is executed.</li>
-<li> <i>CPU</i> — contains the CPU operative information specifically that is accessible CPU/core number and frequency of the CPU, which runs the program. Value of frequency is checked every 10 seconds, for X86, and allows you to monitor its change, for example, by the power management mechanisms.</li>
-<li> <i>Main CPUs set</i> — indicates main list CPUs for use by OpenSCADA tasks. Into round brackets contains list of used CPUs currently.</li>
-<li> <i>Tasks planning clock</i> — contains information about the used tasks planning clock and its resolution on the operation system. It allows you to orient with the minimum interval of time of periodic tasks, for example, for task of the data acquisition.</li>
-<li> <i>Number of phases of the task invoking</i> — to set up phasing of the task invoking in the determined phases number, &lt;= 0 to set optimal, 1 to disable the tasks phasing.</li>
-<li> <i>Internal charset</i> — contains information about the charset in which text messages are stored within the program.</li>
-<li> <i>Config-file</i> — contains information about the configuration file used by the program. Set by the command-line parameter "--config" or the project.</li>
-<li> <i>Work directory</i> — indicates the working directory of the station. It is used in relative addressing of objects in the file system, for example, database files. It preferably installed by project manager, at startup, or by launch environment of the program.</li>
-<li> <i>Modules directory</i> — indicates to directories of modules of OpenSCADA, separated by ';', they can include a files' template into the end (/my/modules/path/lib*.so). If the value of this field is incorrect then when the program is started, the program ends with a message in the console that the configuration is incorrect.</li>
-<li> <i>Icons directory</i> — indicates the directory containing the program icons. If the configuration navigation tree have no icons, then the value of this field is incorrect.</li>
-<li> <i>Documents directory</i> — indicates the directory containing the program documents. If you can not to call local documents then the value of this field is incorrect or the documentation is not installed.</li>
-<li> <i>Work DB</i> — indicates the working Data Base, that is the Data Base part of the combined storage, used to store main data of the program; which may be the Configuration File (<b>&lt;cfg&gt;</b>) also for excluding the Data Base from the data storage.</li>
-<li> <i>Save the program at exit</i> — points to the need to save the changed data at finishing of the program.</li>
-<li> <i>Period the program saving</i> — indicates the frequency in seconds with which to save the changed station's data.</li>
+<ul><li> <i>Station</i> — contains information about the station's identifier and indicates the localized station's name. The identifier is specified by the command line parameter "--station"; when loading it is sought a section in the configuration file appropriate to the station identifier, and if not detected, it uses the first available one. The name is specified by the command line parameter "--statName".</li>
+<li> <i>Configuration file</i> — contains information about the configuration file used by the program. Set by the command-line parameter "--config" or the project.</li>
+<li> <i>Work directory</i> — contains information of the working directory of the station. This is used in relative addressing of objects in the file system, for example, database files. This is installed by <a href="#Projects">the project manager</a> at startup or directly in <a href="#CfgFilePrm">configuration the program launch</a>.</li>
+<li> <i>Modules directory</i> — contains information of directories of modules of OpenSCADA, separated by ';', they can include a files' template in the end (/my/modules/path/lib*.so). <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> If the value of this field is incorrect then when the program is started, the program ends with a message in the console that the configuration is incorrect.</li>
+<li> <i>Icons directory</i> — contains information of directories of the program icons, separated by ';'. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> If the configuration navigation tree have no icons then the value of this field is incorrect.</li>
+<li> <i>Documents directory</i> — contains information of directories of the program documents, separated by ';'. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> If you can not to call local documents then the value of this field is incorrect or the documentation is not installed.</li>
+<li> <i>Work DB</i> — indicates the working Data Base, that is the Data Base part of the combined storage used to store main data of the program; which may be <a href="#CfgFilePrm">the Configuration File</a> (<b>&lt;cfg&gt;</b>) also for excluding completely the Data Base from the data storage.</li>
+<li> <i>Save the program at exit, with the period</i> — points to the need to save the changed data at finishing of the program and indicates the periodicity in seconds with which to save the changed program's data.</li>
 <li> <i>Set modification for the calculated objects</i> — most suitable for the production systems together with the previous configuration properties, for the calculation context saving. But it is inconvinient in the development mode, all time reminding for the saving need.</li>
-<li> <i>Language</i> — indicates the language of messages and localisation of the program. Changing of this field is acceptable, but leads to a change of messages' language only for the interface and dynamic messages!</li>
-<li> <i>Messages</i> — section of the parameters' group that are processing by the work of messages of the stations:
-<ul><li> <i>Least level</i> — indicates the level of messages beginning from which they are to be processed. Messages below this level will be ignored. The level "Debug (0)" have special sense, it set will enable debug messages generation by different parts of the program. For the parts debug messages generation control you can use the tab "Debug" (Fig.4d), which will be appeared in this case.</li>
-<li> <i>To syslog</i> — indicates the need of sending the message to the system logger that is the mechanism of operation system for work with messages of the system and software. When this option is enabled the possibility appears to manage and control the OpenSCADA messages by the mechanisms of OS.</li>
-<li> <i>To stdout</i> — indicates the use of the standard output mechanism in the console as a message output. Disabling of this feature will eliminate the entire output in the console, unless you specify the following parameter.</li>
-<li> <i>To stderr</i> — indicates the use of the standard error-taking mechanism for outputting messages, is usually also sent to the console.</li>
-<li> <i>To archive</i> — indicates the need to output messages to the archive of messages OpenSCADA, which is represented by the message buffer. This option is usually enabled and its disabling leads to the actual disabling of the archiving at the station! Saving buffer messages to the storage is carried out by the appropriate message archiver whose creation and configuration can be found in detail in <a href="#CfgArch">the configuration section of the subsystem "Archives-History"</a>.</li></ul></li></ul></li>
+<li> <i>Messages</i> — indicates the level of messages beginning from which they are to be processed and directions of the messages sending. Messages below this level will be ignored. The level "Debug (0)" have special sense, it set will enable debug messages generation by different parts of the program. To control the parts debug messages generation you can use the tab "Debug" (Fig.4d), which will be appeared in this case. The directions indicate the need of the message sending to the system logger, to the standard output, error and to the archive:
+<ul><li> the system logger is a mechanism of operation system for work with messages of the system and software; when this option is enabled the possibility appears to manage and control the OpenSCADA messages by the mechanisms of OS;</li>
+<li> the standard output and error direct the messages to console in the corresponded level; or to the standard log for some specific embedded systems;</li>
+<li> the archive of OpenSCADA messages is represented by the message buffer; <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> this option is usually enabled and its disabling leads to the actual disabling of the archiving at the station; saving the message buffer to the storage is carried out by the appropriate message archiver whose creation and configuration can be found in detail in <a href="#CfgArch">the configuration section of the subsystem "Archives-History"</a>.</li></ul></li>
+<li> <i>Environment</i> — section of the environment information and configuration:
+<ul><li> <i>Program</i> — contains information of the program name and version. Usually it is OpenSCADA or name of a solution based on OpenSCADA.</li>
+<li> <i>System</i> — contains information of name and version of the Operational System (OS), OS kernel on which the program is executed.</li>
+<li> <i>System time</i> — contains information of the actual system time with the timezone.</li>
+<li> <i>System planning clock</i> — contains information of the used tasks planning clock and its resolution on the operation system. It allows you to orient with the minimum interval of time of periodic tasks, for example, for tasks of the data acquisition.</li>
+<li> <i>System user</i> — contains information of the user from whose the program is executed in OS.</li>
+<li> <i>Language</i> — contains information about the charset in which text messages are stored within the program and indicates the complete locale information with language, country and charset in the view "en_GB.UTF-8". <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Changing the complete locale is acceptable but leads to a change of messages' language for the interface and dynamic messages mostly.</li>
+<li> <i>Host name</i> — contains information of the machine name that runs the station.</li>
+<li> <i>CPU</i> — contains the CPU operative information and indicates the main CPUs set for use by OpenSCADA tasks. The CPU information represents the accessible CPU/core number and the frequency, which runs the program. Value of frequency is checked every 10 seconds (for X86) and allows you to monitor its change by the power management mechanisms for example. The main CPUs set contains in round brackets a list of used currently CPUs.</li>
+<li> <i>Number of phases of the task invoking</i> — to set up phasing of the task invoking in the determined phases number, &lt;= 0 to set optimal, 1 to disable the tasks phasing.</li></ul></li></ul></li>
 <li> The tab "Subsystems" contains the list of subsystems (Fig.4b) and allows you to jump directly to them using the context menu.</li>
 <li> The tab "Redundancy" (Fig.4c) contains the configuration of redundancy of the station with the following settings:
 <ul><li> <i>Status</i> — contains information on the redundancy mechanism, that is current and maximum time spent on the execution of one cycle of the task of redundancy processing.</li>
@@ -548,7 +543,7 @@
 <p>To modify the fields of this page it may be required the super user's rights. Get these rights you can by means of including your user into the superuser's group "root", or by entering the station from the superuser "root".
 </p><p>We must mention another one important point: the fields of the identifiers of all OpenSCADA objects are unacceptable for direct editing, because they are keys for storage of objects' data inti the database. However, to change the object's identifier you can by the command of cutting and the further pasting of the object (Cut-&gt; Paste) in the configurator.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:842px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_st.png"><img class="thumbimage" height="821" src="files/QTCfg_sys_st.png" width="840" /></a>  <div class="thumbcaption">Fig. 4a. The tab "Station" of the main page of the station configuration.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:859px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_st.png"><img class="thumbimage" height="700" src="files/QTCfg_sys_st.png" width="857" /></a>  <div class="thumbcaption">Fig. 4a. The tab "Station" of the main page of the station configuration.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:773px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_sub.png"><img class="thumbimage" height="469" src="files/QTCfg_sys_sub.png" width="771" /></a>  <div class="thumbcaption">Fig 4b. The tab "Subsystems" of the main page of the station configuration.</div></div></div></div>
 <p>Service task of the redundancy mechanism is always running and executed at intervals which are prescribed in the appropriate configuration field. Real work on implementing the redundancy is carried out in presence of at least one redundant station in the list of stations, and implies:
 </p>
@@ -657,8 +652,8 @@
 </p>
 <ul><li> <i>Identifier</i> — identifier of the external station.</li>
 <li> <i>Name</i> — name of the external host.</li>
-<li> <i>Transport</i> — selection of a module of the "Transports" subsystem from the list to use it for access to an external station.</li>
-<li> <i>Address</i> — address of the external station in format, specific to the module of the subsystem "Transports" selected in the previous field.</li>
+<li> <i>Transport</i> — selection for the transport type or address directly from list of the network transports, output transports directly and input transports allowed to creation associated output connections.</li>
+<li> <i>Address</i> — additional address to the previous field used at creation the missed or automatic output transports and as the remote initiative connection ID for the input transports. Address of the external station through the output connection is specific to the module of the subsystem "Transports" selected in the previous field.</li>
 <li> <i>User</i> — name/identifier of the user of the external station on behalf of whom to perform the connection.</li>
 <li> <i>Password</i> — password of the user of the external station.</li>
 <li> <i>Mode</i> — host mode: "User", "System", "User and System".</li>
@@ -685,7 +680,7 @@
 <li> <i>Address</i> — transport address in a specific type of transport (module) format. Description of the format of the address of the transport, as a rule, is available in the tooltip for this field.</li>
 <li> <i>Transport protocol</i> — indicates the transport protocol modules (the subsystem "Transport protocols") those should work in conjunction with the input transport. That is, received unstructured data this module will sent to the structuring and processing to the specified modules of the transport protocol.</li>
 <li> <i>To connect</i> — indicates the state/command "Connect", in which to transfer the transport at startup.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:926px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_in.png"><img class="thumbimage" height="824" src="files/Sockets_in.png" width="924" /></a>  <div class="thumbcaption">Fig. 4.3c. The tab "Transport" of the page of an input transport of the module of the subsystem "Transports".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:905px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_in.png"><img class="thumbimage" height="839" src="files/Sockets_in.png" width="903" /></a>  <div class="thumbcaption">Fig. 4.3c. The tab "Transport" of the page of an input transport of the module of the subsystem "Transports".</div></div></div></div>
 <p><span id="TransportOut" title="#TransportOut">Output transport</span> (Fig.4.3d) contains:
 </p>
 <ul><li> Section "State" — contains the settings that characterize the state of the transport:
@@ -697,7 +692,7 @@
 <li> <i>Name</i> — specifies the transport's name.</li>
 <li> <i>Description</i> — brief description of the transport and its appointment.</li>
 <li> <i>Address</i> — transport address in a specific type of transport (module) format. Description of the format of the address of the transport, as a rule, is available in the tooltip for this field.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:779px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out.png"><img class="thumbimage" height="621" src="files/Sockets_out.png" width="777" /></a>  <div class="thumbcaption">Fig. 4.3d. The tab "Transport" of the page of an output transport of the module of the subsystem "Transports".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:790px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out.png"><img class="thumbimage" height="616" src="files/Sockets_out.png" width="788" /></a>  <div class="thumbcaption">Fig. 4.3d. The tab "Transport" of the page of an output transport of the module of the subsystem "Transports".</div></div></div></div>
 <p>Output transport, in addition, provides a tab of forming user requests via this transport (Fig.4.3e). The tab is provided for debugging of communications and communication protocols, and includes:
 </p>
 <ul><li> <i>Time</i> — information about the time spent on the request and the response.</li>
@@ -710,7 +705,7 @@
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:707px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr_otr_req.png"><img class="thumbimage" height="670" src="files/QTCfg_subsys_tr_mod_tr_otr_req.png" width="705" /></a>  <div class="thumbcaption">Fig. 4.3e. The tab "Request" of the page of an output transport of the module of the subsystem "Transports".</div></div></div></div>
 <p><span id="TrDiagnostic" title="#TrDiagnostic">Both input and output transports also contain the tab "IO log"</span> (Fig.4.3f). The tab is provided for generic control, observing and learning the traffic through the transports and includes the log length and block limit fields and the same text area of the log. For the log disable you can the log length field set to zero.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:837px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr_log.png"><img class="thumbimage" height="709" src="files/QTCfg_subsys_tr_mod_tr_log.png" width="835" /></a>  <div class="thumbcaption">Fig. 4.3f. The tab "IO log" of the page of an input transport of the module of the subsystem "Transports".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:784px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr_log.png"><img class="thumbimage" height="749" src="files/QTCfg_subsys_tr_mod_tr_log.png" width="782" /></a>  <div class="thumbcaption">Fig. 4.3f. The tab "IO log" of the page of an input transport of the module of the subsystem "Transports".</div></div></div></div>
 <h3><span class="mw-headline" id="Subsystem_.22Transport_protocols.22"><span class="mw-headline-number">4.4</span> Subsystem "Transport protocols"</span></h3>
 <p>This subsystem is the modular one. To configure the subsystem the root page of the subsystem "Transport Protocols" is provided, it contains the tab "Modules". The tab "Modules" (Fig.4.1b) contains a list of modules in the subsystem "Transport Protocols" and it is identical for all modular subsystems.
 </p><p>Each module of the subsystem "Transport Protocols" provides the configuration page with the tab "Module". On the tab "Module" there is information on the module of the subsystem "Transport Protocols" (Fig.4.1d), which structure is identical for all modules.
@@ -775,14 +770,14 @@
 </p><p>In the table of attributes of template user can, through the context menu: add, insert, delete, move up or down the record of attribute, as well as edit the attribute fields:
 </p>
 <ul><li> <i>Identifier</i> — identifier of the attribute.</li>
-<li> <i>Name</i> — name of the attribute.</li>
-<li> <i>Type</i> — select the value's type of the attribute from the following: "Real", "Integer", "Boolean", "String", "String (translate)", "Text", "Text (translate)", "Object", "Integer numbers selection", "Real numbers selection", "Strings selection".</li>
+<li> <i>Name</i> — name of the attribute.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The name's rows after the first one treat as help.</dd></dl>
+<ul><li> <i>Type</i> — select the value's type of the attribute from the following: "Real", "Integer", "Boolean", "String", "String (translate)", "Text", "Text (translate)", "Object", "Integer numbers selection", "Real numbers selection", "Strings selection".</li>
 <li> <i>Mode</i> — select the mode from list: "Input", "Output". Typically used to indicate the direction of data transmission through links. I.e., values for the "Input" data link will only be obtained, and for the "Output" will also be transferred, in the case of modification.</li>
 <li> <i>Attribute</i> — mode of the parameter's attribute, implemented based on a template from the list: "No attribute", "Read Only", "Full access". For the attributes of a template, in which this field is set, it will be created an appropriate attribute in the controller's parameter of this subsystem.</li>
 <li> <i>Configuration</i> — configuration mode of an attribute in the configuration tab of a template of the controller's parameter of this subsystem from the list: "Variable", "Constant", "Link". In the "Constant" and "Link" modes in the configuration tab of a template will be added these attributes to set the constant or specify an external link of the parameter.</li>
 <li> <i>Value</i> — attribute's default value or link's template to access by the link:
-<ul><li> Format of the link's template depends on the component that uses it. Common links format is written in the following way "<b>{Parameter}|{attribute}</b>". Field <i>Parameter</i> — specifies the parameter's name as the attribute's container. Attributes with the equal value <i>Parameter</i> will be grouped and will be appointed only by the indication of the attributes' container, and the individual attributes will be associated with the attributes of the container in accordance with the field <i>attribute</i>.</li>
-<li> Constant link value writes in the form "<b>val:{Constant}</b>".</li>
+<ul><li> Format of the link's template depends on the component that uses it. Common links format is written in the following way "<b>{Parameter}|{attribute}</b>". The <i>Parameter</i> field — specifies the parameter's name as the attribute's container. Attributes with the equal value <i>Parameter</i> will be grouped and will be appointed only by the indication of the attributes' container, and the individual attributes will be associated with the attributes of the container in accordance with the field <i>attribute</i>.</li>
 <li> For selectable types the field may also contains of values list, in the second line, and names list, in the third line, with items separating by the symbol ";".</li></ul></li></ul>
 <p>The syntax of the language of the template program can be found in the documentation of the module which provides the interpreter of the selected language. For example, a typical user programming language of OpenSCADA is <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc.JavaScript</a>.
 </p>
@@ -911,7 +906,7 @@
 <li> <i>Name</i> — specifies the archive name.</li>
 <li> <i>Description</i> — brief description of the archive and its purpose.</li>
 <li> <i>To start</i> — indicates the state "Running" in which to transfer the archive at the program startup.</li>
-<li> <i>Source</i> — indicates the type and address of the source. Type of source is indicated from the list: "Passive", "Passive param. attribute" or "Active param. attribute". Passive archive does not have an associated source of values, the data to the such archive the source transfers by itself, for example from calculating procedures of users on internal programming language. Types with the attribute of the parameter in the address field indicate the parameter of the subsystem "Data acquisition" as the source. Passive attribute of the parameter sends data to the archive by itself with its own period of the data acquisition. Active attribute of the parameter is acquired by the archiving task of this subsystem. In fact, all real data sources work in passive archiving mode, since the received data is immediately placed in the parameter attribute, sometimes by the source timestamp. But calculators (<a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">DAQ.JavaLikeCalc</a>, <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">DAQ.LogicLev</a>, <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a>, <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">DAQ.Siemens</a>) can only operate in the active archiving mode because the data in the attribute parameter is updated only with their direct request, and are taken from the execution context. In the case of real data sources, the difference between active and passive mode of archiving by the fact that in the passive mode the source can put data into the archive by timestamp, and in the active mode the timestamp is always set to the current system time.</li>
+<li> <i>Source</i> — indicates the type and address of the source. Type of source is indicated from the list: "Passive", "DAQ Attribute" or "Active DAQ Attribute (DEPRECATED)". Passive archive does not have an associated source of values, the data to the such archive the source transfers by itself, for example from calculating procedures of users on internal programming language. Types with the attribute of the parameter in the address field indicate the parameter attribute of the subsystem "Data acquisition" as the source. Main attribute of the parameter sends data to the archive by itself with its own period of the data acquisition. Active attribute of the parameter is acquired by the archiving task of this subsystem. All real data sources work in the main archiving mode since the received data is immediately placed in the parameter attribute, sometimes by the source timestamp. The calculators (<a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">DAQ.JavaLikeCalc</a>, <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">DAQ.LogicLev</a>, <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a>, <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">DAQ.Siemens</a>, <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">DAQ.OPC_UA</a>) also works now in the main archiving mode and early used the active archiving mode because the data in the attribute parameter was updated only with them direct request, and was taken from the execution context. In the case of the real data sources, the difference between active and main mode of archiving by the fact that in the main mode the source can put data into the archive by timestamp, and in the active mode the timestamp is always set to the current system time.</li>
 <li> <i>Data combining mode</i> — sets the combining mode for data writing from the high-resolution buffer (for example, 1 second) to low-resolution archiver (for example, 1 minute), when into single point of the archiver placed several values (for example, 60) from the buffer. The modes implemented: "Moving average", "Single", "Minimum" and "Maximum".</li>
 <li> <i>Value type</i> — indicates the type of values which are stored in the archive from the list: "Boolean", "Integer", "Real", "String", "Int16", "Int32", "Int64", "Real(Float)" and "Real(Double)".</li>
 <li> <i>Buffer period</i> — indicates the periodicity of values in the archive buffer, in seconds.</li>
@@ -919,7 +914,7 @@
 <li> <i>Buffer in the hard time grid</i> — indicates the mode of the buffer. The hard time grid mode involves the memory reservation for each value, but without the timestamp. This mode eliminates the possibility of packaging the adjacently-identical values but also saves on storage of the timestamp. Otherwise, the buffer operates in the mode of storage the value and timestamp and supports the packaging of adjacently-identical values.</li>
 <li> <i>Buffer in the high time resolution</i> — indicates the possibility of storing values at intervals and dimensions up to 1 microsecond, differently the values can be stored at intervals and dimensions up to 1 second.</li>
 <li> <i>Filling the passage points with the last value</i> — the passage values mostly fill by EVAL but sometime data periodicity of the source greater to the archive's one and it is normal.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:830px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_va_arch.png"><img class="thumbimage" height="721" src="files/QTCfg_subsys_arch_va_arch.png" width="828" /></a>  <div class="thumbcaption">Fig. 4.6d. The main configuration tab of a values archive of the subsystem "Archives-History".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:894px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_va_arch.png"><img class="thumbimage" height="718" src="files/QTCfg_subsys_arch_va_arch.png" width="892" /></a>  <div class="thumbcaption">Fig. 4.6d. The main configuration tab of a values archive of the subsystem "Archives-History".</div></div></div></div>
 <p>Tab Archivers' (Fig.4.6e) contains the table with the configuration of the processing of the archive by the available archivers. Lines are available archivers, and the columns are the following parameters:
 </p>
 <ul><li> <i>Archiver</i> — information on the archiver address.</li>
@@ -1032,476 +1027,475 @@
 <p>The Configuration File of OpenSCADA is provided to store the generic configuration of OpenSCADA-station. Only in the Configuration File and through the command-line options you can specify a part of the key parameters of the station, so familiarity with the Configuration File structure is necessary for professionals who make peculiar solutions based on OpenSCADA. More information on how to startup and execution OpenSCADA can be found in the section "<a href="#Startup">Startup and execution</a>".
 </p><p>Structure of the Configuration File based on the extensible markup language XML. Correspondingly, strict compliance with XML syntax rules is required. An illustrative example of an OpenSCADA Configuration File with examples of the configuration of most OpenSCADA components is given below:
 </p>
-<pre style="white-space: pre-wrap;">
-&lt;?xml version='1.0' encoding='UTF-8'&nbsp;?&gt;
-&lt;OpenSCADA&gt;
-    &lt;!--
-    This is the OpenSCADA configuration file.
-    --&gt;
-    &lt;station id="SimulatorStation"&gt;
-        &lt;!--
-        Description of the internal parameters of the station.
-        The station is the OpenSCADA program.
-        --&gt;
-        &lt;prm id="StName"&gt;AGLKS&lt;/prm&gt;
-        &lt;prm id="WorkDB"&gt;SQLite.GenDB&lt;/prm&gt;
-        &lt;prm id="LogTarget"&gt;10&lt;/prm&gt;
-        &lt;prm id="LangBase"&gt;en_US.UTF-8;uk_UA.UTF-8;ru_RU.UTF-8&lt;/prm&gt;
-        &lt;prm id="SaveAtExit"&gt;0&lt;/prm&gt;
-        &lt;prm id="SavePeriod"&gt;0&lt;/prm&gt;
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="cp">&lt;?xml version='1.0' encoding='UTF-8' ?&gt;</span>
+<span class="nt">&lt;OpenSCADA&gt;</span>
+    <span class="c">&lt;!--</span>
+<span class="c">    This is the OpenSCADA configuration file.</span>
+<span class="c">    --&gt;</span>
+    <span class="nt">&lt;station</span> <span class="na">id=</span><span class="s">"SimulatorStation"</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!--</span>
+<span class="c">        Description of the internal parameters of the station.</span>
+<span class="c">        The station is the OpenSCADA program.</span>
+<span class="c">        --&gt;</span>
+        <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"StName"</span><span class="nt">&gt;</span>AGLKS<span class="nt">&lt;/prm&gt;</span>
+        <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"WorkDB"</span><span class="nt">&gt;</span>SQLite.GenDB<span class="nt">&lt;/prm&gt;</span>
+        <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"LogTarget"</span><span class="nt">&gt;</span>10<span class="nt">&lt;/prm&gt;</span>
+        <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"LangBase"</span><span class="nt">&gt;</span>en_US.UTF-8;uk_UA.UTF-8;ru_RU.UTF-8<span class="nt">&lt;/prm&gt;</span>
+        <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"SaveAtExit"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/prm&gt;</span>
+        <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"SavePeriod"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/prm&gt;</span>
 
-        &lt;node id="sub_BD"&gt;
-            &lt;tbl id="DB"&gt;
-                &lt;fld ID="GenDB" TYPE="SQLite" NAME="Generic DB" NAME_uk="Основна БД" NAME_ru="Основная БД" ADDR="St.db" CODEPAGE="UTF-8" /&gt;
-            &lt;/tbl&gt;
-        &lt;/node&gt;
+        <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"sub_BD"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;tbl</span> <span class="na">id=</span><span class="s">"DB"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">ID=</span><span class="s">"GenDB"</span> <span class="na">TYPE=</span><span class="s">"SQLite"</span> <span class="na">NAME=</span><span class="s">"Generic DB"</span> <span class="na">NAME_uk=</span><span class="s">"Основна БД"</span> <span class="na">NAME_ru=</span><span class="s">"Основная БД"</span> <span class="na">ADDR=</span><span class="s">"St.db"</span> <span class="na">CODEPAGE=</span><span class="s">"UTF-8"</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/tbl&gt;</span>
+        <span class="nt">&lt;/node&gt;</span>
 
-        &lt;node id="sub_Security"&gt;
-            &lt;tbl id="Security_user"&gt;
-                &lt;fld NAME="roman" DESCR="Roman Savochenko" PASS="$1$roman$wleNCf/uyA84cGpBn5QuG." /&gt;
-                &lt;fld NAME="root" DESCR="Administrator (superuser)!!!" DESCR_uk="Супер користувач" DESCR_ru="Супер пользователь" PASS="$1$root$lCn57dP9yzkCIAyrwJ24r1" /&gt;
-                &lt;fld NAME="test" DESCR="Test user" PASS="$1$test$pi/xDtU5WFVRqYS6BMU8X/" /&gt;
-                &lt;fld NAME="user" DESCR="Simple user" DESCR_uk="Звичайний користувач" DESCR_ru="Простой пользователь" PASS="$1$user$k8sntSoh7jhsc6lwspjsU." /&gt;
-            &lt;/tbl&gt;
-            &lt;tbl id="Security_grp"&gt;
-                &lt;fld NAME="Archive" DESCR="Archives-History" DESCR_uk="Архіви-Історія" DESCR_ru="Архивы-История" /&gt;
-                &lt;fld NAME="BD" DESCR="Databases" DESCR_uk="Бази даних" DESCR_ru="Базы данных" /&gt;
-                &lt;fld NAME="DAQ" DESCR="Data acquisition" DESCR_uk="Збір даних" DESCR_ru="Сбор данных" /&gt;
-                &lt;fld NAME="ModSched" DESCR="Modules scheduler" DESCR_uk="Диспетчер модулів" DESCR_ru="Диспетчер модулей" /&gt;
-                &lt;fld NAME="Protocol" DESCR="Transport protocols" DESCR_uk="Транспортні протоколи" DESCR_ru="Транспортные протоколы" /&gt;
-                &lt;fld NAME="Security" DESCR="Security" DESCR_uk="Безпека" DESCR_ru="Безопасность" /&gt;
-                &lt;fld NAME="Special" DESCR="Specials" DESCR_uk="Спеціальні" DESCR_ru="Специальные" /&gt;
-                &lt;fld NAME="Transport" DESCR="Transports" DESCR_uk="Транспорти" DESCR_ru="Транспорты" /&gt;
-                &lt;fld NAME="UI" DESCR="User Interfaces" DESCR_uk="Інтерфейси користувача" DESCR_ru="Интерфейсы пользователя" /&gt;
-                &lt;fld NAME="root" DESCR="Administartors group" DESCR_uk="Група адміністраторів" DESCR_ru="Группа администраторов" USERS="roman;" /&gt;
-                &lt;fld NAME="users" DESCR="Users group" DESCR_uk="Група користувачів" DESCR_ru="Группа пользователей" USERS="test;user;" /&gt;
-                &lt;fld NAME="ITW" DESCR="IT worker" DESCR_uk="Робітник IT" DESCR_ru="Работник IT"
-                    LONGDESCR="Information Technology or service worker."
-                    LONGDESCR_uk="Робітник Інформаційних Технологій та сервісу."
-                    LONGDESCR_ru="Работник Информационных Технологий и сервиса." /&gt;
-                &lt;fld NAME="op" DESCR="Operator" DESCR_uk="Оператор" DESCR_ru="Оператор" /&gt;
-            &lt;/tbl&gt;
-        &lt;/node&gt;
+        <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"sub_Security"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;tbl</span> <span class="na">id=</span><span class="s">"Security_user"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"roman"</span> <span class="na">DESCR=</span><span class="s">"Roman Savochenko"</span> <span class="na">PASS=</span><span class="s">"$1$roman$wleNCf/uyA84cGpBn5QuG."</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"root"</span> <span class="na">DESCR=</span><span class="s">"Administrator (superuser)!!!"</span> <span class="na">DESCR_uk=</span><span class="s">"Супер користувач"</span> <span class="na">DESCR_ru=</span><span class="s">"Супер пользователь"</span> <span class="na">PASS=</span><span class="s">"$1$root$lCn57dP9yzkCIAyrwJ24r1"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"test"</span> <span class="na">DESCR=</span><span class="s">"Test user"</span> <span class="na">PASS=</span><span class="s">"$1$test$pi/xDtU5WFVRqYS6BMU8X/"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"user"</span> <span class="na">DESCR=</span><span class="s">"Simple user"</span> <span class="na">DESCR_uk=</span><span class="s">"Звичайний користувач"</span> <span class="na">DESCR_ru=</span><span class="s">"Простой пользователь"</span> <span class="na">PASS=</span><span class="s">"$1$user$k8sntSoh7jhsc6lwspjsU."</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/tbl&gt;</span>
+            <span class="nt">&lt;tbl</span> <span class="na">id=</span><span class="s">"Security_grp"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"Archive"</span> <span class="na">DESCR=</span><span class="s">"Archives-History"</span> <span class="na">DESCR_uk=</span><span class="s">"Архіви-Історія"</span> <span class="na">DESCR_ru=</span><span class="s">"Архивы-История"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"BD"</span> <span class="na">DESCR=</span><span class="s">"Databases"</span> <span class="na">DESCR_uk=</span><span class="s">"Бази даних"</span> <span class="na">DESCR_ru=</span><span class="s">"Базы данных"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"DAQ"</span> <span class="na">DESCR=</span><span class="s">"Data acquisition"</span> <span class="na">DESCR_uk=</span><span class="s">"Збір даних"</span> <span class="na">DESCR_ru=</span><span class="s">"Сбор данных"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"ModSched"</span> <span class="na">DESCR=</span><span class="s">"Modules scheduler"</span> <span class="na">DESCR_uk=</span><span class="s">"Диспетчер модулів"</span> <span class="na">DESCR_ru=</span><span class="s">"Диспетчер модулей"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"Protocol"</span> <span class="na">DESCR=</span><span class="s">"Transport protocols"</span> <span class="na">DESCR_uk=</span><span class="s">"Транспортні протоколи"</span> <span class="na">DESCR_ru=</span><span class="s">"Транспортные протоколы"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"Security"</span> <span class="na">DESCR=</span><span class="s">"Security"</span> <span class="na">DESCR_uk=</span><span class="s">"Безпека"</span> <span class="na">DESCR_ru=</span><span class="s">"Безопасность"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"Special"</span> <span class="na">DESCR=</span><span class="s">"Specials"</span> <span class="na">DESCR_uk=</span><span class="s">"Спеціальні"</span> <span class="na">DESCR_ru=</span><span class="s">"Специальные"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"Transport"</span> <span class="na">DESCR=</span><span class="s">"Transports"</span> <span class="na">DESCR_uk=</span><span class="s">"Транспорти"</span> <span class="na">DESCR_ru=</span><span class="s">"Транспорты"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"UI"</span> <span class="na">DESCR=</span><span class="s">"User Interfaces"</span> <span class="na">DESCR_uk=</span><span class="s">"Інтерфейси користувача"</span> <span class="na">DESCR_ru=</span><span class="s">"Интерфейсы пользователя"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"root"</span> <span class="na">DESCR=</span><span class="s">"Administartors group"</span> <span class="na">DESCR_uk=</span><span class="s">"Група адміністраторів"</span> <span class="na">DESCR_ru=</span><span class="s">"Группа администраторов"</span> <span class="na">USERS=</span><span class="s">"roman;"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"users"</span> <span class="na">DESCR=</span><span class="s">"Users group"</span> <span class="na">DESCR_uk=</span><span class="s">"Група користувачів"</span> <span class="na">DESCR_ru=</span><span class="s">"Группа пользователей"</span> <span class="na">USERS=</span><span class="s">"test;user;"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"ITW"</span> <span class="na">DESCR=</span><span class="s">"IT worker"</span> <span class="na">DESCR_uk=</span><span class="s">"Робітник IT"</span> <span class="na">DESCR_ru=</span><span class="s">"Работник IT"</span>
+                    <span class="na">LONGDESCR=</span><span class="s">"Information Technology or service worker."</span>
+                    <span class="na">LONGDESCR_uk=</span><span class="s">"Робітник Інформаційних Технологій та сервісу."</span>
+                    <span class="na">LONGDESCR_ru=</span><span class="s">"Работник Информационных Технологий и сервиса."</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"op"</span> <span class="na">DESCR=</span><span class="s">"Operator"</span> <span class="na">DESCR_uk=</span><span class="s">"Оператор"</span> <span class="na">DESCR_ru=</span><span class="s">"Оператор"</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/tbl&gt;</span>
+        <span class="nt">&lt;/node&gt;</span>
 
-        &lt;node id="sub_ModSched"&gt;
-            &lt;prm id="ModAllow"&gt;*&lt;/prm&gt;
-            &lt;prm id="ModDeny" /&gt;
-            &lt;prm id="ChkPer"&gt;0&lt;/prm&gt;
-        &lt;/node&gt;
+        <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"sub_ModSched"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"ModAllow"</span><span class="nt">&gt;</span>*<span class="nt">&lt;/prm&gt;</span>
+            <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"ModDeny"</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"ChkPer"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/prm&gt;</span>
+        <span class="nt">&lt;/node&gt;</span>
 
-        &lt;node id="sub_Transport"&gt;
-            &lt;tbl id="ExtTansp"&gt;
-                &lt;fld OP_USER="roman" ID="loop" NAME="Loop" NAME_uk="Петля" NAME_ru="Петля" TRANSP="Sockets" ADDR="TCP:localhost:10005" USER="roman" PASS="roman" /&gt;
-                &lt;fld OP_USER="*" ID="loop" NAME="Loop" NAME_uk="Петля" NAME_ru="Петля" TRANSP="Sockets" ADDR="TCP:localhost:10005" USER="roman" PASS="roman" /&gt;
-                &lt;fld OP_USER="roman" ID="loopSSL" NAME="Loop SSL" NAME_uk="Петля SSL" NAME_ru="Петля SSL" TRANSP="SSL" ADDR="localhost:10045" USER="roman" PASS="roman" /&gt;
-                &lt;fld OP_USER="*" ID="loopSSL" NAME="Loop SSL" NAME_uk="Петля SSL" NAME_ru="Петля SSL" TRANSP="SSL" ADDR="localhost:10045" USER="roman" PASS="roman" /&gt;
-            &lt;/tbl&gt;
-            &lt;tbl id="Transport_in"&gt;
-                &lt;fld ID="Self" MODULE="Sockets" NAME="Self system" DESCRIPT="Main transport of OpenSCADA self protocol."
-                        DESCRIPT_uk="Основний транспорт власного протоколу OpenSCADA." DESCRIPT_ru="Основной транспорт собственного протокола OpenSCADA." ADDR="TCP::10005:1" PROT="SelfSystem" START="1"&gt;
-                    &lt;A_PRMS&gt;&amp;lt;prms MaxQueue="10" MaxClients="20" MaxClientsPerHost="5" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" /&amp;gt;&lt;/A_PRMS&gt;
-                &lt;/fld&gt;
-                &lt;fld ID="WEB_1" MODULE="Sockets" NAME="WEB 1" DESCRIPT="Main transport of the WEB interfaces."
-                        DESCRIPT_uk="Основний транспорт WEB інтерфейсів." DESCRIPT_ru="Основной транспорт WEB интерфейсов." ADDR="TCP::10002:0" PROT="HTTP" START="1"&gt;
-                    &lt;A_PRMS&gt;&amp;lt;prms MaxQueue="10" MaxClients="100" MaxClientsPerHost="25" BufLen="5" KeepAliveReqs="0" KeepAliveTm="5" /&amp;gt;&lt;/A_PRMS&gt;
-                &lt;/fld&gt;
-                &lt;fld ID="WEB_2" MODULE="Sockets" NAME="WEB 2" DESCRIPT="Reserve transport of the WEB interfaces."
-                        DESCRIPT_uk="Резервний транспорт WEB інтерфейсів." DESCRIPT_ru="Резервный транспорт WEB интерфейсов." ADDR="TCP::10004:0" PROT="HTTP" START="1"&gt;
-                    &lt;A_PRMS&gt;&amp;lt;prms MaxQueue="10" MaxClients="100" MaxClientsPerHost="25" BufLen="5" KeepAliveReqs="0" KeepAliveTm="5" /&amp;gt;&lt;/A_PRMS&gt;
-                &lt;/fld&gt;
-            &lt;/tbl&gt;
-            &lt;!--
-            &lt;tbl id="Transport_out"&gt;
-                &lt;fld
-                    ID="testModBus"
-                    MODULE="Sockets"
-                    NAME="Test ModBus"
-                    NAME_uk="Тест ModBus"
-                    NAME_ru="Тест ModBus"
-                    DESCRIPT="ModBus protocol exchange test."
-                    DESCRIPT_uk="Тест обміну за протоколом ModBus."
-                    DESCRIPT_ru="Тест обмена по протоколу ModBus."
-                    ADDR="TCP:localhost:10502"
-                    START="1"/&gt;
-            &lt;/tbl&gt;--&gt;
-        &lt;/node&gt;
+        <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"sub_Transport"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;tbl</span> <span class="na">id=</span><span class="s">"ExtTansp"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">OP_USER=</span><span class="s">"roman"</span> <span class="na">ID=</span><span class="s">"loop"</span> <span class="na">NAME=</span><span class="s">"Loop"</span> <span class="na">NAME_uk=</span><span class="s">"Петля"</span> <span class="na">NAME_ru=</span><span class="s">"Петля"</span> <span class="na">TRANSP=</span><span class="s">"Sockets"</span> <span class="na">ADDR=</span><span class="s">"TCP:localhost:10005"</span> <span class="na">USER=</span><span class="s">"roman"</span> <span class="na">PASS=</span><span class="s">"roman"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">OP_USER=</span><span class="s">"*"</span> <span class="na">ID=</span><span class="s">"loop"</span> <span class="na">NAME=</span><span class="s">"Loop"</span> <span class="na">NAME_uk=</span><span class="s">"Петля"</span> <span class="na">NAME_ru=</span><span class="s">"Петля"</span> <span class="na">TRANSP=</span><span class="s">"Sockets"</span> <span class="na">ADDR=</span><span class="s">"TCP:localhost:10005"</span> <span class="na">USER=</span><span class="s">"roman"</span> <span class="na">PASS=</span><span class="s">"roman"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">OP_USER=</span><span class="s">"roman"</span> <span class="na">ID=</span><span class="s">"loopSSL"</span> <span class="na">NAME=</span><span class="s">"Loop SSL"</span> <span class="na">NAME_uk=</span><span class="s">"Петля SSL"</span> <span class="na">NAME_ru=</span><span class="s">"Петля SSL"</span> <span class="na">TRANSP=</span><span class="s">"SSL"</span> <span class="na">ADDR=</span><span class="s">"localhost:10045"</span> <span class="na">USER=</span><span class="s">"roman"</span> <span class="na">PASS=</span><span class="s">"roman"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">OP_USER=</span><span class="s">"*"</span> <span class="na">ID=</span><span class="s">"loopSSL"</span> <span class="na">NAME=</span><span class="s">"Loop SSL"</span> <span class="na">NAME_uk=</span><span class="s">"Петля SSL"</span> <span class="na">NAME_ru=</span><span class="s">"Петля SSL"</span> <span class="na">TRANSP=</span><span class="s">"SSL"</span> <span class="na">ADDR=</span><span class="s">"localhost:10045"</span> <span class="na">USER=</span><span class="s">"roman"</span> <span class="na">PASS=</span><span class="s">"roman"</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/tbl&gt;</span>
+            <span class="nt">&lt;tbl</span> <span class="na">id=</span><span class="s">"Transport_in"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">ID=</span><span class="s">"Self"</span> <span class="na">MODULE=</span><span class="s">"Sockets"</span> <span class="na">NAME=</span><span class="s">"Self system"</span> <span class="na">DESCRIPT=</span><span class="s">"Main transport of OpenSCADA self protocol."</span>
+                        <span class="na">DESCRIPT_uk=</span><span class="s">"Основний транспорт власного протоколу OpenSCADA."</span> <span class="na">DESCRIPT_ru=</span><span class="s">"Основной транспорт собственного протокола OpenSCADA."</span> <span class="na">ADDR=</span><span class="s">"TCP::10005:1"</span> <span class="na">PROT=</span><span class="s">"SelfSystem"</span> <span class="na">START=</span><span class="s">"1"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;A_PRMS&gt;</span><span class="ni">&amp;amp;</span>lt;prms MaxQueue="10" MaxClients="20" MaxClientsPerHost="5" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" /<span class="ni">&amp;amp;</span>gt;<span class="nt">&lt;/A_PRMS&gt;</span>
+                <span class="nt">&lt;/fld&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">ID=</span><span class="s">"WEB_1"</span> <span class="na">MODULE=</span><span class="s">"Sockets"</span> <span class="na">NAME=</span><span class="s">"WEB 1"</span> <span class="na">DESCRIPT=</span><span class="s">"Main transport of the WEB interfaces."</span>
+                        <span class="na">DESCRIPT_uk=</span><span class="s">"Основний транспорт WEB інтерфейсів."</span> <span class="na">DESCRIPT_ru=</span><span class="s">"Основной транспорт WEB интерфейсов."</span> <span class="na">ADDR=</span><span class="s">"TCP::10002:0"</span> <span class="na">PROT=</span><span class="s">"HTTP"</span> <span class="na">START=</span><span class="s">"1"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;A_PRMS&gt;</span><span class="ni">&amp;amp;</span>lt;prms MaxQueue="10" MaxClients="100" MaxClientsPerHost="25" BufLen="5" KeepAliveReqs="0" KeepAliveTm="5" /<span class="ni">&amp;amp;</span>gt;<span class="nt">&lt;/A_PRMS&gt;</span>
+                <span class="nt">&lt;/fld&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">ID=</span><span class="s">"WEB_2"</span> <span class="na">MODULE=</span><span class="s">"Sockets"</span> <span class="na">NAME=</span><span class="s">"WEB 2"</span> <span class="na">DESCRIPT=</span><span class="s">"Reserve transport of the WEB interfaces."</span>
+                        <span class="na">DESCRIPT_uk=</span><span class="s">"Резервний транспорт WEB інтерфейсів."</span> <span class="na">DESCRIPT_ru=</span><span class="s">"Резервный транспорт WEB интерфейсов."</span> <span class="na">ADDR=</span><span class="s">"TCP::10004:0"</span> <span class="na">PROT=</span><span class="s">"HTTP"</span> <span class="na">START=</span><span class="s">"1"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;A_PRMS&gt;</span><span class="ni">&amp;amp;</span>lt;prms MaxQueue="10" MaxClients="100" MaxClientsPerHost="25" BufLen="5" KeepAliveReqs="0" KeepAliveTm="5" /<span class="ni">&amp;amp;</span>gt;<span class="nt">&lt;/A_PRMS&gt;</span>
+                <span class="nt">&lt;/fld&gt;</span>
+            <span class="nt">&lt;/tbl&gt;</span>
+            <span class="c">&lt;!--</span>
+<span class="c">            &lt;tbl id="Transport_out"&gt;</span>
+<span class="c">                &lt;fld</span>
+<span class="c">                    ID="testModBus"</span>
+<span class="c">                    MODULE="Sockets"</span>
+<span class="c">                    NAME="Test ModBus"</span>
+<span class="c">                    NAME_uk="Тест ModBus"</span>
+<span class="c">                    NAME_ru="Тест ModBus"</span>
+<span class="c">                    DESCRIPT="ModBus protocol exchange test."</span>
+<span class="c">                    DESCRIPT_uk="Тест обміну за протоколом ModBus."</span>
+<span class="c">                    DESCRIPT_ru="Тест обмена по протоколу ModBus."</span>
+<span class="c">                    ADDR="TCP:localhost:10502"</span>
+<span class="c">                    START="1"/&gt;</span>
+<span class="c">            &lt;/tbl&gt;--&gt;</span>
+        <span class="nt">&lt;/node&gt;</span>
 
-        &lt;node id="sub_DAQ"&gt;
-            &lt;!--
-            &lt;tbl id="tmplib"&gt;
-                &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" DB="tmplib_test2"/&gt;
-            &lt;/tbl&gt;
-            &lt;tbl id="tmplib_test2"&gt;
-                &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR=""
-                    PROGRAM="JavaLikeCalc.JavaScript&amp;#010;cnt=5*i;"/&gt;
-            &lt;/tbl&gt;
-            &lt;tbl id="tmplib_test2_io"&gt;
-                &lt;fld TMPL_ID="test2" ID="i" NAME="I" NAME_uk="I" NAME_ru="I" TYPE="4" FLAGS="160" VALUE="" POS="0"/&gt;
-                &lt;fld TMPL_ID="test2" ID="cnt" NAME="Cnt" NAME_uk="Cnt" NAME_ru="Cnt" TYPE="4" FLAGS="32" VALUE="" POS="0"/&gt;
-            &lt;/tbl&gt;--&gt;
+        <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"sub_DAQ"</span><span class="nt">&gt;</span>
+            <span class="c">&lt;!--</span>
+<span class="c">            &lt;tbl id="tmplib"&gt;</span>
+<span class="c">                &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" DB="tmplib_test2"/&gt;</span>
+<span class="c">            &lt;/tbl&gt;</span>
+<span class="c">            &lt;tbl id="tmplib_test2"&gt;</span>
+<span class="c">                &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR=""</span>
+<span class="c">                    PROGRAM="JavaLikeCalc.JavaScript&amp;amp;#010;cnt=5*i;"/&gt;</span>
+<span class="c">            &lt;/tbl&gt;</span>
+<span class="c">            &lt;tbl id="tmplib_test2_io"&gt;</span>
+<span class="c">                &lt;fld TMPL_ID="test2" ID="i" NAME="I" NAME_uk="I" NAME_ru="I" TYPE="4" FLAGS="160" VALUE="" POS="0"/&gt;</span>
+<span class="c">                &lt;fld TMPL_ID="test2" ID="cnt" NAME="Cnt" NAME_uk="Cnt" NAME_ru="Cnt" TYPE="4" FLAGS="32" VALUE="" POS="0"/&gt;</span>
+<span class="c">            &lt;/tbl&gt;--&gt;</span>
 
-            &lt;node id="mod_LogicLev"&gt;
-                &lt;!--
-                &lt;tbl id="DAQ"&gt;
-                    &lt;fld
-                        ID="test2"
-                        NAME="Test 2"
-                        NAME_uk="Тест 2"
-                        NAME_ru="Тест 2"
-                        DESCR=""
-                        ENABLE="1"
-                        START="1"
-                        PRM_BD="test2prm"
-                        PERIOD="1000"
-                        PRIOR="0"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="test2prm"&gt;
-                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR=""
-                        EN="1" MODE="2" PRM="test2.test2"/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_LogicLev"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--</span>
+<span class="c">                &lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld</span>
+<span class="c">                        ID="test2"</span>
+<span class="c">                        NAME="Test 2"</span>
+<span class="c">                        NAME_uk="Тест 2"</span>
+<span class="c">                        NAME_ru="Тест 2"</span>
+<span class="c">                        DESCR=""</span>
+<span class="c">                        ENABLE="1"</span>
+<span class="c">                        START="1"</span>
+<span class="c">                        PRM_BD="test2prm"</span>
+<span class="c">                        PERIOD="1000"</span>
+<span class="c">                        PRIOR="0"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="test2prm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR=""</span>
+<span class="c">                        EN="1" MODE="2" PRM="test2.test2"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_System"&gt;
-                &lt;!--
-                &lt;tbl id="DAQ"&gt;
-                    &lt;fld
-                        ID="dataOS"
-                        NAME="OS data"
-                        NAME_uk="Дані ОС"
-                        NAME_ru="Даные ОС"
-                        DESCR="Data of services and subsystems of OS."
-                        DESCR_uk="Дані сервісів та підсистем ОС."
-                        DESCR_ru="Данные сервисов и подсистем ОС."
-                        ENABLE="1"
-                        START="1"
-                        AUTO_FILL="0"
-                        PRM_BD="DataOSprm"
-                        PERIOD="1000"
-                        PRIOR="0"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="DataOSprm"&gt;
-                    &lt;fld SHIFR="CPU" NAME="CPU load" NAME_uk="Навантаження CPU" NAME_ru="Нагрузка CPU" DESCR=""
-                        EN="1" TYPE="CPU" SUBT="gen"/&gt;
-                    &lt;fld SHIFR="MEM" NAME="Memory" NAME_uk="Пам'ять" NAME_ru="Память" DESCR="" EN="1" TYPE="MEM"/&gt;
-                &lt;/tbl&gt;
-                --&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_System"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--</span>
+<span class="c">                &lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld</span>
+<span class="c">                        ID="dataOS"</span>
+<span class="c">                        NAME="OS data"</span>
+<span class="c">                        NAME_uk="Дані ОС"</span>
+<span class="c">                        NAME_ru="Даные ОС"</span>
+<span class="c">                        DESCR="Data of services and subsystems of OS."</span>
+<span class="c">                        DESCR_uk="Дані сервісів та підсистем ОС."</span>
+<span class="c">                        DESCR_ru="Данные сервисов и подсистем ОС."</span>
+<span class="c">                        ENABLE="1"</span>
+<span class="c">                        START="1"</span>
+<span class="c">                        AUTO_FILL="0"</span>
+<span class="c">                        PRM_BD="DataOSprm"</span>
+<span class="c">                        PERIOD="1000"</span>
+<span class="c">                        PRIOR="0"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="DataOSprm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="CPU" NAME="CPU load" NAME_uk="Навантаження CPU" NAME_ru="Нагрузка CPU" DESCR=""</span>
+<span class="c">                        EN="1" TYPE="CPU" SUBT="gen"/&gt;</span>
+<span class="c">                    &lt;fld SHIFR="MEM" NAME="Memory" NAME_uk="Пам'ять" NAME_ru="Память" DESCR="" EN="1" TYPE="MEM"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                --&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_DiamondBoards"&gt;
-                &lt;!--
-                &lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="Athena" NAME="Athena board" NAME_uk="Плата Athena" NAME_ru="Плата Athena" DESCR=""
-                        ENABLE="1" START="0" BOARD="25" PRM_BD_A="AthenaAnPrm" PRM_BD_D="AthenaDigPrm" ADDR="640" INT="5"
-                        DIO_CFG="0" ADMODE="0" ADRANGE="0" ADPOLAR="0" ADGAIN="0" ADCONVRATE="1000"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="AthenaAnPrm"&gt;
-                    &lt;fld SHIFR="ai0" NAME="AI 0" NAME_uk="AI 0" NAME_ru="AI 0" DESCR="" EN="0" TYPE="0" CNL="0" GAIN="0"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="AthenaDigPrm"&gt;
-                    &lt;fld SHIFR="di0" NAME="DI 0" NAME_uk="DI 0" NAME_ru="DI 0" DESCR="" EN="0" TYPE="0" PORT="0" CNL="0"/&gt;
-                &lt;/tbl&gt;
-                --&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_DiamondBoards"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--</span>
+<span class="c">                &lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="Athena" NAME="Athena board" NAME_uk="Плата Athena" NAME_ru="Плата Athena" DESCR=""</span>
+<span class="c">                        ENABLE="1" START="0" BOARD="25" PRM_BD_A="AthenaAnPrm" PRM_BD_D="AthenaDigPrm" ADDR="640" INT="5"</span>
+<span class="c">                        DIO_CFG="0" ADMODE="0" ADRANGE="0" ADPOLAR="0" ADGAIN="0" ADCONVRATE="1000"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="AthenaAnPrm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="ai0" NAME="AI 0" NAME_uk="AI 0" NAME_ru="AI 0" DESCR="" EN="0" TYPE="0" CNL="0" GAIN="0"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="AthenaDigPrm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="di0" NAME="DI 0" NAME_uk="DI 0" NAME_ru="DI 0" DESCR="" EN="0" TYPE="0" PORT="0" CNL="0"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                --&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_BlockCalc"&gt;
-                &lt;!--
-                &lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="Model" NAME="Model" NAME_uk="Модель" NAME_ru="Модель" DESCR=""
-                        ENABLE="1" START="1" PRM_BD="Model_prm" BLOCK_SH="Model_blcks" PERIOD="1000" PRIOR="0" PER_DB="0" ITER="1"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="Model_blcks"&gt;
-                    &lt;fld ID="Klap" NAME="Klapan" NAME_uk="Клапан" NAME_ru="Клапан" DESCR=""
-                        FUNC="DAQ.JavaLikeCalc.lib_techApp.klap" EN="1" PROC="1"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="Model_blcks_io"&gt;
-                    &lt;fld BLK_ID="Klap" ID="l_kl1" TLNK="0" LNK="" VAL="50"/&gt;
-                    &lt;fld BLK_ID="Klap" ID="l_kl2" TLNK="0" LNK="" VAL="20"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="Model_prm"&gt;
-                    &lt;fld SHIFR="l_kl" NAME="Klap level" NAME_uk="Положення клапану" NAME_ru="Положение клапана" DESCR=""
-                        EN="1" IO="Klap.l_kl1"/&gt;
-                &lt;/tbl&gt;
-                --&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_BlockCalc"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--</span>
+<span class="c">                &lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="Model" NAME="Model" NAME_uk="Модель" NAME_ru="Модель" DESCR=""</span>
+<span class="c">                        ENABLE="1" START="1" PRM_BD="Model_prm" BLOCK_SH="Model_blcks" PERIOD="1000" PRIOR="0" PER_DB="0" ITER="1"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="Model_blcks"&gt;</span>
+<span class="c">                    &lt;fld ID="Klap" NAME="Klapan" NAME_uk="Клапан" NAME_ru="Клапан" DESCR=""</span>
+<span class="c">                        FUNC="DAQ.JavaLikeCalc.lib_techApp.klap" EN="1" PROC="1"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="Model_blcks_io"&gt;</span>
+<span class="c">                    &lt;fld BLK_ID="Klap" ID="l_kl1" TLNK="0" LNK="" VAL="50"/&gt;</span>
+<span class="c">                    &lt;fld BLK_ID="Klap" ID="l_kl2" TLNK="0" LNK="" VAL="20"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="Model_prm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="l_kl" NAME="Klap level" NAME_uk="Положення клапану" NAME_ru="Положение клапана" DESCR=""</span>
+<span class="c">                        EN="1" IO="Klap.l_kl1"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                --&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_JavaLikeCalc"&gt;
-                &lt;!--
-                &lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="CalcTest" NAME="Calculation test" NAME_uk="Тест обчислення" NAME_ru="Тест вычисления" DESCR=""
-                        ENABLE="1" START="1" PRM_BD="CalcTest_prm" FUNC="TemplFunc.d_alarm" SCHEDULE="1" PRIOR="0" ITER="1"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="CalcTest_val"&gt;
-                    &lt;fld ID="in" VAL="0"/&gt;
-                    &lt;fld ID="alrm" VAL=""/&gt;
-                    &lt;fld ID="alrm_md" VAL="1"/&gt;
-                    &lt;fld ID="alrm_mess" VAL="Error present."/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="CalcTest_prm"&gt;
-                    &lt;fld SHIFR="alrm" NAME="Alarm" NAME_uk="Аварія" NAME_ru="Авария" DESCR="" EN="1" FLD="alrm"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="lib"&gt;
-                    &lt;fld ID="TemplFunc" NAME="" DESCR="" DB="lib_TemplFunc"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="lib_TemplFunc"&gt;
-                    &lt;fld ID="d_alarm" NAME="Digit alarm" NAME_uk="Аварія за дискретним" NAME_ru="Авария по дискретному" DESCR=""
-                        FORMULA="alrm=(in==alrm_md)?&amp;quot;1:&amp;quot;+alrm_mess:&amp;quot;0&amp;quot;;"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="lib_TemplFunc_io"&gt;
-                    &lt;fld F_ID="d_alarm" ID="in" NAME="Input" NAME_uk="Вхід" NAME_ru="Вход" TYPE="3" MODE="0" DEF="" HIDE="0" POS="0"/&gt;
-                    &lt;fld F_ID="d_alarm" ID="alrm" NAME="Alarm" NAME_uk="Аварія" NAME_ru="Авария" TYPE="0" MODE="1" DEF="" HIDE="0" POS="1"/&gt;
-                    &lt;fld F_ID="d_alarm" ID="alrm_md" NAME="Alarm mode" NAME_uk="Режим аварії" NAME_ru="Режим аварии"
-                        TYPE="3" MODE="0" DEF="" HIDE="0" POS="2"/&gt;
-                    &lt;fld F_ID="d_alarm" ID="alrm_mess" NAME="Alarm message" NAME_uk="Повідомлення аварії" NAME_ru="Сообщение аварии"
-                        TYPE="0" MODE="0" DEF="" HIDE="0" POS="3"/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_JavaLikeCalc"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--</span>
+<span class="c">                &lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="CalcTest" NAME="Calculation test" NAME_uk="Тест обчислення" NAME_ru="Тест вычисления" DESCR=""</span>
+<span class="c">                        ENABLE="1" START="1" PRM_BD="CalcTest_prm" FUNC="TemplFunc.d_alarm" SCHEDULE="1" PRIOR="0" ITER="1"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="CalcTest_val"&gt;</span>
+<span class="c">                    &lt;fld ID="in" VAL="0"/&gt;</span>
+<span class="c">                    &lt;fld ID="alrm" VAL=""/&gt;</span>
+<span class="c">                    &lt;fld ID="alrm_md" VAL="1"/&gt;</span>
+<span class="c">                    &lt;fld ID="alrm_mess" VAL="Error present."/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="CalcTest_prm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="alrm" NAME="Alarm" NAME_uk="Аварія" NAME_ru="Авария" DESCR="" EN="1" FLD="alrm"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="lib"&gt;</span>
+<span class="c">                    &lt;fld ID="TemplFunc" NAME="" DESCR="" DB="lib_TemplFunc"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="lib_TemplFunc"&gt;</span>
+<span class="c">                    &lt;fld ID="d_alarm" NAME="Digit alarm" NAME_uk="Аварія за дискретним" NAME_ru="Авария по дискретному" DESCR=""</span>
+<span class="c">                        FORMULA="alrm=(in==alrm_md)?&amp;amp;quot;1:&amp;amp;quot;+alrm_mess:&amp;amp;quot;0&amp;amp;quot;;"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="lib_TemplFunc_io"&gt;</span>
+<span class="c">                    &lt;fld F_ID="d_alarm" ID="in" NAME="Input" NAME_uk="Вхід" NAME_ru="Вход" TYPE="3" MODE="0" DEF="" HIDE="0" POS="0"/&gt;</span>
+<span class="c">                    &lt;fld F_ID="d_alarm" ID="alrm" NAME="Alarm" NAME_uk="Аварія" NAME_ru="Авария" TYPE="0" MODE="1" DEF="" HIDE="0" POS="1"/&gt;</span>
+<span class="c">                    &lt;fld F_ID="d_alarm" ID="alrm_md" NAME="Alarm mode" NAME_uk="Режим аварії" NAME_ru="Режим аварии"</span>
+<span class="c">                        TYPE="3" MODE="0" DEF="" HIDE="0" POS="2"/&gt;</span>
+<span class="c">                    &lt;fld F_ID="d_alarm" ID="alrm_mess" NAME="Alarm message" NAME_uk="Повідомлення аварії" NAME_ru="Сообщение аварии"</span>
+<span class="c">                        TYPE="0" MODE="0" DEF="" HIDE="0" POS="3"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_Siemens"&gt;
-                &lt;!--
-                &lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"
-                        PRM_BD="test2prm" PERIOD="1000" PRIOR="0" CIF_DEV="0" ADDR="5" ASINC_WR="0"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="test2prm"&gt;
-                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1" TMPL="S7.ai_man"/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_Siemens"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--</span>
+<span class="c">                &lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"</span>
+<span class="c">                        PRM_BD="test2prm" PERIOD="1000" PRIOR="0" CIF_DEV="0" ADDR="5" ASINC_WR="0"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="test2prm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1" TMPL="S7.ai_man"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_SNMP"&gt;
-                &lt;!--
-                &lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR=""
-                        ENABLE="1" START="1" PRM_BD="test2prm" PERIOD="1000" PRIOR="0" ADDR="localhost" COMM="public" PATTR_LIM="20"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="test2prm"&gt;
-                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1" OID_LS="system"/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_SNMP"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--</span>
+<span class="c">                &lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR=""</span>
+<span class="c">                        ENABLE="1" START="1" PRM_BD="test2prm" PERIOD="1000" PRIOR="0" ADDR="localhost" COMM="public" PATTR_LIM="20"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="test2prm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1" OID_LS="system"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_ModBus"&gt;
-                &lt;!--
-                &lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"
-                        PRM_BD="test2prm" PERIOD="1000" PRIOR="0" TRANSP="Sockets" ADDR="exlar.diya.org" NODE="1"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="test2prm"&gt;
-                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1"
-                        ATTR_LS="321:0:tst:Test"/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_ModBus"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--</span>
+<span class="c">                &lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"</span>
+<span class="c">                        PRM_BD="test2prm" PERIOD="1000" PRIOR="0" TRANSP="Sockets" ADDR="exlar.diya.org" NODE="1"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="test2prm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1"</span>
+<span class="c">                        ATTR_LS="321:0:tst:Test"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_DAQGate"&gt;
-                &lt;!--
-                &lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"
-                        PRM_BD="test2prm" PERIOD="1000" PRIOR="0" SYNCPER="60" STATIONS="loop" CNTRPRM="System.AutoDA"/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_DAQGate"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--</span>
+<span class="c">                &lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"</span>
+<span class="c">                        PRM_BD="test2prm" PERIOD="1000" PRIOR="0" SYNCPER="60" STATIONS="loop" CNTRPRM="System.AutoDA"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_DCON"&gt;
-                &lt;!--&lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"
-                        PRM_BD="test2prm" PERIOD="1" PRIOR="0" ADDR="" REQ_TRY="1"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="test2prm"&gt;
-                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1" MOD_TP="0"
-                        MOD_ADDR="1" CRC_CTRL="1"/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_DCON"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--&lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"</span>
+<span class="c">                        PRM_BD="test2prm" PERIOD="1" PRIOR="0" ADDR="" REQ_TRY="1"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="test2prm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1" MOD_TP="0"</span>
+<span class="c">                        MOD_ADDR="1" CRC_CTRL="1"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_ICP_DAS"&gt;
-                &lt;!--&lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"
-                        PRM_BD="test2prm" PERIOD="1" PRIOR="0" BUS="1" BAUD="115200" LP_PRMS="" REQ_TRY="3"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="test2prm"&gt;
-                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1"
-                        MOD_TP="552985" MOD_ADDR="0" MOD_SLOT="1" MOD_PRMS="0"/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_ICP_DAS"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--&lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"</span>
+<span class="c">                        PRM_BD="test2prm" PERIOD="1" PRIOR="0" BUS="1" BAUD="115200" LP_PRMS="" REQ_TRY="3"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="test2prm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1"</span>
+<span class="c">                        MOD_TP="552985" MOD_ADDR="0" MOD_SLOT="1" MOD_PRMS="0"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_OPC_UA"&gt;
-                &lt;!--&lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"
-                        PRM_BD="test2prm" SCHEDULE="1" PRIOR="0" SYNCPER="60" ADDR="" EndPoint="opc.tcp://localhost:4841" SecPolicy="None"
-                        SecMessMode="1" Cert="" PvKey="" AttrsLimit="100"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="test2prm"&gt;
-                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1" ND_LS=""/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_OPC_UA"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--&lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"</span>
+<span class="c">                        PRM_BD="test2prm" SCHEDULE="1" PRIOR="0" SYNCPER="60" ADDR="" EndPoint="opc.tcp://localhost:4841" SecPolicy="None"</span>
+<span class="c">                        SecMessMode="1" Cert="" PvKey="" AttrsLimit="100"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="test2prm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1" ND_LS=""/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_SoundCard"&gt;
-                &lt;!--&lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"
-                        PRM_BD="test2prm" CARD="" SMPL_RATE="8000" SMPL_TYPE="1"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="test2prm"&gt;
-                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1" CHANNEL="0"/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
-        &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_SoundCard"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--&lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"</span>
+<span class="c">                        PRM_BD="test2prm" CARD="" SMPL_RATE="8000" SMPL_TYPE="1"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="test2prm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1" CHANNEL="0"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
+        <span class="nt">&lt;/node&gt;</span>
 
-        &lt;node id="sub_Archive"&gt;
-            &lt;prm id="MessBufSize"&gt;1000&lt;/prm&gt;
-            &lt;prm id="MessPeriod"&gt;5&lt;/prm&gt;
-            &lt;prm id="ValPeriod"&gt;1000&lt;/prm&gt;
-            &lt;prm id="ValPriority"&gt;10&lt;/prm&gt;
-            &lt;!--
-            &lt;tbl id="Archive_mess_proc"&gt;
-                &lt;fld
-                    ID="StatErrors"
-                    MODUL="FSArch"
-                    NAME="Errors"
-                    NAME_uk="Помилки"
-                    NAME_ru="Ошибки"
-                    DESCR="Archive of local errors"
-                    DESCR_uk="Архів локальних помилок"
-                    DESCR_ru="Архив локальных ощибок"
-                    START="1"
-                    CATEG="/DemoStation*"
-                    LEVEL="4"
-                    ADDR="ARCHIVES/MESS/stError/"/&gt;
-                &lt;fld
-                    ID="NetRequsts"
-                    MODUL="FSArch"
-                    NAME="Network requests"
-                    NAME_uk="Мережеві запити"
-                    NAME_ru="Сетевые запросы"
-                    DESCR="Requests to the server via Sockets transport."
-                    DESCR_uk="Запити до сервера через транспорт Sockets."
-                    DESCR_ru="Запросы к серверу через транспорт Sockets."
-                    START="1"
-                    CATEG="/DemoStation/Transport/Sockets*"
-                    LEVEL="1"
-                    ADDR="ARCHIVES/MESS/Net/"/&gt;
-            &lt;/tbl&gt;
-            &lt;tbl id="Archive_val_proc"&gt;
-                &lt;fld
-                    ID="1h"
-                    MODUL="FSArch"
-                    NAME="1hour"
-                    NAME_uk="1година"
-                    NAME_ru="1час"
-                    DESCR="Averaging at hour"
-                    DESCR_uk="Усереднення за годину"
-                    DESCR_ru="Усреднение за час"
-                    START="1"
-                    ADDR="ARCHIVES/VAL/1h/"
-                    V_PER="360"
-                    A_PER="60"/&gt;
-            &lt;/tbl&gt;
-            &lt;tbl id="Archive_val"&gt;
-                &lt;fld
-                    ID="test1"
-                    NAME="Test 1"
-                    NAME_uk="Тест 1"
-                    NAME_ru="Тест 1"
-                    DESCR="Test 1"
-                    DESCR_uk="Тест 1"
-                    DESCR_ru="Тест 1"
-                    START="1"
-                    VTYPE="1"
-                    BPER="1"
-                    BSIZE="200"
-                    BHGRD="1"
-                    BHRES="0"
-                    SrcMode="0"
-                    Source=""
-                    ArchS=""/&gt;
-            &lt;/tbl&gt;--&gt;
-        &lt;/node&gt;
+        <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"sub_Archive"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"MessBufSize"</span><span class="nt">&gt;</span>1000<span class="nt">&lt;/prm&gt;</span>
+            <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"MessPeriod"</span><span class="nt">&gt;</span>5<span class="nt">&lt;/prm&gt;</span>
+            <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"ValPeriod"</span><span class="nt">&gt;</span>1000<span class="nt">&lt;/prm&gt;</span>
+            <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"ValPriority"</span><span class="nt">&gt;</span>10<span class="nt">&lt;/prm&gt;</span>
+            <span class="c">&lt;!--</span>
+<span class="c">            &lt;tbl id="Archive_mess_proc"&gt;</span>
+<span class="c">                &lt;fld</span>
+<span class="c">                    ID="StatErrors"</span>
+<span class="c">                    MODUL="FSArch"</span>
+<span class="c">                    NAME="Errors"</span>
+<span class="c">                    NAME_uk="Помилки"</span>
+<span class="c">                    NAME_ru="Ошибки"</span>
+<span class="c">                    DESCR="Archive of local errors"</span>
+<span class="c">                    DESCR_uk="Архів локальних помилок"</span>
+<span class="c">                    DESCR_ru="Архив локальных ощибок"</span>
+<span class="c">                    START="1"</span>
+<span class="c">                    CATEG="/DemoStation*"</span>
+<span class="c">                    LEVEL="4"</span>
+<span class="c">                    ADDR="ARCHIVES/MESS/stError/"/&gt;</span>
+<span class="c">                &lt;fld</span>
+<span class="c">                    ID="NetRequsts"</span>
+<span class="c">                    MODUL="FSArch"</span>
+<span class="c">                    NAME="Network requests"</span>
+<span class="c">                    NAME_uk="Мережеві запити"</span>
+<span class="c">                    NAME_ru="Сетевые запросы"</span>
+<span class="c">                    DESCR="Requests to the server via Sockets transport."</span>
+<span class="c">                    DESCR_uk="Запити до сервера через транспорт Sockets."</span>
+<span class="c">                    DESCR_ru="Запросы к серверу через транспорт Sockets."</span>
+<span class="c">                    START="1"</span>
+<span class="c">                    CATEG="/DemoStation/Transport/Sockets*"</span>
+<span class="c">                    LEVEL="1"</span>
+<span class="c">                    ADDR="ARCHIVES/MESS/Net/"/&gt;</span>
+<span class="c">            &lt;/tbl&gt;</span>
+<span class="c">            &lt;tbl id="Archive_val_proc"&gt;</span>
+<span class="c">                &lt;fld</span>
+<span class="c">                    ID="1h"</span>
+<span class="c">                    MODUL="FSArch"</span>
+<span class="c">                    NAME="1hour"</span>
+<span class="c">                    NAME_uk="1година"</span>
+<span class="c">                    NAME_ru="1час"</span>
+<span class="c">                    DESCR="Averaging at hour"</span>
+<span class="c">                    DESCR_uk="Усереднення за годину"</span>
+<span class="c">                    DESCR_ru="Усреднение за час"</span>
+<span class="c">                    START="1"</span>
+<span class="c">                    ADDR="ARCHIVES/VAL/1h/"</span>
+<span class="c">                    V_PER="360"</span>
+<span class="c">                    A_PER="60"/&gt;</span>
+<span class="c">            &lt;/tbl&gt;</span>
+<span class="c">            &lt;tbl id="Archive_val"&gt;</span>
+<span class="c">                &lt;fld</span>
+<span class="c">                    ID="test1"</span>
+<span class="c">                    NAME="Test 1"</span>
+<span class="c">                    NAME_uk="Тест 1"</span>
+<span class="c">                    NAME_ru="Тест 1"</span>
+<span class="c">                    DESCR="Test 1"</span>
+<span class="c">                    DESCR_uk="Тест 1"</span>
+<span class="c">                    DESCR_ru="Тест 1"</span>
+<span class="c">                    START="1"</span>
+<span class="c">                    VTYPE="1"</span>
+<span class="c">                    BPER="1"</span>
+<span class="c">                    BSIZE="200"</span>
+<span class="c">                    BHGRD="1"</span>
+<span class="c">                    BHRES="0"</span>
+<span class="c">                    SrcMode="0"</span>
+<span class="c">                    Source=""</span>
+<span class="c">                    ArchS=""/&gt;</span>
+<span class="c">            &lt;/tbl&gt;--&gt;</span>
+        <span class="nt">&lt;/node&gt;</span>
 
-        &lt;node id="sub_Protocol"&gt;
-        &lt;/node&gt;
+        <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"sub_Protocol"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;/node&gt;</span>
 
-        &lt;node id="sub_UI"&gt;
-            &lt;node id="mod_QTStarter"&gt;
-                &lt;prm id="StartMod"&gt;QTCfg&lt;/prm&gt;
-                &lt;prm id="CloseToTray"&gt;0&lt;/prm&gt;
-                &lt;prm id="Style"&gt;&lt;/prm&gt;
-                &lt;prm id="Palette"&gt;&lt;/prm&gt;
-                &lt;prm id="StyleSheets"&gt;&lt;/prm&gt;
-                &lt;tbl id="LookFeel"&gt;
-                    &lt;fld NAME="Typical TDE" STYLE="" STL_SHTS=""&gt;
-                        &lt;PALETTE&gt;#000000, #dddfe4, #ffffff, #ffffff, #555555, #c7c7c7, #000000, #ffffff, #000000, #ffffff, #efefef, #000000, #678db2, #ffffff, #0000ee, #52188b
+        <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"sub_UI"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_QTStarter"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"StartMod"</span><span class="nt">&gt;</span>QTCfg<span class="nt">&lt;/prm&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"CloseToTray"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/prm&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Style"</span><span class="nt">&gt;&lt;/prm&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Palette"</span><span class="nt">&gt;&lt;/prm&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"StyleSheets"</span><span class="nt">&gt;&lt;/prm&gt;</span>
+                <span class="nt">&lt;tbl</span> <span class="na">id=</span><span class="s">"LookFeel"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"Typical TDE"</span> <span class="na">STYLE=</span><span class="s">""</span> <span class="na">STL_SHTS=</span><span class="s">""</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;PALETTE&gt;</span>#000000, #dddfe4, #ffffff, #ffffff, #555555, #c7c7c7, #000000, #ffffff, #000000, #ffffff, #efefef, #000000, #678db2, #ffffff, #0000ee, #52188b
 #808080, #dddfe4, #ffffff, #ffffff, #555555, #c7c7c7, #c7c7c7, #ffffff, #808080, #ffffff, #efefef, #000000, #567594, #ffffff, #0000ee, #52188b
-#000000, #dddfe4, #ffffff, #ffffff, #555555, #c7c7c7, #000000, #ffffff, #000000, #ffffff, #efefef, #000000, #678db2, #ffffff, #0000ee, #52188b&lt;/PALETTE&gt;
-                    &lt;/fld&gt;
-                    &lt;fld NAME="Blue Slate" STYLE="" STL_SHTS=""&gt;
-                        &lt;PALETTE&gt;#000000, #9db9c8, #f6fcff, #c9dae3, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
+#000000, #dddfe4, #ffffff, #ffffff, #555555, #c7c7c7, #000000, #ffffff, #000000, #ffffff, #efefef, #000000, #678db2, #ffffff, #0000ee, #52188b<span class="nt">&lt;/PALETTE&gt;</span>
+                    <span class="nt">&lt;/fld&gt;</span>
+                    <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"Blue Slate"</span> <span class="na">STYLE=</span><span class="s">""</span> <span class="na">STL_SHTS=</span><span class="s">""</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;PALETTE&gt;</span>#000000, #9db9c8, #f6fcff, #c9dae3, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
 #808080, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #808080, #bfe2f4, #808080, #c3c3c3, #9db9c8, #000000, #558097, #808080, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
-#000000, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000&lt;/PALETTE&gt;
-                    &lt;/fld&gt;
-                    &lt;fld NAME="Blue Darkness" STYLE="" STL_SHTS=""&gt;
-                        &lt;PALETTE&gt;#ffffff, #426794, #5788c3, #4871a2, #162231, #37567b, #dcdcdc, #5788c3, #ffffff, #002a4e, #426794, #000000, #5cb3ff, #000000, #00ffff, #c0c0ff
+#000000, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000<span class="nt">&lt;/PALETTE&gt;</span>
+                    <span class="nt">&lt;/fld&gt;</span>
+                    <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"Blue Darkness"</span> <span class="na">STYLE=</span><span class="s">""</span> <span class="na">STL_SHTS=</span><span class="s">""</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;PALETTE&gt;</span>#ffffff, #426794, #5788c3, #4871a2, #162231, #37567b, #dcdcdc, #5788c3, #ffffff, #002a4e, #426794, #000000, #5cb3ff, #000000, #00ffff, #c0c0ff
 #555555, #426794, #5788c3, #4871a2, #162231, #37567b, #37567b, #5788c3, #555555, #002a4e, #426794, #000000, #4c95d4, #ffffff, #00ffff, #c0c0ff
-#ffffff, #426794, #5788c3, #4871a2, #162231, #37567b, #dcdcdc, #5788c3, #ffffff, #002a4e, #426794, #000000, #5cb3ff, #000000, #00ffff, #c0c0ff&lt;/PALETTE&gt;
-                    &lt;/fld&gt;
-                &lt;/tbl&gt;
-            &lt;/node&gt;
-            &lt;node id="mod_QTCfg"&gt;
-                &lt;prm id="StartUser"&gt;roman&lt;/prm&gt;
-            &lt;/node&gt;
-            &lt;node id="mod_Vision"&gt;
-                &lt;prm id="StartUser"&gt;roman&lt;/prm&gt;
-            &lt;/node&gt;
-            &lt;node id="mod_WebCfg"&gt;
-                &lt;prm id="SessTimeLife"&gt;20&lt;/prm&gt;
-            &lt;/node&gt;
-            &lt;node id="mod_VCAEngine"&gt;
-                &lt;!--
-                &lt;tbl id="LIB"&gt;
-                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR=""
-                        DB_TBL="wlib_test2" ICO="" USER="root" GRP="UI" PERMIT="436"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="wlib_test2"&gt;
-                    &lt;fld ID="test2" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_PER="-1"
-                        USER="root" GRP="UI" PERMIT="436"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="wlib_test2_io"&gt;
-                    &lt;fld IDW="test2" ID="name" IO_VAL="Test 2" IO_VAL_uk="Тест 2" IO_VAL_ru="Тест 2" SELF_FLG="" CFG_TMPL="" CFG_VAL=""/&gt;
-                    &lt;fld IDW="test2" ID="dscr" IO_VAL="Test of the module 2" IO_VAL_uk="Тест модуля 2" IO_VAL_ru="Тест модуля 2" SELF_FLG="" CFG_TMPL="" CFG_VAL=""/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="PRJ"&gt;
-                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" DB_TBL="prj_test2" ICO="" USER="root" GRP="UI" PERMIT="436"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="prj_test2"&gt;
-                    &lt;fld OWNER="/test2" ID="pg1" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_PER="-1" USER="root" GRP="UI" PERMIT="436" FLGS="1"/&gt;
-                    &lt;fld OWNER="/test2/pg1" ID="pg2" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_PER="-1" USER="root" GRP="UI" PERMIT="436" FLGS="0"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="prj_test2_incl"&gt;
-                    &lt;fld IDW="/prj_test2/pg_pg1" ID="wdg1" PARENT="/wlb_originals/wdg_Box"/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
-        &lt;/node&gt;
+#ffffff, #426794, #5788c3, #4871a2, #162231, #37567b, #dcdcdc, #5788c3, #ffffff, #002a4e, #426794, #000000, #5cb3ff, #000000, #00ffff, #c0c0ff<span class="nt">&lt;/PALETTE&gt;</span>
+                    <span class="nt">&lt;/fld&gt;</span>
+                <span class="nt">&lt;/tbl&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_QTCfg"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"StartUser"</span><span class="nt">&gt;</span>roman<span class="nt">&lt;/prm&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_Vision"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"StartUser"</span><span class="nt">&gt;</span>roman<span class="nt">&lt;/prm&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_WebCfg"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"SessTimeLife"</span><span class="nt">&gt;</span>20<span class="nt">&lt;/prm&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_VCAEngine"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--</span>
+<span class="c">                &lt;tbl id="LIB"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR=""</span>
+<span class="c">                        DB_TBL="wlib_test2" ICO="" USER="root" GRP="UI" PERMIT="436"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="wlib_test2"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_PER="-1"</span>
+<span class="c">                        USER="root" GRP="UI" PERMIT="436"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="wlib_test2_io"&gt;</span>
+<span class="c">                    &lt;fld IDW="test2" ID="name" IO_VAL="Test 2" IO_VAL_uk="Тест 2" IO_VAL_ru="Тест 2" SELF_FLG="" CFG_TMPL="" CFG_VAL=""/&gt;</span>
+<span class="c">                    &lt;fld IDW="test2" ID="dscr" IO_VAL="Test of the module 2" IO_VAL_uk="Тест модуля 2" IO_VAL_ru="Тест модуля 2" SELF_FLG="" CFG_TMPL="" CFG_VAL=""/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="PRJ"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" DB_TBL="prj_test2" ICO="" USER="root" GRP="UI" PERMIT="436"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="prj_test2"&gt;</span>
+<span class="c">                    &lt;fld OWNER="/test2" ID="pg1" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_PER="-1" USER="root" GRP="UI" PERMIT="436" FLGS="1"/&gt;</span>
+<span class="c">                    &lt;fld OWNER="/test2/pg1" ID="pg2" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_PER="-1" USER="root" GRP="UI" PERMIT="436" FLGS="0"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="prj_test2_incl"&gt;</span>
+<span class="c">                    &lt;fld IDW="/prj_test2/pg_pg1" ID="wdg1" PARENT="/wlb_originals/wdg_Box"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
+        <span class="nt">&lt;/node&gt;</span>
 
-        &lt;node id="sub_Special"&gt;
-            &lt;node id="mod_SystemTests"&gt;
-                &lt;prm id="Param" on="0" per="5" name="LogicLev.experiment.F3" /&gt;
-                &lt;prm id="XML" on="0" per="10" file="/etc/oscada.xml" /&gt;
-                &lt;prm id="Mess" on="0" per="10" arhtor="DBArch.test3" depth="10" /&gt;
-                &lt;prm id="SOAttach" on="0" per="20" name="../../lib/openscada/daq_LogicLev.so" mode="0" full="1" /&gt;
-                &lt;prm id="Val" on="0" per="1" name="LogicLev.experiment.F3.var" arch_len="5" arch_per="1000000" /&gt;
-                &lt;prm id="Val" on="0" per="1" name="System.AutoDA.CPULoad.load" arch_len="10" arch_per="1000000" /&gt;
-                &lt;prm id="DB" on="0" per="10" type="MySQL" addr="server.diya.org;roman;123456;oscadaTest" table="test" size="1000" /&gt;
-                &lt;prm id="DB" on="0" per="10" type="DBF" addr="./DATA/DBF" table="test.dbf" size="1000" /&gt;
-                &lt;prm id="DB" on="0" per="10" type="SQLite" addr="./DATA/test.db" table="test" size="1000" /&gt;
-                &lt;prm id="DB" on="0" per="10" type="FireBird" addr="server.diya.org:/var/tmp/test.fdb;roman;123456" table="test" size="1000" /&gt;
-                &lt;prm id="TrOut" on="0" per="1" addr="TCP:127.0.0.1:10001" type="Sockets" req="time" /&gt;
-                &lt;prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:10001" type="Sockets" req="time" /&gt;
-                &lt;prm id="TrOut" on="0" per="1" addr="UNIX:./oscada" type="Sockets" req="time" /&gt;
-                &lt;prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:daytime" type="Sockets" req="time" /&gt;
-                &lt;prm id="SysContrLang" on="0" per="10" path="/Archive/FSArch/mess_StatErrors/%2fprm%2fst" /&gt;
-                &lt;prm id="ValBuf" on="0" per="5" /&gt;
-                &lt;prm id="Archive" on="0" per="30" arch="test1" period="1000000" /&gt;
-                &lt;prm id="Base64Code" on="0" per="10" /&gt;
-            &lt;/node&gt;
-        &lt;/node&gt;
-  &lt;/station&gt;
+        <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"sub_Special"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_SystemTests"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Param"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"5"</span> <span class="na">name=</span><span class="s">"LogicLev.experiment.F3"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"XML"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="na">file=</span><span class="s">"/etc/oscada.xml"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Mess"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="na">arhtor=</span><span class="s">"DBArch.test3"</span> <span class="na">depth=</span><span class="s">"10"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"SOAttach"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"20"</span> <span class="na">name=</span><span class="s">"../../lib/openscada/daq_LogicLev.so"</span> <span class="na">mode=</span><span class="s">"0"</span> <span class="na">full=</span><span class="s">"1"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Val"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"1"</span> <span class="na">name=</span><span class="s">"LogicLev.experiment.F3.var"</span> <span class="na">arch_len=</span><span class="s">"5"</span> <span class="na">arch_per=</span><span class="s">"1000000"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Val"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"1"</span> <span class="na">name=</span><span class="s">"System.AutoDA.CPULoad.load"</span> <span class="na">arch_len=</span><span class="s">"10"</span> <span class="na">arch_per=</span><span class="s">"1000000"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"DB"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="na">type=</span><span class="s">"MySQL"</span> <span class="na">addr=</span><span class="s">"server.diya.org;roman;123456;oscadaTest"</span> <span class="na">table=</span><span class="s">"test"</span> <span class="na">size=</span><span class="s">"1000"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"DB"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="na">type=</span><span class="s">"DBF"</span> <span class="na">addr=</span><span class="s">"./DATA/DBF"</span> <span class="na">table=</span><span class="s">"test.dbf"</span> <span class="na">size=</span><span class="s">"1000"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"DB"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="na">type=</span><span class="s">"SQLite"</span> <span class="na">addr=</span><span class="s">"./DATA/test.db"</span> <span class="na">table=</span><span class="s">"test"</span> <span class="na">size=</span><span class="s">"1000"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"DB"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="na">type=</span><span class="s">"FireBird"</span> <span class="na">addr=</span><span class="s">"server.diya.org:/var/tmp/test.fdb;roman;123456"</span> <span class="na">table=</span><span class="s">"test"</span> <span class="na">size=</span><span class="s">"1000"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"TrOut"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"1"</span> <span class="na">addr=</span><span class="s">"TCP:127.0.0.1:10001"</span> <span class="na">type=</span><span class="s">"Sockets"</span> <span class="na">req=</span><span class="s">"time"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"TrOut"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"1"</span> <span class="na">addr=</span><span class="s">"UDP:127.0.0.1:10001"</span> <span class="na">type=</span><span class="s">"Sockets"</span> <span class="na">req=</span><span class="s">"time"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"TrOut"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"1"</span> <span class="na">addr=</span><span class="s">"UNIX:./oscada"</span> <span class="na">type=</span><span class="s">"Sockets"</span> <span class="na">req=</span><span class="s">"time"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"TrOut"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"1"</span> <span class="na">addr=</span><span class="s">"UDP:127.0.0.1:daytime"</span> <span class="na">type=</span><span class="s">"Sockets"</span> <span class="na">req=</span><span class="s">"time"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"SysContrLang"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="na">path=</span><span class="s">"/Archive/FSArch/mess_StatErrors/%2fprm%2fst"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"ValBuf"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"5"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Archive"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"30"</span> <span class="na">arch=</span><span class="s">"test1"</span> <span class="na">period=</span><span class="s">"1000000"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Base64Code"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
+        <span class="nt">&lt;/node&gt;</span>
+  <span class="nt">&lt;/station&gt;</span>
 
-&lt;/OpenSCADA&gt;
-</pre>
+<span class="nt">&lt;/OpenSCADA&gt;</span>
+</pre></div>
 <p>Let's examine the structure of the configuration file in detail. One configuration file can contain the configuration of several stations in the sections <i>&lt;station id="SimulatorStation"/&gt;</i>. The "id" attribute specifies the station identifier — class of the station. Use of this or that section of the station is indicated by the command line parameter <i>--station=SimulatorStation</i> when starting. The section of the station directly contains station parameters and subsystem sections. Section configuration parameters are written as <i>&lt;prm id="StName"&gt;AGLKS&lt;/prm&gt; </i>, where the "id" attribute specifies the parameter ID, and in the body of the "prm" tag, the value "AGLKS" for the parameter is specified. The list of available parameters and their description for the station and all other sections can be obtained from the console by starting OpenSCADA with the parameter <i>--help</i>.
 </p><p>The subsystem sections <i>&lt;node id="sub_DAQ" /&gt;</i> contain: subsystem parameters, module sections, and table sections for reflections of the data of databases in the configuration file. Module sections <i>&lt;node id="mod_DiamondBoards" /&gt; </i> contain individual module parameters and table sections for reflections of the data of databases in the configuration file.
 </p><p>The sections of the tables of reflection of the data of databases are provided for placement in the configuration file records of DB tables for the OpenSCADA components. Let's examine the table of the input transports "Transport_in" of the subsystem "Transports" <i>&lt;node id="sub_Transport"&gt;</i> from the above provided example of the configuration file. The table contains three records with the fields: ID, MODULE, NAME, DESCRIPT, ADDR, PROT, START. After starting with this section and in general without the DB in the subsystem "Transports" of the module "Sockets" you'll see three input transports. The formats of the table structures of the main components are included into the demo configuration file — models of technological processes. For details of the structure of the database tables refer to the documentation of the corresponding modules or simply save the desired object to the configuration file.
@@ -1724,6 +1718,7 @@ RestoreTime &lt;seconds&gt;   Connection recovery time.
 ---- Parameters of the module section '/sub_UI/mod_QTStarter/' of the configuration file ----
 StartMod   &lt;moduls&gt;     List of the modules that are started, separated ';'.
 CloseToTray &lt;0|1&gt;       Closing all windows or starting without Qt modules to the system tray.
+SessCntr   [0...*3]     Sessions control-restart: 0-if running, 1-anyway, 2-immediately, 3-never.
 Style      &lt;name&gt;       The GUI style of Qt.
 Font       &lt;font&gt;       Common Qt font.
 Palette    &lt;colors&gt;     Twenty colors of the palette separated by symbol ',' in three lines for active, disabled and inactive groups.
@@ -1766,7 +1761,7 @@ ChkPer     &lt;seconds&gt;    Period of the checking for new shared libraries(mo
 <li> opening of own dialog window of the starter (Fig.5a);</li>
 <li> starting-collapsing to the system tray (Fig.5b) — is actually a background run mode, but with the access from the graphical environment.</li></ul></li>
 <li> initiation startup mode (Fig.5c) — selecting a project to switch to the main mode of the project OpenSCADA execution.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:428px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_dialog.png"><img class="thumbimage" height="673" src="files/QTStarter_dialog.png" width="426" /></a>  <div class="thumbcaption">Fig.5a. Dialog window of the starter of the QTStarter module.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:412px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_dialog.png"><img class="thumbimage" height="671" src="files/QTStarter_dialog.png" width="410" /></a>  <div class="thumbcaption">Fig.5a. Dialog window of the starter of the QTStarter module.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:348px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_systray.png"><img class="thumbimage" height="174" src="files/QTStarter_systray.png" width="346" /></a>  <div class="thumbcaption">Fig.5b. Project "AGLKS", started or collapsed to the system tray.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:298px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_selectProj.png"><img class="thumbimage" height="514" src="files/QTStarter_selectProj.png" width="296" /></a>  <div class="thumbcaption">Fig.5c. Dialog window of the starter of the QTStarter module in the initiation mode — a project selection.</div></div></div></div>
 <p>The simple startup is little useful, inconvenient and involves the use and operation of only one configuration, which is <a href="#Config">configuration file</a> <i>{sysconfdir}/oscada.xml</i> as the primary configuration storage. To enable configuration choices, the <a href="#CfgFilePrm">command line parameter <i>--config</i></a> is provided at startup of the program and changing of the program working directory before launching or by <a href="#CfgFilePrm">parameter "WorkDir" this configuration file</a>, which can be used and used exclusively by OpenSCADA to version 0.9 through the creation of a separate command line script (Shell) for a separate configuration. The OpenSCADA 0.9 version adds the concept of the "OpenSCADA Project", which was originally implemented by a separate command line script <b>openscada_start</b>, and then integrated into the OpenSCADA core and the startup module of the local graphical interface.
@@ -1821,7 +1816,7 @@ openscada-proj proc|create|remove|update {ProjName}
   update - update from 0.8.0 LTS;
  Arguments:
   ProjName - project name;
- Environments:
+ Environment variables:
   dPrj     - directory of projects OpenSCADA, can be RO;
   dPrjUser - directory of projects OpenSCADA of the user, WR;
   dSysCfg  - directory of system configuration;
@@ -1836,9 +1831,10 @@ openscada-proj backupList {ProjName}
  Arguments:
   ProjName   - project name;
   BackupName - the backup archive name.
- Environments:
-  OSCADA_TAR_ComprPrg - TAR compression program, at missing there used gzip.
-  OSCADA_BackLim      - Backups limit, 10 by default
+ Environment variables:
+  OSCD_TAR_ComprPrg - TAR compression program, by default gzip;
+  OSCD_TAR_Args     - TAR extra arguments, by default \"--exclude=lock --exclude=ARCHIVES\";
+  OSCD_BackLim      - Backups limit, by default 10.
 </pre>
 <p>In general, the command line script for the project manager <b>openscada-proj</b> includes such project functions and commands:
 </p>
@@ -1851,8 +1847,7 @@ openscada-proj backupList {ProjName}
 <ul><li> <i>backup</i> — backup the selected project <i>ProjName</i> to the name <i>BackupName</i>, or to the current date at missing;</li>
 <li> <i>backupRestore</i> — restore the selected project <i>ProjName</i> from the pointed backup name <i>BackupName</i>, or from the last one at missing;</li>
 <li> <i>backupList</i> — list the project <i>ProjName</i> backups.</li></ul>
-<p>Backup is generally done in the OpenSCADA working folder, along with the folders of the projects themselves, for which packed folder files are created with the name <b>{ProjName}_{BackupName}.backup</b>, for example — "Boiler_2020-06-24_20.09.backup". By default, project folders are compressed with "gzip", which can be changed by setting the environment variable "OSCADA_TAR_ComprPrg". Accordingly, the backup can be done from the outside, for example, according to the established schedule with CRON, in addition to doing it manually from the graphical interface of the project manager (Fig.5a).
-</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Backup a project folder with large archives on working systems can be inefficient and too expensive, so the archive folder "ARCHIVES" should be taken to a separate large storage and referenced from the project folder, which is also advisable for the distribution of storage to basic - highly reliable - reserved and large archival data storage (DATA) — history.
+<p>Backup is generally done in the OpenSCADA working folder along with the folders of the projects themselves, for which packed folder files are created with the name <b>{ProjName}_{BackupName}.backup</b>, for example — "Boiler_2020-06-24_20.09.backup". By default, project folders are compressed with "gzip", which can be changed by setting the environment variable "OSCD_TAR_ComprPrg". The backup files limit is set by default to 10 and you may change that by the environment variable "OSCD_BackLim". You also can append some specific arguments to the TAR archiver by the environment variable "OSCD_TAR_Args", which by default set to "--exclude=lock --exclude=ARCHIVES" for excluding the file "lock" and folder "ARCHIVES" from the backup. The backup can be done from the outside, for example, from the established schedule with CRON, in addition to doing it manually from the graphical interface of the project manager (Fig.5a).
 </p>
 <h3><span class="mw-headline" id="Execution_the_ready_OpenSCADA_project_in_the_service-background_space"><span class="mw-headline-number">5.2</span> <span id="Service" title="#Service">Execution the ready OpenSCADA project in the service-background space</span></span></h3>
 <p>The OpenSCADA project organisation in a separate folder makes it easy to run ready-made projects in the service space — execution in the background, as well as further update and maintenance of this project without direct remote control. In fact, you can develop a project locally by keeping its folder in the user's work folder (typically "{HOME}/.openscada"), and to run in the service space just copy or package, transfer to a remote work device and unpack into the system work folder (default "/usr/share/openscada").
@@ -1862,23 +1857,22 @@ openscada-proj backupList {ProjName}
 <ul><li> install the packages <b>openscada-model-aglks</b> (<b>openscada-lts-model-aglks</b> for LTS) and <b>openscada-server</b> (<b>openscada-lts-server</b> for LTS), if they were not installed yet and that is not environments of the <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">Live Disk</a> or the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Linux Automation</a> from the Disk installation;</li>
 <li> start the project "AGLKS", for getting its folder in the user's work folder;</li>
 <li> copy the project "AGLKS" folder to the system work folder also renaming to "server", previously stop the background execution of the project "server" and remove its project folder; for example, in that way from the console:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-# Connect from the superuser
-$ su -
-# ... for the live disk and some other Linux environments
-$ sudo bash
-# Stop down of execution of the previous server configuration and remove its folder
-$ service openscada-server stop; rm -R /usr/share/openscada/server
-# ... for LTS
-$ service openscada-lts-server stop; rm -R /usr/share/openscada/server
-# Copy the project "AGLKS" from the user home folder "{HOME}" also renaming to "server"
-$ cp -R {HOME}/.openscada/AGLKS /usr/share/openscada/server 
-# Start the server already in the project "AGLKS"
-$ service openscada-server start
-# ... for LTS
-$ service openscada-lts-server start
-</pre>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Note that locally you can not copy the entire project folder, but only make a symbolic link to it, but you get the risk of double project execution on a shared folder and data, which leads to the crash of one or both executions!
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="c"># Connect from the superuser</span>
+su -
+<span class="c"># ... for the live disk and some other Linux environments</span>
+sudo bash
+<span class="c"># Stop down of execution of the previous server configuration and remove its folder</span>
+service openscada-server stop<span class="p">;</span> rm -R /usr/share/openscada/server
+<span class="c"># ... for LTS</span>
+service openscada-lts-server stop<span class="p">;</span> rm -R /usr/share/openscada/server
+<span class="c"># Copy the project "AGLKS" from the user home folder "{HOME}" also renaming to "server"</span>
+cp -R <span class="o">{</span>HOME<span class="o">}</span>/.openscada/AGLKS /usr/share/openscada/server 
+<span class="c"># Start the server already in the project "AGLKS"</span>
+service openscada-server start
+<span class="c"># ... for LTS</span>
+service openscada-lts-server start
+</pre></div>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Note, that locally you may not to copy the entire project folder, but only make a symbolic link to it, but you get the risk of double project execution on a shared folder and data, which leads to the crash of one or both executions!
 </p><p>Difference between the project execution in the service-background environment from the user environment of the desktop is actually one, except for the lack of the local graphical interface of course, it is the absence of a locale in the background, ie the interface language will be English. And what can be fixed simply by changing or adding <a href="Program_manual.html#CfgFilePrm" title="Special:MyLanguage/Documents/Program manual">the configuration parameter</a> <b>&lt;prm id="Lang"&gt;uk_UA.UTF-8&lt;/prm&gt;</b> to the section-tag "station" of the file <b>oscada.xml</b> of the background project.
 </p><p><br />
 </p>
@@ -1896,5 +1890,5 @@ $ service openscada-lts-server start
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> </td></tr></table></body>
 </html>

@@ -1,8 +1,7 @@
 
-//!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module Archive.Tmpl file: val.h
 /***************************************************************************
- *   Copyright (C) 2018 by MyName MyFamily, <my@email.org>                 *
+ *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,25 +18,26 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-//!!! Multi-including this header file prevent. Change for your include file name
+// Preventing of the header file multi-including - change at the header file name changing
 #ifndef VAL_H
 #define VAL_H
 
-//!!! System's includings. Add need for your module includings.
+// System includings - add need ones
 #include <string>
 
-//!!! OpenSCADA module's API includings. Add need for your module includings.
+// OpenSCADA API includings - add need ones
 #include <tarchives.h>
 
 using std::string;
 using namespace OSCADA;
 
-//!!! All module's object's include into self (individual) namespace. Change namespace for your module.
-namespace ModTmpl
+// All the module objects in own (individual) namespace - change for your module
+namespace ArhTmpl
 {
 
+// Definition the element object of the value archiver of the subsystem "Archives-History" - add methods and attributes at your need
 //************************************************
-//* ModTmpl::ModVArchEl - Value archive element  *
+//* ArhTmpl::ModVArchEl - Value archive element  *
 //************************************************
 class ModVArch;
 
@@ -45,61 +45,50 @@ class ModVArchEl: public TVArchEl
 {
     public:
 	//Methods
-	//!!! Constructor for the object.
 	ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator );
-	//!!! Destructor for the object.
 	~ModVArchEl( );
 
-	//!!! Archive element's properties: begin, end and period of processed data
 	int64_t begin( )	{ return mBeg; }
 	int64_t end( )		{ return mEnd; }
 	int64_t period( )	{ return mPer; }
 
-	//!!! Direct link function to value archivator object
 	ModVArch &archivator()	{ return (ModVArch&)TVArchEl::archivator(); }
 
     protected:
 	//Methods
-	//!!! Get and set data virtual functions for access to archive.
 	TVariant getValProc( int64_t *tm, bool up_ord );
 	void getValsProc( TValBuf &buf, int64_t beg, int64_t end );
-	void setValsProc( TValBuf &buf, int64_t beg, int64_t end );
+	int64_t setValsProc( TValBuf &buf, int64_t beg, int64_t end, bool toAccum );
 
     private:
 	//Attributes
-	//!!! Archive element's properties: begin, end and period of processed data
 	int64_t mBeg, mEnd, mPer;
 };
 
+// Definition the value archiver object of the subsystem "Archives-History" - add methods and attributes at your need
 //************************************************
-//* ModTmpl::ModVArch - Value archivator         *
+//* ArhTmpl::ModVArch - Value archivator         *
 //************************************************
 class ModVArch: public TVArchivator
 {
     public:
 	//Methods
-	//!!! Constructor for the object.
 	ModVArch( const string &iid, const string &idb, TElem *cf_el );
-	//!!! Destructor for the object.
 	~ModVArch( );
 
-	//!!! Inherited (virtual) start and stop archivator functions
 	void start( );
-	void stop( );
+	void stop( bool full_del = false );
 
     protected:
 	//Methods
-	//!!! Inherited (virtual) load and save object's node methods.
 	void load_( );
 	void save_( );
 
-	//!!! OpenSCADA control interface comands process virtual function.
 	void cntrCmdProc( XMLNode *opt );
 
-	//!!! Inherited (virtual) function for create self value archive element
 	TVArchEl *getArchEl( TVArchive &arch );
 };
 
-} //End namespace ModTmpl
+} //End the namespace ArhTmpl
 
 #endif //VAL_H

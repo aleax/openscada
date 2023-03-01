@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tprmtmpl.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -261,9 +261,10 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/io",_("IO"))) {
-	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),RWRWR_,"root",SDAQ_ID,2,"s_com","add,del,ins,move","rows","5")) {
+	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),RWRWR_,"root",SDAQ_ID,2,"s_com","add,ins,move,del","rows","5")) {
 		ctrMkNode("list",opt,-1,"/io/io/0",_("Identifier"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str",
+		    "help",_("The name's rows after the first one treat as help."));
 		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d",
 			IO::Real,IO::Integer,IO::Boolean,IO::String,IO::String|(IO::TransltText<<8),IO::String|(IO::FullText<<8),IO::String|((IO::FullText|IO::TransltText)<<8),
@@ -465,7 +466,7 @@ bool TPrmTempl::Impl::lnkInit( int num, bool toRecnt )
     bool toCheckRes = true;
 
 retry:
-    if(it->second.addr.empty() || it->second.addr.compare(0,4,"val:") == 0)	toCheckRes = false;
+    if(it->second.addr.empty() || it->second.addr.find("val:") == 0)	toCheckRes = false;
     // Try to relink
     else if(it->second.con.freeStat()) {
 	string addr = it->second.addr, aAddr;
@@ -475,17 +476,20 @@ retry:
 	int objOff = 0;
 
 	try {
-	    con = SYS->daq().at().attrAt((aAddr=TSYS::strParse(addr,0,"#",&objOff)), '.', true);
+	    bool isPath = (addr.find("prm:") == 0);
+	    if(isPath) addr = addr.substr(4);
+	    con = SYS->daq().at().attrAt((aAddr=TSYS::strParse(addr,0,"#",&objOff)), isPath?0:'.', true, obj);
 	    if(!con.freeStat()) {
 		if(con.at().fld().type() == TFld::Object && objOff < (int)addr.size())
-		    setS(num, con.at().getO().at().propGet(addr.substr(objOff),'.'));
+		    setS(num, con.at().getO().at().propGet(addr.substr(objOff),isPath?0:'.'));
 		else setS(num, con.at().getS());
 		toCheckRes = false;
 	    }
-	    else if(!SYS->daq().at().prmAt(aAddr,'.',true).freeStat()) toCheckRes = false;	//just a parameter
+	    else if(!SYS->daq().at().prmAt(aAddr,isPath?0:'.',true,obj).freeStat()) toCheckRes = false;	//just a parameter
+	    if(isPath) addr = "prm:" + addr;
 	} catch(TError &err) { }
 
-	//Set the connection result
+	//Setting the connection result
 	res.lock();
 	// Relink after going behind the lock
 	if((it=lnks.find(num)) == lnks.end())	return false;
@@ -511,8 +515,8 @@ TVariant TPrmTempl::Impl::lnkInput( int num )
     map<int,SLnk>::iterator it = lnks.find(num);
 
     if(it == lnks.end())	return EVAL_REAL;
-    if(it->second.addr.compare(0,4,"val:") == 0)return it->second.addr.substr(4);
-    if(it->second.con.freeStat())		return EVAL_REAL;
+    if(it->second.addr.find("val:") == 0) return it->second.addr.substr(4);
+    if(it->second.con.freeStat())	  return EVAL_REAL;
     if(it->second.hops > RECURS_DET_HOPS) {
 	it->second.addr = ""; it->second.con.free();
 	it->second.hops = 0;
@@ -659,6 +663,20 @@ void TPrmTempl::Impl::outputLinks( )
 	if(ioMdf(ls[iL])) lnkOutput(ls[iL], get(ls[iL]));
 }
 
+void TPrmTempl::Impl::archAttrs( TValue *vl )
+{
+    if(!vl) return;
+
+    int idIO = -1, idLnk = -1;
+    AutoHD<TVal> pVal;
+    vector<string> ls;
+
+    vl->vlList(ls);
+    for(unsigned iEl = 0; iEl < ls.size(); iEl++)
+	if(!(pVal=vl->vlAt(ls[iEl])).at().isCfg() && !(pVal.at().fld().flg()&TVal::Dynamic) && (idIO=ioId(ls[iEl])) >= 0)
+	    pVal.at().set(((idLnk=lnkId(ls[iEl])) >= 0 && lnkActive(idLnk)) ? lnkInput(idLnk) : get(idIO), 0, true);
+}
+
 bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 {
     MtxAlloc res(lnkRes, true);
@@ -675,7 +693,8 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 		if(is_lnk && TSYS::strLine(func()->io(iIO)->def(),0).size() &&
 		    !s2i(TBDS::genPrmGet(obj->nodePath()+"onlAttr","0",opt->attr("user"))))
 		{
-		    string nprm = TSYS::strSepParse(TSYS::strLine(func()->io(iIO)->def(),0),0,'|');
+		    string nprm = TSYS::strLine(TSYS::strSepParse(TSYS::strLine(func()->io(iIO)->def(),0),0,'|'), 0);
+
 		    // Check already to present parameters
 		    bool f_ok = false;
 		    for(unsigned iL = 0; iL < list.size() && !f_ok; iL++)
@@ -687,6 +706,9 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 		    }
 		}
 		else {
+		    string nprm = func()->io(iIO)->name();
+		    int nOff = 0; string nprm1 = TSYS::strLine(nprm, 0, &nOff);
+
 		    const char *tip = "str";
 		    bool fullTxt = false;
 		    if(!is_lnk)
@@ -699,9 +721,10 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 				break;
 			    case IO::Object:	fullTxt = true;	break;
 			}
-		    XMLNode *wn = ctrMkNode("fld",opt,-1,(pref+"/prm/el_"+i2s(iIO)).c_str(),
-			    func()->io(iIO)->name(),RWRWR_,"root",SDAQ_ID,1,"tp",tip);
-		    if(wn && is_lnk) wn->setAttr("dest","sel_ed")->setAttr("select",pref+"/prm/ls_"+i2s(iIO))->setAttr("help",lnkHelp());
+		    XMLNode *wn = ctrMkNode("fld", opt, -1, (pref+"/prm/el_"+i2s(iIO)).c_str(), nprm1, RWRWR_, "root", SDAQ_ID, 1, "tp",tip);
+		    if(nOff < nprm.size()) wn->setAttr("help",nprm.substr(nOff));
+		    if(wn && is_lnk) wn->setAttr("dest","sel_ed")->setAttr("select",pref+"/prm/ls_"+i2s(iIO))->
+					 setAttr("help",(wn->attr("help").size()?wn->attr("help")+"\n\n":"")+lnkHelp());
 		    if(wn && fullTxt)wn/*->setAttr("cols","100")*/->setAttr("rows","4");
 		}
 	    }
@@ -719,28 +742,28 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
     else if(a_path.find("/prm/pr_") == 0) {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    string lnk_val = lnks[s2i(a_path.substr(8))].addr;
-	    if(!SYS->daq().at().attrAt(TSYS::strParse(lnk_val,0,"#"),'.',true).freeStat()) {
-		opt->setText(lnk_val.substr(0,lnk_val.rfind(".")));
+	    bool isPath = (lnk_val.find("prm:") == 0);
+	    if(!SYS->daq().at().attrAt(TSYS::strParse(isPath?lnk_val.substr(4):lnk_val,0,"#"),isPath?0:'.',true,obj).freeStat()) {
+		opt->setText(lnk_val.substr(0,lnk_val.rfind(isPath?"/":".")));
 		opt->setText(opt->text()+" (+)");
 	    }
 	    else opt->setText(lnk_val);
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    TParamContr *pC = dynamic_cast<TParamContr*>(obj);
-	    string no_set;
 	    string p_nm = TSYS::strSepParse(TSYS::strLine(func()->io(s2i(a_path.substr(8)))->def(),0),0,'|');
 	    string p_vl = TSYS::strParse(opt->text(), 0, " ");
-	    if(pC && p_vl == pC->DAQPath()) throw TError(obj->nodePath().c_str(),_("Error, recursive linking."));
-	    AutoHD<TValue> prm = SYS->daq().at().prmAt(p_vl, '.', true);
+	    bool isPath = (p_vl.find("prm:") == 0);
+	    if(pC && p_vl == (isPath?TSYS::path2sepstr(pC->DAQPath(),'.'):pC->DAQPath()))
+		throw TError(obj->nodePath().c_str(),_("Error, recursive linking."));
+	    AutoHD<TValue> prm = SYS->daq().at().prmAt(isPath?p_vl.substr(4):p_vl, isPath?0:'.', true, obj);
 
 	    for(map<int,SLnk>::iterator iL = lnks.begin(); iL != lnks.end(); ++iL)
 		if(p_nm == TSYS::strSepParse(TSYS::strLine(func()->io(iL->first)->def(),0),0,'|')) {
 		    lnkAddrSet(iL->first, p_vl);
 		    string p_attr = TSYS::strSepParse(TSYS::strLine(func()->io(iL->first)->def(),0),1,'|');
-		    if(!prm.freeStat()) {
-			if(prm.at().vlPresent(p_attr))	lnkAddrSet(iL->first, p_vl+"."+p_attr);
-			else no_set += p_attr+",";
-		    }
+		    if(!prm.freeStat() && prm.at().vlPresent(p_attr))
+			lnkAddrSet(iL->first, p_vl+(isPath?"/":".")+p_attr);
 		}
 	    initLnks();
 	    obj->modif();
@@ -749,15 +772,25 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
     else if((a_path.find("/prm/pl_") == 0 || a_path.find("/prm/ls_") == 0) && ctrChkNode(opt)) {
 	bool is_pl = (a_path.find("/prm/pl_") == 0);
 	string m_prm = lnks[s2i(a_path.substr(8))].addr;
-	if(is_pl && !SYS->daq().at().attrAt(m_prm,'.',true).freeStat()) m_prm = m_prm.substr(0,m_prm.rfind("."));
-	SYS->daq().at().ctrListPrmAttr(opt, m_prm, is_pl, '.');
+	bool isVal = (m_prm.find("val:") == 0);
+	bool isPath = (m_prm.find("prm:") == 0);
+	if(is_pl && !SYS->daq().at().attrAt(m_prm,isPath?0:'.',true,obj).freeStat())
+	    m_prm = m_prm.substr(0, m_prm.rfind(isPath?"/":"."));
+	if(m_prm.size() && !isVal)
+	    SYS->daq().at().ctrListPrmAttr(opt, m_prm, is_pl, isPath?0:'.', isPath?"prm:":"", obj);
+	else if(m_prm.empty()) {
+	    SYS->daq().at().ctrListPrmAttr(opt, m_prm, is_pl, '.');
+	    SYS->daq().at().ctrListPrmAttr(opt, m_prm, is_pl, 0, "prm:", obj);
+	    if(!is_pl) opt->childAdd("el")->setText(_("val:Constant value"));
+	}
     }
     else if(a_path.find("/prm/el_") == 0) {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    int iIO = s2i(a_path.substr(8));
 	    if(func()->io(iIO)->flg()&TPrmTempl::CfgLink) {
 		opt->setText(lnks[iIO].addr);
-		if(!SYS->daq().at().attrAt(TSYS::strParse(opt->text(),0,"#"),'.',true).freeStat())
+		bool isPath = (opt->text().find("prm:") == 0);
+		if(!SYS->daq().at().attrAt(TSYS::strParse(isPath?opt->text().substr(4):opt->text(),0,"#"),isPath?0:'.',true,obj).freeStat())
 		    opt->setText(opt->text()+" (+)");
 	    }
 	    else if(func()->io(iIO)->flg()&TPrmTempl::CfgConst)
@@ -785,13 +818,18 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 
 string TPrmTempl::Impl::lnkHelp( )
 {
-    return _("Address to the DAQ attribute writes in the form \"{Type}.{Cntr}.{Prm}[.{PrmN}].{Attr}\", where:\n"
-	"    Type,Cntr,Prm,Attr - DAQ: type, controller object, parameter and attribute.\n"
-	"  Link's template, of the column \"Value\" on the template forming side, writes in the form \"{Parameter}|{attribute}\", where:\n"
-	"    Parameter - specifies the parameter's name as the attribute's container;\n"
-	"    attribute - attributes with the equal value <Parameter> will be grouped and will be appointed only by the indication of the attributes' container,\n"
-	"                and the individual attributes will be associated with the attributes of the container in accordance with this field.\n"
-	"Constant link value writes in the form \"val:{Constant}\".\n");
+    return _("Address to the DAQ attribute is written in the forms:\n"
+	"  \"{Type}.{Cntr}.{Prm}[.{PrmN}].{Attr}\";\n"
+	"  \"prm:/{Type}/{Cntr}/{Prm}[/{PrmN}]/{Attr}\";\n"
+	"  \"val:Constant value\".\n"
+	"Where:\n"
+	"  {Type},{Cntr},{Prm},{Attr} - DAQ type, controller object, parameter and attribute;\n"
+	"  \"prm:\" - prefix of the ordinal form path where you can use the relativity by '.' and '..';\n"
+	"  \"val:\" - prefix of the constant value in links.\n\n"
+	"Link's template, of the column \"Value\" on the template forming side, writes in the form \"{Parameter}|{attribute}\", where:\n"
+	"  {Parameter} - specifies the parameter's name as the attribute's container;\n"
+	"  {attribute} - attributes with the equal value <Parameter> will be grouped and will be appointed only by the indication of the attributes' container, "
+	"and the individual attributes will be associated with the attributes of the container in accordance with this field.\n");
 }
 
 //*************************************************

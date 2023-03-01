@@ -78,7 +78,7 @@ ImgView::~ImgView( )	{ }
 
 bool ImgView::setImage( const string &imgdata )
 {
-    bool rez = mImg.loadFromData((const uchar*)imgdata.c_str(), imgdata.size());
+    bool rez = imgdata.size() && mImg.loadFromData((const uchar*)imgdata.c_str(), imgdata.size());
 
     if(rez) {
 	mImg = mImg.scaled(QSize(hSz?vmin(hSz,mImg.width()):mImg.width(),

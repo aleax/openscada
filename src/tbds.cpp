@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tbds.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -461,7 +461,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char f
 	    else {
 		if(nd->name() != "tbl" && !(isCfgCtx && !path.size())) nd->setName("tbl");
 
-		// Search present field
+		// Search the field presence
 		for(unsigned iFld = 0, iEl; iFld < nd->childSize(); iFld++) {
 		    XMLNode *el = nd->childGet(iFld);
 		    if(el->name() != "fld") continue;
@@ -530,7 +530,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char f
 			}
 
 			// To attribute
-			if(!isPrm && svalBASE.size() < NSTR_BUF_LEN) {
+			if(!isPrm && svalBASE.size() < CFG_A_LEN) {
 			    wel->setAttr(vnm, svalBASE);
 			    if((fnd=wel->childGet(vnm,0,true))) wel->childDel(fnd);
 			}
@@ -544,9 +544,9 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char f
 			}
 		    }
 		    // ... for translated
-		    if(isTransl && !cf.noTransl() && (!isPrm || vnm == "val") && (!Mess->translDyn() || isDynSet || isSysPreStor)) {
+		    if(!isCfgCtx && isTransl && !cf.noTransl() && (!isPrm || vnm == "val") && (!Mess->translDyn() || isDynSet || isSysPreStor)) {
 			vnm = cf_el[iEl]+"_"+toLang;
-			if(!isPrm && sval.size() < NSTR_BUF_LEN) {
+			if(!isPrm && sval.size() < CFG_A_LEN) {
 			    wel->setAttr(vnm, sval);
 			    if((fnd=wel->childGet(vnm,0,true))) wel->childDel(fnd);
 			}
@@ -1057,7 +1057,8 @@ void TBD::cntrCmdProc( XMLNode *opt )
     // SQL-request
     if(a_path == "/serv/SQL" && ctrChkNode(opt,"call",RWRWR_,"root",SDB_ID,SEC_WR)) {
 	vector< vector<string> > tbl;
-	sqlReq(opt->text(), s2i(opt->attr("withRez"))?&tbl:NULL, s2i(opt->attr("intoTrans")));
+	sqlReq(opt->text(), s2i(opt->attr("withRez"))?&tbl:NULL, opt->attr("intoTrans").size()?s2i(opt->attr("intoTrans")):EVAL_BOOL);
+	if(tbl.size()) opt->setText("");
 	for(unsigned iR = 0; iR < tbl.size(); iR++)
 	    for(unsigned iC = 0; iC < tbl[iR].size(); iC++) {
 		while(iR == 0 && iC >= opt->childSize()) opt->childAdd("list");
@@ -1674,13 +1675,13 @@ void TTable::fieldSQLSet( TConfig &cfg )
 	    sval = getSQLVal(u_cfg);
 
 	    // No translation
-	    if(!hasTr || u_cfg.fld().type() != TFld::String || (cf_el[iEl].size() > 3 && cf_el[iEl][2] == '#'))
+	    if(!hasTr || u_cfg.fld().type() != TFld::String || !(u_cfg.fld().flg()&TFld::TransltText) || (cf_el[iEl].size() > 3 && cf_el[iEl][2] == '#'))
 		ls += (ls.size()?", \"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval;
 	    else {
 		string svalRAW = u_cfg.getS(), toLang = Mess->langCode();
 
 		// Translation
-		bool isTransl = u_cfg.fld().flg()&TFld::TransltText, isDynSet = false;
+		bool isTransl = true /*u_cfg.fld().flg()&TFld::TransltText*/, isDynSet = false;
 		//  ... system prestored
 		bool isSysPreStor = (isTransl && TSYS::strParse(svalRAW,0,string(1,0)) != svalRAW && TSYS::strParse(svalRAW,2,string(1,0)).empty());
 		if(isSysPreStor) {

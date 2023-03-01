@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../en/files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="index.html"><img src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Бібліотеки/Елементи електрики</h1>
@@ -21,6 +21,7 @@
 <th> Джерело </th>
 <th> Мови </th>
 <th> Автор </th>
+<th> Іконка </th>
 <th> Опис
 </th></tr>
 
@@ -32,7 +33,8 @@
 <td> vcaElectroEls.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaElectroEls.db.gz" title="File:VcaElectroEls.db.gz">GZip</a>) &gt; VCA.wlb_ElectroEls </td>
 <td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a><br />&nbsp;&nbsp;<font size="-2"><i>Максим Лисенко (2009)</i></font>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a><br />&nbsp;&nbsp;<font size="-2"><i>Максим Лисенко (2009)</i></font> </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:LibElectricalElements.png"><img alt="LibElectricalElements.png" height="64" src="../en/files/LibElectricalElements.png" width="64" /></a>
 </td>
 <td> Надає бібліотеку мнемонічних елементів інтерфейсу користувача електричних підстанцій та станцій генерації електрики.
 <ul><li> <b>Засновано:</b> Червень 2009</li>
@@ -48,10 +50,9 @@
 </p>
 <ul><li> такий що постачається з готовим та відповідним пакетом дистрибутиву Linux на кшталт "openscada-libdb-vca", "openscada-LibDB.VCA";</li>
 <li> найбільш актуальний та безпосередньо отриманий з <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторію subversion</a>, перетворений у файл БД SQLite шляхом:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql
-$ sqlite3 -init vcaElectroEls.sql vcaElectroEls.db .exit
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre>wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql
+sqlite3 -init vcaElectroEls.sql vcaElectroEls.db .exit
+</pre></div>
 <ul><li> завантаження <a class="external" href="http://oscada.org/wiki/File:VcaElectroEls.db.gz" title="File:VcaElectroEls.db.gz">прикріпленого тут</a>.</li></ul>
 <p>Цей завантажений файл Ви надалі можете розмістити у теці проекту станції та створити об'єкт бази даних модуля БД "SQLite", зареєструвавши файл бази даних у конфігурації.
 </p>
@@ -594,7 +595,7 @@ $ sqlite3 -init vcaElectroEls.sql vcaElectroEls.db .exit
 <h2><span class="mw-headline" id=".D0.94.D0.BE.D0.B4.D0.B0.D1.82.D0.BE.D0.BA_1:_.D0.9F.D1.96.D0.B4.D0.BB.D0.B0.D1.88.D1.82.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D1.82.D0.B0_.D0.BF.D0.BE.D0.B3.D0.BE.D0.B4.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.96.D0.B2.2C_.D0.BF.D0.BE.D0.B1.D1.83.D0.B4.D0.BE.D0.B2.D0.B0_.D1.86.D1.96.D0.BB.D1.96.D1.81.D0.BD.D0.B8.D1.85_.D0.B5.D0.BB.D0.B5.D0.BA.D1.82.D1.80.D0.B8.D1.87.D0.BD.D0.B8.D1.85_.D1.81.D1.85.D0.B5.D0.BC"><span class="mw-headline-number">3</span> <span id="Add1" title="#Add1">Додаток 1: Підлаштування та погодження елементів, побудова цілісних електричних схем</span></span></h2>
 <p>Ця бібліотека містить та призначена для побудови цілісних електричних схем довільної конфігурації з окремих її елементів, які потрібно відповідним чином візуально приєднувати один до іншого таким чином, щоб не було помітно зсувів за спільною віссю та проміжків-розривів між з'єднанням візуальних елементів, особливо для з'єднувальних ліній та із можливістю мати однаково досконалий вигляд на широкому діапазоні масштабів, в ідеалі на всіх.
 </p><p>Потреба у роботі мнемосхем на широкому діапазоні масштабів актуальна через уніфіковану побудову мнемосхем у роздільній здатності 900x600 та можливість їх виконання на великих роздільних здатностях сучасних дисплеїв, коли коефіцієнт масштабування може наразі досягати 10.
-</p><p>Відтак, всі неідеальності ручного підлаштування там одразу спливуть та зіпсують картинку, оскільки це складно зробити без спеціальних засобів та на початковому екрані розробки їх неможливо побачити.
+</p><p>Відтак, всі недосконалості ручного підлаштування там одразу випливуть та зіпсують картинку, оскільки це складно виконати без спеціальних засобів та на початковому екрані розробки їх неможливо побачити.
 </p><p>Згідно до чого рекомендуються наступні правила підлаштування елементів, які дозволяють отримати бажаний результат:
 </p>
 <ol><li> <i><b>Вирівнювання елементів за віссю</b></i> треба здійснювати центруванням, або ліворуч та праворуч для елементів із декількома підключеннями на одній стороні, оскільки всіх їх уніфіковано у розмірі 100x100 та за умови їх системного розташування на мнемосхемі за однаковим масштабом, типово 0.2.</li>
@@ -611,5 +612,5 @@ $ sqlite3 -init vcaElectroEls.sql vcaElectroEls.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Electrical_elements/uk">Libs/Electrical_elements/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Electrical_elements/uk">Libs/Electrical_elements/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> </td></tr></table></body>
 </html>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 17:01+0300\n"
+"POT-Creation-Date: 2023-02-23 09:56+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -96,20 +96,19 @@ msgstr "Основні вікна"
 msgid "Module options"
 msgstr "Опції модуля"
 
-msgid "Station of the VCA engine"
-msgstr "Станція рушія СВУ"
+msgid "Exit when closing the last running project"
+msgstr "Вихід при закритті останнього проєкту що виконується"
 
-msgid "Go to the remote stations list configuration"
-msgstr "Перейти до конфігурації переліку віддалених станцій"
+msgid "Reset widget styles to common"
+msgstr "Скидати стилі віджетів до загального"
 
-msgid "Starting user"
-msgstr "Стартовий користувач"
-
-msgid "Password of the user"
-msgstr "Пароль користувача"
-
-msgid "Connection recovery time, seconds"
-msgstr "Час відновлення підключення, секунд"
+msgid ""
+"Required for some widget styles like \"gtk\" in some specific widgets in run "
+"mode, like buttons for the background color and images."
+msgstr ""
+"Потрібне для деяких стилів віджетів на кшталт \"gtk\" у роботі деяких "
+"специфічних віджетів у режимі виконання, на кшталт кнопок для кольору фону "
+"та зображень."
 
 msgid "Lifetime and maximum number of the cached pages"
 msgstr "Час життя та максимальна кількість сторінок у кеші"
@@ -130,6 +129,36 @@ msgstr ""
 "Кількість визначає обмеження сторінок у кеші.\n"
 "Нульове значення кількості виключає закриття сторінок у кеш."
 
+msgid "Go to the remote stations list configuration"
+msgstr "Перейти до конфігурації переліку віддалених станцій"
+
+msgid "Station of the VCA engine"
+msgstr "Станція рушія СВУ"
+
+#, c-format
+msgid ""
+"Use '%s' for querying the station together user and password at the module "
+"generic call.\n"
+"Useful at presence of many control stations and for opening several of them "
+"simultaneously."
+msgstr ""
+"Користуйтеся '%s' для запиту станції разом із користувачем та паролем при "
+"загальному виклику модуля.\n"
+"Корисно за наявності багато станцій керування та відкриття декількох з них "
+"одночасно."
+
+msgid "<Select>"
+msgstr "<Вибір>"
+
+msgid "Starting user"
+msgstr "Стартовий користувач"
+
+msgid "Password of the user"
+msgstr "Пароль користувача"
+
+msgid "Connection recovery time, seconds"
+msgstr "Час відновлення підключення, секунд"
+
 msgid "List of the projects for launch"
 msgstr "Перелік проєктів для пуску"
 
@@ -145,20 +174,6 @@ msgstr ""
 "Для підключення до фонового або іншого відкритого сеансу використати "
 "\"ses_{SesID}\"."
 
-msgid "Exit when closing the last running project"
-msgstr "Вихід при закритті останнього проєкту що виконується"
-
-msgid "Reset widget styles to common"
-msgstr "Скидати стилі віджетів до загального"
-
-msgid ""
-"Required for some widget styles like \"gtk\" in some specific widgets in run "
-"mode, like buttons for the background color and images."
-msgstr ""
-"Потрібне для деяких стилів віджетів на кшталт \"gtk\" у роботі деяких "
-"специфічних віджетів у режимі виконання, на кшталт кнопок для кольору фону "
-"та зображень."
-
 #, c-format
 msgid "%d: Development by \"%s\" for the station \"%s\"."
 msgstr "%d: Розробка від \"%s\" для станції \"%s\"."
@@ -168,14 +183,17 @@ msgid ""
 "%d: Running \"%s:%s\" from \"%s\" - %s, for the station \"%s\", updating "
 "period %s(%s), cached pages %d and resources %d."
 msgstr ""
-"%d: Виконання \"%s:%s\" від \"%s\" - %s, для станції \"%s\", період оновлення %s(%s), кешованих "
-"сторінок %d та ресурсів %d."
+"%d: Виконання \"%s:%s\" від \"%s\" - %s, для станції \"%s\", період "
+"оновлення %s(%s), кешованих сторінок %d та ресурсів %d."
 
 msgid "Connected"
 msgstr "Під'єднаний"
 
 msgid "Disconnected"
 msgstr "Від'єднаний"
+
+msgid "<Local>"
+msgstr "<Локально>"
 
 msgid "Ready"
 msgstr "Готовий"
@@ -1020,9 +1038,6 @@ msgstr "Бібліотека віджетів"
 msgid "State"
 msgstr "Стан"
 
-msgid "Item icon. Click to download another."
-msgstr "Іконка елементу. Натисніть для завантаження іншої."
-
 msgid "Status:"
 msgstr "Статус:"
 
@@ -1119,14 +1134,34 @@ msgstr "Повідомлення"
 msgid "Error getting the node '%1' information."
 msgstr "Помилка запиту інформації вузла '%1'."
 
-msgid "Downloading the image icon"
-msgstr "Завантажити зображення іконки"
+msgid "Save image"
+msgstr "Зберегти зображення"
+
+msgid "Load image"
+msgstr "Завантажити зображення"
+
+msgid "Clear image"
+msgstr "Очистити зображення"
+
+msgid "Saving the picture"
+msgstr "Збереження картинки"
+
+msgid "Images (*.png *.xpm *.jpg)"
+msgstr "Зображення (*.png *.xpm *.jpg)"
+
+#, c-format
+msgid "Error saving to the file '%s'."
+msgstr "Помилка збереження у файл '%s'."
+
+msgid "Loading the picture"
+msgstr "Завантаження картинки"
 
 msgid "Images (*.png *.jpg)"
 msgstr "Зображення (*.png *.jpg)"
 
-msgid "Error downloading the icon image '%1'."
-msgstr "Помилка завантаження зображення іконки '%1'."
+#, c-format
+msgid "Error loading the picture '%s'."
+msgstr "Помилка завантаження картинки '%s'."
 
 msgid "Saving the changes"
 msgstr "Збереження змін"
@@ -1141,8 +1176,8 @@ msgstr ""
 msgid "No rows selected."
 msgstr "Жодного рядку не обрано."
 
-msgid "Are you sure of loading a mime to selected item '%1'?"
-msgstr "Ви дійсно бажаєте завантажити MIME до обраного візуального елементу '%1'?"
+msgid "Are you sure of loading data to selected item '%1'?"
+msgstr "Ви дійсно бажаєте завантажити дані до обраного елементу '%1'?"
 
 msgid "Loading the data"
 msgstr "Завантаження модуля."
@@ -1179,6 +1214,9 @@ msgstr "Корінь:"
 
 msgid "Path:"
 msgstr "Шлях:"
+
+msgid "Periodic processing, milliseconds:"
+msgstr "Періодичне опрацювання, мілісекунд:"
 
 msgid "Attributes"
 msgstr "Атрибути"
@@ -1385,9 +1423,6 @@ msgstr "Натисніть для встановлення візуальног�
 msgid "Saving the widget image"
 msgstr "Збереження зображення віджету"
 
-msgid "Images (*.png *.xpm *.jpg)"
-msgstr "Зображення (*.png *.xpm *.jpg)"
-
 msgid "Error saving to the file '%1'."
 msgstr "Помилка збереження у файл '%1'."
 
@@ -1554,6 +1589,10 @@ msgstr "Порожньо"
 
 msgid "\"Frequency (Hz)\""
 msgstr "\"Частота (Гц)\""
+
+#, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr "Помилка закриття файлу %d - '%s (%d)'!"
 
 msgid "Error writing to: %1."
 msgstr "Помилка запису до: %1."
@@ -2202,6 +2241,9 @@ msgstr "Скасувати"
 
 msgid "Selecting an user"
 msgstr "Вибір користувача"
+
+msgid "Station:"
+msgstr "Станція:"
 
 msgid "User:"
 msgstr "Користувач:"

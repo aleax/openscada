@@ -105,7 +105,7 @@ class TProtocol: public TModule
 
     private:
 	//Methods
-	virtual TProtocolIn *in_open( const string &name )
+	virtual TProtocolIn *in_open( const string &id )
 	{ throw TError(nodePath().c_str(), _("Function '%s' is not supported!"), "in_open"); }
 
 	//Attributes

@@ -1,5 +1,4 @@
 
-//!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module UI.Tmpl file: module.h
 /***************************************************************************
  *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
@@ -19,97 +18,49 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-//!!! Multi-including this header file prevent. Change for your include file name
+// Preventing of the header file multi-including - change at the header file name changing
 #ifndef MODULE_H
 #define MODULE_H
 
-//!!! System's includings. Add need for your module includings.
+// System includings - add need ones
 #include <string>
 #include <vector>
 
-using std::string;
-using std::vector;
-using namespace OSCADA;
-
-//!!! OpenSCADA module's API includings. Add need for your module includings.
+// OpenSCADA API includings - add need ones
 #include <tuis.h>
 
-//!!! Definition of the individual module translation functions. Do not change these!
+// Definition of the individual module translation functions - do not change
 #undef _
 #define _(mess) mod->I18N(mess).c_str()
 #undef trS
 #define trS(mess) mod->I18N(mess,mess_PreSave)
 
-//!!! All module's object's include into self (individual) namespace. Change namespace for your module.
-namespace ModTmpl
+using std::string;
+using std::vector;
+using namespace OSCADA;
+
+// All the module objects in own (individual) namespace - change for your module
+namespace UITmpl
 {
 
-//!!! Root module's object define. Add methods and attributes for your need.
+// Definition the root module object of the subsystem "UI" - add methods and attributes at your need
 //************************************************
-//* TWEB                                         *
+//* UIMod                                        *
 //************************************************
-class TWEB: public TUI
+class UIMod: public TUI
 {
     public:
 	//Methods
-	//!!! Constructor for module's root object.
-	TWEB( string name );
-	//!!! Destructor for module's root object.
-	~TWEB( );
-
-	//!!! Individual module's get methods
-	int nCol( )			{ return n_col; }
-	int hSize( )			{ return h_sz; }
-	int vSize( )			{ return v_sz; }
-	int trndLen( )			{ return trnd_len; }
-	int trndTm( )			{ return trnd_tm; }
-
-	//!!! Individual module's set methods
-	void setNCol( int vl )		{ n_col = vl; modif(); }
-	void setHSize( int vl )		{ h_sz = vl; modif(); }
-	void setVSize( int vl )		{ v_sz = vl; modif(); }
-	void setTrndLen( int vl )	{ trnd_len = vl; modif(); }
-	void setTrndTm( int vl )	{ trnd_tm = vl; modif(); }
-
-    protected:
-	//Methods
-	//!!! Inherited (virtual) load and save object's node methods. Call from OpenSCADA kernel.
-	void load_( );
-	void save_( );
+	UIMod( string name );
+	~UIMod( );
 
     private:
 	//Methods
-	//!!! Registered your module's export functions.
-	void HTTP_GET( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
-	void HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
-
-	//!!! Module's comandline options for print help function.
-	string optDescr( );
-	//!!! Append module's info attributes create and get functions.
-	string modInfo( const string &name );
-	void   modInfo( vector<string> &list );
-
-	//!!! OpenSCADA control interface comands process virtual function.
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-
-	//!!! Your module self functions.
-	string http_head( const string &rcode, int cln, const string &cnt_tp = "text/html", const string &addattr = "" );
-	string w_head( );
-	string w_tail( );
-
-	//!!! Your module self attributes.
-	//Attributes
-	int	n_col,		//Columns number
-		h_sz,		//Horizontal trend size
-		v_sz,		//Vertical trend size
-		trnd_len,	//Trand length (sek)
-		trnd_tm;	//Trand back time offset (sec)
-
-	vector<string>	trnd_lst;
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 };
 
-//!!! Define shortcut for module's root object for fast call from other module's objects.
-extern TWEB *mod;
-}
+extern UIMod *mod;	//The module root link
+
+} //End the namespace UITmpl
 
 #endif //MODULE_H

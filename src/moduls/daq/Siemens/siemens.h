@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.Siemens file: siemens.h
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -122,7 +122,7 @@ class TMdPrm: public TParamContr
 	void vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl );
 	void vlArchMake( TVal &val );
 
-	void loadIO( bool force = false );
+	void loadIO( );
 	void saveIO( );
 
 	//Attributes

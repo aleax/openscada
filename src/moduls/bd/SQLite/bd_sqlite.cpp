@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"4.0.7"
+#define MOD_VER		"4.0.8"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -53,7 +53,7 @@ extern "C"
     TModule::SAt module( int n_mod )
 #endif
     {
-	if(n_mod == 0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID, MOD_TYPE, VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -277,7 +277,7 @@ void MBD::getStructDB( const string &nm, vector<TTable::TStrIt> &tblStrct )
 
 void MBD::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //Getting the page info
     if(opt->name() == "info") {
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID,3,
@@ -291,7 +291,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("comm",opt,-1,"/prm/st/end_tr",_("Close opened transaction"),RWRW__,"root",SDB_ID);
 	return;
     }
-    //Process command to page
+    //Processing for commands to the page
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/dbFsList" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setText(":memory:");

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 17:01+0300\n"
+"POT-Creation-Date: 2023-02-23 09:56+0200\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -99,20 +99,18 @@ msgstr "Hauptfenster"
 msgid "Module options"
 msgstr "Optionen des Moduls"
 
-msgid "Station of the VCA engine"
-msgstr "Station der VCA-Engine"
+msgid "Exit when closing the last running project"
+msgstr "Beenden, wenn das zuletzt ausgeführte Projekt geschlossen wird"
 
-msgid "Go to the remote stations list configuration"
-msgstr "Wechseln Sie zur Liste der Remote-Stationslisten"
+msgid "Reset widget styles to common"
+msgstr "Reset-Widget Stile gemeinsam"
 
-msgid "Starting user"
-msgstr "Benutzer starten"
-
-msgid "Password of the user"
-msgstr "Passwort des Benutzers"
-
-msgid "Connection recovery time, seconds"
-msgstr "Verbindungswiederherstellungszeit, Sekunden"
+msgid ""
+"Required for some widget styles like \"gtk\" in some specific widgets in run "
+"mode, like buttons for the background color and images."
+msgstr ""
+"Erforderlich für einige Widget-Stile wie \"gtk\" in bestimmten Widgets im "
+"Ausführungsmodus, z. B. Schaltflächen für die Hintergrundfarbe und Bilder."
 
 msgid "Lifetime and maximum number of the cached pages"
 msgstr "Lebensdauer und maximale Anzahl der zwischengespeicherten Seiten"
@@ -133,6 +131,36 @@ msgstr ""
 "Die Anzahl definiert eine Begrenzung der Seiten im Cache.\n"
 "Ein Nullwert der Zahl schließt das Cache-Limit aus."
 
+msgid "Go to the remote stations list configuration"
+msgstr "Wechseln Sie zur Liste der Remote-Stationslisten"
+
+msgid "Station of the VCA engine"
+msgstr "Station der VCA-Engine"
+
+#, c-format
+msgid ""
+"Use '%s' for querying the station together user and password at the module "
+"generic call.\n"
+"Useful at presence of many control stations and for opening several of them "
+"simultaneously."
+msgstr ""
+"Verwenden Sie '%s' zum Abfragen der Station zusammen mit Benutzer und "
+"Passwort beim generischen Aufruf des Moduls.\n"
+"Nützlich bei Vorhandensein vieler Kontrollstationen und zum gleichzeitigen "
+"Öffnen mehrerer davon."
+
+msgid "<Select>"
+msgstr "<Auswählen>"
+
+msgid "Starting user"
+msgstr "Benutzer starten"
+
+msgid "Password of the user"
+msgstr "Passwort des Benutzers"
+
+msgid "Connection recovery time, seconds"
+msgstr "Verbindungswiederherstellungszeit, Sekunden"
+
 msgid "List of the projects for launch"
 msgstr "Liste der Projekte zum Start"
 
@@ -148,19 +176,6 @@ msgstr ""
 "Um sich mit dem Hintergrund oder einer anderen offenen Sitzung zu verbinden, "
 "benutzen Sie \"ses_{SesID}\"."
 
-msgid "Exit when closing the last running project"
-msgstr "Beenden, wenn das zuletzt ausgeführte Projekt geschlossen wird"
-
-msgid "Reset widget styles to common"
-msgstr "Reset-Widget Stile gemeinsam"
-
-msgid ""
-"Required for some widget styles like \"gtk\" in some specific widgets in run "
-"mode, like buttons for the background color and images."
-msgstr ""
-"Erforderlich für einige Widget-Stile wie \"gtk\" in bestimmten Widgets im "
-"Ausführungsmodus, z. B. Schaltflächen für die Hintergrundfarbe und Bilder."
-
 #, c-format
 msgid "%d: Development by \"%s\" for the station \"%s\"."
 msgstr "%d: Entwicklung durch \"%s\" für die Station \"%s\"."
@@ -170,14 +185,18 @@ msgid ""
 "%d: Running \"%s:%s\" from \"%s\" - %s, for the station \"%s\", updating "
 "period %s(%s), cached pages %d and resources %d."
 msgstr ""
-"%d: Laufen \"%s:%s\" von \"%s\" - %s, für die Station \"%s\", Aktualisierungszeitraum %s(%s), "
-"zwischengespeicherte Seiten %d und Ressourcen %d."
+"%d: Laufen \"%s:%s\" von \"%s\" - %s, für die Station \"%s\", "
+"Aktualisierungszeitraum %s(%s), zwischengespeicherte Seiten %d und "
+"Ressourcen %d."
 
 msgid "Connected"
 msgstr "Verbunden"
 
 msgid "Disconnected"
 msgstr "Getrennt"
+
+msgid "<Local>"
+msgstr "<Lokal>"
 
 msgid "Ready"
 msgstr "Fertig"
@@ -1035,9 +1054,6 @@ msgstr "Widgetsbibliothek"
 msgid "State"
 msgstr "Zustand"
 
-msgid "Item icon. Click to download another."
-msgstr "Artikel-Symbol. Klicken Sie, um eine andere herunterzuladen."
-
 msgid "Status:"
 msgstr "Status:"
 
@@ -1134,14 +1150,34 @@ msgstr "Nachricht"
 msgid "Error getting the node '%1' information."
 msgstr "Fehler beim Abrufen des Knoten '%1' Informationen."
 
-msgid "Downloading the image icon"
-msgstr "Herunterladen des Iconbildes"
+msgid "Save image"
+msgstr "Speichern Bild"
+
+msgid "Load image"
+msgstr "Laden Bild"
+
+msgid "Clear image"
+msgstr "Klares Bild"
+
+msgid "Saving the picture"
+msgstr "Speichern des Bildes"
+
+msgid "Images (*.png *.xpm *.jpg)"
+msgstr "Bilder (*.png *.xpm *.jpg)"
+
+#, c-format
+msgid "Error saving to the file '%s'."
+msgstr "Fehler beim Speichern in die Datei '%s'."
+
+msgid "Loading the picture"
+msgstr "Laden des Bildes"
 
 msgid "Images (*.png *.jpg)"
 msgstr "Bilder (*.png *.jpg)"
 
-msgid "Error downloading the icon image '%1'."
-msgstr "Fehler beim Laden des Iconbildes '%1'."
+#, c-format
+msgid "Error loading the picture '%s'."
+msgstr "Fehler beim Laden des Bildes '%s'."
 
 msgid "Saving the changes"
 msgstr "Speichern der Änderungen"
@@ -1156,8 +1192,8 @@ msgstr ""
 msgid "No rows selected."
 msgstr "Keine Zeilen ausgewählt."
 
-msgid "Are you sure of loading a mime to selected item '%1'?"
-msgstr "Sind Sie sicher, der das Laden einer MIME, um ausgewählte Element '%1'?"
+msgid "Are you sure of loading data to selected item '%1'?"
+msgstr "Sind Sie sicher, dass Sie Daten in das ausgewählte Element '%1' laden?"
 
 msgid "Loading the data"
 msgstr "Laden der Daten."
@@ -1194,6 +1230,9 @@ msgstr "Root:"
 
 msgid "Path:"
 msgstr "Pfad:"
+
+msgid "Periodic processing, milliseconds:"
+msgstr "Periodische Verarbeitung, Millisekunden:"
 
 msgid "Attributes"
 msgstr "Attribute"
@@ -1404,9 +1443,6 @@ msgstr "Betätigen um die visuelle Skalierung des Widgets auf 100% zurückzusetz
 msgid "Saving the widget image"
 msgstr "Speichern des Widgetbildes"
 
-msgid "Images (*.png *.xpm *.jpg)"
-msgstr "Bilder (*.png *.xpm *.jpg)"
-
 msgid "Error saving to the file '%1'."
 msgstr "Fehler beim Speichern in der Datei '%1'."
 
@@ -1573,6 +1609,10 @@ msgstr "Leeren"
 
 msgid "\"Frequency (Hz)\""
 msgstr "\"Frequenz (Hz)\""
+
+#, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr "Schließen der Datei %d Fehler '%s (%d)'!"
 
 msgid "Error writing to: %1."
 msgstr "Fehler beim Schreiben in: %1."
@@ -2232,6 +2272,9 @@ msgstr "Abbrechen"
 
 msgid "Selecting an user"
 msgstr "Einen Benutzer auswählen"
+
+msgid "Station:"
+msgstr "Bahnhof:"
 
 msgid "User:"
 msgstr "Benutzer:"

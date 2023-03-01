@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-31 16:53+0300\n"
+"POT-Creation-Date: 2022-07-15 20:55+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -79,6 +79,10 @@ msgstr ""
 "Als das dritte globale Argument kann priorityatile in das Adressfeld "
 "angegeben werden, zB \"localhost:123||5:1||3\"."
 
+#, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr "Schließen der Datei %d Fehler '%s (%d)'!"
+
 msgid "Error connecting: "
 msgstr "Verbindungsfehler: "
 
@@ -114,6 +118,7 @@ msgstr "Fehler beim Öffnen der temporären Datei '%s': '%s'"
 msgid "Error writing the file '%s'."
 msgstr "Fehler beim Schreiben der Datei '%s'."
 
+#, c-format
 msgid "The input transport closed by the error: %s"
 msgstr "Der Eingabetransport wurde geschlossen durch den Fehler: %s"
 
@@ -309,6 +314,10 @@ msgid "SSL_CTX_use_PrivateKey_file: %s"
 msgstr "SSL_CTX_use_PrivateKey_file: %s"
 
 #, c-format
+msgid "Closing the socket %d error '%s (%d)'!"
+msgstr "Schließen des Sockets %d Fehler '%s (%d)'!"
+
+#, c-format
 msgid "Error connecting: %s"
 msgstr "Verbindungsfehler: %s"
 
@@ -359,3 +368,4 @@ msgstr "Zeitabstände"
 
 msgid "Attempts"
 msgstr "Versuche"
+

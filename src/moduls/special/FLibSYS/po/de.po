@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-31 19:40+0200\n"
+"POT-Creation-Date: 2022-07-15 20:51+0300\n"
 "PO-Revision-Date: 2011-07-19 20:52+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -23,6 +23,10 @@ msgstr "Eigenschaften werden vom Objekt nicht unterstützt."
 #, c-format
 msgid "Error the function '%s' or missing its parameters."
 msgstr "Error die Funktion '%s' oder fehlende Parameter."
+
+#, c-format
+msgid "Closing the file %p error '%s (%d)'!"
+msgstr "Schließen der Datei %p Fehler '%s (%d)'!"
 
 msgid "System functions"
 msgstr "Systemfunktionen"

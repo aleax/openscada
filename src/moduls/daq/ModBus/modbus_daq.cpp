@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ModBus file: modbus_daq.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -324,21 +324,22 @@ TVariant TMdContr::getVal( const string &addr, MtxString &w_err )
     if(tp.empty() || !(mode.find("r") != string::npos || mode.find("w") == string::npos)) return (int64_t)EVAL_INT;
     if(tp[0] == 'C') return getValC(aid, w_err, isInputs);
     if(tp[0] == 'R') {
-	int64_t vl = getValR(aid,w_err,isInputs);
+	bool regLE = (mode.find("e") != string::npos);	//BE by default
+	int64_t vl = getValR(aid, w_err, isInputs, regLE);
 	atp_sub.resize(vmax(2,atp_sub.size()), 0);
 	switch(atp_sub[0]) {
 	    case 'b':	return char((vl==EVAL_INT)?EVAL_BOOL:((vl>>atoi(atp_sub.c_str()+1))&1));
 	    case 'f': {	//Float (4)
-		int64_t vl2 = getValR(strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0), w_err, isInputs);
+		int64_t vl2 = getValR(strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0), w_err, isInputs, regLE);
 		if(vl == EVAL_INT || vl2 == EVAL_INT) return EVAL_REAL;
 		union { uint16_t r[2]; float f; } wl;
 		wl.r[0] = vl; wl.r[1] = vl2;
 		return wl.f;
 	    }
 	    case 'd': {	//Double (8)
-		int64_t vl2 = getValR(strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0), w_err, isInputs);
-		int64_t vl3 = getValR(strtol(TSYS::strParse(aids,2,",").c_str(),NULL,0), w_err, isInputs);
-		int64_t vl4 = getValR(strtol(TSYS::strParse(aids,3,",").c_str(),NULL,0), w_err, isInputs);
+		int64_t vl2 = getValR(strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0), w_err, isInputs, regLE);
+		int64_t vl3 = getValR(strtol(TSYS::strParse(aids,2,",").c_str(),NULL,0), w_err, isInputs, regLE);
+		int64_t vl4 = getValR(strtol(TSYS::strParse(aids,3,",").c_str(),NULL,0), w_err, isInputs, regLE);
 		if(vl == EVAL_INT || vl2 == EVAL_INT || vl3 == EVAL_INT || vl4 == EVAL_INT) return EVAL_REAL;
 		union { uint16_t r[4]; double d; } wl;
 		wl.r[0] = vl; wl.r[1] = vl2; wl.r[2] = vl3; wl.r[3] = vl4;
@@ -348,16 +349,16 @@ TVariant TMdContr::getVal( const string &addr, MtxString &w_err )
 		switch(atp_sub[1]) {
 		    case '2':	return int64_t((vl==EVAL_INT)?EVAL_INT:(int16_t)vl);
 		    case '4': {
-			int64_t vl2 = getValR(strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0), w_err, isInputs);
+			int64_t vl2 = getValR(strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0), w_err, isInputs, regLE);
 			if(vl == EVAL_INT || vl2 == EVAL_INT) return (int64_t)EVAL_INT;
 			union { uint16_t r[2]; int32_t i; } wl;
 			wl.r[0] = vl; wl.r[1] = vl2;
 			return wl.i;
 		    }
 		    case '8': {
-			int64_t vl2 = getValR(strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0), w_err, isInputs);
-			int64_t vl3 = getValR(strtol(TSYS::strParse(aids,2,",").c_str(),NULL,0), w_err, isInputs);
-			int64_t vl4 = getValR(strtol(TSYS::strParse(aids,3,",").c_str(),NULL,0), w_err, isInputs);
+			int64_t vl2 = getValR(strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0), w_err, isInputs, regLE);
+			int64_t vl3 = getValR(strtol(TSYS::strParse(aids,2,",").c_str(),NULL,0), w_err, isInputs, regLE);
+			int64_t vl4 = getValR(strtol(TSYS::strParse(aids,3,",").c_str(),NULL,0), w_err, isInputs, regLE);
 			if(vl == EVAL_INT || vl2 == EVAL_INT || vl3 == EVAL_INT || vl4 == EVAL_INT) return (int64_t)EVAL_INT;
 			union { uint16_t r[4]; int64_t i; } wl;
 			wl.r[0] = vl; wl.r[1] = vl2; wl.r[2] = vl3; wl.r[3] = vl4;
@@ -369,7 +370,7 @@ TVariant TMdContr::getVal( const string &addr, MtxString &w_err )
 		switch(atp_sub[1]) {
 		    case '2':	return int64_t((vl==EVAL_INT)?EVAL_INT:vl);
 		    case '4': {
-			int64_t vl2 = getValR(strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0), w_err, isInputs);
+			int64_t vl2 = getValR(strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0), w_err, isInputs, regLE);
 			if(vl == EVAL_INT || vl2 == EVAL_INT) return (int64_t)EVAL_INT;
 			union { uint16_t r[2]; uint32_t i; } wl;
 			wl.r[0] = vl; wl.r[1] = vl2;
@@ -378,14 +379,15 @@ TVariant TMdContr::getVal( const string &addr, MtxString &w_err )
 		}
 		break;
 	    case 's': {
+		regLE = (mode.find("e") == string::npos);	//LE by default
 		int rSz = strtol(TSYS::strParse(aids,1,",").c_str(), NULL, 0);
 		string rez;
 		for(int iR = aid; iR < (aid+rSz); iR++) {
-		    vl = getValR(iR, w_err, isInputs);
+		    vl = getValR(iR, w_err, isInputs, regLE);
 		    if(vl == EVAL_INT) return EVAL_STR;
-		    vl = TSYS::i16_BE(vl);
 		    rez.append((char*)&vl, 2);
 		}
+		if(atp_sub.size() > 1) rez = Mess->codeConvIn(atp_sub.substr(1), rez);
 		return rez;
 	    }
 	    default: return vl;
@@ -394,7 +396,7 @@ TVariant TMdContr::getVal( const string &addr, MtxString &w_err )
     return (int64_t)EVAL_INT;
 }
 
-int64_t TMdContr::getValR( int addr, MtxString &err, bool in )
+int64_t TMdContr::getValR( int addr, MtxString &err, bool in, bool isLE )
 {
     int64_t rez = EVAL_INT;
     ResAlloc res(reqRes, false);
@@ -402,10 +404,10 @@ int64_t TMdContr::getValR( int addr, MtxString &err, bool in )
     for(unsigned iB = 0; iB < workCnt.size(); iB++)
 	if((addr*2) >= workCnt[iB].off && (addr*2+2) <= (workCnt[iB].off+(int)workCnt[iB].val.size())) {
 	    string terr = workCnt[iB].err.getVal();
-	    if(terr.empty())
-		rez = (unsigned short)(workCnt[iB].val[addr*2-workCnt[iB].off]<<8) |
-		      (unsigned char)workCnt[iB].val[addr*2-workCnt[iB].off+1];
-	    else if(err.getVal().empty()) err.setVal(terr);
+	    if(terr.empty()) {
+		rez = TSYS::getUnalign16(workCnt[iB].val.data()+(addr*2-workCnt[iB].off));
+		rez = isLE ? TSYS::i16_LE(rez) : TSYS::i16_BE(rez);
+	    } else if(err.getVal().empty()) err.setVal(terr);
 	    break;
 	}
     return rez;
@@ -433,6 +435,7 @@ bool TMdContr::setVal( const TVariant &val, const string &addr, MtxString &w_err
     string atp_sub = TSYS::strParse(tp, 1, "_");
     string aids = TSYS::strParse(addr, 0, ":", &off);
     int aid = strtol(aids.c_str(), NULL, 0);
+    string mode = TSYS::strParse(addr, 0, ":", &off);
 
     //Registering for the later common writing in the asynchronous mode and pass updating the just writed values
     if(chkAssync) {
@@ -451,86 +454,91 @@ bool TMdContr::setVal( const TVariant &val, const string &addr, MtxString &w_err
     bool wrRez = false;
     if(tp[0] == 'C')	wrRez = setValC(val.getB(), aid, w_err);
     if(tp[0] == 'R') {
+	bool regLE = (mode.find("e") != string::npos);	//BE by default
 	atp_sub.resize(vmax(2,atp_sub.size()), 0);
 	switch(atp_sub[0]) {
 	    case 'b': {
-		int64_t vl = getValR(aid, w_err);
-		if(vl != EVAL_INT) wrRez = setValR(val.getB() ? (vl|(1<<atoi(atp_sub.c_str()+1))) : (vl & ~(1<<atoi(atp_sub.c_str()+1))), aid, w_err);
+		int64_t vl = getValR(aid, w_err, false, regLE);
+		if(vl != EVAL_INT) wrRez = setValR(val.getB() ? (vl|(1<<atoi(atp_sub.c_str()+1))) : (vl & ~(1<<atoi(atp_sub.c_str()+1))), aid, w_err, regLE);
 		else if(tmDelay == 0) wrRez = true;	//By no previous data present but need for connect try
 		break;
 	    }
 	    case 'f': {
 		union { uint16_t r[2]; float f; } wl;
 		wl.f = val.getR();
-		map<int,int> regs;
+		map<int, uint16_t> regs;
 		regs[aid] = wl.r[0];
 		regs[strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0)] = wl.r[1];
-		wrRez = setValRs(regs, w_err);
+		wrRez = setValRs(regs, w_err, regLE);
 		break;
 	    }
 	    case 'd': {
 		union { uint16_t r[4]; double d; } wl;
 		wl.d = val.getR();
-		map<int, int> regs;
+		map<int, uint16_t> regs;
 		regs[aid] = wl.r[0];
 		regs[strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0)] = wl.r[1];
 		regs[strtol(TSYS::strParse(aids,2,",").c_str(),NULL,0)] = wl.r[2];
 		regs[strtol(TSYS::strParse(aids,3,",").c_str(),NULL,0)] = wl.r[3];
-		wrRez = setValRs(regs, w_err);
+		wrRez = setValRs(regs, w_err, regLE);
 		break;
 	    }
 	    case 'i':
 	    case 'u':
 		switch(atp_sub[1]) {
-		    case '2':	wrRez = setValR(val.getI(), aid, w_err);	break;
+		    case '2':	wrRez = setValR(val.getI(), aid, w_err, regLE);	break;
 		    case '4': {
 			union { uint16_t r[2]; uint32_t i; } wl;
 			wl.i = val.getI();
-			map<int,int> regs;
+			map<int, uint16_t> regs;
 			regs[aid] = wl.r[0];
 			regs[strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0)] = wl.r[1];
-			wrRez = setValRs(regs, w_err);
+			wrRez = setValRs(regs, w_err, regLE);
 			break;
 		    }
 		    case '8': {
 			union { uint16_t r[4]; uint64_t i; } wl;
 			wl.i = val.getI();
-			map<int,int> regs;
+			map<int, uint16_t> regs;
 			regs[aid] = wl.r[0];
 			regs[strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0)] = wl.r[1];
 			regs[strtol(TSYS::strSepParse(aids,2,',').c_str(),NULL,0)] = wl.r[2];
 			regs[strtol(TSYS::strSepParse(aids,3,',').c_str(),NULL,0)] = wl.r[3];
-			wrRez = setValRs(regs, w_err);
+			wrRez = setValRs(regs, w_err, regLE);
 			break;
 		    }
 		}
 		break;
 	    case 's': {
+		regLE = (mode.find("e") == string::npos);	//LE by default
 		string vl = val.getS();
+		if(atp_sub.size() > 1) vl = Mess->codeConvOut(atp_sub.substr(1), vl);
 		vl.resize(strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0)*2);
-		map<int,int> regs;
+		map<int, uint16_t> regs;
 		for(int iR = aid; iR < (aid+(int)vl.size()/2); iR++)
-		    regs[iR] = TSYS::i16_BE(TSYS::getUnalign16(vl.data()+(iR-aid)*2));
-		wrRez = setValRs(regs, w_err);
+		    regs[iR] = TSYS::getUnalign16(vl.data()+(iR-aid)*2);
+		wrRez = setValRs(regs, w_err, regLE);
 		break;
 	    }
-	    default: wrRez = setValR(val.getI(), aid, w_err);
+	    default: wrRez = setValR(val.getI(), aid, w_err, regLE);
 	}
     }
 
     return wrRez;
 }
 
-bool TMdContr::setValR( int val, int addr, MtxString &err )
+bool TMdContr::setValR( uint16_t val, int addr, MtxString &err, bool isLE )
 {
+    val = isLE ? TSYS::i16_LE(val) : TSYS::i16_BE(val);
+
     //Encode request PDU (Protocol Data Units)
     string pdu, terr;
     if(!mMltWr) {
 	pdu = (char)0x6;		//Function, preset single register
 	pdu += (char)(addr>>8);		//Address MSB
 	pdu += (char)addr;		//Address LSB
-	pdu += (char)(val>>8);		//Data MSB
-	pdu += (char)val;		//Data LSB
+	pdu += (char)val;		//Data MSB
+	pdu += (char)(val>>8);		//Data LSB
     }
     else {
 	pdu = (char)0x10;		//Function, preset multiple registers
@@ -539,8 +547,8 @@ bool TMdContr::setValR( int val, int addr, MtxString &err )
 	pdu += (char)0x00;		//Quantity MSB
 	pdu += (char)0x01;		//Quantity LSB
 	pdu += (char)0x02;		//Byte Count
-	pdu += (char)(val>>8);		//Data MSB
-	pdu += (char)val;		//Data LSB
+	pdu += (char)val;		//Data MSB
+	pdu += (char)(val>>8);		//Data LSB
     }
 
     //Request to a remote server
@@ -550,34 +558,34 @@ bool TMdContr::setValR( int val, int addr, MtxString &err )
 	return false;
     }
 
-    //Set to an acquisition block
+    //Set to the acquisition block
     ResAlloc res(reqRes, false);
     for(unsigned iB = 0; iB < acqBlks.size(); iB++)
 	if((addr*2) >= acqBlks[iB].off && (addr*2+2) <= (acqBlks[iB].off+(int)acqBlks[iB].val.size())) {
-	    acqBlks[iB].val[addr*2-acqBlks[iB].off]   = (char)(val>>8);
-	    acqBlks[iB].val[addr*2-acqBlks[iB].off+1] = (char)val;
+	    acqBlks[iB].val[addr*2-acqBlks[iB].off]   = (char)val;	//Data MSB
+	    acqBlks[iB].val[addr*2-acqBlks[iB].off+1] = (char)(val>>8);	//Data LSB
 	    break;
 	}
 
     return true;
 }
 
-bool TMdContr::setValRs( const map<int,int> &regs, MtxString &err )
+bool TMdContr::setValRs( const map<int,uint16_t> &regs, MtxString &err, bool isLE )
 {
     int start = 0, prev = 0;
+    uint16_t vreg = 0;
     string pdu, terr;
 
     //Writing by single register
     if(!mMltWr) {
-	for(map<int,int>::const_iterator iR = regs.begin(); iR != regs.end(); iR++)
-	    if(!setValR(iR->second, iR->first, err)) return false;
+	for(map<int,uint16_t>::const_iterator iR = regs.begin(); iR != regs.end(); iR++)
+	    if(!setValR(iR->second,iR->first,err,isLE)) return false;
 	return true;
     }
 
     //Writing by multiply registers
-    for(map<int,int>::const_iterator iR = regs.begin(); true; iR++) {
-	if(iR == regs.end() || (pdu.length() && (((iR->first-prev) > 1) || (prev-start) > 122)))
-	{
+    for(map<int,uint16_t>::const_iterator iR = regs.begin(); true; iR++) {
+	if(iR == regs.end() || (pdu.length() && (((iR->first-prev) > 1) || (prev-start) > 122))) {
 	    if(pdu.empty()) break;
 	    // Finish and send request
 	    pdu[3] = (char)0x00;		//Quantity MSB
@@ -594,6 +602,8 @@ bool TMdContr::setValRs( const map<int,int> &regs, MtxString &err )
 	    if(iR == regs.end()) break;
 	}
 
+	vreg = isLE ? TSYS::i16_LE(iR->second) : TSYS::i16_BE(iR->second);
+
 	//Start request prepare
 	if(pdu.empty()) {
 	    pdu = (char)0x10;			//Function, preset multiple registers
@@ -604,17 +614,16 @@ bool TMdContr::setValRs( const map<int,int> &regs, MtxString &err )
 	    pdu += (char)0x02;			//Byte Count
 	    start = iR->first;
 	}
-	pdu += (char)(iR->second>>8);		//Data MSB
-	pdu += (char)iR->second;		//Data LSB
+	pdu += (char)vreg;			//Data MSB
+	pdu += (char)(vreg>>8);			//Data LSB
 	prev = iR->first;
 
-	//Set to acquisition block
+	//Set to the acquisition block
 	ResAlloc res(reqRes, false);
 	for(unsigned iB = 0; iB < acqBlks.size(); iB++)
-	    if((iR->first*2) >= acqBlks[iB].off && (iR->first*2+2) <= (acqBlks[iB].off+(int)acqBlks[iB].val.size()))
-	    {
-		acqBlks[iB].val[iR->first*2-acqBlks[iB].off]   = (char)(iR->second>>8);
-		acqBlks[iB].val[iR->first*2-acqBlks[iB].off+1] = (char)iR->second;
+	    if((iR->first*2) >= acqBlks[iB].off && (iR->first*2+2) <= (acqBlks[iB].off+(int)acqBlks[iB].val.size())) {
+		acqBlks[iB].val[iR->first*2-acqBlks[iB].off]   = (char)vreg;		//Data MSB
+		acqBlks[iB].val[iR->first*2-acqBlks[iB].off+1] = (char)(vreg>>8);	//Data LSB
 		break;
 	    }
     }
@@ -661,7 +670,8 @@ bool TMdContr::setValC( char val, int addr, MtxString &err )
 
 string TMdContr::modBusReq( string &pdu )
 {
-    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strParse(addr(),0,".")).at().outAt(TSYS::strParse(addr(),1,"."));
+    AutoHD<TTransportOut> tr = SYS->transport().at().outAt(addr());
+		//SYS->transport().at().at(TSYS::strParse(addr(),0,".")).at().outAt(TSYS::strParse(addr(),1,"."));
 
     XMLNode req(mPrt);
     req.setAttr("id", id())->
@@ -958,8 +968,13 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    "help",_("Manual restart of the enabled controller object causes the force reformation of the acquisition blocks.\n"
 		    "Restart to apply the removed PLC links in run."));
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",EVAL_STR,RWRWR_,"root",SDAQ_ID,
-	    4,"tp","str","dest","select","select","/cntr/cfg/trLst","help",_("Default port of the ModuBus/TCP is 502."));
+	string outHelp, tVl;
+	if((tVl=TSYS::strParse(addr(),1,".")).size() && tVl.find(STR_IN_PREF) != 0 &&
+		SYS->transport().at().modPresent((tVl=TSYS::strParse(addr(),0,"."))))
+	    outHelp = SYS->transport().at().at(tVl).at().outAddrHelp();
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",EVAL_STR,RWRWR_,"root",SDAQ_ID,4,
+	    "tp","str", "dest","sel_ed", "select","/cntr/cfg/trLst",
+	    "help",(TMess::labStdOutTrs()+(outHelp.size()?"\n\n"+outHelp+"\n\n"+_("Default port of the ModuBus/TCP is 502!")+"\n":"")).c_str());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/NODE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/MAX_BLKSZ",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,/*startStat()?R_R_R_:*/RWRWR_,"root",SDAQ_ID,4,
@@ -1000,11 +1015,35 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	start();
     }
     else if(a_path == "/cntr/cfg/trLst" && ctrChkNode(opt)) {
-	opt->childAdd("el")->setText("");
-	vector<string> sls;
-	SYS->transport().at().outTrList(sls);
-	for(unsigned iS = 0; iS < sls.size(); iS++)
-	    opt->childAdd("el")->setText(sls[iS]);
+	int cLv = 0;
+	string	cPath = "", cEl, pAddr = TSYS::strParse(addr(), 0, ":");
+	vector<string> list;
+	for(int cOff = 0; (cEl=TSYS::strParse(pAddr,0,".",&cOff)).size(); ++cLv) {
+	    cPath += cLv ? "."+cEl : cEl;
+	    opt->childAdd("el")->setText(cPath);
+	}
+
+	switch(cLv) {
+	    case 0:
+		SYS->transport().at().modList(list);
+		for(unsigned iS = 0; iS < list.size(); iS++)
+		    opt->childAdd("el")->setText(list[iS]);
+		break;
+	    case 1:
+		if(!SYS->transport().at().modPresent(cEl=TSYS::strParse(pAddr,0,"."))) break;
+		SYS->transport().at().at(cEl).at().outList(list);
+		for(unsigned iS = 0; iS < list.size(); iS++)
+		    opt->childAdd("el")->setText(cPath+"."+list[iS]);
+		SYS->transport().at().at(cEl).at().inList(list);
+		for(unsigned iS = 0; iS < list.size(); iS++)
+		    opt->childAdd("el")->setText(cPath+"."+STR_IN_PREF+list[iS]);
+		break;
+	    case 2:
+		if(TSYS::strParse(pAddr,1,".").find(STR_IN_PREF) == 0)
+		    opt->childAdd("el")->setText(cPath+":RemConId");
+		//else ?!?!
+		break;
+	}
     }
     else TController::cntrCmdProc(opt);
 }
@@ -1120,7 +1159,7 @@ void TMdPrm::loadDATA( bool incl )
 	    TFld::Type tp = TFld::Integer;
 	    if(atp[0] == 'C' || (atp_sub.size() && atp_sub[0] == 'b')) tp = TFld::Boolean;
 	    else if(atp_sub == "f" || atp_sub == "d") tp = TFld::Real;
-	    else if(atp_sub == "s") tp = TFld::String;
+	    else if(atp_sub.size() && atp_sub[0] == 's') tp = TFld::String;
 
 	    if(!pEl.fldPresent(aid) || pEl.fldAt(pEl.fldId(aid)).type() != tp) {
 		if(pEl.fldPresent(aid)) pEl.fldDel(pEl.fldId(aid));
@@ -1166,7 +1205,7 @@ void TMdPrm::loadDATA( bool incl )
 		    }
 		}
 	    }
-	    pEl.fldAt(el_id).setReserve(atp+":"+ai);
+	    pEl.fldAt(el_id).setReserve(atp+":"+ai+":"+aflg);
 
 	    als[aid] = true;
 	}
@@ -1187,7 +1226,7 @@ void TMdPrm::loadDATA( bool incl )
 		lCtx->addLinksAttrs(&pEl);
 
 		// Load IO at enabling
-		loadIO(true);
+		loadIO();
 
 		// Init links
 		lCtx->chkLnkNeed = lCtx->initLnks(/*true*/);	//!!!! Do not reconnect but that can be done in loadIO() early
@@ -1255,7 +1294,7 @@ void TMdPrm::load_( )
     loadIO();
 }
 
-void TMdPrm::loadIO( bool force )
+void TMdPrm::loadIO( )
 {
     if(!enableStat() || !isLogic() || !lCtx || !lCtx->func()) return;
 
@@ -1326,9 +1365,6 @@ void TMdPrm::upValLog( bool first, bool last, double frq )
 {
     if(!isLogic() || !lCtx->func())	return;
 
-    AutoHD<TVal> pVal;
-    vector<string> ls;
-
     try {
 	if(lCtx->chkLnkNeed && !first && !last)	lCtx->chkLnkNeed = lCtx->initLnks();
 
@@ -1355,16 +1391,8 @@ void TMdPrm::upValLog( bool first, bool last, double frq )
 	if(lCtx->idNm >= 0 && lCtx->ioMdf(lCtx->idNm)) setName(lCtx->getS(lCtx->idNm));
 	if(lCtx->idDscr >= 0 && lCtx->ioMdf(lCtx->idDscr)) setDescr(lCtx->getS(lCtx->idDscr));
 
-	//Attribute's values update
-	elem().fldList(ls);
-	for(unsigned iEl = 0; iEl < ls.size(); iEl++) {
-	    int id_lnk = lCtx->lnkId(ls[iEl]);
-	    if(id_lnk >= 0 && !lCtx->lnkActive(id_lnk)) id_lnk = -1;
-	    pVal = vlAt(ls[iEl]);
-	    if(pVal.at().fld().flg()&TVal::Dynamic)	continue;
-	    if(id_lnk < 0) pVal.at().set(lCtx->get(lCtx->ioId(ls[iEl])), 0, true);
-	    else pVal.at().set(lCtx->lnkInput(id_lnk), 0, true);
-	}
+	//Put values to the attributes and archives in the passive archiving mode
+	lCtx->archAttrs(this);
     } catch(TError &err) {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_warning(nodePath().c_str(),_("Error of the calculation template."));
@@ -1478,7 +1506,7 @@ void TMdPrm::vlArchMake( TVal &val )
     TParamContr::vlArchMake(val);
 
     if(val.arch().freeStat()) return;
-    val.arch().at().setSrcMode(TVArchive::PassiveAttr);
+    val.arch().at().setSrcMode(TVArchive::DAQAttr);
     val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
     val.arch().at().setHardGrid(true);
     val.arch().at().setHighResTm(true);
@@ -1496,10 +1524,13 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    "Where:\n"
 		    "  dt - ModBus data type (R-register[3,6(16)], C-coil[1,5(15)], RI-input register[4], CI-input coil[2]);\n"
 		    "       R and RI can be expanded by the suffixes:\n"
-		    "         i2-Int16, i4-Int32, i8-Int64, u2-UInt16, u4-UInt32, f-Float, d-Double, b5-Bit5, b-Bit in address, s-String;\n"
+		    "         i2-Int16, i4-Int32, i8-Int64, u2-UInt16, u4-UInt32, f-Float, d-Double, b5-Bit5, b-Bit in address, s[CHARSET]-String;\n"
 		    "       Start from the symbol '#' for the commented line;\n"
 		    "  numb - ModBus data address of the device (dec, hex or octal) [0...65535];\n"
-		    "  flg - flags: read/write mode (r-read, w-write), strict requesting mode (not combining) 's', registers order inversion '~';\n"
+		    "  flg - flags: read/write mode (r-read, w-write),\n"
+		    "               strict requesting mode (not combining) 's',\n"
+		    "               registers order inversion '~',\n"
+		    "               register 'e'ndian toggle (to LE in generic and BE for strings);\n"
 		    "  id - identifier of the created attribute;\n"
 		    "  name - name of the created attribute.\n"
 		    "Examples:\n"
@@ -1519,17 +1550,25 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(isStd() && a_path == "/prm/cfg/ATTR_LS" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	opt->childAdd("rule")->setAttr("expr","^#[^\n]*")->setAttr("color","gray")->setAttr("font_italic","1");
-	opt->childAdd("rule")->setAttr("expr",":[rws~]*:")->setAttr("color","red");
-	opt->childAdd("rule")->setAttr("expr",":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)")->setAttr("color","blue");
-	opt->childAdd("rule")->setAttr("expr","^(C|CI|R|RI|RI?_[iubfds]\\d*)")->setAttr("color","darkorange");
-	opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");
+	opt->childAdd("rule")->setAttr("expr","^(CI?|RI?_b1[0-5]|RI?_b[0-9]?|RI?_i[248]?|RI?_u[24]?|RI?_[fd]|RI?_s[^:]*|RI?)")->setAttr("color","darkorange");
+	XMLNode *g0 = opt->childAdd("rule")->setAttr("expr","(?<=:).*");
+	    g0->childAdd("rule")->setAttr("expr","^(0?[xX]?[0-9a-fA-F]*)(\\.[0-7]|,(0?[xX]?[0-9a-fA-F]*),?(0?[xX]?[0-9a-fA-F]*),?(0?[xX]?[0-9a-fA-F]*)|)")->setAttr("color","blue");
+	    XMLNode *g1 = g0->childAdd("rule")->setAttr("expr","(?<=:).*");
+		g1->childAdd("rule")->setAttr("expr","[rws~e]*(?<!:)")->setAttr("color","red");
+		XMLNode *g2 = g1->childAdd("rule")->setAttr("expr","(?<=:).*");
+		    g2->childAdd("rule")->setAttr("expr","[^:]*")->setAttr("font_weight","1");
+		    g2->childAdd("rule")->setAttr("expr","(?<=:).*")->setAttr("font_italic","1");
+
+	//opt->childAdd("rule")->setAttr("expr",":[rws~]*:")->setAttr("color","red");
+	//opt->childAdd("rule")->setAttr("expr",":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)")->setAttr("color","blue");
+	//opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");
     }
     else if(isLogic() && a_path == "/prm/cfg/TMPL" && ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR)) {
 	cfg("TMPL").setS(opt->text());
 	disable();
 	modif();
     }
-    else if(isLogic() && enableStat() && lCtx->func() && lCtx->cntrCmdProc(opt))	;
+    else if(isLogic() && enableStat() && lCtx->func() && lCtx->cntrCmdProc(opt)) ;
     else TParamContr::cntrCmdProc(opt);
 }
 
@@ -1659,9 +1698,11 @@ string TMdPrm::TLogCtx::lnkHelp( )
 	"ModBus address writes in the form \"{dt}:{numb}[:{flg}]\", where:\n"
 	"  dt - ModBus data type (R-register[3,6(16)], C-coil[1,5(15)], RI-input register[4], CI-input coil[2]);\n"
 	"       R and RI can be expanded by the suffixes:\n"
-	"         i2-Int16, i4-Int32, i8-Int64, u2-UInt16, u4-UInt32, f-Float, d-Double, b5-Bit5, b-Bit in address, s-String;\n"
+	"         i2-Int16, i4-Int32, i8-Int64, u2-UInt16, u4-UInt32, f-Float, d-Double, b5-Bit5, b-Bit in address, s[CHARSET]-String;\n"
 	"  numb - ModBus data address of the device (dec, hex or octal) [0...65535];\n"
-	"  flg - flags: read/write mode (r-read; w-write), registers order inversion '~'.\n"
+	"  flg - flags: read/write mode (r-read; w-write),\n"
+	"               registers order inversion '~',\n"
+	"               register 'e'ndian toggle (to LE in generic and BE for strings).\n"
 	"Examples:\n"
 	"  \"R:0x300:rw\" - register access;\n"
 	"  \"C:100:rw\" - coil access;\n"

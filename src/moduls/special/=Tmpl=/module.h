@@ -1,5 +1,4 @@
 
-//!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module Special.Tmpl file: module.h
 /***************************************************************************
  *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
@@ -19,18 +18,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-//!!! Multi-including this header file prevent. Change for your include file name
+// Preventing of the header file multi-including - change at the header file name changing
 #ifndef MODULE_H
 #define MODULE_H
 
-//!!! System's includings. Add need for your module includings.
+// System includings - add need ones
 #include <string>
 #include <vector>
 
-//!!! OpenSCADA module's API includings. Add need for your module includings.
+// OpenSCADA API includings - add need ones
 #include <tspecials.h>
 
-//!!! Definition of the individual module translation functions. Do not change these!
+// Definition of the individual module translation functions - do not change
 #undef _
 #define _(mess) mod->I18N(mess).c_str()
 #undef trS
@@ -40,40 +39,28 @@ using std::string;
 using std::vector;
 using namespace OSCADA;
 
-//!!! All module's object's include into self (individual) namespace. Change namespace for your module.
-namespace ModTmpl
+// All the module objects in own (individual) namespace - change for your module
+namespace SpecTmpl
 {
 
-//!!! Root module's object define. Add methods and attributes for your need.
+// Definition the root module object of the subsystem "Special" - add methods and attributes at your need
 //*************************************************
-//* ModTmpl::Lib				  *
+//* SpecTmpl::SpecMod				  *
 //*************************************************
-class Lib : public TSpecial
+class SpecMod : public TSpecial
 {
     public:
 	//Methods
-	//!!! Constructor for input transport object.
-	Lib( string src );
-	//!!! Destructor for input transport object.
-	~Lib( );
-
-	//!!! Module's start and stop call. Place code for internal objects start and stop.
-	void modStart( );
-	void modStop( );
+	SpecMod( string src );
+	~SpecMod( );
 
     private:
 	//Methods
-	//!!! Module's comandline options for print help function.
-	string optDescr( );
-
-	//!!! Module's post enable call. Add your module objects initialize code.
-	void postEnable( int flag );
-	//!!! OpenSCADA control interface comands process virtual function.
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 };
 
-extern Lib *mod;
+extern SpecMod *mod;	//The module root link
 
-} //End namespace ModTmpl
+} //End the namespace SpecTmpl
 
 #endif //MODULE_H

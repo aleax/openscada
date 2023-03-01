@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.GPIO file: GPIO_module.cpp
 /***************************************************************************
- *   Copyright (C) 2016-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2016-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,7 +38,7 @@
 #define MOD_NAME	"GPIO"
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.2.4"
+#define MOD_VER		"2.2.5"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("GPIO different single board PCs: Broadcom BCM 2835 and more (Raspberry Pi, ...), SUNXI AllWinner H2 and more (Orange Pi Zero, ...).")
 #define LICENSE		"GPL2"

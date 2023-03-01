@@ -150,6 +150,9 @@ msgstr ""
 msgid "Identifier"
 msgstr ""
 
+msgid "The name's rows after the first one treat as help."
+msgstr ""
+
 msgid "Type"
 msgstr ""
 

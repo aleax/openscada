@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 17:01+0300\n"
+"POT-Creation-Date: 2023-02-23 09:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,19 +69,13 @@ msgstr ""
 msgid "Module options"
 msgstr ""
 
-msgid "Station of the VCA engine"
+msgid "Exit when closing the last running project"
 msgstr ""
 
-msgid "Go to the remote stations list configuration"
+msgid "Reset widget styles to common"
 msgstr ""
 
-msgid "Starting user"
-msgstr ""
-
-msgid "Password of the user"
-msgstr ""
-
-msgid "Connection recovery time, seconds"
+msgid "Required for some widget styles like \"gtk\" in some specific widgets in run mode, like buttons for the background color and images."
 msgstr ""
 
 msgid "Lifetime and maximum number of the cached pages"
@@ -97,6 +91,30 @@ msgid ""
 "Zero value of the number excludes the cache limit."
 msgstr ""
 
+msgid "Go to the remote stations list configuration"
+msgstr ""
+
+msgid "Station of the VCA engine"
+msgstr ""
+
+#, c-format
+msgid ""
+"Use '%s' for querying the station together user and password at the module generic call.\n"
+"Useful at presence of many control stations and for opening several of them simultaneously."
+msgstr ""
+
+msgid "<Select>"
+msgstr ""
+
+msgid "Starting user"
+msgstr ""
+
+msgid "Password of the user"
+msgstr ""
+
+msgid "Connection recovery time, seconds"
+msgstr ""
+
 msgid "List of the projects for launch"
 msgstr ""
 
@@ -104,15 +122,6 @@ msgid ""
 "Automatically executed projects, divided by the symbol ';'.\n"
 "To open the project window on the desired display (1), use the project name format: 'PrjName-1'.\n"
 "To connect to the background or another open session use \"ses_{SesID}\"."
-msgstr ""
-
-msgid "Exit when closing the last running project"
-msgstr ""
-
-msgid "Reset widget styles to common"
-msgstr ""
-
-msgid "Required for some widget styles like \"gtk\" in some specific widgets in run mode, like buttons for the background color and images."
 msgstr ""
 
 #, c-format
@@ -127,6 +136,9 @@ msgid "Connected"
 msgstr ""
 
 msgid "Disconnected"
+msgstr ""
+
+msgid "<Local>"
 msgstr ""
 
 msgid "Ready"
@@ -919,9 +931,6 @@ msgstr ""
 msgid "State"
 msgstr ""
 
-msgid "Item icon. Click to download another."
-msgstr ""
-
 msgid "Status:"
 msgstr ""
 
@@ -1018,13 +1027,33 @@ msgstr ""
 msgid "Error getting the node '%1' information."
 msgstr ""
 
-msgid "Downloading the image icon"
+msgid "Save image"
+msgstr ""
+
+msgid "Load image"
+msgstr ""
+
+msgid "Clear image"
+msgstr ""
+
+msgid "Saving the picture"
+msgstr ""
+
+msgid "Images (*.png *.xpm *.jpg)"
+msgstr ""
+
+#, c-format
+msgid "Error saving to the file '%s'."
+msgstr ""
+
+msgid "Loading the picture"
 msgstr ""
 
 msgid "Images (*.png *.jpg)"
 msgstr ""
 
-msgid "Error downloading the icon image '%1'."
+#, c-format
+msgid "Error loading the picture '%s'."
 msgstr ""
 
 msgid "Saving the changes"
@@ -1038,7 +1067,7 @@ msgstr ""
 msgid "No rows selected."
 msgstr ""
 
-msgid "Are you sure of loading a mime to selected item '%1'?"
+msgid "Are you sure of loading data to selected item '%1'?"
 msgstr ""
 
 msgid "Loading the data"
@@ -1075,6 +1104,9 @@ msgid "Root:"
 msgstr ""
 
 msgid "Path:"
+msgstr ""
+
+msgid "Periodic processing, milliseconds:"
 msgstr ""
 
 msgid "Attributes"
@@ -1272,9 +1304,6 @@ msgstr ""
 msgid "Saving the widget image"
 msgstr ""
 
-msgid "Images (*.png *.xpm *.jpg)"
-msgstr ""
-
 msgid "Error saving to the file '%1'."
 msgstr ""
 
@@ -1432,6 +1461,10 @@ msgid "Empty"
 msgstr ""
 
 msgid "\"Frequency (Hz)\""
+msgstr ""
+
+#, c-format
+msgid "Closing the file %d error '%s (%d)'!"
 msgstr ""
 
 msgid "Error writing to: %1."
@@ -2066,6 +2099,9 @@ msgid "Cancel"
 msgstr ""
 
 msgid "Selecting an user"
+msgstr ""
+
+msgid "Station:"
 msgstr ""
 
 msgid "User:"

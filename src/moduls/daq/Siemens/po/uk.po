@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 17:52+0300\n"
+"POT-Creation-Date: 2022-07-15 20:33+0300\n"
 "PO-Revision-Date: 2007-10-28 09:21+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -231,6 +231,7 @@ msgstr "Відновлення через %.6g c. "
 msgid "Acquisition. "
 msgstr "Збір. "
 
+#, c-format
 msgid "Acquisition with the period %s. "
 msgstr "Збір з періодом %s. "
 
@@ -238,9 +239,9 @@ msgstr "Збір з періодом %s. "
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Наступний збір за cron '%s'. "
 
+#, c-format
 msgid "Spent time %s[%s], read %s, wrote %s, connection errors %g. "
-msgstr ""
-"Витрачено часу %s[%s], прочитано %s, записано %s, помилок підключення %g. "
+msgstr "Витрачено часу %s[%s], прочитано %s, записано %s, помилок підключення %g. "
 
 #, c-format
 msgid "Connection to the data source: %s."
@@ -257,6 +258,10 @@ msgstr "Немає жодного пристрою або драйвер від�
 
 msgid "Error opening the remote PLC socket."
 msgstr "Помилка відкриття сокету віддаленого ПЛК."
+
+#, c-format
+msgid "Closing the socket %d error '%s (%d)'!"
+msgstr "Помилка закриття файлу %d - '%s (%d)'!"
 
 msgid "Error connecting to the PLC."
 msgstr "Помилка підключення до ПЛК."
@@ -398,8 +403,7 @@ msgid "Unknown data encoding type, %d."
 msgstr "Невідомий тип кодування, %d."
 
 #, c-format
-msgid ""
-"Inconsistency in the size of the data block to the response size, %d(%d)."
+msgid "Inconsistency in the size of the data block to the response size, %d(%d)."
 msgstr "Невідповідність розміру блоку даних до розміру відповіді, %d(%d)."
 
 #, c-format
@@ -633,3 +637,4 @@ msgstr ""
 "у \"Grp 3\", зсув 20 та розмір 20.\n"
 "\n"
 "Формат загальної адреси:\n"
+

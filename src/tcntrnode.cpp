@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcntrnode.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1037,13 +1037,11 @@ bool TCntrNode::ctrRemoveNode( XMLNode *nd, const char *path )
     return true;
 }
 
-bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *user, const char *grp, char mode, const char *warn )
+bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *user, const char *grp, char mode )
 {
     if(nd->name() != cmd) return false;
     if(((char)perm&mode) != mode && SYS->security().at().access(nd->attr("user"),mode,user,grp,perm) != mode)
 	throw TError("ContrItfc", _("Error accessing item '%s'!"), nd->attr("path").c_str());
-    if(warn && !s2i(nd->attr("force")))
-	throw TError(TError::Core_CntrWarning, "ContrItfc", _("Warning element '%s'! %s"), nd->attr("path").c_str(),warn);
     nd->setAttr("rez", i2s(TError::NoError));
 
     return true;
@@ -1069,12 +1067,12 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	    }
 	    else if(opt->childSize()) modifG();
 
-	    if(opt->childSize())	{ res.lock(); SYS->setCfgCtx(opt); }
+	    if(opt->childSize()) { res.lock(); SYS->setCfgCtx(opt); }
 
 	    string errs;
 	    load(NULL, &errs);
 	    if(selDB.size() && !isdigit(selDB[0]))	SYS->setSelDB("");
-	    if(SYS->cfgCtx())	{ SYS->setCfgCtx(NULL); modifG(); }
+	    if(SYS->cfgCtx())	{ SYS->setCfgCtx(NULL); opt->childClear(); modifG(); }
 	    if(errs.size()) throw err_sys(_("Error loading:\n%s"), errs.c_str());
 	}
 	// Save the node
@@ -1109,13 +1107,13 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 		    XMLNode reqIco("get"); reqIco.setAttr("path","/ico")->setAttr("user",opt->attr("user"))->setAttr("lang",opt->attr("lang"));
 		    ch.at().cntrCmdProc(&reqIco);
 		    if(icoCheck) chN->setAttr("icoSize", i2s(reqIco.text().size()));
-		    else chN->childAdd("ico")->setText(reqIco.text());
+		    else if(reqIco.text().size()) chN->childAdd("ico")->setText(reqIco.text());
 		    //   Process groups
 		    XMLNode brReq("info"); brReq.setAttr("path","/br")->setAttr("user",opt->attr("user"))->setAttr("lang",opt->attr("lang"));
 		    ch.at().cntrCmdProc(&brReq);
-		    for(unsigned i_br = 0; brReq.childSize() && i_br < brReq.childGet(0)->childSize(); i_br++) {
+		    for(unsigned iBr = 0; brReq.childSize() && iBr < brReq.childGet(0)->childSize(); iBr++) {
 			XMLNode *chB = chN->childAdd();
-			*chB = *brReq.childGet(0)->childGet(i_br);
+			*chB = *brReq.childGet(0)->childGet(iBr);
 			int grpBrId = ch.at().grpId(chB->attr("id"));
 			ch.at().chldList(grpBrId, ls);
 			chB->setAttr("chPresent",ls.size()?"1":"0");
@@ -1138,7 +1136,7 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/plang/list" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setText("");
-	vector<string>  ls, lls;
+	vector<string> ls, lls;
 	SYS->daq().at().modList(ls);
 	for(unsigned iM = 0; iM < ls.size(); iM++) {
 	    if(!SYS->daq().at().at(ls[iM]).at().compileFuncLangs(&lls))	continue;

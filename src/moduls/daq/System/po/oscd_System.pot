@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 17:55+0300\n"
+"POT-Creation-Date: 2022-07-15 20:40+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,6 +30,10 @@ msgid "Idle (%)"
 msgstr ""
 
 msgid "General"
+msgstr ""
+
+#, c-format
+msgid "Closing the file %p error '%s (%d)'!"
 msgstr ""
 
 msgid "10:Device is not available."
@@ -158,6 +162,10 @@ msgid "Connected=%d; Active=%d; Busy=%d; Error=%d"
 msgstr ""
 
 msgid "Property "
+msgstr ""
+
+#, c-format
+msgid "Closing the pipe %p error '%s (%d)'!"
 msgstr ""
 
 msgid "Data sensors"

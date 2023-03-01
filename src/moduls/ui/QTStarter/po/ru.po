@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-31 08:47+0300\n"
+"POT-Creation-Date: 2022-08-27 21:52+0300\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -482,21 +482,6 @@ msgstr "Дополнительно"
 msgid "Mon"
 msgstr "Пон"
 
-msgid "Name"
-msgstr "Имя"
-
-msgid "Style"
-msgstr "Стиль"
-
-msgid "Font"
-msgstr "Шрифт"
-
-msgid "Palette"
-msgstr "Палитра"
-
-msgid "Style Sheets"
-msgstr "Таблица Стилей"
-
 msgid "Hold when overloaded to another project."
 msgstr "Удерживать при перегрузке в другой проект."
 
@@ -513,6 +498,14 @@ msgid "Stopping the module."
 msgstr "Останов модуля."
 
 #, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr ""
+
+#, c-format
+msgid "Error writing the file '%s': %s"
+msgstr ""
+
+#, fuzzy, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "    --QtInNotMainThread Starts Qt into a different from the main thread.\n"
@@ -546,6 +539,8 @@ msgid ""
 "';'.\n"
 "CloseToTray <0|1>       Closing all windows or starting without Qt modules "
 "to the system tray.\n"
+"SessCntr   [0...*3]     Sessions control-restart: 0-if running, 1-anyway, 2-"
+"immediately, 3-never.\n"
 "Style      <name>       The GUI style of Qt.\n"
 "Font       <font>       Common Qt font.\n"
 "Palette    <colors>     Twenty colors of the palette separated by symbol ',' "
@@ -604,6 +599,21 @@ msgstr "Модули Qt для запуска"
 msgid "Collapse and startup to the system tray"
 msgstr "Сворачивать и запускать в системный лоток"
 
+msgid "Sessions control-restart"
+msgstr ""
+
+msgid "if running;anyway;immediately;never"
+msgstr ""
+
+msgid ""
+"Applied at the next start for the modes:\n"
+"- 'if running' - if it is still running when the session is shut down;\n"
+"- 'anyway' - wants to be started at the start of the next session;\n"
+"- 'immediately' - wants to be started immediately whenever it is not "
+"running;\n"
+"- 'never' - does not want to be restarted automatically."
+msgstr ""
+
 msgid "Look and feel"
 msgstr "Вид и ощущение"
 
@@ -615,6 +625,12 @@ msgstr "Стиль виджетов"
 
 msgid "Common font"
 msgstr "Общий шрифт"
+
+msgid "Palette"
+msgstr "Палитра"
+
+msgid "Style Sheets"
+msgstr "Таблица Стилей"
 
 msgid "<Select a profile to combine>"
 msgstr "<Выбрать профиль для объединения>"
@@ -741,11 +757,11 @@ msgstr ""
 msgid "The button for exit the program."
 msgstr "Кнопка для выхода из программы."
 
-msgid "current"
-msgstr "текущий"
+msgid "CURRENT"
+msgstr "ТЕКУЩИЙ"
 
-msgid "running"
-msgstr "исполняется"
+msgid "RUNNING"
+msgstr "ИСПОЛНЕНИЕ"
 
 #, c-format
 msgid "%d backups"

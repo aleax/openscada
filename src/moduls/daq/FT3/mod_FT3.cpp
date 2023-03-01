@@ -1852,7 +1852,7 @@ void TMdPrm::cntrCmdProc(XMLNode *opt)
 void TMdPrm::vlArchMake(TVal &val)
 {
     if(val.arch().freeStat()) return;
-    val.arch().at().setSrcMode(TVArchive::PassiveAttr, val.arch().at().srcData());
+    val.arch().at().setSrcMode(TVArchive::DAQAttr, val.arch().at().srcData());
     val.arch().at().setPeriod((long long) (owner().period() * 1000000));
     val.arch().at().setHardGrid(true);
     val.arch().at().setHighResTm(true);

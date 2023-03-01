@@ -1672,7 +1672,7 @@ Author: Roman Savochenko <roman@oscada.org>, Maxim Lysenko (2009)
 Initially sponsored by: Valeriy Nikolaev
 Sponsored in the unification and improvement: Nikolay Mitrofanov, ElProtect (June 2017)
 Founded: June 2009
-Version: 2.0.0
+Version: 2.0.1
 License: GPLv2
 DOC: Libs_Electrical_elements|Libs/Electrical_elements','Библиотека создаётся для предоставления мнемонических элементов пользовательского интерфейса и содержит элементы мнемосхем, которые часто востребованы при формировании пользовательского интерфейса электрических подстанций и станций генерации электрики. Строится библиотека на основе примитива "ElFigure" и языка внутреннего программирования JavaLikeCalc.
 
@@ -1682,7 +1682,7 @@ DOC: Libs_Electrical_elements|Libs/Electrical_elements','Библиотека с
 Изначально спонсировано: Валерий Николаев
 Спонсировано унификацию и усовершенствование: Николай Митрофанов, ElProtect (Июнь 2017)
 Основано: Июнь 2009
-Версия: 2.0.0
+Версия: 2.0.1
 Лицензия: GPLv2
 DOC: Libs_Electrical_elements|Libs/Electrical_elements','Бібліотека створюється для надання мнемонічних елементів користувацького інтерфейсу та містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу електричних підстанцій та станцій генерації електрики. Будується бібліотека переважно на основі примітиву "ElFigure" та мови внутрішнього програмування JavaLikeCalc.
 
@@ -1692,9 +1692,44 @@ DOC: Libs_Electrical_elements|Libs/Electrical_elements','Бібліотека с
 Початково спонсоровано: Валерій Ніколаєв
 Спонсоровано уніфікацію та вдосконалення: Микола Мітрофанов, ElProtect (Червень 2017)
 Засновано: Червень 2009
-Версія: 2.0.0
+Версія: 2.0.1
 Ліцензія: GPLv2
-DOC: Libs_Electrical_elements|Libs/Electrical_elements','wlb_ElectroEls','');
+DOC: Libs_Electrical_elements|Libs/Electrical_elements','wlb_ElectroEls','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
+1ZYAAAAASUVORK5CYII=');
 CREATE TABLE IF NOT EXISTS 'wlb_ElectroEls_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '0' ,"CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_ElectroEls_io VALUES('El_KeySqr_1','name','','One-way key (deprecated)','Ключ однополосный (устарелое)','Ключ односмуговий (застаріле)',32,'','','','','','');
 INSERT INTO wlb_ElectroEls_io VALUES('El_KeySqr_1','dscr','','One-way key, according to GOST 2.755-87

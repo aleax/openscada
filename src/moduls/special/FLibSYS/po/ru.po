@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-31 19:40+0200\n"
+"POT-Creation-Date: 2022-07-15 20:51+0300\n"
 "PO-Revision-Date: 2007-10-24 18:37+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -21,6 +21,10 @@ msgstr "Свойства не поддерживаются объектом."
 #, c-format
 msgid "Error the function '%s' or missing its parameters."
 msgstr "Ошибка функции '%s' или недостаточно параметров."
+
+#, c-format
+msgid "Closing the file %p error '%s (%d)'!"
+msgstr ""
 
 msgid "System functions"
 msgstr "Системные функции"
@@ -74,7 +78,8 @@ msgstr ""
 "добавление;...)"
 
 msgid "Machine data format ('n'-system order;'b'-BigEndian;'l'-LittleEndian)"
-msgstr "Формат данных машины ('n'-сист. порядок;'b'-BigEndian;'l'-LittleEndian)"
+msgstr ""
+"Формат данных машины ('n'-сист. порядок;'b'-BigEndian;'l'-LittleEndian)"
 
 msgid "String encoding in the file/stream"
 msgstr "Кодировка строки в файле/потоке"
@@ -238,7 +243,8 @@ msgid "String: Decode text from binary"
 msgstr "Строка: Декодировать текст из бинарного вида"
 
 msgid "Decoding the text from the binary, for the text format <00 A0 FA DE>."
-msgstr "Декодирование текста из бинарного вида, для формата текста <00 A0 FA DE>."
+msgstr ""
+"Декодирование текста из бинарного вида, для формата текста <00 A0 FA DE>."
 
 msgid "Value"
 msgstr "Значение"
@@ -514,4 +520,3 @@ msgstr "XML: Запрос интерфейса управления"
 
 msgid "Requesting for control the program, by XML."
 msgstr "Запрос на предмет контроля программы, по XML."
-

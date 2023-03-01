@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 17:55+0300\n"
+"POT-Creation-Date: 2022-07-15 20:40+0300\n"
 "PO-Revision-Date: 2009-08-18 09:59+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -34,6 +34,10 @@ msgstr "Idletime (%)"
 
 msgid "General"
 msgstr "Im allgemein"
+
+#, c-format
+msgid "Closing the file %p error '%s (%d)'!"
+msgstr "Schließen der Datei %p Fehler '%s (%d)'!"
 
 msgid "10:Device is not available."
 msgstr "10:Das Gerät ist."
@@ -163,6 +167,10 @@ msgstr "Verbunden=%d; Aktiv=%d; Beschäftigt=%d; Fehler=%d"
 msgid "Property "
 msgstr "Eigentum "
 
+#, c-format
+msgid "Closing the pipe %p error '%s (%d)'!"
+msgstr "Schließen der Pipe %p Fehler '%s (%d)'!"
+
 msgid "Data sensors"
 msgstr "Datesensoren"
 
@@ -256,6 +264,7 @@ msgstr "Zusätzlichen Parametern"
 msgid "Acquisition. "
 msgstr "Erwerb. "
 
+#, c-format
 msgid "Acquisition with the period %s. "
 msgstr "Erwerb mit dem Zeitraum %s. "
 
@@ -263,6 +272,7 @@ msgstr "Erwerb mit dem Zeitraum %s. "
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Erwerb nächsten durch cron '%s'. "
 
+#, c-format
 msgid "Spent time %s[%s]. "
 msgstr "Verbrauchte Zeit %s[%s]. "
 
@@ -305,3 +315,4 @@ msgstr "USV (NUT)"
 
 msgid "Up time"
 msgstr "Betriebszeit"
+

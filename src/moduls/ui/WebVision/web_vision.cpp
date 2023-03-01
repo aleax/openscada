@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebVision file: web_vision.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,6 +21,7 @@
 #include <fcntl.h>
 #include <signal.h>
 #include <string.h>
+#include <errno.h>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -34,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"6.6.25"
+#define MOD_VER		"6.8.2"
 #define AUTHORS		trS("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	trS("Visual operation user interface, based on the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -244,7 +245,8 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mCachePgLife
 	_("January"), _("February"), _("March"), _("April"), _("May"), _("June"), _("July"),
 	_("August"), _("September"), _("October"), _("November"), _("December")
 	_("Field for displaying and changing the current user."), _("Field for displaying and changing the used interface style."),
-	_("Alarm level: %1"), _("Notificator %1") };
+	_("Alarm level: %1"), _("Notificator %1"),
+	_("Field for printing and exporting data."), _("Main Page"), _("Document %1"), _("Table %1"), _("No data for export!") };
 #endif
 }
 
@@ -370,7 +372,8 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 	    if((hd=open("WebVisionVCA.js",O_RDONLY)) >= 0) {
 		char buf[prmStrBuf_SZ];
 		for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) page.append(buf, len);
-		close(hd);
+		if(close(hd) != 0)
+		    mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	    }
 	    else page = WebVisionVCA_js;
 	    page = trMessReplace(page);

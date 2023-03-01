@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tdaqs.h
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -59,10 +59,11 @@ class TDAQS : public TSubSYS
 	void subStop( );
 
 	AutoHD<TTypeDAQ> at( const string &name ) const		{ return modAt(name); }
-	AutoHD<TCntrNode> daqAt( const string &path, char sep = 0, bool noex = false, bool waitForAttr = false ) const;
-	AutoHD<TValue> prmAt( const string &path, char sep = 0, bool noex = false ) const;
-	AutoHD<TVal> attrAt( const string &path, char sep = 0, bool noex = false ) const;
-	void ctrListPrmAttr( XMLNode *nd, const string &addrBase, bool toPrm = false, char sep = 0, const string &pref = "" );
+	AutoHD<TCntrNode> daqAt( const string &path, char sep = 0, bool noex = false, bool waitForAttr = false, TCntrNode *ndBase = NULL ) const;
+	AutoHD<TValue> prmAt( const string &path, char sep = 0, bool noex = false, TCntrNode *ndBase = NULL ) const;
+	AutoHD<TVal> attrAt( const string &path, char sep = 0, bool noex = false, TCntrNode *ndBase = NULL ) const;
+	void ctrListPrmAttr( XMLNode *nd, const string &addrBase,
+	    bool toPrm = false, char sep = 0, const string &pref = "", TCntrNode *ndBase = NULL );
 
 	// Parameter's templates library
 	string tmplLibTable( )					{ return "ParamTemplLibs"; }

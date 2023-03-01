@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="../index.html"><img alt="OpenSCADA" src="../../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="../index.html"><img src="../../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/QTCfg</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/QTCfg.html" title="Модули/Конфигуратор на Qt (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/QTCfg.html" title="Модулі/Конфігуратор на Qt (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/QTCfg.html" title="Модули/Конфигуратор на Qt (81% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/QTCfg.html" title="Модулі/Конфігуратор на Qt (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> </td>
 <td> Program configurator (Qt)
 </td>
-<td> 5.9 </td>
+<td> 5.12 </td>
 <td> GPL2 </td>
 <td> ui_QTCfg.so </td>
 <td> en,uk,ru,de </td>
@@ -40,14 +40,14 @@
 <td> UI </td>
 <td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — the page initial translation</i></font> </td>
 <td> Provides the Qt-based configurator of OpenSCADA.
-<ul><li> <b>To Do:</b></li></ul>
-<dl><dd>- append for tabs and the tab "Chosen" with: procedures, favourite import or other fast accessing user functions.</dd></dl>
+<ul><li> <b><a href="../To_do.html" title="Special:MyLanguage/Works/To do">To Do</a>:</b></li></ul>
+<dl><dd>+ append for tabs and the tab "Chosen" with: procedures, favourite import or other fast accessing user functions.</dd></dl>
 </td></tr></table>
 <p>The module provides the configurator of OpenSCADA, which based on the multi-platform library <a class="external text" href="http://qt.io" rel="nofollow noreferrer noopener" target="_blank">Qt</a> of the graphical user interface (GUI) of initially created by the firm <a class="external text" href="http://www.trolltech.com" rel="nofollow noreferrer noopener" target="_blank">TrollTech</a>.
 </p><p>The module is based on <a href="../API.html" title="Special:MyLanguage/Documents/API">the control interface of OpenSCADA</a>, which means providing a single configuration interface. Update of the module may be required only in the case of updating the specification of the control interface language. To query the page context, group query of the control interface is used, which allows you to optimize the time of remote access on high-latency and slow communication channels.
 </p><p>Let's examine the working window of the configurator in Figure 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:733px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_workplacestruct.png"><img class="thumbimage" height="717" src="../files/QTCfg_workplacestruct.png" width="731" /></a>  <div class="thumbcaption">Fig.1. Working window of the configurator</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:784px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_workplacestruct.png"><img class="thumbimage" height="720" src="../files/QTCfg_workplacestruct.png" width="782" /></a>  <div class="thumbcaption">Fig.1. Working window of the configurator</div></div></div></div>
 <p>The operating window of the configurator consists of the following parts:
 </p>
 <dl><dd>1 <i>Menu</i> — contains the drop-down menu of the configurator.</dd>
@@ -81,7 +81,9 @@
 <li> <i>Forward</i> — goes forward to the forward page.</li>
 <li> <i>Refresh</i> — refreshes the current page.</li>
 <li> <i>Start</i> — runs periodically update of the current page content with an interval of one second.</li>
-<li> <i>Stop</i> — stops periodically update of the current page content with an interval of one second.</li></ul></li>
+<li> <i>Stop</i> — stops the periodically update of the current page content with an interval of one second.</li>
+<li> <i>Favorite</i> — going to the selected favorite pages.</li>
+<li> <i>Append to favorite for {Page}/Remove from favorite  for {Page}</i> — toggles the current page as favorite.</li></ul></li>
 <li> <i>Help</i> — assistance call commands:
 <ul><li> <i>About</i> — information about this module and OpenSCADA.</li>
 <li> <i>About Qt</i> — information about the Qt library.</li>
@@ -93,17 +95,19 @@
 </p>
 <ul><li> <i>Load from the DB</i> — loads the selected object or branch of the object from the database.</li>
 <li> <i>Save to the DB</i> — saves the selected object or branch of the object to the database.</li>
-<li> <i>Up</i> — goes to the parent page.</li>
-<li> <i>Back</i> — goes back to the previous page.</li>
-<li> <i>Forward</i> — goes forward to the forward page.</li>
 <li> <i>Add</i> — adds a new object to the container.</li>
 <li> <i>Delete</i> — deletes the selected object.</li>
 <li> <i>Copy item</i> — copies the selected object.</li>
 <li> <i>Cut item</i> — cuts of the selected object. The original object is removed after paste.</li>
 <li> <i>Paste item</i> — pastes of the copied or cut item.</li>
+<li> <i>Up</i> — goes to the parent page.</li>
+<li> <i>Back</i> — goes back to the previous page.</li>
+<li> <i>Forward</i> — goes forward to the forward page.</li>
 <li> <i>Refresh</i> — refreshes the current page.</li>
 <li> <i>Start</i> — runs periodically update of the current page content with an interval of one second.</li>
 <li> <i>Stop</i> — stops periodically update of the current page content with an interval of one second.</li>
+<li> <i>Favorite</i> — going to the selected favorite pages.</li>
+<li> <i>Append to favorite for {Page}/Remove from favorite  for {Page}</i> — toggles the current page as favorite.</li>
 <li> <i>Manual on the page</i> — calls inline or offline manual on selected page.</li>
 <li> Call buttons of the graphical interface modules of OpenSCADA based on the Qt library</li></ul>
 <p>In the navigation tree the context menu of following contents is supported:
@@ -115,6 +119,8 @@
 <li> <i>Copy item</i> — copies the selected object.</li>
 <li> <i>Cut item</i> — cuts of the selected object. The original object is removed after paste.</li>
 <li> <i>Paste item</i> — pastes of the copied or cut item.</li>
+<li> <i>Favorite</i> — going to the selected favorite pages.</li>
+<li> <i>Append to favorite for {Page}/Remove from favorite  for {Page}</i> — toggles the current page as favorite.</li>
 <li> <i>Refresh the items tree</i> — refreshes the navigation tree content.</li></ul>
 <p>The control elements are divided to: basic, commands, lists, tables and images. All items are displayed in the sequence strictly appropriate to their location in the description of the control interface language.
 </p>
@@ -132,12 +138,12 @@
 <h2><span class="mw-headline" id="Configuration"><span class="mw-headline-number">1</span> Configuration</span></h2>
 <p>In order to customize its own behavior in some cases, the module provides the ability to configure the parameters through the control interface of OpenSCADA (Fig.2). These parameters are:
 </p>
-<ul><li> Timeouts of checking connections "{fail}:{good}" — sometimes (for the SSH tunnel), it is useful to reduce the connecting timeout up to 30 seconds to keep the connection.</li>
+<ul><li> Timeouts of the connection checking '{fail}:{good}' — sometimes (for the SSH tunnels), it is useful to reduce the connecting timeout up to 30 seconds to keep the connection.</li>
 <li> Initial path of the configurator — allows to determine what local page to open when you start the configurator.</li>
 <li> Initial user of the configurator — points on behalf of the which user to open configuration without requiring a password.</li>
 <li> ToolTip limit in chars to prevent of big emerging help windows, by default 150. Set zero for disable.</li>
-<li> Go to the configuration of the list of remote stations of OpenSCADA, which is used to provide the remote configuration.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:856px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg.png"><img class="thumbimage" height="506" src="../files/QTCfg.png" width="854" /></a>  <div class="thumbcaption">Fig.2. Configuration page of the configurator.</div></div></div></div>
+<li> Go to configuration of the remote OpenSCADA hosts list, which is used to provide the remote configuration.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:850px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg.png"><img class="thumbimage" height="544" src="../files/QTCfg.png" width="848" /></a>  <div class="thumbcaption">Fig.2. Configuration page of the configurator.</div></div></div></div>
 <p>Vertically scalable fields (list, text, and table) provide automatic scaling for available space and field contents. In addition, they have the ability to manually change their height by snapping and dragging the bottom of the widget, which, however, does not work for all Qt widget styles.
 </p>
 <h2><span class="mw-headline" id="Basic_elements"><span class="mw-headline-number">2</span> Basic elements</span></h2>
@@ -159,7 +165,7 @@
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:780px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_tableelem.png"><img class="thumbimage" height="639" src="../files/QTCfg_tableelem.png" width="778" /></a>  <div class="thumbcaption">Fig.6. The table.</div></div></div></div>
 <h2><span class="mw-headline" id="Images"><span class="mw-headline-number">6</span> Images</span></h2>
-<p>The images are designed to transmit graphic information into the configurators. Example of the image is shown in Figure 7.
+<p>The images are designed to transmit graphic information into the configurators. Example of the image is shown in Figure 7. From the context menu you can save the image and writable ones you can also load and clear.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1017px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_imgelem.png"><img class="thumbimage" height="627" src="../files/QTCfg_imgelem.png" width="1015" /></a>  <div class="thumbcaption">Fig.7. The image.</div></div></div></div>
 
@@ -168,5 +174,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/QTCfg/en">Modules/QTCfg/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/QTCfg/en">Modules/QTCfg/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> </td></tr></table></body>
 </html>

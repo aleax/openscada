@@ -1,5 +1,4 @@
 
-//!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module Protocol.Tmpl file: module.h
 /***************************************************************************
  *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
@@ -19,82 +18,70 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-//!!! Multi-including this header file prevent. Change for your include file name
+// Preventing of the header file multi-including - change at the header file name changing
 #ifndef MODULE_H
 #define MODULE_H
 
-//!!! System's includings. Add need for your module includings.
+// System includings - add need ones
 #include <string>
-#include <map>
 
-//!!! OpenSCADA module's API includings. Add need for your module includings.
+// OpenSCADA API includings - add need ones
 #include <tprotocols.h>
 
-//!!! Definition of the individual module translation functions. Do not change these!
+// Definition of the individual module translation functions - do not change
 #undef _
 #define _(mess) mod->I18N(mess).c_str()
 #undef trS
 #define trS(mess) mod->I18N(mess,mess_PreSave)
 
 using std::string;
-using std::map;
 using namespace OSCADA;
 
-//!!! All the module's objects you should include into self (individual) namespace. Change the namespace for your module.
-namespace ModTmpl
+// All the module objects in own (individual) namespace - change for your module
+namespace PrtTmpl
 {
 
-//!!! Input protocol realisation object define. Add methods and attributes for your need.
+// Definition the input transport protocol object of the subsystem "Transport protocols" - add methods and attributes at your need
 //*************************************************
-//* ModTmpl::TProtIn                              *
+//* PrtTmpl::TProtIn                              *
 //*************************************************
 class TProtIn: public TProtocolIn
 {
     public:
 	//Methods
-	//!!! Constructor for input protocol object.
 	TProtIn( string name );
-	//!!! Destructor for input protocol object.
 	~TProtIn( );
 
-	//!!! The inherited (virtual) function of process input and preparint output data for called input transport
 	bool mess( const string &request, string &answer );
 };
 
-//!!! Root module object define. Add methods and attributes for your need.
+// Definition the root module object of the subsystem "Transport protocols" - add methods and attributes at your need
 //*************************************************
-//* ModTmpl::TProt                                *
+//* PrtTmpl::TProt                                *
 //*************************************************
 class TProt: public TProtocol
 {
     public:
 	//Methods
-	//!!! Constructor for root module object.
 	TProt( string name );
-	//!!! Destructor for root module object.
 	~TProt( );
+
+	void outMess( XMLNode &io, TTransportOut &tro );
 
     protected:
 	//Methods
-	//!!! Inherited (virtual) load and save object's node methods. Call from OpenSCADA kernel.
 	void load_( );
 	void save_( );
 
     private:
 	//Methods
-	//!!! Module's comandline options for print help function.
-	string optDescr( );
-	//!!! Main subsystem API function for self modules input protocol object creation.
-	TProtocolIn *in_open( const string &name );
+	TProtocolIn *in_open( const string &id );
 
-	//!!! OpenSCADA control interface comands process virtual function.
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
-
 };
 
-//!!! The module root link
-extern TProt *mod;
+extern TProt *mod;	//The module root link
 
-} //End namespace ModTmpl
+} //End the namespace PrtTmpl
 
 #endif //MODULE_H

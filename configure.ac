@@ -2,11 +2,11 @@ AC_PREREQ(2.50)
 
 # After any LTS release append there the third stabilisation level/number to the version
 #  Don't change the version string but it uses in whole to replace by a real one into the automatic builder.
-AC_INIT(OpenSCADA, [0.9.5.5], roman@oscada.org)
+AC_INIT(OpenSCADA, [0.9.6], roman@oscada.org)
 
 # Increase the major for next Work version.
 # Increase the minor after any significant changes into API of the Work/LTS version
-oscd_LIBREVISION="3:12:0"
+oscd_LIBREVISION="3:13:0"
 
 AC_PREFIX_DEFAULT(/usr)
 oscd_modulpref="oscd_"
@@ -20,14 +20,13 @@ AC_LANG(C++)
 # Perform the program name transformation
 #AC_ARG_PROGRAM
 
-# Enable options
 AC_ENABLE_SHARED(yes)
 AC_ENABLE_STATIC(yes)
 AC_LIBTOOL_DLOPEN
 
 # AM_GNU_GETTEXT
 
-# Check for the needed programs.
+# Checking for the programs
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
@@ -47,7 +46,7 @@ fi
 
 AM_SANITY_CHECK
 
-# Check for the header files.
+# Checking for the header files
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
@@ -57,11 +56,11 @@ AC_CHECK_HEADERS([string vector map exception typeinfo deque],[],
     AC_MSG_ERROR([Some STL headers are not found. Install or check the STL of StdC++ developing package!]))
 AC_CHECK_HEADERS([langinfo.h syscall.h iconv.h libintl.h], [], AC_MSG_NOTICE([Some system headers aren't found. Using disabled!]))
 
-#Check for the gettext utilites
 if test $ac_cv_header_iconv_h = yes; then
     AC_SEARCH_LIBS(libiconv_open, [iconv])
 fi
 
+# Checking for the Gettext utilites
 if test $ac_cv_header_libintl_h = yes; then
     AC_CHECK_PROG(XGETTEXT, xgettext, xgettext, false)
     AC_CHECK_PROG(MSGMERGE, msgmerge, msgmerge, false)
@@ -72,7 +71,7 @@ if test $ac_cv_header_libintl_h = yes; then
     AC_SEARCH_LIBS(libintl_bindtextdomain, [intl])
 fi
 
-# Check for typedefs, structures and the compiler characteristics.
+# Checking for typedefs, structures, and compiler characteristics
 AC_HEADER_STDBOOL
 AC_C_CONST
 AC_C_INLINE
@@ -92,7 +91,7 @@ fi
 
 AM_CONDITIONAL([ResourcesAllow], [test -d data])
 
-# Check for functions of libraries
+# Checking for library functions
 AC_FUNC_CLOSEDIR_VOID
 AC_FUNC_MKTIME
 AC_FUNC_SELECT_ARGTYPES
@@ -157,7 +156,10 @@ AC_SEARCH_LIBS(deflate, [z], [], AC_MSG_ERROR([Z library isn't found. Install or
 # Check for the PCRE library using in the OpenSCADA core
 CXXFLAGS="$CXXFLAGS $($PKG_CONFIG --cflags libpcre)"
 AC_CHECK_HEADERS([pcre.h], [], AC_MSG_ERROR([The PCRE header isn't found. Install or check the PCRE developing package!]))
-AC_SEARCH_LIBS(pcre_compile, [pcre], [], AC_MSG_ERROR([The PCRE library isn't found. Install or check the PCRE package!]))
+AC_SEARCH_LIBS(pcre_compile, [pcre], [
+    AC_SEARCH_LIBS(pcre16_compile, [pcre16], AC_DEFINE(HAVE_PCRE16, 1, [PCRE16 is allowed]))
+    AC_SEARCH_LIBS(pcre32_compile, [pcre32], AC_DEFINE(HAVE_PCRE32, 1, [PCRE32 is allowed]))
+], AC_MSG_ERROR([The PCRE library isn't found. Install or check the PCRE package!]))
 
 # Check for the GD library using into the OpenSCADA core
 if test $enable_LibGD = yes; then

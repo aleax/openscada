@@ -149,6 +149,9 @@ msgstr "ВВ"
 msgid "Identifier"
 msgstr "Ідентифікатор"
 
+msgid "The name's rows after the first one treat as help."
+msgstr "Рядки ім'я після першого опрацьовуються як допомога."
+
 msgid "Type"
 msgstr "Тип"
 
@@ -169,6 +172,7 @@ msgstr "Приховано"
 msgid "Default"
 msgstr "Замовчення"
 
+#, c-format
 msgid ""
 "Size source %s, bytecode %s; Registers totally %d, constants %d, internal "
 "functions' %d; Functions external %d, internal %d."

@@ -511,23 +511,28 @@ bool TFld::selNm2VlB( const string &name )
 
 XMLNode *TFld::cntrCmdMake( XMLNode *opt, const string &path, int pos, const string &user, const string &grp, int perm )
 {
-    XMLNode *n_e = TCntrNode::ctrMkNode("fld",opt,pos,(path+"/"+name()).c_str(),trD(descr()),
-	    (flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),1,"len",i2s(len()).c_str());
-    if(n_e) {
+    string dscr = trD(descr());
+    int dOff = 0; string dscr1 = TSYS::strLine(dscr, 0, &dOff);
+
+    XMLNode *nE = TCntrNode::ctrMkNode("fld", opt, pos, (path+"/"+name()).c_str(), dscr1,
+	    (flg()&TFld::NoWrite)?(perm&~_W_W_W):perm, user.c_str(), grp.c_str(),1,"len",i2s(len()).c_str());
+    if(nE) {
+	if(dOff < dscr.size())
+	    nE->setAttr("help", dscr.substr(dOff));
 	if(flg()&TFld::Selectable)
-	    n_e->setAttr("tp","str")->setAttr("len","")->setAttr("dest",(flg()&TFld::SelEdit)?"sel_ed":"select")->
+	    nE->setAttr("tp","str")->setAttr("len","")->setAttr("dest",(flg()&TFld::SelEdit)?"sel_ed":"select")->
 		setAttr("sel_id",values())->setAttr("sel_list",selNames());
 	else switch(type()) {
 	    case TFld::String:
-		n_e->setAttr("tp","str");
-		if(flg()&FullText)	n_e->/*setAttr("cols","100")->*/setAttr("rows","4");
+		nE->setAttr("tp","str");
+		if(flg()&FullText)	nE->/*setAttr("cols","100")->*/setAttr("rows","4");
 		break;
-	    case TFld::Integer:	n_e->setAttr("tp",(flg()&HexDec)?"hex":((flg()&OctDec)?"oct":"dec"));	break;
-	    case TFld::Real:	n_e->setAttr("tp","real");	break;
-	    case TFld::Boolean:	n_e->setAttr("tp","bool");	break;
-	    case TFld::Object:	n_e->setAttr("tp","str")->setAttr("cols","100")->setAttr("rows","4");	break;
+	    case TFld::Integer:	nE->setAttr("tp",(flg()&HexDec)?"hex":((flg()&OctDec)?"oct":"dec"));	break;
+	    case TFld::Real:	nE->setAttr("tp","real");	break;
+	    case TFld::Boolean:	nE->setAttr("tp","bool");	break;
+	    case TFld::Object:	nE->setAttr("tp","str")->setAttr("cols","100")->setAttr("rows","4");	break;
 	    default: break;
 	}
     }
-    return n_e;
+    return nE;
 }

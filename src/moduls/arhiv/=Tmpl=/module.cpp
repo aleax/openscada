@@ -1,5 +1,4 @@
 
-//!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module Archive.Tmpl file: module.cpp
 /***************************************************************************
  *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
@@ -19,20 +18,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-//!!! System's includings. Add need for your module includings.
+// System includings - add need ones
 #include <sys/stat.h>
 #include <signal.h>
-#include <string>
 
-//!!! OpenSCADA module's API includings. Add need for your module includings.
+// OpenSCADA API includings - add need ones
 #include <tsys.h>
 #include <resalloc.h>
 #include <tmess.h>
 
-//!!! Self your module's includings. Add need for your module includings.
+// Own includings of the module - add need ones
 #include "module.h"
 
-//!!! Module's meta-information. Change for your module.
 //*************************************************
 //* Module info!                                  *
 #define MOD_ID		"Tmpl"
@@ -45,10 +42,9 @@
 #define LICENSE		"MyLicense"
 //*************************************************
 
-ModTmpl::ModArch *ModTmpl::mod;
+ArhTmpl::ModArch *ArhTmpl::mod;
 
-//!!! Required section for binding OpenSCADA kernel's to this module. Gives information and create module's root object.
-//!!! Not remove this section!
+// Required section for binding OpenSCADA core to this module, It gives information and creates module root object - do not change
 extern "C"
 {
 #ifdef MOD_INCL
@@ -57,7 +53,7 @@ extern "C"
     TModule::SAt module( int n_mod )
 #endif
     {
-	if( n_mod==0 ) 	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID, MOD_TYPE, VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -67,59 +63,39 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) ) 
-	    return new ModTmpl::ModArch( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new ArhTmpl::ModArch(source);
 	return NULL;
     }
 }
 
-//!!! Include for default call into your module's namespace.
-using namespace ModTmpl;
+using namespace ArhTmpl;
 
 //*************************************************
-//* ModTmpl::ModArch                               *
+//* ArhTmpl::ModArch                               *
 //*************************************************
-//!!! Constructor for module's root object. Append into for your need.
 ModArch::ModArch( const string &name ) : TTypeArchivator(MOD_ID)
 {
-    //!!! Init shortcut to module's root object. No change it.
     mod = this;
 
-    //!!! Loading module's meta-information into root object. No change it.
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 }
 
-//!!! Module's post enable call. Add your module objects initialize code.
-void ModArch::postEnable( int flag )
-{
-    TModule::postEnable( flag );
-
-    if(!(flag&TCntrNode::NodeConnect))	return;
-
-    //!!! Place here your code for internal objects initialize.
-}
-
-//!!! Destructor for root module's object.
 ModArch::~ModArch( )
 {
     try{ modStop(); } catch(...) { }
 }
 
-//!!! Inherited (virtual) load and save object's node methods. Call from OpenSCADA kernel.
-void ModArch::load_( )
+void ModArch::postEnable( int flag )
 {
-    //> Load parameters from command line
+    TModule::postEnable(flag);
 
+    if(flag&TCntrNode::NodeConnect) {
+	//Adding the own DB-fields for archives
+	owner().messE().fldAdd(new TFld("A_PRMS","Addon parameters",TFld::String,TFld::FullText,"10000"));
+	owner().valE().fldAdd(new TFld("A_PRMS","Addon parameters",TFld::String,TFld::FullText,"10000"));
+    }
 }
 
-//!!! Main subsystem API function for self modules message objects creation.
-TMArchivator *ModArch::AMess( const string &iid, const string &idb )
-{
-    return new ModMArch(iid,idb,&owner().messE());
-}
+TMArchivator *ModArch::AMess( const string &id, const string &db ) { return new ModMArch(id, db, &owner().messE()); }
 
-//!!! Main subsystem API functions for self modules value archive objects creation.
-TVArchivator *ModArch::AVal( const string &iid, const string &idb )
-{
-    return new ModVArch(iid,idb,&owner().valE());
-}
+TVArchivator *ModArch::AVal( const string &id, const string &db ) { return new ModVArch(id, db, &owner().valE()); }

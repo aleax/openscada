@@ -71,7 +71,7 @@ class LibProjProp: public QDialog
 
     private slots:
 	//Private slots
-	void selectIco( );
+	void doIco( QAction * );
 	void isModify( QObject *snd = NULL );
 
 	void addMimeData( );
@@ -155,7 +155,7 @@ class VisItProp : public QDialog
 
     private slots:
 	//Private slots
-	void selectIco( );
+	void doIco( QAction * );
 	void isModify( QObject *snd = NULL );
 
 	void addAttr( );
@@ -172,13 +172,17 @@ class VisItProp : public QDialog
 	class ItemDelegate: public QItemDelegate
 	{
 	    public:
-		//Public methods
-		ItemDelegate(QObject *parent = 0);
+	    //Public methods
+	    ItemDelegate(QObject *parent = 0);
 
-		void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-		QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-		void setEditorData(QWidget *editor, const QModelIndex &index) const;
-		void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+	    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+	    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+	    void setEditorData(QWidget *editor, const QModelIndex &index) const;
+	    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+
+	    private:
+	    //Private attributes
+	    bool eventFilter( QObject *object, QEvent *event );
 	};
 	//Private attributes
 	QTabWidget	*wdg_tabs;	//Tabs
@@ -186,6 +190,8 @@ class VisItProp : public QDialog
 			*obj_root,	//Root
 			*obj_path,	//Path
 			*obj_st,	//Status
+			*lab_proc_perG,	//Label of the periodic processing
+			*lab_proc_per,	//Label of the procedure calculate period
 			*lab_proc_text_tr; //Label of the widget's procedure program text translation
 //			*obj_used,	//Used
 //			*obj_tmstmp;	//TimeStamp
@@ -196,6 +202,7 @@ class VisItProp : public QDialog
 
 	LineEdit	*obj_name;	//Name
 	TextEdit	*obj_descr;	//Description
+	LineEdit	*proc_perG;	//Periodic processing
 
 	InspAttr	*obj_attr;	//Attributes inspector
 	InspLnk		*obj_lnk;	//Links inspector

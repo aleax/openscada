@@ -37,7 +37,7 @@
 #define MOD_NAME	trS("DAQ boards by Comedi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.20"
+#define MOD_VER		"1.0.21"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org).")
 #define LICENSE		"GPL2"
@@ -522,7 +522,7 @@ void TMdPrm::vlArchMake( TVal &val )
 
     if(val.arch().freeStat()) return;
     if(asynchRd) {
-	val.arch().at().setSrcMode(TVArchive::PassiveAttr);
+	val.arch().at().setSrcMode(TVArchive::DAQAttr);
 	val.arch().at().setPeriod(owner().period() ? (int64_t)owner().period()/1000 : 1000000);
     }
     else {

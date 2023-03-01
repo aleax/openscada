@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.AMRDevs 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-01 11:07+0300\n"
+"POT-Creation-Date: 2022-07-15 20:16+0300\n"
 "PO-Revision-Date: 2011-07-19 20:33+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -17,8 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 1.2\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgid "13:Error respond: Too short."
 msgstr "13:Fehler der Antwort: Zu kurz."
@@ -109,7 +108,7 @@ msgid "Firmware version"
 msgstr "Die Firmwareversion"
 
 msgid "Kontar"
-msgstr ""
+msgstr "Kontar"
 
 msgid "Input transport"
 msgstr "Eingabetransport"
@@ -200,6 +199,10 @@ msgid "Error: '%s': '%s'"
 msgstr "Fehler: '%s': '%s'"
 
 #, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr "Schließen der Datei %d Fehler '%s (%d)'!"
+
+#, c-format
 msgid "15:Response PDU size (%d from %d) error."
 msgstr "15:Antwort PDU-Größe (%d von %d) Fehler."
 
@@ -257,3 +260,4 @@ msgstr "Bearbeitung"
 
 msgid "11:Value not gathered."
 msgstr "11:Der Wert ist nicht empfangen."
+

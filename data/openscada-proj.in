@@ -14,7 +14,7 @@ openscada-proj proc|create|remove|update {ProjName}
   update - update from 0.8.0 LTS;
  Arguments:
   ProjName - project name;
- Environments:
+ Environment variables:
   dPrj     - directory of projects OpenSCADA, can be RO;
   dPrjUser - directory of projects OpenSCADA of the user, WR;
   dSysCfg  - directory of system configuration;
@@ -29,19 +29,19 @@ openscada-proj backupList {ProjName}
  Arguments:
   ProjName   - project name;
   BackupName - the backup archive name.
- Environments:
-  OSCADA_TAR_ComprPrg - TAR compression program, at missing there used gzip.
-  OSCADA_BackLim      - Backups limit, 10 by default
+ Environment variables:
+  OSCD_TAR_ComprPrg - TAR compression program, by default gzip;
+  OSCD_TAR_Args     - TAR extra arguments, by default \"--exclude=lock --exclude=ARCHIVES\";
+  OSCD_BackLim      - Backups limit, by default 10.
 ";
 }
 
 if test $# -lt 1; then argHelp; exit 0; fi
 
-dPrjUser=${dPrjUser=~/.openscada}
-if test "x$dPrj" = "x"; then dPrj=@oscd_datadir_full@; fi
-if test "x$dSysCfg" = "x"; then dSysCfg=@sysconfdir_full@; fi
-if test "x$dData" = "x"; then dData=@datadir_full@; fi
-
+dPrjUser=${dPrjUser:=~/.openscada}
+dPrj=${dPrj:=@oscd_datadir_full@}
+dSysCfg=${dSysCfg:=@sysconfdir_full@}
+dData=${dData:=@datadir_full@}
 
 case "$1" in
   list)
@@ -161,13 +161,14 @@ case "$1" in
     cd $prjsDir
     if test -d $prjNm; then
 	echo "Backuping the project \"$prjNm\" to $prjBackNm"
-	if test "x$OSCD_TAR_ComprPrg" = "x"; then OSCD_TAR_ComprPrg=gzip; fi
-	tar --exclude="lock" -I$OSCD_TAR_ComprPrg -cvf $prjBackNm $prjNm > /dev/null
+	OSCD_TAR_ComprPrg=${OSCD_TAR_ComprPrg:=gzip}
+	OSCD_TAR_Args=${OSCD_TAR_Args:=--exclude=lock --exclude=ARCHIVES}
+	tar -I$OSCD_TAR_ComprPrg $OSCD_TAR_Args -cvf $prjBackNm $prjNm > /dev/null
 	ln -f -s $prjBackNm ${prjNm}_last.backup
 
 	#Processing the backup limit
 	iBack=0
-	if test "x$OSCD_BackLim" = "x"; then OSCD_BackLim=10; fi
+	OSCD_BackLim=${OSCD_BackLim:=10}
 	for iF in `ls -t ${prjNm}_*.backup 2> /dev/null`; do
 	    if test -h $iF; then continue; fi
 	    if test $iBack -ge $OSCD_BackLim; then

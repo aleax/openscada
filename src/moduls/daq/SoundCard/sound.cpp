@@ -35,7 +35,7 @@
 #define MOD_NAME	trS("Sound card")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.8.8"
+#define MOD_VER		"0.8.9"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides an access to the sound card.")
 #define LICENSE		"GPL2"
@@ -298,7 +298,7 @@ int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long frames
 	int  chn = cntr.pHd[iP].at().iCnl();
 	AutoHD<TVal> val = cntr.pHd[iP].at().vlAt("val");
 	AutoHD<TVArchive> arch = val.at().arch();
-	bool archAllow = (!arch.freeStat() && arch.at().srcMode() == TVArchive::PassiveAttr);
+	bool archAllow = (!arch.freeStat() && arch.at().srcMode() == TVArchive::DAQAttr);
 	switch(cntr.mSmplType) {
 	    case paFloat32:
 		if(archAllow)
@@ -423,7 +423,7 @@ void TMdPrm::vlArchMake( TVal &val )
     TParamContr::vlArchMake(val);
 
     if(val.arch().freeStat()) return;
-    val.arch().at().setSrcMode(TVArchive::PassiveAttr);
+    val.arch().at().setSrcMode(TVArchive::DAQAttr);
     val.arch().at().setPeriod(1000000/owner().mSmplRate);
     val.arch().at().setHardGrid(true);
     val.arch().at().setHighResTm(true);

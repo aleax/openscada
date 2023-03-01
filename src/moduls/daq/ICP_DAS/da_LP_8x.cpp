@@ -21,6 +21,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <errno.h>
 
 #include <tsys.h>
 
@@ -198,7 +199,8 @@ void da_LP_8x::getVal( TMdPrm *p )
 		rV = (rV>>1)&0x0f;
 		val = ~(((rV&0x08) >> 3) | ((rV&0x04) >> 1) | ((rV&0x02) << 1) | ((rV&0x01) << 3)) & 0x0f;
 	    }
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(p->nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	}
 	p->vlAt("RS").at().setI(val, 0, true);
     }
@@ -536,7 +538,7 @@ void *da_LP_8x::fastTask( void *ip )
 		for(unsigned iC = 0; iC < cnls.size(); iC++) {
 		    // Place the readed data to OpenSCADA buffers
 		    AutoHD<TVArchive> arch;
-		    if(!cnls[iC].at().arch().freeStat() && (arch=cnls[iC].at().arch()).at().srcMode() == TVArchive::PassiveAttr)
+		    if(!cnls[iC].at().arch().freeStat() && (arch=cnls[iC].at().arch()).at().srcMode() == TVArchive::DAQAttr)
 			for(int64_t iT = 0; iT < tSz; iT += arch.at().period()) {
 			    //i8014W_CalibrateData(p.modSlot, gainArr[iC], rdData[((rdCnt/cnls.size())*iT/tSz)*cnls.size()+iC], &vAI);
 			    vAI = (10.0/(gainArr[iC]?2*gainArr[iC]:1))*(float)rdData[((rdCnt/cnls.size())*iT/tSz)*cnls.size()+iC]/32670; //Better up to 1.5%

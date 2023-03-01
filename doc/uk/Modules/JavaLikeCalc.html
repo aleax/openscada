@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../../en/files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="../index.html"><img alt="OpenSCADA" src="../../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="../index.html"><img src="../../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/Обчислювач подібний до Java</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FJavaLikeCalc&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/JavaLikeCalc" title="Modules/JavaLikeCalc">Modules/JavaLikeCalc</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/JavaLikeCalc.html" title="Modules/JavaLikeCalc (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/JavaLikeCalc.html" title="Модули/Вычислитель похожий на Java (100% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FJavaLikeCalc&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/JavaLikeCalc" title="Modules/JavaLikeCalc">Modules/JavaLikeCalc</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/JavaLikeCalc.html" title="Modules/JavaLikeCalc (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/JavaLikeCalc.html" title="Модули/Вычислитель похожий на Java (93% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a> </td>
 <td> Обчислювач на мові подібній до Java
 </td>
-<td> 5.4 </td>
+<td> 5.5 </td>
 <td> GPL2 </td>
 <td> daq_JavaLikeCalc.so </td>
 <td> en,uk,ru,de </td>
@@ -44,9 +44,9 @@
 <p>Модуль джерела даних надає до OpenSCADA механізм створення функцій та їх бібліотек на мові подібній до Java. Опис функції на мові подібній до Java зводиться до обв'язки параметрів функції алгоритмом. Крім цього модуль наділено функціями безпосередніх обчислень шляхом створення об'єктів обчислювальних контролерів.
 </p><p>Безпосередні обчислення забезпечуються створенням об'єкту контролеру та зв'язуванням його із функцією цього-ж модуля. Для зв'язування функції створюється кадр значень (контекст), над яким і виконуються періодичні обчислення.
 </p><p>Модулем реалізуються функції горизонтального резервування, а саме — спільна робота з віддаленою станцією цього-ж рівня. Окрім синхронізації значень та архівів атрибутів параметрів, модулем здійснюється синхронізація значень обчислювальної функції, з метою безударного "підхоплення" алгоритмів.
-</p><p>Параметри функції можуть вільно створюватися, видалятися або модифікуватися. Поточна версія модуля підтримує до 65535 параметрів функції, у підсумку із внутрішніми змінними. Вигляд редагування функцій у конфігураторі OpenSCADA показано на рисунку 1.
+</p><p>Параметри функції можуть вільно створюватися, видалятися або модифікуватися. Поточна версія модуля підтримує до 65535 параметрів функції, у підсумку із внутрішніми змінними. Вигляд редагування функцій у конфігураторі OpenSCADA показано на рисунку 1. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Рядки ім'я параметрів після першого опрацьовуються як допомога.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:993px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_funcedit_uk.png"><img class="thumbimage" height="683" src="../files/JavaLikeCalc_funcedit_uk.png" width="991" /></a>  <div class="thumbcaption">Рис.1. Вигляд редагування функцій у конфігураторі OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:944px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_funcedit_uk.png"><img class="thumbimage" height="683" src="../files/JavaLikeCalc_funcedit_uk.png" width="942" /></a>  <div class="thumbcaption">Рис.1. Вигляд редагування функцій у конфігураторі OpenSCADA.</div></div></div></div>
 <p>Після будь-якої зміни тексту програми або конфігурації параметрів, здійснюється перекомпіляція програми із повідомленням об'єктів значень <i>TValCfg</i>, пов'язаних з функцією. Компілятор мови побудовано із використанням відомого генератору граматики "Bison", який сумісний з не менш відомою утилітою "Yacc".
 </p><p>Мова використовує неявне визначення локальних змінних, яке полягає у визначені нової змінної у випадку привласнення їй значення. Причому тип локальної змінної встановлюється у відповідності з типом значення, що привласнюється. Наприклад, вираз <b>Qr=Q0*Pi+0.01;</b> визначить змінну <b>Qr</b> з типом змінної <b>Q0</b>.
 </p><p>У роботі з різними типами ця мова використовує механізм автоматичного приведення типів у місцях, де подібне приведення є доцільним.
@@ -54,10 +54,9 @@
 </p><p>У процесі генерації коду, компілятор мови здійснює оптимізацію за константам та приведення типів констант до потрібного типу. Під оптимізацією констант мається на увазі обчислення двох констант та вставка результату у код, у процесі побудови байт-коду. Наприклад, вираз <b>y=pi*10;</b> згорнеться у просте привласнення <b>y=31.4159;</b>. Під приведенням типів констант до потрібного типу мається на увазі формування константи у коді, яка виключає приведення типу в процесі виконання. Наприклад, вираз <b>y=x*"10";</b>, у випадку реального типу змінної <b>x</b>, перетвориться у <b>y=x*10;</b>.
 </p><p>Вирази привласнення можуть записуватися через символ ',', наприклад:
 </p>
-<pre style="white-space: pre-wrap;">
-var1 = 1, var2 = 3, var4 = var1+var2;
-for(var1 = 0, var2 = 0, var3 = -1; var1 &lt; 10; var1++, var2++) var3++;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">var1</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">var2</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="nx">var4</span> <span class="o">=</span> <span class="nx">var1</span><span class="o">+</span><span class="nx">var2</span><span class="p">;</span>
+<span class="k">for</span><span class="p">(</span><span class="nx">var1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">var2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">var3</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="nx">var1</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="nx">var1</span><span class="o">++</span><span class="p">,</span> <span class="nx">var2</span><span class="o">++</span><span class="p">)</span> <span class="nx">var3</span><span class="o">++</span><span class="p">;</span>
+</pre></div>
 <p>Мова підтримує виклики зовнішніх та внутрішніх функцій. Ім'я будь-якої функції, взагалі, сприймається як символ, перевірка якого на належність до тієї або іншої категорії здійснюється у наступній послідовності:
 </p>
 <ul><li> не починається з крапки:
@@ -74,9 +73,9 @@ for(var1 = 0, var2 = 0, var3 = -1; var1 &lt; 10; var1++, var2++) var3++;
 <ul><li> елементи шляху до властивості та функції об'єкту, ім'я яких не має починатися на цифру та містити символи операцій.</li></ul></li></ul>
 <p>Виклик зовнішньої функції, як і глобального атрибуту параметру DAQ, записується у вигляді адреси до <a href="../User_API.html" title="Special:MyLanguage/Documents/User API">вузла об'єктної моделі OpenSCADA</a>: "DAQ.JavaLikeCalc.lib_techApp.klapNotLin". Для статичних функцій Ви можете наступним чином здійснювати динамічне підключення:
 </p>
-<pre style="white-space: pre-wrap;">
-function klapNotLin = "DAQ.JavaLikeCalc.lib_techApp.klapNotLin";
-rez = klapNotLin(prm1, prm2, ..., prmN);</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="kd">function</span> <span class="nx">klapNotLin</span> <span class="o">=</span> <span class="s2">"DAQ.JavaLikeCalc.lib_techApp.klapNotLin"</span><span class="p">;</span>
+<span class="nx">rez</span> <span class="o">=</span> <span class="nx">klapNotLin</span><span class="p">(</span><span class="nx">prm1</span><span class="p">,</span> <span class="nx">prm2</span><span class="p">,</span> <span class="p">...,</span> <span class="nx">prmN</span><span class="p">);</span>
+</pre></div>
 <p>Для надання можливості написання користувацьких процедур управління різними компонентами OpenSCADA, цим модулем надається реалізація API прекомпіляції користувацьких процедур окремих компонентів OpenSCADA на мові подібної до Java. Такими компонентами, наприклад, є: шаблони параметрів <a href="../Program_manual.html#DAQ" title="Special:MyLanguage/Documents/Program manual">підсистеми "Збір даних"</a> та <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">середовище візуалізації та управління (СВУ)</a>.
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -103,8 +102,9 @@ rez = klapNotLin(prm1, prm2, ..., prmN);</pre>
 <li class="toclevel-1 tocsection-14"><a href="#.D0.91.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA.D0.B8_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D0.B9_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="tocnumber">4</span> <span class="toctext"><span>Бібліотеки функцій модуля</span></span></a></li>
 <li class="toclevel-1 tocsection-15"><a href="#.D0.9A.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D1.96_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="tocnumber">5</span> <span class="toctext">Користувацькі функції модуля</span></a></li>
 <li class="toclevel-1 tocsection-16"><a href="#API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">6</span> <span class="toctext">API користувацького програмування</span></a></li>
-<li class="toclevel-1 tocsection-17"><a href="#.D0.9F.D1.80.D0.BE.D0.B4.D1.83.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D1.96.D1.81.D1.82.D1.8C"><span class="tocnumber">7</span> <span class="toctext"><span>Продуктивність</span></span></a></li>
-<li class="toclevel-1 tocsection-18"><a href="#.D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">8</span> <span class="toctext">Посилання</span></a></li>
+<li class="toclevel-1 tocsection-17"><a href="#.D0.A1.D0.B5.D1.80.D0.B2.D1.96.D1.81.D0.BD.D1.96_.D0.BA.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4.D0.B8-.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97_.D0.86.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.83_.D0.A3.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D1.96.D0.BD.D0.BD.D1.8F"><span class="tocnumber">7</span> <span class="toctext">Сервісні команди-функції Інтерфейсу Управління</span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#.D0.9F.D1.80.D0.BE.D0.B4.D1.83.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D1.96.D1.81.D1.82.D1.8C"><span class="tocnumber">8</span> <span class="toctext"><span>Продуктивність</span></span></a></li>
+<li class="toclevel-1 tocsection-19"><a href="#.D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">9</span> <span class="toctext">Посилання</span></a></li>
 </ul>
 </div>
 
@@ -214,11 +214,13 @@ rez = klapNotLin(prm1, prm2, ..., prmN);</pre>
 <p>Мовою підтримуються два типи умов. Перший — це операції умови для використання всередині виразу, другий — глобальний, заснований на умовних операторах.
 </p><p>Умова всередині виразу будується на операціях '?' та ':'. У якості прикладу можна записати наступний практичний вираз:
 </p>
-<pre style="white-space: pre-wrap;">st_open = (pos &gt;= 100)&nbsp;? true&nbsp;: false;</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">st_open</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pos</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+</pre></div>
 <p>Що читається як — якщо змінна <i>pos</i> більша або дорівнює <b>100</b>, тоді змінній <i>st_open</i> привласнюється значення <b>true</b>, інакше — <b>false</b>.
 </p><p>Глобальна умова будується на основі умовних операторів "if" та "else". У якості прикладу можна привести той-же вираз, але записаний у інший спосіб:
 </p>
-<pre style="white-space: pre-wrap;">if(pos &gt; 100) st_open = true; else st_open = false;</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="k">if</span><span class="p">(</span><span class="nx">pos</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">)</span> <span class="nx">st_open</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span> <span class="k">else</span> <span class="nx">st_open</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</pre></div>
 <h4><span class="mw-headline" id=".D0.A6.D0.B8.D0.BA.D0.BB.D0.B8"><span class="mw-headline-number">1.4.2</span> Цикли</span></h4>
 <p>Підтримується три типи циклів: <b>while</b>, <b>for</b> та <b>for-in</b>. Синтаксис циклів відповідає мовам програмування: C++, Java та JavaScript.
 </p><p>Цикл <b>while</b>, загалом, записується наступним чином: <b>while({умова}) {тіло циклу};</b><br />
@@ -239,14 +241,13 @@ rez = klapNotLin(prm1, prm2, ..., prmN);</pre>
 </p><p>Оператор "return", в середині внутрішньої функції, здійснює контрольоване її завершення та розташування вказаної змінної, або результату виразу, як результату викликуваної внутрішньої функції.
 </p><p>Приклад типового визначення та використання внутрішньої функції наведено далі:
 </p>
-<pre style="white-space: pre-wrap;">
-function sum(a, b, c, d) { return a + ((b==EVAL)?0:b) + ((c==EVAL)?0:c) + ((d==EVAL)?0:d); }
-rez = sum(1, 2);
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="kd">function</span> <span class="nx">sum</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="p">((</span><span class="nx">b</span><span class="o">==</span><span class="nx">EVAL</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">b</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="nx">c</span><span class="o">==</span><span class="nx">EVAL</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">c</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="nx">d</span><span class="o">==</span><span class="nx">EVAL</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">d</span><span class="p">);</span> <span class="p">}</span>
+<span class="nx">rez</span> <span class="o">=</span> <span class="nx">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+</pre></div>
 <h4><span class="mw-headline" id=".D0.A1.D0.BF.D0.B5.D1.86.D1.96.D0.B0.D0.BB.D1.8C.D0.BD.D1.96_.D1.81.D0.B8.D0.BC.D0.B2.D0.BE.D0.BB.D0.B8_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.BE.D0.B2.D0.B8.D1.85_.D0.B7.D0.BC.D1.96.D0.BD.D0.BD.D0.B8.D1.85"><span class="mw-headline-number">1.4.4</span> Спеціальні символи строкових змінних</span></h4>
 <p>Мовою передбачено підтримку наступних спеціальних символів строкових змінних:
 </p>
-<dl><dd>"\n" — перевід рядка;</dd>
+<dl><dd>"\n" — переведення рядка;</dd>
 <dd>"\t" — символ табуляції;</dd>
 <dd>"\b" — забій;</dd>
 <dd>"\f" — перевід сторінки;</dd>
@@ -262,11 +263,10 @@ rez = sum(1, 2);
 </p><p>Об'єкт регулярного виразу "RegExp" створюється командою <b>varO = new RegExp(pat, flg)</b>, де <i>pat</i> — шаблон регулярного виразу, а <i>flg</i> — ознаки пошуку. Об'єкт роботи із регулярними виразами оснований на бібліотеці "PCRE". При глобальному пошуку встановлюється атрибут об'єкту "lastIndex", що дозволяє продовжити пошук у наступному виклику функції. У випадку невдалого пошуку атрибут "lastIndex" скидається у нуль. Детальніше про властивості та функції об'єкту регулярного виразу можна прочитати за <a href="../User_API.html#RegExp" title="Special:MyLanguage/Documents/User API">посиланням</a>.
 </p><p>Для довільного доступу до аргументів функції передбачено об'єкт аргументів, звернутися до якого можна за посередництвом символу "arguments". Цей об'єкт містить властивість "length" з кількістю аргументів у функції та дозволяє звернутися до значень аргументу за посередництвом його <b>номеру</b> або <b>ідентифікатору</b>. Розглянемо перебір аргументів по циклу:
 </p>
-<pre style="white-space: pre-wrap;">
-args = new Array();
-for(var i = 0; i &lt; arguments.length; i++)
-  args[i] = arguments[i];
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">args</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">();</span>
+<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span>
+  <span class="nx">args</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+</pre></div>
 <p>Часткові властивості об'єкту мають і базові типи. Властивості та функції базових типів приведено нижче:
 </p>
 <ul><li> Нульовий тип, функції:
@@ -301,32 +301,32 @@ for(var i = 0; i &lt; arguments.length; i++)
 <li> <i>int indexOf( string substr, int start = 0 );</i> — повертає позицію пошукового рядка <i>substr</i> у вихідному рядку, починаючи з позиції <i>start</i>. Якщо вихідна позиція не вказана то пошук починається з початку. Якщо шуканого рядка не знайдено то повертається "-1".</li>
 <li> <i>int lastIndexOf( string substr, int start = {end} );</i> — повертає позицію шуканого рядка <i>substr</i> у вихідному рядку починаючи з позиції <i>start</i>, при пошуку з кінця. Якщо вихідна позиція не вказана то пошук починається з кінця. Якщо шуканого рядку не знайдено то повертається "-1".</li>
 <li> <i>int search( string pat, string flg = "" );</i> — шукає у рядку за шаблоном <i>pat</i> та ознаками шаблону <i>flg</i>. Повертає положення знайденого рядку інакше "-1".</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-var rez = "Java123Script".search("script","i");  // rez = 7</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="kd">var</span> <span class="nx">rez</span> <span class="o">=</span> <span class="s2">"Java123Script"</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="s2">"script"</span><span class="p">,</span><span class="s2">"i"</span><span class="p">);</span>  <span class="c1">// rez = 7</span>
+</pre></div>
 <dl><dd><ul><li> <i>int search( RegExp pat );</i> — шукає у рядку за шаблоном "RegExp" <i>pat</i>. Повертає положення найденого підрядку інакше "-1".</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-var rez = "Java123Script".search(new RegExp("script","i"));  // rez = 7</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="kd">var</span> <span class="nx">rez</span> <span class="o">=</span> <span class="s2">"Java123Script"</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">"script"</span><span class="p">,</span><span class="s2">"i"</span><span class="p">));</span>  <span class="c1">// rez = 7</span>
+</pre></div>
 <dl><dd><ul><li> <i>Array match( string pat, string flg = "" );</i> — шукає у рядку за шаблоном <i>pat</i> та ознаками шаблону <i>flg</i>. Повертає масив із знайденим підрядком (0) та підвиразами (&gt;1). Атрибут "index" масиву встановлюється у позицію знайденого підрядка. Атрибут "input" встановлюється у початковий рядок. Атрибут "err" встановлюється у код помилки операції.</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-var rez = "1 плюс 2 плюс 3".match("\\d+","g");  // rez = [1], [2], [3]</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="kd">var</span> <span class="nx">rez</span> <span class="o">=</span> <span class="s2">"1 плюс 2 плюс 3"</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="s2">"\\d+"</span><span class="p">,</span><span class="s2">"g"</span><span class="p">);</span>  <span class="c1">// rez = [1], [2], [3]</span>
+</pre></div>
 <dl><dd><ul><li> <i>Array match( TRegExp pat );</i> — шукає у рядку за шаблоном "RegExp" <i>pat</i>. Повертає масив зі знайденим підрядком (0) та підвиразами (&gt;1). Атрибут "index" масиву встановлюється у позицію знайденого підрядка. Атрибут "input" встановлюється у початковий рядок. Атрибут "err" встановлюється у код помилки операції.</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-var rez = "1 плюс 2 плюс 3".match(new RegExp("\\d+","g"));  // rez = [1], [2], [3]</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="kd">var</span> <span class="nx">rez</span> <span class="o">=</span> <span class="s2">"1 плюс 2 плюс 3"</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">"\\d+"</span><span class="p">,</span><span class="s2">"g"</span><span class="p">));</span>  <span class="c1">// rez = [1], [2], [3]</span>
+</pre></div>
 <dl><dd><ul><li> <i>string slice( int beg, int end ); string substring( int beg, int end );</i> — повертає підрядок вилучений з початкового, починаючи з позиції <i>beg</i> та до <i>end</i> (не включаючи), нумерація з нуля. Якщо значення початку або кінця негативне, то відлік ведеться з кінця рядку. Якщо кінець не вказано, то кінцем є кінець рядку. Наприклад, конструкція <b>substring(-2)</b> поверне останні два символи рядку.</li>
 <li> <i>Array split( string sep, int limit );</i> — повертає масив елементів рядку, поділених <i>sep</i> та з обмеженням кількості елементів <i>limit</i>.</li>
 <li> <i>Array split( RegExp pat, int limit );</i> — повертає масив елементів рядку, поділених шаблоном "RegExp" <i>pat</i> та з обмеженням кількості елементів <i>limit</i>.</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-rez = "1,2, 3 , 4 ,5".split(new RegExp("\\s*,\\s*"));  // rez = [1], [2], [3], [4], [5]</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="nx">rez</span> <span class="o">=</span> <span class="s2">"1,2, 3 , 4 ,5"</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">"\\s*,\\s*"</span><span class="p">));</span>  <span class="c1">// rez = [1], [2], [3], [4], [5]</span>
+</pre></div>
 <dl><dd><ul><li> <i>string insert( int pos, string substr );</i> — вставляє підрядок <i>substr</i> у позицію <i>pos</i> поточного рядку.</li>
 <li> <i>string replace( int pos, int n, string str );</i> — замінює підрядок з позиції <i>pos</i> та довжиною <i>n</i> у поточному рядку, на рядок <i>str</i>.</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-rez = "Javascript".replace(4,3,"67");  // rez = "Java67ipt"</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="nx">rez</span> <span class="o">=</span> <span class="s2">"Javascript"</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s2">"67"</span><span class="p">);</span>  <span class="c1">// rez = "Java67ipt"</span>
+</pre></div>
 <dl><dd><ul><li> <i>string replace( string substr, string str );</i> — замінює всі підрядки <i>substr</i> на рядок <i>str</i>. </li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-rez = "123 321".replace("3","55");  // rez = "1255 5521"</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="nx">rez</span> <span class="o">=</span> <span class="s2">"123 321"</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">"3"</span><span class="p">,</span><span class="s2">"55"</span><span class="p">);</span>  <span class="c1">// rez = "1255 5521"</span>
+</pre></div>
 <dl><dd><ul><li> <i>string replace( RegExp pat, string str );</i> — замінює підрядок за шаблоном <i>pat</i> на рядок <i>str</i>.</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-rez = "value = \"123\"".replace(new RegExp("\"([^\"]*)\"","g"),"``$1''"));  // rez = "value = ``123''"</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="nx">rez</span> <span class="o">=</span> <span class="s2">"value = \"123\""</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">"\"([^\"]*)\""</span><span class="p">,</span><span class="s2">"g"</span><span class="p">),</span><span class="s2">"``$1''"</span><span class="p">));</span>  <span class="c1">// rez = "value = ``123''"</span>
+</pre></div>
 <dl><dd><ul><li> <i>real toReal();</i> — перетворює поточной рядок у реальне число.</li>
 <li> <i>int toInt( int base = 10 );</i> — перетворює поточний рядок у ціле число, відповідно до основи <i>base</i> (від 2 до 36). Якщо основа дорівнює 0 тоді буде враховуватися префіксний запис для визначення основи (123-десяткове; 0123-вісімкове; 0x123-шістнадцяткове).</li>
 <li> <i>string {parse,parseEnd}( int pos, string sep = ".", int off = {0,{length}}, bool mergeSepSymb = false );</i> — виокремлює із вихідного рядку елемент <i>pos</i> для роздільника елементів <i>sep</i> та від зміщення <i>off</i> (зупинка на початку наступного токену, або кінці для <i>parseEnd</i>). <i>mergeSepSymb</i> визначає дозвіл поєднання групи однакових символів у один роздільник. Результуюче зміщення поміщається назад до <i>off</i>. <i>parseEnd()</i> робить те саме, але з кінця.</li>
@@ -341,28 +341,26 @@ rez = "value = \"123\"".replace(new RegExp("\"([^\"]*)\"","g"),"``$1''"));  // r
 <h3><span class="mw-headline" id=".D0.9F.D1.80.D0.B8.D0.BA.D0.BB.D0.B0.D0.B4.D0.B8_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.B8_.D0.BD.D0.B0_.D1.86.D1.96.D0.B9_.D0.BC.D0.BE.D0.B2.D1.96"><span class="mw-headline-number">1.6</span> <span id="Examples" title="#Examples">Приклади програми на цій мові</span></span></h3>
 <p>Наведемо декілька прикладів програм на мові подібній до Java:
 </p>
-<pre style="white-space: pre-wrap;">
-//Модель ходу виконавчого механізму шарового крану
-if(!(st_close &amp;&amp;&nbsp;!com) &amp;&amp;&nbsp;!(st_open &amp;&amp; com))
-{
-  tmp_up = (pos&gt;0&amp;&amp;pos&lt;100)&nbsp;? 0&nbsp;: (tmp_up&gt;0&amp;&amp;lst_com==com)&nbsp;? tmp_up-1/frq&nbsp;: t_up;
-  pos += (tmp_up&gt;0)&nbsp;? 0&nbsp;: (100*(com?1:-1))/(t_full*frq);
-  pos = (pos&gt;100)&nbsp;? 100&nbsp;: (pos&lt;0)&nbsp;? 0&nbsp;: pos;
-  st_open = (pos&gt;=100)&nbsp;? true&nbsp;: false;
-  st_close = (pos&lt;=0)&nbsp;? true&nbsp;: false;
-  lst_com = com;
-}
-</pre>
-<pre style="white-space: pre-wrap;">
-//Модель клапану
-Qr = Q0 + Q0*Kpr*(Pi-1) + 0.01;
-Sr = (S_kl1*l_kl1+S_kl2*l_kl2)/100;
-Ftmp = (Pi&gt;2*Po)&nbsp;? Pi*pow(Q0*0.75/Ti,0.5)&nbsp;: (Po&gt;2*Pi)&nbsp;? Po*pow(Q0*0.75/To,0.5)&nbsp;: pow(abs(Q0*(pow(Pi,2)-pow(Po,2))/Ti),0.5);
-Fi -= (Fi-7260*Sr*sign(Pi-Po)*Ftmp)/(0.01*lo*frq);
-Po += 0.27*(Fi-Fo)/(So*lo*Q0*frq);
-Po = (Po&lt;0)&nbsp;? 0&nbsp;: (Po&gt;100)&nbsp;? 100&nbsp;: Po;
-To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*frq);
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c1">//Модель ходу виконавчого механізму кульового крану</span>
+<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">st_close</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">com</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">(</span><span class="nx">st_open</span> <span class="o">&amp;&amp;</span> <span class="nx">com</span><span class="p">))</span>
+<span class="p">{</span>
+  <span class="nx">tmp_up</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pos</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">&amp;&amp;</span><span class="nx">pos</span><span class="o">&lt;</span><span class="mi">100</span><span class="p">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="p">(</span><span class="nx">tmp_up</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">&amp;&amp;</span><span class="nx">lst_com</span><span class="o">==</span><span class="nx">com</span><span class="p">)</span> <span class="o">?</span> <span class="nx">tmp_up</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="nx">frq</span> <span class="o">:</span> <span class="nx">t_up</span><span class="p">;</span>
+  <span class="nx">pos</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">tmp_up</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="p">(</span><span class="mi">100</span><span class="o">*</span><span class="p">(</span><span class="nx">com</span><span class="o">?</span><span class="mi">1</span><span class="o">:-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="nx">t_full</span><span class="o">*</span><span class="nx">frq</span><span class="p">);</span>
+  <span class="nx">pos</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pos</span><span class="o">&gt;</span><span class="mi">100</span><span class="p">)</span> <span class="o">?</span> <span class="mi">100</span> <span class="o">:</span> <span class="p">(</span><span class="nx">pos</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="nx">pos</span><span class="p">;</span>
+  <span class="nx">st_open</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pos</span><span class="o">&gt;=</span><span class="mi">100</span><span class="p">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="nx">st_close</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pos</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="nx">lst_com</span> <span class="o">=</span> <span class="nx">com</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c1">//Модель клапану</span>
+<span class="nx">Qr</span> <span class="o">=</span> <span class="nx">Q0</span> <span class="o">+</span> <span class="nx">Q0</span><span class="o">*</span><span class="nx">Kpr</span><span class="o">*</span><span class="p">(</span><span class="nx">Pi</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">;</span>
+<span class="nx">Sr</span> <span class="o">=</span> <span class="p">(</span><span class="nx">S_kl1</span><span class="o">*</span><span class="nx">l_kl1</span><span class="o">+</span><span class="nx">S_kl2</span><span class="o">*</span><span class="nx">l_kl2</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span><span class="p">;</span>
+<span class="nx">Ftmp</span> <span class="o">=</span> <span class="p">(</span><span class="nx">Pi</span><span class="o">&gt;</span><span class="mi">2</span><span class="o">*</span><span class="nx">Po</span><span class="p">)</span> <span class="o">?</span> <span class="nx">Pi</span><span class="o">*</span><span class="nx">pow</span><span class="p">(</span><span class="nx">Q0</span><span class="o">*</span><span class="mf">0.75</span><span class="o">/</span><span class="nx">Ti</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">:</span> <span class="p">(</span><span class="nx">Po</span><span class="o">&gt;</span><span class="mi">2</span><span class="o">*</span><span class="nx">Pi</span><span class="p">)</span> <span class="o">?</span> <span class="nx">Po</span><span class="o">*</span><span class="nx">pow</span><span class="p">(</span><span class="nx">Q0</span><span class="o">*</span><span class="mf">0.75</span><span class="o">/</span><span class="nx">To</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">:</span> <span class="nx">pow</span><span class="p">(</span><span class="nx">abs</span><span class="p">(</span><span class="nx">Q0</span><span class="o">*</span><span class="p">(</span><span class="nx">pow</span><span class="p">(</span><span class="nx">Pi</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="nx">pow</span><span class="p">(</span><span class="nx">Po</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span><span class="o">/</span><span class="nx">Ti</span><span class="p">),</span><span class="mf">0.5</span><span class="p">);</span>
+<span class="nx">Fi</span> <span class="o">-=</span> <span class="p">(</span><span class="nx">Fi</span><span class="o">-</span><span class="mi">7260</span><span class="o">*</span><span class="nx">Sr</span><span class="o">*</span><span class="nx">sign</span><span class="p">(</span><span class="nx">Pi</span><span class="o">-</span><span class="nx">Po</span><span class="p">)</span><span class="o">*</span><span class="nx">Ftmp</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">0.01</span><span class="o">*</span><span class="nx">lo</span><span class="o">*</span><span class="nx">frq</span><span class="p">);</span>
+<span class="nx">Po</span> <span class="o">+=</span> <span class="mf">0.27</span><span class="o">*</span><span class="p">(</span><span class="nx">Fi</span><span class="o">-</span><span class="nx">Fo</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">So</span><span class="o">*</span><span class="nx">lo</span><span class="o">*</span><span class="nx">Q0</span><span class="o">*</span><span class="nx">frq</span><span class="p">);</span>
+<span class="nx">Po</span> <span class="o">=</span> <span class="p">(</span><span class="nx">Po</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="p">(</span><span class="nx">Po</span><span class="o">&gt;</span><span class="mi">100</span><span class="p">)</span> <span class="o">?</span> <span class="mi">100</span> <span class="o">:</span> <span class="nx">Po</span><span class="p">;</span>
+<span class="nx">To</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">abs</span><span class="p">(</span><span class="nx">Fi</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nx">Ti</span><span class="o">*</span><span class="nx">pow</span><span class="p">(</span><span class="nx">Po</span><span class="o">/</span><span class="nx">Pi</span><span class="p">,</span><span class="mf">0.02</span><span class="p">)</span><span class="o">-</span><span class="nx">To</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="nx">Fwind</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nx">Twind</span><span class="o">-</span><span class="nx">To</span><span class="p">)</span><span class="o">/</span><span class="nx">Riz</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">Ct</span><span class="o">*</span><span class="nx">So</span><span class="o">*</span><span class="nx">lo</span><span class="o">*</span><span class="nx">Qr</span><span class="o">*</span><span class="nx">frq</span><span class="p">);</span>
+</pre></div>
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83_.D1.82.D0.B0_.D0.B9.D0.BE.D0.B3.D0.BE_.D0.BA.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F"><span class="mw-headline-number">2</span> <span id="Controller" title="#Controller">Об'єкт контролеру та його конфігурація</span></span></h2>
 <p>Об'єкт контролеру цього модуля, для забезпечення безпосередніх обчислень, пов'язується з функціями із бібліотек, побудованими за його допомогою, або з <a href="../DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">шаблоном збору даних</a>. У випадку з шаблоном збору даних, додається можливість зовнішнього зв'язування, з іншими параметрами та атрибутами підсистеми "Збір даних". Для надання обчислювальних даних до OpenSCADA, у об'єкті контролеру можуть створюватися параметри. Приклад вкладки конфігурації об'єкту контролеру даного типу наведено на рисунку 2.
 </p>
@@ -405,7 +403,45 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 <ul><li> <i>ElTp call(ElTp prm1, ...)</i> — викликає функцію "func" бібліотеки "Lfunc" з параметрами <i>prm{N}</i>. Повертає результат викликаної функції. Префікс "lib_" перед ідентифікатором бібліотеки обов'язковий!</li></ul>
 <p><br />
 </p>
-<h2><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D0.B4.D1.83.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D1.96.D1.81.D1.82.D1.8C"><span class="mw-headline-number">7</span> <span id="Productivity" title="#Productivity">Продуктивність</span></span></h2>
+<h2><span class="mw-headline" id=".D0.A1.D0.B5.D1.80.D0.B2.D1.96.D1.81.D0.BD.D1.96_.D0.BA.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4.D0.B8-.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97_.D0.86.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.83_.D0.A3.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D1.96.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">7</span> Сервісні команди-функції Інтерфейсу Управління</span></h2>
+<p>Сервісні функції — це інтерфейс доступу до OpenSCADA із зовнішніх систем посередництвом <a href="../API.html#CntrNode" title="Special:MyLanguage/Documents/API">Інтерфейсу Управління</a>. Цей механізм покладено в основу усього обміну всередині OpenSCADA, реалізованого шляхом слабких зв'язків та <a href="../Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">власного протоколу обміну OpenSCADA</a>.
+</p><p><br />
+<b><u>Отримання значень ВВ функції об'єкту контролеру</u></b><br />
+ЗАП: <i>&lt;get path="/DAQ/JavaLikeCalc/<b>{CNTR}</b>/%2fserv%2ffncAttr" /&gt;</i>
+</p>
+<ul><li> <i>CNTR</i> — об'єкт контролеру.</li></ul>
+<p>ВІДП: <i>&lt;get path="/DAQ/JavaLikeCalc/{CNTR}/%2fserv%2ffncAttr" rez="<b>0</b>"&gt;<b>{IOs}</b>&lt;/get&gt;</i>
+</p>
+<ul><li> <i>IOs</i> — ВВ контексту виконання функції у тегах "a": <i>&lt;a id="<b>{ID}</b>"&gt;<b>{value}</b>&lt;/a&gt;</i>
+<ul><li> <i>ID</i> — ідентифікатор ВВ;</li>
+<li> <i>value</i> — значення ВВ.</li></ul></li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/DAQ/JavaLikeCalc/testCalc/%2fserv%2ffncAttr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"f_frq"</span><span class="nt">&gt;</span>0.1<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"f_start"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"f_stop"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"this"</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>TCntrNodeObj path="/sub_DAQ/mod_JavaLikeCalc/cntr_testCalc/"/<span class="ni">&amp;gt;</span><span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"offset"</span><span class="nt">&gt;</span>100<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"out"</span><span class="nt">&gt;</span>50<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"test"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"rez"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"inFarg"</span><span class="nt">&gt;</span>3<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
+</pre></div>
+<p><b><u>Встановлення значень ВВ функції об'єкту контролеру</u></b><br />
+ЗАП[<b>root-DAQ</b>]: <i>&lt;set path="/DAQ/JavaLikeCalc/<b>{CNTR}</b>/%2fserv%2ffncAttr"&gt;<b>{IOs}</b>&lt;/set&gt;</i>
+</p>
+<ul><li> <i>CNTR</i> — об'єкт контролеру;</li>
+<li> <i>IOs</i> — ВВ контексту виконання функції у тегах "a": <i>&lt;a id="<b>{ID}</b>"&gt;<b>{value}</b>&lt;/a&gt;</i>
+<ul><li> <i>ID</i> — ідентифікатор ВВ;</li>
+<li> <i>value</i> — значення ВВ.</li></ul></li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/DAQ/JavaLikeCalc/testCalc/%2fserv%2ffncAttr"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"out"</span><span class="nt">&gt;</span>50<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"test"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;/set&gt;</span>
+</pre></div>
+<p><br />
+</p>
+<h2><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D0.B4.D1.83.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D1.96.D1.81.D1.82.D1.8C"><span class="mw-headline-number">8</span> <span id="Productivity" title="#Productivity">Продуктивність</span></span></h2>
 <p>Початковий текст процедур на мові цього модуля компілюється у байт-код, який надалі обчислюється віртуальною машиною. Байт-код це не машинний код і досягнути продуктивності самої апаратної архітектури у віртуальній машині його виконуючої — теоретично нереально, якщо звісно код цієї віртуальної машини не виконує сам процесор. Тобто продуктивність виконання байт-коду приблизно на порядок нижче апаратної продуктивності за рахунок накладених витрат команд віртуальної машини, розподілу багатопотокового доступу до даних, прозорого приведення типів та відсутності жорсткої типізації, а також динамічної природи мови та наявності складних типів "Рядок" та "Об'єкт".
 </p><p><b>28.01.2006:</b><br />
 <i>Description:</i> Initial estimation of the productivity of the OpenSCADA virtual machine in example of the expression <b>y=x1+x2</b>, where all the variables are global and in the float-point type.
@@ -565,7 +601,7 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 <td> By the dynamic accessing function with the end object preparation <b>tO = SYS.DAQ.GPIO.io.pi.fnc_put; for(i = 0; i &lt; 1000; i++) tO.call(18, true);</b> </td>
 <td> 14.3
 </td></tr></table>
-<h2><span class="mw-headline" id=".D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">8</span> Посилання</span></h2>
+<h2><span class="mw-headline" id=".D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">9</span> Посилання</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_UserOM_JavaLikeCalc_uk.odg" title="File:Oscada UserOM JavaLikeCalc uk.odg">Діаграма: Об'єктна модель користувача модуля JavaLikeCalc.</a></li></ul>
 
 
@@ -573,5 +609,5 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/JavaLikeCalc/uk">Modules/JavaLikeCalc/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/JavaLikeCalc/uk">Modules/JavaLikeCalc/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> </td></tr></table></body>
 </html>

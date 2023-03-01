@@ -1,5 +1,4 @@
 
-//!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module UI.Tmpl file: module.cpp
 /***************************************************************************
  *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
@@ -19,17 +18,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-//!!! System's includings. Add need for your module includings.
+// System includings - add need ones
 #include <string>
 
-//!!! OpenSCADA module's API includings. Add need for your module includings.
+// OpenSCADA API includings - add need ones
 #include <tsys.h>
 #include <tmess.h>
 
-//!!! Self your module's includings. Add need for your module includings.
+// Own includings of the module - add need ones
 #include "module.h"
 
-//!!! Module's meta-information. Change for your module.
 //************************************************
 //* Module info!                                 *
 #define MOD_ID		"Tmpl"
@@ -43,10 +41,9 @@
 #define LICENSE		"MyLicense"
 //************************************************
 
-ModTmpl::TWEB *ModTmpl::mod;
+UITmpl::UIMod *UITmpl::mod;
 
-//!!! Required section for binding OpenSCADA kernel's to this module. Gives information and create module's root object.
-//!!! Not remove this section!
+// Required section for binding OpenSCADA core to this module, It gives information and creates module root object - do not change
 extern "C"
 {
 #ifdef MOD_INCL
@@ -55,7 +52,7 @@ extern "C"
     TModule::SAt module( int n_mod )
 #endif
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -65,257 +62,38 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new ModTmpl::TWEB( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new UITmpl::UIMod(source);
 	return NULL;
     }
 }
 
-//!!! Include for default call into your module's namespace.
-using namespace ModTmpl;
+using namespace UITmpl;
 
 //************************************************
-//* TWEB                                         *
+//* UIMod::UIMod                                 *
 //************************************************
-//!!! Constructor for module's root object. Append into for your need.
-TWEB::TWEB( string name ) : TUI(MOD_ID)
+UIMod::UIMod( string name ) : TUI(MOD_ID)
 {
-    //!!! Init shortcut to module's root object. No change it.
     mod = this;
 
-    //!!! Loading module's meta-information into root object. No change it.
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
-
-    //!!! Register your module's export functions. Used, for example, for call from HTTP module, and use this OpenSCADA module as HTTP user interface module.
-    // Reg export functions
-    modFuncReg(new ExpFunc("void HTTP_GET(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
-	"GET command processing from HTTP protocol!",(void(TModule::*)( )) &TWEB::HTTP_GET));
-    modFuncReg(new ExpFunc("void HTTP_POST(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
-	"POST command processing from HTTP protocol!",(void(TModule::*)( )) &TWEB::HTTP_POST));
 }
 
-//!!! Destructor for module's root object. Append into for your need.
-TWEB::~TWEB( )
+UIMod::~UIMod( )
 {
 
 }
 
-//!!! Create append module's info attributes. In this example add attribute "SubType" for HTTP module allow bind inform.
-void TWEB::modInfo( vector<string> &list )
+void UIMod::cntrCmdProc( XMLNode *opt )
 {
-    TModule::modInfo(list);
-    list.push_back("SubType");
-}
+    //???? Change and append for your specific configuration
 
-//!!! Get an append module's info attribute. In this example get attribute "SubType" for HTTP module allow bind inform.
-string TWEB::modInfo( const string &name )
-{
-    if(name == "SubType") return SUB_TYPE;
-
-    return TModule::modInfo(name);
-}
-
-//!!! Module's comandline options the print help function. Add your module commandline parameters info.
-string TWEB::optDescr( )
-{
-    return TSYS::strMess(_(
-	"======================= Module <%s:%s> options =======================\n"
-	"---- Parameters of the module section '%s' of the configuration file ----\n\n"),
-	MOD_TYPE,MOD_ID,nodePath().c_str());
-}
-
-//!!! Inherited (virtual) load object's node method. Call from OpenSCADA kernel. Append your module need data loadings
-void TWEB::load_( )
-{
-    //!!! Load self module command line parameters' values. Append your addition parameters process.
-    // Load parameters from command line
-
-    //!!! Load addition your module specific data. For example, make loading addition module's parameters from OpenSCADA DB or from main config-file.
-    //> Load parameters from config-file
-    string trnds = TBDS::genPrmGet(nodePath()+"Trends"), trnd_el;
-    trnd_lst.clear();
-    for( int el_off = 0; (trnd_el=TSYS::strSepParse(trnds,0,';',&el_off)).size(); )
-	trnd_lst.push_back(trnd_el);
-    n_col = atoi(TBDS::genPrmGet(nodePath()+"n_col",TSYS::int2str(n_col)).c_str());
-    h_sz = atoi(TBDS::genPrmGet(nodePath()+"h_sz",TSYS::int2str(h_sz)).c_str());
-    v_sz = atoi(TBDS::genPrmGet(nodePath()+"v_sz",TSYS::int2str(v_sz)).c_str());
-    trnd_len = atoi(TBDS::genPrmGet(nodePath()+"trnd_len",TSYS::int2str(trnd_len)).c_str());
-    trnd_tm  = atoi(TBDS::genPrmGet(nodePath()+"trnd_tm",TSYS::int2str(trnd_tm)).c_str());
-}
-
-//!!! Inherited (virtual) save object's node method. Call from OpenSCADA kernel. Append your module need data savings
-void TWEB::save_( )
-{
-    //!!! Save addition your module specific data. For example, make saving addition module's parameters to OpenSCADA DB.
-    //> Save parameters to config-file
-    string trnds;
-    for(int i_el = 0; i_el < trnd_lst.size(); i_el++ )
-	trnds+=trnd_lst[i_el]+";";
-    TBDS::genPrmSet(nodePath()+"Trends",trnds);
-    TBDS::genPrmSet(nodePath()+"n_col",TSYS::int2str(n_col));
-    TBDS::genPrmSet(nodePath()+"h_sz",TSYS::int2str(h_sz));
-    TBDS::genPrmSet(nodePath()+"v_sz",TSYS::int2str(v_sz));
-    TBDS::genPrmSet(nodePath()+"trnd_len",TSYS::int2str(trnd_len));
-    TBDS::genPrmSet(nodePath()+"trnd_tm",TSYS::int2str(trnd_tm));
-}
-
-//!!! OpenSCADA control interface comands process virtual function.
-//!!! For example, process access from standard confifurators of OpenSCADA to individual module's parameters.
-//!!! Modify for self needs
-void TWEB::cntrCmdProc( XMLNode *opt )
-{
-    //> Get page info
-    if(opt->name() == "info")
-    {
+    //Getting the page info
+    if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
-	{
-	    ctrMkNode("list",opt,-1,"/prm/cfg/trnds",_("Display parameter attributes trends"),RWRWR_,"root",SUI_ID,1,"s_com","add,del");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/col",_("Collums"),RWRWR_,"root",SUI_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/hsize",_("Horizontal trend size (pixel)"),RWRWR_,"root",SUI_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/vsize",_("Vertical trend size (pixel)"),RWRWR_,"root",SUI_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_tm",_("Trend start time, seconds"),RWRWR_,"root",SUI_ID,1,"tp","time");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_len",_("Trend length, seconds"),RWRWR_,"root",SUI_ID,1,"tp","dec");
-	}
 	return;
     }
-
-    //> Process command to page
+    //Processing for commands to the page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/trnds")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
-	    for(unsigned i_el=0; i_el < trnd_lst.size(); i_el++ )
-		opt->childAdd("el")->setText(trnd_lst[i_el]);
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	{ trnd_lst.push_back(opt->text()); modif(); }
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))
-	    for(unsigned i_el=0; i_el < trnd_lst.size(); i_el++)
-		if(trnd_lst[i_el] == opt->text() )
-		{
-		    trnd_lst.erase(trnd_lst.begin()+i_el);
-		    modif();
-		    break;
-		}
-    }
-    else if(a_path == "/prm/cfg/col")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(nCol()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setNCol(atoi(opt->text().c_str()));
-    }
-    else if(a_path == "/prm/cfg/hsize")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(hSize()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setHSize(atoi(opt->text().c_str()));
-    }
-    else if(a_path == "/prm/cfg/vsize")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(vSize()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setVSize(atoi(opt->text().c_str()));
-    }
-    else if(a_path == "/prm/cfg/trnd_tm")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(trndTm()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setTrndTm(atoi(opt->text().c_str()));
-    }
-    else if(a_path == "/prm/cfg/trnd_len")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(trndLen()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setTrndLen(atoi(opt->text().c_str()));
-    }
-    else TUI::cntrCmdProc(opt);
+    TUI::cntrCmdProc(opt);
 }
-
-//!!! Registered export function for process GET requests from OpenSCADA transport's protocol module HTTP.
-void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
-{
-    string ntrnd = TSYS::pathLev(url, 0);
-    if(!ntrnd.size()) {
-	//> Make main page
-	page = w_head();
-	int i_col = 0;
-	page = page+"<table>\n";
-	for(int i_el = 0; i_el < trnd_lst.size(); i_el++) {
-	    try {
-		if( (dynamic_cast<TVal*>(&SYS->nodeAt(trnd_lst[i_el],0,'.').at()) &&
-		    !dynamic_cast<TVal&>(SYS->nodeAt(trnd_lst[i_el],0,'.').at()).arch().freeStat()) ||
-		    dynamic_cast<TVArchive *>(&SYS->nodeAt(trnd_lst[i_el],0,'.').at()) )
-		{
-		    if(i_col==0) page = page+"<tr>";
-		    page = page+"<td><b>"+trnd_lst[i_el]+"</b><br/>\n";
-		    page = page+"<img src='/"+MOD_ID+"/"+TSYS::int2str(i_el)+"' border='0'/></td>\n";
-		    if(i_col==(n_col-1)) page = page+"</tr>";
-		    if(++i_col == n_col) i_col=0;
-		}
-	    } catch(...) { }
-	}
-	page = page+"</table>\n"+w_tail();
-	page = http_head("200 OK",page.size())+page;
-    }
-    else
-    {
-	AutoHD<TVArchive> arch;
-	int imgn = atoi(ntrnd.c_str());
-	if( dynamic_cast<TVal *>(&SYS->nodeAt(trnd_lst[imgn],0,'.').at()) )
-	    arch = dynamic_cast<TVal&>(SYS->nodeAt(trnd_lst[imgn],0,'.').at()).arch();
-	else if( dynamic_cast<TVArchive *>(&SYS->nodeAt(trnd_lst[imgn],0,'.').at()) )
-	    arch = SYS->nodeAt(trnd_lst[imgn],0,'.');
-
-	if( !arch.freeStat() )
-	{
-	    int64_t v_beg = ((trnd_tm+trnd_len)>time(NULL))?time(NULL)-trnd_len:trnd_tm;
-	    int64_t v_end = v_beg+trnd_len;
-
-	    page = arch.at().makeTrendImg(v_beg*1000000,v_end*1000000,"",h_sz, v_sz );
-	}
-	page = http_head("200 OK",page.size(),string("image/png"))+page;
-    }
-}
-
-//!!! Registered export function for process POST requests from OpenSCADA transport's protocol module HTTP.
-void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
-{
-
-}
-
-//!!! Your module self functions realisation.
-string TWEB::http_head( const string &rcode, int cln, const string &cnt_tp, const string &addattr )
-{
-    return  "HTTP/1.0 "+rcode+"\n"
-	"Server: "+PACKAGE_STRING+"\n"
-	"Accept-Ranges: bytes\n"
-	"Content-Length: "+TSYS::int2str(cln)+"\n"
-	"Connection: close\n"
-	"Content-type: "+cnt_tp+"\n"
-	"Charset="+Mess->charset()+"\n"+addattr+"\n";
-}
-
-string TWEB::w_head( )
-{
-    bool per_refr = trnd_tm > time(NULL);
-
-    string shead =
-	"<?xml version='1.0' ?>\n"
-	"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n"
-	"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
-	"<head>\n"
-	"  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n";
-    if(per_refr)
-	shead=shead+"<meta http-equiv='Refresh' content='1'/>\n<meta http-equiv='Cache-Control' content='no-cache'/>\n";
-    shead=shead+"  <title>OpenSCADA debug web modul!</title>\n"
-	"</head>\n"
-	"<body bgcolor='#818181' text='#000000' link='#3366ff' vlink='#339999' alink='#33ccff'>\n";
-	//"<h1 align=\"center\"><font color=\"#ffff00\"> Welcome to OpenSCADA debug web modul!</font></h1>\n"
-	//"<hr width=\"100%\" size=\"2\">\n"
-	//"<hr width='100%' size='3'/><br/>\n";
-
-    return shead;
-}
-
-string TWEB::w_tail( )
-{
-    return
-	//"<hr width='100%' size='3'/>\n"
-	"</body>\n"
-	"</html>";
-}
-

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.SMH2Gi 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 17:58+0300\n"
+"POT-Creation-Date: 2022-07-15 20:30+0300\n"
 "PO-Revision-Date: 2012-10-31 10:21+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -64,6 +64,7 @@ msgstr "Директория с *.ini файлами устройств MR/MC"
 msgid "Acquisition. "
 msgstr "Сбор. "
 
+#, c-format
 msgid "Acquisition with the period %s. "
 msgstr "Сбор с периодом %s. "
 
@@ -71,6 +72,7 @@ msgstr "Сбор с периодом %s. "
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Следующий сбор по cron '%s'. "
 
+#, c-format
 msgid "Spent time %s."
 msgstr "Затрачено времени %s."
 
@@ -80,6 +82,10 @@ msgstr "Ошибка открытия GPIO %s для сброса MC."
 
 msgid "Write to gpio94 error!"
 msgstr "Ошибка записи в gpio94!"
+
+#, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr ""
 
 #, c-format
 msgid "Segnetics SMH2Gi automatic created transport for '%s' bus"

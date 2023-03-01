@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-19 19:45+0300\n"
+"POT-Creation-Date: 2022-12-15 20:01+0200\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -100,12 +100,12 @@ msgstr "Следующий сбор по cron '%s'. "
 msgid "Spent time %s[%s]. "
 msgstr "Затрачено времени %s[%s]. "
 
-#, c-format
-msgid "Error '%s', restoring in %.3g s."
+#, fuzzy, c-format
+msgid "Station '%s' - ERROR, restoring in %.3g s."
 msgstr "Ошибка '%s', восстановление через %.3g с."
 
-#, c-format
-msgid "Requests to '%s' - %.6g; "
+#, fuzzy, c-format
+msgid "Station '%s' - requests %.6g; "
 msgstr "Запросов к '%s' - %.6g; "
 
 #, c-format
@@ -135,15 +135,15 @@ msgstr "Подключение к источнику данных: %s."
 msgid "STOP"
 msgstr "ОСТАНОВЛЕН"
 
-msgid "10:Data not available."
-msgstr "10:Данные не доступны."
-
 msgid "OK"
 msgstr "НОРМА"
 
-#, c-format
-msgid "Connection to the data source '%s': %s."
-msgstr "Подключение к источнику данных '%s': %s."
+#, fuzzy, c-format
+msgid "Station '%s' - %s"
+msgstr "Запросов к '%s' - %.6g; "
+
+msgid "10:Data not available."
+msgstr "10:Данные не доступны."
 
 #, c-format
 msgid "Station missed '%s'."
@@ -236,3 +236,7 @@ msgstr "Конфигурация удаленного параметра"
 
 msgid "Controller is not started!"
 msgstr "Контроллер не запущен!"
+
+#, c-format
+#~ msgid "Connection to the data source '%s': %s."
+#~ msgstr "Подключение к источнику данных '%s': %s."

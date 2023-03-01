@@ -1,5 +1,4 @@
 
-//!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module BD.Tmpl file: module.h
 /***************************************************************************
  *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
@@ -19,18 +18,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-//!!! Multi-including of this header file prevent. Change it for your include file name
+// Preventing of the header file multi-including - change at the header file name changing
 #ifndef MODULE_H
 #define MODULE_H
 
-//!!! System's includings. Add need for your module includings.
+// System includings - add need ones
 #include <string>
 
-//!!! OpenSCADA module's API includings. Add need for your module includings.
-#include <tmodule.h>
+// OpenSCADA API includings - add need ones
 #include <tbds.h>
 
-//!!! Definition of the individual module translation functions. Do not change these!
+// Definition of the individual module translation functions - do not change
 #undef _
 #define _(mess) mod->I18N(mess).c_str()
 #undef trS
@@ -39,11 +37,11 @@
 using std::string;
 using namespace OSCADA;
 
-//!!! All the module's objects you should include into self (individual) namespace. Change the namespace for your module.
+// All the module objects in own (individual) namespace - change for your module
 namespace BDTmpl
 {
 
-//!!! BD-subsystem table object realisation define. Add methods and attributes for your need
+// Definition the table object of the subsystem "DB" - add methods and attributes at your need
 //************************************************
 //* BDTmpl::Table				 *
 //************************************************
@@ -52,46 +50,28 @@ class MTable : public TTable
 {
     public:
 	//Public methods
-	//!!! Constructor for a DB-subsystem table object
 	MTable( string name, MBD *iown );
-	//!!! Destructor for a DB-subsystem table object
 	~MTable( );
 
-	// Field's functions
-	//!!! Processing virtual function for getting the field's structure (value's type of the field and it's primary key flag)
 	void fieldStruct( TConfig &cfg );
-	//!!! Processing virtual functions for seeking, getting, setting and deleting a field
 	bool fieldSeek( int row, TConfig &cfg, const string &cacheKey = "" );
 	void fieldGet( TConfig &cfg );
 	void fieldSet( TConfig &cfg );
 	void fieldDel( TConfig &cfg );
 
-	//!!! Back link to the table's owner database object
+	void fieldFix( TConfig &cfg, const string &langLs = "" );
+
 	MBD &owner( ) const;
 
     private:
 	//Private methods
-	//!!! Post disable processing function
 	void postDisable( int flag );
-	//!!! The table structure fixing function to the field
-	void fieldFix( TConfig &cfg, const string &langLs = "" );
-	//!!! The table structure obtain
-	void getStructDB( string name, vector< vector<string> > &tblStrct );
 
-	//!!! Get and set field item's value processing functions
-	string getVal( TCfg &cfg, uint8_t RqFlg = 0 );
-	void   setVal( TCfg &cfg, const string &vl, bool tr = false );
-
-	//!!! Convert UTC time to SQL and vice-versa functions
-	string UTCtoSQL( time_t val );
-	time_t SQLtoUTC( const string &val );
-
-	//Private attributes
-	//!!! The table strucure attribute
-	vector< vector<string> > tblStrct;
+	string	getSQLVal( TCfg &cf, uint8_t RqFlg = 0 );
+	void	setSQLVal( TCfg &cf, const string &vl, bool tr = false );
 };
 
-//!!! BD-subsystem's database object realisation define. Add methods and attributes for your need.
+// Definition the database object of the subsystem "DB" - add methods and attributes at your need
 //************************************************
 //* BDTmpl::MBD				 	 *
 //************************************************
@@ -102,23 +82,20 @@ class MBD : public TBD
 
     public:
 	//Public methods
-	//!!! Constructor for a DB-subsystem database object
 	MBD( string iid, TElem *cf_el );
-	//!!! Destructor for a DB-subsystem database object
 	~MBD( );
 
-	//!!! Enable and disable the database object processing virtual functions
 	void enable( );
 	void disable( );
 
-	//!!! Get the list of tables availabled in the database processing virtual function
 	void allowList( vector<string> &list ) const;
-	//!!! SQL request processing main virtual function
 	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL, char intoTrans = EVAL_BOOL );
 
-	//!!! BEGIN and COMMIT a transaction processing functions
 	void transOpen( );
 	void transCommit( );
+	void transCloseCheck( );
+
+	void getStructDB( const string &nm, vector<TTable::TStrIt> &tblStrct );
 
     protected:
 	//Protected methods
@@ -126,22 +103,15 @@ class MBD : public TBD
 
     private:
 	//Private methods
-	//!!! Post disable processing function
 	void postDisable( int flag );
-	//!!! Open a table processing function
 	TTable *openTable( const string &name, bool create );
 
 	//Private attributes
-	//!!! The database attributes from the address
-	string	host, hostaddr, user, pass, db, port, connectTimeout;
-	//!!! The database code page
-	string	cdPg;
-
-	//!!! The database access resource
-	ResMtx	connRes;
+	int	reqCnt;
+	int64_t	reqCntTm, trOpenTm;
 };
 
-//!!! Root module object realisation define.
+// Definition the root module object of the subsystem "DB" - add methods and attributes at your need
 //************************************************
 //* BDTmpl::BDMod                                *
 //************************************************
@@ -149,20 +119,19 @@ class BDMod: public TTypeBD
 {
     public:
 	//Public methods
-	//!!! Constructor for the Root module object.
 	BDMod( string name );
-	//!!! Destructor for the Root module object.
 	~BDMod( );
+
+	int lsPr( )	{ return 3; }
+	string features( );
 
     private:
 	//Private methods
-	//!!! Open DB processing function
 	TBD *openBD( const string &iid );
 };
 
-//!!! The module root link
-extern BDMod *mod;
+extern BDMod *mod;	//The module root link
 
-}//End namespace BDTmpl
+} //End the namespace BDTmpl
 
 #endif // MODULE_H

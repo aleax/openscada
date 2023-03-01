@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Serial file: mod_serial.h
 /***************************************************************************
- *   Copyright (C) 2009-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -118,8 +118,6 @@ class TTrOut: public TTransportOut
 	TTrOut( string name, const string &idb, TElem *el );
 	~TTrOut( );
 
-	bool isNetwork( )			{ return false; }
-
 	string getStatus( );
 
 	string timings( )			{ return mTimings; }
@@ -213,6 +211,8 @@ class TTr: public TTypeTransport
 	TTr( string name );
 	~TTr( );
 
+	bool isNetwork( )			{ return false; }
+
 	AutoHD<TTrIn> inAt( const string &name );
 	AutoHD<TTrOut> outAt( const string &name );
 
@@ -220,6 +220,7 @@ class TTr: public TTypeTransport
 	TTransportOut *Out( const string &name, const string &idb );
 
 	string outAddrHelp( );
+	string outTimingsHelp( );
 
 	static void writeLine( int fd, const string &ln, bool noNewLn = false );
 	static string expect( int fd, const string& expLst, int tm );

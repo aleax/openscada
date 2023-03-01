@@ -1,3 +1,482 @@
+2023-03-01 Roman 0.9.6
+- New and significantly updated parts:
+    - OpenSCADA Core: 3:12:0 => 3:13:0
+    - OpenSCADA "Transport" subsystem: 18 => 19
+    - DAQ.DAQGate: 2.9 => 2.11
+    - DAQ.JavaLikeCalc: 5.4 => 5.5
+    - DAQ.LogicLev: 2.6 => 2.7
+    - {DAQ,Protocol}.ModBus: 3.4 => 3.6, 2.9 => 2.10
+    - Archive.FSArch: 3.7 => 3.8
+    - Transport.Sockets: 4.3 => 4.5
+    - UI.QTStarter: 5.12 => 5.14
+    - UI.QTCfg: 5.9 => 5.12
+    - UI.VCAEngine: 7.8 => 7.11
+    - UI.Vision: 8.0 => 8.6
+    - UI.WebCfgD: 2.3 => 2.4
+    - UI.WebVision: 6.6 => 6.8
+    - LibsDB.OscadaLibs.LowDevLib: 1.4 => 1.5
+	- mbBase: 1.0 => 1.2
+    - LibsDB.OscadaLibs.base.initConAssociateTrs: 1.1 => 1.2
+    - LibsDB.vcaBase.Main
+	- RootPgSo: 2.5 => 2.6
+	- storeHouse: 1.1 => 1.3
+	- {grpGraph,grpGraph10}: 1.4 => 1.5
+	- grpCadr: 1.2 => 1.3
+	- ElCadr: 1.2 => 1.4
+	- ElViewGraph: 1.3 => 1.4
+	- ResultGraphEl: 1.1 => 1.2
+	- anShow: 1.2 => 1.3
+	- anShow1: 1.3 => 1.4
+	- TextLab: 1.1 => 1.2
+	- ImgLab: 1.1 => 1.2
+    - LibsDB.vcaBase.mnEls
+	- El_Kran_Sh: 1.1 => 1.2
+	- Compressor: 1.1 => 1.2
+	- El_Kran_polozh: 1.0 => 1.1
+    - LibsDB.vcaBase.doc
+	- docAlarmsRep: 1.6 => 1.7
+	- docRepDay: 3.1 => 3.2
+	- docRepMonth: 3.1 => 3.2
+	- docRepYear: 1.2 => 1.3
+	- docUsersSet: 1.7 => 1.8
+	- docDin: 1.2 => 1.3
+
+- CONCEPTUAL > Productivity optimisation of the VCA interface
+    !!!!:FXI:UI.VCAEngine: Adapted to work in very big processing periods and disabling the periodic processing in whole:
+	    - fixed in obtaining the period from the owner session widget;
+	    - appended by setting the session side period with the User API function calcPer() of the session side widget,
+		expanded by specifying the special period values:
+		    PerVal_Sess(0), PerVal_Parent(-1), PerVal_UserMin(PerVal_Dis(-2)), PerVal_SessDef(-3);
+	    - "Period of the calculation" renamed to the "Periodic processing" and the renamed field is specified as a generic parameter,
+		that is moved to the main configuration tab and appended by the page widgets of the project
+		and child widget of the library widget;
+	    - the session object appended by the User API function period(), what returns the session processing period;
+	    - the processing period was clarified in the session widget status.
+	Change of the attribute "alarmSt" appended by accompaniation the new event "ws_alarmChange".
+    !!:UI.Vision: Adapted for renaming "Period of the calculation" to the "Periodic processing" and for moving to the main configuration tab.
+	The previous field in the "Processing" tab is set to be hidden at that missing in the VCA model.
+    LibsDB.vcaBase,ModelsDB.{AGLKS.vca,Boiler.St}: The VCA projects set to the calculation period 250 ms.
+	Calculation of the control group of the VCA projects set to 1000 ms.
+    !!!!:LibsDB.vcaBase: wlb_Main.RootPgSo: Adapted to work in very big processing periods and disabling the periodic processing in whole:
+	    - appended by continuing the immediately cycles before the container page opening at the start and after navigation,
+		using the new event "usr_calc";
+	    - appended by switching to the fast cycle at alarm blink, using the new function calcPer();
+	    - switched to the processing period 1000 ms.
+	!!!!:wlb_Main.ElCadr: Adapted to work in very big processing periods and disabling the periodic processing in whole:
+	    - appended by continuing the immediately cycles using the new event "usr_calc";
+	    - appended by switching to the fast cycle at alarm blink, using the new function calcPer();
+	    - switched to the processing period -1 (parent).
+	!!!!:wlb_Main.{grpGraph,grpGraph10}: Adapted to work in very big processing periods and disabling the periodic processing in whole:
+	    - appended by continuing the immediately cycles using the new event "usr_calc";
+	    - switched to the processing period -1 (parent);
+	    - tracing period of the Diagram primitive linked also to the Widget period.
+	!!!!:wlb_Main.ElViewCadr: Adapted to work in very big processing periods and disabling the periodic processing in whole:
+	    - appended by switching to the fast cycle at cursor blink, using the new function calcPer();
+	    - switched to the processing period -1 (parent);
+	    - tracing period of the Diagram primitive linked also to the Widget period.
+	!!!!:wlb_Main.storeHouse: Adapted to work in very big processing periods and disabling the periodic processing in whole:
+	    - switched to the processing period -2 (disabled);
+	    - appended by continuing the immediately cycles using the new event "usr_calc".
+	!:wlb_Main.ElViewGraph: Adapted to work in very big processing periods:
+	    - appended by continuing the immediately cycles in waiting the values appear, using the new event "usr_calc";
+	    - appended by switching to the fast cycle at cursor blink, using the new function calcPer();
+	    - the calculation set in 2000 ms due to need of that updating at the trend cursor changing.
+	!:wlb_Main.grph_panel: Appended by storing the tracing period of the linked Diagram primitive.
+	    Switched to the processing period -1 (parent).
+	wlb_Main.{grpCadr,ResultGraphEl}: Adapted to work in very big processing periods and disabling the periodic processing in whole:
+	    - switched to the processing period -1 (parent);
+	    - tracing period of the Diagram primitive linked also to the Widget period.
+	wlb_Main.{TextLab,ImgLab},wlb_mnEls.{El_Kran_polozh,El_Kran_Sh,Compressor}: Adapted to work in very big processing periods
+		and disabling the periodic processing in whole:
+	    - appended by switching to the fast cycle at cursor blink, using the new function calcPer();
+	    - switched to the processing period -1 (parent).
+	wlb_Main.{anShow,anShow1}: switched to the processing period -1 (parent) and appended by switching
+	    to the fast cycle (500 ms) at focus and alarm blink.
+	wlb_doc.{docRepDay,docRepMonth}, wlb_Main.{graphSelPrm,doc_panel,accept,treeSelect,cntrPaspExt}, wlb_Main.{ViewCadr,ResultGraph}:
+	    Switched to the processing period -1 (parent).
+	wlb_doc.{docDin,docAlarmsRep}: Switched to the processing period -2 (disabled).
+	wlb_doc.docRepMonth: Excluded from execution at stopping.
+	wlb_doc.docRepYear: Appended by one immediately cycle after f_start, using the new event "usr_calc".
+	    Disabled for the periodic processing.
+	wlb_Main.userManager: Disabled in the periodic processing.
+
+- CONCEPTUAL > Unification the associated output transports to the input one AND the generic output transport connection
+    !!!!:FIX: Unification the associated output transports processing of the input Sockets transport for:
+	Transport:
+	    - the function TTransportIn::assTrO() renamed to TTransportIn::associateTrO() and expanded by creation new transports
+		at the first and next removing for stopped ones, and the just created transports appended by reading the initial
+		connection ID with it registering in the connection parameter "initConID";
+	    - the new function TTransportIn::associateTr() and its UserAPI variant SYS.Transport["Modul"]["in_Transp"].associateTr()
+		of obtaining the output transport object at its Connection ID;
+	    - the associated output transports from an input one appended by removing at the inactivity at the TTransportIn::keepAliveTm();
+	    - the new UserAPI function SYS.Transport["Modul"]["in_Transp"].associateTrsList() as a correct naming variant to assTrsList();
+	    - the output transport object appended by the UserAPI functions conPrm() and setConPrm() of accessing the connection parameters;
+	    - changing the name template in "inA_ID_N" of the associated output transports to the input one;
+	    - FIX:Sockets: the input transports prevented at spare socket closing in the initiative mode;
+		the new initiative connection limit checking moved to the main limits checking part.
+	!:LibsDB.OscadaLibs: tmplib_base.initConsAssignTrs: Renamed to initConAssociateTrs and adapted to use the function conPrm("initConID")
+	    and associateTrsList().
+    !!!!: The generic output transport connection:
+	Transport:
+	    - the new function TTransportS::outAt() and its UserAPI variant SYS.Transport.outAt()
+		of the output transport generic obtaining from the unified address;
+	    - TTransportS::extHost() moved to use TTransportS::outAt().
+	!!!:Transport,UI.{QTCfg,WebCfgD}: The field "Transport" of the external hosts table expanded for specifying the transport address
+	    in the unified-common form and expanded by the selection specifying per item with support such behaviour
+	    in the common configurators.
+	!!!!:DAQ.ModBus: The first one what moved to use the unified connection to the output transport.
+	!:LibsDB.OscadaLibs: tmplib_DevLib.mbBase: Switched to use TTransportS::outAt().
+
+- CONCEPTUAL > Messages Translation (fixes of the conceptual changes of the previous update)
+    !!!!:FIX:SYS: Prevented from propagating the base language column of the translations table "Tr"
+	    in the SINGLE translation mode and the base language.
+	!!:FIX: The string EVal value "<EVAL>" appended as not translated one to prevent that translation in VCAEngine for NULL DB values.
+	!!:FIX: The translation manager prevented in the marked base changing to a human readable form at all, since that used as a key.
+	TFunction::operator=() finished in adaption to the IO name translation.
+	Writing to the configuration in XML prevented in doubling the translated field for the configuration contexts.
+    !!!:FIX:DB: The translation prevented from propagating the base language column in the SINGLE translation mode
+	    for already translated DBs, by appending for different detection the translated DBs in whole and the translated column presence.
+	!!!:FIX: Fixed for the DB syntax error at cleaning the translation fields equal to the base.
+	!!!:FIX: Fixed in writing untranslated strings, by clearing all translation and writing to base.
+	!!:FIX: Prevented in the DBs service termination, as the transactions closing, at some wrong DB presence.
+	!:FIX: The translation setting prevented in setting double messages to the base messages; what completing not translation "<EVAL>".
+	FIX: Absence the flag TFld::TransltText means as the translation complete missing for that field.
+    !!!!:FIX:DAQ::ParamTmpl: Fixed for the IO name edition in the non basic mode of the dynamic translation.
+	!!:FIX: Fixed in the flag IO::TransltText processing for strings.
+	FIX: The service request "list:/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/%2fserv%2fattr" fixed in the attribute name translation.
+    FIX:Transports,UI.{QTCfg,Vision,WebCfgD}: The function TTransportS::extHostList() appended by an argument "lang"
+	to receive translated names of remote hosts.
+    !:FIX:Protocol.ModBus: Fixed-adapted in the IO name dynamic translation.
+
+- OpenSCADA libraries and projects:
+    !:data/ModelsDB/AGLKS: During of renaming AGLKS to AGLCS and appending the translated icons there performed:
+	- appended by AGLCS.png and AGLKS.png,openscada_AGLKS.png moved to the English;
+	- appended by АГЛКС.png icon file localised to Ukrainian and mRussian;
+	- oscada_AGLKS.xml: appended by the field "StName" translation to Ukrainian and mRussian.
+    !:FIX:data/ModelsDB/Boiler: During of appending the translated icons there performed:
+	- Boiler.png,openscada_Boiler.png moved to the English;
+	- appended by Котел.png icon file localised to Ukrainian and mRussian;
+	- oscada_Boiler.xml: appended by the field "StName" translation to Ukrainian and mRussian;
+	- fixed in some description.
+    data/icons: The icon collection appended by an icon of representing the simulator-model station class-ID - SimulatorStation.png.
+    FIX:ModelsDB.AGLKS:
+	FIX:St: Some fixed in the library vcaAGLKS description.
+	    FIX: testCalc_prm.test: Fixed for the messages translation of some attributes.
+	    FIX: Fixed in the F4 dimension name.
+	Model: The message "Pressure after the first stage of the compressor" translation was some changed.
+    !!:FIX:LibsDB.OscadaLibs: The library tmplib_LowDevLib appended by the template "BT: RDTech UM24C, UM25C and UM34C (RDTech)", with:
+	    - completed translation to Ukrainian;
+	    - the attribute "dev" with the Bluetooth device name and for binding to the device at the template start using rfcomm.
+	!!: The library tmplib_DevLib appended by the template "Slot LTD devices (SLOT)".
+	!:FIX: tmplib_DevLib.mbBase: Adapted to the builtin syntax highlighting for the attribute "Items set (items)".
+	    Allowed for empty item names.
+	!:FIX: tmplib_base.ntf: For the server address in the SMTP HELLO request used the EMail sender address
+	    from the attribute "from" of the "io" object instead SYS.system("hostname -f").parse(0,"\n"),
+	    which can be wrong for the SMTP-servers.
+	FIX:flb_servProc.wacko2media: fixed for the WHERE value's quotter of the SELECT SQL request.
+	flb_servProc.docOffLine in the attributes "pages" and "pagesCur", tmplib_DevLib.mbBase in the attribute "items",
+	    tmplib_LowDevLib.RDTech in the attribute "dev" adapted to help from the second row.
+    !!!!:FIX:LibsDB.vcaBase: wlb_Main.storeHouse: Significantly expanded by:
+		- implementation the procedures support for the logical columns;
+		- implementation the report of all visible table and a selected record.
+	    Allowed for type changing of the specific field "NAME".
+	    Appended by force update at changing fields with the color highlighting.
+	    Switched to use the transaction for reading the changes in the first cycle.
+	    The filters appended by separated clearance also at the class change.
+	!!:FIX:wlb_doc.docRepDay: Some improved and appended by:
+	    the columns grouping in the header, string values direct reading, colors disable in the table at EVAL scale.
+	!!:wlb_doc.docUsersSet: Added by the "Message category (messCat)" configuration.
+	!:FIX: wlb_doc.{docRepDay,docRepMonth}: Fixed in the document regeneration at the same time, by setting 0, and in whole.
+	!: wlb_Main.{alarmsAct,alarmsSt}: Adapted to the builtin syntax highlighting
+		for the attribute "Highlight rules (highLght)" with using the PCRE rich features.
+	    In the attributes "colms" and "highLght" adapted to help from the second row.
+	!: wlb_{Main,mnEls,doc,prescr},LibsDB.vcaElectroEls.wlb_ElectroEls: Appended by the library representative icon.
+	!: prj_tmplSO,ModelsDB.AGLKS.vca.prj_AGLKS,ModelsDB.Boiler.St: Removed of the VCA project representative icon
+	    for use the common project one.
+	!: wlb_Main.grph_panel: Appended by the begin time moving to the cursor and reformated for the main time navigation.
+	FIX: wlb_doc.docRepInstVals: Fixed in centering the diagram.
+	wlb_Main.{grpGraph,grpGraph10}: Appended in limiting the cursor time for the visible area.
+	    Appended by the control panel open at the event key_mousePresLeft also.
+	wlb_Main.RootPgSo: Width of the logo expanded to 110 pixels.
+	wlb_Main.alarmsStReport: renamed to "Report" for the common using by Main.storeHouse.
+	The resources of the widget library wlb_Main was updated for the image "edit.png" and appended by the image docIt.png.
+	The message "Copy" translation was some changed.
+    FIX:LibsDB.vcaTest: wlb_test.FormElTests: Fixed in some translation for Ukrainian.
+
+- API:
+    !!!!:Changes:
+	SYS: The functions TSYS::id(), TSYS::name() and TSYS::user() were set as constant.
+	    The definitions SEC_XT, SEC_WR, SEC_RD moved from the file tsecurity.h to tcntrnode.h and used there also.
+	    ctrChkNode() cleaned for the argument "warn" due to the response attribute "force" is deprecated.
+	    The Control Interface request "chlds:/{nPath}/%2fobj" appended by not creating the empty icon tags "ico".
+	    NSTR_BUF_LEN(50) split to CFG_A_LEN (100) for using in the maximum attribute size of the configuration cell in XML.
+	    The argument "init" removed from setIcoDir(), setDocDir(), setLang() during moving under the generic clearing mechanism.
+	    Appending the enumeration MdfSYSFlds by the fields: MDF_Name, MDF_MESS, MDF_TR, MDF_DBG, MDF_RD.
+	DB: The Control Interface request "call:/BD/{MOD}/{DB}/%2fserv%2fSQL" appended by processing the "intoTrans" attribute as EVAL
+	    at missing and clearing the request text in the response.
+	DAQ::Value: The service request "get:/serv/attr" of the Control Interface prevented from clearing the "el" subtags
+	    at missing the representing attribute, them value is set to EVAL for true mark that as processed in DAQ.DAQGate
+	    and don't continue them request in each cycle.
+	Archives-History: The value archive link type "Passive param. attribute (TVArchive::PassiveAttr)"
+		renamed to "DAQ attribute (TVArchive::DAQAttr)".
+	    The value archive link type "Active param. attribute" renamed to "Active DAQ attribute" with that mark as DEPRECATED.
+	Transports: The function TTransportIn::assTrO() renamed to TTransportIn::associateTrO().
+	    The TTransportOut::isNetwork() virtual function sign moved to the TTypeTransport object with linking the old one to new one,
+		for marking all module as the network one.
+	UI.VCAEngine: The Control Interface request "get:/UI/VCAEngine/%2fserv%2fwlbBr" appended by not creating the empty icon tags "ico".
+    Appends:
+	SYS: The new function TSYS::ico() of the icon obtaining.
+	    Names of the security standard permissions appended by _W_W_W(0222).
+	    TRegExp: Appended by a new option 'U' (ungreedy) of the greedy mode toggle, together the User API method "ungreedy".
+		Appended by the function mode(), the argument "mode" in setPattern()
+		    and the enumeration "Mode" with the items: MD_8, MD_16, MD_32, MD_WCHAR, MD_SAVE.
+		The search() function of the object appended by an argument "length" of the measured block size return.
+	    XMLNode: The loading flags appended by the no flag item LD_NO.
+	    TMess: Appended by the common label labStdOutTrs() for address format of the unified output transport function.
+	DAQ: The DAQ item linking functions expanded by the base node specifying in the attribute "ndBase", for:
+		ctrListPrmAttr(), daqAt(), prmAt(), attrAt().
+	    The object TPrmTempl::Impl appended by the new function archAttrs() of updating-archiving attributes of the LogicalLevel.
+	Archives-History: The value archive object TVArchive appended by declaration the enumeration ServReqDtMode
+	    for the Control Interface request "get:/Archive/va_{ARCH}/%2fserv%2fval".
+	Transports: The new function TTransportIn::associateTr() and its UserAPI variant SYS.Transport["Modul"]["in_Transp"].associateTr().
+	    The new function TTransportS::outAt() and its UserAPI variant SYS.Transport.outAt().
+	    The new UserAPI function SYS.Transport["Modul"]["in_Transp"].associateTrsList() as a correct naming variant to assTrsList().
+	    The output transport object appended by the UserAPI functions conPrm() and setConPrm() of accessing the connection parameters.
+	    The function TTransportS::extHostList() appended by an argument "lang" to receive translated names of remote hosts.
+	    The "in_" and "out_" prefix moved to the definitions STR_IN_PREF and STR_OUT_PREF respectively.
+	    The TTransportS object appended by the enumeration LogType with the items: LTP_BinaryText, LTP_Binary, LTP_Text.
+	UI.VCAEngine: Appended by setting the session side period with the User API function calcPer() of the session side widget.
+	    Session periods expanded by specifying the special values: PerVal_Sess(0), PerVal_Parent(-1), PerVal_UserMin(PerVal_Dis(-2)),
+		PerVal_SessDef(-3).
+	    The session object appended by the User API function period(), returning the session periodic processing.
+	    The attribute "alarmSt" change appended by accompaniation by the new event "ws_alarmChange".
+
+- SYS:
+    !!!!:FIX:Building: configure.ac: Core library version rose to 3:13:0 and the program version rose to 0.9.6.
+	!!!!: The module version of the subsystem "Transport" rose to 19.
+	FIX: configure.ac: Fixed for some messages.
+	Makefile.am: Modified for including to the icons folded all data/ModelsDB/{AGLKS,Boiler} files.
+	data/Android/patches/openscada_openscada-proj.patch: Adapted to the last changes.
+    !!!!:The source code messages and program documentation:
+	!!!: Revised completely the "API" document in the section "Control Interface and dynamic tree of program objects"
+	    which unified and the section "Service commands-functions" moved there as a subsection,
+	    the subsection "Service commands-functions" completely rewrote and appended, and all those translated in Ukrainian.
+	!!!: Revised the document "How to/Create module".
+	doc/en/files/doc.css: Appended by the used syntax highlighting rules;
+	*: The word "cron" renamed to "CRON".
+    !!!!:*: Most close(), iconv_close(), dlclose(), pclose() functions appended by checking the result and warning at problems.
+    !!!!:.,DAQ.JavaLikeCalc: Getting help from the second line for the Control Interface appended in:
+	- description of the element fields (TFld) with DAQ-values;
+	- name of function IOs (TFunction) with links and attributes builder of the DAQ Logical Level.
+    !!!!: Revised for all templates in the folders =Tmpl=.
+    !:.,UI.Vision: Errors for control commands of the Control Interface to the redundant stations set to mark as warnings on the local ones.
+	UI.Vision: The warnings are processed now as the local successful result only with notifying about the problem
+	    for the attributes modification and widgets removing.
+    .,DAQ.JavaLikeCalc,UI.VCAEngine: The Control Interface tables appended by the context help to the field "Name".
+    DAQ,DAQ.JavaLikeCalc,Protocol.{ModBus,HTTP}: Commands to the Control Interface tables reordered for moving the deletion "del" to the end.
+    !!!:FIX: The tab "Station" of the main page of the OpenSCADA Control Interface appended by the system time information
+	and commonly restructured.
+    !!:FIX:data/openscada-proj.in: Expanded by the new environment variable OSCD_TAR_Args of defining extra tar arguments like to --exclude
+	    and it was set to the default value "--exclude=lock --exclude=ARCHIVES".
+	FIX: Fixed in description and using the environment variables OSCD_TAR_ComprPrg and OSCD_BackLim.
+	For the environment variables there used the substitution instead the direct condition.
+    !!: During unification the common project icon obtaining through using the project name and ID there performed:
+	- the Base Language Name used also for obtaining the icon, so now checked: The Translated Name, the Base Language Name, ID;
+	- the icon obtaining mechanism moved in a new separated function TSYS::ico();
+	- the "StName" method mName moved under the mutex control.
+    !: The separated control of the control fields modifications was some unified for:
+	- appending for the generic clearing mechanism of the modification flags sysModifFlgs in the loading and saving functions;
+	- moving under the generic clearing mechanism for the configuration fields: "Lang", "IcoDir", "DocDir";
+	- appending under the modification flags sysModifFlgs control for the configuration fields: MDF_Name("StName"),
+	    MDF_MESS("MessLev","LogTarget"), MDF_TR("LangBase","Lang2CodeBase","TranslDyn","TranslEnMan"), MDF_DBG("SelDebCats"),
+	    MDF_RD("RdStLevel","RdTaskPer","RdRestConnTm","RdPrimCmdTr","RdStList").
+    FIX: Prevented in the maximum measuring value sticking of tasks' time consumption at switching the scheduling method to CRON.
+    The User API functions strptime() and strptimegm() set in the time default initiating to 0:00:00.
+    The service request "load:/{Node}/%2fobj" appended by clearing the configuration context after the loading.
+    !!!!:TRegExp: Appended by the 16 and 32 modes support by the pcre16 and pcre32 libraries respectively
+	    and only for the search() function currently.
+    !:XMLNode: The saving option BinShield(0x400) appended by encoding-shielding of the wrong UTF-8 symbols,
+	    to prevent of XML-parsing errors on FireFox.
+
+- DB:
+    SQLite: The "tracing" debug category appended by the prefix "db_".
+    DBGate: Appended by setting the default values before the request MTable::fieldSeek() for decreasing the network trafic.
+
+- DAQ:
+    !!!!: The Logical Level linking appended by a form of the address representing as the prefixed path "prm:/node/node",
+	    so with support of the relative addressing at "." and "..":
+	- the DAQ item linking functions expanded by the base node specifying in the attribute "ndBase", for:
+	    ctrListPrmAttr(), daqAt(), prmAt(), attrAt();
+	- the implementation object TPrmTempl::Impl of the Logical Level of the DAQ-template expanded for the new linking support.
+    !!:FIX: Setting the LogicalLevel links prevented from cleaning all the string after the space at the link constants "val:".
+    FIX: The service request "get:/serv/mess" of obtaining the data source messages of the Controller Object
+	appended by ignoring the processing for empty categories by catsPat().
+    Text attribute fields disabled for the text width limit, for the builtin syntax highlighting mostly.
+    The controler objects in the flags "To start" and "To enable" improved in setting "To enable" at "To start"
+	and clearing "To start" at "To enable".
+    ModBus,LogicLev,OPC_UA,Siemens: TMdPrm::loadIO() cleaned from the spare argument.
+    !!!!:ModBus: Appended by the option "e" for the register endian switch to LE for generic and BE for strings.
+	!!: The string extension of the registers appended by the input charset conversion.
+	Expanded in the syntax highlighting for use the PCRE rich features.
+    !!!:FIX:DAQGate: The message categories in catsPat() of obtaining the data source messages of the Controller Object
+	    switched to generate own detailed rules of the regular expression from the specified remote controllers
+	    - to prevent very redundant messages obtaining.
+	!!:FIX: Improved-fixed in the Controller Alarm status formation for multiple stations,
+	    when ALARM it is at missing connection of all stations.
+	!!: The sync() function of the controller object rewrote completely in the "Removing remotely missed parameters" section for:
+	    - processing the parameter's representing stations: removing completely for missing stations
+		and parameters with no station;
+	    - removing disabled parameters and the logical containers at the flag "Allow the automatic removal of parameters and attributes".
+	FIX: Restored in the redundant hosts live tracing.
+	FIX: Prevented of disabling DAQ-parameters at receiving the error TError::Tr_UnknownHost.
+	Appended in the location information for group names of control parameters of the main control page of the DAQ parameter.
+	Appended by messaging about disable parameters.
+	The parameter objects appended the stations information where the object is presented.
+	The function TMdPrm::setStats() was renamed to TMdPrm::setStat() and was appended by stations removing at the argument "toRemove".
+	The function TSYS::strSepParse() was replaced to TSYS::strParse().
+	Status area of the parameter object appended by the field "Address in remote source".
+	The controller parameter list allowed for empty rows.
+    !!:OPC_UA: Finished in the writing support through custom flags of the Standard mode and the type obtaining from IO for the Logical mode.
+	libOPC_UA: Improved in the items parsing of DAQ-parameters in the Standard mode, than allowing the chars '|' in the address.
+	Improved for the syntax highlight rules of items in the Standard mode of DAQ-parameters.
+    !:JavaLikeCalc: Prevented in starting-compiling functions for stopped libraries,
+	    due to the libraries can be stopped already at the exiting so the function compiling can lock external objects.
+	!: The own service library "sys_compile" appended also for that starting just after creation.
+    !:LogicLev: Some improved in work the parameter type "Reflection", that also switched to the passive archiving mode.
+    FIX:System: The UPS source prevented from flooding in the debug mode.
+	FIX: Fixed for fclose() wrong using in DAQ.System.
+    FIX:GPIO: The file po/oscd_GPIO.pot was appended to the repository.
+    FIX:ICP_DAS: The file include/i8048W.h was appended to the repository.
+
+- Archives-History:
+    !!!!:.,DAQ.{LogicLev,ModBus,OPC_UA}: Finished the unification of archiving at the Logical Level sources
+	    when used only the direct-passive archiving:
+	- the object TPrmTempl::Impl appended by the new function archAttrs() of updating-archiving attributes of the LogicalLevel;
+	- the value archive link type "Passive param. attribute (TVArchive::PassiveAttr)" renamed to "DAQ attribute (TVArchive::DAQAttr)";
+	- the value archive link type "Active param. attribute" renamed to "Active DAQ attribute" with that mark as DEPRECATED.
+    FIX: TPrmTempl::Impl::lnkId() added of checking the function availability due to the execution context can be cleared already
+	on busy systems.
+    FIX:Value: Prevented in direct setting values to the archives in very future, what causes FSArch in creation many spare files.
+    !!!!:FIX:FSArch: Prevented for access to files[iA] in ModVArchEl::setValsProc() outside the lock using the read-lock switching.
+	!!!!:FIX: Prevented for access to "files" in ModMArch::checkArchivator() outside the lock.
+	!!!:FIX: Files accessing locks completely revised for including the packing/unpacking, new files creation,
+		removing old ones under the WR lock space including also the conditions checking.
+	    Also removed for the relocks in cycles and at indexes.
+	FIX: The ModMArch object appended by the sign chkANow of preventing multiple checking in checkArchivator().
+	    The sign chkANow for Values also prevented from sticking at an exception.
+    DBArch: Length of the integer type fields cleared to use the maximum resolution values, that is "bigint" for MySQL.
+
+- Transports:
+    !!!:FIX: The output transports appended by the force stopping at the object system disable-disconnection,
+	not in destructors what is late then there can be lost the socket handlers.
+    !!!: The IO log of the transports appended by the data modes: "Binary & Text", "Binary", "Text".
+    !!!!:FIX:Sockets: Fixed in processing the not complete writing for the Input part,
+	    when the message cuts on the TCP transmitter buffer size.
+	!!: The input buffer size of the Input part bound to the hardware receiver buffer size control
+	    and the internal one just frozen to the standard string buffer length since that is not critical and need no control.
+	FIX: Fixed in use the proper type socklen_t of the size argument of the getsockopt() function, that doesn't compile here for Android.
+	The transport status appended by the system size of the input buffer and MSS.
+	The input transport modes were named.
+	The S_NM_SOCK definition renamed to S_NM_SOCKET with the content "SOCK" renaming to "SOCKET".
+	The SOCK_FORCE, SOCK_TCP, SOCK_UDP. SOCK_UNIX, SOCK_RAWCAN renamed to S_FORCE, S_TCP, S_UDP. S_UNIX, S_RAWCAN respectively.
+	The configuration field "Maximum segment size (MSS), B" of the output transport moved to the bottom.
+	Appended by resetting the connection time variable "connTm" at the input transport start.
+    SSL: The input transport stopping appended by termination client tasks like to Transport.Sockets.
+    Serial: The output transport expanded for the possibility of setting the timeouts field in the address one.
+
+- Transport Protocols:
+    !!!!:ModBus: Appended by the option "e" for the register endian switch to LE for generic and BE for strings.
+	FIX: Appended by clearing spare Data IO at loading.
+	FIX: The Data Node is set to disabled at loading now.
+	FIX: Prevented from reloading at the Data Node enable.
+    SelfSystem: Appended by clearing the attribute "remoteSrcAddr" in the response tree.
+
+- UI:
+    !!!!:QTStarter,QTCfg,Vision: The common Syntax Highlighter in SnthHgl::rule() switched to the main work using PCRE in TRegExp,
+	    since that is 5 TIMES FASTER and very richer comparing to QRegExp;
+	    and QRegExp left to be automatically enabled at missing the PCRE 32/16 libraries.
+	!!: The Qt-generic library (lib_qtgen) appended by the static-external functions getFont() and getColor()
+	    from UI.Vision and by the object SnthHgl from UI.Vision and UI.QTCfg.
+    !:WebVision,Vision: The type "Line Edit" of the primitive FormEl adapted to store the value from the data model at the element editing
+	- to restore the true value at cancel the changes.
+    data/icons/,UI.QTCfg: The icon collection appended by the files favorites.png, favorites_add.png, favorites_del.png.
+    QTCfg,WebCfgD: The remote hosts copy appended by clearing in the "load" command-request
+	for the attributes "ctx" and "rez" after the "save" command-request.
+    !!!!:QTStarter: Appended by the display sessions control, that is the sessions restore.
+	Some statuses switched to the upper case.
+	The table fields editing of the real type switched to use the standard QLineEdit instead the span one with two digits after radix.
+    !!!!:QTCfg: Appended by the Favorite pages implementation.
+	!!!: The image element appended by a function of clearing the image completely.
+	FIX: Icon of the dialog button of the "Moving or copying the node" changed to the proper one.
+	Improved in naming some control fields of the module main configuration page.
+	The text fields with the builtin syntax highlighting appended by deep text cursor position restore
+	    at the syntax rules apply and in whole.
+	Improved some in the base fields alignment under single description, that is in RO-labels display.
+	Label of the text fields aligned in the center vertically.
+	The context searching field of the navigation tree switched to use the pure selecting function setCurrentItem().
+	The function getExpandTreeWIt() also appended by selection not selected end items.
+	Fields of the commands limited in them attributes by only name, text and "id" at copy.
+	The previous and next navigation buttons added by tooltip with items in the navigation lists.
+    !!!!:FIX:Vision: All control requests "<info>" appended by checking the child nodes presence to prevent crashes in some cases.
+	!!!!: Appended by the possibility of call remote station interfaces by selecting the remote station in a dialog,
+	    for what the user selection dialog was expanded.
+	!!!: The text areas with the syntax highlighting appended by the builtin variant.
+	!!!: The image elements (icons) of the item dialogs appended by a button menu with the functions: Save, Load, Clear.
+	!!: The Widget Attributes edition table appended by the multiline edition for the "Name" column
+	    and the context help loading for that.
+	!!: The popup menu of the project, the project pages, the widget libraries and the library widgets
+	    in appending widgets from the libraries removed for limit of the libraries here in 20 items by moving all them
+	    to a new separated menu item "... from the Library".
+	!: The project and widget library tree's icons appended by the forcibly setting for clearing also.
+	!: The different screens control switched to use the actual Qt5 method for Qt5 respectively.
+	FIX: The type Trend of the primitive Diagram fixed in updating the trend values under cursor at the cursor change
+	    during the common loading and fixed in the current cursor hold after it setting by setCursor().
+	FIX: Fixed for some original messages.
+	Status of the opened windows in the module configuration page appended by the station name,
+	    for remote stations mostly and their multiple opening.
+	Prevented for exceptions in the function TBDS::genPrmSet().
+	The initial window size of projects started in the fullscreen mode increased up to 1024x768.
+	The processing-calculation period fields is set to update-reload after a change.
+	Code of the Document exporting to CSV some cleaned.
+	Exporting the Document tables to CSV appended by preventing the empty rows.
+	Added for the hosts sorting in the host selection lists.
+    !!!:FIX:VCAEngine: Icons of the projects and the widget libraries switched to download the common project icon at missing local.
+	!!!: The widget libraries adapted to interhost copying.
+	!!:FIX: The Document primitive generation appended by limiting the repeating blocks size in limUserFile_SZ (10MB).
+	!!:FIX: Fixed in the correct treating of the project pages and the library widgets with initially wrong parent addresses,
+	    for don't remove child widgets and change them parent at pointing the correct parent address.
+	!: The behaviour about the attribute "IO_VAL" field translation changed to allow the translation for linked in and styled ones,
+		for getting the translation in development;
+	    the constant ones left as intranslated due to the configuration value reading-replacing
+		and the reading expanded on the user attributes loading.
+	FIX: The pages are prevented from the parent widget address clearing at the page type changing from Standard to Template and back.
+	FIX: The visualisator specific attributes fixed in work after the source widgets reloading,
+	    allowing the flag Attr::VizerSpec loading.
+	The type field of the pages set in invisibility for the owner page is the Template.
+	Copying resources pointed in attributes of the widgets expanded for the attribute "src" of the primitive "Media".
+	The "newMime" message renamed to "newRes".
+	"!!redefined!!" renamed to "REDEFINED".
+    !!!!:FIX:WebVision: Appended by the export implementation for the "Document - HTML,CSV" and "Table CSV".
+	!!!: Appended by the printing implementation for the "Document" and "Main Page".
+	!!!: The type Table of the primitive FormEl added by tearing off the table header at big tables scrolling down.
+	!!:FIX: The type Table of the primitive FormEl improved and fixed for:
+	    - setting the CSS property "white-space" to "pre-wrap";
+	    - setting the color changes under the selected cells;
+	    - preventing the focus loss just after entry to the cell editing;
+	    - fixing the boolean value setting at entry to the cell editing;
+	    - the table refitting at growing the column string length.
+	!!: The included pages closing set after several (4) row appears - to prevent of closing all pages at fast navigation.
+	FIX: Fixed in the button color dynamic change on Chrome through pre-clearance the style field "backgroundColor".
+	FIX: Appended in the item text encoding for symbols '<','>','&' of the type "Tree" of the primitive "FormEl".
+	FIX: The type Trend of the primitive Diagram fixed in setting the EVAL values to the trend cursor values
+	    at tracing the current time by the cursor and the tracing period more at 1 second.
+	FIX: Fixed in processing the type Table of the primitive FormEl for conditions of the column fitting.
+	The type ComboBox of the primitive FormEl appended by adding empty values to the list.
+	Some speeded up on slow channels for 50% idle and requesting the reaction result without a sleep
+	    by resetting the planning period to the VCA-model side one.
+    WebCfgD: Appended by "padding-right: 5px;" for all fields.
+
+
 2022-12-03 Roman 0.9.5.5
 - FIX:LibsDB.vcaBase: wlb_doc.docRepInstVals: Fixed in centering the diagram.
 - !:FIX:data/ModelsDB/Boiler: Fixed in some description and the processing period of the project set to 250 ms.
@@ -15,7 +494,7 @@
 - FIX:UI.VCAEngine: The pages are prevented from the parent widget address clearing at the page type changing
 	from Standard to Template and back.
     The type field of the pages set to invisible for the owner page is the Template.
-- UI.Vision: Exporting the Document tables to CSV appended of preventing the empty rows.
+- UI.Vision: Exporting the Document tables to CSV appended by preventing the empty rows.
 
 
 2022-10-23 Roman 0.9.5.4
@@ -26,23 +505,23 @@
     FIX: Prevented in the maximum measuring value sticking of tasks' time consumption at switching the scheduling method to CRON.
 - !!!:FIX:DB: The translation prevented from propagating the base language column in the SINGLE translation mode for already translated DBs,
 	by appending for different detection the translated DBs in whole and the translated column presence.
-    !!:FIX: Coming to the translations clearing is set at the new flag "isTranslatable", splitted from "isTransl",
+    !!:FIX: Coming to the translations clearing is set at the new flag "isTranslatable", split from "isTransl",
 	since "isTransl" is the translation environment, then that was not cleared on the base language environments,
 	moreover, that was marked the translation as the base message change.
     !:FIX: The translation setting prevented in setting double messages to the base messages; what completing not translation "<EVAL>".
 - DAQ: The controler objects in the flags "To start" and "To enable" improved in setting "To enable" at "To start"
 	and clearing "To start" at "To enable".
     Value: The service request "get:/serv/attr" of the Control Interface prevented from clearing the "el" subtags
-	at missing the representing attribute, they value is set to EVAL for true mark that as processed in DAQ.DAQGate
-	and don't continue they request in each cycle.
+	at missing the representing attribute, them value is set to EVAL for true mark that as processed in DAQ.DAQGate
+	and don't continue them request in each cycle.
 - !!:FIX:DAQ.DAQGate: The controller object sync() function rewrote completely in the "Removing remotely missed parameters" section for:
 	- processing the parameter's representing stations: removing completely for missing stations
-	    and stations where that attribute is miss now;
+	    and parameters with no station;
 	- removing disabled parameters and the logical containers at the flag "Allow the automatic removal of parameters and attributes".
     FIX: Prevented of disabling DAQ-parameters at receiving the error TError::Tr_UnknownHost.
-    The function TMdPrm::setStats() was renamed to TMdPrm::setStat() and was appended for stations removing at the argument "toRemove".
+    The function TMdPrm::setStats() was renamed to TMdPrm::setStat() and was appended by stations removing at the argument "toRemove".
     The function TSYS::strSepParse() was replaced to TSYS::strParse().
-    Status area of the parameter object appended for the field "Address in remote source".
+    Status area of the parameter object appended by the field "Address in remote source".
 - !!:DAQ.JavaLikeCalc: Prevented in starting-compiling functions for stopped libraries,
 	due to the libraries can be stopped already at the exiting so the function compiling can lock external objects.
     !!: The own service library "sys_compile" appended also for that starting just after creation.
@@ -52,19 +531,19 @@
 - !!!:FIX:Archive.FSArch: Files accessing locks completely revised for including the packing/unpacking, new files creation,
 	removing old ones under the WR lock space including also the conditions checking.
     Also removed for the relocks in cycles and at indexes.
-    FIX: The ModMArch object appended of the sign chkANow of preventing multiple checking in checkArchivator().
+    FIX: The ModMArch object appended by the sign chkANow of preventing multiple checking in checkArchivator().
     The sign chkANow for Values also prevented from sticking at an exception.
-- Transport.Sockets: Appended for resetting the connection time variable "connTm" at the input transport start.
-- Protocol.SelfSystem: Appended for clearing the attribute "remoteSrcAddr" in the response tree.
+- Transport.Sockets: Appended by resetting the connection time variable "connTm" at the input transport start.
+- Protocol.SelfSystem: Appended by clearing the attribute "remoteSrcAddr" in the response tree.
 - !!!:UI.{QTCfg,WebCfgD}: The table expanded by the selection specifying per item.
 - UI.QTStarter: The table fields editing of the real type switched to use the standard QLineEdit
-    instead the spinned one with two digits after radix.
+    instead the span one with two digits after radix.
 - UI.QTCfg: The context searching field of the navigation tree switched to use the pure selecting function setCurrentItem().
-    The function getExpandTreeWIt() also appended of selection not selected end items.
+    The function getExpandTreeWIt() also appended by selection not selected end items.
 - !!:FIX:UI.VCAEngine: Fixed in the correct treating of the project pages and the library widgets with initially wrong parent addresses,
 	for don't remove child widgets and change they parent at pointing the correct parent address.
-    !!:FIX: The document primitive generation appended of limiting the repeating blocks size in limUserFile_SZ (10MB).
-    !!: The behaviour about the attribute "IO_VAL" field translation changed to alow the translation for linked in and styled ones,
+    !!:FIX: The Document primitive generation appended by limiting the repeating blocks size in limUserFile_SZ (10MB).
+    !!: The behaviour about the attribute "IO_VAL" field translation changed to allow the translation for linked in and styled ones,
 	for getting the translation in development;
 	the constant ones left as intranslated due to the configuration value reading-replacing
 	and the reading expanded on the user attributes loading.
@@ -73,13 +552,13 @@
 - !!:UI.Vision: The popup menu of project, project pages, widget libraries and library widgets in appending widgets from the libraries
 	removed for limit of the libraries here in 20 items by moving all they to a new separated menu item "... from the Library".
     The processing-calculation period fields is set to update-reload after a change.
-- !!:FIX:UI.WebVision: The view Table of the primitive FormEl improved and fixed for:
+- !!:FIX:UI.WebVision: The type Table of the primitive FormEl improved and fixed for:
 	- setting the CSS property "white-space" to "pre-wrap";
 	- setting the color changes under the selected cells;
 	- preventing the focus loss just after entry to the cell editing;
 	- fixing the boolean value setting at entry to the cell editing;
 	- the table refitting at growing the column string length.
-    FIX: Appended in the item text encoding for symbols '<','>','&' of the view "Tree" of the primitive type "FormEl".
+    FIX: Appended in the item text encoding for symbols '<','>','&' of the type "Tree" of the primitive type "FormEl".
 
 
 2022-09-03 Roman 0.9.5.3
@@ -105,18 +584,18 @@
 - FIX:SYS: Building: configure.ac: Fixed for some messages.
 - !!!!:FIX:DAQ.ParamTmpl: Fixed for the IO name edition in the non basic mode of the dynamic translation.
 - FIX:DAQ.System: The UPS source prevented from flooding in the debug mode.
-    Most close(), iconv_close(), dlclose(), pclose() functions appended of checking the result and warning at problems.
+    Most close(), iconv_close(), dlclose(), pclose() functions appended by checking the result and warning at problems.
 - !!!!:FIX:Archive.FSArch: Prevented for access to "files" in ModMArch::checkArchivator() outside the lock.
 - !!!!:FIX:Transports.Sockets: Fixed in processing the not complete writing for the Input part,
 	when the message cuts on the TCP transmitter buffer size.
     !!: The input buffer size of the Input part bound to the hardware receiver buffer size control
 	and the internal one just frozen to the standard string buffer len since that is not critical and need no control.
-	The transport status appended of the system size of the input buffer and MSS.
-    Most close(), iconv_close(), dlclose(), pclose() functions appended of checking the result and warning at problems.
+	The transport status appended by the system size of the input buffer and MSS.
+    Most close(), iconv_close(), dlclose(), pclose() functions appended by checking the result and warning at problems.
 - UI.QTCfg: Improved some in the base fields alignment under single description, that is in RO-labels display.
     Label of the text fields aligned in the center vertically
-- !!!!:FIX:UI.Vision: All control requests "<info>" appended of checking the child nodes presence to prevent crashes in some cases.
-    !: The project and widget library tree's icons appended of the forcibly setting for clearing also.
+- !!!!:FIX:UI.Vision: All control requests "<info>" appended by checking the child nodes presence to prevent crashes in some cases.
+    !: The project and widget library tree's icons appended by the forcibly setting for clearing also.
     Prevented for exceptions in the function TBDS::genPrmSet().
 - UI.WebCfgD: Appended "padding-right: 5px;" for all fields.
 
@@ -131,29 +610,29 @@
 - !:SYS,UI.Vision: Errors for control commands of the Control Interface to the redundant stations set to mark as warnings on the local ones.
     UI.Vision: The warnings are processed now as the local successful result only with notifying about the problem
 	for the attributes modification and widgets removing.
-- SYS.TRegExp: The TRegExp object appended of a new option 'U' (ungreedy) of the greedy mode toggle, together the User API method "ungreedy".
-    search() function of the object appended of an argument "length" of the measured block size return.
-- !:SYS.XMLNode: The saving option BinShield(0x400) appended of encoding-shielding of the wrong UTF-8 symbols,
+- SYS.TRegExp: The TRegExp object appended by a new option 'U' (ungreedy) of the greedy mode toggle, together the User API method "ungreedy".
+    The search() function of the object appended by an argument "length" of the measured block size return.
+- !:SYS.XMLNode: The saving option BinShield(0x400) appended by encoding-shielding of the wrong UTF-8 symbols,
     to prevent of XML-parsing errors on FireFox.
-- FIX:Transports,UI.{QTCfg,Vision,WebCfgD}: The function TTransportS::extHostList() appended an argument "lang"
-    to allow the remote host names obtaining translated.
-- !!!:FIX:Transports: The output transports appended for the force stopping at the object system disable-disconnection,
+- FIX:Transports,UI.{QTCfg,Vision,WebCfgD}: The function TTransportS::extHostList() appended by an argument "lang"
+    to receive translated names of remote hosts.
+- !!!:FIX:Transports: The output transports appended by the force stopping at the object system disable-disconnection,
     not in destructors what is late then there can be lost the socket handlers.
 - !!!!:FIX:Transport.Sockets: The input transports prevented at spare socket closing in the initiative mode.
-- Transport.SSL: The input transport stopping appended of termination client tasks like to Transport.Sockets.
+- Transport.SSL: The input transport stopping appended by termination client tasks like to Transport.Sockets.
 - DAQ: Text attribute fields disabled for the text width limit, for the builtin syntax highlighting mostly.
-- DAQ.DAQGate: Appended for messaging about disable parameters.
+- DAQ.DAQGate: Appended by messaging about disable parameters.
     Appended in the location information for group names of control parameters of the main control page of the DAQ parameter.
 - !!!!:FIX:Archive.FSArch: Prevented for access to files[iA] in ModVArchEl::setValsProc() outside the lock using the read-lock switching.
-- !!:UI.{QTStarter,QTCfg,Vision}: The QT-generic library (lib_qtgen) appended of the static-external functions getFont() and getColor()
-	from UI.Vision and the object SnthHgl from UI.Vision and UI.QTCfg.
-    The function SnthHgl::rule() some unified, made optimal and appended of commented code of using TRegExp instead QRegExp,
+- !!:UI.{QTStarter,QTCfg,Vision}: The QT-generic library (lib_qtgen) appended by the static-external functions getFont() and getColor()
+	from UI.Vision and by the object SnthHgl from UI.Vision and UI.QTCfg.
+    The function SnthHgl::rule() some unified, made optimal and appended by commented code of using TRegExp instead QRegExp,
 	and that commented due to difference of the position counting as completed UTF-symbols in QRegExp and chars in TRegExp (PCRE),
 	but TRegExp using is still interested due to TRegExp (PCRE) functional is richer to QRegExp.
-- UI.QTCfg: The text fields with the builtin syntax highlighting appended of deep text cursor position restore at the syntax rules apply
+- UI.QTCfg: The text fields with the builtin syntax highlighting appended by deep text cursor position restore at the syntax rules apply
     and in whole.
-- !!!:UI.Vision: The text areas with the syntax highlighting appended of the builtin variant.
-- UI.WebVision: The type ComboBox of the primitive FormEl appended for adding empty values to the list.
+- !!!:UI.Vision: The text areas with the syntax highlighting appended by the builtin variant.
+- UI.WebVision: The type ComboBox of the primitive FormEl appended by adding empty values to the list.
 
 
 2022-05-31 Roman 0.9.5
@@ -176,7 +655,7 @@
 	- shape of the mouse cursor of the primitive Box for the runtime mode prevented for set in the development mode.
     !!: Requesting of the widget attributes' values of the developed widget moved to a single big request,
 	than the remote development is become much faster.
-    Status of the opened windows in the module configuration page appended of the station name,
+    Status of the opened windows in the module configuration page appended by the station name,
 	for remote stations mostly and their multiple opening.
 - !:UI.WebVision: The type CheckBox of the primitive FormEl was some improved, simplified, centered vertically
 	and allowed to the dynamic resize.
@@ -199,12 +678,12 @@
 - !!:FIX:DAQ.DAQGate: Fixed for several stations selection in the controller object.
     Allowed for sync the new parameter attributes during the enabling also, after moving that process also to the task.
 - UI.VCAEngine: The Project object appended a Control Interface service request "read:/serv/access", of checking the read access.
-    The Control Interface service request "get:/prm/cfg/prj" appended an option "noName" for preventing the project name request,
+    The Control Interface service request "get:/prm/cfg/prj" appended by an option "noName" for preventing the project name request,
 	than preventing other projects spare loading here at the name obtaining.
     The project list requesting in the Project Session object prevented of requesting the project name
 	to prevent other projects spare loading here at the name obtaining.
     The project and Widget Library enabling/disabling message set to the TMess::Info level.
-    The Project Page and Widget Library Widget enabling/disabling appended of a TMess::Debug level message.
+    The Project Page and Widget Library Widget enabling/disabling appended by a TMess::Debug level message.
 - UI.WebVision: Checking the projects accessing moved to check the HTTP accessibility before the access checking in VCAEngine,
     than preventing other projects spare loading here at the name obtaining if there is no access on the HTTP level.
 
@@ -212,7 +691,7 @@
 2022-04-22 Roman 0.9.5
 - !!:LibsDB.OscadaLibs: tmplib_base.{anUnifSt,codeState}: Adapted to the syntax highlight builtin of the input preprocessing procedure.
 - !!:FIX:LibsDB.vcaBase: wlb_Main.storeHouse: Expanded and fixed for:
-        - appended of the highlighting rules for column values with filter index or list;
+        - appended by the highlighting rules for column values with filter index or list;
         - removed for spare and wrong filtering of the special fields "*{ID}".
     wlb_Main.TextLab: Optionally enabled for the transitive translation in the status text which often comes from some DAQ-source.
 - AGLKS.St: ModBus_node.test updated during of the complete disabling the translation, the translation loading and registering.
@@ -227,7 +706,7 @@
 - !!!!:FIX:SYS: Complete disabling the translation and registering in the message index at the loading for generic TConfig nodes
         with the JavaLikeCalc procedure text and a deprecated flag of enabling that procedure whole translation:
     - performed for: TPrmTempl, DAQ.JavaLikeCalc::Func, Protocol.{ModBus.Node,UserProtocol.UserPrt}, UI.VCAEngine.{LWidget,Page}.
-    - the TCfg::setExtVal() function appended an argument "toOne" for reseting the extension mode to the One value instead the Two
+    - the TCfg::setExtVal() function appended by an argument "toOne" for reseting the extension mode to the One value instead the Two
         and that value is writed directly to the inherited TVariant container;
     - TCfg::operator=() switched to direct copy in the inherited TVariant container;
     - the copying function TConfig::exclCopy() provided in copy the external fields directly through TCfg::operator=()
@@ -236,24 +715,24 @@
 - SYS,DAQ.*,UI.VCAEngine: Status texts of different objects were unified in removing the symbol ":".
 - !!!!:FIX:SYS: Accessing the TMess::trMessIdx container in the control interface edition table moved to
         it complete copy under the lock trMessIdxRes and it copy using outside the lock, then preventing for dead locks at the DB access.
-- !!!!:SYS: The translation management table appended of the user functions "Split item" and "Remove from Trs"
+- !!!!:SYS: The translation management table appended by the user functions "Split item" and "Remove from Trs"
         with implementing in new functions TMess::translItSplit() and TMess::translItRemTrs() respectively.
-- !!!!:FIX:DB: The TBD object appended an internal flag "mIsFirst" of control the object first enable and what used to prevent
+- !!!!:FIX:DB: The TBD object appended by an internal flag "mIsFirst" of control the object first enable and what used to prevent
     of the table "Trs" registering at each enable-connection-reconnection.
 - DAQ.{JavaLikeCalc,ModBus}: Prevented of the controller object disable and/or stop at
     the some configuration fields reloading witout a change.
 - !!:FIX:DAQ.JavaLikeCalc: Prevented in some resources lock of the library function at its program change,
 	when performed the program compile at disabled function.
     New IO creation appended the new ID enumeration.
-- DAQ.DAQGate: Appended for rapid detection of the generic connections loss and marking all the parameter attributes to EVAL.
+- DAQ.DAQGate: Appended by rapid detection of the generic connections loss and marking all the parameter attributes to EVAL.
 - DAQ.ModBus: Prevented of setting alarms in the endrun stage.
 - Protocol.{ModBus,UserProtocol}: The whole translation flag is hidden for unset values.
-- !!:UI.QTCfg: The Tables appended of finding for pointed strings.
-- UI.VCAEngine: Widget attributes loading in the project execution context appended of the dynamic-data translation for
+- !!:UI.QTCfg: The Tables appended by finding for pointed strings.
+- UI.VCAEngine: Widget attributes loading in the project execution context appended by the dynamic-data translation for
     the translatable strings.
 - UI.WebUser: The program text field was set to non translatable in whole.
 - FIX:UI.WebVision: Items of the type Combo of the primitive FormEl were set to reloading content at the init.
-    Items of the type Table of the primitive FormEl appended for refiting at rows number change more than 3.
+    Items of the type Table of the primitive FormEl appended by refiting at rows number change more than 3.
 
 
 2022-04-10 Roman 0.9.5
@@ -264,13 +743,13 @@
 	and adapted for redefinition they name and table properties;
     - the special fields "*{ID}" set to the forcibly creation together the class table and prevented from they removing;
     - prevented of removing the specific fields for all classes of the table "classes";
-    - the class fields appended of the possibility to specify they order in the third argument of the table properties as a position;
+    - the class fields appended by the possibility to specify they order in the third argument of the table properties as a position;
     - the class selection field fixed in listing more than one item;
     - enabling the class edition and selection fields moved in the constant execution for correct processing at the user change;
     - the class edition field allowed for the complete name.
 - FIX:SYS: The TRegExp::replace() function fixed in processing zero length replacing symbols, like to the line begin "^".
 - !!!!:FIX:DB.{SQLite,MySQL,PostgreSQL,FireBird}: Fixed in the function fieldFix() for correct processing of the multiple languages.
-- !!:DAQ: The User API functions appended of the function funcSnthHgl() in the DAQ module object
+- !!:DAQ: The User API functions appended by the function funcSnthHgl() in the DAQ module object
 	and for obtaining the syntax highlight rules of the module and language.
     !!: TTypeDAQ::compileFuncSynthHighl() renamed to TTypeDAQ::compileFuncSnthHgl() in a way of the name unification.
     The text configuration field of the Logical Level parameters was cleaned for the columns limit.
@@ -278,7 +757,7 @@
 - !!:UI: TUIS::fontSyntHighlCode() and TUIS::setFontSyntHighlCode() renamed to
 	TUIS::fontSnthHglCode() and TUIS::setFontSnthHglCode() respectively in a way of the name unification.
     !!: The Configuration File field "FontSyntHighlCode" renamed to "FontSnthHglCode" in a way of the name unification.
-- !!:UI.QTCfg: The text fields appended of checking and activation the builtin syntax highlight rules from the XML-tag "SnthHgl".
+- !!:UI.QTCfg: The text fields appended by checking and activation the builtin syntax highlight rules from the XML-tag "SnthHgl".
 - !:FIX:UI.WebVision: The type Table of the primitive FormEl expanded
 	of detection the table refitting need at length change of the not fixed fields and
 	of detection the table complete change in the edition mode.
@@ -287,20 +766,20 @@
 
 2022-04-03 Roman 0.9.5
 - FIX:LibsDB.vcaBase: wlb_Main.userManager: prevented in setting for edition the denied users at opening the page from that user.
-    The table "Trs" appended of the message "Norm" translation.
-- SYS,DB,UI.Vision: The double messages removing button appended of a help message in the label labStorRemGenStor()
+    The table "Trs" appended by the message "Norm" translation.
+- SYS,DB,UI.Vision: The double messages removing button appended by a help message in the label labStorRemGenStor()
     with a warning of removing from the Generic Storage (*.*).
 - !!!:FIX:SYS,DB,Security: The messages translation appended-finished in synchronization the system prestored
 	and the dynamic-data setting messages.
-    !!:FIX:DB: The data setting function TBDS::dataSet() and TTable::fieldSQLSet() appended of treating the system prestored messages
+    !!:FIX:DB: The data setting function TBDS::dataSet() and TTable::fieldSQLSet() appended by treating the system prestored messages
 	in writing the translated value.
-    TMess::translGet() and TMess::translSet() appended of the system prestored messages detection and resolving.
-    TMess::translSet() appended of just return the message at the base empty.
-    TMess::I18N() appended of just return the message at the dynamic-data message setting.
+    TMess::translGet() and TMess::translSet() appended by the system prestored messages detection and resolving.
+    TMess::translSet() appended by just return the message at the base empty.
+    TMess::I18N() appended by just return the message at the dynamic-data message setting.
     Security,UI.VCAEngine: Finished in the description field sync translation of the TUser and TGroup
 	and the name field of the widget library for the system prestored and the dynamic-data.
     The TConfig control commands "get" and "set" allowed in the dynamic translation also for the non dynamic mode.
-- SYS: The "Target node does not have the required branch." error appended of the target node value
+- SYS: The "Target node does not have the required branch." error appended by the target node value
 	and separated to the non writibility detection message.
     The error message "There is no access to create a real-time task ..." set just as a debug one.
 - FIX:DB: The data setting function TBDS::dataSet() expanded in dividing the message to the BASE one for the Configuration File.
@@ -325,7 +804,7 @@
 	The configuration parameter "Lang2CodeBase" renamed to "LangBase" with support "Lang2CodeBase" up to the 1.0 release.
     !!: TMess::lang2Code() and TMess::lang2CodeBase() renamed to TMess::langCode() and TMess::langCodeBase() respectively
 	for starting the adaption to the language code more than 2 symbols, for what TMess::langCodeBase() was adapted already.
-- UI,SYS,DAQ.JavaLikeCalc: The subsystem configuration appended of the tab "Subsystem" and the configuration field
+- UI,SYS,DAQ.JavaLikeCalc: The subsystem configuration appended by the tab "Subsystem" and the configuration field
     "Syntax highlight font for code" in that for configuration of the corresponded font in OpenSCADA parts, which set to "monospace".
 - !:SYS: TConfig::objFunc() adapted to passing the language through the argument "user_lang" renamed from "user".
     !: The User API function TConfig::cfg() adapted to postranslation of the system translation of the translatable strings.
@@ -339,7 +818,7 @@
 	"Parameter {N}: value (prm{N}val)" and "Parameter {N}: properties (prm{N}prop)".
     FIX:The openReg() request switched to the new open page always appearing on the top, also for registered before.
     User action messages of the sessions switched to generate from the sessions not projects.
-- !:UI.WebVision: In the XML-responses generation appended for coding the binary symbols by the options XMLNode::BinShield.
+- !:UI.WebVision: In the XML-responses generation appended by coding the binary symbols by the options XMLNode::BinShield.
 
 
 2022-03-14 Roman 0.9.5
@@ -355,17 +834,17 @@
     !!:FIX: Security: Description of the user and group fixed in the prestored translation.
         FIX: Storage of the system users and groups moved to EMPTY to allow that loading from external storages.
     !!: Most TCntrNode::Flag items renamed SelfModify->Modified, SelfModifyS->ModifiedS, SelfSaveForceOnChild->SaveForceOnChild.
-    !!: Force loading appended of the errors suppression for not modified nodes before that operation:
-        - the structure TCntrNode::Flag appended of the item LoadForcibly;
-        - TCntrNode::modif() and TCntrNode::modifG() appended of a new argument "forceLoad".
+    !!: Force loading appended by the errors suppression for not modified nodes before that operation:
+        - the structure TCntrNode::Flag appended by the item LoadForcibly;
+        - TCntrNode::modif() and TCntrNode::modifG() appended by a new argument "forceLoad".
     TModSchedul::chkAllowMod() removed for spare variable "path_els" declaration.
 - DAQ,UI.VCAEngine: The enum TParamContr::EnDisFlag and UI.VCAEngine::Widget::EnDisFlag first item directly linked
         to the new item TCntrNode::NodeSpecific (0x100).
 - !:FIX:UI.VCAEngine: The pages appended in disable and clear the parent address at the page type change for Page::Template, Page::Link;
-        also as the types exit from Page::Template and Page::Container appended of a suggestion to remove the branch pages.
+        also as the types exit from Page::Template and Page::Container appended by a suggestion to remove the branch pages.
     The subpages-branch loading allowed only for Page::Template and Page::Container and suppressed in whole of errors
         at pages appending to non containers by Engine::NoContainer.
-    The object Engine appended of the own error codes ErrCodes with the items NotResLnk (link to TError::EXT) and NoContainer.
+    The object Engine appended by the own error codes ErrCodes with the items NotResLnk (link to TError::EXT) and NoContainer.
 - !:UI.WebCfgD: Improved in the table usability and mostly in the text edition:
 	true width fitting,
 	text cursor setting and tracing at the entry and Ctrl+Enter using setSelectionRange().
@@ -422,10 +901,10 @@
 	for accessing the allowed data and the work Data Base for new data;
     - TBDS::{dataSeek,dataGet,dataSet,dataDel,genDBGet,genDBSet}() moved to the bit flags TBDS::ReqGenFlg;
     - the TBDS::dbList() moved to the bit flags TBDS::DBLsFlg;
-    - TCntrNode appended of the functions storage() and setStorage() for tracking the availability of node data
+    - TCntrNode appended by the functions storage() and setStorage() for tracking the availability of node data
 	in different storages and offer a queue of source DB for the mechanism of sequentially removing duplicates
 	and they used in the object's storage functions DB(), fullDB(), setDB();
-    - the objects are adapted for tracking the multiple storages and are appended of the sequentially removing duplicates:
+    - the objects are adapted for tracking the multiple storages and are appended by the sequentially removing duplicates:
 	Security.{User,Group}, Transport.{Input,Output}, DAQ.{Controller,TemplateLib}, Archives.{VArchive,VArchiver,MArchiver},
 	DAQ.JavaLikeCalc.Lib, Protocol.{ModBus,OPC_UA,UserProtocol}.*, UI.WebUser.Page, UI.{VCAEngine,Vision}.{WdgLib,Proj};
     - the generic parameters accessing functions TBDS::genDBGet() and TBDS::genPrmSet() moved under the new storage conception
@@ -438,8 +917,8 @@
 	were shortened to the standard storage address with the table name unification, where the previous not standard names leave
 	to be edited up to the 1.0 release;
     - Archive.DBArch,Protocol.HTTP: switched to select only DBs;
-    - the root object of the DB subsystem appended of DB priority base [0...9] in the generic storages list
-	and the TBD object appended of the configuration field "Priority in list" to control order of the databases from TBDS::dbList(),
+    - the root object of the DB subsystem appended by DB priority base [0...9] in the generic storages list
+	and the TBD object appended by the configuration field "Priority in list" to control order of the databases from TBDS::dbList(),
 	than control the loading order;
     - the "Work DB" configuration field changing disabled on the modification marking of all nodes;
     - the label TMess::labDB() separated to two ones: TMess::labStor() and TMess::labStorGen();
@@ -458,10 +937,10 @@
     - common SQL-code moving to the functions: fieldSQLSeek(), fieldSQLGet(), fieldSQLSet(), fieldSQLDel();
     - declaration in the core for the service definitions, methods and functions to the common SQL-code:
 	SEEK_PRELOAD_LIM, tblStrct, seekSess, connRes, fieldFix(), getSQLVal(), setSQLVal();
-    - the fieldFix() appended an argument "langLs" of specifiyng need languages instead the argument "trPresent";
+    - the fieldFix() appended by an argument "langLs" of specifiyng need languages instead the argument "trPresent";
     - unified in the setting message common processing:
 	- detection of the double translation collumns to the default language was removed due to of there is no the default language now;
-	- appended of treating direct (not translation) SET commands by setting fields marked as noTransl() to prevent of collisions at
+	- appended by treating direct (not translation) SET commands by setting fields marked as noTransl() to prevent of collisions at
 	    extended processing the translation;
 	- the SET command unified in the translation states specifying;
 	- the translation setting mechanism expanded for clearing the translation at setting not translable ones.
@@ -476,13 +955,13 @@
 	- the flag TFld::TransltText used in: value getting of TValue of DAQ-Atributes,
 	    DAQ-Attributes translation of DAQ.{LogicLev,ModBus,OPC_UA,Siemens},
 	    UI-Attributes translation of UI.VCAEngine;
-	- the value (TValue) of the DAQ-Atributes appended of the context information in the full text and translation;
+	- the value (TValue) of the DAQ-Atributes appended by the context information in the full text and translation;
 	- set to the type "String (translate)" for: the field "colDscrCustNames" of wlb_Main.{alarmsAct,alarmsSt}.
     Expanding the execution environment of the OpenSCADA object functions by the language, for functions like to strftime():
 	- the object TCntrNodeObj and the function TCntrNode::objFuncCall() expanded in the argument "user" renaming to "user_lang"
 	    with pointing language in the second line;
-	- DAQ.JavaLikeCalc: the TCntrNodeObj execution appended of the language;
-	- SYS.strftime() appended of execution from the pointed language-locale.
+	- DAQ.JavaLikeCalc: the TCntrNodeObj execution appended by the language;
+	- SYS.strftime() appended by execution from the pointed language-locale.
     TUIS,UI.{QTCfg,Vision}: docGet() expanded by the language in the second line.
     FIX: The "Translations" tab expansion and fixing for:
 	- the option "check for mismatch (TrChkUnMatch)" renamed to "check/fix (TrChkAndFix)" and expanded of the translation fixing functions:
@@ -490,7 +969,7 @@
 	    merging the base messages as the translations;
 	- fixed in the matching check for all languages and clearing the service flags;
 	- information of the non matching was appended in the second message text;
-	- the translation status appended of the short labels "SINGLELANGUAGE", "MULTILANGUAGE", "MULTILANGUAGE-DYNAMIC";
+	- the translation status appended by the short labels "SINGLELANGUAGE", "MULTILANGUAGE", "MULTILANGUAGE-DYNAMIC";
 	    the message index; size of the cache and the translation context;
 	- the base language configuration field of the MULTILANGUAGE modes expanded by list the project locales separated by ";";
 	- field of the translation manager languages moved under the data lock and is preset to langBase() languages;
@@ -499,13 +978,13 @@
 	- the user language obtaining unified in the function lang2Code(), expanded by the arguments "user" and "onlyUser";
 	- the lang2CodeBase() function separated to the common one langBase() and appended the function langToLocale() of obtaining
 	    the complete locale at language from langBase();
-	- the language field of the objects TSYS, TUser appended of the selection list from langBase();
+	- the language field of the objects TSYS, TUser appended by the selection list from langBase();
 	- the translation cache significant extending and unification:
 	    - in the new TMess object's functions translCacheGet(), translCacheSet(), translCacheLimits() and the own lock trMessCacheRes;
 	    - extended by the message category for caching the system translations and users;
 	    - the cache limiting also appended by the time limit variable "limCacheIts_TM" for what it checked in the service task;
 	    - the TUser::lang() changing appended by the user language cache clearance.
-	- appended for the translation context at the new function TMess::trCtx() and the object TrCtxAlloc for handling the context
+	- appended by the translation context at the new function TMess::trCtx() and the object TrCtxAlloc for handling the context
 		registration as user and language bound to the call thread:
 	    - _()->TMess::I18N() adapted in use the translation context at empty language field;
 	    - TCntrNode::cntrCmd(), Protocol.HTTP, UI.{Vision,WebVision,WebUser,WebCfg,WebCfgD} attached to use the translation context.
@@ -530,16 +1009,16 @@
 	    for which the INSERT command also adapted in copy the translation and/or BASE independently the start locale;
 	- appended and used for a new function translIdxCacheUpd() of updating the operative translation messages' index and cache
 	    in the MULTILANGUAGE-DYNAMIC mode for the SET command;
-	- appended of the translation copy in the SQL INSERT command and for the MULTILANGUAGE-DYNAMIC mode;
-	- the configuration file appended of the MULTILANGUAGE-DYNAMIC mode support.
+	- appended by the translation copy in the SQL INSERT command and for the MULTILANGUAGE-DYNAMIC mode;
+	- the configuration file appended by the MULTILANGUAGE-DYNAMIC mode support.
 	INDIVIDUAL MESSAGES - "Trs"
-	- UI.VCAEngine: appended of changing the storage just after the widget procedure compile for placing of the dynamic messages
+	- UI.VCAEngine: appended by changing the storage just after the widget procedure compile for placing of the dynamic messages
 	    translation to the project storage;
 	- the transitive dynamic translation prevented in appending the table "Trs" for messages available in other sources,
 	    so checking the message index before;
 	- FIX: fixed for the new UserAPI messages registering in the MULTILANGUAGE-DYNAMIC mode;
-	- appended for filtering the messages for they translatability before registering;
-	- appended for the new messages early registering in the translation messages index just after appending to the storage table "Trs";
+	- appended by filtering the messages for they translatability before registering;
+	- appended by the new messages early registering in the translation messages index just after appending to the storage table "Trs";
 	- LibsDB.vcaBase:
 	    - wlb_Main.ElViewGraph: enabled for the transitive translation in the tooltip and for the parameter description;
 	    - wlb_Main.objProps: enabled for the transitive dynamic translation.
@@ -553,24 +1032,24 @@
 	- the TFld and IO objects expanded in work with the prestoring system messages;
 	- module info fields adapted to the MULTILANGUAGE-DYNAMIC mode;
 	- Security: the system users and groups some renamed and enabled for the prestoring system translation;
-	- FIX:UI.VCAEngine: name of the VCA-library object appended for the prestored translation and for the static libraries
+	- FIX:UI.VCAEngine: name of the VCA-library object appended by the prestored translation and for the static libraries
 	    like to "Original widgets";
 	- UI.{QTCfg,Vision}: adapted to the control items obtain in language of the user
 	    and update the main window interface language at it change;
 	    - UI.Vision: appended in updation the toolbars at the user change, what also adapted for the dynamic translation;
 		all development dialogs adapted for the dynamic translation.
-	- UI.{QTStarter,QTCfg,Vision}: appended for the system Qt-messages translation relating to the selected user language,
+	- UI.{QTStarter,QTCfg,Vision}: appended by the system Qt-messages translation relating to the selected user language,
 	    through the common application property "lang" for the Qt-translation reimplemented function QTranslator::translate(),
 	    and then the language commonly switched by the last interface and for all opened;
 	    the Starter Menu set for dynamic translation and updating.
 
 - CONCEPTUAL > Message Sublevels {Main}[0...9] and Unification for the User Messages Transferring
     - generic adaption to sublevels {Main}[0...9] of the main message levels [0...7];
-    - DAQ,DAQ.DAQGate: the function TController::messSet() appended of the messages transferring from the top to the down,
+    - DAQ,DAQ.DAQGate: the function TController::messSet() appended by the messages transferring from the top to the down,
 	so sinking down, making the function virtual one and redefine that in DAQGate,
 	and defining also the new OpenSCADA control service request of the TController object "set:/serv/mess";
     - DAQ: specified for the DAQ-transparency messages in the category form "{TP}{ModId}:{CntrId}[.{prm}][:{spec}]",
-	appended of such messages creation function TController::messSet() and the User API functions
+	appended by such messages creation function TController::messSet() and the User API functions
 	SYS.DAQ["Modul"]["Controller"].messSet(), SYS.DAQ["Modul"]["Controller"]["Parameter"].messSet();
     - LibsDB.vcaBase:
 	- wlb_Main.{ElCadr,TextLab,ImgLab,cntrRegul},mnEls.{El_Kran_Sh,Compressor}: adapted for the user action messages forming
@@ -590,10 +1069,10 @@
 	FIX:AGLKS.vca: The style rule 'labColorGrph1' fixed for the Default.
     !!!:FIX:LibsDB.vcaBase:
 	!!:FIX:wlb_Main.{alarmsAct,alarmsSt}: The default sorting at the field of the alarm time set back to "1" as not default descending order.
-	    !!: wlb_Main.alarmsAct: Appended for the field "messCat" of specifying the alarm categories.
+	    !!: wlb_Main.alarmsAct: Appended by the field "messCat" of specifying the alarm categories.
 	!!:wlb_Main.{ElViewGraph,graphSelPrm}: Adapted to reset the trend item color to the default styled at setting that to empty;
-	    appended of the empty color processing as the default one also taken from the style.
-	!!:FIX:wlb_Main.RootPgSo: Appended of complete updating at the user change, but language also can be changed, and the language.
+	    appended by the empty color processing as the default one also taken from the style.
+	!!:FIX:wlb_Main.RootPgSo: appended by complete updating at the user change, but language also can be changed, and the language.
 	    !: The Termination Control Panel call returned back to the unconditional call
 		and directly at the events for open before any other control panels.
 	    FIX: Fixed in width setting of the view area buttons at updating after the user change.
@@ -606,9 +1085,9 @@
 	!!:tmplib_base.anUnif:
 	    !!: Expanded in the common field DESCR using for the specific parameters redefinition
 		by the new fields "CustomFlds" and "CustomAlarms".
-	    !!: Appended of the user procedure option "toSave" of force saving the object at the exit.
+	    !!: Appended by the user procedure option "toSave" of force saving the object at the exit.
 	!!:flb_servProc.docOffLine: Expanded for the index page accessing from any other pages.
-	!:test.test: Appended of the commented parts of testing the string streams parsing by
+	!:test.test: Appended by the commented parts of testing the string streams parsing by
 	    string.{parse,parseEnd,parsePath,parsePathEnd,parseLine}().
 
 - API:
@@ -635,74 +1114,74 @@
 	    The functions moved as static ones: TBDS::{dbList,dataSeek,dataGet,dataSet,dataDel,dataDelTbl}(), TBDS::{fullDBSYS,fullDB}().
 	    The generic parameters accessing functions TBDS::genDBGet() and TBDS::genPrmSet() renamed to genPrmGet() and genPrmSet() everywhere.
 	Archives-History: Definitions of the archive specific names renamed for BUF_ARCH_NM, ALRM_ARCH_NM, ALRM_ARCH_CH_NM
-	    to ARCH_BUF, ARCH_ALRM, ARCH_ALRM_CH; and appended for ARCH_NOALRM ("<noalarms>").
+	    to ARCH_BUF, ARCH_ALRM, ARCH_ALRM_CH; and appended by ARCH_NOALRM ("<noalarms>").
     Appends:
-	SYS: The global short functions appended of s2l() and s2u().
-	    Appended of a new function strParseEnd() of parsing the separated string from the end.
-	    The function pathLev() appended of a new argument of position the offset to the next token begin
+	SYS: The global short functions appended by s2l() and s2u().
+	    Appended by a new function strParseEnd() of parsing the separated string from the end.
+	    The function pathLev() appended by a new argument of position the offset to the next token begin
 		and what also appended in the UserAPI function parsePath() of DAQ.JavaLikeCalc.
-	    TCntrNode appended of the functions storage() and setStorage() for tracking the availability of node data.
-	    The time limit variable "limCacheIts_TM" appended for the cache limiting.
+	    TCntrNode appended by the functions storage() and setStorage() for tracking the availability of node data.
+	    The time limit variable "limCacheIts_TM" appended by the cache limiting.
 	    The common encoding function strEncode() and the User API one appended the variant "ShieldBin"
 		of shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F].
-	    TMess: Appended for a function of checking the messages for them translatability - isMessTranslable().
-		Appended for functions of managing the translation cache: translCacheGet(), translCacheSet(), translCacheLimits()
-		    and the own lock trMessCacheRes. Appended for a function translIdxCacheUpd() of updating the operative translation
+	    TMess: Appended by a function of checking the messages for them translatability - isMessTranslable().
+		Appended by functions of managing the translation cache: translCacheGet(), translCacheSet(), translCacheLimits()
+		    and the own lock trMessCacheRes. Appended by a function translIdxCacheUpd() of updating the operative translation
 		    messages' index and cache.
-		Appended for the translation context at the new function trCtx() and the object TrCtxAlloc for handling.
-		Appended for the data translation trD()->translGet() and trDSet()->translSet().
-		Appended for the prestoring system messages translation trS(), as an other link to I18N().
-		Appended for the function messLevelTest().
-		The TMess::Type structure appended of an item "MaxLev" of the maximum message types/levels specifying.
-		The TMess definitions appended of mess_PreSave="<PSV>" and mess_TrModifMark="<!>".
-	    XMLNode: Appended of the new saving option BinShield(0x400) for controllable shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F].
+		Appended by the translation context at the new function trCtx() and the object TrCtxAlloc for handling.
+		Appended by the data translation trD()->translGet() and trDSet()->translSet().
+		Appended by the prestoring system messages translation trS(), as an other link to I18N().
+		Appended by the function messLevelTest().
+		The TMess::Type structure appended by an item "MaxLev" of the maximum message types/levels specifying.
+		The TMess definitions appended by mess_PreSave="<PSV>" and mess_TrModifMark="<!>".
+	    XMLNode: Appended by the new saving option BinShield(0x400) for controllable shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F].
 	    TConfig,TCfg: Expanded for new parameters TConfig::{trcSet,setTrcSet}(), TCfg::{isSet,setIsSet}() of detection
 		the configuration field changing and using in the partial DB-loading instead toDefault();
 		and TConfig::{noTransl,setNoTransl}() for global setting the structure default translation.
-	    TError: codes appended of: DB_TrRemoved (22) for mark the translation removing in DB,
+	    TError: codes appended by: DB_TrRemoved (22) for mark the translation removing in DB,
 		DB_ReadOnly (23) introduced by SQLite at the unification process,
 		Core_NoNode (5) of the TCntrNode missing,
 		Tr_ErrTransport (12) for the transport errors mark.
-	DB: The TBDS::realDBName() appended of the back conversion argument.
-	    The static methods of TBDS appended of the new function dbPart() of getting the storage address parts
-		and appended of a new function dataDelTbl() of the common tables removing, also in the Configuration File.
-	    Appended for the structure item object TTable::TStrIt.
+	DB: The TBDS::realDBName() appended by the back conversion argument.
+	    The static methods of TBDS appended by the new function dbPart() of getting the storage address parts
+		and appended by a new function dataDelTbl() of the common tables removing, also in the Configuration File.
+	    Appended by the structure item object TTable::TStrIt.
 	    Common SQL-code moving to the new functions: TTable::fieldSQLSeek(), TTable::fieldSQLGet(), TTable::fieldSQLSet(),
 		TTable::fieldSQLDel(); with the flags TTable::SQLReqFlag: SQLNoFlg, SQLOrderForSeek, SQLFirstSkipForSeek.
 	    Declaration in the core for the service definitions, methods and functions to the common SQL-code:
 		SEEK_PRELOAD_LIM, tblStrct, seekSess, connRes, fieldFix(), getSQLVal(), setSQLVal().
-	    Appended of the list priority specifying functions TBD::lsPr(), TBD::setLsPr() and virtual one TTypeBD::lsPr().
-	    Appended of the DB features specifying virtual function TTypeBD::features().
+	    Appended by the list priority specifying functions TBD::lsPr(), TBD::setLsPr() and virtual one TTypeBD::lsPr().
+	    Appended by the DB features specifying virtual function TTypeBD::features().
 	DAQ: TFunction::IO object's structure IO::IOFlgs appended the flag IO::TransltText of marking the translate String IO directly.
-	    The function {TController,TParameter}::messSet() appended of the messages transferring from the top to the down, and also
+	    The function {TController,TParameter}::messSet() appended by the messages transferring from the top to the down, and also
 	    the User API functions SYS.DAQ["Modul"]["Controller"].messSet(), SYS.DAQ["Modul"]["Controller"]["Parameter"].messSet().
-	    The TCntrNodeObj appended of the function lang() obtained from the second line of the common method mUserLang.
-	Archives-History: Appended of the function "void TArchives::messPut( const TMess::SRec &rec, const string &arch = "" )" variant.
-	Transports: Appended of the new function extHostSeek().
-	VCAEngine: The User API functions mime() and mimeSet() appended of the correct equivalents resource() and resourceSet().
+	    The TCntrNodeObj appended by the function lang() obtained from the second line of the common method mUserLang.
+	Archives-History: Appended by the function "void TArchives::messPut( const TMess::SRec &rec, const string &arch = "" )" variant.
+	Transports: Appended by the new function extHostSeek().
+	VCAEngine: The User API functions mime() and mimeSet() appended by the correct equivalents resource() and resourceSet().
 
 - SYS:
     !!!!:FIX:Building: configure.ac: Core library version rose to 3:12:0 and the program version rose to 0.9.5.
 	!!!!: The module version of the subsystem "BD" rose to 15, the subsystem "DAQ" rose to 14.
-	!!!!: The Debian 11 root file systems (chroots) are appended for build OpenSCADA;
+	!!!!: The Debian 11 root file systems (chroots) are appended by build OpenSCADA;
 	    and Nokia N900 removed since the compiler crashes now constantly in several places.
 	!!:data/*.xml: The TBDS Generic parameter "SYSStPref" removed.
 	FIX:DAQ.OPC_UA,libOPC_UA,DAQ.Siemens: Restored in building by old GCC 3 compilers through PROTECTED sections accessing errors.
 	FIX:UI.Vision: Restored in building with Qt lesser 4.6 in accessing QDesktopWidget().screenCount().
-	AUTOMAKE appended of the options "1.10 subdir-objects" to prevent the subdir object warnings.
+	AUTOMAKE appended by the options "1.10 subdir-objects" to prevent the subdir object warnings.
 	data/{debian,debian_mod}/changelog: Changed in the repository to LTS.
 	data/oscada_start.xml: The FSArch archive renamed from "1second" to "1second (instantaneous)".
     !!!!:The source code messages and program documentation:
-	!!!!: The "Program Manual" document appended of the new section "Execution the ready OpenSCADA project in the service-background space"
+	!!!!: The "Program Manual" document appended by the new section "Execution the ready OpenSCADA project in the service-background space"
 	    and revised in the section "Startup and execution".
 	!!!: The "Quick start" manual included the new section "Execution the ready OpenSCADA project in the service-background space"
 	    into own section "Background and remote execution — server, PLC execution environment and remote development".
-	!!!: New document of the How to "Create multi language project" appended for downloading to offline.
+	!!!: New document of the How to "Create multi language project" appended by downloading to offline.
 	!!!: The whole source code labels like to ????, !!!!, ?!?! and they comments were revised.
 	!!:UI.{VCAEngine,Vision}: The "Mime data" renamed to "Resources" and "Mime type" to "MIME".
 	!:UI.{QTCfg,Vision}: "Collumns" renamed to "Columns".
 	Finished in the replacing rom_as@oscada.org by roman@oscada.org for the service files.
-	{DAQ,Protocol}.ModBus: Appended for the modules' name individual specifying and translation.
+	{DAQ,Protocol}.ModBus: Appended by the modules' name individual specifying and translation.
 	UI.{VCAEngine,QTStarter,Vision,WebVision}: The Ukrainian word "проекту" renamed to "проєкту" everywhere.
     !!!!:FIX: The debug categories processing moved under own lock "dbgRes" instead "mRes", where the hungs are observed.
     !!!:.,DAQ.DAQGate: The messages redundancy and messages transferring in DAQ.DAQGate limited for depth of the requesting messages
@@ -711,36 +1190,36 @@
 	    - request the active alarms;
 	    - request the archive in deep and up to the alarms requesting time, without the alarms activation;
 	    - ordinal-periodic request of the last messages, without the alarms activation.
-    !!!:Protocol.HTTP,UI.{WebCfg,WebCfgD,WebUser,WebVision}: Appended of the previous user detection to mark that actions for HTTP-modules
+    !!!:Protocol.HTTP,UI.{WebCfg,WebCfgD,WebUser,WebVision}: Appended by the previous user detection to mark that actions for HTTP-modules
 	    with moving the previous user authentication session closing after successful the new one.
 	!!: All the HTTP-modules adapted to the user field in the HTTP-functions with the previous user in the second line.
 	!!:FIX:WebVision: The previous user is used now for detection of the user change between the ordinal users
 	    and for single session, than prevent to create new sessions.
 	The HTTP-functions HttpGet() and HttpPost() marked as deprecated and scheduled for removing after version 1.0.
     !!!: Expanding the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F] shielding:
-	!!:XMLNode: Appended of the new saving option BinShield(0x400) for controllable shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F],
+	!!:XMLNode: Appended by the new saving option BinShield(0x400) for controllable shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F],
 	    what is significant for the WebBrowsers.
 	!: The common encoding function strEncode() and the User API one
 	    appended the variant "ShieldBin" of shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F].
-	!!:UI.WebCfgD: Appended of encoding the XML traffic for the binary symbols shielding using the new option "BinShield".
-	DB.SQLite: The binary mode detection appended for the symbols range [\x0-\x8\xB-\xC\x0E-\x1F].
+	!!:UI.WebCfgD: Appended by encoding the XML traffic for the binary symbols shielding using the new option "BinShield".
+	DB.SQLite: The binary mode detection appended by the symbols range [\x0-\x8\xB-\xC\x0E-\x1F].
 	UI.QTCfg: The binary symbols encoding of the text fields moved to use the new variant "ShieldBin" of the TSYS::strEncode() function.
     !!!!:FIX: strParse() rewrote and tested in processing the group symbols merging at the scan;
 	    and strParse(), strLine(), pathLev() in position the offset to the next token begin and limiting in the down for 0;
 	    and pathLevEnd() in positioning the offset to the next token end and limited in the up for the size.
 	!!: TModSchedul::chkAllowMod(),UI.QTCfg,Protocol.HTTP: switched in use TSYS::pathLevEnd() and  TSYS::pathLev() in the new behaviour.
-    !!!:.,DB,DAQ: The global configuration context copying mechanism (interstation) appended for the marking link
+    !!!:.,DB,DAQ: The global configuration context copying mechanism (interstation) appended by the marking link
 	    to the last setting operation object, to easy postmarks setting.
 	!!:DAQ: As a postmark to the saving DAQ-parameter object there appended the attribute "prmTp" with the parameter type,
 	    which is used next in true detection the parameter type changing at the following loading.
     !:FIX: The lock file processing-updating moved to update always, not only at the running, at the file availability,
 	due to the possibility of multiple starting on VERY long starting projects.
     !: The OpenSCADA control request "list:/db/list" expanded of the optons support and the option "onlydb" for generation only the DB list.
-    The TConfig object appended of the common "NoTransl" flag.
+    The TConfig object appended by the common "NoTransl" flag.
     TSYS::str2addr() expanded for reading the string address as uint64_t.
 
 - DB:
-    !!:FIX: The TBDS::dataDel() fixed-appended in removing multiple items and appended of removing the empty table nodes
+    !!:FIX: The TBDS::dataDel() fixed-appended in removing multiple items and appended by removing the empty table nodes
 	of the Configuration File.
     !:FIX: Fixed in the function TTable::fieldSQLSeek() for anyway processing at empty requesting list.
     The TBD object prevented in reload from it for the project work DB.
@@ -757,10 +1236,10 @@
     The attribute "work_lib_db" of the TPrmTmplLib object renamed to the standard "mDB".
     !:ModBus,OPC_UA,Siemens: Disabled for the links reconnection after the loadIO(true) call.
     .,JavaLikeCalc,UI.{VCAEngine,Vision}: The whole translation flag is hidden for unset values.
-    !!!!:FIX:DAQGate: Appended of the asynchronous writing mode implementation. The configuration field of the remote stations selection moved
-	    in simple combobox. The controller object status appended of the counters of read/archive's/wrote values, read messages
+    !!!!:FIX:DAQGate: Appended by the asynchronous writing mode implementation. The configuration field of the remote stations selection moved
+	    in simple combobox. The controller object status appended by the counters of read/archive's/wrote values, read messages
 	    and the writing buffer status.
-	!!:FIX: Fixed in reusing parameters with empty address for included ones and appended for clearing the address at the parameters copy,
+	!!:FIX: Fixed in reusing parameters with empty address for included ones and appended by clearing the address at the parameters copy,
 	    so you can now copy all controller objects with the parameter archives store.
 	!!:FIX: Unified in the sync commonly and fixed in the attributes sync,
 	    with preventing in constantly sync of the missed on remote host parameters.
@@ -768,12 +1247,12 @@
 	FIX: Completely prevented of the missing parameters naming also after those copy.
 	FIX: Removed for the periodic connection error messages and prevented of the connection restoring time miss
 	    at the start and the connection missing.
-    !!:Siemens: Appended of the new option "Maximum size of the request block, bytes" of specifying the maximum requesting block,
+    !!:Siemens: Appended by the new option "Maximum size of the request block, bytes" of specifying the maximum requesting block,
 	    due to a problem observing when PLC returns the error "incorrect PDU size" at reading blocks about 200 bytes.
-	Appended for the additional debugs.
-    !:System: The init() function of the DA-sources appended of the updation mode, to update the subtype field "SUBT" mostly.
-	The Disk SMART attribute's name appended of the code, for unknown parameters mostly.
-    !:ModBus: The controller object status appended of the transport error state (code 12) and the writing buffer status in the asynchronous
+	Appended by the additional debugs.
+    !:System: The init() function of the DA-sources appended by the updation mode, to update the subtype field "SUBT" mostly.
+	The Disk SMART attribute's name appended by the code, for unknown parameters mostly.
+    !:ModBus: The controller object status appended by the transport error state (code 12) and the writing buffer status in the asynchronous
 	writing. The parameter objects error at the common controller errors is taken now directly from the controller object status.
 
 - FIX:Archives-History: Improved the archiver periodicity limiting in the archiver module before to correct apply the final value.
@@ -781,15 +1260,15 @@
 - Transports:
     !:FIX: Propagation of the password hash of the OpenSCADA external hosts connection was fixed in the host creation
 	and the same propagation expanded to all host connections with the equal connection user, by the new function extHostSeek().
-    External OpenSCADA hosts' table appended of checking the host ID presence at it change.
-    !!!:SSL: Both input and output parts appended of the possibility to point the certificates and the key directly from an external file.
-	!!: Appended for reloading the certificates file of the input transport at it change by the transport reconnect.
-    Sockets: The source code was some cleaned and the socket closing of the input transport appended for the result checking.
+    External OpenSCADA hosts' table appended by checking the host ID presence at it change.
+    !!!:SSL: Both input and output parts appended by the possibility to point the certificates and the key directly from an external file.
+	!!: Appended by reloading the certificates file of the input transport at it change by the transport reconnect.
+    Sockets: The source code was some cleaned and the socket closing of the input transport appended by the result checking.
 
 - Transport Protocols:
     !!:FIX:HTTP: Fixed in reading the "accept-language" HTTP variable only as the two symbol language code,
 	    then the common interface is translated also now on FireFox who sends there the country code also.
-	Appended of detection and notification of login tries the unallowed users.
+	Appended by detection and notification of login tries the unallowed users.
     !!:FIX:SelfSystem: In the input part switched to load the whole input message before checking the auth information,
 	then preventing for strange error messages "Error the command format." for the message tail.
 
@@ -805,11 +1284,11 @@
 	    The empty page group is meant now the "main" one to force the root page replace at starting from non empty page groups.
 	    The argument "FullTree" of requesting is removed for 0 value.
     !!!:QTStarter,WebVision,WebCfgD:
-	Qt part, in the generic Qt Library, and Web appended for the table edition text apply at Enter and new line at Ctrl+Enter.
+	Qt part, in the generic Qt Library, and Web appended by the table edition text apply at Enter and new line at Ctrl+Enter.
     !!:FIX:QTCfg,Vision: Prevented from hangs at stopping from a termination signal, from the console mostly,
 	    since locking the main Qt thread in modStop() without qApp->processEvents().
-	The List element context menu appended of the text item copy function.
-    !:QTCfg,WebCfgD: Appended of sorting the external OpenSCADA hosts by name. Items of the List element enabled for the word wrapping.
+	The List element context menu appended by the text item copy function.
+    !:QTCfg,WebCfgD: Appended by sorting the external OpenSCADA hosts by name. Items of the List element enabled for the word wrapping.
     =Tmpl=,WebCg: Moved to use the actual HTTP-functions HTTP_GET() and HTTP_POST().
     QTStarter: Prevented of the project list updating for the inactive window or the dialog invisibility.
     !!!!:VCAEngine: Finishing the changes obtaining in the runtime mode by the clocking cycles through,
@@ -822,9 +1301,9 @@
 	    - support of reloading the main calculation clock and clearing the old changes clock value;
 	    - preventing the empty cycles for the common widgets requesting;
 	    - removed for code of the previous slide current mark mechanism of the attributes changing detection with the doubles.
-	!!!: The Widget copy operation appended of copying the used widget resources (the Image type now only), and in that way there performed:
-	    - the Widget objects' function resourceGet() appended an argument <noParent> and set for the "constant" qualifier;
-	    - the Widget objects appended of the function resourceSet() declaration and implementation;
+	!!!: The Widget copy operation appended by copying the used widget resources (the Image type now only), and in that way there performed:
+	    - the Widget objects' function resourceGet() appended by an argument <noParent> and set for the "constant" qualifier;
+	    - the Widget objects appended by the function resourceSet() declaration and implementation;
 	    - the container function resourceDataSet() prevented in operating for just copied but not yet stored containers.
 	!!:FIX: The "<deleted>" mark setting for the removed inherited included widgets moved to the save function of the container widget,
 	    since that is lost at the copy operations and now you can easy undo/redo such widgets removing.
@@ -832,25 +1311,25 @@
 	    with expanding the mime operations for work with completely specified DBs.
 	!!:FIX: Prevented in the attribute values inheriting for the output links, then do not write to DAQ the obviously wrong values
 	    at the hot edition of running projects and their items.
-	!: The project copying operation appended of true treating the broken page links before copying the target link page.
+	!: The project copying operation appended by true treating the broken page links before copying the target link page.
 	!: Manual enabling the visual items causes now for their reloading, due to the previosly loaded values loss at the inheriting,
 	    for: Widget Library and items, Project and items.
 	!: The inheritance restoring operation, or the changes clearing, for the included visual items
-	    appended of the container inheritance restoring.
+	    appended by the container inheritance restoring.
 	!: DB of the original widget library is set to empty, to prevent of wrong removing at the work DB reloading.
 	FIX: Prevented of the connected vizualizers count at the reconnection, from different user mostly.
 	FIX: Fixed in the new styles creation and loading only allowed ones with control of the property values presence before reading
 	    and filling for missing at setting.
 	FIX: Fixed in loading the CONSTANT attributes from the not empty configuration value due to the main value is not saved in such case.
 	FIX: The widget libraries and projects copy fixed in the spare copy "DB_TBL".
-	The global definitions in the common VCA file types.h appended for A_GEOM_MIN (-10000) and A_GEOM_MAX(10000)
+	The global definitions in the common VCA file types.h appended by A_GEOM_MIN (-10000) and A_GEOM_MAX(10000)
 	    to use in the attributes A_GEOM_* and the UI.Vision module.
 	Enabled for show the single not parameter configuration attributes in the "Links" tab and for the not show attributes mode.
-	The project session calculation status appended of the counter value and the widget objects appended the modification counter status.
+	The project session calculation status appended by the counter value and the widget objects appended the modification counter status.
 	The container object's functions mimeDataList(), mimeDataGet(), mimeDataSet(), mimeDataDel()
 	    renamed to resourceDataList(), resourceDataGet(), resourceDataSet(), resourceDataDel() respectively.
 	Widget::{path,parentNm,setParentNm}(), Widget::mParentNmPrev renamed to Widget::{addr,parentAddr,setParentAddr}(). Widget::mParentAddrPrev.
-	The attribute object appended of the visual state detection function isVisual() - used in the visualizers.
+	The attribute object appended by the visual state detection function isVisual() - used in the visualizers.
     !!:FIX:Vision: Fixed, or finished the implementation, for UNDO/REDO the removing operation
 	    of the inherited included Widgets of the Project Pages.
 	!!: Adjusted in the focus policy to the UI.WebVision way and appended the focus force clearing at lost,
@@ -859,22 +1338,22 @@
 	!: The container pages switching moved to switch only from the VCA-engine - just sending "pgOpenSrc" there.
 	FIX: The view Table of the primitive FormEl fixed in the table refitting at adding first row and adding rows in whole.
 	FIX: In the runtime fixed for the actual pages reopening and fitting the window size at the complete reconnection.
-	Appended of updating the style name at the user change.
-	The shape type changing appended of clearing all child objects after the shape destroy(),
+	Appended by updating the style name at the user change.
+	The shape type changing appended by clearing all child objects after the shape destroy(),
 	    due to warnings of reusing-doubling like to QLayout.
     !!:FIX:WebVision: The session methods mUser and mUserOrig moved under the data mutex lock, due to there can be crashes
 	    at active user manipulations.
 	!!:FIX: The view "Combo" of the type "Line" and the types "List" and "Combo" appended
 	    of creation value items missed in the selection list.
-	!!:FIX: The popup windows of the calendar and editable combo appended of the geometry check than preventing the main window overflow;
+	!!:FIX: The popup windows of the calendar and editable combo appended by the geometry check than preventing the main window overflow;
 	    and the popup windows closing moved completely at a mouse button press outward the window, together other popup menus.
-	!!:FIX: The focusing appended of force the focus to widget set in focus from the VCA-Engine acknowledge,
+	!!:FIX: The focusing appended by force the focus to widget set in focus from the VCA-Engine acknowledge,
 	    but with checking that change to prevent the common style combo unroll at the focused field periodic update.
 	!!:FIX: Improved and fixed in usability the view Table of the primitive FormEl and mostly in the text edition:
 	    - true width fitting and minimum height setting to 40 pixels,
 	    - FIX: fixed in specifying the column sorting value "0" as ascending-default and "1" as descending from the top,
 		like to the UI.Vision behaviour and the numbers (integer,float) sort-comparing was implemented separately.
-	!!: Appended for the FrontEnd status display in the session status field with that requesting-scheduling at display the field.
+	!!: Appended by the FrontEnd status display in the session status field with that requesting-scheduling at display the field.
 	!:FIX: The bordered line and Bezier prevented of drawing at equal first and end points, what causes of all the widget fill.
 	FIX: Fixed in the button visible size update at it change in VCA, just setting its style to "width: inherit; height: inherit".
 
@@ -891,7 +1370,7 @@
 - !!!!:FIX:SYS: The module version of the subsystem "Archives" rose to 14.
     !!!: The redundancy requests prevented of the host multiple requests, by using a request lock "reqM",
 	have to prevent of the redundancy connection sometime lost at changing the DAQ sources.
-    FIX:TMess: The structure SRec appended for the default values in the constructor and by the comparing function.
+    FIX:TMess: The structure SRec appended by the default values in the constructor and by the comparing function.
 - FIX:DAQ,Archives,UI.QTCfg: DAQ-Parameters copy prevented from an error of presence already the binding archive.
     FIX:UI.QTCfg: Such errors also prevented on termination the group copying operation by a new acceptation dialogue.
 - !!!!:FIX:Archive,DAQ.DAQGate: TArchiveS::messPut() fixed in processing of messages setting at empty "arch".
@@ -900,22 +1379,22 @@
 	since the alarms set and clear now forcibly.
 . !!:FIX:DAQ.{ModBus,OPC_UA,Siemens}: Switched to the possibility to work with empty template, just as the parameters container.
 	FIX: The logical type DAQ-Attributes saving appended in miss disabling the translation.
-	The DAQ-Parameters of the Ligical type appended for the common connection errors display
+	The DAQ-Parameters of the Ligical type appended by the common connection errors display
 	    in the attribute "err".
 	FIX: DAQ.{ModBus,Siemens}: Added for clearing the call now flag at errors.
 - FIX:DB.DBGate,DAQ.DAQGate: Prevented of the host multiple requests, by using a request lock "reqM".
-- !:FIX:DAQ: The logical level implementation appended of the multilevel recursion detection for the logical level links.
+- !:FIX:DAQ: The logical level implementation appended by the multilevel recursion detection for the logical level links.
     The function TPrmTempl::Impl::cntrCmdProc() set as the virtual one, to allow of implementing the DAQ-source specific.
     The DAQ-Parameter type switched to show the name always, not only at the selection.
-    !!!!:FIX:Siemens: Appended for the Simple type of the DAQ-parameters.
-	!!!: Appended for the data area specifying as a negative DB with code of this area,
+    !!!!:FIX:Siemens: Appended by the Simple type of the DAQ-parameters.
+	!!!: Appended by the data area specifying as a negative DB with code of this area,
 	    and the Flags/Marks processing (0x83) added in a specific way, by the prefix "F".
 	!: Enabled for the parameters hierarchical including.
 	FIX: Fixed in sending the opening connection requests at the connection lost in the ISO-TCP own implementation.
 	The logical level parameters enabled to show the connection/acquisition errors in the "Error(err)" attribute.
-    !!!!:FIX:{DAQ,Protocol}.OPC_UA: Appended for the Logical type DAQ-Parameters support.
+    !!!!:FIX:{DAQ,Protocol}.OPC_UA: Appended by the Logical type DAQ-Parameters support.
 	!!:FIX: Fixed for the mtxData locking in TMdContr::getValMIt();
-	!!: The Standard type DAQ-Parameters appended for the no requesting the metadata on the server mode
+	!!: The Standard type DAQ-Parameters appended by the no requesting the metadata on the server mode
 	    and the attributes direct ID and name.
 	!: The parameter side nodes browser expanded for checking the expanded nodes' list format in the presence detection.
 	FIX:DAQ.OPC_UA: Fixed-finished in the parameter including support.
@@ -926,11 +1405,11 @@
 	The controller object status appended in display the sync state.
     LogicLev: Some reformatted in the functions loadIO() and saveIO() to uniformity with DAQ.{ModBus,OPC_UA,Siemens}.
     ModBus: The source code some cleared.
-- FIX:Archive.DBArch: Appended of detection some value sources freeze in the block archiving.
+- FIX:Archive.DBArch: Appended by detection some value sources freeze in the block archiving.
 - FIX:UI.{VCAEngine,Vision}: The field "Period of the calculating" of the tab "Processing"
     of the widget properties edition allowed to control constantly, independently at the procedure presence
     and for the included pages/widgets calculation common control.
-- !!:FIX:UI.VCAEngine: The VCA-styles appended of they updating at the user change in runtime
+- !!:FIX:UI.VCAEngine: The VCA-styles appended by they updating at the user change in runtime
 	and cleared by naming the special styles and they number limit.
     FIX: The applying order of the function Widget::inheritAttr() changed to all configuration before,
 	in preventing the Widget::attrChange() invoking for old configurations,
@@ -948,7 +1427,7 @@
 	Rewrote in the logo image placing, to prevent of use the Qt5 specific function instead QLabel::pixmap().
     FIX:QTCfg: Fixed in broke names the selectable table columns after first incomplete "name-id" item.
 - FIX:UI.WebCfgD: Fixed in the table set value updation for table data come with the flag "noReload".
-- FIX:UI.WebVision: Appended of tracing the user changing in the standard way
+- FIX:UI.WebVision: Appended by tracing the user changing in the standard way
     and of sending the "connect" request with the flag "userChange" for the user VCA-style change also.
 
 
@@ -957,31 +1436,31 @@
 - FIX:LibsDB.vcaBase: Main.grpCadr: Cleared from spare modification and the group name set to "<page>" for the unification.
     doc.docMessRep,Main.{alarmsAct,alarmsSt}: Expanded in detecion the current source name of violations after passing the multiple gates.
 - FIX:AGLKS.St: The DAQ-parameter LogLev.gen.P4 fixed in the violation borders specifying.
-- FIX:Archives: The archive object removing appended of switching to "Passive" and starting for stopped ones,
+- FIX:Archives: The archive object removing appended by switching to "Passive" and starting for stopped ones,
 	to remove also from the storages for the archive objects with lost the source.
     !: The control interface button expanded for clearing the visible alarms, not all them only.
 - DAQ.{*,DAQGate}: Archive values requesting in redundancy and the gate cleared for setting some values to "0" for "sepReq", "hostTm"
     to decrease some the traffic.
-- !!:DAQ.DAQGate: The sync modes appended for a mode of preventing the sync in whole for the stored in the cache objects,
+- !!:DAQ.DAQGate: The sync modes appended by a mode of preventing the sync in whole for the stored in the cache objects,
     allowing value -1 for the configuration field "Synchronization time with the remote station, seconds."
 - FIX:DAQ.Siemens: Fix the restoring connection time calculation for the acquisition periodicity not 1 second.
 - FIX:DAQ.OPC_UA: Fixed-finished in the parameter including support.
-- UI.QTCfg: The copy accepting dialog appended for the limiting of the display items list in 10.
-- FIX:UI.VCAEngine: Detection the group-parameter link status as OK appended for checking not only first sucesfully linked attribute.
+- UI.QTCfg: The copy accepting dialog appended by the limiting of the display items list in 10.
+- FIX:UI.VCAEngine: Detection the group-parameter link status as OK appended by checking not only first sucesfully linked attribute.
 - !:FIX:UI.{Vision,WebVision}: The view Table of the primitive FormEl fixed in specifying
     the column sorting value "0" as descending and "1" as ascending from the top,
     and force of applying the attribute "sort" change.
-- FIX:UI.Vision: The copy widgets appended for udating at errors also, for the possible restoring of the inherited removing.
+- FIX:UI.Vision: The copy widgets appended by udating at errors also, for the possible restoring of the inherited removing.
 
 
 2021-06-21 Roman 0.9.4
 - FIX:LibsDB.vcaBase: Main.ElViewGraph.lb_val.arg0cfg fixed in wrong translation to uk.
-- DAQ.DAQGate: The requestion function cntrIfCmd() appended for the argument "noConnect" of preventing
+- DAQ.DAQGate: The requestion function cntrIfCmd() appended by the argument "noConnect" of preventing
     the missed connections establish at the archive requesting now.
 - FIX:SYS: The "Translations" tab fixed in the option of checking for matching.
-- !!:DAQ: The DAQ-parameter object appended for an information field of the changing timestamp with it maximum value
+- !!:DAQ: The DAQ-parameter object appended by an information field of the changing timestamp with it maximum value
     on the controller object, by the new DB configuration field "TIMESTAMP" of the parameter object.
-- FIX:DAQ.{ModBus,Siemens}: Appended for setting the modification flag of the target parameter at copy to it,
+- FIX:DAQ.{ModBus,Siemens}: Appended by setting the modification flag of the target parameter at copy to it,
     for the Logical Level type.
 - UI.VCAEngine: Some unified in the links processing for translation String constants and "val:{Value}".
 - FIX:UI.Vision: Fixed in complete exiting from the edition mode of the primitive ElFigure included into the Box at focus lost.
@@ -1009,18 +1488,18 @@
 	- RootPgSo: 2.3 => 2.4
 
 - OpenSCADA libraries and projects:
-    !!:LibsDB.vcaBase,AGLKS.vca: Main.RootPgSo: Appended for:
+    !!:LibsDB.vcaBase,AGLKS.vca: Main.RootPgSo: Appended by:
 	- the widget "alarms" on the primitive "Protocol" basis with the possibility of enable/disable;
-	- appended for an optional function of returning to a default user after specified time of the inactivity in a new attribute "defUser";
+	- appended by an optional function of returning to a default user after specified time of the inactivity in a new attribute "defUser";
 	- switched to a non relative algorithm of the main mnemonic scheme's vertical position and height calculation.
     !!!!:LibsDB.OscadaLibs:
 	!!!!:DevLib.IEC62056: Rewrote in the synchronous (request-answer) mode for working multiple devices on the serial bus.
 	    !:FIX: fixed in using the true address mask 0x7F instead 0x3F.
-	!: PrescrTempl.manager: appended for a feature of pausing prescriptions from the commands-steps.
-	!: base.anUnif: appended for an option "Force NORM violation at the start" for the force NORM alarm messages generation at the start.
+	!: PrescrTempl.manager: appended by a feature of pausing prescriptions from the commands-steps.
+	!: base.anUnif: appended by an option "Force NORM violation at the start" for the force NORM alarm messages generation at the start.
 	FIX: base.ntf: in the notification part improved for the broken transports (after the long response time) processing.
 	"NORMA" renamed to "NORM".
-    !!!!:LibsDB.vcaBase: The library "Main" appended for the new page "StoreHouse (storeHouse)" implementation.
+    !!!!:LibsDB.vcaBase: The library "Main" appended by the new page "StoreHouse (storeHouse)" implementation.
 	!!:Main.RootPgSo: Periodicity of the frame execution rise to 1000 milliseconds after appending for events early processing.
 	    Switched mostly from the hotkeys "Ctrl+?" to "CtrlAlt+?".
 	!: The template VCA-project adapted to the actual alarms table early appending in the vertical size scale 0.96.
@@ -1037,27 +1516,27 @@
 
 - API:
     !!!!:Changes:
-	SYS: The function TSYS::curTime() appended for an argument of the clock source specifying with using the function clock_gettime().
-	    The EVAL_RFlt definition appended for the suffix "f".
+	SYS: The function TSYS::curTime() appended by an argument of the clock source specifying with using the function clock_gettime().
+	    The EVAL_RFlt definition appended by the suffix "f".
 	Mess: The translation function TMess::translSet() appended by an argument "srcFltr" of filtering at sources.
 	Transports: The IO-log functions pushLogMess() appended by the arguments "data" and "dataDir".
     Appends:
 	Mess: The data lock separated from all messages lock in dtRes.
 	SYS: The user API functions appended by the function lang() of the system language fast obtaining.
-	    Appended for the function TSYS::curTimeN().
+	    Appended by the function TSYS::curTimeN().
 	    .,DAQ.{LogicLev,ModBus,Siemens}: Appended and used for a global constant DAQ_APER_FRQ of frequency
 		of representing the aperiodic invokes, like to f_start, of the periodic processes.
-	Security: The user object appended for a function auth() of the User API to authenticate at password.
-	Transports: The input and output transport objects appended for the IO-log attributes: "mLogLstDt", "mLogLstDtTm".
+	Security: The user object appended by a function auth() of the User API to authenticate at password.
+	Transports: The input and output transport objects appended by the IO-log attributes: "mLogLstDt", "mLogLstDtTm".
 
 - SYS:
     !!!!:FIX:Building: configure.ac: Core library version rose to 3:10:0 and the program version rose to 0.9.4.
-	data/Android/patches/openscada_oscada.xml.patch: The Android patch appended for the plain passwords restoring in the table ExtTansp.
+	data/Android/patches/openscada_oscada.xml.patch: The Android patch appended by the plain passwords restoring in the table ExtTansp.
     !!!!:The source code messages and program documentation:
 	!!!!: rom_as@oscada.org replaced by roman@oscada.org in everywhere in the source.
 	!!: The document "Modules/OPC_UA" complete revised for the modules version 2.1 and the translation.
-    !!!!: The "Translations" tab restructured something, appended for the actual status, appended for some context help
-		and the translations manager appended for:
+    !!!!: The "Translations" tab restructured something, appended by the actual status, appended by some context help
+		and the translations manager appended by:
 	    - limiting of the table form time in prmInterf_TM (7 seconds);
 	    - a configuration field of passing number the top messages;
 	    - translation setting only for the filtered sources;
@@ -1067,7 +1546,7 @@
     !!:FIX:.,BD.LDAP,Archive.{DBArch,FSArch},DAQ.{ModBus,MMS},{DAQ,Protocol}.OPC_UA,UI.Vision: Some cleaned from the build warnings.
     !!:FIX: The common configuration field "WorkDir" was prevented from marking as modified one at the project switch
 	than saving it in the configuration file.
-    !!:FIX: The EVAL_RFlt definition appended for the suffix "f" to prevent of wrong comparing the double EVAL_RFlt with stored float values,
+    !!:FIX: The EVAL_RFlt definition appended by the suffix "f" to prevent of wrong comparing the double EVAL_RFlt with stored float values,
 	fixes the archiver Archive.FSArch work with the float type values in the EVAL detection.
     !!:FIX:Mess: The data lock separated from all messages lock in dtRes to prevent the concurrently locks
 	at active work with translations. The mLang2CodeBase, mLang2Code attributes switched to this new lock.
@@ -1085,10 +1564,10 @@
 
 - DAQ:
     FIX: Insertion or creation new DAQ template items fixed in the ID indexing-enumerating for checking the items presence,
-	the new inserted or added items appended for the default value (configuration value) copying.
+	the new inserted or added items appended by the default value (configuration value) copying.
     Value: The Value object prevented from storing NaN real values by replacing them to EVAL.
     !!:ModBus,Siemens: Switched in "f_frq" value form to use the real task execution information.
-    !!!!:{DAQ,Protocol}.OPC_UA.{.,libOPC_UA}: Appended for the Publish service implementation, CHUNKS support on the DAQ-client part
+    !!!!:{DAQ,Protocol}.OPC_UA.{.,libOPC_UA}: Appended by the Publish service implementation, CHUNKS support on the DAQ-client part
 	    and the code coming refactoring in generic:
 	CLIENT:
 	- attributes (monitored items) adding moved from attrPrc() directly to enable() and which ensured to call at the controller object start
@@ -1101,46 +1580,46 @@
 	- structure variables in DAQ-parameters allowed to select them items separately, in the selection browser;
 	- the variables list of the DAQ-parameters parsing set to complete parsing with passing empty lines;
 	- the DAQ-controller object appended in closing the session and secure channel at it stopping;
-	- the controller object common status appended for the detailed information about the used secure channel,
+	- the controller object common status appended by the detailed information about the used secure channel,
 	    session, subscription and the processing monitored items;
 	- the request lock renamed to resOPC.
 	SERVER:
-	- the OPC-UA Server object appended for the common server status tab with information about activity of the secure channels;
-	- the EndPoint Node object appended for the common status with information about activity of the sessions and subscriptions,
+	- the OPC-UA Server object appended by the common server status tab with information about activity of the secure channels;
+	- the EndPoint Node object appended by the common status with information about activity of the sessions and subscriptions,
 	    also the subscription task period and time of execution.
 	LIB:
 	- unified in specifying the default value of the secure channel life time, what set to 300000 ms;
 	- the default LifeTimeCounter of the subscriptions set to 2400;
-	- the object NodeId appended for the function operator==() of direct comparing;
+	- the object NodeId appended by the function operator==() of direct comparing;
 	- the function XML_N::childClear() appended by a result of returning the same XML_N object for concatenation;
-	- the function curTime() appended for an argument of the clock source specifying with using the function clock_gettime();
-	- short functions appended for str2int() and str2uint();
+	- the function curTime() appended by an argument of the clock source specifying with using the function clock_gettime();
+	- short functions appended by str2int() and str2uint();
 	- some fields renamed: publInterv to publInterval, cntrLifeTime to lifetimeCnt, cntrKeepAlive to maxKeepAliveCnt,
 		maxNotPerPubl to maxNtfPerPubl, en to publEn;
 	- fixing "POOL" word on "POLL".
 	LIB_CLIENT:
-	- Client::reqService() appended for the meta command "CloseALL" of closing current session and secure channel;
+	- Client::reqService() appended by the meta command "CloseALL" of closing current session and secure channel;
 	- the main client services processing function protIO() adapted to work in the asynchronous mode (not requesting);
 	    - the function Client::messIO() expanded for the timeout argument with specifying the requesting mode also;
 	    - the channel writing and reading is separated in MSG packages processing;
 	    - adaption the secure messages to work with the mixed input buffer;
 	    - moving the main service request "OPN" under the messages processing due to the renewals sending inward the Publish activity.
 	- implemented for the Publish service on the client side:
-	    - the "Client" object appended for the subobject "Subscr" implementation (but stored in Client::SClntSess) with the functions:
+	    - the "Client" object appended by the subobject "Subscr" implementation (but stored in Client::SClntSess) with the functions:
 		activate(), monitoredItemAdd() and monitoredItemDel();
-	    - the "Client" object appended for the function poll() with:
+	    - the "Client" object appended by the function poll() with:
 		- unifying the values reading both for the Read and Publish modes;
 		- checking of loss all Publish requests during the OpcUa_ClntPublishResentCntr(2) keep alive count-time;
 		- restoring the Publish pool.
 	    - the object Client::Subscr::MonitItem was added as the monitored items representer
 		with the access under the client resource common lock;
-	    - the service requests appended for implementation, include processing the responses:
+	    - the service requests appended by implementation, include processing the responses:
 		CreateSubscription, DeleteSubscriptions, CreateMonitoredItems, Publish, Poll;
 	    - implemented and tested in the secure policies support at Publish;
 	    - the target Publish requests pool per subscription set in the virtual function publishReqsPool() with default value 2;
-	- appended for the CHUNKS implementation both for requests and responses;
+	- appended by the CHUNKS implementation both for requests and responses;
 	- completely revised and cleared in the common requesting function reqService() from doubling the arguments and parameters:
-	    - appended for restoring sessions at reconnection the secure channel;
+	    - appended by restoring sessions at reconnection the secure channel;
 	    - unifying the clearing of the current session and secure channel.
 	- the client object appended by the common resources lock mtxData;
 	- the message property "timeoutHint" set to 0 for all messages;
@@ -1148,32 +1627,32 @@
 	- the error OpcUa_BadSecureChannelIdInvalid added for clearing the secure channel;
 	- Client::SClntSess::{sessOpen,lstMessReq} renamed to {secChnlOpenTm,secLstMessReqTm}
 	- ... and prevented from clearing in restoring the session and secure channel;
-	- appended for debug message of the request errors.
+	- appended by debug message of the request errors.
 	LIB_SERVER:
 	- the server part adapted to work with UAExpert 1.5 for:
 	    - the attribute AId_Descr of the DAQ-value set to the type OpcUa_LocalizedText;
-	    - the integer types appended for declaration OpcUa_IntAuto and OpcUa_UIntAuto.
+	    - the integer types appended by declaration OpcUa_IntAuto and OpcUa_UIntAuto.
 	- the subscriptions processing returned to they processing in a separate task and the function subScrCycle() for:
 	    - true counting all timeouts to disable;
 	    - processing the periodicity of subscription and publishing;
-	    - checking the assigned sessions and secure channels state to close the subscriptions.
+	    - checking the associated sessions and secure channels state to close the subscriptions.
 	- but the publishing leave for processing in the input channel activity and the function Server::EP::publishCall() with
 	    preventing the Publish processing for wrong and foreign Subscriptions, by checking inPrtId, sesTokId and isSecCnlAct;
 	- Session unification for:
 	    - link of the sessions to secure channels switched to single one instead an array;
-	    - the session checking of all messages appended of preventing of using foreign connections.
+	    - the session checking of all messages appended by preventing of using foreign connections.
 	- not final chunk packages switched to send directly, for not append to single TCP-package;
 	- EP::mtxData lock switched to PTHREAD_MUTEX_RECURSIVE;
 	- the secure channels limited in OpcUa_SecCnlLimit(10) and the publishes queue in OpcUa_ServerMaxPublishQueue(10);
 	- EP::secSize() renamed to EP::secN() and there added EP::sessN(), EP::subscrN() and chnlList();
 	- Server.SecCnl.{TokenId,TokenIdPrev} renamed to Server.SecCnl.{tokenId,tokenIdPrev}.
-    !!:ModBus: The output part of the protocol RTU variant appended for early termination of the package waiting
+    !!:ModBus: The output part of the protocol RTU variant appended by early termination of the package waiting
 	    of the standard functions [ERR,1...6,15,16], what increases the overall bandwidth twice.
 	!!: IO of the Logical Level parameters enabled for the translation, for not linked strings and like to DAQ.LogicLev.
 	!!: The DAQ attributes parsing switched to use TSYS::strLine() and TSYS::strParse()
 	    than allowing the symbol ':' in the name and empty lines in the text.
 	FIX: Prevented from marking the not connected controller objects as NORM at them stopping.
-	Appended for passing wrong items in the Standard Mode of the DAQ-parameters.
+	Appended by passing wrong items in the Standard Mode of the DAQ-parameters.
     !:FIX:DAQGate: Prevented from error processing of parameters from other DAQ.DAQGate controller objects with the broken link.
 	FIX: Fixed in listing the DAQ-objects in control remotely through the OpenSCADA Control Interface.
     Siemens: The waiting connection cycle switched to use the common period or 1 second for aperiodic scheduling.
@@ -1182,7 +1661,7 @@
     FIX: The value archives prevented from the atachment try of the missed archivers.
     Size of the field of the archivers list expanded up to 1000.
     !!!!:FIX:FSArch: Critical fixed in the value archive files processing, in try they ID write to NULL string.
-    !!:DBArch: The message archivers appended for the configuration field "Unique and non duple messages for time and category only".
+    !!:DBArch: The message archivers appended by the configuration field "Unique and non duple messages for time and category only".
 	!!:FIX: Fixed from crashes at the value archiver groups processing by not clearing the table field configs (TConfig) links under the locks
 	    and the unlocked function ModVArch::grpLimits() for reqRes.
 	FIX:DBArch: Fixed in the default value of the field "Grouping limit of the parameters" setting to 100.
@@ -1192,7 +1671,7 @@
     !!!: The IO log, both input and output parts, expanded and appended of:
 	- combining data of packages with even direction and address during prmWait_TM (5 seconds);
 	- microseconds part of the time fixed for 6 symbols;
-	- the data messages appended for the direction symbol;
+	- the data messages appended by the direction symbol;
 	- of limiting the one processing block size by a new configuration field;
 	- performance significantly rising by using the preliminary buffer.
     Sockets,SSL: The input transport polling mode switched to aligning at the period grid.
@@ -1209,18 +1688,18 @@
 - UI:
     !!!!:FIX:Common review and refactoring the tables in Qt and Web both generically and in the view Table of the primitive FomEl of VCA:
 	!!:QTStarter,QTCfg,Vision: The common library class TableDelegate significantly improved to work in QTCfg and Vision:
-	    - appended for the own user roles SelectRole, TextLimRole and OneLineString;
-	    - the cell paint appended for the background color by reading-applying the common roles;
-	    - the number types (integer and real) appended for force centring;
+	    - appended by the own user roles SelectRole, TextLimRole and OneLineString;
+	    - the cell paint appended by the background color by reading-applying the common roles;
+	    - the number types (integer and real) appended by force centring;
 	    - the string types appended by the options of alignment and wordwrapping from the role Qt::TextAlignmentRole;
-	    - appended for long text visible limit support by the own role TextLimRole and the default value 300 symbols
+	    - appended by long text visible limit support by the own role TextLimRole and the default value 300 symbols
 		by sizeHint() additional reimplementation.
 	!!!!:FIX: The view "Table" of the primitive "FormEl":
 	    !!:VCAEngine,QTStarter,Vision,WebVision: Appended by the new cell type 't'-text mostly for allowing the edition confirming
 		the type 's'-string by pressing Enter.
 	    !!:VCAEngine,Vision,WebVision: Appended of the column, row and cell space option "prec" of the real value precision control;
 		and by the column and cell attribute "align" implementation.
-	    !!:WebVision,Vision: Appended for switching the tables in preventing of double storing the source content
+	    !!:WebVision,Vision: Appended by switching the tables in preventing of double storing the source content
 		at the content size more for 10000.
 	    !!!!:FIX:Vision: Using the common table delegate with the feature of multiline edition.
 		!!!!: Improved in the columns, rows and cells show at the table updating and commonly:
@@ -1253,7 +1732,7 @@
 		!!!: Implemented for the light processing of the width changing and updating:
 		    - the table changes detection and updating switched to the mode of not storing double source content.
 		    - prevented from the complete updating at the attribute "value" modification;
-		!!!: Appended for the sorting support by columns. Set to the first visible column for sorting at the sorting enable.
+		!!!: Appended by the sorting support by columns. Set to the first visible column for sorting at the sorting enable.
 	    VCAEngine: Appended of limiting in processing the table content for direct apply the changes,
 		only for it size lesser for limUserFile_SZ (1 MB).
 	!!!!:WebCfgD: The table expandings for:
@@ -1273,26 +1752,26 @@
 	    the text color preferred in setting the lower value and vice versa.
     VCAEngine,Vision: The service of activation runtime visualizer-specific attributes appended
 	    of the default value in the text, on the attribute "keepAspectRatio", wich is TRUE by default on UI.Vision.
-	The frame calculation field "Period of the calculating, milliseconds" appended for a context help.
+	The frame calculation field "Period of the calculating, milliseconds" appended by a context help.
     !!!:VCAEngine:
 	!!!!: Appended and enabled as a build option for the mark mechanism of the attributes changing without the doubles,
 	    by requesting the previous-completed cycles,
 	    than also preventing the need of detection the doubles in the visualisers and storing the big source content.
-	    The modification detection function modifChk() appended for an argument "isCnt" of specifying the containers.
+	    The modification detection function modifChk() appended by an argument "isCnt" of specifying the containers.
 	!!!: The projects runtime improved in changing parents of the processing pages on the fly.
 	!!!: The session tasks execution appended of early execution at events presence.
 	!!:FIX: The VCA-styles fixed in accessing to empty fields which don't load.
 	!!: The "Diagnostic" page of the VCA-projects adapted to show the debug level messages at enable the debugging.
-	    !: The session debug messages appended for messages of the setting events.
-	!!: The project session execution information appended for the real periodicity taken from the task,
+	    !: The session debug messages appended by messages of the setting events.
+	!!: The project session execution information appended by the real periodicity taken from the task,
 	    which also used in form value of the procedure attribute "f_frq".
 	!:FIX: The service request "set:/serv/attr" to the sessions for a group of attributes appended by the events applying
 	    in the last of all other attributes setting.
 	FIX: Some improved in the links processing only for constants.
 	The included widgets, restored from the parent widget, is set to enabled after adding.
-	Copying the container widgets and pages appended for checking and removing the child widgets, what removed on the source.
-	Included widgets of the containers copying appended for adjustment the end position to ensure the visibility.
-    !!:Vision: The property dialogues of the "Widgets" and "Projects / Widget libraries" appended for own statusbar
+	Copying the container widgets and pages appended by checking and removing the child widgets, what removed on the source.
+	Included widgets of the containers copying appended by adjustment the end position to ensure the visibility.
+    !!:Vision: The property dialogues of the "Widgets" and "Projects / Widget libraries" appended by own statusbar
 	    and a button of context manual invoking. The TextEdit widgets switched to own statusbar of the property
 	    dialogues for the cursor position and what disabled in ToolTip.
 	!!: The text code edition widget of the "Widgets" property dialogue appended in restoring the cursor position after apply or cancel.
@@ -1303,14 +1782,14 @@
 	FIX: Processing the force widgets style switching to the system one QCommonStyle() or QPlastiqueStyle()
 	    of the buttons of the primitive FormEl is unified in reusing the system style objects
 	    and that disabled in the CSS styles using here due to color alpha lost.
-	Title of the developing window appended for the remote host information.
-    !!!!:FIX:WebVision: Appended for detection disappearing of the project execution session and return an error,
+	Title of the developing window appended by the remote host information.
+    !!!!:FIX:WebVision: Appended by detection disappearing of the project execution session and return an error,
 	    in the common request "pgOpenList", and at dropping down the calculation counter "tmCnt".
 	!!!!: The keyboard focus and events significantly improved for ensure that working in common by:
 	    - setting the "tabindex" attribute for all active widgets and for FormEl items specially - for the form elements;
 	    - appending the "tabindex" number calculation as a unique one for whole interface, than prventing the tab focus jumps;
 	    - processing the onfocus event for the own focus setting by setFocus();
-	    - the view Button of the primitive FormEl appended for the keyboard events processing for down and up at the keys Space and Enter;
+	    - the view Button of the primitive FormEl appended by the keyboard events processing for down and up at the keys Space and Enter;
 	    - the primitive Diagram is simplified by removing the spare A item;
 	    - FIX: Fixed in the keyboard focus switching at mouse clicking on buttons with images.
 	!!:FIX: Fixed in checking the removed widgets for all and the master page.
@@ -1324,7 +1803,7 @@
 	FIX: The external windows as DIV closing set in sending only the closing signal to the model
 	    and real closing after it removing in the model to prevent sometime flicking.
 	FIX: Widgets removing appended of removing the transparent DIV-frames.
-	All items appended for the CSS property "pointer-events" treating in the value "all" for active, the master page and boxes
+	All items appended by the CSS property "pointer-events" treating in the value "all" for active, the master page and boxes
 	    with included pages; or "none" for all others. To ensure the pointer events pass through inactive elements to the active ones behind.
 	The view LineEdit of the primitive FormEl set to update at the configuration change 'cfg'.
 	The view LineEdit, TextEdit, Table of the primitive FormEl disabled
@@ -1342,12 +1821,12 @@
 	- FIX: forced in the actual-selected item marking in the control tree after it rolling;
 	- removing nodeText() and setNodeText() by direct using "innerText" and "textContent".
     FIX:QTCfg: Prevented from show empty field of the button area of the TextEdit widget in some cases.
-	Appended for clossing the double configuration windows without the warning dialog.
+	Appended by clossing the double configuration windows without the warning dialog.
     FIX:UI.QTStarter: Prevented from updating the starting window at it close-hide state.
 
 
 2021-03-23 Roman 0.9.3.3
-- !:LibsDB.OscadaLibs: PrescrTempl.manager appended for a feature of pausing prescriptions from the commands-steps.
+- !:LibsDB.OscadaLibs: PrescrTempl.manager appended by a feature of pausing prescriptions from the commands-steps.
 - !:Transports: Performance of the IO log preparing was significantly rised by using the preliminary buffer,
 	so currently there is possible of observing logs on 1000 records.
     The IO log appended of limiting the one processing block size by a new configuration field.
@@ -1362,11 +1841,11 @@
 - !!!!:FIX:Archive.FSArch: Critical fixed in the value archive files processing, in try they ID write to NULL string.
 - !!:FIX:UI.WebVision: Fixed at last in plodding spare DIV items at the page changing in the page containers,
     detected as changing the argument "pgBr" of the makeEl() function for the included page and it wrong processing by its container.
-- !!:DAQ.ModBus: The output part of the protocol RTU variant appended for early termination of the package waiting
+- !!:DAQ.ModBus: The output part of the protocol RTU variant appended by early termination of the package waiting
 	of the standard functions [ERR,1...6,15,16], what increases the overall bandwidth twice.
     !: The DAQ attributes parsing switched to use TSYS::strLine() and TSYS::strParse()
 	than allowing the symbol ':' in the name and empty lines in the text.
-- UI.QTCfg: Appended for clossing the double configuration windows without the warning dialog.
+- UI.QTCfg: Appended by clossing the double configuration windows without the warning dialog.
 - UI.WebVision: The external windows as DIV closing set in sending only the closing signal to the model
     and real closing after it removing in the model to prevent sometime flicking.
 
@@ -1375,7 +1854,7 @@
 - FIX:SYS: TCfg::setS() in the extended variant switched in writing to the TVariant container directly, for the extended values,
     than omitting the field wrong limits.
 - FIX:DAQ: Insertion or creation new DAQ template items fixed in the ID indexing-enumerating for checking the items presence,
-    the new inserted or added items appended for the default value (configuration value) copying.
+    the new inserted or added items appended by the default value (configuration value) copying.
 - FIX:DB.MySQL: Disabled for the key size limiting depending they quantity.
 - FIX:DB.PostgreSQL: The data type "timestamp with time zone" of the integer variant TFld::DateTimeDec replaced by "timestamp".
 - FIX:Archive.DBArch: Fixed in the default value of the field "Grouping limit of the parameters" setting to 100.
@@ -1399,17 +1878,17 @@
 2020-12-27 Roman 0.9.3
 - !!:FIX:Archive.DBArch: Fixed for only direct the values archiving in the group mode and
 	when the values type may drop to the Integer type as the default one.
-    !!:FIX: The value archiving in the group mode appended for removing the according table column at the archive removing,
+    !!:FIX: The value archiving in the group mode appended by removing the according table column at the archive removing,
 	for the table column hot removing just after appending some new archive,
 	than preventing the table early growing to the DB limit.
 
 
 2020-12-20 Roman 0.9.3
 - OpenSCADA libraries and projects:
-    !!:FIX:LibsDB.OscadaLibs: The library DevLib appended by the template "MTP 4D (MTP4D)" and "ModBus base (mbBase)".
+    !!:FIX:LibsDB.OscadaLibs: The library tmplib_DevLib appended by the template "MTP 4D (MTP4D)" and "ModBus base (mbBase)".
 	!:FIX: DevLib.{DNP3,IEC62056} fixed in processing the output transport object placed as an attribute,
 	    but that allows to set only for Object, so EVAL was used here.
-	    base.initConsAssignTrs Appended for limiting the remote initiator ID in 20 symbols - OpenSCADA objects ID limit.
+	    base.initConsAssignTrs Appended by limiting the remote initiator ID in 20 symbols - OpenSCADA objects ID limit.
 	FIX: The DAQ-template base.initConsAssignTrs some improved in detection duple connections.
     !!:FIX:LibsDB.vcaBase: The template project (tmplSO) cleaned from spare mnemos of the prescription management
 	    and the main page appended of the actual alarms-violations table.
@@ -1429,31 +1908,31 @@
 	SYS.,*: The system wide limits and parameters moved to the user configuration area (the configuration file) for some allowed range.
 		STD_WAIT_DELAY moved to prmWait_DL and changed to 0.1 seconds.
 		The previous system wide limits' and parameters' definitions left for the external modules compatibility!
-	    TSYS appended for the function taskSendSIGALRM() of sending the termination signal "ALARM" to OpenSCADA tasks.
-	    TValFunc: Appended for a state of the function execution by the function isCalc().
+	    TSYS appended by the function taskSendSIGALRM() of sending the termination signal "ALARM" to OpenSCADA tasks.
+	    TValFunc: Appended by a state of the function execution by the function isCalc().
 	Transports: The output transports expanded for a mark of the transport as Network one, by the function isNetwork(), in the User API also.
 
 - SYS:
     !!!!:FIX:Building:
 	!!!!:FIX:configure.ac: Core library version rose to 3:9:0 and the program version rose to 0.9.3.
 	data/openscada.ebuild: Updated for the last state.
-	data/{oscada_plc.xml,oscada_server.xml,oscada_start.xml}: The disabled DBs appended for the description.
+	data/{oscada_plc.xml,oscada_server.xml,oscada_start.xml}: The disabled DBs appended by the description.
 	data/{oscada_start.xml,ModelsDB/{AGLKS/oscada_AGLKS.xml,Boiler/oscada_Boiler.xml}}, data/Android/patches/openscada_oscada.xml.patch:
-	    The style "Typical TDE" appended for a color of the table throughrows.
-	    The style "Blue Darkness" appended for a color of the table throughrows.
+	    The style "Typical TDE" appended by a color of the table throughrows.
+	    The style "Blue Darkness" appended by a color of the table throughrows.
     FIX:data/openscada-proj.in: Fixed in packing big crashreports.
     !!!!:{DAQ,Protocol}.ModBus:
 	The subtype "_b" - bit type, expanded by moving the bit number to the register number field like to "R_b:123.12".
 	Added by the flag "~" for inversion registers order of the complex subtypes in multiple registers, like to "_f".
 	The flag "rw" separated to "r" and "w".
     !!!!: The module version of the subsystem "Transports" rose to 17.
-    FIX:Function: Appended for detection the duple IOs at the IO context copy.
+    FIX:Function: Appended by detection the duple IOs at the IO context copy.
     FIX: The field "PASS" of the table "CfgExtHosts" expanded in its size up to 100.
     Appended at the rand() activation by srand() execution for the current time microsecond part.
 
 - DAQ:
     FIX: DAQ parameters appended in checking the parameter type on interstation copying for single parameters.
-    !!:LogicLev,ModBus,Siemens: Appended for termination long time executed templates at the parameter disable,
+    !!:LogicLev,ModBus,Siemens: Appended by termination long time executed templates at the parameter disable,
 	using new functions TValFunc::isCalc() and TSYS::taskSendSIGALRM().
     !!:FIX:LogicLev: Removed for the calculation lock "calcRes", what used only in locking the writing
 	to the parameter attributes during the calculation and what can be long.
@@ -1481,7 +1960,7 @@
     !!:FIX:{Sockets,SSL}: The default timeouts returned to "10:1".
 
 - Protocols:
-    !!!!:HTTP: Appended for the dynamic cookie name and the User ID space,
+    !!!!:HTTP: Appended by the dynamic cookie name and the User ID space,
 	    where the cookie name is "oscd_UID" and is used the User ID space in work with the common authentication sessions table,
 	    and the cookie name is "oscd_UID_{PrjNm}" in the work without that.
 	!!:FIX: Multipart POST of the output function outMess() prevented in the end boundary placing
@@ -1508,19 +1987,19 @@
 	    - an argument of the functions {ntfRes,commCall}();
 	    - an argument of the notification procedures "resTp" what is return and placed to stdout (for Shell) for "doRes".
 	- appending the notifiers by the flag "notifyServ" of the notification enabling on the VCA-server side;
-	- VCA-server side appended for the field "resStatic" of the direct resource specifying (non dynamic);
+	- VCA-server side appended by the field "resStatic" of the direct resource specifying (non dynamic);
 	- appending the notification procedures' context for the two variables "resTp" and "prcID".
     FIX:Vision: The notifiers were fixed in processing all 8 ones.
-    !!:FIX:UI.QTStarter: Appended for the start dialog periodic updating in the project list.
+    !!:FIX:UI.QTStarter: Appended by the start dialog periodic updating in the project list.
 	FIX: Fixed in building with Qt 5.15.
     FIX:QTCfg: Set to update the current page content after errors in some commands.
 	Some appended in way of an improvement try of the station icons updating.
     !!:FIX:VCAEngine: Fixed in crash at a widget link setting to "prm".
 	!!: The resource requesting service "get:/wdg/res", Widget::resourceGet() and {WidgetLib,Project}::mimeDataGet()
-	    appended for requesting the resource parts, for big media files mostly.
+	    appended by requesting the resource parts, for big media files mostly.
 	FIX: The operations of the quietance by the service request "<quietance path='%2fserv%2falarm' />"
 	    allowed for all by setting the reading permition.
-	FIX: Source files listing of the primitive Media appended for "mp3;ogg;wav;ogv;mp4".
+	FIX: Source files listing of the primitive Media appended by "mp3;ogg;wav;ogv;mp4".
     !!:FIX:Vision: The call saveState() moved from the developing window destructor to the closing event,
 	    but a problem of empty context saving was observed after playing some media.
 	!!: Appended of playing the notifications by the internal player at Phonon and not in the separate notification task.
@@ -1530,14 +2009,14 @@
 	FIX: Fixed in local filesystem URLs processing for MediaSource of Phonon.
 	FIX: Temporary files of loaded from the mime table data of the types "Video" and "Audio" of the primitive "Media"
 	    are set to remove.
-	The visual editing window title appended for the widget-page name.
+	The visual editing window title appended by the widget-page name.
     !!!!:FIX:WebVision: Implementing of the notifications support.
 	!!!!: Implementation of the resources uploading in parts, for big media, by the HTTP parameter "Range: bytes=".
 	!!:FIX: Fixed in the page cache spare cleaning for widgets from pages with common name to the remove page.
 	FIX: The function setWAttrs() expanded in encoding the symbol '&' to the entity "&amp;" of the string values.
 	FIX: Fixed in the sessTime() specifying as time_t instead int.
 	FIX: Prevented from potential cycling between "prj_" and "ses_" URLs at the UID inconsistence.
-	The LineEdit type of the primitive "FormEl" appended for switching it to the modification mode at selection.
+	The LineEdit type of the primitive "FormEl" appended by switching it to the modification mode at selection.
 	Unified in the time constants specifying for: tmClearEdit, tmFullUpd, tmAlrmUpd.
 	Information requests of the opening page moved under the common request "CntrReqs" together the notifier attributes activation.
 	Styles of the popupmenu some improved.
@@ -1570,7 +2049,7 @@
 2020-09-21 Roman 0.9.2.1
 - !:FIX:LibsDB.OscadaLibs: DevLib.{DNP3,IEC62056} fixed in processing the output transport object placed as an attribute,
     but that allows to set only for Object, so EVAL was used here.
-    base.initConsAssignTrs Appended for limiting the remote initiator ID in 20 symbols - OpenSCADA objects ID limit.
+    base.initConsAssignTrs Appended by limiting the remote initiator ID in 20 symbols - OpenSCADA objects ID limit.
 - !:FIX:LibsDB.vcaBase: Main.RootPgSo fixed in the second row of the signal objects processing
     and the rate of font height to width set to 0.75 from 0.8.
 - data/ModelsDB/{oscada_start.xml,AGLKS/oscada_AGLKS.xml,Boiler/oscada_Boiler.xml}:
@@ -1651,7 +2130,7 @@
     !!!!:FIX:data/openscada-proj.in,UI.QTStarter: Implementation the builtin backuping.
 	!!!!:FIX:data/openscada-proj.in: Appended for the commands "backup", "backupRestore", "backupList" to implement the project backups.
 	    FIX: The command "list" some improved to show the preinstalled and user projects.
-	    The "remove" command of the projects appended for removing backups of the project.
+	    The "remove" command of the projects appended by removing backups of the project.
 	    Crash report files appended for GZIPing.
 	!!!!:UI.QTStarter: Appended for the backup commands call from the project manager - list of the projects.
     !!!!:.,DB,DAQ.{LogicLev,ModBus,Siemens},UI.{QTCfg,WebCfgD}: Implementation the interstation copying mechanism of the control interface nodes:
@@ -1917,7 +2396,7 @@
 	    !!!!:{anUnif,anUnifSt,manInUnif,digAlarm,codeState,pidUnif,pidUnifImp,SNMP,UPS}:
 		Moved under the unified alarms forming and controlling mechanism.
 		manInUnif: Expanded for alarms setting from the preprocessing custom procedure.
-	    !!!: Appended for the "initConsAssignTrs" template of the assigned output transports processing of the initial Sockets'
+	    !!!: Appended for the "initConsAssignTrs" template of the associated output transports processing of the initial Sockets'
 		connections for any type of the source objects, that is DAQ-modules and logical level controllers and parameters.
 	    !!!: Appended for the "codeState" template of the state forming by a code.
 	    !!!: Appended for the complex notifier implementation in the template "ntf",
@@ -1932,7 +2411,7 @@
 	    {anUnif,anUnifSt}: The imitation expanded for random offset.
 	    {digAlarm,codeState}: Prevented from call at the stopping.
 	    The templates "simleBoard" and "digitBlock" marked as obsoleted.
-	!!!!:FIX:DevLib: The template library is a splitted part of the original library "Devices" under the name "Industrial devices", which revised,
+	!!!!:FIX:DevLib: The template library is a split part of the original library "Devices" under the name "Industrial devices", which revised,
 		improved, appended, documented and the documentation appended to offline.
 	    !!!!:FIX:IEC60870: Appended for the separate time "tmPoolAll" of the period of the complete polling.
 		!!: Appended for the package M_ME_TF_1, M_ME_NC_1 support, expanded for the SQ-mode support,
@@ -1948,7 +2427,7 @@
 	    !!!!: Appended for the DNP3 implementation and it tested with outstation-demo from opendnp3.
 	    !!!: Appended for the counter modules Pulsar-M (pulsarM) implementation.
 	    !!: Appended for the ModBus scanner implementation as the template "ModBusScan".
-	!!!:LowDevLib: The template library is a splitted part of the original library "Devices" under the name "Low-level devices", which revised,
+	!!!:LowDevLib: The template library is a split part of the original library "Devices" under the name "Low-level devices", which revised,
 		some improved, documented and the documentation appended to offline.
 	    !!!:FIX:{1W_DS9097,1W_DS9097U}: Fixed for the device family detection as the template 0x7F,
 		detected on the last DS2413 with the first byte 0xBA.
@@ -2529,7 +3008,7 @@
 		The mode of inactivity improved to remove all selecting and to restore edited values.
 	    !!:FIX:Date: Fixed for crashing at setting configuration.
 	    !:FIX:Button: Fixed for disabling at inactivity. Appended of setting the pointing cursor.
-	    FIX:LineEdit: Fixed for marging from the hidden icon size, for the spinned Real and Integer.
+	    FIX:LineEdit: Fixed for marging from the hidden icon size, for the span Real and Integer.
 	    FIX:Text: Fixed for show tooltips in the runtime mode.
 	    FIX:Time: Fixed in the value processing.
 	!!:FIX: Fixed for the master page regular replacing (crashing) and scaling into the run-time mode.
@@ -3283,7 +3762,7 @@
 - DB.LibsDB.vcaBase: export="1" for all documents with values was added.
 - SYS: Checking for ldap.h for module DB.LDAP was added.
 - SYS: data/debian/control: Appended by a commented dependency for libldap2-dev.
-- !:SYS,UI.{QTCfg,QTStarted,Vision}: The online documentation call was switched for call ones from the new Wiki but some pages are not alowed here now before them moving.
+- !:SYS,UI.{QTCfg,QTStarted,Vision}: The online documentation call was switched for call ones from the new Wiki but some pages are not allowed here now before them moving.
 - !!:DB: Tables' content display set to configurable limited, by default it is 100 rows.
 - FIX:SYS.TRegExp fix in function match(), for hang and crash prevent.
 - !!:DB.{SQLite,MySQL,PostgreSQL,FireBird}: Preloading of fieldSeek() set limited on 100 records, for long unterminated hangs prevent.
@@ -3340,7 +3819,7 @@
     !!!!:Protocol.HTTP,UI.{WebUser,WebVision}: Expanded for multi-languages interface by: URL parameter "lang", auth user's language, Web browser's language.
 	Templates also set to support multilanguage.
     !!!!:UI.Vision: Mostly adapted to system menus and dialogs dynamic messages translation of the run-time interface.
-	Left untranslated only Qt-internal messages which unalowed to dynamic translation and without all system locale changing!
+	Left untranslated only Qt-internal messages which unallowed to dynamic translation and without all system locale changing!
 
 
 2017-08-05 Roman (stable)
@@ -4090,7 +4569,7 @@
     FIX: Session's pages force enabling, at a request, prevented after its manual disable.
     FIX: User attribute ID prevented to set for empty.
     Visualizer specific attributes activation expanded for only present attributes activation, no creation.
-- !!:UI.Vision: Visualizer specific attributes are alowed for the primitives and an attribute "sclWin" added and used
+- !!:UI.Vision: Visualizer specific attributes are allowed for the primitives and an attribute "sclWin" added and used
     for primitive "Diagram" for trends view in scale by window drawn by mouse.
 
 

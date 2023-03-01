@@ -3034,7 +3034,7 @@ INSERT INTO CM201_prm VALUES('PT0202','PT0202_2','Pressure after the first stage
 *s.at:ed:Dimension
 *i.1:prec:Precision
 *r.0:min:Minimum
-*r.20:max:Maximum','','Тиск після першої ступені компресору','','Давление после первой ступени компрессора','CM101_1.Po:var:Переменная
+*r.20:max:Maximum','','Тиск після першого ступеня компресору','','Давление после первой ступени компрессора','CM101_1.Po:var:Переменная
 *s.ат:ed:Ед.измерения
 *i.1:prec:Точность
 *r.0:min:Минимум

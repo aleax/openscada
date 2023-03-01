@@ -27,7 +27,7 @@ appsdir = $(datadir)/applications
 apps_DATA = data/openscada.desktop data/ModelsDB/AGLKS/openscada_AGLKS.desktop data/ModelsDB/Boiler/openscada_Boiler.desktop
 
 icodir = $(oscd_datadir)/icons
-ico_DATA = data/icons/* data/openscada.png data/ModelsDB/AGLKS/AGLKS.png data/ModelsDB/Boiler/Boiler.png
+ico_DATA = data/icons/* data/openscada.png data/ModelsDB/AGLKS/*.png data/ModelsDB/Boiler/*.png
 
 libdbdir = $(oscd_datadir)/LibsDB
 libdb_DATA = data/LibsDB/*.db

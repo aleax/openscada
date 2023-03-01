@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tdaqs.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -92,36 +92,59 @@ void TDAQS::rdActCntrList( vector<string> &ls, bool isRun )
     }
 }
 
-void TDAQS::ctrListPrmAttr( XMLNode *opt, const string &l_prm, bool toPrm, char sep, const string &pref )
+void TDAQS::ctrListPrmAttr( XMLNode *opt, const string &ilPrm, bool toPrm, char sep, const string &pref, TCntrNode *ndBase )
 {
-    int cLv = 0;
-    string c_path = "", c_el;
+    string cPath = "", cEl;
     vector<string> ls;
-    opt->childAdd("el")->setText(pref+c_path);
+    string lPrm = ilPrm;
+    if(pref.size() && lPrm.find(pref) == 0) lPrm = lPrm.substr(pref.size());
+
+    if(sep || cPath.size()) opt->childAdd("el")->setText(pref+cPath);
 
     AutoHD<TCntrNode> DAQnd = this;
-    const char *c_grp = "mod_";
-    for(int c_off = 0; (sep && (c_el=TSYS::strSepParse(l_prm,0,sep,&c_off)).size()) ||
-		   (!sep && (c_el=TSYS::pathLev(l_prm,0,true,&c_off)).size()); ++cLv)
+    const char *cGrp = "mod_";
+    int cLv = 0;
+    for(int cOff = 0; (sep && (cEl=TSYS::strSepParse(lPrm,0,sep,&cOff)).size()) ||
+		      (!sep && (cEl=TSYS::pathLev(lPrm,0,true,&cOff)).size()); ++cLv)
     {
-	c_path += sep ? (cLv?sep+c_el:c_el) : "/"+c_el;
-	DAQnd = DAQnd.at().nodeAt(c_grp+c_el, 0, sep, 0, true);
+	if(cEl == ".") {
+	    if(ndBase && cLv == 0 && lPrm[0] == '.') { DAQnd = ndBase; cPath += cEl; }
+	    else cPath += "/"+cEl;
+	}
+	else if(cEl == "..") {
+	    if(ndBase && cLv == 0 && lPrm.find("..") == 0) { DAQnd = ndBase; cPath += cEl; }
+	    else cPath += "/"+cEl;
+	    if(&DAQnd.at() != this) DAQnd = DAQnd.at().nodePrev();
+	}
+	else {
+	    cPath += sep ? (cLv?sep+cEl:cEl) : "/"+cEl;
+	    DAQnd = DAQnd.at().nodeAt(cGrp+cEl, 0, sep, 0, true);
+	}
+
 	if(DAQnd.freeStat()) break;
-	opt->childAdd("el")->setText(pref+c_path);
-	c_grp = (cLv == 0) ? "cntr_" : "prm_";
+	opt->childAdd("el")->setText(pref+cPath);
+	cGrp = dynamic_cast<TTypeDAQ*>(&DAQnd.at()) ? "cntr_" : "prm_";
     }
-    if(sep && cLv) c_path += sep;
+    if(sep && cLv) cPath += sep;
+    if(!sep && ndBase) {
+	if(cPath.size()) opt->childAdd("el")->setText(pref+cPath+"/..");
+	else {
+	    opt->childAdd("el")->setText(pref+".");
+	    opt->childAdd("el")->setText(pref+"..");
+	}
+    }
+
     if(!DAQnd.freeStat()) {
-	DAQnd.at().chldList(DAQnd.at().grpId(c_grp), ls, true);
-	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	    opt->childAdd("el")->setText(pref+c_path+(sep?ls[i_l]:("/"+ls[i_l])));
+	DAQnd.at().chldList(DAQnd.at().grpId(cGrp), ls, true);
+	for(unsigned iL = 0; iL < ls.size(); iL++)
+	    opt->childAdd("el")->setText(pref+cPath+(sep?ls[iL]:("/"+ls[iL])));
 
 	//Get attributes
-	if(!toPrm && strcmp(c_grp,"prm_") == 0) {
+	if(!toPrm && strcmp(cGrp,"prm_") == 0) {
 	    DAQnd.at().chldList(DAQnd.at().grpId("a_"), ls, true);
 	    if(ls.size()) opt->childAdd("el")->setText(_("=== Attributes ==="));
-	    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-		opt->childAdd("el")->setText(pref+c_path+(sep?ls[i_l]:("/"+ls[i_l])));
+	    for(unsigned iL = 0; iL < ls.size(); iL++)
+		opt->childAdd("el")->setText(pref+cPath+(sep?ls[iL]:("/"+ls[iL])));
 	}
     }
 }
@@ -438,31 +461,43 @@ void TDAQS::subStop( )
     TSubSYS::subStop();
 }
 
-AutoHD<TCntrNode> TDAQS::daqAt( const string &path, char sep, bool noex, bool waitForAttr ) const
+AutoHD<TCntrNode> TDAQS::daqAt( const string &path, char sep, bool noex, bool waitForAttr, TCntrNode *ndBase ) const
 {
     string cEl;
     AutoHD<TCntrNode> DAQnd = const_cast<TDAQS*>(this);
-    const char *c_grp = "mod_";
-    for(int c_off = 0, cLv = 0; (sep && (cEl=TSYS::strSepParse(path,0,sep,&c_off)).size()) ||
-		   (!sep && (cEl=TSYS::pathLev(path,0,true,&c_off)).size()); ++cLv)
+    const char *cGrp = "mod_";
+    for(int cOff = 0, cLv = 0; (sep && (cEl=TSYS::strSepParse(path,0,sep,&cOff)).size()) ||
+		   (!sep && (cEl=TSYS::pathLev(path,0,true,&cOff)).size()); ++cLv)
     {
-	bool lastEl = (cLv > 2 && c_off >= (int)path.size());
-	if(waitForAttr && lastEl) c_grp = "a_";
-	AutoHD<TCntrNode> tNd = DAQnd.at().nodeAt(c_grp+cEl, 0, sep, 0, true);
-	if(tNd.freeStat() && !(strcmp(c_grp,"a_") != 0 && lastEl && !(tNd=DAQnd.at().nodeAt("a_"+cEl,0,sep,0,true)).freeStat())) {
+	bool lastEl = (/*cLv > 2 &&*/ cOff >= (int)path.size());
+	if(waitForAttr && lastEl) cGrp = "a_";
+
+	AutoHD<TCntrNode> tNd;
+	if(cEl == ".") {
+	    if(ndBase && cLv == 0 && path[0] == '.') tNd = ndBase;
+	    else tNd = DAQnd;
+	}
+	else if(cEl == "..") {
+	    if(ndBase && cLv == 0 && path.find("..") == 0) DAQnd = ndBase;
+	    if(&DAQnd.at() != this) tNd = DAQnd.at().nodePrev();
+	    else tNd = DAQnd;
+	}
+	else tNd = DAQnd.at().nodeAt(cGrp+cEl, 0, sep, 0, true);
+
+	if(tNd.freeStat() && !(strcmp(cGrp,"a_") != 0 && lastEl && !(tNd=DAQnd.at().nodeAt("a_"+cEl,0,sep,0,true)).freeStat())) {
 	    if(noex) return AutoHD<TValue>();
 	    else throw err_sys(_("Missing the DAQ node '%s'."), path.c_str());
 	}
-	c_grp = (cLv == 0) ? "cntr_" : "prm_";
+	cGrp = dynamic_cast<TTypeDAQ*>(&tNd.at()) ? "cntr_" : "prm_";
 	DAQnd = tNd;
     }
 
     return DAQnd;
 }
 
-AutoHD<TValue> TDAQS::prmAt( const string &path, char sep, bool noex ) const
+AutoHD<TValue> TDAQS::prmAt( const string &path, char sep, bool noex, TCntrNode *ndBase ) const
 {
-    AutoHD<TCntrNode> DAQnd = daqAt(path, sep, noex);
+    AutoHD<TCntrNode> DAQnd = daqAt(path, sep, noex, false, ndBase);
     if(DAQnd.freeStat() || !dynamic_cast<TValue*>(&DAQnd.at())) {
 	if(noex) return AutoHD<TValue>();
 	else throw err_sys(_("The specified node is not the parameter '%s'."), path.c_str());
@@ -471,9 +506,9 @@ AutoHD<TValue> TDAQS::prmAt( const string &path, char sep, bool noex ) const
     return DAQnd;
 }
 
-AutoHD<TVal> TDAQS::attrAt( const string &path, char sep, bool noex ) const
+AutoHD<TVal> TDAQS::attrAt( const string &path, char sep, bool noex, TCntrNode *ndBase ) const
 {
-    AutoHD<TCntrNode> DAQnd = daqAt(path, sep, noex, true);
+    AutoHD<TCntrNode> DAQnd = daqAt(path, sep, noex, true, ndBase);
     if(DAQnd.freeStat() || !dynamic_cast<TVal*>(&DAQnd.at())) {
 	if(noex) return AutoHD<TVal>();
 	else throw err_sys(_("The specified node is not the attribute '%s'."), path.c_str());
@@ -602,7 +637,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
     if(a_path == "/serv/redundant") {
 	if(ctrChkNode(opt,"st",RWRWR_,"root",SDAQ_ID,SEC_RD)) {	//State
 	    opt->setAttr("inProc", "1");
-	    opt->setAttr("StLevel",i2s(SYS->rdStLevel()));
+	    opt->setAttr("StLevel", i2s(SYS->rdStLevel()));
 	    map<string, bool> cntrLs;
 	    vector<string> cls;
 	    rdActCntrList(cls);

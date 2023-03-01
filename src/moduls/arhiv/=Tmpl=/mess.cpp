@@ -1,5 +1,4 @@
 
-//!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module Archive.Tmpl file: mess.cpp
 /***************************************************************************
  *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
@@ -19,142 +18,118 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-//!!! System's includings. Add need for your module includings.
+// System includings - add need ones
 #include <sys/time.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 
-//!!! OpenSCADA module's API includings. Add need for your module includings.
+// OpenSCADA API includings - add need ones
 #include <tsys.h>
 
-//!!! Self your module's includings. Add need for your module includings.
-#include "arch.h"
+// Own includings of the module - add need ones
 #include "mess.h"
 
-//!!! Include for default call into your module's namespace.
-using namespace ModTmpl;
+using namespace ArhTmpl;
 
 //************************************************
-//* ModTmpl::ModMArch - Messages archivator       *
+//* ArhTmpl::ModMArch - Message archiver         *
 //************************************************
-//!!! Constructor for the object. Append into for your need.
 ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
     TMArchivator(iid,idb,cf_el), mBeg(0), mEnd(0)
 {
+    //???? Set here the default message archiver address
     setAddr("*.*");
 }
 
-//!!! Destructor for the object.
 ModMArch::~ModMArch( )
 {
     try{ stop(); } catch(...) { }
 }
 
-//!!! Module's post disable call. Place here for your data remove at the object remove
 void ModMArch::postDisable( int flag )
 {
     TMArchivator::postDisable( flag );
 
     if(flag&NodeRemove) {
-	//Remove info record
-	TConfig cfg(&mod->archEl());
-	cfg.cfg("TBL").setS(archTbl(),true);
-	TBDS::dataDel(addr()+"."+mod->mainTbl(), "", cfg);
+	//???? Code of removing the archiver data
     }
 }
 
-//!!! Inherited (virtual) load object's node methods. Place here for object's data loading
 void ModMArch::load_( )
 {
-    TMArchivator::load_();
+    //TMArchivator::load_();
 
-    //> Init address to DB
-    if( addr().empty() ) setAddr("*.*");
-
-    //> Load message archive parameters
-    TConfig cfg(&mod->archEl());
-    cfg.cfg("TBL").setS(archTbl());
-    if(TBDS::dataGet(addr()+"."+mod->mainTbl(),"",cfg,TBDS::NoException)) {
-	mBeg = atoi(cfg.cfg("BEGIN").getS().c_str());
-	mEnd = atoi(cfg.cfg("END").getS().c_str());
-    }
-
-    //!!! Addon parameters of the object loading.
     try {
 	XMLNode prmNd;
 	string  vl;
-	prmNd.load(mAPrms);
-	vl = prmNd.attr("Size"); if( !vl.empty() ) setMaxSize(s2r(vl));
+	prmNd.load(cfg("A_PRMS").getS());
+	//vl = prmNd.attr("XML"); if(!vl.empty()) setUseXML(s2i(vl));
+	//???? Append loading the additional configuration attributes
     } catch(...) { }
 }
 
-//!!! Inherited (virtual) save object's node methods. Place here for object's data saving
 void ModMArch::save_( )
 {
-    //!!! Addon parameters of the object saving.
     XMLNode prmNd("prms");
-    prmNd.setAttr("Size", r2s(maxSize()));
-    mAPrms = prmNd.save(XMLNode::BrAllPast);
+    //prmNd.setAttr("XML", i2s(useXML()));
+    //???? Append saving the additional configuration attributes
+    cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TMArchivator::save_();
 }
 
-//!!! Inherited (virtual) start archivator functions.
 void ModMArch::start( )
 {
-    //> Connection to DB and enable status check
-    string wdb = TBDS::realDBName(addr());
-    AutoHD<TBD> db = SYS->db().at().nodeAt(wdb,0,'.');
-    if( !db.at().enableStat( ) ) db.at().enable();
+    //???? Prepare own structures and check available storages
 
-    runSt = true;
+    TMArchivator::start();
 }
 
-//!!! Inherited (virtual) stop archivator functions.
 void ModMArch::stop( )
 {
-    runSt = false;
+    TMArchivator::stop();
+
+    //???? Releasing own structures
 }
 
-//!!! Put data virtual functions for place data to archive.
-void ModMArch::put( vector<TMess::SRec> &mess )
+bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 {
-    if(!runSt) throw TError(nodePath().c_str(),_("Archive is not started!"));
+    TMArchivator::put(mess, force);	//Allow redundancy
 
-    //!!! Code for place data to archive.
+    if(!runSt) throw err_sys(_("Archive is not started!"));
+
+    //???? Code of placing the messages group in the module specific storage
 }
 
-//!!! Get data virtual functions for request data from archive.
-void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level )
+time_t ModMArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const string &category, char level, time_t upTo )
 {
-    if(!runSt) throw TError(nodePath().c_str(),_("Archive is not started!"));
+    if(!runSt) throw err_sys(_("Archive is not started!"));
 
-    //!!! Code for request data from archive.
+    //???? Code of getting the messages from the module specific storage
+
+    return 0;
 }
 
-//!!! OpenSCADA control interface comands process virtual function.
-//!!! For example, process access from standard configurators of OpenSCADA to individual module's parameters.
-//!!! Modify for self needs.
 void ModMArch::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
-    if(opt->name() == "info")
-    {
+    //???? Change and append for your specific configuration
+
+    //Getting the page info
+    if(opt->name() == "info") {
 	TMArchivator::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time (msek)"),R_R_R_,"root",SARH_ID,1,"tp","real");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",SARH_ID,3,
-	    "dest","select","select","/db/list:onlydb","help",TMess::labStor(true).c_str());
-	ctrMkNode("fld",opt,-1,"/prm/cfg/sz",_("Archive size (hours)"),RWRWR_,"root",SARH_ID,1,"tp","real");
+	//ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time (msek)"),R_R_R_,"root",SARH_ID,1,"tp","real");
+	//ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",SARH_ID,3,
+	//    "dest","select","select","/db/list:onlydb","help",TMess::labStor(true).c_str());
+	//ctrMkNode("fld",opt,-1,"/prm/cfg/sz",_("Archive size (hours)"),RWRWR_,"root",SARH_ID,1,"tp","real");
 	return;
     }
-
-    //> Process command to page
+    //Processing for commands to the page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(r2s(tm_calc));
+    /*if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(r2s(tm_calc));
     else if(a_path == "/prm/cfg/sz")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(r2s(maxSize()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setMaxSize(s2r(opt->text()));
     }
-    else TMArchivator::cntrCmdProc(opt);
+    else*/ TMArchivator::cntrCmdProc(opt);
 }

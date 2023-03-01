@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-29 10:27+0300\n"
+"POT-Creation-Date: 2022-12-11 10:01+0200\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -49,6 +49,10 @@ msgstr "Widgetsbibliothek abschalten."
 #, c-format
 msgid "Error enabling/disabling widget '%s': %s."
 msgstr "Fehler beim Ein-/Abschaltens des Widgets '%s': %s."
+
+#, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr "Schließen der Datei %d Fehler '%s (%d)'!"
 
 #, c-format
 msgid "The widget '%s' is already present!"
@@ -122,8 +126,8 @@ msgstr "Daten"
 msgid "Calculating procedure - "
 msgstr "Berechnungsverfahren - "
 
-msgid "!!redefined!!"
-msgstr "!!neu definiert!!"
+msgid "REDEFINED"
+msgstr "NEU DEFINIERT"
 
 msgid "inherited"
 msgstr "vererbt"
@@ -317,7 +321,8 @@ msgid "View"
 msgstr "Ansicht"
 
 msgid "Text;Combo;Integer;Real;Time;Date;Date and time;Password"
-msgstr "Text;Combo;Ganzzahl;Reelle Zahl;Uhrzeit;Datum;Datum und Uhrzeit;Passwort"
+msgstr ""
+"Text;Combo;Ganzzahl;Reelle Zahl;Uhrzeit;Datum;Datum und Uhrzeit;Passwort"
 
 msgid "Confirm"
 msgstr "Bestätigen"
@@ -540,8 +545,10 @@ msgstr ""
 "Die Dateivorlage schreibt sich wie in \"Images (*.png *.xpm *.jpg);;CSV-"
 "Datei (*.csv)\"."
 
-msgid "List of the hierarchical items by the path \"/{DIR}/{DIR}/{ITEM}\" per line."
-msgstr "Liste von hierarchischen Elementen gleich \"/{DIR}/{DIR}/{ITEM}\" in Zeilen."
+msgid ""
+"List of the hierarchical items by the path \"/{DIR}/{DIR}/{ITEM}\" per line."
+msgstr ""
+"Liste von hierarchischen Elementen gleich \"/{DIR}/{DIR}/{ITEM}\" in Zeilen."
 
 msgid "List of items-values by lines."
 msgstr "Liste der Werke-Werte durch Linien."
@@ -681,7 +688,8 @@ msgid "Border: style"
 msgstr "Rand: Stil"
 
 msgid "None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"
-msgstr "Keine;Gepunktet;Gestrichelt;Durchgehend;Doppelt;Rille;Grat;Einsatz;Anfang"
+msgstr ""
+"Keine;Gepunktet;Gestrichelt;Durchgehend;Doppelt;Rille;Grat;Einsatz;Anfang"
 
 msgid "Color"
 msgstr "Farbe"
@@ -720,7 +728,8 @@ msgstr ": Wert"
 msgid ": config"
 msgstr ": Konfiguration"
 
-msgid "Text value in HTML. Use \"%{x}\" for argument \"x\" (from 1) value insert."
+msgid ""
+"Text value in HTML. Use \"%{x}\" for argument \"x\" (from 1) value insert."
 msgstr ""
 "Textwert in HTML. Verwenden Sie \"%{n}\" die Werte der Argumente \"n\" (aus "
 "1) zu halten."
@@ -1430,10 +1439,15 @@ msgstr "Typ der Seite"
 msgid ""
 "Consider to remove included pages linked to this page as a template due to "
 "it is not the template more!"
-msgstr "Erwägen Sie, enthaltene Seiten, die mit dieser Seite als Vorlage verknüpft sind, zu entfernen, da es sich nicht um die Vorlage mehr handelt!"
+msgstr ""
+"Erwägen Sie, enthaltene Seiten, die mit dieser Seite als Vorlage verknüpft "
+"sind, zu entfernen, da es sich nicht um die Vorlage mehr handelt!"
 
-msgid "Consider to remove included pages due to this page is not a container more!"
-msgstr "Erwägen Sie, enthaltene Seiten zu entfernen, da diese Seite kein Container mehr ist!"
+msgid ""
+"Consider to remove included pages due to this page is not a container more!"
+msgstr ""
+"Erwägen Sie, enthaltene Seiten zu entfernen, da diese Seite kein Container "
+"mehr ist!"
 
 msgid "Standard"
 msgstr "Standard"
@@ -1454,7 +1468,7 @@ msgid "The variable is not a link"
 msgstr "Die Variable ist kein Lnk"
 
 msgid "val:Constant value"
-msgstr "val:Konstante"
+msgstr "val:Konstanter Wert"
 
 msgid "=== Pages ==="
 msgstr "=== Seite ==="
@@ -1590,6 +1604,10 @@ msgstr "Ressourcenstromtyp"
 msgid "Procedure ID"
 msgstr "Prozedur-ID"
 
+#, c-format
+msgid "Closing the pipe %p error '%s (%d)'!"
+msgstr "Schließen der Pipe %p Fehler '%s (%d)'!"
+
 msgid "Opened. "
 msgstr "Geöffnet. "
 
@@ -1606,16 +1624,31 @@ msgid "Opened"
 msgstr "Geöffnet"
 
 #, c-format
-msgid "Error compiling the function '%s' by the language '%s' for the widget: %s"
-msgstr "Fehler in der Funktionskompilation '%s' in der Sprache '%s' für Widget: %s"
+msgid ""
+"Error compiling the function '%s' by the language '%s' for the widget: %s"
+msgstr ""
+"Fehler in der Funktionskompilation '%s' in der Sprache '%s' für Widget: %s"
 
 #, c-format
 msgid "Modification form %d, fix %d. "
 msgstr "Änderung bilden %d, fixieren %d. "
 
 #, c-format
-msgid "Processing at %s. "
-msgstr "Verarbeitung bei %s. "
+msgid "Periodic processing %s%s. "
+msgstr "Periodische Verarbeitung %s%s. "
+
+msgid "DISABLED"
+msgstr "DEAKTIVIERT"
+
+msgid ", from the procedure"
+msgstr ", aus dem Verfahren"
+
+#, c-format
+msgid "Processing%s. "
+msgstr "Verarbeitung%s. "
+
+msgid ", no procedure"
+msgstr ", kein Verfahren"
 
 msgid "Spent time on the branch "
 msgstr "Verbrachte Zeit in der Branche "
@@ -1625,7 +1658,8 @@ msgstr "der Gegenstand "
 
 #, c-format
 msgid "It is a try of creating a widget in depth bigger to %d!"
-msgstr "Es ist ein Versuch, ein Widget mit einer Tiefe von bis zu %d zu erstellen!"
+msgstr ""
+"Es ist ein Versuch, ein Widget mit einer Tiefe von bis zu %d zu erstellen!"
 
 #, c-format
 msgid "Events: %s"
@@ -1949,6 +1983,20 @@ msgstr "Widget: "
 msgid "Go to the parent"
 msgstr "Gehe zum Elternteil"
 
+msgid "Periodic processing, milliseconds"
+msgstr "Periodische Verarbeitung, Millisekunden"
+
+msgid ""
+"Use 0 if you want the session period processing,\n"
+"   -1 if you want to use the parent widget/page/project processing period in "
+"the cascade,\n"
+"   -2 for disable the periodic processing in whole."
+msgstr ""
+"Verwenden Sie 0, wenn Sie die Verarbeitung des Sitzungszeitraums wünschen,\n"
+"   -1, wenn Sie das übergeordnete Widget/Seite/Projekt Bearbeitungszeitraum "
+"in der Kaskade verwenden möchten,\n"
+"   -2 zum Deaktivieren der periodischen Verarbeitung insgesamt."
+
 msgid "Clear the widget changes"
 msgstr "Zurücksetzen Änderungen"
 
@@ -2045,21 +2093,14 @@ msgstr "Attribute anzeigen"
 msgid "Custom"
 msgstr "Benutzerdefiniert"
 
+msgid "The name's rows after the first one treat as help."
+msgstr "Die Namenszeilen nach der ersten behandeln als Hilfe."
+
 msgid "Work area"
 msgstr "Arbeitsbereich"
 
 msgid "Calculation"
 msgstr "Berechnung"
-
-msgid "Period of the calculating, milliseconds"
-msgstr "Zeitraum der Berechnung, Millisekunden"
-
-msgid ""
-"Use -1 (< 0) if you want to use the parent widget/page/project calculating "
-"period."
-msgstr ""
-"Verwenden Sie -1 (<0), wenn Sie den Berechnungszeitraum für das "
-"übergeordnete Widget/Seite/Projekt verwenden möchten."
 
 msgid "Procedure language"
 msgstr "Verfahrenssprache"
@@ -2186,7 +2227,8 @@ msgstr ""
 msgid "Node presence"
 msgstr "Knotenpräsenz"
 
-msgid "Checking for the node presence, including widgets, attributes and other."
+msgid ""
+"Checking for the node presence, including widgets, attributes and other."
 msgstr ""
 "Überprüfen auf die Knotenpräsenz, einschließlich Widgets, Attribute und "
 "andere."
@@ -2234,4 +2276,3 @@ msgstr ""
 "vollständige Adresse des Attributs in <addr> angegeben wird, und indem: die "
 "Adresse des Widget in <addr> und die Attributkennung in <attr> separat "
 "angegeben werden."
-

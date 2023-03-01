@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.OPC_UA file: mod_daq.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -953,7 +953,7 @@ void TMdPrm::loadDATA( bool incl )
 		lCtx->addLinksAttrs(&pEl);
 
 		// Load IO at enabling
-		loadIO(true);
+		loadIO();
 
 		// Init links
 		lCtx->chkLnkNeed = lCtx->initLnks(/*true*/);	//!!!! Do not reconnect but that can be done in loadIO() early
@@ -1025,7 +1025,7 @@ void TMdPrm::load_( )
     loadIO();
 }
 
-void TMdPrm::loadIO( bool force )
+void TMdPrm::loadIO( )
 {
     if(!enableStat() || !isLogic() || !lCtx || !lCtx->func()) return;
 
@@ -1096,9 +1096,6 @@ void TMdPrm::upValLog( bool first, bool last, double frq )
 {
     if(!isLogic() || !lCtx->func())	return;
 
-    AutoHD<TVal> pVal;
-    vector<string> ls;
-
     try {
 	if(lCtx->chkLnkNeed && !first && !last)	lCtx->chkLnkNeed = lCtx->initLnks();
 
@@ -1125,16 +1122,8 @@ void TMdPrm::upValLog( bool first, bool last, double frq )
 	if(lCtx->idNm >= 0 && lCtx->ioMdf(lCtx->idNm)) setName(lCtx->getS(lCtx->idNm));
 	if(lCtx->idDscr >= 0 && lCtx->ioMdf(lCtx->idDscr)) setDescr(lCtx->getS(lCtx->idDscr));
 
-	//Attribute's values update
-	elem().fldList(ls);
-	for(unsigned iEl = 0; iEl < ls.size(); iEl++) {
-	    int id_lnk = lCtx->lnkId(ls[iEl]);
-	    if(id_lnk >= 0 && !lCtx->lnkActive(id_lnk)) id_lnk = -1;
-	    pVal = vlAt(ls[iEl]);
-	    if(pVal.at().fld().flg()&TVal::Dynamic)	continue;
-	    if(id_lnk < 0) pVal.at().set(lCtx->get(lCtx->ioId(ls[iEl])), 0, true);
-	    else pVal.at().set(lCtx->lnkInput(id_lnk), 0, true);
-	}
+	//Put values to the attributes and archives in the passive archiving mode
+	lCtx->archAttrs(this);
     } catch(TError &err) {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_warning(nodePath().c_str(),_("Error of the calculation template."));
@@ -1262,7 +1251,7 @@ void TMdPrm::vlArchMake( TVal &val )
     TParamContr::vlArchMake(val);
 
     if(val.arch().freeStat()) return;
-    val.arch().at().setSrcMode(TVArchive::PassiveAttr);
+    val.arch().at().setSrcMode(TVArchive::DAQAttr);
     val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
     val.arch().at().setHardGrid(true);
     val.arch().at().setHighResTm(true);
@@ -1304,10 +1293,21 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(isStd() && a_path == "/prm/cfg/ND_LS" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	opt->childAdd("rule")->setAttr("expr","^#[^\n]*")->setAttr("color","gray")->setAttr("font_italic","1");
-	opt->childAdd("rule")->setAttr("expr","\"(\\\\\"|[^\"])*\"")->setAttr("color","darkgreen");
+	XMLNode *g0 = opt->childAdd("rule")->setAttr("expr","^(0?[xX]?[0-9a-fA-F]*:|)(\".*\"|\\{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\\}|0?[xX]?[0-9a-fA-F]*)")->
+		setAttr("font_weight","1")->setAttr("color","darkblue");
+	    g0->childAdd("rule")->setAttr("expr","\".*\"")->setAttr("color","darkgreen");
+	    g0->childAdd("rule")->setAttr("expr","\\{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\\}")->setAttr("color","darkblue");
+	    g0->childAdd("rule")->setAttr("expr","[0-9a-fA-F]*:")->setAttr("color","darkorange");
+	g0 = opt->childAdd("rule")->setAttr("expr","(?<=\\|).*");
+	    g0->childAdd("rule")->setAttr("expr","[bifsorw]*(?<!\\|)")->setAttr("color","red");
+	    XMLNode *g1 = g0->childAdd("rule")->setAttr("expr","(?<=\\|).*");
+		g1->childAdd("rule")->setAttr("expr","[^|]*")->setAttr("font_weight","1");
+		g1->childAdd("rule")->setAttr("expr","(?<=|).*")->setAttr("font_italic","1");
+
+	/*opt->childAdd("rule")->setAttr("expr","\"(\\\\\"|[^\"])*\"")->setAttr("color","darkgreen");
 	opt->childAdd("rule")->setAttr("expr","\\{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\\}")->setAttr("color","darkblue");
 	opt->childAdd("rule")->setAttr("expr","\\b(0[xX][0-9a-fA-F]*|[0-9]*)\\b")->setAttr("color","darkorange");
-	opt->childAdd("rule")->setAttr("expr","\\|[bifsorw]*|")->setAttr("color","red");
+	opt->childAdd("rule")->setAttr("expr","\\|[bifsorw]*|")->setAttr("color","red");*/
 	/*opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");*/
     }
     else if(isStd() && a_path == "/prm/cfg/SEL_NDS") {

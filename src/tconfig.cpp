@@ -200,12 +200,12 @@ void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user,
 	return;
     }
     TCfg &cel = cfg(elem);
-    if(TCntrNode::ctrChkNode(opt,"get",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEC_RD)) {
+    if(TCntrNode::ctrChkNode(opt,"get",(cel.fld().flg()&TFld::NoWrite)?(perm&~_W_W_W):perm,user.c_str(),grp.c_str(),SEC_RD)) {
 	if(cel.fld().type() == TFld::String && (cel.fld().flg()&TFld::TransltText))
 	    opt->setText(trD(cel.getS()));
 	else opt->setText(cel.getS());
     }
-    if(TCntrNode::ctrChkNode(opt,"set",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEC_WR)) {
+    if(TCntrNode::ctrChkNode(opt,"set",(cel.fld().flg()&TFld::NoWrite)?(perm&~_W_W_W):perm,user.c_str(),grp.c_str(),SEC_WR)) {
 	if(cel.fld().type() == TFld::String && (cel.fld().flg()&TFld::TransltText))
 	    cel.setS(trDSet(cel.getS(),opt->text()));
 	else cel.setS(opt->text());
@@ -232,7 +232,7 @@ void TConfig::setNoTransl( bool vl )
 TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms,
     const string &user_lang, int perm, const string &owner )
 {
-    // ElTp cfg(string nm) - config variable 'nm' get.
+    // ElTp cfg( string nm ) - config variable 'nm' get.
     //  nm - config variable name.
     if(iid == "cfg" && prms.size() >= 1 &&
 	    SYS->security().at().access(TSYS::strLine(user_lang,0),SEC_RD,TSYS::strParse(owner,0,":"),TSYS::strParse(owner,1,":"),perm)) {
@@ -242,7 +242,7 @@ TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms,
 	    return Mess->I18N(cf->getS(), TSYS::strLine(user_lang,1).c_str());
 	return *cf;
     }
-    // ElTp cfgSet(string nm, ElTp val) - set config variable 'nm' to 'val'.
+    // bool cfgSet( string nm, ElTp val ) - set config variable 'nm' to 'val'.
     //  nm - config variable name;
     //  val - variable value.
     if(iid == "cfgSet" && prms.size() >= 2 &&

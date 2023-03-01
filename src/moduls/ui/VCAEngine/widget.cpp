@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: widget.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -637,7 +637,7 @@ void Widget::attrAdd( TFld *attr, int pos, bool inher, bool forceMdf, bool allIn
 	    if(p->second->mOi >= pos) p->second->mOi++;
 	mAttrs.insert(std::pair<string,Attr*>(a->id(),a));
 
-	if(a->id().compare(0,3,"vs_") == 0)
+	if(a->id().find("vs_") == 0)
 	    a->setFlgSelf((Attr::SelfAttrFlgs)(a->flgSelf()|Attr::VizerSpec), true);
 
 	//Set modif for new attribute reload allow
@@ -917,12 +917,12 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 		opt->setAttr("lnkPath",parentNoLink().at().addr());
 	    }
 	    else wdgList(lst);
-	    for(unsigned i_f = 0; i_f < lst.size(); i_f++) {
-		if(!isLink()) iwdg = wdgAt(lst[i_f]);
-		else iwdg = parentNoLink().at().wdgAt(lst[i_f]);
+	    for(unsigned iF = 0; iF < lst.size(); iF++) {
+		if(!isLink()) iwdg = wdgAt(lst[iF]);
+		else iwdg = parentNoLink().at().wdgAt(lst[iF]);
 		XMLNode *wn = opt->childAdd("get")->setAttr("path",a_path);
 		iwdg.at().cntrCmdServ(wn);
-		wn->setName("w")->attrDel("path")->attrDel("rez")->setAttr("id",lst[i_f]);
+		wn->setName("w")->attrDel("path")->attrDel("rez")->setAttr("id",lst[iF]);
 	    }
 	}
     }
@@ -954,6 +954,11 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/name",_("Name"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/descr",_("Description"),RWRWR_,"root",SUI_ID,3,"tp","str","cols","100","rows","4");
 		ctrMkNode("img",opt,-1,"/wdg/cfg/ico",_("Icon"),(isLink()?R_R_R_:RWRWR_),"root",SUI_ID,2,"v_sz","64","h_sz","64");
+		ctrMkNode("fld",opt,-1,"/wdg/cfg/procPer",_("Periodic processing, milliseconds"),RWRWR_,"root",SUI_ID,3,
+		    "tp","dec", "min",i2s(PerVal_UserMin).c_str(),
+		    "help",_("Use 0 if you want the session period processing,\n"
+			     "   -1 if you want to use the parent widget/page/project processing period in the cascade,\n"
+			     "   -2 for disable the periodic processing in whole."));
 		ctrMkNode("comm",opt,-1,"/wdg/cfg/clear",_("Clear the widget changes"),RWRWR_,"root",SUI_ID);
 		ctrMkNode("comm",opt,-1,"/wdg/cfg/chDown",_("Lower down the widget changes to its parent"),RWRWR_,"root",SUI_ID);
 	    }
@@ -988,10 +993,6 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     }
     else if(a_path == "/wdg/st/goparent" && ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD) && !parent().freeStat())
 	opt->setText(parent().at().nodePath(0,true));
-    else if(a_path == "/wdg/cfg/ico" || a_path == "/ico") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(ico());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setIco(opt->text());
-    }
     else if(a_path == "/wdg/cfg/id" && ctrChkNode(opt))		opt->setText(id());
     else if(a_path == "/wdg/cfg/type" && ctrChkNode(opt))	opt->setText(type());
     else if(a_path == "/wdg/cfg/root" && ctrChkNode(opt))	opt->setText(rootId());
@@ -1004,6 +1005,14 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     else if(a_path == "/wdg/cfg/descr") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trD(descr()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDescr(trDSet(descr(),opt->text()));
+    }
+    else if(a_path == "/wdg/cfg/ico" || a_path == "/ico") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(ico());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setIco(opt->text());
+    }
+    else if(a_path == "/wdg/cfg/procPer") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(calcPer()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCalcPer(s2i(opt->text()));
     }
     else if(a_path == "/wdg/cfg/clear" && ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID)) {
 	if(opt->attr("attr").empty()) wClear();
@@ -1068,11 +1077,11 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	    if(!chkUserPerm || SYS->security().at().access(opt->attr("user"),SEC_RD,owner(),grp(),permit())) {
 		vector<string>  lst;
 		wdgList(lst);
-		for(unsigned i_f = 0; i_f < lst.size(); i_f++) {
-		    AutoHD<Widget> iwdg = wdgAt(lst[i_f]);
+		for(unsigned iF = 0; iF < lst.size(); iF++) {
+		    AutoHD<Widget> iwdg = wdgAt(lst[iF]);
 		    if(chkUserPerm && !SYS->security().at().access(opt->attr("user"),SEC_RD,iwdg.at().owner(),iwdg.at().grp(),iwdg.at().permit()))
 			continue;
-		    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(trD(iwdg.at().name()));
+		    opt->childAdd("el")->setAttr("id",lst[iF])->setText(trD(iwdg.at().name()));
 		}
 	    }
 	}
@@ -1491,7 +1500,8 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    if(!wdgPresent(wattr))	wattr = ".";
 	    if(ctrMkNode("table",opt,-1,"/proc/attr",_("Attributes"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id")) {
 		ctrMkNode("list",opt,-1,"/proc/attr/id",_("Identifier"),RWRWR_,"root",SUI_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/proc/attr/name",_("Name"),RWRWR_,"root",SUI_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/proc/attr/name",_("Name"),RWRWR_,"root",SUI_ID,2,"tp","str",
+		    "help",_("The name's rows after the first one treat as help."));
 		ctrMkNode("list",opt,-1,"/proc/attr/type",_("Type"),RWRWR_,"root",SUI_ID,4,"tp","dec","idm","1","dest","select","select","/proc/tp_ls");
 		ctrMkNode("list",opt,-1,"/proc/attr/wa",_("Work area"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/proc/attr/proc",_("Processing"),RWRWR_,"root",SUI_ID,1,"tp","bool");
@@ -1499,8 +1509,11 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/proc/attr/cfgtmpl",_("Configuration template"),RWRWR_,"root",SUI_ID,1,"tp","str");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/proc/calc",_("Calculation"))) {
-		ctrMkNode("fld",opt,-1,"/proc/calc/per",_("Period of the calculating, milliseconds"),RWRWR_,"root",SUI_ID,2,"tp","dec",
-		    "help",_("Use -1 (< 0) if you want to use the parent widget/page/project calculating period."));
+		//ctrMkNode("fld",opt,-1,"/proc/calc/per",_("Period of the calculating, milliseconds"),RWRWR_,"root",SUI_ID,3,
+		//    "tp","dec", "min",i2s(PerVal_UserMin).c_str(),
+		//    "help",_("Use 0 if you want the session period calculation,\n"
+		//	     "   -1 if you want to use the parent widget/page/project calculating period,\n"
+		//	     "   -2 for disable the periodic calculation in whole."));
 		ctrMkNode("fld",opt,-1,"/proc/calc/progLng",_("Procedure language"),RWRWR_,"root",SUI_ID,4,"tp","str", "dest","sel_ed", "select","/plang/list",
 		    "help",_("Select the blank language to reset the widget procedure and language to the parent widget."));
 		if(calcProg().size() && !(!parent().freeStat() && calcProg() == parent().at().calcProg()) && calcProgTr())
@@ -1527,8 +1540,8 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	vector<string> lst;
 	wdgList(lst);
 	opt->childAdd("el")->setText(".");
-	for(unsigned i_f=0; i_f < lst.size(); i_f++)
-	    opt->childAdd("el")->setText(lst[i_f]);
+	for(unsigned iF = 0; iF < lst.size(); iF++)
+	    opt->childAdd("el")->setText(lst[iF]);
     }
     else if(a_path == "/proc/attr") {
 	wattr = opt->attr("wdg");
@@ -1658,10 +1671,10 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(calcLang());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCalcLang(opt->text());
     }
-    else if(a_path == "/proc/calc/per") {
+    /*else if(a_path == "/proc/calc/per") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(calcPer()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCalcPer(s2i(opt->text()));
-    }
+    }*/
     else if(a_path == "/proc/calc/prog_tr") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(calcProgTr()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCalcProgTr(s2i(opt->text()));

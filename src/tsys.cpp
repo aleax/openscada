@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -74,8 +74,8 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     isLoaded(false), mRunning(false), isServPrc(false), mFinalKill(false),
     mUser("root"), mConfFile(sysconfdir_full "/oscada.xml"), mId("InitSt"),
     mModDir(oscd_moddir_full), mIcoDir("icons;" oscd_datadir_full "/icons"), mDocDir("docs;" oscd_datadir_full "/docs"),
-    mWorkDB(dataRes()), mSelDB(dataRes()), mMainCPUs(dataRes()), mTaskInvPhs(10), mSaveAtExit(false), mSavePeriod(0),
-    mModifCalc(false), rootModifCnt(0), sysModifFlgs(0), mStopSignal(0), mN_CPU(1),
+    mName(dataRes()), mNameB(dataRes()), mWorkDB(dataRes()), mSelDB(dataRes()), mMainCPUs(dataRes()),
+    mTaskInvPhs(10), mSaveAtExit(false), mSavePeriod(0), mModifCalc(false), rootModifCnt(0), sysModifFlgs(MDF_NONE), mStopSignal(0), mN_CPU(1),
     mainPthr(0), mSysTm(0), mClockRT(false), mPrjCustMode(true), mPrjNm(dataRes()), mCfgCtx(NULL), mCfgCtxLast(NULL),
     mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrimCmdTr(false)
 {
@@ -186,6 +186,26 @@ TSYS::~TSYS( )
 	delete iCL->second;
 }
 
+string TSYS::ico( string *tp )
+{
+    string itp, rez;
+
+    //At the localised name
+    rez = TSYS::strEncode(TUIS::icoGet(trD(name()),&itp), TSYS::base64);
+    //... or the base name
+    if(!itp.size()) {
+	if(mNameB.empty()) mNameB = TBDS::genPrmGet(nodePath()+"StName", "", "root");
+	rez = TSYS::strEncode(TUIS::icoGet(mNameB,&itp), TSYS::base64);
+    }
+    //... or ID
+    if(!itp.size())
+	rez = TSYS::strEncode(TUIS::icoGet(id(),&itp), TSYS::base64);
+
+    if(tp) *tp = itp;
+
+    return rez;
+}
+
 string TSYS::host( )
 {
     utsname ubuf; uname(&ubuf);
@@ -208,23 +228,10 @@ void TSYS::setWorkDir( const string &wdir, bool init )
     else { sysModifFlgs |= MDF_WorkDir; modif(); }
 }
 
-void TSYS::setIcoDir( const string &idir, bool init )
-{
-    mIcoDir = idir;
-    if(init) sysModifFlgs &= ~MDF_IcoDir;
-    else { sysModifFlgs |= MDF_IcoDir; modif(); }
-}
-
-void TSYS::setDocDir( const string &idir, bool init )
-{
-    mDocDir = idir;
-    if(init) sysModifFlgs &= ~MDF_DocDir;
-    else { sysModifFlgs |= MDF_DocDir; modif(); }
-}
-
 void TSYS::setModDir( const string &mdir, bool init )
 {
     mModDir = mdir;
+
     if(init) sysModifFlgs &= ~MDF_ModDir;
     else { sysModifFlgs |= MDF_ModDir; modif(); }
 }
@@ -662,7 +669,8 @@ void TSYS::cfgFileLoad( )
 	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) s_buf.append(buf, len);
 	    fOK = s_buf.size();
 	}
-	close(hd);
+	if(close(hd) != 0)
+	    mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	if(!fOK) mess_sys(TMess::Error, _("Error loading the configuration file '%s'."), mConfFile.c_str());
 
 	try {
@@ -699,10 +707,12 @@ void TSYS::cfgFileSave( )
     else {
 	string rezFile = rootN.save(XMLNode::XMLHeader);
 	int rez = write(hd, rezFile.data(), rezFile.size());
-	if(rez != (int)rezFile.size()) mess_sys(TMess::Error,_("Error writing the configuration file '%s': %s"), mConfFile.c_str(), ((rez<0)?strerror(errno):""));
+	if(rez != (int)rezFile.size())
+	    mess_sys(TMess::Error,_("Error writing the configuration file '%s': %s"), mConfFile.c_str(), ((rez<0)?strerror(errno):""));
 	rootModifCnt = 0;
 	rootFlTm = time(NULL);
-	close(hd);
+	if(close(hd) != 0)
+	    mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
     }
 }
 
@@ -726,12 +736,12 @@ void TSYS::cfgPrmLoad( )
 
     //System parameters
     setClockRT(s2i(TBDS::genPrmGet(nodePath()+"ClockRT",i2s(clockRT()))));
-    mName = TBDS::genPrmGet(nodePath()+"StName", name(), "root", TBDS::UseTranslation);
+    setName(TBDS::genPrmGet(nodePath()+"StName",name(),"root",TBDS::UseTranslation));
     mWorkDB = TBDS::genPrmGet(nodePath()+"WorkDB",workDB());
     setWorkDir(TBDS::genPrmGet(nodePath()+"Workdir","").c_str(), true);
     setModDir(TBDS::genPrmGet(nodePath()+"ModDir",modDir()), true);
-    setIcoDir(TBDS::genPrmGet(nodePath()+"IcoDir",icoDir()), true);
-    setDocDir(TBDS::genPrmGet(nodePath()+"DocDir",docDir()), true);
+    setIcoDir(TBDS::genPrmGet(nodePath()+"IcoDir",icoDir()));
+    setDocDir(TBDS::genPrmGet(nodePath()+"DocDir",docDir()));
     setMainCPUs(TBDS::genPrmGet(nodePath()+"MainCPUs",mainCPUs()));
     setTaskInvPhs(s2i(TBDS::genPrmGet(nodePath()+"TaskInvPhs",i2s(taskInvPhs()))));
     setSaveAtExit(s2i(TBDS::genPrmGet(nodePath()+"SaveAtExit",i2s(saveAtExit()))));
@@ -748,6 +758,8 @@ void TSYS::cfgPrmLoad( )
     for(int off = 0; (stId=TSYS::strSepParse(stLs,0,';',&off)).size(); )
 	if(mSt.find(stId) == mSt.end()) mSt[stId] = SStat();
     mRdRes.unlock();
+
+    sysModifFlgs = MDF_NONE;
 }
 
 void TSYS::load_( )
@@ -852,7 +864,7 @@ void TSYS::save_( )
     mess_sys(TMess::Info, _("Saving."));
 
     //System parameters
-    TBDS::genPrmSet(nodePath()+"StName", mName, "root", TBDS::UseTranslation);
+    if(sysModifFlgs&MDF_Name)	{ TBDS::genPrmSet(nodePath()+"StName", name(), "root", TBDS::UseTranslation); mNameB = ""; }
     TBDS::genPrmSet(nodePath()+"WorkDB", workDB(), "root", TBDS::OnlyCfg);
     if(sysModifFlgs&MDF_WorkDir)TBDS::genPrmSet(nodePath()+"Workdir", workDir(), "root", TBDS::OnlyCfg);
     if(sysModifFlgs&MDF_ModDir)	TBDS::genPrmSet(nodePath()+"ModDir", modDir(), "root", TBDS::OnlyCfg);
@@ -866,18 +878,22 @@ void TSYS::save_( )
     TBDS::genPrmSet(nodePath()+"ModifCalc", i2s(modifCalc()));
 
     //Redundancy parameters
-    TBDS::genPrmSet(nodePath()+"RdStLevel", i2s(rdStLevel()), "root", TBDS::OnlyCfg);
-    TBDS::genPrmSet(nodePath()+"RdTaskPer", r2s(rdTaskPer()), "root", TBDS::OnlyCfg);
-    TBDS::genPrmSet(nodePath()+"RdRestConnTm", i2s(rdRestConnTm()), "root", TBDS::OnlyCfg);
-    TBDS::genPrmSet(nodePath()+"RdPrimCmdTr", i2s(rdPrimCmdTr()), "root", TBDS::OnlyCfg);
-    mRdRes.lock(false);
-    string stLs;
-    for(map<string,TSYS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++)
-	stLs += sit->first+";";
-    mRdRes.unlock();
-    TBDS::genPrmSet(nodePath()+"RdStList", stLs, "root", TBDS::OnlyCfg);
+    if(sysModifFlgs&MDF_RD) {
+	TBDS::genPrmSet(nodePath()+"RdStLevel", i2s(rdStLevel()), "root", TBDS::OnlyCfg);
+	TBDS::genPrmSet(nodePath()+"RdTaskPer", r2s(rdTaskPer()), "root", TBDS::OnlyCfg);
+	TBDS::genPrmSet(nodePath()+"RdRestConnTm", i2s(rdRestConnTm()), "root", TBDS::OnlyCfg);
+	TBDS::genPrmSet(nodePath()+"RdPrimCmdTr", i2s(rdPrimCmdTr()), "root", TBDS::OnlyCfg);
+	mRdRes.lock(false);
+	string stLs;
+	for(map<string,TSYS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++)
+	    stLs += sit->first+";";
+	mRdRes.unlock();
+	TBDS::genPrmSet(nodePath()+"RdStList", stLs, "root", TBDS::OnlyCfg);
+    }
 
     Mess->save();	//Messages load
+
+    sysModifFlgs = MDF_NONE;
 }
 
 int TSYS::start( )
@@ -986,7 +1002,7 @@ void TSYS::unload( )
     mIcoDir = "icons;" oscd_datadir_full "/icons";
     mDocDir = "docs;" oscd_datadir_full "/docs";
     mWorkDB = DB_CFG;
-    mSaveAtExit = false, mSavePeriod = 0, isLoaded = false, rootModifCnt = 0, sysModifFlgs = 0, mPrjCustMode = true;
+    mSaveAtExit = false, mSavePeriod = 0, isLoaded = false, rootModifCnt = 0, sysModifFlgs = MDF_NONE, mPrjCustMode = true;
 
     modifG();
 }
@@ -1081,7 +1097,8 @@ void TSYS::clkCalc( )
 			(fp=fopen("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq","r")))) {
 	    size_t rez = fread(buf, 1, sizeof(buf)-1, fp); buf[rez] = 0;
 	    mSysclc = uint64_t(s2r(buf)*1e3);
-	    fclose(fp);
+	    if(fclose(fp) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), fp, strerror(errno), errno);
 	}
 
 	//Try read file cat /proc/cpuinfo for CPU frequency or BogoMIPS get
@@ -1093,7 +1110,8 @@ void TSYS::clkCalc( )
 		    mSysclc = (uint64_t)(frq*1e6);
 		    break;
 		}
-	    fclose(fp);
+	    if(fclose(fp) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), fp, strerror(errno), errno);
 	}
     }
 }
@@ -2140,7 +2158,8 @@ bool TSYS::prjLock( const char *cmd )
 	    int bufLn = 35;
 	    char buf[bufLn+1]; buf[bufLn] = 0;
 	    bool toRemove = (read(hd,buf,bufLn) <= 0);
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	    if(!toRemove) {
 		int pid = 0, tm = 0;
 		toRemove = ((sscanf(buf,"%d %d",&pid,&tm) < 2) || pid == getpid() || abs(sysTm()-tm) > 2*prjLockUpdPer());
@@ -2158,7 +2177,8 @@ bool TSYS::prjLock( const char *cmd )
     if(hd >= 0) {
 	string lockInfo = TSYS::strMess("%010d %020d", (int)getpid(), (int)sysTm());
 	write(hd, lockInfo.data(), lockInfo.size());
-	close(hd);
+	if(close(hd) != 0)
+	    mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	return true;
     }
 
@@ -2753,7 +2773,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	for(int r_cnt = 0; (r_cnt=fread(buf,1,sizeof(buf),fp)) || !feof(fp); )
 	    rez.append(buf,r_cnt);
 
-	pclose(fp);
+	if(pclose(fp) == -1)
+	    mess_warning(nodePath().c_str(), _("Closing the pipe %p error '%s (%d)'!"), fp, strerror(errno), errno);
 	return rez;
     }
     // int fileSize( string file ) - Return the <file> size.
@@ -2762,7 +2783,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	int rez = -1;
 	if(hd >= 0) {
 	    rez = lseek(hd, 0, SEEK_END);
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	}
 	return rez;
     }
@@ -2780,7 +2802,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	    else
 		for(int len = 0, rLen = 0; rLen < sz && (len=read(hd,buf,fmin(sz-rLen,(int)sizeof(buf)))) > 0; rLen += len)
 		    rez.append(buf, len);
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	}
 	return rez;
     }
@@ -2793,7 +2816,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	int hd = open(prms[0].getS().c_str(), wflags, permCrtFiles());
 	if(hd >= 0) {
 	    wcnt = write(hd, val.data(), val.size());
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	}
 	return wcnt;
     }
@@ -3125,50 +3149,60 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    setAttr("doc","Program_manual|Documents/Program_manual");
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
 	    ctrMkNode("grp",opt,-1,"/br/sub_",_("Subsystem"),R_R_R_,"root","root",1,"idm","1");
-	if(TUIS::icoGet(name(),NULL,true).size() || TUIS::icoGet(id(),NULL,true).size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
+	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);	//!!!! Checking to deny the real data requesting
 	if(ctrMkNode("area",opt,-1,"/gen",_("Station"),R_R_R_)) {
-	    ctrMkNode("fld",opt,-1,"/gen/id",_("Identifier"),R_R_R_,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/stat",_("Station name"),RWRWR_,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/prog",_("Program"),R_R_R_,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/ver",_("Version"),R_R_R_,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/host",_("Host name"),R_R_R_,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/user",_("System user"),R_R_R_,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/sys",_("Operation system"),R_R_R_,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/CPU",_("CPU"),R_R_R_,"root","root",1,"tp","str");
-	    if(nCPU() > 1)
-		ctrMkNode("fld",opt,-1,"/gen/mainCPUs",_("Main CPUs set"),RWRWR_,"root","root",2,"tp","str",
-		    "help",_("To set up the processors you use, write a row of numbers separated by a ':' character.\nProcessor numbers start at 0."));
-	    ctrMkNode("fld",opt,-1,"/gen/clk",_("Tasks planning clock"),R_R_R_,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/taskInvPhs",_("Number of phases of the task invoking"),RWRWR_,"root","root",2,"tp","dec",
-		"help",_("To set up phasing of the task invoking in the determined phases number, <= 0 to set optimal, 1 to disable the tasks phasing."));
-	    ctrMkNode("fld",opt,-1,"/gen/in_charset",_("Internal charset"),R_R___,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/id",_("Station"),R_R_R_,"root","root",2,"tp","str", "help",_("Identifier"));
+	    ctrMkNode("fld",opt,-1,"/gen/stat","",RWRWR_,"root","root",2,"tp","str", "help",_("Name"));
 	    ctrMkNode("fld",opt,-1,"/gen/config",_("Configuration file"),R_R___,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),R_R___,"root","root",3,"tp","str","dest","sel_ed","select","/gen/workDirList");
-	    ctrMkNode("fld",opt,-1,"/gen/moddir",_("Modules directory"),R_R___,"root","root",3,"tp","str","dest","sel_ed","select","/gen/modDirList");
-	    ctrMkNode("fld",opt,-1,"/gen/icodir",_("Icons directory"),R_R___,"root","root",4,"tp","str","dest","sel_ed","select","/gen/icoDirList",
+	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),R_R___,"root","root",3,
+		"tp","str", "dest","sel_ed", "select","/gen/workDirList");
+	    ctrMkNode("fld",opt,-1,"/gen/moddir",_("Modules directory"),R_R___,"root","root",3,
+		"tp","str", "dest","sel_ed", "select","/gen/modDirList");
+	    ctrMkNode("fld",opt,-1,"/gen/icodir",_("Icons directory"),R_R___,"root","root",4,
+		"tp","str", "dest","sel_ed", "select","/gen/icoDirList",
 		"help",_("Separate directory paths with icons by symbol ';'."));
-	    ctrMkNode("fld",opt,-1,"/gen/docdir",_("Documents directory"),R_R___,"root","root",4,"tp","str","dest","sel_ed","select","/gen/docDirList",
+	    ctrMkNode("fld",opt,-1,"/gen/docdir",_("Documents directory"),R_R___,"root","root",4,
+		"tp","str", "dest","sel_ed", "select","/gen/docDirList",
 		"help",_("Separate directory paths with documents by symbol ';'."));
-	    ctrMkNode("fld",opt,-1,"/gen/wrk_db",_("Work DB"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/db/list",
+	    ctrMkNode("fld",opt,-1,"/gen/wrk_db",_("Work DB"),RWRWR_,"root","root",4,
+		"tp","str", "dest","select", "select","/db/list",
 		"help",_("Work DB address in the format \"{DB module}.{DB name}\"."));
-	    ctrMkNode("fld",opt,-1,"/gen/saveExit",_("Save the program at exit"),RWRWR_,"root","root",2,"tp","bool",
+	    ctrMkNode("fld",opt,-1,"/gen/saveExit",_("Save the program at exit, with the period"),RWRWR_,"root","root",2,"tp","bool",
 		"help",_("Select for the program automatic saving to DB on exit."));
-	    ctrMkNode("fld",opt,-1,"/gen/savePeriod",_("Period the program saving"),RWRWR_,"root","root",2,"tp","dec",
-		"help",_("Use not a zero period (seconds) to periodically save program changes to the DB."));
+	    ctrMkNode("fld",opt,-1,"/gen/savePeriod","",RWRWR_,"root","root",2,"tp","dec",
+		"help",_("Use not a zero period in seconds to periodically save program changes to the storage."));
 	    ctrMkNode("fld",opt,-1,"/gen/modifCalc",_("Set modification for the calculated objects"),RWRWR_,"root","root",2,"tp","bool",
 		"help",_("Most suitable for the production systems together with the previous configuration properties, for the calculation context saving.\n"
 			 "But it is inconvinient in the development mode, all time reminding for the saving need."));
-	    ctrMkNode("fld",opt,-1,"/gen/lang",_("Language"),RWRWR_,"root","root",3,
-		"tp","str", "dest","sel_ed", "sel_list",Mess->langBase().c_str());
-	    if(ctrMkNode("area",opt,-1,"/gen/mess",_("Messages"),R_R_R_)) {
-		ctrMkNode("fld",opt,-1,"/gen/mess/lev",_("Least level"),RWRWR_,"root","root",6,"tp","dec","len","1","dest","select",
+	    ctrMkNode("fld",opt,-1,"/gen/mess",_("Messages"),RWRWR_,"root","root",6,"tp","dec","len","1","dest","select",
 		    "sel_id","0;1;2;3;4;5;6;7",
 		    "sel_list",_("Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X])"),
 		    "help",_("Least messages level which is procesed by the program."));
-		ctrMkNode("fld",opt,-1,"/gen/mess/log_sysl",_("To syslog"),RWRWR_,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/gen/mess/log_stdo",_("To stdout"),RWRWR_,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/gen/mess/log_stde",_("To stderr"),RWRWR_,"root","root",1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/gen/mess/log_arch",_("To archive"),RWRWR_,"root","root",1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/gen/mess_sysl","",RWRWR_,"root","root",2,"tp","bool", "help",_("To syslog"));
+	    ctrMkNode("fld",opt,-1,"/gen/mess_stdo","",RWRWR_,"root","root",2,"tp","bool", "help",_("To stdout"));
+	    ctrMkNode("fld",opt,-1,"/gen/mess_stde","",RWRWR_,"root","root",2,"tp","bool", "help",_("To stderr"));
+	    ctrMkNode("fld",opt,-1,"/gen/mess_arch","",RWRWR_,"root","root",2,"tp","bool", "help",_("To archive"));
+	    if(ctrMkNode("area",opt,-1,"/gen/env",_("Environment"),R_R_R_)) {
+		ctrMkNode("fld",opt,-1,"/gen/env/prog",_("Program"),R_R_R_,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/gen/env/sys",_("System"),R_R_R_,"root","root",2,"tp","str","len","30");
+		ctrMkNode("fld",opt,-1,"/gen/env/time",_("System time"),R_R_R_,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/gen/env/clk",_("System planning clock"),R_R_R_,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/gen/env/user",_("System user"),R_R_R_,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/gen/env/in_charset",_("Language"),R_R___,"root","root",2,
+		    "tp","str", "help",_("System locale charset."));
+		ctrMkNode("fld",opt,-1,"/gen/env/lang","",RWRWR_,"root","root",4,
+		    "tp","str", "dest","sel_ed", "sel_list",Mess->langBase().c_str(),
+		    "help",_("Complete locale information with language, country and charset in the view \"en_GB.UTF-8\"."));
+		ctrMkNode("fld",opt,-1,"/gen/env/host",_("Host name"),R_R_R_,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/gen/env/CPU",_("CPU"),R_R_R_,"root","root",1,"tp","str");
+		if(nCPU() > 1)
+		    ctrMkNode("fld",opt,-1,"/gen/env/mainCPUs","",RWRWR_,"root","root",2,"tp","str",
+			"help",_("Main CPUs set.\n"
+				 "To set up the processors you use, write a row of numbers separated by the character ':'.\n"
+				 "Processor numbers start at 0."));
+		ctrMkNode("fld",opt,-1,"/gen/env/taskInvPhs",_("Number of phases of the task invoking"),RWRWR_,"root","root",2,"tp","dec",
+		    "help",_("To set up phasing of the task invoking in the determined phases number,\n"
+			     " <= 0 to set optimal, 1 to disable the tasks phasing."));
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/subs",_("Subsystems")))
@@ -3186,7 +3220,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/redund/sts/lev",_("Level"),R_R_R_,"root","root",1,"tp","dec");
 		ctrMkNode("list",opt,-1,"/redund/sts/cnt",_("Counter"),R_R_R_,"root","root",1,"tp","real");
 	    }
-	    ctrMkNode("comm",opt,-1,"/redund/hostLnk",_("Go to the configuration of the list of remote stations"),0660,"root","Transport",1,"tp","lnk");
+	    ctrMkNode("comm",opt,-1,"/redund/hostLnk",_("Go to the configuration of the list of remote stations"),RWRW__,"root","Transport",1,"tp","lnk");
 	}
 	if(ctrMkNode("area",opt,-1,"/tr",_("Translations"))) {
 	    ctrMkNode("fld",opt,-1,"/tr/status",_("Status"),R_R_R_,"root","root",1,"tp","str");
@@ -3258,53 +3292,13 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     }
 
     //Process command to page
-    if(a_path == "/ico" && ctrChkNode(opt)) {
-	string itp;
-	opt->setText(TSYS::strEncode(TUIS::icoGet(name(),&itp),TSYS::base64));
-	if(!itp.size())
-	    opt->setText(TSYS::strEncode(TUIS::icoGet(id(),&itp),TSYS::base64));
-	opt->setAttr("tp", itp);
-    }
-    else if(a_path == "/gen/host" && ctrChkNode(opt))	opt->setText(host());
-    else if(a_path == "/gen/sys" && ctrChkNode(opt)) {
-	utsname ubuf; uname(&ubuf);
-	opt->setText(string(ubuf.sysname)+"-"+ubuf.release);
-    }
-    else if(a_path == "/gen/user" && ctrChkNode(opt))	opt->setText(mUser);
-    else if(a_path == "/gen/prog" && ctrChkNode(opt))	opt->setText(PACKAGE_NAME);
-    else if(a_path == "/gen/ver" && ctrChkNode(opt))	opt->setText(VERSION);
+    if(a_path == "/ico" && ctrChkNode(opt)) { string itp; opt->setText(ico(&itp)); opt->setAttr("tp", itp); }
+    //else if(a_path == "/gen/ver" && ctrChkNode(opt))	opt->setText(VERSION);
     else if(a_path == "/gen/id" && ctrChkNode(opt))	opt->setText(id());
     else if(a_path == "/gen/stat") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(trD(name()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setName(trDSet(name(),opt->text()));
     }
-    else if(a_path == "/gen/CPU" && ctrChkNode(opt))	opt->setText(strMess(_("%dx%0.3gGHz"),nCPU(),(float)sysClk()/1e9));
-    else if(a_path == "/gen/mainCPUs") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD)) {
-	    string vl = mainCPUs();
-#if !defined(__ANDROID__) && __GLIBC_PREREQ(2,4)
-	    cpu_set_t cpuset;
-	    CPU_ZERO(&cpuset);
-	    pthread_getaffinity_np(mainPthr, sizeof(cpu_set_t), &cpuset);
-	    vl += "(";
-	    for(int iCPU = 0; iCPU < nCPU(); iCPU++)
-		if(CPU_ISSET(iCPU,&cpuset)) vl += string(vl[vl.size()-1]=='('?"":":")+i2s(iCPU);
-	    vl += ")";
-#endif
-	    opt->setText(vl);
-	}
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setMainCPUs(TSYS::strParse(opt->text(),0,"("));
-    }
-    else if(a_path == "/gen/clk" && ctrChkNode(opt)) {
-	struct timespec tmval;
-	clock_getres(SYS->clockRT()?CLOCK_REALTIME:CLOCK_MONOTONIC, &tmval);
-	opt->setText(TSYS::strMess(SYS->clockRT()?_("Real-time %s"):_("Monotonic %s"),tm2s(1e-9*tmval.tv_nsec).c_str()));
-    }
-    else if(a_path == "/gen/taskInvPhs") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(taskInvPhs()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setTaskInvPhs(s2i(opt->text()));
-    }
-    else if(a_path == "/gen/in_charset" && ctrChkNode(opt))	opt->setText(Mess->charset());
     else if(a_path == "/gen/config") {
 	if(ctrChkNode(opt))	opt->setText(mConfFile);
 	if(ctrChkNode(opt,"scan",RWRWR_,"root","root",SEC_WR))	cfgFileScan(false, true);
@@ -3345,29 +3339,62 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	setDocDir(opt->text().c_str());
     }
     else if(a_path == "/gen/docDirList" && ctrChkNode(opt))	ctrListFS(opt, TSYS::strParse(docDir(),0,";"));
-    else if(a_path == "/gen/lang") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->lang());
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLang(opt->text());
-    }
-    else if(a_path == "/gen/mess/lev") {
+
+    else if(a_path == "/gen/mess") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(Mess->messLevel()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setMessLevel(s2i(opt->text()));
     }
-    else if(a_path == "/gen/mess/log_sysl") {
+    else if(a_path == "/gen/mess_sysl") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText((Mess->logDirect()&0x01)?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect(s2i(opt->text())?Mess->logDirect()|0x01:Mess->logDirect()&(~0x01));
     }
-    else if(a_path == "/gen/mess/log_stdo") {
+    else if(a_path == "/gen/mess_stdo") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText((Mess->logDirect()&0x02)?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect(s2i(opt->text())?Mess->logDirect()|0x02:Mess->logDirect()&(~0x02));
     }
-    else if(a_path == "/gen/mess/log_stde") {
+    else if(a_path == "/gen/mess_stde") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText((Mess->logDirect()&0x04)?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect(s2i(opt->text())?Mess->logDirect()|0x04:Mess->logDirect()&(~0x04));
     }
-    else if(a_path == "/gen/mess/log_arch") {
+    else if(a_path == "/gen/mess_arch") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText((Mess->logDirect()&0x08)?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect(s2i(opt->text())?Mess->logDirect()|0x08:Mess->logDirect()&(~0x08));
+    }
+    else if(a_path == "/gen/env/prog" && ctrChkNode(opt))	opt->setText(PACKAGE_STRING);
+    else if(a_path == "/gen/env/sys" && ctrChkNode(opt)) { utsname ubuf; uname(&ubuf); opt->setText(string(ubuf.sysname)+"-"+ubuf.release); }
+    else if(a_path == "/gen/env/time" && ctrChkNode(opt))	opt->setText(atm2s(sysTm(),"%Y-%m-%dT%H:%M:%S %z"));
+    else if(a_path == "/gen/env/clk" && ctrChkNode(opt)) {
+	struct timespec tmval;
+	clock_getres(SYS->clockRT()?CLOCK_REALTIME:CLOCK_MONOTONIC, &tmval);
+	opt->setText(TSYS::strMess(SYS->clockRT()?_("Real-time %s"):_("Monotonic %s"),tm2s(1e-9*tmval.tv_nsec).c_str()));
+    }
+    else if(a_path == "/gen/env/user" && ctrChkNode(opt))	opt->setText(mUser);
+    else if(a_path == "/gen/env/in_charset" && ctrChkNode(opt))	opt->setText(Mess->charset());
+    else if(a_path == "/gen/env/lang") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->lang());
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLang(opt->text());
+    }
+    else if(a_path == "/gen/env/host" && ctrChkNode(opt))	opt->setText(host());
+    else if(a_path == "/gen/env/CPU" && ctrChkNode(opt))	opt->setText(strMess(_("%dx%0.3gGHz"),nCPU(),(float)sysClk()/1e9));
+    else if(a_path == "/gen/env/mainCPUs") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD)) {
+	    string vl = mainCPUs();
+#if !defined(__ANDROID__) && __GLIBC_PREREQ(2,4)
+	    cpu_set_t cpuset;
+	    CPU_ZERO(&cpuset);
+	    pthread_getaffinity_np(mainPthr, sizeof(cpu_set_t), &cpuset);
+	    vl += "(";
+	    for(int iCPU = 0; iCPU < nCPU(); iCPU++)
+		if(CPU_ISSET(iCPU,&cpuset)) vl += string(vl[vl.size()-1]=='('?"":":")+i2s(iCPU);
+	    vl += ")";
+#endif
+	    opt->setText(vl);
+	}
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setMainCPUs(TSYS::strParse(opt->text(),0,"("));
+    }
+    else if(a_path == "/gen/env/taskInvPhs") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(taskInvPhs()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setTaskInvPhs(s2i(opt->text()));
     }
     else if((a_path == "/br/sub_" || a_path == "/subs/br") && ctrChkNode(opt,"get",R_R_R_,"root","root",SEC_RD)) {
 	vector<string> lst;
@@ -3420,6 +3447,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		mSt[opt->text()] = SStat();
 		modif();
 	    }
+	    sysModifFlgs |= MDF_RD;
 	}
     }
     else if(a_path == "/redund/lsSt" && ctrChkNode(opt)) {

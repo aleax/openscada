@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: qtcfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2022 by Roman Savochenko, <roman@oscada.org>      *
+ *   Copyright (C) 2004-2023 by Roman Savochenko, <roman@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,6 +21,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <errno.h>
 #include <algorithm>
 
 #include <QToolTip>
@@ -244,7 +245,7 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     // Start of "Auto update"
     if(!ico_t.load(TUIS::icoGet("start",NULL,true).c_str())) ico_t.load(":/images/start.png");
     actStartUpd = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actStartUpd->setShortcut(Qt::CTRL+Qt::Key_B);
+    actStartUpd->setShortcut(Qt::CTRL+Qt::Key_R);
     connect(actStartUpd, SIGNAL(triggered()), this, SLOT(pageCyclRefrStart()));
     // Stop of "Auto update"
     if(!ico_t.load(TUIS::icoGet("stop",NULL,true).c_str())) ico_t.load(":/images/stop.png");
@@ -252,6 +253,19 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     actStopUpd->setShortcut(Qt::CTRL+Qt::Key_E);
     actStopUpd->setEnabled(false);
     connect(actStopUpd, SIGNAL(triggered()), this, SLOT(pageCyclRefrStop()));
+    // Favorite page toggling
+    if(!favToggleAdd.load(TUIS::icoGet("favorites_add",NULL,true).c_str())) favToggleAdd.load(":/images/favorites_add.png");
+    if(!favToggleDel.load(TUIS::icoGet("favorites_del",NULL,true).c_str())) favToggleDel.load(":/images/favorites_del.png");
+    actFavToggle = new QAction(QPixmap::fromImage(favToggleAdd), "", this);
+    actFavToggle->setShortcut(Qt::CTRL+Qt::Key_B);
+    actFavToggle->setEnabled(false);
+    connect(actFavToggle, SIGNAL(triggered()), this, SLOT(favToggle()));
+    // Favorite page
+    if(!ico_t.load(TUIS::icoGet("favorites",NULL,true).c_str())) ico_t.load(":/images/favorites.png");
+    actFav = new QAction(QPixmap::fromImage(ico_t), "", this);
+    actFav->setEnabled(false);
+    actFav->setMenu(new QMenu(this));
+    connect(actFav, SIGNAL(triggered()), this, SLOT(favGo()));
     // About "System info"
     if(!ico_t.load(TUIS::icoGet("help",NULL,true).c_str())) ico_t.load(":/images/help.png");
     actAbout = new QAction(QPixmap::fromImage(ico_t), "", this);
@@ -305,6 +319,9 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     menuView->addAction(actUpdate);
     menuView->addAction(actStartUpd);
     menuView->addAction(actStopUpd);
+    menuView->addSeparator();
+    menuView->addAction(actFav);
+    menuView->addAction(actFavToggle);
 
     menuBar()->addMenu((menuHelp=new QMenu(this)));
     menuHelp->addAction(actAbout);
@@ -325,10 +342,6 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     toolBar->addAction(actDBLoad);
     toolBar->addAction(actDBSave);
     toolBar->addSeparator();
-    toolBar->addAction(actUp);
-    toolBar->addAction(actPrev);
-    toolBar->addAction(actNext);
-    toolBar->addSeparator();
     toolBar->addAction(actItAdd);
     toolBar->addAction(actItDel);
     toolBar->addSeparator();
@@ -336,9 +349,16 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     toolBar->addAction(actItCut);
     toolBar->addAction(actItPaste);
     toolBar->addSeparator();
+    toolBar->addAction(actUp);
+    toolBar->addAction(actPrev);
+    toolBar->addAction(actNext);
+    toolBar->addSeparator();
     toolBar->addAction(actUpdate);
     toolBar->addAction(actStartUpd);
     toolBar->addAction(actStopUpd);
+    toolBar->addSeparator();
+    toolBar->addAction(actFav);
+    toolBar->addAction(actFavToggle);
     toolBar->addSeparator();
     toolBar->addAction(actManualPage);
     // QTStarter
@@ -398,6 +418,8 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     initHosts();
     try{ pageDisplay("/"+SYS->id()+mod->startPath()); }
     catch(TError &err) { pageDisplay("/"+SYS->id()); }
+
+    favUpd(Fav_Reload|Fav_List);
 
     winCntr++;
 }
@@ -525,6 +547,16 @@ void ConfApp::messUpd( )
     actStopUpd->setToolTip(_("Stop the cycled refreshing"));
     actStopUpd->setWhatsThis(_("The button for stopping the cycled refreshing of the page content"));
     actStopUpd->setStatusTip(_("Press for stopping the cycled refreshing of the page content."));
+    // Favorite page toggling
+    actFavToggle->setText(TSYS::strMess(_("Append to favorite for '%s'"),"?").c_str());
+    actFavToggle->setToolTip(actFavToggle->text());
+    actFavToggle->setWhatsThis(_("The button to toggle the current page as favorite"));
+    actFavToggle->setStatusTip(_("Press to toggle the current page as favorite."));
+    // Favorite page
+    actFav->setText(_("Favorite"));
+    actFav->setToolTip(_("Go to favorite"));
+    actFav->setWhatsThis(_("The button-menu to go the favorite page"));
+    actFav->setStatusTip(_("Press to go the favorite page."));
     // About "System info"
     actAbout->setText(_("&About"));
     actAbout->setToolTip(_("Program and OpenSCADA information"));
@@ -669,15 +701,15 @@ void ConfApp::treeSearch( )
 
 void ConfApp::pageUp( )
 {
-    size_t i_l = string::npos;
+    size_t iL = string::npos;
     while(true) {
-	i_l = selPath.rfind("/",i_l);
-	if(i_l == string::npos || i_l == 0) return;
-	if((selPath.size()-i_l) > 1) break;
-	i_l--;
+	iL = selPath.rfind("/", iL);
+	if(iL == string::npos || iL == 0) return;
+	if((selPath.size()-iL) > 1) break;
+	iL--;
     }
 
-    selectPage(selPath.substr(0,i_l));
+    selectPage(selPath.substr(0,iL));
 }
 
 void ConfApp::pagePrev( )
@@ -942,7 +974,7 @@ void ConfApp::itPaste( )
 		    throw TError(s2i(req.attr("rez")), req.attr("mcat").c_str(), "%s", req.text().c_str());
 
 		//Load context of the source node to the destination one
-		req.setName("load")->setAttr("path", "/"+statNm+dstNm+"/%2fobj");
+		req.setName("load")->setAttr("path", "/"+statNm+dstNm+"/%2fobj")->attrDel("ctx")->attrDel("rez");
 		if(cntrIfCmd(req))
 		    throw TError(s2i(req.attr("rez")), req.attr("mcat").c_str(), "%s", req.text().c_str());
 	    }
@@ -968,6 +1000,108 @@ void ConfApp::itPaste( )
     treeUpdate();
     if(chSel.size()) selectPage(chSel);
     else pageRefresh();
+}
+
+void ConfApp::favToggle( )
+{
+    string selNmPath = getTreeWItNmPath(selPath);
+
+    int fvPresent = -1;
+    for(unsigned iFv = 0; fvPresent < 0 && iFv < favs.size(); ++iFv)
+	if(TSYS::strParse(favs[iFv],0,":") == selPath) fvPresent = iFv;
+
+    if(fvPresent >= 0) {
+	favs.erase(favs.begin()+fvPresent);
+	actFavToggle->setIcon(QPixmap::fromImage(favToggleAdd));
+	actFavToggle->setText(TSYS::strMess(_("Append to favorite for '%s'"),(selNmPath.size()?selNmPath:selPath).c_str()).c_str());
+    }
+    else {
+	favs.push_back(selPath+(selNmPath.size()?":"+selNmPath:""));
+	while(favs.size() > limCacheIts_N) favs.erase(favs.begin());
+
+	actFavToggle->setIcon(QPixmap::fromImage(favToggleDel));
+	actFavToggle->setText(TSYS::strMess(_("Remove from favorite for '%s'"),(selNmPath.size()?selNmPath:selPath).c_str()).c_str());
+    }
+    actFavToggle->setToolTip(actFavToggle->text());
+
+    string sfavs;
+    for(unsigned iFv = 0; iFv < favs.size(); ++iFv)
+	sfavs += (sfavs.size()?"\n":"") + favs[iFv];
+
+    TBDS::genPrmSet(mod->nodePath()+"favorites", sfavs, user());
+
+    favUpd(Fav_List);
+}
+
+void ConfApp::favUpd( unsigned opts )
+{
+    if(opts&Fav_Reload) {
+	favs.clear();
+	string sfavs = TBDS::genPrmGet(mod->nodePath()+"favorites", "", user()), fav;
+	for(int off = 0; (fav=TSYS::strLine(sfavs,0,&off)).size() || off < sfavs.size(); )
+	    favs.push_back(fav);
+    }
+
+    if(opts&Fav_List) {
+	actFav->setMenu(new QMenu(this));
+
+	QAction *actFavLnk;
+	for(int iFv = (int)favs.size()-1; iFv >= 0; --iFv) {
+	    int off = 0;
+	    string spath = TSYS::strParse(favs[iFv], 0, ":", &off);
+	    actFavLnk = new QAction(((off<favs[iFv].size())?favs[iFv].substr(off):spath).c_str(), this);
+	    actFavLnk->setObjectName(spath.c_str());
+	    actFav->menu()->addAction(actFavLnk);
+	    connect(actFavLnk, SIGNAL(triggered()), this, SLOT(favGo()));
+	}
+	if(favs.size()) {
+	    actFav->menu()->addSeparator();
+	    actFavLnk = new QAction(_("Clear the list"), this);
+	    actFav->menu()->addAction(actFavLnk);
+	    connect(actFavLnk, SIGNAL(triggered()), this, SLOT(favGo()));
+	}
+    }
+
+    if(opts&Fav_Sel) {
+	actFavToggle->setEnabled(selPath.size());
+	string selNmPath = getTreeWItNmPath(selPath);
+	if(selNmPath.size()) {
+	    bool fvPresent = false;
+	    for(unsigned iFv = 0; !fvPresent && iFv < favs.size(); ++iFv)
+		fvPresent = (TSYS::strParse(favs[iFv],0,":") == selPath);
+	    if(!fvPresent) {
+		actFavToggle->setIcon(QPixmap::fromImage(favToggleAdd));
+		actFavToggle->setText(TSYS::strMess(_("Append to favorite for '%s'"),selNmPath.c_str()).c_str());
+	    }
+	    else {
+		actFavToggle->setIcon(QPixmap::fromImage(favToggleDel));
+		actFavToggle->setText(TSYS::strMess(_("Remove from favorite for '%s'"),selNmPath.c_str()).c_str());
+	    }
+	    actFavToggle->setToolTip(actFavToggle->text());
+	}
+    }
+
+    actFav->setEnabled(favs.size());
+}
+
+void ConfApp::favGo( )
+{
+    if(!sender()) return;
+    QAction *sa = (QAction*)sender();
+    if(sa->menu() && sa->menu()->actions().size()) sa = sa->menu()->actions()[0];
+
+    if(sa->objectName().isEmpty()) {
+	TBDS::genPrmSet(mod->nodePath()+"favorites", "", user());
+	favUpd(Fav_Reload|Fav_List|Fav_Sel);
+    }
+    else try {
+	//Prev and next
+	if(selPath.size()) prev.insert(prev.begin(), selPath);
+	if((int)prev.size() >= queSz)	prev.pop_back();
+	next.clear();
+
+	pageDisplay(sa->objectName().toStdString());
+    } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 }
 
 void ConfApp::editToolUpdate( )
@@ -1014,6 +1148,7 @@ void ConfApp::userSel( )
     catch(TError &err) { pageDisplay("/"+SYS->id()); }
 
     treeUpdate();
+    favUpd(Fav_Reload|Fav_List);
 }
 
 void ConfApp::pageRefresh( int tm )
@@ -1147,11 +1282,12 @@ void ConfApp::selectItem( )
     if(sel_ls.size() == 1 && selPath != sel_ls.at(0)->text(2).toStdString()) {
 	selectPage(sel_ls.at(0)->text(2).toStdString(), CH_REFR_TM);
 
-	if((sel_ls=CtrTree->selectedItems()).size()) {	//Updating but it can be changed after "selectPage"
+	//!!!! Due to that performed in pageDisplay() already
+	/*if((sel_ls=CtrTree->selectedItems()).size()) {	//Updating but it can be changed after "selectPage"
 	    int saveVl = CtrTree->horizontalScrollBar() ? CtrTree->horizontalScrollBar()->value() : 0;
 	    CtrTree->scrollToItem(sel_ls.at(0), QAbstractItemView::EnsureVisible);
 	    if(CtrTree->horizontalScrollBar()) CtrTree->horizontalScrollBar()->setValue(saveVl);
-	}
+	}*/
     }
 }
 
@@ -1998,7 +2134,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 
 		    QSizePolicy sp(QSizePolicy::Preferred, QSizePolicy::Preferred);
 		    sp.setControlType(QSizePolicy::Label);
-#if QT_VERSION >= 0x040700
+#if QT_VERSION >= 0x040800
 		    sp.setWidthForHeight(true);
 #endif
 		    sp.setHorizontalStretch(1);	//!!!! At setting there 0 we enable work at size hint which is very wrapping big texts,
@@ -2149,23 +2285,35 @@ void ConfApp::pageDisplay( const string path )
     pgDisplay = true;
 
     try {
-    //Chek Up
+    //Checking for Up
     actUp->setEnabled(path.rfind("/") != string::npos && path.rfind("/") != 0);
 
-    //Check Prev and Next
+    //Checking for Prev and Next
     actPrev->setEnabled(prev.size());
-    actNext->setEnabled(next.size());
+    while(prev.size() > NAV_BACK_DEPTH) prev.pop_back();
+    string tVl;
+    for(vector<string>::iterator iv = prev.begin(); iv != prev.end(); ++iv)
+	tVl += (tVl.size()?"\n":"") + *iv;
+    actPrev->setToolTip(tVl.c_str());
 
+    actNext->setEnabled(next.size());
+    while(next.size() > NAV_BACK_DEPTH) next.pop_back();
+    tVl = "";
+    for(vector<string>::iterator iv = next.begin(); iv != next.end(); ++iv)
+	tVl += (tVl.size()?"\n":"") + *iv;
+    actNext->setToolTip(tVl.c_str());
+
+    //Updating the current page
     if(path != pgInfo.attr("path")) {
 	if(path == selPath) selPath = pgInfo.attr("path");	//!!!! To ensure of proper working of the checking for not applied editable widgets
 
 	// Trace the control tree
-	QTreeWidgetItem *tIt;
+	QTreeWidgetItem *tIt = NULL;
 	if((!CtrTree->currentItem() || CtrTree->currentItem()->text(2).toStdString() != path) && (tIt=getExpandTreeWIt(path))) {
 	    CtrTree->blockSignals(true);
 	    CtrTree->setCurrentItem(tIt);
 	    CtrTree->blockSignals(false);
-	    CtrTree->scrollToItem(tIt);
+	    CtrTree->scrollToItem(tIt, QAbstractItemView::EnsureVisible);
 	}
 
 	// Stop the refreshing
@@ -2257,8 +2405,11 @@ loadGenReqDate:
     req.setAttr("path","/"+SYS->id()+"/%2fobj");
     if(!cntrIfCmd(req) && s2i(req.text()))	mStModify->setText("*");
 
-    //Edit tools update
+    //Edit tools updating
     editToolUpdate();
+
+    //Checking for Favorite Pages
+    favUpd(Fav_Sel);
 
     pgDisplay = false;
     if(winClose) close();
@@ -2368,6 +2519,10 @@ void ConfApp::ctrTreePopup( )
 		popup.addAction(actItCopy);
 		popup.addAction(actItPaste);
 		popup.addSeparator();
+		//Favorite
+		popup.addAction(actFav);
+		popup.addAction(actFavToggle);
+		popup.addSeparator();
 	    }
 	}
 	//Main action add
@@ -2464,7 +2619,7 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	    it->setText(1, grpDscr.c_str());
 	    it->setText(2, (path+"/"+br_path).c_str());
 	    // Set icon
-	    XMLNode *chIco = chEl->childGet("ico",0,true);
+	    XMLNode *chIco = chEl->childGet("ico", 0, true);
 	    if(chIco) {
 		string simg = TSYS::strDecode(chIco->text(),TSYS::base64);
 		QImage img;
@@ -2515,7 +2670,9 @@ QTreeWidgetItem *ConfApp::getExpandTreeWIt( const string &path )
 	if(curIt && !curIt->isExpanded()) curIt->setExpanded(true);
 	for(int iIt = 0; iIt < (curIt?curIt->childCount():CtrTree->topLevelItemCount()); iIt++) {
 	    QTreeWidgetItem *tit = curIt ? curIt->child(iIt) : CtrTree->topLevelItem(iIt);
-	    if(tit->text(2)[0] == '*' && ((isGrpOK=sit.find(tit->text(2).toStdString().substr(1)) == 0) || (iIt+1) >= curIt->childCount())) {
+	    if(tit->text(2)[0] == '*' &&
+		    ((isGrpOK=sit.find(tit->text(2).toStdString().substr(1)) == 0) || (iIt+1) >= curIt->childCount()))
+	    {
 		curIt = isGrpOK ? tit : curIt->child(0); iIt = -1;
 		if(!curIt->isExpanded()) curIt->setExpanded(true);
 	    }
@@ -2533,6 +2690,18 @@ QTreeWidgetItem *ConfApp::getExpandTreeWIt( const string &path )
     if(curIt && !curIt->isSelected()) curIt->setSelected(true);
 
     return curIt;
+}
+
+string ConfApp::getTreeWItNmPath( const string &path )
+{
+    string selNmPath;
+    QTreeWidgetItem *treeIt = getExpandTreeWIt(path);
+    while(treeIt) {
+	selNmPath = treeIt->text(0).toStdString() + (selNmPath.size()?" > "+selNmPath:"");
+	treeIt = treeIt->parent();
+    }
+
+    return selNmPath;
 }
 
 int ConfApp::cntrIfCmd( XMLNode &node )
@@ -2812,7 +2981,10 @@ void ConfApp::buttonClicked( )
 	    XMLNode req("set"); req.setAttr("path", selPath+"/"+button->objectName().toStdString());
 	    //Copy parameters
 	    for(unsigned iCh = 0; iCh < n_el->childSize(); iCh++)
-		*(req.childAdd()) = *(n_el->childGet(iCh));
+		//*(req.childAdd()) = *(n_el->childGet(iCh));
+		req.childAdd(n_el->childGet(iCh)->name())->
+					setAttr("id",n_el->childGet(iCh)->attr("id"))->
+					setText(n_el->childGet(iCh)->text());
 
 	    mess_info(mod->nodePath().c_str(), _("%s| Pressed down '%s'!"),
 		user().c_str(), (selPath+"/"+button->objectName().toStdString()).c_str());
@@ -2896,26 +3068,26 @@ void ConfApp::listBoxPopup( )
     try {
 	n_el = SYS->ctrId(root, TSYS::strDecode(lbox->objectName().toStdString(),TSYS::PathEl));
 	if(n_el->attr("tp") == "br" && item != NULL) {
-	    actBr = last_it = new QAction(_("Go"),this);
+	    actBr = last_it = new QAction(_("Go"), this);
 	    popup.addAction(actBr);
 	    popup.addSeparator();
 	}
 	if((s2i(n_el->attr("acs"))&SEC_WR) && n_el->attr("s_com").size()) {
 	    if(n_el->attr("s_com").find("add") != string::npos) {
-	        actAdd = last_it = new QAction(_("Add"),this);
+	        actAdd = last_it = new QAction(_("Add"), this);
 		popup.addAction(actAdd);
 	    }
 	    if(n_el->attr("s_com").find("ins") != string::npos && item != NULL) {
-		actIns = last_it = new QAction(_("Insert"),this);
+		actIns = last_it = new QAction(_("Insert"), this);
 		popup.addAction(actIns);
 	    }
 	    if(n_el->attr("s_com").find("edit") != string::npos && item != NULL) {
-		actEd = last_it = new QAction(_("Edit"),this);
+		actEd = last_it = new QAction(_("Edit"), this);
 		popup.addAction(actEd);
 	    }
 	    if(n_el->attr("s_com").find("del") != string::npos && item != NULL) {
 		popup.addSeparator();
-		actDel = last_it = new QAction(_("Delete"),this);
+		actDel = last_it = new QAction(_("Delete"), this);
 		popup.addAction(actDel);
 	    }
 	    if(n_el->attr("s_com").find("move") != string::npos && item != NULL) {
@@ -3231,18 +3403,22 @@ void ConfApp::imgPopup( const QPoint &pos )
     ImgView *img = (ImgView *)sender();
     string el_path = selPath+"/"+img->objectName().toStdString();
 
-    QAction *last_it, *save_img, *load_img;
-    last_it=save_img=load_img=NULL;
+    QAction *last_it, *save_img, *load_img, *clear_img;
+    last_it = save_img = load_img = clear_img = NULL;
 
     try {
 	XMLNode *n_el = SYS->ctrId(root, TSYS::strDecode(img->objectName().toStdString(),TSYS::PathEl));
 	if(!img->image().isNull()) {
-	    save_img = last_it = new QAction(_("Saving an image"),this);
+	    save_img = last_it = new QAction(_("Save image"),this);
 	    popup.addAction(save_img);
 	}
 	if(s2i(n_el->attr("acs"))&SEC_WR) {
-	    load_img = last_it = new QAction(_("Loading an image"),this);
+	    load_img = last_it = new QAction(_("Load image"),this);
 	    popup.addAction(load_img);
+	    if(!img->image().isNull()) {
+		clear_img = last_it = new QAction(_("Clear image"),this);
+		popup.addAction(clear_img);
+	    }
 	}
 
 	if(last_it) {
@@ -3265,7 +3441,8 @@ void ConfApp::imgPopup( const QPoint &pos )
 		int hd = open(fileName.toStdString().c_str(), O_RDONLY);
 		if(hd < 0) throw TError(mod->nodePath().c_str(), _("Error opening the file '%s'\n"), fileName.toStdString().c_str());
 		while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf, len);
-		::close(hd);
+		if(::close(hd) != 0)
+		    mess_warning(mod->nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 
 		//Set image to widget
 		if(!img->setImage(rez))
@@ -3277,6 +3454,13 @@ void ConfApp::imgPopup( const QPoint &pos )
 		mess_info(mod->nodePath().c_str(), _("%s| '%s' uploaded by the picture '%s'."),
 		    user().c_str(), el_path.c_str(), fileName.toStdString().c_str());
 		if(cntrIfCmd(n_el1)) { mod->postMess(n_el1.attr("mcat"),n_el1.text(),TUIMod::Error,this); return; }
+	    }
+	    else if(rez == clear_img) {
+		XMLNode n_el1("set");
+		n_el1.setAttr("path", el_path)->setText("");
+		mess_info(mod->nodePath().c_str(), _("%s| '%s' cleared."), user().c_str(), el_path.c_str());
+		if(cntrIfCmd(n_el1)) { mod->postMess(n_el1.attr("mcat"),n_el1.text(),TUIMod::Error,this); return; }
+		img->setImage("");
 	    }
 	}
     } catch(TError &err) {

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvalue.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -159,7 +159,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		attr = vlAt(vLs[iEl]);
 		opt->childAdd("el")->
 		    setAttr("id", vLs[iEl])->
-		    setAttr("nm", attr.at().fld().descr())->
+		    setAttr("nm", trD(attr.at().fld().descr()))->
 		    setAttr("flg", i2s(attr.at().fld().flg()))->
 		    setAttr("tp", i2s(attr.at().fld().type()))->
 		    setAttr("vals", attr.at().fld().values())->
@@ -185,7 +185,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		    if(!hostTm) aNd->setAttr("tm", ll2s(vtm));
 		}
 		if(!vl.at().isCfg() && (vl.at().fld().flg()&TVal::Dynamic) && vl.at().fld().len() >= prcTm)
-		    opt->childAdd("del")->setAttr("id", vLs[iEl])->setAttr("name", vl.at().fld().descr())->
+		    opt->childAdd("del")->setAttr("id", vLs[iEl])->setAttr("name", trD(vl.at().fld().descr()))->
 				setAttr("type", i2s(vl.at().fld().type()))->setAttr("flg", i2s(vl.at().fld().flg()))->
 				setAttr("values", vl.at().fld().values())->setAttr("selNames", vl.at().fld().selNames());
 	    }
@@ -263,8 +263,8 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    vlList(vLs);
 	    for(unsigned iEl = 0; iEl < vLs.size(); iEl++) {
 		AutoHD<TVal> vl = vlAt(vLs[iEl]);
-		XMLNode *n_e = vl.at().fld().cntrCmdMake(opt, "/val", -1, "root", SDAQ_ID, RWRWR_);
-		if(n_e) {
+		XMLNode *nE = vl.at().fld().cntrCmdMake(opt, "/val", -1, "root", SDAQ_ID, RWRWR_);
+		if(nE) {
 		    string sType = _("Unknown");
 		    switch(vl.at().fld().type()) {
 			case TFld::String:
@@ -278,18 +278,18 @@ void TValue::cntrCmdProc( XMLNode *opt )
 			default: break;
 		    }
 		    if(vl.at().fld().flg()&TFld::Selectable) sType += _("-select");
-		    n_e->setAttr("help",
+		    nE->setAttr("help", (nE->attr("help").size()?nE->attr("help")+"\n\n":"")+
 			TSYS::strMess(_("Parameter attribute\n"
 			    "  ID: '%s'\n"
 			    "  Name: '%s'\n"
 			    "  Type: '%s'\n"
 			    "  Read only: %d"),
-			    vl.at().fld().name().c_str(),trD(vl.at().fld().descr()).c_str(),
+			    vl.at().fld().name().c_str(),TSYS::strLine(trD(vl.at().fld().descr()),0).c_str(),
 			    sType.c_str(),(vl.at().fld().flg()&TFld::NoWrite)?1:0));
 		    if(vl.at().fld().values().size())
-			n_e->setAttr("help",n_e->attr("help")+_("\n  Values: ")+vl.at().fld().values());
+			nE->setAttr("help",nE->attr("help")+_("\n  Values: ")+vl.at().fld().values());
 		    if(vl.at().fld().selNames().size())
-			n_e->setAttr("help",n_e->attr("help")+_("\n  Names for selection: ")+vl.at().fld().selNames());
+			nE->setAttr("help",nE->attr("help")+_("\n  Names for selection: ")+vl.at().fld().selNames());
 		}
 	    }
 	}
@@ -311,7 +311,8 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	}
 	return;
     }
-    // Process command to page
+
+    // Commands processing to the page
     if(a_path.find("/val") == 0) {
 	if(a_path.find("/val/sel_") == 0 && ctrChkNode(opt)) {
 	    AutoHD<TVal> vl = vlAt(TSYS::pathLev(a_path,1).substr(4));
@@ -507,7 +508,7 @@ string TVal::setArch( const string &nm )
     //Create new archive
     rez_nm = SYS->archive().at().valAdd(rez_nm);
     SYS->archive().at().valAt(rez_nm).at().setValType(fld().type());
-    SYS->archive().at().valAt(rez_nm).at().setSrcMode(TVArchive::PassiveAttr,DAQPath());
+    SYS->archive().at().valAt(rez_nm).at().setSrcMode(TVArchive::DAQAttr,DAQPath());
     SYS->archive().at().valAt(rez_nm).at().setToStart(true);
     SYS->archive().at().valAt(rez_nm).at().start();
     owner().vlArchMake(*this);
@@ -721,7 +722,7 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 	    if(!mTime) mTime = TSYS::curTime();
 	    if(fld().flg()&TVal::DirWrite && !sys)	owner().vlSet(*this, value, pvl);
 	    //Set to archive
-	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
+	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::DAQAttr)
 		try{ mArch.at().setS(value,time()); }
 		catch(TError &err) {
 		    if(err.cod == TError::Arch_Val_OldBufVl) mArch.at().clear();
@@ -753,7 +754,7 @@ void TVal::setI( int64_t value, int64_t tm, bool sys )
 	    if(!mTime) mTime = TSYS::curTime();
 	    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, value, pvl);
 	    //Set to archive
-	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
+	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::DAQAttr)
 		try{ mArch.at().setI(value,time()); }
 		catch(TError &err) {
 		    if(err.cod == TError::Arch_Val_OldBufVl) mArch.at().clear();
@@ -786,7 +787,7 @@ void TVal::setR( double value, int64_t tm, bool sys )
 	    if(!mTime) mTime = TSYS::curTime();
 	    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, value, pvl);
 	    //Set to archive
-	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
+	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::DAQAttr)
 		try{ mArch.at().setR(value, time()); }
 		catch(TError &err) {
 		    if(err.cod == TError::Arch_Val_OldBufVl) mArch.at().clear();
@@ -816,7 +817,7 @@ void TVal::setB( char value, int64_t tm, bool sys )
 	    if(!mTime) mTime = TSYS::curTime();
 	    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, value, pvl);
 	    //Set to archive
-	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
+	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::DAQAttr)
 		try{ mArch.at().setB(value,time()); }
 		catch(TError &err) {
 		    if(err.cod == TError::Arch_Val_OldBufVl) mArch.at().clear();

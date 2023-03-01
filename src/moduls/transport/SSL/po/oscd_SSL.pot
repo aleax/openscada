@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-31 16:53+0300\n"
+"POT-Creation-Date: 2022-07-15 20:55+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,6 +46,10 @@ msgstr ""
 msgid ""
 "Attempts of the requesting both for this transport and protocol, for full requests.\n"
 "Can be prioritatile specified into the address field as the third global argument, as such \"localhost:123||5:1||3\"."
+msgstr ""
+
+#, c-format
+msgid "Closing the file %d error '%s (%d)'!"
 msgstr ""
 
 msgid "Error connecting: "
@@ -245,6 +249,10 @@ msgstr ""
 
 #, c-format
 msgid "SSL_CTX_use_PrivateKey_file: %s"
+msgstr ""
+
+#, c-format
+msgid "Closing the socket %d error '%s (%d)'!"
 msgstr ""
 
 #, c-format

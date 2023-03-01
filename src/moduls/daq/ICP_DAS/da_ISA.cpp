@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ICP_DAS file: da_ISA.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2014 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2012-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +22,7 @@
 #include <sys/ioctl.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <errno.h>
 
 #include "ixisa.h"
 
@@ -65,15 +66,19 @@ da_ISA::~da_ISA( )
 
 }
 
-string da_ISA::modType( const string &modTp )
+string da_ISA::modType( TMdPrm *prm, const string &modTp )
 {
     FILE *fd_proc = fopen(IXISA_PROC_FILE, "r");
     if(fd_proc) {
 	char rbuf[200], isadev[31], isaname[31];
 	while(fgets(rbuf,sizeof(rbuf),fd_proc))
-	    if(sscanf(rbuf,"dev: %30s %*x %*x %30s",isadev,isaname) == 2 && modTp == isadev)
-	    { fclose(fd_proc); return isaname; }
-	fclose(fd_proc);
+	    if(sscanf(rbuf,"dev: %30s %*x %*x %30s",isadev,isaname) == 2 && modTp == isadev) {
+		if(fclose(fd_proc) != 0)
+		    mess_warning(prm->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), fd_proc, strerror(errno), errno);
+		return isaname;
+	    }
+	if(fclose(fd_proc) != 0)
+	    mess_warning(prm->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), fd_proc, strerror(errno), errno);
     }
 
     return "";
@@ -89,7 +94,8 @@ void da_ISA::tpList( TMdPrm *prm, vector<string> &tpl, vector<string> *ntpl )
 	while(fgets(rbuf,sizeof(rbuf),fd_proc))
 	    if(sscanf(rbuf,"dev: %30s %*x %*x %30s",isadev,isaname) == 2)
 	    { tpl.push_back(isadev); if(ntpl) ntpl->push_back(TSYS::strMess("%s (%s)",isaname,isadev)); }
-	fclose(fd_proc);
+	if(fclose(fd_proc) != 0)
+	    mess_warning(prm->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), fd_proc, strerror(errno), errno);
     }
 }
 
@@ -100,7 +106,7 @@ void da_ISA::enable( TMdPrm *p, vector<string> &als )
     if(!p->extPrms) p->extPrms = new tval();
     tval *ePrm = (tval*)p->extPrms;
 
-    ePrm->dev = devs[modType(p->modTp.getS())];
+    ePrm->dev = devs[modType(p,p->modTp.getS())];
     ePrm->devFd = open(("/dev/"+p->modTp.getS()).c_str(), O_RDWR);
     if(ePrm->devFd < 0)	return;
 
@@ -136,7 +142,7 @@ void da_ISA::enable( TMdPrm *p, vector<string> &als )
 	    // Set board configuration
 	    ixisa_reg_t reg;
 	    reg.value = (directDIO&(1<<i_ch)) ? 0x80 : 0x9b;
-	    if((directDIO&(1<<i_ch)) && modType(p->modTp.getS()) == "DIO-24") reg.value = 0x89;
+	    if((directDIO&(1<<i_ch)) && modType(p,p->modTp.getS()) == "DIO-24") reg.value = 0x89;
 
 	    if(ePrm->dev.DIO == 1) reg.id = IXISA_CR;
 	    else switch(i_ch) {
@@ -190,7 +196,8 @@ void da_ISA::disable( TMdPrm *p )
 {
     if(p->extPrms) {
 	tval *ePrm = (tval*)p->extPrms;
-	if(ePrm->devFd >= 0) close(ePrm->devFd);
+	if(ePrm->devFd >= 0 && close(ePrm->devFd) != 0)
+	    mess_warning(p->nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), ePrm->devFd, strerror(errno), errno);
 	delete (tval *)p->extPrms;
 	p->extPrms = NULL;
     }
@@ -307,7 +314,7 @@ void da_ISA::getVal( TMdPrm *p )
 		}
 		break;
 	    case 2:		//2-IXISA_DIO_A(N)
-		if(modType(p->modTp.getS()) == "ISO-730")
+		if(modType(p,p->modTp.getS()) == "ISO-730")
 		    switch(i_ch) {
 			case 0: data.id = IXISA_IDIO_A;	break;
 			case 1: data.id = IXISA_IDIO_B;	break;
@@ -432,7 +439,7 @@ void da_ISA::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &pvl
 		}
 		break;
 		case 2:		//2-IXISA_DIO_A(N)
-		if(modType(p->modTp.getS()) == "ISO-730")
+		if(modType(p,p->modTp.getS()) == "ISO-730")
 		    switch(i_ch) {
 			case 0: data.id = IXISA_IDIO_A;	break;
 			case 1: data.id = IXISA_IDIO_B;	break;
@@ -459,7 +466,7 @@ void da_ISA::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &pvl
 
 bool da_ISA::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 {
-    DevFeature dev = devs[modType(p->modTp.getS())];
+    DevFeature dev = devs[modType(p,p->modTp.getS())];
 
     if(opt->name() == "info") {
 	if((dev.AI || dev.DIO || dev.DI || dev.DO) && p->ctrMkNode("area",opt,-1,"/cfg",_("Configuration"))) {

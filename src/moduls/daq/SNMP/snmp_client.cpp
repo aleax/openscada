@@ -47,7 +47,7 @@
 #define MOD_NAME	trS("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.9.12"
+#define MOD_VER		"0.9.13"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides an implementation of the client of SNMP-service.")
 #define LICENSE		"GPL2"
@@ -784,7 +784,7 @@ void TMdPrm::vlArchMake(TVal &val)
     TParamContr::vlArchMake(val);
 
     if(val.arch().freeStat()) return;
-    val.arch().at().setSrcMode(TVArchive::PassiveAttr);
+    val.arch().at().setSrcMode(TVArchive::DAQAttr);
     val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
     val.arch().at().setHardGrid(true);
     val.arch().at().setHighResTm(true);
