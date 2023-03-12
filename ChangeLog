@@ -1,3 +1,10 @@
+2023-03-12 Roman 0.9.6
+- data/Android/patches/openscada_oscada.xml.patch: Patch of the simulator icons appended the image AGLKS.png.
+- LibsDB.OscadaLibs: flb_servProc.docOffLine: Adapted to the service request changing "get:/%2fgen%2fprog" to "get:/%2fgen%2fenv%2fprog".
+- LibsDB.vcaBase: The message "Copy" translation was some changed.
+    wlb_Main.{anShow,anShow1,TextLab,ImgLab},wlb_mnEls.El_Alarm: The attribute "ntf","spName" set to be the translated string.
+
+
 2023-03-01 Roman 0.9.6
 - New and significantly updated parts:
     - OpenSCADA Core: 3:12:0 => 3:13:0

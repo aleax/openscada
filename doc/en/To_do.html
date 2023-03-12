@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="index.html"><img src="../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Works/To do</h1>
@@ -94,11 +94,24 @@
 <dd> - implementing the service commands-functions for DAQ.BlockCalc and DAQ.JavaLikeCalc</dd>
 <dd> - implementing the service commands-functions for MTP</dd>
 <dd> - creating libraries for some languages of IEC 61131-3</dd></dl>
+<ul><li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/PinePhone" title="Special:MyLanguage/Using/PinePhone">Open Phone — PinePhone</a></li></ul>
+<dl><dd>- connect as PC through Docking Bar</dd>
+<dd>- install Mobian: <a class="external free" href="https://wiki.pine64.org/index.php/PinePhone_Installation_Instructions" rel="nofollow noreferrer noopener" target="_blank">https://wiki.pine64.org/index.php/PinePhone_Installation_Instructions</a></dd>
+<dd>- build and/or install ready OpenSCADA packages for Mobian</dd>
+<dd>- learn the hardware specific and measure that productivity in OpenSCADA</dd>
+<dd>- connect the device sensors to OpenSCADA</dd>
+<dd>- build and install OpenSCADA on Majero</dd>
+<dd>- adapt for the custom usage: decreasing the power consumption from minimum 1W, enabling and testing the deep sleep</dd>
+<dd>- connect GPS and maps to OpenSCADA</dd>
+<dd>- append audio and video writing in OpenSCADA</dd>
+<dd>- adapt for the scanning-photo functions under OpenSCADA control with reading the barcodes</dd></dl>
+<ul><li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Orange_Pi" title="Special:MyLanguage/Using/Orange Pi">Single-board computers Orange Pi</a></li></ul>
+<dl><dd>- observe for decreasing the power consumption in relation with <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/PinePhone" title="Special:MyLanguage/Using/PinePhone">Pine Phone</a>.</dd></dl>
 </td></tr>
 <tr>
 <td>
 <h3><span class="mw-headline" id="Testing.2C_optimization_and_fixing"><span class="mw-headline-number">4</span> <span id="TestOptFix" title="#TestOptFix">Testing, optimization and fixing</span></span></h3>
-<ul><li> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> [TESTING] Implement the asynchronous writing with a function of preventing the data loss on the time of the connection missing for the key DAQ-modules of the OpenSCADA internal procedures: <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a>, <a href="Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a>, <a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DCON</a>. The function is currently tested on the module <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> and preventing the data loss must be expanded here for the synchronous writing also.</li>
+<ul><li> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> [TESTING] Implement the asynchronous writing with a function of preventing the data loss on the time of the connection missing for the key DAQ-modules of the OpenSCADA internal procedures: <a href="Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a>, <a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DCON</a>. The function is currently tested on the module <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> and preventing the data loss must be expanded here for the synchronous writing also.</li>
 <li> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> [TESTING] Expanding the <a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">output transport generic obtaining from the unified address</a> often without separate creation the output transport object. The function is currently tested on the module <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>.</li>
 <li> <i>UI.{Vision,WebVision}</i>: Complete revision of the primitive "ElFigure" implementation, what needs:</li></ul>
 <dl><dd>- BUG: selecting multiple figures at hold the key "Ctrl";</dd>
@@ -115,18 +128,11 @@
 <dl><dd> - develop a mechanism for tracking the irrelevance of messages in the table "Trs"
 <dl><dd>&nbsp;?&gt; it is possible to add to the table "Trs" a field of options where to specify time of update-registration and at compilation or execution, accordingly to clear too old and updated-registered at compilation</dd></dl></dd></dl>
 <ul><li> (+) Develop the text highlighting rules building in the comments of the custom text rules.</li>
-<li> Develop the pure demo and the TP-mode on the certificates base in the keys of the subscription on a TP-package: prevent writing and form the notification dialogues.</li>
-<li> Work out for developing, using, integration to solutions, concept of the support of the OpenSCADA project. Expand the community targeting for implementation control of:
+<li> Work out for developing, using, integration to solutions, concept of the OpenSCADA project support. Expand the community by targeting on the implementation control of:
 <ul><li> tasks: tasks pool, fund and fundraising; developers register, ranks for participate into the tasks.</li>
 <li> solutions: register a task of the solution implementation (by consumer), set demands to the task and performer, set the price limit; each performer propose self price; consumer select a performer. Commission from the order price to the project is 10%.</li></ul></li>
-<li> Prepare some solutions as OpenSCADA products:
-<ul><li> Common packages of 0.9 LTS as a product — developing the service updates of the 0.9 LTS in the pure demo mode before applying a key of the TP support;</li>
-<li> Android packages;</li>
-<li> Firmwares and builds for "ICP DAS" LinPac (LP).</li></ul></li>
-<li> Adapt to the software platform Android: </li></ul>
-<dl><dd>- adapt to build in a chroot due to the actual problem of building for old Android 4.5 and 5,6,7,8,9,10 by the Java SDK8 build from <a class="external text" href="https://https://adoptopenjdk.net/" rel="nofollow noreferrer noopener" target="_blank">AdoptOpenJDK</a> which also doesn't support already Java source and target versions 1.5;</dd>
-<dd>- or update the Java-code of Qt from API-version 52;</dd>
-<dd>- append all external windows of the runtime mode of the module Vision for items of their closing and for centring.</dd></dl>
+<li> <a class="external" href="http://oscada.org/wiki/Sub-projects/Adaption_to_Android" title="Sub-projects/Adaption to Android">Adapt to the software platform Android</a>:</li></ul>
+<dl><dd>- append all external windows of the runtime mode of the module Vision for items of their closing and for centring.</dd></dl>
 <ul><li> Adapt to the software platform QNX:</li></ul>
 <dl><dd>+ get for some QNX platform representation =&gt; due to the deep closing, but yet using OpenSource, this OS is not allowed in free and there was bought a used hardware based on BlackBerry, that is "BB PlayBook", that is not actual already due to the main supporting resources are <span style="color: red">DEAD</span>;</dd>
 <dd>- start an adaption subproject and place here <a class="external text" href="http://oscada.org/ua/forum/posts/raznoe/popytka_adaptacii_openscada_k_qnx_65/" rel="nofollow noreferrer noopener" target="_blank">the preadaption achievements</a> from Sergey Doroshka;</dd>
@@ -249,5 +255,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Works/To_do/en">Works/To_do/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> </td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Works/To_do/en">Works/To_do/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
 </html>
