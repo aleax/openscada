@@ -59,7 +59,7 @@
 #define MOD_NAME	trS("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.14.3"
+#define MOD_VER		"5.14.4"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -1074,7 +1074,7 @@ void StApp::startDialog( )
 //*************************************************
 //* StartDialog                                   *
 //*************************************************
-StartDialog::StartDialog( ) : logo(NULL), prjsLs(NULL), prjsBt(NULL), updTmr(NULL), logoImgSz(0)
+StartDialog::StartDialog( ) : logo(NULL), prjsLs(NULL), prjsBt(NULL), updTmr(NULL)
 {
     if(SYS->prjCustMode()) setWindowTitle(_("Qt-starter of OpenSCADA"));
     else if(SYS->prjNm().size()) setWindowTitle(QString(_("Project: %1")).arg(SYS->prjNm().c_str()));
@@ -1147,7 +1147,6 @@ StartDialog::StartDialog( ) : logo(NULL), prjsLs(NULL), prjsBt(NULL), updTmr(NUL
 	plt.setBrush(QPalette::Window, pxImg.copy(pxImg.width()-1, 0, 1, pxImg.height()));
 	logo->setPalette(plt);
 	wnd_lay->addWidget(logo);
-	logoImgSz = pxImg.height();
     }
 
     //Append the title and the list of Qt modules of OpenSCADA
@@ -1266,9 +1265,13 @@ StartDialog::StartDialog( ) : logo(NULL), prjsLs(NULL), prjsBt(NULL), updTmr(NUL
 
 void StartDialog::showEvent( QShowEvent* )
 {
-    //Hide the projects apply button for too busy lists
-    if(prjsLs && prjsBt)
-	prjsBt->setVisible(!prjsLs->verticalScrollBar() || !prjsLs->verticalScrollBar()->isVisible() || prjsLs->height() > 3*QFontMetrics(prjsLs->font()).height());
+    //Hide the projects apply button and the logotype for too busy lists
+    if(prjsLs) {
+	if(prjsBt) prjsBt->setVisible(!prjsLs->verticalScrollBar() || !prjsLs->verticalScrollBar()->isVisible() ||
+				prjsLs->height() > 3*QFontMetrics(prjsLs->font()).height());
+	if(logo) logo->setVisible(!prjsLs->verticalScrollBar() || !prjsLs->verticalScrollBar()->isVisible() ||
+				prjsLs->height() > 3*QFontMetrics(prjsLs->font()).height());
+    }
 
     updTmr = new QTimer(this);
     connect(updTmr, SIGNAL(timeout()), this, SLOT(updatePrjList()));
@@ -1288,11 +1291,6 @@ bool StartDialog::eventFilter( QObject *object, QEvent *event )
     if(object == prjsLs && updTmr) updTmr->start(1e3*prmWait_TM);	//Delay the updating at some activity in the project list
 
     return false;
-}
-
-void StartDialog::resizeEvent( QResizeEvent *event )
-{
-    if(logo) logo->setVisible(height()/3 > logoImgSz);
 }
 
 void StartDialog::updatePrjList( bool force, const string &stage )

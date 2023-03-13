@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcontroller.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -382,7 +382,7 @@ void TController::redntDataUpdate( )
     for(unsigned iP = 0; iP < req.childSize(); iP++) {
 	XMLNode *p = req.childGet(iP);
 	addr = p->attr("path");
-	if(addr == "/%2fcntr%2fst%2fstatus") { mRdSt.setVal(p->text()); continue; }
+	if(addr == "/%2fcntr%2fst%2fstatus") { mRdSt.setVal(p->text()); continue; }	//???? Move to the synchronous request in getStatus()
 	size_t aPos = addr.rfind("/"); addr = (aPos == string::npos) ? "" : addr.substr(0, aPos);
 	if((prm=nodeAt(addr,0,0,0,true)).freeStat()) continue;
 	prm.at().mRdPrcTm = s2i(p->attr("prcTm"));
@@ -397,8 +397,8 @@ void TController::redntDataUpdate( )
 		    int64_t btm = atoll(aNd->attr("tm").c_str());
 		    int64_t per = atoll(aNd->attr("per").c_str());
 		    TValBuf buf(vl.at().arch().at().valType(), 0, per, false, true);
-		    for(unsigned i_v = 0; i_v < aNd->childSize(); i_v++)
-			buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
+		    for(unsigned iV = 0; iV < aNd->childSize(); iV++)
+			buf.setS(aNd->childGet(iV)->text(),btm+per*iV);
 		    vl.at().arch().at().setVals(buf, buf.begin(), buf.end(), "");
 		}
 		else if(aNd->name() == "del" && prm.at().dynElCntr()) {

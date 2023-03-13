@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.8.3"
+#define MOD_VER		"3.8.4"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -202,16 +202,22 @@ TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	string lang = (prms.size() >= 6) ? prms[5].getS() : "";
 	if(lang.size() > 2)	lang = lang.substr(0, 2);
 
+	// HTTP header's attributes
 	string httpattrs = (prms.size() >= 3) ? prms[2].getS() : "";
-
+	//  Setting the content type
 	if(httpattrs.find("Content-Type") == string::npos)
 	    httpattrs = "Content-Type: text/html;charset="+Mess->charset() + (httpattrs.size()?"\x0D\x0A":"") + httpattrs;
+	//  Processing the keep alive
 	if(KeepAlive)
 	    httpattrs = "Keep-Alive: timeout="+i2s(srcTr().at().keepAliveTm())+", max="+i2s(srcTr().at().keepAliveReqs())+"\x0D\x0A"+
 			"Connection: Keep-Alive" + (httpattrs.size()?"\x0D\x0A":"") + httpattrs;
+	//  Disabling the cache
+	httpattrs = string("Cache-Control: no-cache, no-store, must-revalidate\x0D\x0A"	// HTTP 1.1
+		    "Pragma: no-cache\x0D\x0A"						// HTTP 1.0
+		    "Expires: 0") +							// Proxies
+		    (httpattrs.size()?"\x0D\x0A":"") + httpattrs;
 
 	string answer;
-
 	if(httpattrs.find("Content-Type: text/html") != string::npos) {
 	    int hd = -1;
 	    if(forceTmpl.size() && lang.size())		hd = ::open((forceTmpl+"_"+lang+forceTmplExt).c_str(), O_RDONLY);

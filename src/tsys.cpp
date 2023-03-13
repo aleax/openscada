@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -736,7 +736,7 @@ void TSYS::cfgPrmLoad( )
 
     //System parameters
     setClockRT(s2i(TBDS::genPrmGet(nodePath()+"ClockRT",i2s(clockRT()))));
-    setName(TBDS::genPrmGet(nodePath()+"StName", name(),"root",TBDS::UseTranslation));
+    setName(TBDS::genPrmGet(nodePath()+"StName",name(),"root",TBDS::UseTranslation));
     mWorkDB = TBDS::genPrmGet(nodePath()+"WorkDB",workDB());
     setWorkDir(TBDS::genPrmGet(nodePath()+"Workdir","").c_str(), true);
     setModDir(TBDS::genPrmGet(nodePath()+"ModDir",modDir()), true);

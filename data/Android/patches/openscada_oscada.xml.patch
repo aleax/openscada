@@ -136,3 +136,14 @@
  		<tbl id="LookFeel">
  		    <fld NAME="Typical TDE" STYLE="" FONT="" STL_SHTS="">
  			<PALETTE>#000000, #dddfe4, #ffffff, #ffffff, #555555, #c7c7c7, #000000, #ffffff, #000000, #ffffff, #efefef, #000000, #678db2, #ffffff, #0000ee, #52188b, #C8C8C8
+--- Makefile.am~	2023-02-25 20:39:31.000199357 +0200
++++ Makefile.am	2023-02-25 20:40:05.353081899 +0200
+@@ -27,7 +27,7 @@
+ apps_DATA = data/openscada.desktop data/ModelsDB/AGLKS/openscada_AGLKS.desktop data/ModelsDB/Boiler/openscada_Boiler.desktop
+ 
+ icodir = $(oscd_datadir)/icons
+-ico_DATA = data/icons/* data/openscada.png data/ModelsDB/AGLKS/*.png data/ModelsDB/Boiler/*.png
++ico_DATA = data/icons/* data/openscada.png data/ModelsDB/AGLKS/AGLCS.png data/ModelsDB/AGLKS/AGLKS.png data/ModelsDB/Boiler/Boiler.png
+ 
+ libdbdir = $(oscd_datadir)/LibsDB
+ libdb_DATA = data/LibsDB/*.db

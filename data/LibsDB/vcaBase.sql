@@ -10353,7 +10353,7 @@ if(this.attr("focus") ||
 if(pModeC == true) mode_text = tr("C");
 else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? tr("A") : tr("M"));
 
-if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCalc?500:-3); }','','',-1,'path;perm;name;dscr;active;geomH;tipTool;contextMenu;evProc;backColor;bordWidth;bordColor;',1663487376);
+if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCalc?500:-3); }','','',-1,'path;perm;name;dscr;active;geomH;tipTool;contextMenu;evProc;backColor;bordWidth;bordColor;',1678183635);
 INSERT INTO wlb_Main VALUES('ViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 CElEQVRYhe2YW2/bRhCFz9kLL5JpuE3ctA996T9t/mpRpC7SWrRFmuLuzPSBshTZsgPUIewAOk9a
 7szHHVLS2R1+/P2jc24cN8OwUdOUkpktF8uu74qiAABgvV7nnPH2tFgswjDckTSzpjkjMKbUNE3f
@@ -10501,7 +10501,7 @@ if(this.attr("focus") ||
 	toFastCalc = true;
 } else bordColor = "grey", bordWidth = bordWidth_;
 
-if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCalc?500:-3); }','','',-1,'perm;name;dscr;active;geomH;tipTool;evProc;backColor;bordWidth;bordColor;',1663487393);
+if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCalc?500:-3); }','','',-1,'perm;name;dscr;active;geomH;tipTool;evProc;backColor;bordWidth;bordColor;',1678183635);
 INSERT INTO wlb_Main VALUES('cntrRegul','iVBORw0KGgoAAAANSUhEUgAAAEAAAAArCAIAAABHOBkQAAAACXBIWXMAAA06AAANOgEDIh6FAAAE
 DklEQVRoge2ZTU8bRxjHn9mZ2fF4d/2CDREJcUFVLRRLHHyAK+LGAT4INz5Cc04lLqmUxgfU9oCE
 OPEFoK2VVEhcoKQcqFog3lC7NsZv+zrTgwtBKAmDkmhVyb/TzjP7n/3/V8/MWjJ69uy7VqsF0eE6
@@ -11867,7 +11867,7 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 }
 event = ev_rez;
 
-if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCalc?500:-3); }','','',-1,'name;dscr;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1665336554);
+if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCalc?500:-3); }','','',-1,'name;dscr;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1678183635);
 INSERT INTO wlb_Main VALUES('cntrPaspExt','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADaUlEQVRoge2aTW8bRRjH/zM7u469u15vHLu1U1cRThB9FQUkyq2ocOon
 QHwALnwCznDiwKkfoRI3LnAAKioqWqlBFEqFTGQRShJHpI7j+CXZ2Ls7D4dNE0tIrVMjppHmd9rZ
@@ -13243,7 +13243,7 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 }
 event = ev_rez;
 
-if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCalc?500:-3); }','','',-1,'owner;name;dscr;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;src;fit;',1665336554);
+if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCalc?500:-3); }','','',-1,'owner;name;dscr;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;src;fit;',1678183635);
 INSERT INTO wlb_Main VALUES('userManager','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
 /klEQVRYhe2Zy07bQBiFx+OxnYydC04h0K5ggRJub8ArAEuegrdgy2OwZcGGHS/AgghEKhEJobYh
 JUIE4kkm8Xj+LqwiBC5N0z9EkfhWo7kczxlf5tg2dnZ2UqkUQaLb7abTaSy1vyKlZKlUinOOpXh9
@@ -14426,7 +14426,7 @@ if(alarmSt&0x100) {
 	if(!(alarmSt&0x10000) || alBlnk)	fillColor = isErr ? "red" : fillColor;
 	else fillColor = "gray";
 	alBlnk = !alBlnk;
-}','','',1000,'name;dscr;geomW;geomH;lineClr;fillColor;fillImg;elLst;',1579024297);
+}','','',1000,'name;dscr;geomW;geomH;lineClr;fillColor;fillImg;elLst;',1678183784);
 INSERT INTO wlb_mnEls VALUES('El_Armatura','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAC3BJREFUeJztWXmMVdUd/u4959zlLTMDs7IN4DDQAoMyDAoRCkYIiwxF
 jRibYsLSJdIgrctfojU1NdGkLgW1YEpBY0SII4vRxoKM0hhETNgEii0UGIEqzrx5y93Ovad/3GXe
@@ -19325,7 +19325,7 @@ INSERT INTO wlb_Main_io VALUES('ElCadr','img','down',0,'','','down','','','','',
 INSERT INTO wlb_Main_io VALUES('ElCadr','name','',32,'','','Ramka','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','bordColor','#000000',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','bordColor','#000000',32,'','','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('anShow','path','/wlb_Main/wdg_anShow',40,'','','','/wlb_Main/wdg_anShow','','/wlb_Main/wdg_anShow','','','','');
+INSERT INTO wlb_Main_io VALUES('anShow','path','/wlb_Main/wdg_anShow',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('anShow','contextMenu','',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('anShow','active','1',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('anShow','evProc','ws_FocusIn::open:/pg_control/pg_ElCadr
@@ -19882,9 +19882,7 @@ INSERT INTO wlb_Main_io VALUES('RootPgSo','font','Arial 12 1 0 0 0',0,'','','so1
 INSERT INTO wlb_Main_io VALUES('ElCadr','geomZ','8',32,'','','modAuto','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('anShow1','active','1',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('anShow1','evProc','ws_FocusIn::open:/pg_control/pg_ElCadr
-key_mousePresRight::open:/pg_control/pg_cntrPasp',32,'','','','ws_FocusIn::open:/pg_control/pg_ElCadr
-key_mousePresRight::open:/pg_control/pg_cntrPasp','','ws_FocusIn::open:/pg_control/pg_ElCadr
-key_mousePresRight::open:/pg_control/pg_cntrPasp','','','','');
+key_mousePresRight::open:/pg_control/pg_cntrPasp',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','backColor','',40,'','','info_var','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','bordWidth','0',40,'','','info_var','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','active','1',32,'','','info_var','','','','','','','');
@@ -20521,7 +20519,7 @@ INSERT INTO wlb_Main_io VALUES('RootPgSo','value','0',8,'','','play','','','',''
 INSERT INTO wlb_Main_io VALUES('RootPgSo','img','start',8,'','','play','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','font','Arial 15',0,'','','play','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','active','1',32,'','','play','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('prescrEdit','name','Copy',32,'','','progCopy','Копіювання','','Копирование','','','','');
+INSERT INTO wlb_Main_io VALUES('prescrEdit','name','Copy',32,'','','progCopy','Копіювати','','Копировать','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','geomX','79.771',32,'','','progCopy','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','geomY','532.102',32,'','','progCopy','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','geomW','65',32,'','','progCopy','','','','','','','');
@@ -23390,38 +23388,38 @@ Also this element generates alarms on the corresponding parameter settings.
 The element commonly uses and represents the representative structure of the "Analog signal" DAQ-template.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.1
+Version: 1.3.2
 License: GPLv2',32,'','','','Елемент слугує для відображення поточного значения аналогового параметру та режиму регулятору, якщо параметр є таким.
 Також цей елемент генерує сигналізації (alarms) за відповідними уставкам параметру.
 Елемент загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал".
 
 Автор: Роман Савоченко <roman@oscada,org>
-Версія: 1.3.1
+Версія: 1.3.2
 Ліцензія: GPLv2','','Элемент служит для отображения текущего значения аналогового параметра и режима регулятора, если параметр является таковым.
 Также этот элемент генерирует сигнализации (alarms) по соответствующим уставкам параметра.
 Элемент в целом использует и представляет представительскую структуру DAQ-шаблона "Аналоговый сигнал".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.3.1
+Версия: 1.3.2
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('anShow1','dscr','The element is used to display the current value of the analog parameter and a short prefix of the measured value type.
 Also this element generates alarms on the corresponding parameter settings.
 The element commonly uses and represents the representative structure of the "Analog signal" DAQ-template.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.4.0
+Version: 1.4.1
 License: GPLv2',32,'','','','Елемент слугує для відображення поточного значения аналогового параметру та короткого префіксу виміряного значення.
 Також цей елемент генерує сигналізації (alarms) за відповідними уставкам параметру.
 Елемент загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал".
 
 Автор: Роман Савоченко <roman@oscada,org>
-Версія: 1.4.0
+Версія: 1.4.1
 Ліцензія: GPLv2','','Элемент служит для отображения текущего значения аналогового параметра и краткого префиксу измеренного значения.
 Также этот элемент генерирует сигнализации (alarms) по соответствующим уставкам параметра.
 Элемент в целом использует и представляет представительскую структуру DAQ-шаблона "Аналоговый сигнал".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.4.0
+Версия: 1.4.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('cntrRegul','dscr','Element-frame is used for adjustment of PID-regulator, includes information about the parameter-regulator, fields of the regulator''s settings and the "Diagram" primitive, to monitor the trends of the regulator and browsing history.
 
@@ -23651,33 +23649,33 @@ INSERT INTO wlb_Main_io VALUES('TextLab','dscr','The element is used to display 
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Vassily Grigoriev, the Laboratory of Vacuum Technologies
-Version: 1.2.0
+Version: 1.2.1
 License: GPLv2',32,'','','','Елемент слугує для відображення динамічних текстових міток, що формується на основі дискретних сигналів. Також цей елемент генерує повідомлення про порушення за локально визначеною умовою, атрибут ntf. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів дискретного блоку та стану за кодом.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Василь Григор''єв, Лабораторія Вакуумних Технологій
-Версія: 1.2.0
+Версія: 1.2.1
 Ліцензія: GPLv2','','Элемент служит для отображения динамических текстовых меток, которые формируется на основе дискретных сигналов. Также этот элемент генерирует уведомление про нарушения по локально определённому условию, атрибут ntf. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов дискретного блока и состояния по коду.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Василий Григорьев, Лаборатория Вакуумных Технологий
-Версия: 1.2.0
+Версия: 1.2.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('ImgLab','dscr','The element is used to display the dynamic image labels, which form on basis of the discrete signals. Also this element generates notifications of violations on the locally defined condition, the attribute ntf. The element commonly uses and represents the representative structure of DAQ-templates of the discrete block and the code state.
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Vinnica Poultry Farm
-Version: 1.2.0
+Version: 1.2.1
 License: GPLv2',32,'','','','Елемент слугує для відображення динамічних міток зображень, що формується на основі дискретних сигналів. Також цей елемент генерує повідомлення про порушення за локально визначеною умовою, атрибут ntf. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів дискретного блоку та стану за кодом.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Вінницька Птахофабрика
-Версія: 1.2.0
+Версія: 1.2.1
 Ліцензія: GPLv2','','Элемент служит для отображения динамических меток изображений, которые формируются на основе дискретных сигналов. Также этот элемент генерирует уведомления про нарушения по локально определённому условию, атрибут ntf. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов дискретного блока и состояния по коду.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Винницкая Птицефабрика
-Версия: 1.2.0
+Версия: 1.2.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('accept','dscr','The element implements a simple operations'' acception dialog. The dialog contains a message with a question and two buttons "Apply" and "Cancel". The dialogue, for example, is used in the frame Users manager to accept the deleting operation.
 
@@ -24622,7 +24620,7 @@ INSERT INTO wlb_mnEls_uio VALUES('El_Kran_Sh','stop','Parameter: command - "Stop
 INSERT INTO wlb_mnEls_uio VALUES('El_Alarm','NAME','Name',131077,'',10,'Parameter|NAME','','','Ім''я','','','Имя','','','','','Име');
 INSERT INTO wlb_mnEls_uio VALUES('El_Alarm','st_open','Parameter: status-open',131072,'0',10,'Parameter|st_open','','','Параметр: статус-відкрито','','','Параметр: статус-открыто','','','','','Параметар: статус-опен');
 INSERT INTO wlb_mnEls_uio VALUES('El_Alarm','st_close','Parameter: status-close',131072,'0',10,'Parameter|st_close','','','Параметр: статус-закрито','','','Параметр: статус-закрыт','','','','','');
-INSERT INTO wlb_mnEls_uio VALUES('El_Alarm','ntf','Notification "{st}:{modes}:{Speech text}"',131077,'',9,'','','','Повідомлення "{st}:{modes}:{Текст мови}"','','','Уведомление "{st}:{modes}:{Текст речи}"','','','','','Порука "{статус}:{начина}:{Текст језика}"');
+INSERT INTO wlb_mnEls_uio VALUES('El_Alarm','ntf','Notification "{st}:{modes}:{Speech text}"',131333,'',9,'','','','Повідомлення "{st}:{modes}:{Текст мови}"','','','Уведомление "{st}:{modes}:{Текст речи}"','','','','','Порука "{статус}:{начина}:{Текст језика}"');
 INSERT INTO wlb_mnEls_uio VALUES('El_Alarm','digStts','Statuses',131077,'',10,'Parameter|digStts','','','Статуси','','','Статусы','','','','','Статуси');
 INSERT INTO wlb_mnEls_uio VALUES('Compressor','DESCR','Description',131077,'',10,'Parameter|DESCR','','','Опис','','','Описание','','','','','Опис');
 INSERT INTO wlb_mnEls_uio VALUES('El_Kran_Sh','DESCR','Description',131077,'',10,'Parameter|DESCR','','','Опис','','','Описание','','','','','Опис');
@@ -25005,7 +25003,7 @@ INSERT INTO wlb_prescr_io VALUES('prescrEdit','bordWidth','progBox','2','','',32
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','bordColor','progBox','#5A5A5A','','',32,'','','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','bordStyle','progBox','6','','',32,'','','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','progCopy','root:UI','','',32,'','','','','');
-INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','progCopy','Copy','Копіювання','Копирование',32,'','','','','');
+INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','progCopy','Copy','Копіювати','Копировать',32,'','','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomX','progCopy','79.771','','',32,'','','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomY','progCopy','532.102','','',32,'','','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','geomW','progCopy','65','','',32,'','','','','');
@@ -27916,11 +27914,11 @@ INSERT INTO wlb_Main_uio VALUES('grpCadr','prmAddr','Parameter: address',196613,
 INSERT INTO wlb_Main_uio VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'<page>|var','','el3','Параметр: адреса','','','Параметр: адрес','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'<page>|var','','el2','Параметр: адреса','','','Параметр: адрес','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'<page>|var','','el1','Параметр: адреса','','','Параметр: адрес','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('anShow','pErr','Parameter: error',131077,NULL,10,'Parameter|err','','','Параметр: помилка',NULL,'','Параметр: ошибка',NULL,'','','','','');
+INSERT INTO wlb_Main_uio VALUES('anShow','pErr','Parameter: error',131077,NULL,10,'Parameter|err','','','Параметр: помилка','','','Параметр: ошибка','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow','pErrCode','Parameter: error code',131073,'1|',8,'','','','Параметр: код помилки','','','Параметр: код ошибки','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow','pName','Parameter: name',131333,'',10,'Parameter|NAME','','','Параметр: ім''я','','','Параметр: имя','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow','pVal','Parameter: value',131076,'0|',10,'Parameter|var','','','Параметр: значення','','','Параметр: значение','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('anShow1','pName','Short name',131077,'',9,'','','','Ім''я параметра','||','','Имя параметра','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('anShow1','pName','Short name',131077,'',9,'','','','Ім''я параметра','','','Имя параметра','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow1','pVal','Parameter: value',131076,'0|',10,'Parameter|var','','','Параметр: значення','','','Параметр: значение','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p1_max','Parameter1: maximum',131076,'<EVAL>|',10,'Parameter 1|max','','','Параметр1: максимум','','','Параметр1: максимум','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p1_name','Parameter1: name',131077,NULL,10,'Parameter 1|NAME','','','Параметр1: ім''я','','','Параметр1: имя','','','','','','');
@@ -27996,7 +27994,7 @@ INSERT INTO wlb_Main_uio VALUES('anShow','pModeA','Parameter: regulator mode: au
 INSERT INTO wlb_Main_uio VALUES('anShow','pModeC','Parameter: regulator mode: cascade',131072,NULL,10,'Parameter|casc','','','Параметр: режим регулятору: каскад','','','Параметр: режим регулятора: каскад','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow','pPrec','Parameter: precision',131073,'1|',10,'Parameter|prec','','','Параметр: точність','','','Параметр: точность','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow','redEVAL','Red parameter name in case of failure',131072,NULL,9,'','','','Червоне ім''я параметру у випадку відмови','','','Красное имя параметра в случае отказа','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('anShow','spName','Speech name',131077,NULL,9,'','','','Ім''я для синтезу',NULL,'','Имя для синтеза',NULL,'','','','','');
+INSERT INTO wlb_Main_uio VALUES('anShow','spName','Speech name',131333,NULL,9,'','','','Ім''я для синтезу','','','Имя для синтеза','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrPasp','pName','Parameter name',196613,NULL,10,'Parameter|NAME','','','Ім''я параметру','','','Имя параметра','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElCadr','digComs','Parameter: discrete commands',131333,'OPEN;CLOSE;STOP',10,'<page>|digComs','','','Параметр: дискр. команди','ВІДКР;ЗАКР;СТОП','','Параметр: дискр. команды','ОТКР;ЗАКР;СТОП','','','','','ОТВОР;ЗАТВОР;СТОП');
 INSERT INTO wlb_Main_uio VALUES('ElCadr','digStts','Parameter: discrete stats',131333,NULL,10,'<page>|digStts','','','Параметр: дискр. стани','','','Параметр: дискр. состояния','','','','','','');
@@ -28109,9 +28107,9 @@ INSERT INTO wlb_Main_uio VALUES('TextLab','st_text','Parameter: status (text)',1
 INSERT INTO wlb_Main_uio VALUES('TextLab','stop','Parameter: stop',131072,'0',14,'Parameter|stop','','','Параметр: зупинка','','','Параметр: останов','','','','','Параметар: стоп','');
 INSERT INTO wlb_Main_uio VALUES('anShow1','pNAME','Parameter: name',131333,'',10,'Parameter|NAME','','','Параметр: ім''я','||','','Параметр: имя','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow1','pNameSz','Short name size',131073,'15|',9,'','','','Розмір короткого ім''я','','','Размер короткого имени','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('anShow1','pErr','Parameter: error',131077,'',10,'Parameter|err','','','Параметр: помилка','||','','Параметр: ошибка','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('anShow1','pErr','Parameter: error',131077,'',10,'Parameter|err','','','Параметр: помилка','','','Параметр: ошибка','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow1','pErrCode','Parameter: error code',131073,'0|',8,'','','','Параметр: код помилки','','','Параметр: код ошибки','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('anShow1','spName','Speech message generation on reject',131077,'',9,'','','','Генерація мовного повідомлення у разі відмови','||','','Генерация речевого сообщения при отказе','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('anShow1','spName','Speech message generation on reject',131333,'',9,'','','','Генерація мовного повідомлення у разі відмови','||','','Генерация речевого сообщения при отказе','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','pName','Parameter name',196613,NULL,10,'<page>|NAME','','','Ім''я параметру','','','Имя параметра','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('objProps','objDescr','Object: description',131205,'',10,'Object|DESCR','','','Об''єкт: опис','','','Объект: описание','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('objProps','objErr','Object: error',131077,'',10,'Object|err','','','Об''єкт: помилка','','','Объект: ошибка','','','','','','');
@@ -28121,7 +28119,7 @@ INSERT INTO wlb_Main_uio VALUES('objProps','objItems','Object: items',131078,'<T
 INSERT INTO wlb_Main_uio VALUES('objProps','objName','Object: name',131077,'',10,'Object|NAME','','','Об''єкт: ім''я','','','Объект: имя','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','prevTab','Previous tab',131077,'view',8,'','','','Попередня вкладинка','','','Предыдущая вкладка','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('grpGraph10','allowSelLst','Select: allowed for select parameters',131205,'',8,'','','','Вибір: параметри дозволені для обрання','','','Выбор: параметры разрешённые для выбора','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('TextLab','ntf','Notification "{st}:{modes}:{Speech text}"',131077,'',9,'','','','Повідомлення "{st}:{modes}:{Текст мови}"','','','Уведомление "{st}:{modes}:{Текст речи}"','','','','','Порука "{статус}:{начина}:{Текст језика}"','');
+INSERT INTO wlb_Main_uio VALUES('TextLab','ntf','Notification "{st}:{modes}:{Speech text}"',131333,'',9,'','','','Повідомлення "{st}:{modes}:{Текст мови}"','','','Уведомление "{st}:{modes}:{Текст речи}"','','','','','Порука "{статус}:{начина}:{Текст језика}"','');
 INSERT INTO wlb_Main_uio VALUES('ElViewGraph','log','Logarithmic scale',131072,'0',10,'Parameter|log','','','Логарифмічна шкала','','','Логарифмическая шкала','','','','','Логаритамска скала','');
 INSERT INTO wlb_Main_uio VALUES('grph_panel','sclHor','Horizontal scale',131076,'0|',14,'<page>|sclHorScl','','','Горизонтальна шкала','','','Горизонтальная шкала','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('grph_panel','sclHorOff','Horizontal scale offset',131076,'0|',14,'<page>|sclHorSclOff','','','Зсув горизонтальної шкали','','','Смещение горизонтальной шкалы','','','','','','');
@@ -28251,7 +28249,7 @@ INSERT INTO wlb_Main_uio VALUES('ImgLab','com','Parameter: command',131072,'0',1
 INSERT INTO wlb_Main_uio VALUES('ImgLab','com_text','Parameter: command text (from digComs)',131077,'',14,'Parameter|com_text','','','Параметр: текст команди (з digComs)','','','Параметр: текст команды (из digComs)','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ImgLab','digComs','Parameter: commands',131077,'',10,'Parameter|digComs','','','Параметр: команди','','','Параметр: команды','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ImgLab','digStts','Parameter: statuses',131077,'',10,'Parameter|digStts','','','Параметр: статуси','','','Параметр: статусы','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('ImgLab','ntf','Notification "{st}:{modes}:{Speech text}"',131077,'',9,'','','','Повідомлення "{st}:{modes}:{Текст мови}"','','','Уведомление "{st}:{modes}:{Текст речи}"','','','','','Порука "{статус}:{начина}:{Текст језика}"','');
+INSERT INTO wlb_Main_uio VALUES('ImgLab','ntf','Notification "{st}:{modes}:{Speech text}"',131333,'',9,'','','','Повідомлення "{st}:{modes}:{Текст мови}"','','','Уведомление "{st}:{modes}:{Текст речи}"','','','','','Порука "{статус}:{начина}:{Текст језика}"','');
 INSERT INTO wlb_Main_uio VALUES('ImgLab','st_close','Parameter: status-close',131072,'0',10,'Parameter|st_close','','','Параметр: статус-закрито','','','Параметр: статус-закрыт','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ImgLab','st_open','Parameter: status-open',131072,'0',10,'Parameter|st_open','','','Параметр: статус-відкрито','','','Параметр: статус-открыто','','','','','Параметар: статус-опен','');
 INSERT INTO wlb_Main_uio VALUES('ImgLab','stop','Parameter: stop',131072,'0',14,'Parameter|stop','','','Параметр: зупинка','','','Параметр: останов','','','','','Параметар: стоп','');

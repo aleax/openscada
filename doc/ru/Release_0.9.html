@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../en/files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="index.html"><img src="../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Документы/Релиз 0.9</h1>
@@ -328,35 +328,309 @@
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">7</span> Обновления</span></h2>
 <h3><span class="mw-headline" id=".5B01.03.2023.5D_.D0.A8.D0.95.D0.A1.D0.A2.D0.9E.D0.95_.D0.BE.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5"><span class="mw-headline-number">7.1</span> [01.03.2023] ШЕСТОЕ обновление</span></h3>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
-<ul><li> <b>Состояние:</b> <span style="color: red">подготовка ...</span></li></ul>
-<p>Общий процесс выпуска, пользователям для оценки ваших ожиданий и разработчикам для напоминания задач:<br />
-<b><u>1. Неделя подготовки и сборки:</u></b><br />
+<ul><li> <b>State:</b> <span style="color:red">testing and post building ...</span></li></ul>
+<p>The common releasing process, for the users to estimate your expectations and for the developers to remind the tasks:<br />
+<b><u>1. The preparing and building week:</u></b><br />
 </p>
-<ul><li> Сборка последней Рабочей (Work) SVN-ревизии для всех окружений нерегулярной сборки чтобы обеспечить раннее и широкое тестирование предшествующего LTS релиза.</li>
-<li> Анонсирование начала процесса выпуска:
-<ul><li> создание новой <a href="index.html" title="Special:MyLanguage/Documents">страницы релиза</a> или <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">страницы обновления</a> на Wiki;</li>
-<li> создание новой новости-страницы на <a class="external text" href="http://oscada.org/en/main/%7Cофициальном" rel="nofollow noreferrer noopener" target="_blank">сайте OpenSCADA</a>;</li>
-<li> создание нового сообщения-ссылки на новость-страницу на <a class="external text" href="https://www.facebook.com/Roman.Savochenko" rel="nofollow noreferrer noopener" target="_blank">FaceBook</a> и <a class="external text" href="https://www.linkedin.com/in/roman-savochenko-71b50272/" rel="nofollow noreferrer noopener" target="_blank">LinkedIn</a>;</li></ul></li>
-<li> Объединение изменений Рабочей (Work) версии, или копирование целиком дерева Рабочей ветви, в LTS ветвь-дерево.</li>
-<li> Внесение некоторых изменений, специфических для LTS, на предмет поднятия версий:
-<ul><li> обновление <b>configure.ac</b> на предмет версии выпуска-обновления и библиотеки ядра;</li>
-<li> обновление <b>data/*.spec</b> и <b>data/{debian,debian_mod}/changelog</b> на предмет нового номера версии и дополнения протокола изменений файлов новыми записями выпуска-обновления.</li></ul></li>
-<li> Формирование-дополнение ПротоколаИзменений LTS изменениями из ПротоколаИзменений Work, группируя изменения по размещению и сортируя их по состоянию исправления и уровню, с комбинированием новых возможностей в одном элементе и без удаления любых отличных изменений.</li>
-<li> Копирование значительных изменений из сформированного ПротоколаИзменений LTS на соответствующую страницу релиза-обновления, беря изменения с уровнем более или равные "!!".</li>
-<li> Перевод страниц релиза-обновления, обновление "<a href="../en/To_do.html" title="Special:MyLanguage/Works/To do">Сделать (ToDo)</a>" и "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Works/Road_map" title="Special:MyLanguage/Works/Road map">Дорожная карта (RoadMap)</a>".</li>
-<li> Генерация актуальной внесетевой документации используя сервисную процедуру "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
-<li> Применение-выгрузка изменений LTS дерева в репозиторий и сборка этого.</li>
-<li> Анонсирование релиза-обновления.</li></ul>
-<p><b><u>2. Неделя тестирования и после-сборки:</u></b><br />
+<ul><li> Building the last Work SVN-revision for all environments of the irregular building to provide early and wide testing the coming LTS release.</li>
+<li> Announcing the releasing process start:
+<ul><li> creating a new <a href="index.html" title="Special:MyLanguage/Documents">release page</a> or <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">update page</a> on Wiki;</li>
+<li> creating a new news-page on <a class="external text" href="http://oscada.org/en/main/%7Cthe" rel="nofollow noreferrer noopener" target="_blank">official OpenSCADA site</a>;</li>
+<li> creating a new post-link to the news-page on <a class="external text" href="https://www.facebook.com/Roman.Savochenko" rel="nofollow noreferrer noopener" target="_blank">FaceBook</a> and <a class="external text" href="https://www.linkedin.com/in/roman-savochenko-71b50272/" rel="nofollow noreferrer noopener" target="_blank">LinkedIn</a>;</li></ul></li>
+<li> Merging the Work branch changes or copying the whole Work branch tree to the LTS branch-tree.</li>
+<li> Making some LTS specific changes about the version rise:
+<ul><li> updating <b>configure.ac</b> for version of the release-update and core library;</li>
+<li> updating <b>data/*.spec</b> and <b>data/{debian,debian_mod}/changelog</b> for the new version number and appending the files' changelog for new release-update entry.</li></ul></li>
+<li> Forming-appending the LTS ChangeLog by the changes from the Work ChangeLog, grouping the changes by the location and sorting them by the fixing status and the level, with combination new features under one item and without removing any different changes.</li>
+<li> Copying the significant changes from the formed LTS ChangeLog to the related page of the release-update, taking the changes in the level more or even than "!!".</li>
+<li> Translating the release-update pages, updating the <a href="../en/To_do.html" title="Special:MyLanguage/Works/To do">ToDo</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Works/Road_map" title="Special:MyLanguage/Works/Road map">RoadMap</a>.</li>
+<li> Generating the actual offline documentation using the service procedure "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
+<li> Committing the LTS tree changes to the repository and building that.</li>
+<li> Announcing the release-update.</li></ul>
+<p><b><u>2. The testing and post building week(s):</u></b><br />
 </p>
-<ul><li> Горячее тестирование сборок релиза.</li>
-<li> Завершение и исправления перевода ПротоколаИзменений и документации.</li>
-<li> Генерация актуальной внесетевой документации используя сервисную процедуру "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
-<li> Применение-выгрузка исправлений релиза в репозиторий и сборка этого на предмет второй сборки, и для каждой недели исправления критических ошибок — первая неделя без критических исправлений будет означать завершение выпуска LTS, т.е., ПОЛЬЗОВАТЕЛИ, тестируйте тщательно LTS релиз чтобы потом не жаловаться на его конечную сборку!</li></ul>
+<ul><li> Hot testing the release build.</li>
+<li> Finishing and fixing the ChangeLog translating and the documentation.</li>
+<li> Generating the actual offline documentation using the service procedure "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
+<li> Committing the release fixes to the repository and building that for the second build, and for each week of appearing critical fixes — the first week without the critical fixes means the final the LTS releasing, so, USERS, test closely the LTS release for not complain to it final build!</li></ul>
 </div>
-<p>Это обновление <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релиза 0.9 LTS</a> исправляет около 50 ошибок и добавляет МНОЖЕСТВО улучшений с несколькими значительными-концептуальными, с которыми целиком можно ознакомиться в <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2870" rel="nofollow noreferrer noopener" target="_blank">протоколе изменений обновления</a>.
-</p><p>...
+<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 70 bugs and appends MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2872" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
+</p><p><b><u><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Automation Linux distributive of the project OpenSCADA</a></u></b><br />
 </p>
+<ul><li> updating TDE to 14.0.13;</li>
+<li> fixing noatun, TDESVN, basket, KGpg, than appending the new patched packages "tdesvn-trinity" and "basket-trinity" to the distributive collection;</li>
+<li> some improving and updating TDE HW Manager, KCalc, holiday_ua;</li>
+<li> complete translation to Ukrainian for KDiff3 and showfoto.</li></ul>
+<p><b><u>Main WWW-resources, documentation of the project and subprojects</u></b><br />
+</p>
+<ul><li> fixed for the <a class="external text" href="http://oscada.org/" rel="nofollow noreferrer noopener" target="_blank">Site</a> working in WebBrowsers of old embedded devices like to Nokia N900, N9;</li>
+<li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Nokia_Linux" title="Special:MyLanguage/Using/Nokia Linux">Maemo 5 (Nokia N900)</a> restored with moving to the CSSU-Thumb Toolchain grounded on GCC 4.7.2 from Linaro; and the project page updated;</li>
+<li> completely revised the "API" document in the <a href="../en/API.html#CntrNode" title="Special:MyLanguage/Documents/API">section "Control Interface and dynamic tree of program objects"</a> and the section "Service commands-functions" moved there as a subsection, the <a href="../en/API.html#ServFunc" title="Special:MyLanguage/Documents/API">subsection "Service commands-functions"</a> completely rewrote and appended by, and all these translated in Ukrainian;</li>
+<li> started the new subproject <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/PinePhone" title="Special:MyLanguage/Using/PinePhone">Open Phone — PinePhone</a>;</li>
+<li> completely revised and actualised for the "<a href="How_to_Create_module.html" title="Special:MyLanguage/Documents/How to/Create module">How to Create OpenSCADA module</a>";</li>
+<li> started the new subproject <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Graphical_PLC_Programming" title="Special:MyLanguage/Sub-projects/Graphical PLC Programming">Graphical PLC Programming in OpenSCADA</a>;</li>
+<li> the building scripts of the project <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automatic_Builder_of_OpenSCADA" title="Special:MyLanguage/Sub-projects/Automatic Builder of OpenSCADA">Automatic Builder of OpenSCADA</a> completely revised and unified with the subproject document updating and translation to Ukrainian.</li></ul>
+<p><b><u>New and significantly updated parts</u></b><br />
+</p>
+<ul><li> OpenSCADA Core: 3:12:0 =&gt; <b>3:13:0</b></li></ul>
+<dl><dd> (<a href="#VCAProd">Productivity optimisation of the VCA interface</a>, <a href="#AssocOutTrToIn">Unification the associated output transports to the input one AND the generic output transport connection</a>, <a href="#MessTrFix">Messages Translation — fixes of the conceptual changes of the previous update</a>)</dd></dl>
+<ul><li> OpenSCADA "Transport" subsystem: 18 =&gt; <b>19</b></li></ul>
+<dl><dd> (<a href="#AssocOutTrToIn">Unification the associated output transports to the input one AND the generic output transport connection</a>)</dd></dl>
+<ul><li> DAQ.DAQGate: 2.9 =&gt; <b>2.11</b></li>
+<li> DAQ.JavaLikeCalc: 5.4 =&gt; <b>5.5</b></li>
+<li> DAQ.LogicLev: 2.6 =&gt; <b>2.7</b></li>
+<li> {DAQ,Protocol}.ModBus: 3.4 =&gt; <b>3.6</b>, 2.9 =&gt; <b>2.10</b></li>
+<li> Archive.FSArch: 3.7 =&gt; <b>3.8</b></li>
+<li> Transport.Sockets: 4.3 =&gt; <b>4.5</b></li></ul>
+<dl><dd> (<a href="#AssocOutTrToIn">Unification the associated output transports to the input one AND the generic output transport connection</a>)</dd></dl>
+<ul><li> UI.QTStarter: 5.12 =&gt; <b>5.14</b></li>
+<li> UI.QTCfg: 5.9 =&gt; <b>5.12</b></li>
+<li> UI.VCAEngine: 7.8 =&gt; <b>7.11</b></li></ul>
+<dl><dd> (<a href="#VCAProd">Productivity optimisation of the VCA interface</a>)</dd></dl>
+<ul><li> UI.Vision: 8.0 =&gt; <b>8.6</b></li>
+<li> UI.WebCfgD: 2.3 =&gt; <b>2.4</b></li>
+<li> UI.WebVision: 6.6 =&gt; <b>6.8</b></li>
+<li> LibsDB.OscadaLibs.LowDevLib: 1.4 =&gt; <b>1.5</b>
+<ul><li> mbBase: 1.0 =&gt; <b>1.2</b></li></ul></li>
+<li> LibsDB.OscadaLibs.base.initConAssociateTrs: 1.1 =&gt; <b>1.2</b></li>
+<li> LibsDB.vcaBase.Main
+<ul><li> RootPgSo: 2.5 =&gt; <b>2.6</b></li>
+<li> storeHouse: 1.1 =&gt; <b>1.3</b></li>
+<li> {grpGraph,grpGraph10}: 1.4 =&gt; <b>1.5</b></li>
+<li> grpCadr: 1.2 =&gt; <b>1.3</b></li>
+<li> ElCadr: 1.2 =&gt; <b>1.4</b></li>
+<li> ElViewGraph: 1.3 =&gt; <b>1.4</b></li>
+<li> ResultGraphEl: 1.1 =&gt; <b>1.2</b></li>
+<li> anShow: 1.2 =&gt; <b>1.3</b></li>
+<li> anShow1: 1.3 =&gt; <b>1.4</b></li>
+<li> TextLab: 1.1 =&gt; <b>1.2</b></li>
+<li> ImgLab: 1.1 =&gt; <b>1.2</b></li></ul></li>
+<li> LibsDB.vcaBase.mnEls
+<ul><li> El_Kran_Sh: 1.1 =&gt; <b>1.2</b></li>
+<li> Compressor: 1.1 =&gt; <b>1.2</b></li>
+<li> El_Kran_polozh: 1.0 =&gt; <b>1.1</b></li></ul></li>
+<li> LibsDB.vcaBase.doc
+<ul><li> docAlarmsRep: 1.6 =&gt; <b>1.7</b></li>
+<li> docRepDay: 3.1 =&gt; <b>3.2</b></li>
+<li> docRepMonth: 3.1 =&gt; <b>3.2</b></li>
+<li> docRepYear: 1.2 =&gt; <b>1.3</b></li>
+<li> docUsersSet: 1.7 =&gt; <b>1.8</b></li>
+<li> docDin: 1.2 =&gt; <b>1.3</b></li></ul></li></ul>
+<p><b><u><span id="VCAProd" title="#VCAProd">CONCEPTUAL &gt; Productivity optimisation of the VCA interface</span> </u></b><br />
+</p>
+<ul><li> FXI:UI.VCAEngine:
+<ul><li> Adapted to work in very big processing periods and disabling the periodic processing in whole:
+<ul><li> fixed in obtaining the period from the owner session widget;</li>
+<li> appended by setting the session side period with the User API function calcPer() of the session side widget, expanded by specifying the special period values: PerVal_Sess(0), PerVal_Parent(-1), PerVal_UserMin(PerVal_Dis(-2)), PerVal_SessDef(-3);</li>
+<li> "Period of the calculation" renamed to the "Periodic processing" and the renamed field is specified as a generic parameter, that moved to the main configuration tab and appended by the page widgets of the project and child widget of the library widget;</li>
+<li> the session object appended by the User API function period(), what returns the session processing period;</li>
+<li> the processing period was clarified in the session widget status.</li></ul></li>
+<li> Change of the attribute "alarmSt" appended by accompaniation the new event "ws_alarmChange".</li></ul></li>
+<li> UI.Vision: Adapted for renaming "Period of the calculation" to the "Periodic processing" and for moving to the main configuration tab. The previous field in the "Processing" tab is set to be hidden at that missing in the VCA model.</li>
+<li> LibsDB.vcaBase,ModelsDB.{AGLKS.vca,Boiler.St}: The VCA projects set to the calculation period 250 ms. Calculation of the control group of the VCA projects set to 1000 ms.</li>
+<li> LibsDB.vcaBase:
+<ul><li> wlb_Main.RootPgSo: Adapted to work in very big processing periods and disabling the periodic processing in whole:
+<ul><li> appended by continuing the immediately cycles before the container page opening at the start and after navigation, using the new event "usr_calc";</li>
+<li> appended by switching to the fast cycle at alarm blink, using the new function calcPer();</li>
+<li> switched to the processing period 1000 ms.</li></ul></li>
+<li> wlb_Main.ElCadr: Adapted to work in very big processing periods and disabling the periodic processing in whole:
+<ul><li> appended by continuing the immediately cycles using the new event "usr_calc";</li>
+<li> appended by switching to the fast cycle at alarm blink, using the new function calcPer();</li>
+<li> switched to the processing period -1 (parent).</li></ul></li>
+<li> wlb_Main.{grpGraph,grpGraph10}: Adapted to work in very big processing periods and disabling the periodic processing in whole:
+<ul><li> appended by continuing the immediately cycles using the new event "usr_calc";</li>
+<li> switched to the processing period -1 (parent);</li>
+<li> tracing period of the Diagram primitive linked also to the Widget period.</li></ul></li>
+<li> wlb_Main.ElViewCadr: Adapted to work in very big processing periods and disabling the periodic processing in whole:
+<ul><li> appended by switching to the fast cycle at cursor blink, using the new function calcPer();</li>
+<li> switched to the processing period -1 (parent);</li>
+<li> tracing period of the Diagram primitive linked also to the Widget period.</li></ul></li>
+<li> wlb_Main.storeHouse: Adapted to work in very big processing periods and disabling the periodic processing in whole:
+<ul><li> switched to the processing period -2 (disabled);</li>
+<li> appended by continuing the immediately cycles using the new event "usr_calc".</li></ul></li>
+<li> wlb_Main.ElViewGraph: Adapted to work in very big processing periods:
+<ul><li> appended by continuing the immediately cycles in waiting the values appear, using the new event "usr_calc";</li>
+<li> appended by switching to the fast cycle at cursor blink, using the new function calcPer();</li>
+<li> the calculation set in 2000 ms due to need of that updating at the trend cursor changing.</li></ul></li>
+<li> wlb_Main.grph_panel: Appended by storing the tracing period of the linked Diagram primitive. Switched to the processing period -1 (parent).</li>
+<li> wlb_Main.{grpCadr,ResultGraphEl}: Adapted to work in very big processing periods and disabling the periodic processing in whole:
+<ul><li> switched to the processing period -1 (parent);</li>
+<li> tracing period of the Diagram primitive linked also to the Widget period.</li></ul></li>
+<li> wlb_Main.{TextLab,ImgLab},wlb_mnEls.{El_Kran_polozh,El_Kran_Sh,Compressor}: Adapted to work in very big processing periods and disabling the periodic processing in whole:
+<ul><li> appended by switching to the fast cycle at cursor blink, using the new function calcPer();</li>
+<li> switched to the processing period -1 (parent).</li></ul></li>
+<li> wlb_Main.{anShow,anShow1}: switched to the processing period -1 (parent) and appended by switching to the fast cycle (500 ms) at focus and alarm blink.</li>
+<li> wlb_doc.{docRepDay,docRepMonth}, wlb_Main.{graphSelPrm,doc_panel,accept,treeSelect,cntrPaspExt}, wlb_Main.{ViewCadr,ResultGraph}: Switched to the processing period -1 (parent).</li>
+<li> wlb_doc.{docDin,docAlarmsRep}: Switched to the processing period -2 (disabled).</li>
+<li> wlb_doc.docRepMonth: Excluded from execution at stopping.</li>
+<li> wlb_doc.docRepYear: Appended by one immediately cycle after f_start, using the new event "usr_calc". Disabled for the periodic processing.</li>
+<li> wlb_Main.userManager: Disabled in the periodic processing.</li></ul></li></ul>
+<p><b><u><span id="AssocOutTrToIn" title="#AssocOutTrToIn">CONCEPTUAL &gt; Unification the associated output transports to the input one AND the generic output transport connection</span> </u></b><br />
+</p>
+<ul><li> FIX: Unification the associated output transports processing of the input Sockets transport for:
+<ul><li> Transport:
+<ul><li> the function TTransportIn::assTrO() renamed to TTransportIn::associateTrO() and expanded by creation new transports at the first and next removing for stopped ones, and the just created transports appended by reading the initial connection ID with it registering in the connection parameter "initConID";</li>
+<li> the new function TTransportIn::associateTr() and its UserAPI variant SYS.Transport["Modul"]["in_Transp"].associateTr() of obtaining the output transport object at its Connection ID;</li>
+<li> the associated output transports from an input one appended by removing at the inactivity at the TTransportIn::keepAliveTm();</li>
+<li> the new UserAPI function SYS.Transport["Modul"]["in_Transp"].associateTrsList() as a correct naming variant to assTrsList();</li>
+<li> the output transport object appended by the UserAPI functions conPrm() and setConPrm() of accessing the connection parameters;</li>
+<li> changing the name template in "inA_ID_N" of the associated output transports to the input one;</li>
+<li> FIX:Sockets: the input transports prevented at spare socket closing in the initiative mode; the new initiative connection limit checking moved to the main limits checking part.</li></ul></li>
+<li> LibsDB.OscadaLibs: tmplib_base.initConsAssignTrs: Renamed to initConAssociateTrs and adapted to use the function conPrm("initConID") and associateTrsList().</li></ul></li>
+<li> The generic output transport connection:
+<ul><li> Transports:
+<ul><li> the new function TTransportS::outAt() and its UserAPI variant SYS.Transport.outAt() of the output transport generic obtaining from the unified address;</li>
+<li> TTransportS::extHost() moved to use TTransportS::outAt().</li></ul></li>
+<li> Transport,UI.{QTCfg,WebCfgD}: The field "Transport" of the external hosts table expanded for specifying the transport address in the unified-common form and expanded by the selection specifying per item with support such behaviour in the common configurators.</li>
+<li> DAQ.ModBus: The first one what moved to use the unified connection to the output transport.</li>
+<li> LibsDB.OscadaLibs: tmplib_DevLib.mbBase: Switched to use TTransportS::outAt().</li></ul></li></ul>
+<p><b><u><span id="MessTrFix" title="#MessTrFix">CONCEPTUAL &gt; Messages Translation (fixes of the <a href="Release_0.9.html#MessTr" title="Special:MyLanguage/Documents/Release 0.9">conceptual changes of the previous update</a>) </span> </u></b><br />
+</p>
+<ul><li> FIX:SYS:
+<ul><li> FIX: Prevented from propagating the base language column of the translations table "Tr" in the SINGLE translation mode and the base language.</li>
+<li> FIX: The string EVal value "&lt;EVAL&gt;" appended as not translated one to prevent that translation in VCAEngine for NULL DB values.</li>
+<li> FIX: The translation manager prevented in the marked base changing to a human readable form at all, since that used as a key.</li>
+<li> TFunction::operator=() finished in adaption to the IO name translation.</li>
+<li> Writing to the configuration in XML prevented in doubling the translated field for the configuration contexts.</li></ul></li>
+<li> FIX:DB:
+<ul><li> FIX: The translation prevented from propagating the base language column in the SINGLE translation mode for already translated DBs, by appending for different detection the translated DBs in whole and the translated column presence.</li>
+<li> FIX: Fixed for the DB syntax error at cleaning the translation fields equal to the base.</li>
+<li> FIX: Fixed in writing untranslated strings, by clearing all translation and writing to base.</li>
+<li> FIX: Prevented in the DBs service termination, as the transactions closing, at some wrong DB presence.</li>
+<li> FIX: The translation setting prevented in setting double messages to the base messages; what completing not translation "&lt;EVAL&gt;".</li>
+<li> FIX: Absence the flag TFld::TransltText means as the translation complete missing for that field.</li></ul></li>
+<li> FIX:DAQ::ParamTmpl:
+<ul><li> FIX: Fixed for the IO name edition in the non basic mode of the dynamic translation.</li>
+<li> FIX: Fixed in the flag IO::TransltText processing for strings.</li>
+<li> FIX: The service request "list:/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/%2fserv%2fattr" fixed in the attribute name translation.</li></ul></li>
+<li> FIX:Transports,UI.{QTCfg,Vision,WebCfgD}: The function TTransportS::extHostList() appended by an argument "lang" to receive translated names of remote hosts.</li>
+<li> FIX:Protocol.ModBus: Fixed-adapted in the IO name dynamic translation.</li></ul>
+<p><b><u>OpenSCADA libraries and projects</u></b><br />
+</p>
+<ul><li> FIX:LibsDB.OscadaLibs:
+<ul><li> The library tmplib_LowDevLib appended by the template "BT: RDTech UM24C, UM25C and UM34C (RDTech)".</li>
+<li> The library tmplib_DevLib appended by the template "Slot LTD devices (SLOT)".</li></ul></li>
+<li> FIX:LibsDB.vcaBase:
+<ul><li> wlb_Main.storeHouse: Significantly expanded by: implementation the procedures support for the logical columns; implementation the report of all visible table and a selected record.</li>
+<li> FIX:wlb_doc.docRepDay: Some improved and appended by: the columns grouping in the header, string values direct reading, colors disable in the table at EVAL scale.</li>
+<li> wlb_doc.docUsersSet: Added by the "Message category (messCat)" configuration.</li></ul></li></ul>
+<p><b><u>API</u></b><br />
+<i>!!!!:Changes</i>:
+</p>
+<ul><li> SYS:
+<ul><li> The functions TSYS::id(), TSYS::name() and TSYS::user() were set as constant.</li>
+<li> The definitions SEC_XT, SEC_WR, SEC_RD moved from the file tsecurity.h to tcntrnode.h and used there also.</li>
+<li> ctrChkNode() cleaned for the argument "warn" due to the response attribute "force" is deprecated.</li>
+<li> The Control Interface request "chlds:/{nPath}/%2fobj" appended by not creating the empty icon tags "ico".</li>
+<li> NSTR_BUF_LEN(50) split to CFG_A_LEN (100) for using in the maximum attribute size of the configuration cell in XML.</li>
+<li> The argument "init" removed from setIcoDir(), setDocDir(), setLang() during moving under the generic clearing mechanism.</li>
+<li> Appending the enumeration MdfSYSFlds by the fields: MDF_Name, MDF_MESS, MDF_TR, MDF_DBG, MDF_RD.</li></ul></li>
+<li> DB: The Control Interface request "call:/BD/{MOD}/{DB}/%2fserv%2fSQL" appended by processing the "intoTrans" attribute as EVAL at missing and clearing the request text in the response.</li>
+<li> DAQ::Value: The service request "get:/serv/attr" of the Control Interface prevented from clearing the "el" subtags at missing the representing attribute, them value is set to EVAL for true mark that as processed in DAQ.DAQGate and don't continue them request in each cycle.</li>
+<li> Archives-History: The value archive link type "Passive param. attribute (TVArchive::PassiveAttr)" renamed to "DAQ attribute (TVArchive::DAQAttr)". The value archive link type "Active param. attribute" renamed to "Active DAQ attribute" with that mark as DEPRECATED.</li>
+<li> Transports: The function TTransportIn::assTrO() renamed to TTransportIn::associateTrO(). The TTransportOut::isNetwork() virtual function sign moved to the TTypeTransport object with linking the old one to new one, for marking all module as the network one.</li>
+<li> UI.VCAEngine: The Control Interface request "get:/UI/VCAEngine/%2fserv%2fwlbBr" appended by not creating the empty icon tags "ico".</li></ul>
+<p><i>Appends</i>:
+</p>
+<ul><li> SYS:
+<ul><li> The new function TSYS::ico() of the icon obtaining.</li>
+<li> Names of the security standard permissions appended by _W_W_W(0222).</li>
+<li> TRegExp:
+<ul><li> Appended by a new option 'U' (ungreedy) of the greedy mode toggle, together the User API method "ungreedy".</li>
+<li> Appended by the function mode(), the argument "mode" in setPattern() and the enumeration "Mode" with the items: MD_8, MD_16, MD_32, MD_WCHAR, MD_SAVE.</li>
+<li> The search() function of the object appended by an argument "length" of the measured block size return.</li></ul></li>
+<li> XMLNode: The loading flags appended by the no flag item LD_NO.</li>
+<li> TMess: Appended by the common label labStdOutTrs() for address format of the unified output transport function.</li></ul></li>
+<li> DAQ:
+<ul><li> The DAQ item linking functions expanded by the base node specifying in the attribute "ndBase", for: ctrListPrmAttr(), daqAt(), prmAt(), attrAt().</li>
+<li> The object TPrmTempl::Impl appended by the new function archAttrs() of updating-archiving attributes of the LogicalLevel.</li></ul></li>
+<li> Archives-History: The value archive object TVArchive appended by declaration the enumeration ServReqDtMode for the Control Interface request "get:/Archive/va_{ARCH}/%2fserv%2fval".</li>
+<li> Transports:
+<ul><li> The new function TTransportIn::associateTr() and its UserAPI variant SYS.Transport["Modul"]["in_Transp"].associateTr().</li>
+<li> The new function TTransportS::outAt() and its UserAPI variant SYS.Transport.outAt().</li>
+<li> The new UserAPI function SYS.Transport["Modul"]["in_Transp"].associateTrsList() as a correct naming variant to assTrsList().</li>
+<li> The output transport object appended by the UserAPI functions conPrm() and setConPrm() of accessing the connection parameters.</li>
+<li> The function TTransportS::extHostList() appended by an argument "lang" to receive translated names of remote hosts.</li>
+<li> The "in_" and "out_" prefix moved to the definitions STR_IN_PREF and STR_OUT_PREF respectively.</li>
+<li> The TTransportS object appended by the enumeration LogType with the items: LTP_BinaryText, LTP_Binary, LTP_Text.</li></ul></li>
+<li> UI.VCAEngine:
+<ul><li> Appended by setting the session side period with the User API function calcPer() of the session side widget, expanded by specifying the special values: PerVal_Sess(0), PerVal_Parent(-1), PerVal_UserMin(PerVal_Dis(-2)), PerVal_SessDef(-3).</li>
+<li> The session object appended by the User API function period(), returning the session periodic processing.</li>
+<li> The attribute "alarmSt" change appended by accompaniation by the new event "ws_alarmChange".</li></ul></li></ul>
+<p><b><u>SYS</u></b><br />
+</p>
+<ul><li> FIX:Building: configure.ac: Core library version rose to 3:13:0 and the program version rose to 0.9.6. The module version of the subsystem "Transport" rose to 19.</li>
+<li> *: Most close(), iconv_close(), dlclose(), pclose() functions appended by checking the result and warning at problems.</li>
+<li> .,DAQ.JavaLikeCalc: Getting help from the second line for the Control Interface appended in: description of the element fields (TFld) with DAQ-values; name of function IOs (TFunction) with links and attributes builder of the DAQ Logical Level.</li>
+<li> Revised for all templates in the folders =Tmpl=.</li>
+<li> FIX: The tab "Station" of the main page of the OpenSCADA Control Interface appended by the system time information and commonly restructured.</li>
+<li> FIX:data/openscada-proj.in:
+<ul><li> Expanded by the new environment variable OSCD_TAR_Args of defining extra <b>tar</b> arguments like to --exclude and it was set to the default value "--exclude=lock --exclude=ARCHIVES".</li>
+<li> FIX: Fixed in description and using the environment variables OSCD_TAR_ComprPrg and OSCD_BackLim.</li></ul></li>
+<li> During unification the common project icon obtaining through using the project name and ID there performed:
+<ul><li> the Base Language Name used also for obtaining the icon, so now checked: The Translated Name, the Base Language Name, ID;</li>
+<li> the icon obtaining mechanism moved in a new separated function TSYS::ico().</li></ul></li>
+<li> TRegExp: Appended by the 16 and 32 modes support by the pcre16 and pcre32 libraries respectively and only for the search() function currently.</li></ul>
+<p><b><u>DAQ</u></b><br />
+</p>
+<ul><li> The Logical Level linking appended by a form of the address representing as the prefixed path "prm:/node/node", so with support of the relative addressing at "." and "..":
+<ul><li> the DAQ item linking functions expanded by the base node specifying in the attribute "ndBase", for: ctrListPrmAttr(), daqAt(), prmAt(), attrAt();</li>
+<li> the implementation object TPrmTempl::Impl of the Logical Level of the DAQ-template expanded for the new linking support.</li></ul></li>
+<li> FIX: Setting the LogicalLevel links prevented from cleaning all the string after the space at the link constants "val:".</li>
+<li> ModBus: Appended by the option "e" for the register endian switch to LE for generic and BE for strings. The string extension of the registers appended by the input charset conversion.</li>
+<li> FIX:DAQGate:
+<ul><li> FIX: The message categories in catsPat() of obtaining the data source messages of the Controller Object switched to generate own detailed rules of the regular expression from the specified remote controllers — to prevent very redundant messages obtaining.</li>
+<li> FIX: Improved-fixed in the Controller Alarm status formation for multiple stations, when ALARM it is at missing connection of all stations.</li>
+<li> The sync() function of the controller object rewrote completely in the "Removing remotely missed parameters" section for:
+<ul><li> processing the parameter's representing stations: removing completely for missing stations and parameters with no station;</li>
+<li> removing disabled parameters and the logical containers at the flag "Allow the automatic removal of parameters and attributes".</li></ul></li></ul></li>
+<li> OPC_UA: Finished in the writing support through custom flags of the Standard mode and the type obtaining from IO for the Logical mode.</li></ul>
+<p><b><u>Archives-History</u></b><br />
+</p>
+<ul><li> .,DAQ.{LogicLev,ModBus,OPC_UA}: Finished the unification of archiving at the Logical Level sources when used only the direct-passive archiving:
+<ul><li> the object TPrmTempl::Impl appended by the new function archAttrs() of updating-archiving attributes of the LogicalLevel;</li>
+<li> the value archive link type "Passive param. attribute (TVArchive::PassiveAttr)" renamed to "DAQ attribute (TVArchive::DAQAttr)";</li>
+<li> the value archive link type "Active param. attribute" renamed to "Active DAQ attribute" with that mark as DEPRECATED.</li></ul></li>
+<li> FIX:FSArch:
+<ul><li> FIX: Prevented for access to files[iA] in ModVArchEl::setValsProc() outside the lock using the read-lock switching.</li>
+<li> FIX: Prevented for access to "files" in ModMArch::checkArchivator() outside the lock.</li>
+<li> FIX: Files accessing locks completely revised for including the packing/unpacking, new files creation, removing old ones under the WR lock space including also the conditions checking. Also removed for the relocks in cycles and at indexes.</li></ul></li></ul>
+<p><b><u>Transports</u></b><br />
+</p>
+<ul><li> FIX: The output transports appended by the force stopping at the object system disable-disconnection, not in destructors what is late then there can be lost the socket handlers.</li>
+<li> The IO log of the transports appended by the data modes: "Binary &amp; Text", "Binary", "Text".</li>
+<li> FIX:Sockets: Fixed in processing the not complete writing for the Input part, when the message cuts on the TCP transmitter buffer size. The input buffer size of the Input part bound to the hardware receiver buffer size control and the internal one just frozen to the standard string buffer length since that is not critical and need no control.</li></ul>
+<p><b><u>Transport Protocols</u></b><br />
+</p>
+<ul><li> ModBus: Appended by the option "e" for the register endian switch to LE for generic and BE for strings.</li></ul>
+<p><b><u>User Interface</u></b><br />
+</p>
+<ul><li> QTStarter,QTCfg,Vision: The common Syntax Highlighter in SnthHgl::rule() switched to the main work using PCRE in TRegExp, since that is 5 TIMES FASTER and very richer comparing to QRegExp; and QRegExp left to be automatically enabled at missing the PCRE 32/16 libraries. The Qt-generic library (lib_qtgen) appended by the static-external functions getFont() and getColor() from UI.Vision and by the object SnthHgl from UI.Vision and UI.QTCfg.</li>
+<li> QTStarter: Appended by the display sessions control, that is the sessions restore.</li>
+<li> QTCfg: Appended by the Favorite pages implementation. The image element appended by a function of clearing the image completely.</li>
+<li> FIX:Vision:
+<ul><li> FIX: All control requests "&lt;info&gt;" appended by checking the child nodes presence to prevent crashes in some cases.</li>
+<li> Appended by the possibility of call remote station interfaces by selecting the remote station in a dialog, for what the user selection dialog was expanded.</li>
+<li> The text areas with the syntax highlighting appended by the builtin variant.</li>
+<li> The image elements (icons) of the item dialogs appended by a button menu with the functions: Save, Load, Clear.</li>
+<li> The Widget Attributes edition table appended by the multiline edition for the "Name" column and the context help loading for that.</li>
+<li> The popup menu of the project, the project pages, the widget libraries and the library widgets in appending widgets from the libraries removed for limit of the libraries here in 20 items by moving all them to a new separated menu item "... from the Library".</li></ul></li>
+<li> FIX:VCAEngine:
+<ul><li> Icons of the projects and the widget libraries switched to download the common project icon at missing local.</li>
+<li> The widget libraries adapted to interhost copying.</li>
+<li> FIX: The Document primitive generation appended by limiting the repeating blocks size in limUserFile_SZ (10MB).</li>
+<li> FIX: Fixed in the correct treating of the project pages and the library widgets with initially wrong parent addresses, for don't remove child widgets and change them parent at pointing the correct parent address.</li></ul></li>
+<li> FIX:WebVision:
+<ul><li> Appended by the export implementation for the "Document - HTML,CSV" and "Table CSV".</li>
+<li> Appended by the printing implementation for the "Document" and "Main Page".</li>
+<li> The type Table of the primitive FormEl added by tearing off the table header at big tables scrolling down.</li>
+<li> FIX: The type Table of the primitive FormEl improved and fixed for:
+<ul><li> setting the CSS property "white-space" to "pre-wrap";</li>
+<li> setting the color changes under the selected cells;</li>
+<li> preventing the focus loss just after entry to the cell editing;</li>
+<li> fixing the boolean value setting at entry to the cell editing;</li>
+<li> the table refitting at growing the column string length.</li></ul></li>
+<li> The included pages closing set after several (4) row appears — to prevent of closing all pages at fast navigation.</li></ul></li></ul>
 <h3><span class="mw-headline" id=".5B22.02.2022.5D_.D0.9F.D0.AF.D0.A2.D0.9E.D0.95_.D0.BE.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5"><span class="mw-headline-number">7.2</span> [22.02.2022] ПЯТОЕ обновление</span></h3>
 <p>Это обновление <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релиза 0.9 LTS</a> исправляет около 50 ошибок и добавляет МНОЖЕСТВО улучшений с несколькими значительными-концептуальными, с которыми целиком можно ознакомиться в <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2831" rel="nofollow noreferrer noopener" target="_blank">протоколе изменений обновления</a>.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> <b><u>Significant actions of the developer of the OpenSCADA modules on the update</u></b><br />
@@ -436,7 +710,7 @@
 <li> docUsersSet: 1.5 =&gt; <b>1.7</b></li></ul></li></ul>
 <p><b><u><span id="DataStorage" title="#DataStorage">CONCEPTUAL &gt; Common Conception of the Data Storage</span> </u></b><br />
 </p>
-<ul><li> the Сonception is commonly unified in the direct storage specification and definition the Generic Storage "*.*" as a combination of the Configuration File and the work Data Base, when the Configuration File is the priority one for accessing the allowed data and the work Data Base for new data.</li>
+<ul><li> the Conception is commonly unified in the direct storage specification and definition the Generic Storage "*.*" as a combination of the Configuration File and the work Data Base, when the Configuration File is the priority one for accessing the allowed data and the work Data Base for new data.</li>
 <li> TBDS::{dataSeek,dataGet,dataSet,dataDel,genDBGet,genDBSet}() moved to the bit flags TBDS::ReqGenFlg;</li>
 <li> the TBDS::dbList() moved to the bit flags TBDS::DBLsFlg;</li>
 <li> TCntrNode appended of the functions storage() and setStorage() for tracking the availability of node data in different storages and offer a queue of the storages for the mechanism of sequentially removing duplicates, and they also used in the object functions DB(), fullDB(), setDB();</li>
@@ -1473,5 +1747,5 @@ FIX: The "Translations" tab expansion and fixing for:
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/ru">Documents/Release_0.9/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> 1+r2868</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/ru">Documents/Release_0.9/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2873</td></tr></table></body>
 </html>

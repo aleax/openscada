@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="index.html"><img src="../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Works/To do</h1>
@@ -23,9 +23,9 @@
 <li class="toclevel-1 tocsection-5"><a href="#Program.2FSystem_generic"><span class="tocnumber">5</span> <span class="toctext">Program/System generic</span></a></li>
 <li class="toclevel-1 tocsection-6"><a href="#Subsystem_DB"><span class="tocnumber">6</span> <span class="toctext">Subsystem DB</span></a></li>
 <li class="toclevel-1 tocsection-7"><a href="#Subsystem_.22Transports.22"><span class="tocnumber">7</span> <span class="toctext">Subsystem "Transports"</span></a></li>
-<li class="toclevel-1 tocsection-8"><a href="#Subsystem_.22Protocols_of_the_transports.22"><span class="tocnumber">8</span> <span class="toctext">Subsystem "Protocols of the transports"</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Subsystem_.22Transport_Protocols.22"><span class="tocnumber">8</span> <span class="toctext">Subsystem "Transport Protocols"</span></a></li>
 <li class="toclevel-1 tocsection-9"><a href="#Subsystem_.22Data_acquisition.22_.28DAQ.29"><span class="tocnumber">9</span> <span class="toctext">Subsystem "Data acquisition" (DAQ)</span></a></li>
-<li class="toclevel-1 tocsection-10"><a href="#Subsystem_.22Archives.22"><span class="tocnumber">10</span> <span class="toctext">Subsystem "Archives"</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Subsystem_.22Archives-History.22"><span class="tocnumber">10</span> <span class="toctext">Subsystem "Archives-History"</span></a></li>
 <li class="toclevel-1 tocsection-11"><a href="#Subsystem_.22Special.22"><span class="tocnumber">11</span> <span class="toctext">Subsystem "Special"</span></a></li>
 <li class="toclevel-1 tocsection-12"><a href="#Subsystem_.22User_interfaces.22"><span class="tocnumber">12</span> <span class="toctext">Subsystem "User interfaces"</span></a></li>
 </ul>
@@ -70,7 +70,7 @@
 <ul><li> <a href="Libs_LowLevelDevices.html" title="Special:MyLanguage/Libs/LowLevelDevices">Low level sensors and chips library</a></li></ul>
 <dl><dd>- to combine the <a href="Libs_LowLevelDevices.html#1W_DS9097" title="Special:MyLanguage/Libs/LowLevelDevices">1W templates</a> in one complex and append 1W to work through GPIO directly.</dd></dl>
 <ul><li> <a href="Libs_Regulation_elements.html" title="Special:MyLanguage/Libs/Regulation elements">Regulation elements library</a></li></ul>
-<dl><dd>- move to <a href="Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">the DAQ-templates</a> after their conception expanding for the internal links and the <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a> expanding for using the DAQ-templates.</dd></dl>
+<dl><dd>- move to <a href="Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">the DAQ-templates</a> after their conception expanding for the internal links (+) and the <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a> expanding for using the DAQ-templates.</dd></dl>
 <ul><li> <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">Main elements library of the user interface</a></li></ul>
 <dl><dd> + <a href="#storeHouse">Storehouse</a>: generation of the report document of the selected item, which is ready to print and convenient in complete observing;</dd>
 <dd> + <a href="#storeHouse">Storehouse</a>: generation of the report document of the main table with accounting the filter settings and natural show the specific fields;</dd>
@@ -94,11 +94,25 @@
 <dd> - implementing the service commands-functions for DAQ.BlockCalc and DAQ.JavaLikeCalc</dd>
 <dd> - implementing the service commands-functions for MTP</dd>
 <dd> - creating libraries for some languages of IEC 61131-3</dd></dl>
+<ul><li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/PinePhone" title="Special:MyLanguage/Using/PinePhone">Open Phone — PinePhone</a></li></ul>
+<dl><dd>- connect as PC through Docking Bar</dd>
+<dd>- install Mobian: <a class="external free" href="https://wiki.pine64.org/index.php/PinePhone_Installation_Instructions" rel="nofollow noreferrer noopener" target="_blank">https://wiki.pine64.org/index.php/PinePhone_Installation_Instructions</a></dd>
+<dd>- build and/or install ready OpenSCADA packages for Mobian</dd>
+<dd>- learn the hardware specific and measure that productivity in OpenSCADA</dd>
+<dd>- connect the device sensors to OpenSCADA</dd>
+<dd>- build and install OpenSCADA on Majero</dd>
+<dd>- adapt for the custom usage: decreasing the power consumption from minimum 1W, enabling and testing the deep sleep</dd>
+<dd>- connect GPS and maps to OpenSCADA</dd>
+<dd>- append audio and video writing in OpenSCADA</dd>
+<dd>- adapt for the scanning-photo functions under OpenSCADA control with reading the barcodes</dd></dl>
+<ul><li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Orange_Pi" title="Special:MyLanguage/Using/Orange Pi">Single-board computers Orange Pi</a></li></ul>
+<dl><dd>- observe for decreasing the power consumption in relation with <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/PinePhone" title="Special:MyLanguage/Using/PinePhone">Pine Phone</a>.</dd></dl>
 </td></tr>
 <tr>
 <td>
 <h3><span class="mw-headline" id="Testing.2C_optimization_and_fixing"><span class="mw-headline-number">4</span> <span id="TestOptFix" title="#TestOptFix">Testing, optimization and fixing</span></span></h3>
-<ul><li> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> [TESTING] Implement the asynchronous writing with a function of preventing the data loss on the time of the connection missing for the key DAQ-modules of the OpenSCADA internal procedures: <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a>, <a href="Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a>, <a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DCON</a>. The function is currently tested on the module <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>.</li>
+<ul><li> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> [TESTING] Implement the asynchronous writing with a function of preventing the data loss on the time of the connection missing for the key DAQ-modules of the OpenSCADA internal procedures: <a href="Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a>, <a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DCON</a>. The function is currently tested on the module <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> and preventing the data loss must be expanded here for the synchronous writing also.</li>
+<li> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> [TESTING] Expanding the <a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">output transport generic obtaining from the unified address</a> often without separate creation the output transport object. The function is currently tested on the module <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>.</li>
 <li> <i>UI.{Vision,WebVision}</i>: Complete revision of the primitive "ElFigure" implementation, what needs:</li></ul>
 <dl><dd>- BUG: selecting multiple figures at hold the key "Ctrl";</dd>
 <dd>- BUG: clearing the copy buffer after selected items copy — impossible for the copy repeat;</dd>
@@ -110,30 +124,23 @@
 <tr>
 <td>
 <h3><span class="mw-headline" id="Program.2FSystem_generic"><span class="mw-headline-number">5</span> Program/System generic</span></h3>
-<ul><li> <a href="Create_multi_language_project.html" title="Special:MyLanguage/Documents/How to/Create multi language project">Translation and creation multi language projects</a></li></ul>
+<ul><li> (+) <a href="Create_multi_language_project.html" title="Special:MyLanguage/Documents/How to/Create multi language project">Translation and creation the multi language projects</a></li></ul>
 <dl><dd> - develop a mechanism for tracking the irrelevance of messages in the table "Trs"
 <dl><dd>&nbsp;?&gt; it is possible to add to the table "Trs" a field of options where to specify time of update-registration and at compilation or execution, accordingly to clear too old and updated-registered at compilation</dd></dl></dd></dl>
-<ul><li> Develop the text highlighting rules building in the comments of the custom text rules.</li>
-<li> Develop the pure demo and the TP-mode on the certificates base in the keys of the subscription on a TP-package: prevent writing and form the notification dialogues.</li>
-<li> Work out for developing, using, integration to solutions, concept of the support of the OpenSCADA project. Expand the community targeting for implementation control of:
+<ul><li> (+) Develop the text highlighting rules building in the comments of the custom text rules.</li>
+<li> Work out for developing, using, integration to solutions, concept of the OpenSCADA project support. Expand the community by targeting on the implementation control of:
 <ul><li> tasks: tasks pool, fund and fundraising; developers register, ranks for participate into the tasks.</li>
 <li> solutions: register a task of the solution implementation (by consumer), set demands to the task and performer, set the price limit; each performer propose self price; consumer select a performer. Commission from the order price to the project is 10%.</li></ul></li>
-<li> Prepare some solutions as OpenSCADA products:
-<ul><li> Common packages of 0.9 LTS as a product — developing the service updates of the 0.9 LTS in the pure demo mode before applying a key of the TP support;</li>
-<li> Android packages;</li>
-<li> Firmwares and builds for "ICP DAS" LinPac (LP).</li></ul></li>
-<li> Adapt to the software platform Android: </li></ul>
-<dl><dd>- adapt to build in a chroot due to the actual problem of building for old Android 4.5 and 5,6,7,8,9,10 by the Java SDK8 build from <a class="external text" href="https://https://adoptopenjdk.net/" rel="nofollow noreferrer noopener" target="_blank">AdoptOpenJDK</a> which also doesn't support already Java source and target versions 1.5;</dd>
-<dd>- or update the Java-code of Qt from API-version 52;</dd>
-<dd>- append all external windows of the runtime mode of the module Vision for items of their closing and for centring.</dd></dl>
+<li> <a class="external" href="http://oscada.org/wiki/Sub-projects/Adaption_to_Android" title="Sub-projects/Adaption to Android">Adapt to the software platform Android</a>:</li></ul>
+<dl><dd>- append all external windows of the runtime mode of the module Vision for items of their closing and for centring.</dd></dl>
 <ul><li> Adapt to the software platform QNX:</li></ul>
-<dl><dd>+ get some QNX platform representation =&gt; due to the deep closing, but yet using OpenSource, this OS is not allowed in free and there was bought a used hardware based on BlackBerry, that is "BB PlayBook";</dd>
-<dd>- start the adaption sub-project and place here <a class="external text" href="http://oscada.org/ua/forum/posts/raznoe/popytka_adaptacii_openscada_k_qnx_65/" rel="nofollow noreferrer noopener" target="_blank">the preadaption achievements</a> from Sergey Doroshka;</dd>
+<dl><dd>+ get for some QNX platform representation =&gt; due to the deep closing, but yet using OpenSource, this OS is not allowed in free and there was bought a used hardware based on BlackBerry, that is "BB PlayBook", that is not actual already due to the main supporting resources are <span style="color: red">DEAD</span>;</dd>
+<dd>- start an adaption subproject and place here <a class="external text" href="http://oscada.org/ua/forum/posts/raznoe/popytka_adaptacii_openscada_k_qnx_65/" rel="nofollow noreferrer noopener" target="_blank">the preadaption achievements</a> from Sergey Doroshka;</dd>
 <dd>- build the pure console program;</dd>
 <dd>- build the full-featured Qt-GUI program on Photon.</dd></dl>
 <ul><li> Adapt to the software platform MS Windows®:</li></ul>
 <dl><dd>+ adapt for the modules linking with the OpenSCADA core library directly, for DLL restrictions;</dd>
-<dd>- start the adaption sub-project;</dd>
+<dd>- start an adaption subproject;</dd>
 <dd>- describe <a class="external text" href="http://oscada.org/ru/forum/posts/proekt/zapusk_openscada_v_srede_windows_10_posredstvom_wsl/" rel="nofollow noreferrer noopener" target="_blank">the original start of OpenSCADA as a Linux program on MS Windows, using WSL</a>;</dd>
 <dd>- initiate the OpenSCADA building for the MS Windows environment.</dd></dl>
 </td></tr>
@@ -162,15 +169,14 @@
 <tr>
 <td>
 <h3><span class="mw-headline" id="Subsystem_.22Transports.22"><span class="mw-headline-number">7</span> Subsystem "Transports"</span></h3>
-<ul><li> Expand the function <i>TTransportS::outAt()</i> and its UserAPI variant <i>Transport.outAt()</i>, of the output transport generic obtaining from the unified address, for specifying the redundant addresses.</li>
-<li> Implement an agent of the SNMP protocol, an examples are into: <a class="external text" href="http://www.networkupstools.org" rel="nofollow noreferrer noopener" target="_blank">NUT</a>.</li>
+<ul><li> Implement an agent of the SNMP protocol, an examples are in <a class="external text" href="http://www.networkupstools.org" rel="nofollow noreferrer noopener" target="_blank">NUT</a>.</li>
 <li> Create a gate module to the transports of other OpenSCADA stations.</li>
 <li> <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial interfaces</a></li></ul>
 <dl><dd> - test the modem mode and append to it for the PIN entering field.</dd></dl>
 </td></tr>
 <tr>
 <td>
-<h3><span class="mw-headline" id="Subsystem_.22Protocols_of_the_transports.22"><span class="mw-headline-number">8</span> Subsystem "Protocols of the transports"</span></h3>
+<h3><span class="mw-headline" id="Subsystem_.22Transport_Protocols.22"><span class="mw-headline-number">8</span> Subsystem "Transport Protocols"</span></h3>
 </td></tr>
 <tr>
 <td>
@@ -194,14 +200,14 @@
 <ul><li> <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a></li></ul>
 <dl><dd> + append the builtin Standard Mode of the DAQ-Parameters.</dd></dl>
 <ul><li> <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a></li></ul>
-<dl><dd> - adapt to the new common-unified <a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">output transport connection function outAt()</a> in the controller object transport address field;</dd>
-<dd> - append the option 'L' for the register bytes in little-endian (LE) instead the standard big-endian (BE) order.</dd></dl>
+<dl><dd> + adapt to the new common-unified <a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">output transport connection function outAt()</a> in the controller object transport address field;</dd>
+<dd> + append by the option "e" for the register endian switch to LE for generic and BE for strings.</dd></dl>
 <ul><li> <a href="Modules/System.html" title="Special:MyLanguage/Modules/System">System</a></li></ul>
 <dl><dd> - append measuring of the system memory consumption per process or group of the processes.</dd></dl>
 </td></tr>
 <tr>
 <td>
-<h3><span class="mw-headline" id="Subsystem_.22Archives.22"><span class="mw-headline-number">10</span> Subsystem "Archives"</span></h3>
+<h3><span class="mw-headline" id="Subsystem_.22Archives-History.22"><span class="mw-headline-number">10</span> Subsystem "Archives-History"</span></h3>
 <ul><li> Move the critical section lock from the object TValBuf to its heir, to allow the global lock into the group operations.</li>
 <li> Create a gate module to archives-history of other OpenSCADA stations.</li></ul>
 </td></tr>
@@ -212,9 +218,9 @@
 <tr>
 <td>
 <h3><span class="mw-headline" id="Subsystem_.22User_interfaces.22"><span class="mw-headline-number">12</span> Subsystem "User interfaces"</span></h3>
-<ul><li> Append on the configurators <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QtCfg</a>, <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> side of the conditional control and using the shielded symbols "\{symb}" in the text fields, what is enabled only at such encoding presence, for the binary symbols encoding as an example.</li>
+<ul><li> (+) Append on the configurators <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QtCfg</a>, <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> side by the conditional control and using the shielded symbols "\{symb}" in the text fields, what is enabled only at such encoding presence, for the binary symbols encoding as an example.</li>
 <li> <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">QTStarter</a></li></ul>
-<dl><dd> - implement for a manager of sub-projects of their starting into different processes but with the ones storing and managing into the single configuration file of the project, for high reliable configurations;</dd>
+<dl><dd> - implement for a manager of subprojects of their starting in different processes but with the ones storing and managing into the single configuration file of the project, for high reliable configurations;</dd>
 <dd> - implement for a manager of the background-daemon processes.</dd></dl>
 <ul><li> <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a></li></ul>
 <dl><dd> * revise and unify the keyboard focus forcing on a first active element considering them specifity, to ensure the keyboard shortcuts;</dd>
@@ -249,5 +255,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Works/To_do/en">Works/To_do/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> 1+r2868</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Works/To_do/en">Works/To_do/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2873</td></tr></table></body>
 </html>

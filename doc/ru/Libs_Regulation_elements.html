@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../en/files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="index.html"><img src="../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Библиотека/Элементы регулирования</h1>
@@ -40,7 +40,7 @@
 <li> <b>Изначально создано:</b> в <a class="external text" href="http://wiki.oscada.org/Using/APIFunctionLibs/LibRegEl" rel="nofollow noreferrer noopener" target="_blank">старой Wiki</a></li>
 <li> <b>Использовано:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Kramatorsk_Ball_Mills" title="Special:MyLanguage/Using/Kramatorsk Ball Mills">САУ шаровых барабанных мельниц</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Kramatorsk_Water" title="Special:MyLanguage/Using/Kramatorsk Water">САУ Фосфатирования, Амминирования и Гидразина</a></li>
 <li> <b><a href="../en/To_do.html" title="Special:MyLanguage/Works/To do">Задачи (To Do)</a>:</b></li></ul>
-<dl><dd>- перевести в <a href="Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">DAQ-шаблоны</a> после расширения их концепции на предмет внутренних ссылок и расширения <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a> до использования DAQ-шаблонов.</dd></dl>
+<dl><dd>- перевести в <a href="Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">DAQ-шаблоны</a> после расширения их концепции на предмет внутренних ссылок (+) и расширения <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a> до использования DAQ-шаблонов.</dd></dl>
 </td></tr></table>
 <p>Библиотека создаётся для предоставления функций различных алгоритмов контроля и она может быть использована в программированных логических контроллерах (PLC) основанных на OpenSCADA для построения схем контроля в модуле <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">DAQ.BlockCalc</a>. Библиотека не является статической, а строится на основе модуля <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, позволяющего создавать вычисления на Java-подобном языке. Названия функций и их параметров доступны на языках: Английский, Украинский и mRussian.
 </p><p>Для адресации к функции этой библиотеки можно использовать статический адрес вызова <b>DAQ.JavaLikeCalc.lib_regEl.{Func}()</b> или динамический <b>SYS.DAQ.JavaLikeCalc["lib_regEl"]["{Func}"].call()</b>, <b>SYS.DAQ.JavaLikeCalc["lib_regEl"].{Func}()</b>.
@@ -1226,5 +1226,5 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Regulation_elements/ru">Libs/Regulation_elements/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> 1+r2868</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Regulation_elements/ru">Libs/Regulation_elements/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2873</td></tr></table></body>
 </html>

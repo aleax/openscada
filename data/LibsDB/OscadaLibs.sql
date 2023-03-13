@@ -9151,18 +9151,15 @@ return obuf;','','',1560098890);
 INSERT INTO flb_servProc VALUES('docOffLine','EXT: Off-line documentation','','','Procedure of forming the offline documentation of OpenSCADA from Wiki by reading and processing the specified Wiki pages on different languages, currently it is: English, Ukrainian, mRussian.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.1','','',1,360,0,'trNm = "offLine";
+Version: 1.3.2','','',1,360,0,'trNm = "offLine";
 docHost = "oscada.org:80";
 docHost_ = "http://" + docHost.parse(0,":");
 defLang = "en";
 indexPg = "index.html";
 
-SYS.cntrReq((req=SYS.XMLNode("get").setAttr("path","/%2fgen%2fprog")));
-prgNm = req.text();
-if(!prgVer.length) {
-	SYS.cntrReq((req=SYS.XMLNode("get").setAttr("path","/%2fgen%2fver")));
-	prgVer = req.text();
-}
+SYS.cntrReq((req=SYS.XMLNode("get").setAttr("path","/%2fgen%2fenv%2fprog")));
+prgNm = req.text().parse(0, " ");
+if(!prgVer.length)	prgVer = req.text().parse(1, " ");
 docData = SYS.strftime(SYS.time(), "%B %Y");
 
 //Check and connect to self transport

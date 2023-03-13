@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="index.html"><img src="../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/How to/Create multi language project</h1>
@@ -68,7 +68,7 @@ Creating a multilingual project is a non-trivial task that affects almost all as
 <h3><span class="mw-headline" id="Switching_the_project_to_a_multilingual_mode_and_translation_into_the_selected_languages"><span class="mw-headline-number">5</span> Switching the project to a multilingual mode and translation into the selected languages</span></h3>
 <p>All basic translation actions are performed in the "Translations" tab of the station configuration root page, which is shown in Figure 1 and where we will consider all the actions in this step.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1282px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_transl.png"><img class="thumbimage" height="973" src="files/QTCfg_sys_transl.png" width="1280" /></a>  <div class="thumbcaption">Fig.1. The tab "Translations" of the main page of the station configuration.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1002px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_transl.png"><img class="thumbimage" height="760" src="files/1000px-QTCfg_sys_transl.png" srcset="/wiki/images/8/86/QTCfg_sys_transl.png 1.5x, /wiki/images/8/86/QTCfg_sys_transl.png 2x" width="1000" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:QTCfg_sys_transl.png" title="Enlarge" /></div>Fig.1. The tab "Translations" of the main page of the station configuration.</div></div></div></div>
 <p>First of all, we have to switch the project of the previous stage to multilingual mode, for which in the specified tab we enter the code of the previously selected BASIC language, or a list of locales of all project languages with BASIC first, which is better, because then they will be substituted automatically and used in the translation of system-library messages such as months of date — the figure shows "en_US.UTF-8;uk_UA.UTF-8;ru_RU.UTF-8", so the BASIC is English (en). If you also need dynamic multilingualism, check the box after the language field, which is a plan to enable multilingualism the next time you run it. That is, save these changes to the project storage and restart it.
 </p><p>If everything happened correctly, then after restarting in the translation status we should get "MULTILANGUAGE" or "MULTILANGUAGE-DYNAMIC" and go directly to the translation on the same tab, ie in the table "Messages". If you do not have the table itself, then you have chosen non-dynamic mode, where initially there is no translation messages index to build a translation table manager, but there is a field "Enable manager", which forms that index.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Before enabling the translation manager, or starting to work with it in dynamic mode, you must fully download all messages that do not happen automatically for <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">the VCA projects and libraries</a> and can be done simply by opening <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">the development environment</a>.
@@ -121,5 +121,5 @@ Creating a multilingual project is a non-trivial task that affects almost all as
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Create_multi_language_project/en">Documents/How_to/Create_multi_language_project/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> 1+r2868</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Create_multi_language_project/en">Documents/How_to/Create_multi_language_project/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2873</td></tr></table></body>
 </html>

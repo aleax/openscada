@@ -88,7 +88,6 @@ protected:
     //Methods
     void showEvent( QShowEvent* );
     void closeEvent( QCloseEvent* );
-    void resizeEvent( QResizeEvent* );
 
 private:
     //Attributes
@@ -97,8 +96,6 @@ private:
     QPushButton	*prjsBt;
 
     QTimer	*updTmr;
-
-    unsigned	logoImgSz;
 
     //Methods
     bool eventFilter( QObject *object, QEvent *event );
