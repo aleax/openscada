@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.8.4"
+#define MOD_VER		"3.8.5"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -461,15 +461,11 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     MtxAlloc resN(tro.reqRes(), true);
 
     try {
-	//Get host address from transport
-	hostTr = (tro.owner().modId()=="Sockets") ? TSYS::strParse(tro.addr(),1,":")+":"+TSYS::strParse(tro.addr(),2,":") : tro.addr();
+	//Getting the host address from the transport
+	hostTr = tro.addr();
 
-	//Set new address
-	if(!host.empty() && host != hostTr) {
-	    tro.stop();
-	    tro.setAddr((tro.owner().modId()=="Sockets")?"TCP:"+host:host);
-	    hostTr = host;
-	}
+	//Setting for new address
+	if(!host.empty() && host != hostTr) { tro.stop(); tro.setAddr(host); hostTr = host; }
 	host = hostTr;
 
 	//Prepare request

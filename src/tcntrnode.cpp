@@ -349,24 +349,30 @@ void TCntrNode::nodeList( vector<string> &list, const string &gid )
 AutoHD<TCntrNode> TCntrNode::nodeAt( const string &path, int lev, char sep, int off, bool noex )
 {
     try {
-	string s_br = sep ? TSYS::strDecode(TSYS::strSepParse(path,lev,sep,&off),TSYS::PathEl) :
-			    TSYS::pathLev(path, lev, true, &off);
-	if(s_br.empty()) {
+	string sBr = sep ? TSYS::strDecode(TSYS::strSepParse(path,lev,sep,&off),TSYS::PathEl) :
+			   TSYS::pathLev(path, lev, true, &off);
+	if(sBr.empty()) {
 	    if(nodeMode() == Disabled) throw err_sys(_("Node is disabled!"));
 	    return this;
 	}
 
-	AutoHD<TCntrNode> chN;
+	unsigned iG = 0;
+	string sBrG;
+
 	MtxAlloc res(mChM, true);
-	for(unsigned iG = 0; chGrp && iG < chGrp->size(); iG++)
-	    if(s_br.compare(0,(*chGrp)[iG].id.size(),(*chGrp)[iG].id) == 0) {
-		chN = chldAt(iG, s_br.substr((*chGrp)[iG].id.size()));
+	if(!chGrp) throw err_sys(_("No childs in the node!"));
+	for(iG = 0; iG < chGrp->size(); iG++)
+	    if(sBr.compare(0,(*chGrp)[iG].id.size(),(*chGrp)[iG].id) == 0)
 		break;
-	    }
-	if(chN.freeStat() && chGrp) chN = chldAt(0, s_br);	//Go to default group
+	if(iG < chGrp->size()) sBrG = sBr.substr((*chGrp)[iG].id.size());
 	res.unlock();
-	if(!chN.freeStat()) return chN.at().nodeAt(path, 0, sep, off, noex);
-	throw err_sys(_("The node '%s' is missing!"), s_br.c_str());
+
+	AutoHD<TCntrNode> chN;
+	if(sBrG.size()) chN = chldAt(iG, sBrG);
+	if(chN.freeStat()) chN = chldAt(0, sBr);	//Go to the default group
+	if(chN.freeStat()) throw err_sys(_("The node '%s' is missing!"), sBr.c_str());
+
+	return chN.at().nodeAt(path, 0, sep, off, noex);
     } catch(TError &err) { if(!noex) throw; }
 
     return NULL;

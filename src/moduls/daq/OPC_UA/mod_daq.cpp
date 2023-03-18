@@ -210,7 +210,7 @@ bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
 	if(co.fld().name() == "SCHEDULE")
 	    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
 	else if(co.name() == "EndPoint" && enableStat()) {
-	    tr.at().setAddr("TCP:"+epParse()); tr.at().modifClr();
+	    tr.at().setAddr(epParse()); tr.at().modifClr();
 	    ResAlloc res(resOPC, false);
 	    SecuritySetting ss("", -1);
 	    if(epLst.find(co.getS()) != epLst.end()) ss = epLst[co.getS()];

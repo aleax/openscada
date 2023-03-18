@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <string.h>
 
 #include "tsys.h"
@@ -534,7 +536,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 	TSubSYS::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),R_R_R_) &&
 	    ctrMkNode2("table",opt,-1,"/sub/ehost",TSYS::strMess(_("External hosts of %s"),PACKAGE_NAME).c_str(),RWRWRW,"root",STR_ID,
-		"s_com","add,del","key","id",NULL))
+		"s_com",TSYS::strMess("add:%s,del:%s",_("Add host"),_("Remove host")).c_str(),"key","id",NULL))
 	{
 	    ctrMkNode2("list",opt,-1,"/sub/ehost/id",_("Identifier"),RWRWRW,"root",STR_ID,"tp","str", NULL);
 	    ctrMkNode2("list",opt,-1,"/sub/ehost/name",_("Name"),RWRWRW,"root",STR_ID,"tp","str", NULL);
@@ -792,7 +794,7 @@ void TTypeTransport::perSYSCall( unsigned int cnt )
 //************************************************
 TTransportIn::TTransportIn( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), runSt(false), mId(cfg("ID")), mStart(cfg("START").getBd()), mDB(idb), associateTrRes(true),
-    mLogLen(0), mLogItLim(1000), mLogLstDt(0), mLogLstDtTm(0), mLogTp(TTransportS::LTP_BinaryText)
+    mLogLen(0), mLogItLim(1000), mLogLstDt(0), mLogLstDtTm(0), mLogTp(TTransportS::LTP_BinaryText), mLogFHD(-1)
 {
     mId = iid;
 }
@@ -926,9 +928,20 @@ void TTransportIn::setLogLen( int vl )
 {
     MtxAlloc res(mLogRes, true);
 
-    vl = vmax(0, vmin(10000,vl));
+    vl = vmax(-1, vmin(10000,vl));
     if(vl && !mLogLen) mLogLstDt = 0;
-    while((int)mLog.size() > vl) mLog.pop_back();
+    while(vl > 0 && (int)mLog.size() > vl) mLog.pop_back();
+
+    if(vl < 0 && mLogFHD < 0) {
+	string fNm;
+	if((mLogFHD=open((fNm=STR_IN_PREF+owner().modId()+"_"+id()+".log").c_str(), O_WRONLY|O_CREAT|O_TRUNC, SYS->permCrtFiles())) < 0)
+	    mess_warning(nodePath().c_str(), _("Opening the file '%s' error '%s (%d)'!"), fNm.c_str(), strerror(errno), errno);
+    }
+    else if(vl >= 0 && mLogFHD >= 0) {
+	if(close(mLogFHD) != 0)
+	    mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), mLogFHD, strerror(errno), errno);
+	mLogFHD = -1;
+    }
 
     mLogLen = vl;
 }
@@ -939,6 +952,25 @@ void TTransportIn::pushLogMess( const string &vl, const string &data, int dataDi
 
     if(!logLen()) return;
 
+    //Writing to the file
+    if(mLogFHD >= 0) {
+	int64_t itTm = TSYS::curTime();
+	string  resLog = TSYS::strMess("[%s.%06d] ",atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S").c_str(),itTm%1000000) + vl;
+	if(mLogTp == TTransportS::LTP_Binary || mLogTp == TTransportS::LTP_BinaryText)
+		resLog += TSYS::strDecode(data,TSYS::Bin,(mLogTp==TTransportS::LTP_Binary)?" ":"<text>") + "\n\n";
+	else if(mLogTp == TTransportS::LTP_Text)
+		resLog += data + "\n\n";
+
+	if(write(mLogFHD,resLog.data(),resLog.size()) < 0) {
+	    mess_warning(nodePath().c_str(), _("Writing the file %d error '%s (%d)'!"), mLogFHD, strerror(errno), errno);
+	    close(mLogFHD);
+	    mLogFHD = -1;
+	}
+
+	return;
+    }
+
+    //Writing to the buffer
     if(mLog.size() && dataDir && dataDir == mLogLstDt && (SYS->sysTm()-mLogLstDtTm) < prmWait_TM)
 	mLog[0] += data;
     else {
@@ -1057,14 +1089,14 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/log",_("IO log"),R_R___,"root",STR_ID)) {
-	    ctrMkNode("fld",opt,-1,"/log/logLen",_("Log length, block limit, type"),RWRW__,"root",STR_ID,4,"tp","dec", "min","0", "max","10000",
-		"help",_("Use zero for the log disabling."));
-	    ctrMkNode("fld",opt,-1,"/log/logItLim","",RWRW__,"root",STR_ID,3,"tp","dec", "min","1000", "max","1000000");
+	    ctrMkNode("fld",opt,-1,"/log/logLen",_("Log length, block limit, type"),RWRW__,"root",STR_ID,4,"tp","dec", "min","-1", "max","10000",
+		"help",_("Use zero (0) for the log disabling, -1 for writing to a file."));
+	    ctrMkNode("fld",opt,-1,"/log/logItLim","",RWRW__,"root",STR_ID,3,"tp","dec", "min","100", "max","1000000");
 	    ctrMkNode("fld",opt,-1,"/log/logTp","",RWRW__,"root",STR_ID,4,"tp","dec",
 		"dest","select",
 		"sel_id",TSYS::strMess("%d;%d;%d",TTransportS::LTP_BinaryText,TTransportS::LTP_Binary,TTransportS::LTP_Text).c_str(),
 		"sel_list",_("Binary & Text;Binary;Text"));
-	    if(logLen())
+	    if(logLen() > 0)
 		ctrMkNode("fld",opt,-1,"/log/log",_("Log"),R_R___,"root",STR_ID,4,"tp","str", "rows","20", "cols","100", "SnthHgl","1");
 	}
 	return;
@@ -1152,7 +1184,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 //************************************************
 TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), runSt(false), mDefTimeouts(true), mLstReqTm(0), mId(cfg("ID")), mDB(idb), mStartTm(0), mReqRes(true),
-    mLogLen(0), mLogItLim(1000), mLogLstDt(0), mLogLstDtTm(0), mLogTp(TTransportS::LTP_BinaryText)
+    mLogLen(0), mLogItLim(1000), mLogLstDt(0), mLogLstDtTm(0), mLogTp(TTransportS::LTP_BinaryText), mLogFHD(-1)
 {
     mId = iid;
 }
@@ -1265,9 +1297,20 @@ void TTransportOut::setLogLen( int vl )
 {
     MtxAlloc res(mLogRes, true);
 
-    vl = vmax(0, vmin(10000,vl));
+    vl = vmax(-1, vmin(10000,vl));
     if(vl && !mLogLen) mLogLstDt = 0;
-    while((int)mLog.size() > vl) mLog.pop_back();
+    while(vl > 0 && (int)mLog.size() > vl) mLog.pop_back();
+
+    if(vl < 0 && mLogFHD < 0) {
+	string fNm;
+	if((mLogFHD=open((fNm=STR_OUT_PREF+owner().modId()+"_"+id()+".log").c_str(), O_WRONLY|O_CREAT|O_TRUNC, SYS->permCrtFiles())) < 0)
+	    mess_warning(nodePath().c_str(), _("Opening the file '%s' error '%s (%d)'!"), fNm.c_str(), strerror(errno), errno);
+    }
+    else if(vl >= 0 && mLogFHD >= 0) {
+	if(close(mLogFHD) != 0)
+	    mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), mLogFHD, strerror(errno), errno);
+	mLogFHD = -1;
+    }
 
     mLogLen = vl;
 }
@@ -1277,6 +1320,24 @@ void TTransportOut::pushLogMess( const string &vl, const string &data, int dataD
     MtxAlloc res(mLogRes, true);
 
     if(!logLen()) return;
+
+    //Writing to the file
+    if(mLogFHD >= 0) {
+	int64_t itTm = TSYS::curTime();
+	string  resLog = TSYS::strMess("[%s.%06d] ",atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S").c_str(),itTm%1000000) + vl;
+	if(mLogTp == TTransportS::LTP_Binary || mLogTp == TTransportS::LTP_BinaryText)
+		resLog += TSYS::strDecode(data,TSYS::Bin,(mLogTp==TTransportS::LTP_Binary)?" ":"<text>") + "\n\n";
+	else if(mLogTp == TTransportS::LTP_Text)
+		resLog += data + "\n\n";
+
+	if(write(mLogFHD,resLog.data(),resLog.size()) < 0) {
+	    mess_warning(nodePath().c_str(), _("Writing the file %d error '%s (%d)'!"), mLogFHD, strerror(errno), errno);
+	    close(mLogFHD);
+	    mLogFHD = -1;
+	}
+
+	return;
+    }
 
     if(mLog.size() && dataDir && dataDir == mLogLstDt && (SYS->sysTm()-mLogLstDtTm) < prmWait_TM)
 	mLog[0] += data;
@@ -1412,14 +1473,14 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/req/answ",_("Answer"),RWRW__,"root",STR_ID,4,"tp","str","cols","90","rows","5","SnthHgl","1");
 	}
 	if(ctrMkNode("area",opt,-1,"/log",_("IO log"),R_R___,"root",STR_ID)) {
-	    ctrMkNode("fld",opt,-1,"/log/logLen",_("Log length, block limit, type"),RWRW__,"root",STR_ID,4,"tp","dec", "min","0", "max","10000",
-		"help",_("Use zero for the log disabling."));
-	    ctrMkNode("fld",opt,-1,"/log/logItLim","",RWRW__,"root",STR_ID,3,"tp","dec", "min","1000", "max","1000000");
+	    ctrMkNode("fld",opt,-1,"/log/logLen",_("Log length, block limit, type"),RWRW__,"root",STR_ID,4,"tp","dec", "min","-1", "max","10000",
+		"help",_("Use zero (0) for the log disabling, -1 for writing to a file."));
+	    ctrMkNode("fld",opt,-1,"/log/logItLim","",RWRW__,"root",STR_ID,3,"tp","dec", "min","100", "max","1000000");
 	    ctrMkNode("fld",opt,-1,"/log/logTp","",RWRW__,"root",STR_ID,4,"tp","dec",
 		"dest","select",
 		"sel_id",TSYS::strMess("%d;%d;%d",TTransportS::LTP_BinaryText,TTransportS::LTP_Binary,TTransportS::LTP_Text).c_str(),
 		"sel_list",_("Binary & Text;Binary;Text"));
-	    if(logLen())
+	    if(logLen() > 0)
 		ctrMkNode("fld",opt,-1,"/log/log",_("Log"),R_R___,"root",STR_ID,4,"tp","str", "rows","20", "cols","100", "SnthHgl","1");
 	}
 	return;

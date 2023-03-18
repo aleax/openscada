@@ -1,3 +1,18 @@
+2023-03-18 Roman (stable)
+- !!!!:FIX:SYS: Rewrote the function TCntrNode::nodeAt() to prevent of call the virtual chldAt() under the lock mChM,
+    so preventing some dead locks in the virtual definitions of chldAt().
+- !!!:Transports: The IO log appended by it writing to a file for very big ones at pointing the log size -1.
+    Commands of the table of the external hosts appended by names for custom.
+- DAQ.DAQGate: Some improved in managing the configuring subtab "Configuration of the remote parameter" of the remote station
+    in different states.
+- DAQ.{MMS,OPC_UA,System}: The prefix "TCP:" removed from address of the Sockets transports, as the default one.
+- Protocol.HTTP: The user requests processing part of the function TProt::outMess()
+    cleared from the Socktets' transport default prefix "TCP:" during processing the XML property "Host".
+- FIX:UI.{QTStarter,Vision}: The default table delegate appended by processing a new property "active" in TableDelegate::createEditor()
+    to prevent edition not active tables in UI.Vision runtime.
+- FIX:UI.WebUser: Fixed-adapted for the dynamic translation of the IO names.
+
+
 2023-03-13 Roman (stable)
 - data/Android/patches/openscada_oscada.xml.patch: Patched for only using AGLCS.png, AGLKS.png and Boiler.png icons
     and without АГЛКС.png what is not allowable in Android.

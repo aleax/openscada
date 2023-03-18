@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebUser file: web_user.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.5.13"
+#define MOD_VER		"1.5.14"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -727,7 +727,7 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 
 		for(int id = 0; id < func()->ioSize(); id++) {
 		    if(nId)	nId->childAdd("el")->setText(func()->io(id)->id());
-		    if(nNm)	nNm->childAdd("el")->setText(func()->io(id)->name());
+		    if(nNm)	nNm->childAdd("el")->setText(trD(func()->io(id)->name()));
 		    if(nType)	nType->childAdd("el")->setText(i2s(func()->io(id)->type()));
 		    if(nVal)	nVal->childAdd("el")->setText(getS(id));
 		}

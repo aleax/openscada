@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-16 10:54+0200\n"
+"POT-Creation-Date: 2023-03-18 10:22+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -714,6 +714,9 @@ msgstr "Ошибка отключения узла. Восстановление
 
 msgid "Node is disabled!"
 msgstr "Узел отключен!"
+
+msgid "No childs in the node!"
+msgstr ""
 
 #, c-format
 msgid "The node '%s' is missing!"
@@ -2567,6 +2570,13 @@ msgstr ""
 msgid "External hosts of %s"
 msgstr "Внешние хосты %s"
 
+msgid "Add host"
+msgstr ""
+
+#, fuzzy
+msgid "Remove host"
+msgstr "Удалить из Trs"
+
 msgid "User;System;User and System"
 msgstr "Пользов.;Системн.;Пользов. и Системн."
 
@@ -2634,6 +2644,14 @@ msgid "The initiative connection '%s' is not presented!"
 msgstr "Элемент '%s' отсутствует!"
 
 #, fuzzy, c-format
+msgid "Opening the file '%s' error '%s (%d)'!"
+msgstr "2:Ошибка открытия файла '%s': %s"
+
+#, c-format
+msgid "Writing the file %d error '%s (%d)'!"
+msgstr ""
+
+#, fuzzy, c-format
 msgid "Error connection the new associated node: %s"
 msgstr "Ошибка подключения нового назначенного узла: %s"
 
@@ -2657,7 +2675,8 @@ msgstr "Лог ВВ"
 msgid "Log length, block limit, type"
 msgstr "Длина лога и ограничение блока"
 
-msgid "Use zero for the log disabling."
+#, fuzzy
+msgid "Use zero (0) for the log disabling, -1 for writing to a file."
 msgstr "Используйте ноль для отключения лога."
 
 msgid "Binary & Text;Binary;Text"

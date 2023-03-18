@@ -123,7 +123,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	vector<AutoHD<TTransportOut> >	mAssociateTrO;
 
 	// IO log
-	int		mLogLen, mLogItLim, mLogLstDt, mLogTp;
+	int		mLogLen, mLogItLim, mLogLstDt, mLogTp, mLogFHD;
 	time_t		mLogLstDtTm;
 	deque<string>	mLog;
 };
@@ -221,7 +221,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	ResMtx	mReqRes, mLogRes;
 
 	// IO log
-	int		mLogLen, mLogItLim, mLogLstDt, mLogTp;
+	int		mLogLen, mLogItLim, mLogLstDt, mLogTp, mLogFHD;
 	time_t		mLogLstDtTm;
 	deque<string>	mLog;
 };
