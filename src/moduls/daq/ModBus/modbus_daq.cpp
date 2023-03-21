@@ -139,13 +139,13 @@ string TMdContr::getStatus( )
 	if(!prcSt) val += TSYS::strMess(_("Task terminated! "));
 	if(tmDelay > -1) {
 	    int errCode = TError::Tr_Connect;
-	    if(addr().empty())	{ val += TSYS::strMess(_("No transport.")); errCode = TError::Tr_ErrTransport; }
+	    if(addr().empty())	{ val += TSYS::strMess(_("No transport. ")); errCode = TError::Tr_ErrTransport; }
 	    else try {
 		    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strParse(addr(),0,".")).at().outAt(TSYS::strParse(addr(),1,"."));
-		    if(tr.at().addr().empty()) { val += TSYS::strMess(_("Empty transport.")); errCode = TError::Tr_ErrTransport; }
-		} catch(TError&) { val += TSYS::strMess(_("Error the transport.")); errCode = TError::Tr_ErrTransport; }
-	    if(errCode == TError::Tr_Connect)	val += TSYS::strMess(_("Error the connection."));
-	    val += " " + TSYS::strMess(_("Restoring in %.6g s."), tmDelay);
+		    if(tr.at().addr().empty()) { val += TSYS::strMess(_("Empty transport. ")); errCode = TError::Tr_ErrTransport; }
+		} catch(TError&) { val += TSYS::strMess(_("Error the transport. ")); errCode = TError::Tr_ErrTransport; }
+	    if(errCode == TError::Tr_Connect)	val += TSYS::strMess(_("Error the connection. "));
+	    val += " " + TSYS::strMess(_("Restoring in %.6g s. "), tmDelay);
 	    val.replace(0, 1, i2s(errCode));
 	}
 	else {
@@ -157,9 +157,9 @@ string TMdContr::getStatus( )
 			tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
 	    val += TSYS::strMess(_("Read %g(%g) registers, %g(%g) coils. "), numRReg, numRRegIn, numRCoil, numRCoilIn);
 	    val += TSYS::strMess(_("Wrote %g registers, %g coils. "), numWReg, numWCoil);
-	    if(asynchWrs.size()) val += TSYS::strMess(_("In the buffer %d. "), asynchWrs.size());
 	    val += TSYS::strMess(_("Errors of connection %g, of response %g. "), numErrCon, numErrResp);
 	}
+	if(asynchWrs.size()) val += TSYS::strMess(_("To write %d. "), asynchWrs.size());
     }
 
     return val;

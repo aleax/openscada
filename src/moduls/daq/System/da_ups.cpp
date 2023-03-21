@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_ups.cpp
 /***************************************************************************
- *   Copyright (C) 2014-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2014-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -238,7 +238,7 @@ string UPS::reqUPS( const string &addr, const string &req, const string &debCat 
     else tr = SYS->transport().at().at(tTr).at().outAt(nTr);
 
     MtxAlloc resN(tr.at().reqRes(), true);
-    if(tr.at().addr() != "TCP:"+host) tr.at().setAddr("TCP:"+host);
+    if(tr.at().addr() != host) tr.at().setAddr(host);
     if(!tr.at().startStat()) tr.at().start();
 
     if(debCat.size()) mess_debug(debCat.c_str(), _("REQ -> '%s'"), req.c_str());

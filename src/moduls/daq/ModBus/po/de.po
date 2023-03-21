@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2011-2022.
+# Roman Savochenko <roman@oscada.org>, 2011-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-19 15:09+0200\n"
+"POT-Creation-Date: 2023-03-20 10:09+0200\n"
 "PO-Revision-Date: 2010-10-10 23:11+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -86,21 +86,20 @@ msgstr "Wert"
 msgid "Task terminated! "
 msgstr "Task gekündigt! "
 
-msgid "No transport."
-msgstr "Kein Transport."
+msgid "No transport. "
+msgstr "Kein Transport. "
 
-msgid "Empty transport."
-msgstr "Leertransport."
+msgid "Empty transport. "
+msgstr "Leertransport. "
 
-msgid "Error the transport."
-msgstr "Fehler beim Transport."
+msgid "Error the transport. "
+msgstr "Fehler beim Transport. "
 
-msgid "Error the connection."
-msgstr "Fehler beim Verbinden."
+msgid "Error the connection. "
+msgstr "Fehler beim Verbinden. "
 
-#, c-format
-msgid "Restoring in %.6g s."
-msgstr "Wiederherstellung in %.6g sek."
+msgid "Restoring in %.6g s. "
+msgstr "Wiederherstellung in %.6g sek. "
 
 msgid "Acquisition. "
 msgstr "Erwerb. "
@@ -126,12 +125,12 @@ msgid "Wrote %g registers, %g coils. "
 msgstr "Geschrieben %g Register, %g Bits. "
 
 #, c-format
-msgid "In the buffer %d. "
-msgstr "Im Puffer %d. "
-
-#, c-format
 msgid "Errors of connection %g, of response %g. "
 msgstr "Fehler in der Verbindung %g, in der Antwort %g. "
+
+#, c-format
+msgid "To write %d. "
+msgstr "Schreiben von %d. "
 
 #, c-format
 msgid "Connection to the data source: %s."
@@ -242,9 +241,11 @@ msgstr ""
 "  numb - ModBus-Datenadresse des Geräts (dec., hex., oder octal) "
 "[0...65535];\n"
 "  flg - Flaggen: Regime Lesen/Einschreiben (r-lesen, w-einschreiben),\n"
-"                        strikter Anforderungsmodus (nicht kombinierend) 's',\n"
+"                        strikter Anforderungsmodus (nicht kombinierend) "
+"'s',\n"
 "                        registriert die Auftragsumkehr '~',\n"
-"                        Register 'e'ndian Toggle (zu LE in Generic und BE für Strings);\n"
+"                        Register 'e'ndian Toggle (zu LE in Generic und BE "
+"für Strings);\n"
 "  id - Bezeichner des gebildeten Attributs;\n"
 "  name - Name des gebildeten Attributs.\n"
 "Beispiele:\n"
@@ -295,7 +296,8 @@ msgstr ""
 "[0...65535];\n"
 "  flg - Flaggen: Regime Lesen/Einschreiben (r-lesen, w-einschreiben),\n"
 "                        registriert die Auftragsumkehr '~';\n"
-"                        Register 'e'ndian Toggle (zu LE in Generic und BE für Strings).\n"
+"                        Register 'e'ndian Toggle (zu LE in Generic und BE "
+"für Strings).\n"
 "Beispiele:\n"
 "  \"R:0x300:rw\" - Zugang zum Register;\n"
 "  \"C:100:rw\" - Zugang zum Bit;\n"
@@ -376,7 +378,8 @@ msgstr "Fehler der Serverantwort"
 
 #, c-format
 msgid "The response Transaction ID %d is not suitable to the request one %d."
-msgstr "Die Antworttransaktions-ID %d ist nicht für die Anforderung %d geeignet."
+msgstr ""
+"Die Antworttransaktions-ID %d ist nicht für die Anforderung %d geeignet."
 
 msgid "Not full response"
 msgstr "Nicht voll antworten"
@@ -411,7 +414,8 @@ msgid "1:%02X:Function is not supported."
 msgstr "1:%02X:Funktion wird nicht unterstützt."
 
 msgid "2:Request address is not allowed or the query range is too large."
-msgstr "2:Adresse anfordern ist nicht erlaubt oder der Abfragebereich ist zu groß."
+msgstr ""
+"2:Adresse anfordern ist nicht erlaubt oder der Abfragebereich ist zu groß."
 
 msgid "3:Illegal value of the data in the request."
 msgstr "3:Illegale Datenwert in der Anfrage."
@@ -589,8 +593,9 @@ msgstr ""
 "  {N} - ModBus-Datenadresse des Geräts (dec., hex., oder octal) "
 "[0...65535];\n"
 "  w~e  - Flaggen: Schreibmodus 'w',\n"
-"                            registriert die Auftragsumkehr '~', "
-"                            Register 'e'ndian Toggle (zu LE in Generic und BE für Strings).\n"
+"                            registriert die Auftragsumkehr "
+"'~',                             Register 'e'ndian Toggle (zu LE in Generic "
+"und BE für Strings).\n"
 "Beispiele:\n"
 "  \"R0x300\" - Zugang zum Register;\n"
 "  \"C100w\" - Zugang zum Bit, darf schreiben;\n"
@@ -649,4 +654,3 @@ msgid ""
 msgstr ""
 "Bietet die Implementierung von ModBus-Protokollen. ModBus/TCP, ModBus/RTU "
 "und ModBus/ASCII-Protokolle werden unterstützt."
-

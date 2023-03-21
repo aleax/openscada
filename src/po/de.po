@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-16 10:54+0200\n"
+"POT-Creation-Date: 2023-03-18 10:22+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -715,6 +715,9 @@ msgstr "Fehler beim Ausschalten des Knotens. Den Knoten zurückschalten."
 
 msgid "Node is disabled!"
 msgstr "Der Knoten ist abgeschaltet!"
+
+msgid "No childs in the node!"
+msgstr "Keine Kinder im Knoten!"
 
 #, c-format
 msgid "The node '%s' is missing!"
@@ -2586,6 +2589,12 @@ msgstr ""
 msgid "External hosts of %s"
 msgstr "Externe Hosts von %s"
 
+msgid "Add host"
+msgstr "Gastgeber hinzufügen"
+
+msgid "Remove host"
+msgstr "Gastgeber entfernen"
+
 msgid "User;System;User and System"
 msgstr "Benutzer;System;Benutzer und System"
 
@@ -2654,6 +2663,14 @@ msgid "The initiative connection '%s' is not presented!"
 msgstr "Die Initiative-Verbindung '%s' wird nicht präsentiert!"
 
 #, c-format
+msgid "Opening the file '%s' error '%s (%d)'!"
+msgstr "Beim Öffnen der Datei '%s' ist Fehler '%s (%d)'!"
+
+#, c-format
+msgid "Writing the file %d error '%s (%d)'!"
+msgstr "Beim Schreiben der Datei %d Fehler '%s (%d)'!"
+
+#, c-format
 msgid "Error connection the new associated node: %s"
 msgstr "Fehler beim Verbinden des neuen zugeordneten Knotens: %s"
 
@@ -2676,8 +2693,8 @@ msgstr "IO log"
 msgid "Log length, block limit, type"
 msgstr "Protokolllänge, Blocklimit, Typ"
 
-msgid "Use zero for the log disabling."
-msgstr "Verwenden Sie Null für das Protokoll zu deaktivieren."
+msgid "Use zero (0) for the log disabling, -1 for writing to a file."
+msgstr "Verwenden Sie Null (0) zum Deaktivieren des Protokolls, -1 zum Schreiben in eine Datei."
 
 msgid "Binary & Text;Binary;Text"
 msgstr "Binär zu Text;Binär;Text"

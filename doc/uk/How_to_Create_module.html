@@ -57,11 +57,11 @@
 </p>
 <dl><dd>1. Отримати дерево вихідних текстів проєкту OpenSCADA для:
 <ul><li> <i>Робочої (Work) гілки:</i></li></ul>
-<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">svn co svn://oscada.org/trunk/OpenSCADA</span></dd></dl>
+<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">svn co svn://oscada.org/trunk/OpenSCADA</span></dd></dl>
 <ul><li> <i>гілки стабільного релізу — НЕБАЖАНО, оскільки до стабільних LTS релізів приймаються лише виправлення та ця інструкція потребує версії 0.9 або вище:</i></li></ul>
-<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">svn co svn://oscada.org/tags/openscada_0.9</span></dd></dl></dd>
+<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">svn co svn://oscada.org/tags/openscada_0.9</span></dd></dl></dd>
 <dd>2. Скопіювати теку шаблону з назвою нового модуля "NewMod", наприклад, для підсистеми "БД":
-<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">cd OpenSCADA/src/moduls/bd; cp -r =Tmpl= NewMod; cd NewMod; rm -f configure.ac</span>
+<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">cd OpenSCADA/src/moduls/bd; cp -r =Tmpl= NewMod; cd NewMod; rm -f configure.ac</span>
 <dl><dd> <i>для підсистеми "Збір Даних" шлях наступний</i> — "OpenSCADA/src/moduls/<b>daq</b>"</dd>
 <dd> <i>для підсистеми "Архіви-Історія" шлях наступний</i> — "OpenSCADA/src/moduls/<b>arhiv</b>"</dd>
 <dd> <i>для підсистеми "Транспорти" шлях наступний</i> — "OpenSCADA/src/moduls/<b>transport</b>"</dd>
@@ -69,7 +69,7 @@
 <dd> <i>для підсистеми "Користувацькі Інтерфейси" шлях наступний</i> — "OpenSCADA/src/moduls/<b>ui</b>"</dd>
 <dd> <i>для підсистеми "Спеціальні" шлях наступний</i> — "OpenSCADA/src/moduls/<b>special</b>"</dd></dl></dd></dl></dd>
 <dd>3. Редагувати файл "module.cpp" щодо:
-<dl><dd><dl><dd> <i>також може здійснюватися автоматично за допомогою:</i> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">sed -i "s/Tmpl/NewMod/g" *.{cpp,h}</span></dd></dl></dd></dl>
+<dl><dd><dl><dd> <i>також може здійснюватися автоматично за допомогою:</i> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">sed -i "s/Tmpl/NewMod/g" *.{cpp,h}</span></dd></dl></dd></dl>
 <ul><li> <i>зміни назви функцій вбудування-включення модуля згідно назви нового модуля</i>:</li></ul>
 <dl><dd> "TModule::SAt <b>bd_Tmpl_module</b>( int n_mod )" —&gt; "TModule::SAt <b>bd_NewMod_module</b>( int n_mod )"</dd>
 <dd> "TModule *<b>bd_Tmpl_attach</b>( const TModule::SAt &amp;AtMod, const string &amp;source )" —&gt; "TModule *<b>bd_NewMod_attach</b>( const TModule::SAt &amp;AtMod, const string &amp;source )"</dd></dl>
@@ -86,7 +86,7 @@
 <span class="cp">#define MOD_LICENSE     "GPL2"</span>
 </pre></div>
 <dl><dd>4. Відредагувати конфігурацію складання модуля у файлі "Makefile.am" щодо:
-<dl><dd><dl><dd> <i>також може здійснюватися автоматично за допомогою:</i> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">sed -i "s/Tmpl/NewMod/g" Makefile.am</span></dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd> <i>також може здійснюватися автоматично за допомогою:</i> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">sed -i "s/Tmpl/NewMod/g" Makefile.am</span></dd></dl></dd></dl></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
 EXTRA_DIST = *.h po/*
 
@@ -153,17 +153,17 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 ])
 </pre>
 <dl><dd>6. Тепер новий модуль можна скласти у складі OpenSCADA після переформування складальної системи:
-<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">autoreconf -if; ./configure --enable-NewMod; make</span></dd></dl></dd>
+<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">autoreconf -if; ./configure --enable-NewMod; make</span></dd></dl></dd>
 <dd>7. Опублікувати — сформувати латку із вашим модулем та надіслати її розробникам OpenSCADA:
-<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">cd OpenSCADA; make distclean; rm -rf src/moduls/bd/NewMod/{Makefile.in,.deps}</span></dd>
-<dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">svn add src/moduls/bd/NewMod; svn diff &gt; NewMod.patch</span></dd></dl></dd></dl>
+<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">cd OpenSCADA; make distclean; rm -rf src/moduls/bd/NewMod/{Makefile.in,.deps}</span></dd>
+<dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">svn add src/moduls/bd/NewMod; svn diff &gt; NewMod.patch</span></dd></dl></dd></dl>
 <h3><span class="mw-headline" id=".D0.A1.D1.82.D0.B2.D0.BE.D1.80.D0.B5.D0.BD.D0.BD.D1.8F_.D0.B7.D0.BE.D0.B2.D0.BD.D1.96.D1.88.D0.BD.D1.8C.D0.BE.D0.B3.D0.BE_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F_.D0.B4.D0.BE_OpenSCADA"><span class="mw-headline-number">1.2</span> Створення зовнішнього модуля до OpenSCADA</span></h3>
 <p>Створення зовнішнього модуля до OpenSCADA може мати сенс у випадку розробки інтерфейсу інтеграції з комерційними системами, які вимагають закриття коду взаємодії, а також у випадку інших реалізацій комерційних інтерфейсів при яких модуль до OpenSCADA отримує статус окремого проєкту, розповсюджується та підтримується незалежно, часто у вигляді бінарних збірок під конкретну платформу та версію OpenSCADA. Ліцензія таких модулів відповідно може бути будь якою.
 </p><p>Процедура створення нового зовнішнього модуля на основі шаблону багато в чому схожа на попередню процедуру та включає в себе кроки:
 </p>
 <dl><dd>1. Отримати вихідні текстів проєкту OpenSCADA — для зовнішнього модуля у якості джерела шаблону можна використати будь які файли OpenSCADA версії більш 0.9, оскільки із них потрібно скопіювати лише теку "=Tmpl=" та декілька файлів для збірки.</dd>
 <dd>2. Скопіювати теку шаблону з ім'ям нового модуля "NewMod", наприклад, для підсистеми "БД"; та вже в ній створити та скопіювати потрібні файли зовнішнього модуля. В подальшому інформаційні файли проєкту "COPYING", "NEWS", "README", "AUTHORS" та "ChangeLog" потрібно заповнити згідно сутності нового модуля:
-<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">cp -r OpenSCADA/src/moduls/bd/=Tmpl= NewMod; touch NewMod/{NEWS,README,AUTHORS,ChangeLog}; cp OpenSCADA/I18N.mk NewMod/</span>
+<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">cp -r OpenSCADA/src/moduls/bd/=Tmpl= NewMod; touch NewMod/{NEWS,README,AUTHORS,ChangeLog}; cp OpenSCADA/I18N.mk NewMod/</span>
 <dl><dd> <i>для підсистеми "Збір Даних" шлях наступний</i> — "OpenSCADA/src/moduls/<b>daq</b>/=Tmpl="</dd>
 <dd> <i>для підсистеми "Архіви-Історія" шлях наступний</i> — "OpenSCADA/src/moduls/<b>arhiv</b>/=Tmpl="</dd>
 <dd> <i>для підсистеми "Транспорти" шлях наступний</i> — "OpenSCADA/src/moduls/<b>transport</b>/=Tmpl="</dd>
@@ -175,12 +175,12 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 <ul><li> замість "db_NewMod_la_LDFLAGS = -module -avoid-version <b>$(top_builddir)/src/liboscada.la</b>" записати "db_NewMod_la_LDFLAGS = -module -avoid-version", тобто видалити "$(top_builddir)/src/liboscada.la"</li>
 <li> замість "include <b>../../../../</b>I18N.mk" записати "include I18N.mk", тобто видалити шлях "../../../../"</li></ul></dd>
 <dd>5. Відредагувати файл конфігурації складальної системи "configure.ac" щодо:
-<dl><dd><dl><dd> <i>також може здійснюватися автоматично за допомогою:</i> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">sed -i "s/Tmpl/NewMod/g" configure.ac</span></dd></dl></dd></dl>
+<dl><dd><dl><dd> <i>також може здійснюватися автоматично за допомогою:</i> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">sed -i "s/Tmpl/NewMod/g" configure.ac</span></dd></dl></dd></dl>
 <ul><li> "AC_INIT([<b>Tmpl</b>],[<b>0.0.1</b>],[<b>my@email.org</b>])" — інформація про модуль: ім'я, версія та Ел.Пошта проєкту</li>
 <li> "AM_CONDITIONAL([<b>TmplIncl</b>],[test])" — "AM_CONDITIONAL([<b>NewModIncl</b>],[test])"</li></ul></dd>
 <dd>6. Встановити пакет розробки OpenSCADA "openscada-dev" або "openscada-devel" — у зв'язку з тим, що модуль зовнішній та вихідні файли OpenSCADA потрібні лише на першому етапі його створення, то необхідно встановлювати пакет розробки OpenSCADA, який містить заголовні файли та бібліотеки.</dd>
 <dd>7. Тепер новий модуль можна скласти, після формування складальної системи:
-<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">autoreconf -if; ./configure; make</span></dd></dl></dd></dl>
+<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">autoreconf -if; ./configure; make</span></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="API_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="mw-headline-number">2</span> API модуля</span></h2>
 <p>API OpenSCADA для розробника OpenSCADA та модулів до неї описано у відповідному документі "<a href="API.html" title="Special:MyLanguage/Documents/API">API OpenSCADA</a>", який завжди має бути під рукою при розробці для OpenSCADA. В цьому ж документі наголос здійснено на детальному роз'яснені основних моментів модульного API.
 </p><p>Модулі в OpenSCADA реалізуються як поділювані бібліотеки та одна така бібліотека може містити багато модулів підсистем OpenSCADA, фактично виступаючи як контейнер. Такі контейнери також можуть бути включені-вбудовані до Бібліотеки Ядра OpenSCADA якщо ви будуєте дуже компактні рішення.
@@ -435,7 +435,7 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 <span class="cp">#define trS(mess) mod-&gt;I18N(mess,mess_PreSave)</span>
 </pre></div>
 <p>У конструкторі кореневого об'єкту модуля успадкованого від <b>TModule</b> необхідно встановити основну інформацію модуля викликом функції <b>void modInfoMainSet({Ім'я}, {Тип}, {Версія}, {Автори}, {Опис}, {Ліцензія}, {Джерело})</b> після ініціалізації швидкого посилання "mod" на кореневий об'єкт цього модуля.
-</p><p>Подальше отримання файлу шаблону перекладів "po/oscd_NewMod.pot" текстових повідомлень "<b>_({Повідомлення})</b>" та "<b>trS({Повідомлення})</b>", а також оновлення-актуалізація файлів вже існуючих перекладів "po/{uk|de|ru|...}.po" здійснюється командою у теці модуля <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">make messages</span>.
+</p><p>Подальше отримання файлу шаблону перекладів "po/oscd_NewMod.pot" текстових повідомлень "<b>_({Повідомлення})</b>" та "<b>trS({Повідомлення})</b>", а також оновлення-актуалізація файлів вже існуючих перекладів "po/{uk|de|ru|...}.po" здійснюється командою у теці модуля <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">make messages</span>.
 </p><p>При вирішенні завдань нового модуля може знадобитися розширення параметрів конфігурації, що здійснюється у віртуальній функції <b>void cntrCmdProc( XMLNode *req );</b>. Вміст цієї функції, який додає властивості, у <a href="Modules/SQLite.html" title="Special:MyLanguage/Modules/SQLite">модулі SQLite</a> має вигляд:
 </p>
 <div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="kt">void</span> <span class="n">MBD</span><span class="o">::</span><span class="n">cntrCmdProc</span><span class="p">(</span> <span class="n">XMLNode</span> <span class="o">*</span><span class="n">opt</span> <span class="p">)</span>
@@ -485,8 +485,8 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 <li> <i>*this</i> — цей об'єкт, успадкований від <b>TConfig</b>.</li></ul>
 <p>Для генерації налагоджувальних повідомлень <a href="Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">відповідно до загальної концепції налаштувань</a> необхідно використовувати функцію <b>mess_debug()</b> з умовою виклику залежно від ділянки вихідного тексту програми:
 </p>
-<ul><li> рідко викликувана ділянка — прямий виклик функції <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">mess_debug(...);</span>;</li>
-<li> часто викликувана ділянка — умовний виклик <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">if(mess_lev() == TMess::Debug) mess_debug(...);</span>;</li>
+<ul><li> рідко викликувана ділянка — прямий виклик функції <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">mess_debug(...);</span>;</li>
+<li> часто викликувана ділянка — умовний виклик <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">if(mess_lev() == TMess::Debug) mess_debug(...);</span>;</li>
 <li> критична до продуктивності ділянка коду — обгортання у визначення <b>OSC_DEBUG</b>:</li></ul>
 <div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="cp">#ifdef OSC_DEBUG</span>
   <span class="n">mess_debug</span><span class="p">(...);</span>

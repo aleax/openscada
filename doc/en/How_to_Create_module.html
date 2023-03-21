@@ -57,11 +57,11 @@
 </p>
 <dl><dd>1. Get the source tree of the OpenSCADA project for:
 <ul><li> <i>the Work branch:</i></li></ul>
-<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">svn co svn://oscada.org/trunk/OpenSCADA</span></dd></dl>
+<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">svn co svn://oscada.org/trunk/OpenSCADA</span></dd></dl>
 <ul><li> <i>the stable release branch — NOT RECOMMENDED, as only patches are accepted for stable LTS releases and this instruction requires version 0.9 or higher:</i></li></ul>
-<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">svn co svn://oscada.org/tags/openscada_0.9</span></dd></dl></dd>
+<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">svn co svn://oscada.org/tags/openscada_0.9</span></dd></dl></dd>
 <dd>2. Copy the template folder with the "NewMod" name of the new module, for example, for the "DB" subsystem:
-<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">cd OpenSCADA/src/moduls/bd; cp -r =Tmpl= NewMod; cd NewMod; rm -f configure.ac</span>
+<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">cd OpenSCADA/src/moduls/bd; cp -r =Tmpl= NewMod; cd NewMod; rm -f configure.ac</span>
 <dl><dd> <i>for the "DAQ" subsystem the path is</i> — "OpenSCADA/src/moduls/<b>daq</b>"</dd>
 <dd> <i>for the "Archive-History" subsystem the path is</i> — "OpenSCADA/src/moduls/<b>arhiv</b>"</dd>
 <dd> <i>for the "Transport" subsystem the path is</i> — "OpenSCADA/src/moduls/<b>transport</b>"</dd>
@@ -69,7 +69,7 @@
 <dd> <i>for the "UI" subsystem the path is</i> — "OpenSCADA/src/moduls/<b>ui</b>"</dd>
 <dd> <i>for the "Special" subsystem the path is</i> — "OpenSCADA/src/moduls/<b>special</b>"</dd></dl></dd></dl></dd>
 <dd>3. Edit the "module.cpp" file for:
-<dl><dd><dl><dd> <i>also can do that automatically by:</i> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">sed -i "s/Tmpl/NewMod/g" *.{cpp,h}</span></dd></dl></dd></dl>
+<dl><dd><dl><dd> <i>also can do that automatically by:</i> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">sed -i "s/Tmpl/NewMod/g" *.{cpp,h}</span></dd></dl></dd></dl>
 <ul><li> <i>changing the name of the builtin-inclusion functions of the module according to the name of the new module</i>:</li></ul>
 <dl><dd> "TModule::SAt <b>bd_Tmpl_module</b>( int n_mod )" —&gt; "TModule::SAt <b>bd_NewMod_module</b>( int n_mod )"</dd>
 <dd> "TModule *<b>bd_Tmpl_attach</b>( const TModule::SAt &amp;AtMod, const string &amp;source )" —&gt; "TModule *<b>bd_NewMod_attach</b>( const TModule::SAt &amp;AtMod, const string &amp;source )"</dd></dl>
@@ -86,7 +86,7 @@
 <span class="cp">#define MOD_LICENSE     "GPL2"</span>
 </pre></div>
 <dl><dd>4. Edit the module's building configuration in the "Makefile.am" file to:
-<dl><dd><dl><dd> <i>also can do that automatically by:</i> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">sed -i "s/Tmpl/NewMod/g" Makefile.am</span></dd></dl></dd></dl></dd></dl>
+<dl><dd><dl><dd> <i>also can do that automatically by:</i> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">sed -i "s/Tmpl/NewMod/g" Makefile.am</span></dd></dl></dd></dl></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 30px">
 EXTRA_DIST = *.h po/*
 
@@ -153,17 +153,17 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 ])
 </pre>
 <dl><dd>6. Now the new module can be built in OpenSCADA after the reorganisation of the building system:
-<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">autoreconf -if; ./configure --enable-NewMod; make</span></dd></dl></dd>
+<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">autoreconf -if; ./configure --enable-NewMod; make</span></dd></dl></dd>
 <dd>7. Publication — form a patch with your module and send it to the OpenSCADA developers:
-<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">cd OpenSCADA; make distclean; rm -rf src/moduls/bd/NewMod/{Makefile.in,.deps}</span></dd>
-<dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">svn add src/moduls/bd/NewMod; svn diff &gt; NewMod.patch</span></dd></dl></dd></dl>
+<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">cd OpenSCADA; make distclean; rm -rf src/moduls/bd/NewMod/{Makefile.in,.deps}</span></dd>
+<dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">svn add src/moduls/bd/NewMod; svn diff &gt; NewMod.patch</span></dd></dl></dd></dl>
 <h3><span class="mw-headline" id="Creation_an_external_module_to_OpenSCADA"><span class="mw-headline-number">1.2</span> Creation an external module to OpenSCADA</span></h3>
 <p>Creation an external module to OpenSCADA may make sense in the case of the development the integration interface with business (commercial) systems that require proprietary interaction code, as well as in the case of other commercial interfaces implementations in which the module for the OpenSCADA acquire the status of the separate project, that is distributed and maintained independently often in the form of binary buildings for a specific platform and version of OpenSCADA. The license of such modules, respectively, can be arbitrary.
 </p><p>The procedure for creation a new external module based on the template is largely similar to the previous procedure and includes the following steps:
 </p>
 <dl><dd>1. Get the source texts of the OpenSCADA project — for an external module as a source of the template you can use any OpenSCADA source files of version more than 0.9, because it is necessary to copy only the "=Tmpl=" directory and several files for build.</dd>
 <dd>2. Copy the template directory with the "NewMod" name of the new module, for example, for the "DB" subsystem; and in that directory already create and copy the necessary files of the external module. Further, the information files of the project "COPYING", "NEWS", "README", "AUTHORS" and "ChangeLog" must be filled accordingly to the nature of the new module.
-<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">cp -r OpenSCADA/src/moduls/bd/=Tmpl= NewMod; touch NewMod/{NEWS,README,AUTHORS,ChangeLog}; cp OpenSCADA/I18N.mk NewMod/</span>
+<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">cp -r OpenSCADA/src/moduls/bd/=Tmpl= NewMod; touch NewMod/{NEWS,README,AUTHORS,ChangeLog}; cp OpenSCADA/I18N.mk NewMod/</span>
 <dl><dd> <i>for the "DAQ" subsystem the path is</i> — "OpenSCADA/src/moduls/<b>daq</b>/=Tmpl="</dd>
 <dd> <i>for the "Archive-History" subsystem the path is</i> — "OpenSCADA/src/moduls/<b>arhiv</b>/=Tmpl="</dd>
 <dd> <i>for the "Transport" subsystem the path is</i> — "OpenSCADA/src/moduls/<b>transport</b>/=Tmpl="</dd>
@@ -175,12 +175,12 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 <ul><li> instead "db_NewMod_la_LDFLAGS = -module -avoid-version <b>$(top_builddir)/src/liboscada.la</b>" write "db_NewMod_la_LDFLAGS = -module -avoid-version", that is remove "$(top_builddir)/src/liboscada.la"</li>
 <li> instead "include <b>../../../../</b>I18N.mk" write "include I18N.mk", that is remove the path "../../../../"</li></ul></dd>
 <dd>5. Edit the build system configuration file "configure.ac" for:
-<dl><dd><dl><dd> <i>also can do that automatically by:</i> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">sed -i "s/Tmpl/NewMod/g" configure.ac</span></dd></dl></dd></dl>
+<dl><dd><dl><dd> <i>also can do that automatically by:</i> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">sed -i "s/Tmpl/NewMod/g" configure.ac</span></dd></dl></dd></dl>
 <ul><li> "AC_INIT([<b>Tmpl</b>],[<b>0.0.1</b>],[<b>my@email.org</b>])" — information about the module: name, version and EMail of the project</li>
 <li> "AM_CONDITIONAL([<b>TmplIncl</b>],[test])" — "AM_CONDITIONAL([<b>NewModIncl</b>],[test])"</li></ul></dd>
 <dd>6. Install the OpenSCADA development package "openscada-dev" or "openscada-devel" — because the module is an external one and the OpenSCADA source files are needed only at the first stage of the module creation, you need to install the OpenSCADA development package, which contains the header files and libraries.</dd>
 <dd>7. Now you can build the new module, after formation of the building system
-<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">autoreconf -if; ./configure; make</span></dd></dl></dd></dl>
+<dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">autoreconf -if; ./configure; make</span></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="API_of_the_module"><span class="mw-headline-number">2</span> API of the module</span></h2>
 <p>OpenSCADA API for the developer of OpenSCADA and modules to it is described in the document "<a href="API.html" title="Special:MyLanguage/Documents/API">OpenSCADA API</a>", which should always be on hand at development for OpenSCADA. This document focuses on the detailed explanation of the main points of the modular API.
 </p><p>Modules in OpenSCADA are implemented as shared libraries and one such library can contain many modules of the OpenSCADA subsystems, actually acting as a container. Those containers also can be included-builtin in the OpenSCADA Core Library if you build very tightly solutions.
@@ -435,7 +435,7 @@ For the convenience of direct addressing to the root object of the module from a
 <span class="cp">#define trS(mess) mod-&gt;I18N(mess,mess_PreSave)</span>
 </pre></div>
 <p>In the constructor of the root module's object inherited from the <b>TModule</b> it is necessary to set the main information of the module by call the function <b>void modInfoMainSet({Name}, {Type}, {Version}, {Authors}, {Description}, {License}, {Source})</b> after init the fast link "mod" to the root object of the module.
-</p><p>Further receiving of the translation template file "po/oscd_NewMod.pot" of the text messages "<b>_({Message})</b>" and "<b>trS({Message})</b>", as well as updating-actualising the files of already existing translations "po/{uk|de|ru|...}.po" is carried out by the command <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">make messages</span> in the module folder.
+</p><p>Further receiving of the translation template file "po/oscd_NewMod.pot" of the text messages "<b>_({Message})</b>" and "<b>trS({Message})</b>", as well as updating-actualising the files of already existing translations "po/{uk|de|ru|...}.po" is carried out by the command <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">make messages</span> in the module folder.
 </p><p>During solve the tasks of the new module, it may be necessary to expand the configuration parameters, which is carried out in the virtual function <b>void cntrCmdProc( XMLNode *req );</b>. The content of this function, which adds properties, in the <a href="Modules/SQLite.html" title="Special:MyLanguage/Modules/SQLite">SQLite module</a> looks like this:
 </p>
 <div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="kt">void</span> <span class="n">MBD</span><span class="o">::</span><span class="n">cntrCmdProc</span><span class="p">(</span> <span class="n">XMLNode</span> <span class="o">*</span><span class="n">opt</span> <span class="p">)</span>
@@ -485,8 +485,8 @@ For the convenience of direct addressing to the root object of the module from a
 <li> <i>*this</i> — this object, inherited from <b>TConfig</b>.</li></ul>
 <p>To generate the debug messages <a href="Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">according the common debugging concept</a>, you need to use the function <b>mess_debug()</b> with call it conditionally at the program source part:
 </p>
-<ul><li> the rarely invoked part — direct call to the function <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">mess_debug(...);</span>;</li>
-<li> the often invoked part — conditional call <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">if(mess_lev() == TMess::Debug) mess_debug(...);</span>;</li>
+<ul><li> the rarely invoked part — direct call to the function <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">mess_debug(...);</span>;</li>
+<li> the often invoked part — conditional call <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">if(mess_lev() == TMess::Debug) mess_debug(...);</span>;</li>
 <li> the critical to performance code part — wrapping to definition <b>OSC_DEBUG</b>:</li></ul>
 <div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="cp">#ifdef OSC_DEBUG</span>
   <span class="n">mess_debug</span><span class="p">(...);</span>

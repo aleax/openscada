@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2011-2022.
+# Roman Savochenko <roman@oscada.org>, 2011-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-18 10:47+0200\n"
+"POT-Creation-Date: 2023-03-20 10:03+0200\n"
 "PO-Revision-Date: 2009-08-17 12:07+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -106,9 +106,8 @@ msgstr "Erwerb nächsten durch cron '%s'. "
 msgid "Spent time %s[%s]. "
 msgstr "Verbrauchte Zeit %s[%s]. "
 
-#, c-format
-msgid "Station '%s' - ERROR, restoring in %.3g s."
-msgstr "Station '%s' - FEHLER, Wiederherstellung in %.3g s."
+msgid "Station '%s' - ERROR, restoring in %.3g s. "
+msgstr "Station '%s' - FEHLER, Wiederherstellung in %.3g s. "
 
 #, c-format
 msgid "Station '%s' - requests %.6g; "
@@ -119,8 +118,12 @@ msgid "read %g values, %g archive's, %g messages; "
 msgstr "lesen %g Werte, %g Archivs, %g Nachrichten; "
 
 #, c-format
-msgid "wrote %g values, %g messages, in the buffer %d. "
-msgstr "schrieb %g Werte, %g Nachrichten, in den Puffer %d. "
+msgid "wrote %g values, %g messages. "
+msgstr "schrieb %g Werte, %g Nachrichten. "
+
+#, c-format
+msgid "To write %d. "
+msgstr "Schreiben von %d. "
 
 #, c-format
 msgid "Enabling: station '%s' processing item '%s' for parameters %d."
@@ -244,6 +247,3 @@ msgstr "Konfiguration des Remote-Parameters"
 
 msgid "Controller is not started!"
 msgstr "Controller ist nicht gestartet!"
-
-#~ msgid "NO CONNECTION"
-#~ msgstr "KEINE VERBINDUNG"

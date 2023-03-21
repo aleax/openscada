@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-16 10:54+0200\n"
+"POT-Creation-Date: 2023-03-18 10:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -621,6 +621,9 @@ msgid "Error turning off node. Turning on back the node."
 msgstr ""
 
 msgid "Node is disabled!"
+msgstr ""
+
+msgid "No childs in the node!"
 msgstr ""
 
 #, c-format
@@ -2126,6 +2129,12 @@ msgstr ""
 msgid "External hosts of %s"
 msgstr ""
 
+msgid "Add host"
+msgstr ""
+
+msgid "Remove host"
+msgstr ""
+
 msgid "User;System;User and System"
 msgstr ""
 
@@ -2183,6 +2192,14 @@ msgid "The initiative connection '%s' is not presented!"
 msgstr ""
 
 #, c-format
+msgid "Opening the file '%s' error '%s (%d)'!"
+msgstr ""
+
+#, c-format
+msgid "Writing the file %d error '%s (%d)'!"
+msgstr ""
+
+#, c-format
 msgid "Error connection the new associated node: %s"
 msgstr ""
 
@@ -2205,7 +2222,7 @@ msgstr ""
 msgid "Log length, block limit, type"
 msgstr ""
 
-msgid "Use zero for the log disabling."
+msgid "Use zero (0) for the log disabling, -1 for writing to a file."
 msgstr ""
 
 msgid "Binary & Text;Binary;Text"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-18 10:47+0200\n"
+"POT-Creation-Date: 2023-03-20 10:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -96,7 +96,7 @@ msgid "Spent time %s[%s]. "
 msgstr ""
 
 #, c-format
-msgid "Station '%s' - ERROR, restoring in %.3g s."
+msgid "Station '%s' - ERROR, restoring in %.3g s. "
 msgstr ""
 
 #, c-format
@@ -108,7 +108,11 @@ msgid "read %g values, %g archive's, %g messages; "
 msgstr ""
 
 #, c-format
-msgid "wrote %g values, %g messages, in the buffer %d. "
+msgid "wrote %g values, %g messages. "
+msgstr ""
+
+#, c-format
+msgid "To write %d. "
 msgstr ""
 
 #, c-format

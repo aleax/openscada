@@ -118,16 +118,15 @@
 <h2><span class="mw-headline" id=".D0.A4.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.8F_.D0.B2.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D0.B8.D1.85_.D0.B7.D0.B0.D0.BF.D0.B8.D1.82.D1.96.D0.B2_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_API"><span class="mw-headline-number">3</span> Функція вихідних запитів користувацького API</span></h2>
 <p>Функція вихідних запитів (<a class="external" href="http://oscada.org/wiki/Documents/Program_manual/uk#SYSTransport" title="Documents/Program manual/uk">messIO()</a>) оперує обміном вмістом HTTP-запитів, загорнутими у XML-пакети. Структура запиту має вигляд:
 </p>
-<pre style="white-space: pre-wrap;">
-&lt;req Host="host" URI="uri"&gt;
-  &lt;prm id="pId"&gt;pVal&lt;/prm&gt;
-  &lt;cnt name="cName" filename="cFileName"&gt;
-    &lt;prm id="cpId"&gt;cpVal&lt;/prm&gt;
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;req</span> <span class="na">Host=</span><span class="s">"host"</span> <span class="na">URI=</span><span class="s">"uri"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"pId"</span><span class="nt">&gt;</span>pVal<span class="nt">&lt;/prm&gt;</span>
+  <span class="nt">&lt;cnt</span> <span class="na">name=</span><span class="s">"cName"</span> <span class="na">filename=</span><span class="s">"cFileName"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"cpId"</span><span class="nt">&gt;</span>cpVal<span class="nt">&lt;/prm&gt;</span>
     cVal
-  &lt;/cnt&gt;
+  <span class="nt">&lt;/cnt&gt;</span>
   reqVal
-&lt;/req&gt;
-</pre>
+<span class="nt">&lt;/req&gt;</span>
+</pre></div>
 <dl><dd>Де:
 <ul><li> <i>req</i> — метод запиту, підтримується методи "GET" та "POST".</li>
 <li> <i>host</i> — адреса вузла http-серверу у форматі <i>{HostAddr}:{HostIp}</i>. Якщо дане поле опущено то використовується адреса вузла, вказана у полі адреси транспорту.</li>
@@ -138,12 +137,11 @@
 <li> <i>reqVal</i> — одинокий вміст POST запиту.</li></ul></dd></dl>
 <p>Результатом запиту є відповідь зі структурою:
 </p>
-<pre style="white-space: pre-wrap;">
-&lt;req Host="host" URI="uri" err="err" Protocol="prt" RezCod="rCod" RezStr="rStr"&gt;
-    &lt;prm id="pId"&gt;pVal&lt;/prm&gt;
-    respVal
-&lt;/req&gt;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;req</span> <span class="na">Host=</span><span class="s">"host"</span> <span class="na">URI=</span><span class="s">"uri"</span> <span class="na">err=</span><span class="s">"err"</span> <span class="na">Protocol=</span><span class="s">"prt"</span> <span class="na">RezCod=</span><span class="s">"rCod"</span> <span class="na">RezStr=</span><span class="s">"rStr"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"pId"</span><span class="nt">&gt;</span>pVal<span class="nt">&lt;/prm&gt;</span>
+  respVal
+<span class="nt">&lt;/req&gt;</span>
+</pre></div>
 <dl><dd>Де:
 <ul><li> <i>req</i> — метод запиту.</li>
 <li> <i>host</i> — адреса вузла http-серверу.</li>
@@ -154,52 +152,51 @@
 <li> <i>respVal</i> — вміст відповіді.</li></ul></dd></dl>
 <p>Наведемо формування GET та POST запитів на мові JavaLikeCalc.JavaScript, у якості прикладу використання даної функції у користувацьких процедурах:
 </p>
-<pre style="white-space: pre-wrap;">
-//GET запит HTML сторінки
-req = SYS.XMLNode("GET");
-req.setAttr("URI","/");
-SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");
-test = req.text();
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c1">//GET запит HTML сторінки</span>
+<span class="nx">req</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">XMLNode</span><span class="p">(</span><span class="s2">"GET"</span><span class="p">);</span>
+<span class="nx">req</span><span class="p">.</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"URI"</span><span class="p">,</span><span class="s2">"/"</span><span class="p">);</span>
+<span class="nx">SYS</span><span class="p">.</span><span class="nx">Transport</span><span class="p">.</span><span class="nx">Sockets</span><span class="p">.</span><span class="nx">out_testHTTP</span><span class="p">.</span><span class="nx">messIO</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="s2">"HTTP"</span><span class="p">);</span>
+<span class="nx">test</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">text</span><span class="p">();</span>
 
-//GET запит та збереження файлу
-req = SYS.XMLNode("GET");
-req.setAttr("URI","/oscadaArch/Work/openscada-0.9-r2188.tar.lzma");
-SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");
-if(!req.attr("err").length) SYS.fileWrite("/var/tmp/recvFile.tmp", req.text());
+<span class="c1">//GET запит та збереження файлу</span>
+<span class="nx">req</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">XMLNode</span><span class="p">(</span><span class="s2">"GET"</span><span class="p">);</span>
+<span class="nx">req</span><span class="p">.</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"URI"</span><span class="p">,</span><span class="s2">"/oscadaArch/Work/openscada-0.9-r2188.tar.lzma"</span><span class="p">);</span>
+<span class="nx">SYS</span><span class="p">.</span><span class="nx">Transport</span><span class="p">.</span><span class="nx">Sockets</span><span class="p">.</span><span class="nx">out_testHTTP</span><span class="p">.</span><span class="nx">messIO</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="s2">"HTTP"</span><span class="p">);</span>
+<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">req</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"err"</span><span class="p">).</span><span class="nx">length</span><span class="p">)</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"/var/tmp/recvFile.tmp"</span><span class="p">,</span> <span class="nx">req</span><span class="p">.</span><span class="nx">text</span><span class="p">());</span>
 
-//POST запит
-req = SYS.XMLNode("POST");
-req.setAttr("URI","/WebUser/FlowTec.txt");
-cntNode = req.childAdd("cnt").setAttr("name","pole0").setAttr("filename","Object2-k001-100309-17.txt");
-cntNode.childAdd("prm").setAttr("id","Content-Type").setText("text/plain");
-cntText = "Object2-k001\r\n";
-cntText += "\r\n";
-cntText += "v002\r\n";
-cntText += " n1\r\n";
-cntText += "  09.03.10 16   Polnyj    7155.25    216.0  32.000  17.5\r\n";
-cntText += "v005\r\n";
-cntText += " n1\r\n";
-cntText += "  09.03.10 16   Polnyj     188.81    350.0   4.000  40.0\r\n";
-cntText += "\r\n";
-cntNode.setText(cntText);
-SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");
+<span class="c1">//POST запит</span>
+<span class="nx">req</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">XMLNode</span><span class="p">(</span><span class="s2">"POST"</span><span class="p">);</span>
+<span class="nx">req</span><span class="p">.</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"URI"</span><span class="p">,</span><span class="s2">"/WebUser/FlowTec.txt"</span><span class="p">);</span>
+<span class="nx">cntNode</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">childAdd</span><span class="p">(</span><span class="s2">"cnt"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span><span class="s2">"pole0"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"filename"</span><span class="p">,</span><span class="s2">"Object2-k001-100309-17.txt"</span><span class="p">);</span>
+<span class="nx">cntNode</span><span class="p">.</span><span class="nx">childAdd</span><span class="p">(</span><span class="s2">"prm"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"id"</span><span class="p">,</span><span class="s2">"Content-Type"</span><span class="p">).</span><span class="nx">setText</span><span class="p">(</span><span class="s2">"text/plain"</span><span class="p">);</span>
+<span class="nx">cntText</span> <span class="o">=</span> <span class="s2">"Object2-k001\r\n"</span><span class="p">;</span>
+<span class="nx">cntText</span> <span class="o">+=</span> <span class="s2">"\r\n"</span><span class="p">;</span>
+<span class="nx">cntText</span> <span class="o">+=</span> <span class="s2">"v002\r\n"</span><span class="p">;</span>
+<span class="nx">cntText</span> <span class="o">+=</span> <span class="s2">" n1\r\n"</span><span class="p">;</span>
+<span class="nx">cntText</span> <span class="o">+=</span> <span class="s2">"  09.03.10 16   Polnyj    7155.25    216.0  32.000  17.5\r\n"</span><span class="p">;</span>
+<span class="nx">cntText</span> <span class="o">+=</span> <span class="s2">"v005\r\n"</span><span class="p">;</span>
+<span class="nx">cntText</span> <span class="o">+=</span> <span class="s2">" n1\r\n"</span><span class="p">;</span>
+<span class="nx">cntText</span> <span class="o">+=</span> <span class="s2">"  09.03.10 16   Polnyj     188.81    350.0   4.000  40.0\r\n"</span><span class="p">;</span>
+<span class="nx">cntText</span> <span class="o">+=</span> <span class="s2">"\r\n"</span><span class="p">;</span>
+<span class="nx">cntNode</span><span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="nx">cntText</span><span class="p">);</span>
+<span class="nx">SYS</span><span class="p">.</span><span class="nx">Transport</span><span class="p">.</span><span class="nx">Sockets</span><span class="p">.</span><span class="nx">out_testHTTP</span><span class="p">.</span><span class="nx">messIO</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="s2">"HTTP"</span><span class="p">);</span>
 
-//POST запит із одиничним вмістом
-req = SYS.XMLNode("POST");
-req.setAttr("URI","/WebUser/FlowTec.txt");
-req.childAdd("prm").setAttr("id","Content-Type").setText("text/plain");
-cntText = "Object2-k001\r\n";
-cntText += "\r\n";
-cntText += "v002\r\n";
-cntText += " n1\r\n";
-cntText += "  09.03.10 16   Polnyj    7155.25    216.0  32.000  17.5\r\n";
-cntText += "v005\r\n";
-cntText += " n1\r\n";
-cntText += "  09.03.10 16   Polnyj     188.81    350.0   4.000  40.0\r\n";
-cntText += "\r\n";
-req.setText(cntText);
-SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");
-</pre>
+<span class="c1">//POST запит із одиничним вмістом</span>
+<span class="nx">req</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">XMLNode</span><span class="p">(</span><span class="s2">"POST"</span><span class="p">);</span>
+<span class="nx">req</span><span class="p">.</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"URI"</span><span class="p">,</span><span class="s2">"/WebUser/FlowTec.txt"</span><span class="p">);</span>
+<span class="nx">req</span><span class="p">.</span><span class="nx">childAdd</span><span class="p">(</span><span class="s2">"prm"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"id"</span><span class="p">,</span><span class="s2">"Content-Type"</span><span class="p">).</span><span class="nx">setText</span><span class="p">(</span><span class="s2">"text/plain"</span><span class="p">);</span>
+<span class="nx">cntText</span> <span class="o">=</span> <span class="s2">"Object2-k001\r\n"</span><span class="p">;</span>
+<span class="nx">cntText</span> <span class="o">+=</span> <span class="s2">"\r\n"</span><span class="p">;</span>
+<span class="nx">cntText</span> <span class="o">+=</span> <span class="s2">"v002\r\n"</span><span class="p">;</span>
+<span class="nx">cntText</span> <span class="o">+=</span> <span class="s2">" n1\r\n"</span><span class="p">;</span>
+<span class="nx">cntText</span> <span class="o">+=</span> <span class="s2">"  09.03.10 16   Polnyj    7155.25    216.0  32.000  17.5\r\n"</span><span class="p">;</span>
+<span class="nx">cntText</span> <span class="o">+=</span> <span class="s2">"v005\r\n"</span><span class="p">;</span>
+<span class="nx">cntText</span> <span class="o">+=</span> <span class="s2">" n1\r\n"</span><span class="p">;</span>
+<span class="nx">cntText</span> <span class="o">+=</span> <span class="s2">"  09.03.10 16   Polnyj     188.81    350.0   4.000  40.0\r\n"</span><span class="p">;</span>
+<span class="nx">cntText</span> <span class="o">+=</span> <span class="s2">"\r\n"</span><span class="p">;</span>
+<span class="nx">req</span><span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="nx">cntText</span><span class="p">);</span>
+<span class="nx">SYS</span><span class="p">.</span><span class="nx">Transport</span><span class="p">.</span><span class="nx">Sockets</span><span class="p">.</span><span class="nx">out_testHTTP</span><span class="p">.</span><span class="nx">messIO</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="s2">"HTTP"</span><span class="p">);</span>
+</pre></div>
 <h2><span class="mw-headline" id="API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">4</span> API користувацького програмування</span></h2>
 <p><b>Вхідна частина об'єкту модуля (SYS.Protocol.HTTP.{In})</b>
 </p>

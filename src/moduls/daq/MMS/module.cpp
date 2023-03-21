@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.MMS file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2013-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,7 +37,7 @@
 #define MOD_NAME	trS("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.4.10"
+#define MOD_VER		"1.4.11"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
@@ -256,7 +256,7 @@ void TMdContr::enable_( )
 	tr = SYS->transport().at().nodeAt(trName, 0, '.');
 	tr.at().setDscr(TSYS::strMess(_("MMS automatic created transport for '%s' controller."),id().c_str()));
     }
-    tr.at().setAddr("TCP:"+addr());
+    tr.at().setAddr(addr());
 
     reset();	//MMS coneection state reset
 }
@@ -485,7 +485,7 @@ bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
     try {
 	if(co.fld().name() == "SCHEDULE")
 	    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
-	else if(co.name() == "ADDR" && enableStat()) tr.at().setAddr("TCP:"+co.getS());
+	else if(co.name() == "ADDR" && enableStat()) tr.at().setAddr(co.getS());
     } catch(...) { }
 
     return true;
