@@ -649,11 +649,11 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 </pre></div>
 <p>Прапорці:
 </p>
-<ul><li> <i>notify[{DL}]</i>, <i>notifyServ[{DL}]</i> — включає сповіщення з повтором через час <i>DL</i>, якщо вказано; для <i>DL</i> = 0 повтор здійснюється одразу.</li>
+<ul><li> <i>notify[{DL}]</i>, <i>notifyServ[{DL}]</i> — включає сповіщення з повтором через час <i>DL</i>, якщо вказано; для <i>DL</i> = 0 повтор здійснюється одразу; <i>notifyServ[{DL}]</i> використовується для примусового сповіщення на боці серверу замість візуалізатору із <i>notify[{DL}]</i>.</li>
 <li> <i>resource</i> — запитувати-формувати (примусово) ресурс сповіщення у сервера візуалізації, може бути звуковим файлом, текстом або іншими даними формування сповіщення; але наразі сповіщувачі переважно очікують аудіо.</li>
 <li> <i>queue</i> — ресурси сповіщення визначаються не лише за глобальною ознакою порушення та квітації, а й згідно до пріоритетної черги джерел сповіщення-ресурсів. Черга формується на боці серверу візуалізації, а для візуалізаторів вказується необхідність роботи з нею при запиті ресурсів.</li>
 <li> <i>qMergeMess</i> — поєднувати сповіщення у черзі за рівністю сповіщення.</li>
-<li> <i>quietanceRet</i> — можливість відкликання-повернення квітації візуалізатору, тобто, по факту — зворотнього включення сповіщення.</li></ul>
+<li> <i>quietanceRet</i> — можливість відкликання-повернення квітації візуалізатору, тобто, по факту — зворотного включення сповіщення.</li></ul>
 <p>Наявність поля "resStatic" вмикає отримання ресурсу безпосередньо із таблиці ресурсів або файлу, вказується у спосіб подібний до <a href="#Media">примітиву "Медіа"</a>.
 </p><p>Змінні обміну:
 </p>
@@ -665,26 +665,38 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <li> <i>mess</i> — повідомлення-параметри формування ресурсу або сповіщення;</li>
 <li> <i>lang</i> — мова поточного користувача або системи;</li>
 <li> <i>prcID</i> — унікальний ідентифікатор процедури (на кшталт "ses_AGLKS_ntf2"), переважно для безпечного створення тимчасових файлів.</li></ul>
-<p>Приклади та коментарі до роботи типових способів сповіщення:
+<p>Приклади та коментарі до функціювання типових способів сповіщення:
 </p>
-<ul><li> Бузер на боці візуалізатору або серверу візуалізації:</li></ul>
+<ul><li> Бузер (buzzer) на боці візуалізатору (flags=notify0) або серверу візуалізації (flags=notifyServ0) із повторенням та контролем програвання:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x02"</li>
 <li> notifyVisVision1 | notify1 = </li></ul></dd></dl>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify|notifyServ</span>
-<span class="k">if</span><span class="p">(</span><span class="nx">en</span><span class="p">)</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"beep -f 1000 -l 1000000 &amp;"</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-<span class="k">else</span> <span class="k">if</span><span class="p">((</span><span class="nx">beepPID</span><span class="o">=</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"pidof beep"</span><span class="p">)).</span><span class="nx">toInt</span><span class="p">())</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"kill "</span><span class="o">+</span><span class="nx">beepPID</span><span class="p">);</span>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify0|notifyServ0</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">ntfPrg</span><span class="o">=</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"which beep"</span><span class="p">)).</span><span class="nx">length</span> <span class="o">&amp;&amp;</span>
+    <span class="p">(</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"test -s "</span><span class="o">+</span><span class="nx">prcID</span><span class="o">+</span><span class="s2">".pid"</span><span class="p">,</span><span class="kc">true</span><span class="p">)</span> <span class="o">||</span>		<span class="c1">//No PID file</span>
+     <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"ps -A -o \"pid cmd\" | grep \"^ *$(cat "</span><span class="o">+</span><span class="nx">prcID</span><span class="o">+</span><span class="s2">".pid).*"</span><span class="o">+</span><span class="nx">ntfPrg</span><span class="p">.</span><span class="nx">parseLine</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">+</span><span class="s2">"\" &gt; /dev/null"</span><span class="p">,</span><span class="kc">true</span><span class="p">))</span> <span class="p">)</span>	<span class="c1">//No notify already</span>
+<span class="p">{</span>
+    <span class="nx">ntfPrg</span> <span class="o">=</span> <span class="nx">ntfPrg</span><span class="p">.</span><span class="nx">parseLine</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="nx">ntfPrg</span><span class="o">+</span><span class="s2">" -f 1000 -l 100000 &amp;\necho $! &gt; "</span><span class="o">+</span><span class="nx">prcID</span><span class="o">+</span><span class="s2">".pid"</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"test -s "</span><span class="o">+</span><span class="nx">prcID</span><span class="o">+</span><span class="s2">".pid"</span><span class="p">,</span><span class="kc">true</span><span class="p">))</span>
+    <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"kill $(cat "</span><span class="o">+</span><span class="nx">prcID</span><span class="o">+</span><span class="s2">".pid); rm "</span><span class="o">+</span><span class="nx">prcID</span><span class="o">+</span><span class="s2">".pid "</span><span class="o">+</span><span class="nx">prcID</span><span class="o">+</span><span class="s2">".res;"</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
 </pre></div>
 <dl><dd><ul><li> notifyVisVision1 | notify1 = </li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
-<span class="c">#flags=notify|notifyServ</span>
+<span class="c">#flags=notify0|notifyServ0</span>
 <span class="k">if</span> <span class="nb">test</span> <span class="nv">$en</span> <span class="o">=</span> 1<span class="p">;</span> <span class="k">then</span>
-	beep -f <span class="m">1000</span> -l <span class="m">1000000</span> <span class="p">&amp;</span>
-<span class="k">else</span>
-	<span class="nv">beepPID</span><span class="o">=</span><span class="k">$(</span>pidof beep<span class="k">)</span>
-	<span class="k">if</span> <span class="nb">test</span> <span class="s2">"x</span><span class="nv">$beepPID</span><span class="s2">"</span> !<span class="o">=</span> <span class="s2">"x"</span><span class="p">;</span> <span class="k">then</span> <span class="nb">kill</span> <span class="nv">$beepPID</span><span class="p">;</span> <span class="k">fi</span>
+    <span class="nv">ntfPrg</span><span class="o">=</span><span class="k">$(</span>which beep<span class="k">)</span>
+    <span class="c">#No PID file || No notify already</span>
+    <span class="k">if</span> <span class="nb">test</span> ! -s <span class="nv">$prcID</span>.pid <span class="o">||</span> ! ps -A -o <span class="s2">"pid cmd"</span> <span class="p">|</span> grep <span class="s2">"^ *</span><span class="k">$(</span>cat <span class="nv">$prcID</span>.pid<span class="k">)</span><span class="s2">.*</span><span class="nv">$ntfPrg</span><span class="s2">"</span> &gt; /dev/null<span class="p">;</span> <span class="k">then</span>
+      <span class="nv">$ntfPrg</span> -f <span class="m">1000</span> -l <span class="m">100000</span> <span class="p">&amp;</span>
+      <span class="nb">echo</span> <span class="nv">$!</span> &gt; <span class="nv">$prcID</span>.pid
+    <span class="k">fi</span>
+<span class="k">elif</span> <span class="nb">test</span> -s <span class="nv">$prcID</span>.pid<span class="p">;</span> <span class="k">then</span>
+    <span class="nb">kill</span> <span class="k">$(</span>cat <span class="nv">$prcID</span>.pid<span class="k">)</span>
+    rm <span class="nv">$prcID</span>.pid <span class="nv">$prcID</span>.res
 <span class="k">fi</span>
 </pre></div>
-<ul><li> Повторюване програвання готового звукового файлу, одного загального, на боці візуалізатору або серверу візуалізації:</li></ul>
+<ul><li> Повторюване програвання готового звукового файлу, одного загального, на боці візуалізатору (flags=notify2) або серверу візуалізації (flags=notifyServ2), тривалість аудіо файлу для внутрішньої мови має бути не більше 10 секунд:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x04"</li>
 <li> notify2 | notifyVisVision2 =</li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|notifyServ2</span>
@@ -695,7 +707,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <span class="c">#flags=notify2|notifyServ2</span>
 <span class="k">if</span> <span class="nb">test</span> <span class="nv">$en</span> <span class="o">=</span> 1<span class="p">;</span> <span class="k">then</span> play -q alarm.ogg<span class="p">;</span> <span class="k">fi</span>
 </pre></div>
-<ul><li> Програвання індивідуального, для джерела, звукового файлу, на боці візуалізатору:</li></ul>
+<ul><li> Програвання індивідуального для джерела звукового файлу, на боці візуалізатору, тривалість аудіо файлу для внутрішньої мови має бути не більше 10 секунд:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x04|res:al_prm1"</li>
 <li> notify2 =</li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=queue</span>
@@ -713,7 +725,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <span class="c">#flags=notify2|queue</span>
 <span class="k">if</span> <span class="nb">test</span> <span class="nv">$doNtf</span> <span class="o">=</span> <span class="m">1</span> -a <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
 </pre></div>
-<ul><li> Синтез мови індивідуального сповіщення, для джерела, на боці візуалізатору:</li></ul>
+<ul><li> Синтез мови індивідуального сповіщення для джерела на боці візуалізатору, тривалість повідомлення для внутрішньої мови має бути не більше 10 секунд:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm|Текстове повідомлення синтезу мови|0x04"</li>
 <li> notify2 =</li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=queue</span>
@@ -735,11 +747,11 @@ ws_BtPress:*:open:/pg_control/pg_terminator
   rm tmpForSpeech
 <span class="k">fi</span>
 </pre></div>
-<ul><li> Приготування звукового файлу, одного загального, та його програвання на боці візуалізатору або серверу візуалізації:</li></ul>
+<ul><li> Приготування звукового файлу, одного загального, та його програвання на боці візуалізатору (flags=notifyServ2) або серверу візуалізації (flags=notifyServ2), тривалість аудіо файлу для внутрішньої мови має бути не більше 10 секунд:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x04"</li>
 <li> notify2 = </li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|notifyServ2|resource</span>
-<span class="k">if</span><span class="p">(</span><span class="nx">doRes</span><span class="p">)</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRead</span><span class="p">(</span><span class="s2">"alarm.ogg"</span><span class="p">);</span>  <span class="c1">//Вставити сюди інший метод генерації</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doRes</span><span class="p">)</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRead</span><span class="p">(</span><span class="s2">"alarm.ogg"</span><span class="p">);</span>  <span class="c1">//Insert here a different method of the generation</span>
 <span class="k">if</span><span class="p">(</span><span class="nx">doNtf</span> <span class="o">&amp;&amp;</span> <span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
   <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"play -q tmpPlay"</span><span class="p">);</span>
@@ -749,7 +761,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <dl><dd><ul><li> notify2 = </li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
 <span class="c">#flags=notify2|notifyServ2|resource</span>
-<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doRes</span> <span class="o">=</span> 1<span class="p">;</span> <span class="k">then</span> cp -f alarm.ogg <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>  <span class="c">#Вставити сюди інший метод генерації</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doRes</span> <span class="o">=</span> 1<span class="p">;</span> <span class="k">then</span> cp -f alarm.ogg <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>  <span class="c">#Insert here a different method of the generation</span>
 <span class="k">if</span> <span class="nb">test</span> <span class="nv">$doNtf</span> <span class="o">=</span> <span class="m">1</span> -a <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
 </pre></div>
 <dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
@@ -765,7 +777,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <span class="c">#flags=notify2|resource</span>
 <span class="k">if</span> <span class="nb">test</span> <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
 </pre></div>
-<ul><li> Приготування індивідуального, для джерела сповіщення, звукового файлу через синтез мови, на боці візуалізатору або серверу візуалізації:</li></ul>
+<ul><li> Приготування індивідуального для джерела сповіщення звукового файлу через синтез мови, на боці візуалізатору (flags=notify2) або серверу візуалізації (flags=notifyServ2), тривалість повідомлення для внутрішньої мови має бути не більше 10 секунд:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm|Текстове повідомлення синтезу мови|0x04"</li>
 <li> notify2 =</li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|notifyServ2|queue</span>

@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.DAQGate translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.DAQGate package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2007-2022.
+# Roman Savochenko <roman@oscada.org>, 2007-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-18 10:47+0200\n"
+"POT-Creation-Date: 2023-03-20 10:03+0200\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -101,9 +101,8 @@ msgstr "Наступний збір за cron '%s'. "
 msgid "Spent time %s[%s]. "
 msgstr "Витрачено часу %s[%s]. "
 
-#, c-format
-msgid "Station '%s' - ERROR, restoring in %.3g s."
-msgstr "Станція '%s' - ПОМИЛКА, відновлення через %.3g с."
+msgid "Station '%s' - ERROR, restoring in %.3g s. "
+msgstr "Станція '%s' - ПОМИЛКА, відновлення через %.3g с. "
 
 #, c-format
 msgid "Station '%s' - requests %.6g; "
@@ -114,8 +113,12 @@ msgid "read %g values, %g archive's, %g messages; "
 msgstr "прочитано %g значень, %g архівних, %g повідомлень; "
 
 #, c-format
-msgid "wrote %g values, %g messages, in the buffer %d. "
-msgstr "записано %g значень, %g повідомлень, у буфері %d. "
+msgid "wrote %g values, %g messages. "
+msgstr "записано %g значень, %g повідомлень. "
+
+#, c-format
+msgid "To write %d. "
+msgstr "До запису %d. "
 
 #, c-format
 msgid "Enabling: station '%s' processing item '%s' for parameters %d."

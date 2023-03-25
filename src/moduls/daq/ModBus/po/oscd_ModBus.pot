@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-19 15:09+0200\n"
+"POT-Creation-Date: 2023-03-20 10:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -83,20 +83,20 @@ msgstr ""
 msgid "Task terminated! "
 msgstr ""
 
-msgid "No transport."
+msgid "No transport. "
 msgstr ""
 
-msgid "Empty transport."
+msgid "Empty transport. "
 msgstr ""
 
-msgid "Error the transport."
+msgid "Error the transport. "
 msgstr ""
 
-msgid "Error the connection."
+msgid "Error the connection. "
 msgstr ""
 
 #, c-format
-msgid "Restoring in %.6g s."
+msgid "Restoring in %.6g s. "
 msgstr ""
 
 msgid "Acquisition. "
@@ -123,11 +123,11 @@ msgid "Wrote %g registers, %g coils. "
 msgstr ""
 
 #, c-format
-msgid "In the buffer %d. "
+msgid "Errors of connection %g, of response %g. "
 msgstr ""
 
 #, c-format
-msgid "Errors of connection %g, of response %g. "
+msgid "To write %d. "
 msgstr ""
 
 #, c-format

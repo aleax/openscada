@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.DAQGate file: daq_gate.h
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -169,7 +169,7 @@ class TMdContr: public TController
 
 	    ResMtx reqM, aWrRes, dataRes;
 
-	    float numR, numRA, numW, numRM, numWM;
+	    uint32_t numR, numRA, numW, numRM, numWM;
 	};
 	class SPrmsStack
 	{

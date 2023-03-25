@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.ModBus translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.ModBus module.
 #
-# Roman Savochenko <roman@oscada.org>, 2007-2022.
+# Roman Savochenko <roman@oscada.org>, 2007-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-19 15:09+0200\n"
+"POT-Creation-Date: 2023-03-20 10:09+0200\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -81,21 +81,20 @@ msgstr "Значення"
 msgid "Task terminated! "
 msgstr "Завдання перервано! "
 
-msgid "No transport."
-msgstr "Немає транспорту."
+msgid "No transport. "
+msgstr "Немає транспорту. "
 
-msgid "Empty transport."
-msgstr "Порожній транспорт."
+msgid "Empty transport. "
+msgstr "Порожній транспорт. "
 
-msgid "Error the transport."
-msgstr "Помилка транспорту."
+msgid "Error the transport. "
+msgstr "Помилка транспорту. "
 
-msgid "Error the connection."
-msgstr "Помилка з'єднання."
+msgid "Error the connection. "
+msgstr "Помилка з'єднання. "
 
-#, c-format
-msgid "Restoring in %.6g s."
-msgstr "Відновлення через %.6g c."
+msgid "Restoring in %.6g s. "
+msgstr "Відновлення через %.6g c. "
 
 msgid "Acquisition. "
 msgstr "Збір. "
@@ -121,12 +120,12 @@ msgid "Wrote %g registers, %g coils. "
 msgstr "Записано %g регістрів, %g бітів. "
 
 #, c-format
-msgid "In the buffer %d. "
-msgstr "У буфері %d. "
-
-#, c-format
 msgid "Errors of connection %g, of response %g. "
 msgstr "Помилок з'єднання %g, відповіді %g. "
+
+#, c-format
+msgid "To write %d. "
+msgstr "До запису %d. "
 
 #, c-format
 msgid "Connection to the data source: %s."
@@ -237,8 +236,8 @@ msgstr ""
 "  flg - прапорці: режим запису/читання (r-читати, w-писати),\n"
 "                  суворий режим запиту (без комбінування) 's',\n"
 "                  інверсія порядку регістрів '~';\n"
-"                  перемикання порядку байтів 'e' регістрів (у LE загалом та BE "
-"для рядків);\n"
+"                  перемикання порядку байтів 'e' регістрів (у LE загалом та "
+"BE для рядків);\n"
 "  id - ідентифікатор створюваного атрибуту;\n"
 "  name - ім'я створюваного атрибуту.\n"
 "Приклади:\n"
@@ -289,8 +288,8 @@ msgstr ""
 "[0...65535];\n"
 "  flg - прапорці: режим запису/читання (r-читати, w-писати),\n"
 "                  інверсія порядку регістрів '~',\n"
-"                  перемикання порядку байтів 'e' регістрів (у LE загалом та BE "
-"для рядків).\n"
+"                  перемикання порядку байтів 'e' регістрів (у LE загалом та "
+"BE для рядків).\n"
 "Приклади:\n"
 "  \"R:0x300:rw\" - доступ до регістру;\n"
 "  \"C:100:rw\" - доступ до біту;\n"
@@ -584,8 +583,8 @@ msgstr ""
 "[0...65535];\n"
 "  w~e - прапорці: режим запису 'w',\n"
 "                  інверсія порядку регістрів '~',\n"
-"                  перемикання порядку байтів 'e' регістрів (у LE загалом та BE "
-"для рядків).\n"
+"                  перемикання порядку байтів 'e' регістрів (у LE загалом та "
+"BE для рядків).\n"
 "Приклади:\n"
 "  \"R0x300\" - доступ до регістру;\n"
 "  \"C100w\" - доступ до біту, доступний до запису;\n"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-15 20:01+0200\n"
+"POT-Creation-Date: 2023-03-20 10:03+0200\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -100,9 +100,8 @@ msgstr "Следующий сбор по cron '%s'. "
 msgid "Spent time %s[%s]. "
 msgstr "Затрачено времени %s[%s]. "
 
-#, fuzzy, c-format
-msgid "Station '%s' - ERROR, restoring in %.3g s."
-msgstr "Ошибка '%s', восстановление через %.3g с."
+msgid "Station '%s' - ERROR, restoring in %.3g s. "
+msgstr "Ошибка '%s', восстановление через %.3g с. "
 
 #, fuzzy, c-format
 msgid "Station '%s' - requests %.6g; "
@@ -112,9 +111,13 @@ msgstr "Запросов к '%s' - %.6g; "
 msgid "read %g values, %g archive's, %g messages; "
 msgstr "прочитано %g значений, %g архивных, %g сообщений; "
 
-#, c-format
-msgid "wrote %g values, %g messages, in the buffer %d. "
+#, fuzzy, c-format
+msgid "wrote %g values, %g messages. "
 msgstr "записано %g значений, %g сообщений, в буфере %d. "
+
+#, c-format
+msgid "To write %d. "
+msgstr ""
 
 #, c-format
 msgid "Enabling: station '%s' processing item '%s' for parameters %d."

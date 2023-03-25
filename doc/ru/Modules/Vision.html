@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/Vision</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVision&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Vision" title="Modules/Vision">Modules/Vision</a> and the translation is 90% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Vision.html" title="Modules/Vision (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Vision.html" title="Модулі/Vision (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVision&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Vision" title="Modules/Vision">Modules/Vision</a> and the translation is 89% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Vision.html" title="Modules/Vision (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Vision.html" title="Модулі/Vision (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -573,85 +573,85 @@
 <td> Невизуальный виджет, на стороне исполнения, позволяющий включать вычислительные функции объектной модели OpenSCADA в СВУ.
 </td></tr></table>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Для всех реализованных примитивов, кроме "FormEl", этот модуль поддерживает условную генерацию событий от манипулятора мыши по прозрачности указанного пикселя, боле нуля — не полная прозрачность.
-</p><p><span id="SpecAttrs" title="#SpecAttrs">Модулем визуализатора предоставляется и используется ряд специфических атрибутов</span> общего характера, информация о которых приведена в таблице. Эти атрибуты автоматически создаются визуализатором при их отсутствии и в момент первого запуска, или создаются пользователем в кадре указанной области, по необходимости.
+</p><p><span id="SpecAttrs" title="#SpecAttrs">The visualizer module provides and uses set of specific attributes</span> of the generic means, the information of which is given in the table. These attributes are automatically created by the visualizer in their absence and during the first run, or created by the user in the frame of the specified area, as needed.
 </p>
 <table class="wikitable">
 
 <tr>
-<th> Идентификатор (область) </th>
-<th> Имя </th>
-<th> Назначение
+<th> Identifier (area) </th>
+<th> Name </th>
+<th> Appointment
 </th></tr>
 <tr>
-<td> notify{N}, notifyVisWebVision{N} (страница) </td>
-<td> Уведомитель: тип {N} </td>
-<td> Определяет уведомитель и процедуру получения ресурса уведомления и самого уведомления, используемое при отсутствии Phonon, согласно <a href="../Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">концепции "Сигнализации (Алармы)"</a>.
+<td> notify{N}, notifyVisVision{N} (page) </td>
+<td> Notification: type {N} </td>
+<td> Specifies a notifier and a procedure of the notification resource obtaining and the same notification, accordingly to the <a href="../Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">"Signalling (Alarms)" conception</a>. The notification performed in such priority — <b>notifyVisVision{N}</b> &gt; <b>Phonon</b> &gt; <b>notify{N}</b>. That is the <b>notifyVisVision{N}</b> is most priority, it overrides the <b>Phonon</b> notification and there you can implement very not ordinary notifications.
 </td></tr>
 <tr>
-<td> statLine (главная страница) </td>
-<td> Элементы строки статуса </td>
+<td> statLine (main page) </td>
+<td> Status line items </td>
 <td>
-<p>Текстовое поле с описанием элементов строки статуса пользователя, в формате строки "<b>{Id}:{Label}:{ToolTip}:{Color}:{Img}</b>", где:
+<p>Text field with description of the status line item in the string form "<b>{Id}:{Label}:{ToolTip}:{Color}:{Img}</b>", where:
 </p>
-<ul><li> "Id" — идентификатор, используется также для формирования событий от виджета "stIt_{Id}".</li>
-<li> "Label" — визуальная метка элемента статуса.</li>
-<li> "ToolTip" — всплывающая подсказка про элемент.</li>
-<li> "Color" — цвет метки.</li>
-<li> "Img" — изображение элемента статуса, вместо метки. </li></ul>
+<ul><li> "Id" — identifier, uses also to form events from the widget "stIt_{Id}".</li>
+<li> "Label" — visual label of the status element.</li>
+<li> "ToolTip" — context help about the element.</li>
+<li> "Color" — label color.</li>
+<li> "Img" — image of the status element, instead the label.</li></ul>
 </td></tr>
 <tr>
-<td> runWin (главная страница) </td>
-<td> Окно исполнения </td>
+<td> runWin (main page) </td>
+<td> Window of the execution </td>
 <td>
-<p>Установка режима исполнения главного окна:
+<p>Setting the mode of the main window execution:
 </p>
-<ul><li> "Оригинальный размер (0)".</li>
-<li> "Максимизировать (1)".</li>
-<li> "На весь экран (2)". </li></ul>
+<ul><li> "Original size (0)".</li>
+<li> "Maximize (1)".</li>
+<li> "Full screen (2)". </li></ul>
 </td></tr>
 <tr>
-<td> keepAspectRatio (главная страница) </td>
-<td> Сохранять пропорцию при масштабировании </td>
-<td> Сохранять пропорцию страниц при масштабировании.
+<td> keepAspectRatio (main page) </td>
+<td> Keep aspect ratio on scale </td>
+<td> Keep aspect ratio of the pages on scale.
 </td></tr>
 <tr>
-<td> stBarNoShow (главная страница) </td>
-<td> Не показывать строку статуса </td>
-<td> Скрыть строку статуса главного окна.
+<td> stBarNoShow (main page) </td>
+<td> Do not show the status bar </td>
+<td> Hide the status bar of the main window.
 </td></tr>
 <tr>
-<td> winPosCntrSave (главная страница) </td>
-<td> Управление и сохранение положений окон </td>
-<td> Включение управления и сохранения положения окон исполнения.
+<td> winPosCntrSave (main page) </td>
+<td> Control and save for position of the windows </td>
+<td> Enabling the windows position control and save.
 </td></tr>
 <tr>
-<td> userSetVis (главная страница, создаётся вручную, строковый тип) </td>
-<td> Установка пользователя </td>
+<td> userSetVis (main page, created manually, the type "String") </td>
+<td> Setting the user </td>
 <td>
-<p>Изменение пользователя или вызов диалога для его выбора. Варианты значения:
+<p>Change the user or call a dialog to select it. Variants of the value:
 </p>
-<ul><li> "*" — вызов диалога выбора пользователя; </li>
-<li> "$" — изменение пользователя на типового;</li>
-<li> "{пользователь}[:{пароль}]" — прямая смена на <i>пользователь</i> с <i>паролем</i>; для пустого пароля пользователь меняется только если его права меньше или равны и это локальная визуализация; полезный пример смены на пользователя "user" после минуты неактивности:</li></ul>
+<ul><li> "*" — call for a selecting dialog of the user; </li>
+<li> "$" — change the user to the default one;</li>
+<li> "{user}[:{password}]" — direct change to <i>user</i> with <i>password</i>; for empty password, the user is changed only if its permission is lesser or equal and that is the local visualisation; a useful example of changing to the "user" after one minute inactivity:</li></ul>
 <pre style="white-space: pre-wrap;&nbsp;; margin-left: 20pt">
 if((SYS.time()-this.ownerSess().userActTm()) &lt; 60)userSetVis = "";
 else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user:user";
 </pre>
 </td></tr>
 <tr>
-<td> vs_background (виды "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" примитива "FormEl") </td>
-<td> Пользовательский фон </td>
-<td> Определяет пользовательский фон в форме <b>{color}-{transp} {image}</b>
+<td> vs_background (the views "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" of the primitive "FormEl") </td>
+<td> Custom background </td>
+<td> Specifies for the custom background in the form <b>{color}-{transp} {image}</b>
 </td></tr>
 <tr>
-<td> vs_border (виды "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" примитива "FormEl") </td>
-<td> Пользовательская граница </td>
-<td> Определяет пользовательскую границу в стандартной форме CSS <b>{wdth}px {style} {color}</b>
+<td> vs_border (the views "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" of the primitive "FormEl") </td>
+<td> Custom border </td>
+<td> Specifies for the custom border in the standard CSS-form <b>{wdth}px {style} {color}</b>
 </td></tr>
 <tr>
-<td> vs_winTitle (вид "Box") </td>
-<td> Заголовок окна </td>
-<td> Значение динамического заголовка окна
+<td> vs_winTitle (the view "Box") </td>
+<td> Window title </td>
+<td> Dynamic window title value
 </td></tr></table>
 <p>Рассмотрим реализацию каждого примитива более детально.
 </p>

@@ -1,13 +1,13 @@
 # OpenSCADA.UI.WebUser translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.WebUser package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2010-2018.
+# Roman Savochenko <roman@oscada.org>, 2010-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebUser 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-25 18:26+0200\n"
+"POT-Creation-Date: 2023-03-24 17:39+0200\n"
 "PO-Revision-Date: 2010-03-16 16:43+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -21,10 +21,8 @@ msgstr "WWW-сторінка користувача"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid ""
-"Provides for creating your own web-pages on internal OpenSCADA language."
-msgstr ""
-"Забезпечує створення власних WWW-сторінок на внутрішній мові OpenSCADA."
+msgid "Provides for creating your own web-pages on internal OpenSCADA language."
+msgstr "Забезпечує створення власних WWW-сторінок на внутрішній мові OpenSCADA."
 
 msgid "Identifier"
 msgstr "Ідентифікатор"
@@ -122,6 +120,9 @@ msgstr "Цей об'єкт"
 msgid "Protocol's object"
 msgstr "Об'єкт протоколу"
 
+msgid "Schedule service call"
+msgstr "Планування сервісного виклику"
+
 msgid "Disabled. "
 msgstr "Вимкнено. "
 
@@ -146,6 +147,10 @@ msgstr "Ввімкнено"
 
 msgid "DB"
 msgstr "БД"
+
+#, c-format
+msgid "Remove from '%s'"
+msgstr "Видалити із'%s'"
 
 msgid "Configuration"
 msgstr "Конфігурація"
@@ -188,3 +193,4 @@ msgstr ""
 "   'cnts' - елементи вмісту у Array<XMLNodeObj>.   'this' - вказівник на "
 "об'єкт цієї сторінки;\n"
 "   'prt' - вказівник на об'єкт вхідної частини HTTP протоколу."
+

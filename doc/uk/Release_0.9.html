@@ -354,7 +354,7 @@
 <li> Генерація актуальної позамережевої документації використовуючи сервісну процедуру "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
 <li> Застосування-вивантаження виправлень релізу до репозиторію та складання цього щодо другої збірки, і для кожного тижня виправлення критичних помилок — перший тиждень без критичних виправлень означатиме завершення випуску LTS, тож, КОРИСТУВАЧІ, тестуйте ретельно LTS реліз щоб потім не скаржитись на його кінцеву збірку!</li></ul>
 </div>
-<p>Це оновлення <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релізу 0.9 LTS</a> виправляє біля 70 помилок та додає БАГАТО удосконалень із декількома значними-концептуальними, з якими цілком можна ознайомитися у <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2872" rel="nofollow noreferrer noopener" target="_blank">протоколі змін оновлення</a>.
+<p>Це оновлення <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релізу 0.9 LTS</a> виправляє біля 70 помилок та додає БАГАТО удосконалень із декількома значними-концептуальними, з якими цілком можна ознайомитися у <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2876" rel="nofollow noreferrer noopener" target="_blank">протоколі змін оновлення</a>.
 </p><p><b><u><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Linux Дистрибутив Автоматизації проєкту OpenSCADA</a></u></b><br />
 </p>
 <ul><li> оновлення TDE до 14.0.13;</li>
@@ -364,7 +364,8 @@
 <li> переклад сторінки підпроєкту Українською.</li></ul>
 <p><b><u>Основні WWW-ресурси, документація проєкту та підпроєктів</u></b><br />
 </p>
-<ul><li> виправлення роботи <a class="external text" href="http://oscada.org/" rel="nofollow noreferrer noopener" target="_blank">Сайту</a> у Web-оглядачах старих вбудованих пристроїв на кшталт Nokia N900, N9;</li>
+<ul><li> цілковито переглянуто та перекладено Українською документ "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Server" title="Special:MyLanguage/Sub-projects/Server">Серверна та хостингова інфраструктура проєкту OpenSCADA</a>";</li>
+<li> виправлення роботи <a class="external text" href="http://oscada.org/" rel="nofollow noreferrer noopener" target="_blank">Сайту</a> у Web-оглядачах старих вбудованих пристроїв на кшталт Nokia N900, N9;</li>
 <li> відновлення <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Nokia_Linux" title="Special:MyLanguage/Using/Nokia Linux">Maemo 5 (Nokia N900)</a> із перенесенням на Ланцюг-втулок CSSU-Thumb, заснований на GCC 4.7.2 від Linaro; та оновлення сторінки проєкту;</li>
 <li> цілковитий перегляд документу "API" у <a href="API.html#CntrNode" title="Special:MyLanguage/Documents/API">секції "Інтерфейс Управління та динамічне дерево об'єктів програми"</a> та секцію "Сервісні команди-функції" перенесено туди як підсекцію, <a href="API.html#ServFunc" title="Special:MyLanguage/Documents/API">підсекцію "Сервісні команди-функції"</a> цілком переписано і доповнено, та все це перекладено Українською;</li>
 <li> розпочато новий підпроєкт <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/PinePhone" title="Special:MyLanguage/Using/PinePhone">Відкритий Телефон — PinePhone</a>;</li>
@@ -563,6 +564,7 @@
 <ul><li> FIX:Складання: configure.ac: Версію бібліотеки ядра збільшено до 3:13:0 та версію програми збільшено до 0.9.6. Модульну версію підсистеми "Транспорти" збільшено до 19.</li>
 <li> *: Більшість close(), iconv_close(), dlclose(), pclose() функцій доповнено перевіркою результату та попередженням про проблеми.</li>
 <li> .,DAQ.JavaLikeCalc: Додано отримання допомоги від другого рядка у Інтерфейсі Управління для: опису полів елементів (TFld) із DAQ-значеннями; назв ВВ функцій (TFunction) із побудовувачем зв'язків та атрибутів Логічного Рівня DAQ.</li>
+<li> FIX: Переписано функцію TCntrNode::nodeAt() для запобігання виклику віртуальної chldAt() під блокуванням mChM, чим попереджаючи деяким мертвим блокування у віртуальних визначеннях chldAt().</li>
 <li> Переглянуто усі шаблони у теках =Tmpl=.</li>
 <li> FIX: Вкладку "Станція", головної сторінки Інтерфейсу Управління OpenSCADA, доповнено інформацією системного часу та загалом реструктуровано.</li>
 <li> FIX:data/openscada-proj.in:
@@ -599,11 +601,12 @@
 <p><b><u>Транспорти</u></b><br />
 </p>
 <ul><li> FIX: Вихідні транспорти доповнено примусовою зупинкою за вимкнення-відключення системного об'єкту, не у деструкторі, що вже пізно та тут можуть втрачатися тримачі сокетів.</li>
-<li> Лог ВВ транспортів доповнено режимами: "Бінарний і Текст", "Бінарний", "Текст".</li>
+<li> Лог ВВ транспортів доповнено режимами "Бінарний і Текст", "Бінарний", "Текст", та його записом до файлу за вказанням розміру протоколу -1 для дуже великих.</li>
 <li> FIX:Sockets: Виправлено опрацювання нецілковитого запису у Вхідній частині, коли повідомлення обрізається по розміру буферу передавача TCP. Розмір вхідного буферу Вхідної частини прив'язано до контролю розміру буферу апаратного приймача, а внутрішній просто заморожено на розмірі буферу від стандартного рядка оскільки воно не критичне та не вимагає контролю.</li></ul>
 <p><b><u>Транспортні Протоколи</u></b><br />
 </p>
-<ul><li> ModBus: Доповнено параметром "e" для перемикання послідовності байтів регістру у LE (молодший перший) загалом та BE (старший перший) для рядків.</li></ul>
+<ul><li> ModBus: Доповнено параметром "e" для перемикання послідовності байтів регістру у LE (молодший перший) загалом та BE (старший перший) для рядків.</li>
+<li> HTTP: Доповнено HTTP Атрибутами вимкнення кешу WEB-Браузеру взагалі: "Cache-Control: no-cache, no-store, must-revalidate", "Pragma: no-cache", "Expires: 0".</li></ul>
 <p><b><u>Інтерфейс Користувача</u></b><br />
 </p>
 <ul><li> QTStarter,QTCfg,Vision: Загальне підсвічування синтаксису у SnthHgl::rule() переключено на основне використання PCRE у TRegExp, оскільки він ВП'ЯТЕРО ШВИДШИЙ і значно багатший порівняно із QRegExp; та QRegExp залишено для автоматичного увімкнення за відсутності бібліотек PCRE 32/16. Загальну бібліотеку Qt (lib_qtgen) доповнено статичними-зовнішніми функціями getFont() і getColor() із UI.Vision та об'єктом SnthHgl із UI.Vision і UI.QTCfg.</li>

@@ -1,3 +1,25 @@
+2023-03-25 Roman (stable)
+- !!:LibsDB.vcaBase: wlb_Main.RootPgSo: The "Notification: type 2 (TextSpeech) (notify2)" method expanded by the RHVoice support
+	and appended by the builtin syntax highlight for BASH.
+    !!: The "Notification: type 1 (Buzzer) (notify1)" method rewrote for the long samples playback in the background,
+	that is with control the sample playing stop and restarting only in the case. Appended also by the syntax highlight.
+- !!!!:SYS,Transports,UI.Vision: The function's TSYS::strEncode() TSYS::ShieldSimb encoding renamed to TSYS::ShieldSymb,
+	moved to the function TSYS::strDecode() and in TSYS::strEncode() appended by the common one.
+    !!!!: And the UserAPI function SYS.strDecode() appended by the decoding method "ShieldSymb".
+- DAQ.{DAQGate,ModBus}: Status of the buffer of the asynchronous writing moved into the global context as "To write %d. ",
+	that is for the communication errors also, since the writing buffer is available here and costantly in the Asynchronous Writing.
+    Counters type switched to uint32_t for allowing the resetting and preventing the frozzing.
+- !:FIX:UI.{VCAEngine,Vision}: For encoding strings of the environment variables of the external notification scripts
+    there used the method TSYS::ShieldSymb and only in the symbol '"', for preventing encoding "'".
+- !!!:FIX:UI.VCAEngine: The dynamic translation of tr() fixed in the translation loss after the translation cache cleaning
+	and placing the spare messages to the project's table "Trs".
+- !:UI.Vision: Appended by overriding the Phonon notification method with a notification script declaration
+	in the prioritaty attribute "notifyVisVision{N}".
+    Enabled to notify the active alarms at the start, for the notification script as for Phonon.
+- !!:UI.WebUser: Expanded by a possibility of schedule the user procedures call in the service cycle,
+    for the background processing of some data.
+
+
 2023-03-18 Roman (stable)
 - FIX:Transports: Fixing the building for old environments.
 
@@ -5,7 +27,7 @@
 2023-03-18 Roman (stable)
 - !!!!:FIX:SYS: Rewrote the function TCntrNode::nodeAt() to prevent of call the virtual chldAt() under the lock mChM,
     so preventing some dead locks in the virtual definitions of chldAt().
-- !!!:Transports: The IO log appended by it writing to a file for very big ones at pointing the log size -1.
+- !!!:Transports: The IO log appended by its writing to a file for very big ones at pointing the log size -1.
     Commands of the table of the external hosts appended by names for custom.
 - DAQ.DAQGate: Some improved in managing the configuring subtab "Configuration of the remote parameter" of the remote station
     in different states.

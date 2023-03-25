@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-25 18:26+0200\n"
+"POT-Creation-Date: 2023-03-24 17:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -118,6 +118,9 @@ msgstr ""
 msgid "Protocol's object"
 msgstr ""
 
+msgid "Schedule service call"
+msgstr ""
+
 msgid "Disabled. "
 msgstr ""
 
@@ -141,6 +144,10 @@ msgid "Enabled"
 msgstr ""
 
 msgid "DB"
+msgstr ""
+
+#, c-format
+msgid "Remove from '%s'"
 msgstr ""
 
 msgid "Configuration"

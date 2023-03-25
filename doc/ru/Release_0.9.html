@@ -354,7 +354,7 @@
 <li> Generating the actual offline documentation using the service procedure "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
 <li> Committing the release fixes to the repository and building that for the second build, and for each week of appearing critical fixes — the first week without the critical fixes means the final the LTS releasing, so, USERS, test closely the LTS release for not complain to it final build!</li></ul>
 </div>
-<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 70 bugs and appends MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2872" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
+<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 70 bugs and appends MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2876" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
 </p><p><b><u><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Automation Linux distributive of the project OpenSCADA</a></u></b><br />
 </p>
 <ul><li> updating TDE to 14.0.13;</li>
@@ -364,7 +364,8 @@
 <li> translation the subproject page to Ukrainian.</li></ul>
 <p><b><u>Main WWW-resources, documentation of the project and subprojects</u></b><br />
 </p>
-<ul><li> fixed for the <a class="external text" href="http://oscada.org/" rel="nofollow noreferrer noopener" target="_blank">Site</a> working in WebBrowsers of old embedded devices like to Nokia N900, N9;</li>
+<ul><li> completely revised and translated to Ukrainian the "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Server" title="Special:MyLanguage/Sub-projects/Server">Server and hosting infrastructure of the OpenSCADA project</a>" document;</li>
+<li> fixed for the <a class="external text" href="http://oscada.org/" rel="nofollow noreferrer noopener" target="_blank">Site</a> working in WebBrowsers of old embedded devices like to Nokia N900, N9;</li>
 <li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Nokia_Linux" title="Special:MyLanguage/Using/Nokia Linux">Maemo 5 (Nokia N900)</a> restored with moving to the CSSU-Thumb Toolchain grounded on GCC 4.7.2 from Linaro; and the project page updated;</li>
 <li> completely revised the "API" document in the <a href="../en/API.html#CntrNode" title="Special:MyLanguage/Documents/API">section "Control Interface and dynamic tree of program objects"</a> and the section "Service commands-functions" moved there as a subsection, the <a href="../en/API.html#ServFunc" title="Special:MyLanguage/Documents/API">subsection "Service commands-functions"</a> completely rewrote and appended by, and all these translated in Ukrainian;</li>
 <li> started the new subproject <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/PinePhone" title="Special:MyLanguage/Using/PinePhone">Open Phone — PinePhone</a>;</li>
@@ -563,6 +564,7 @@
 <ul><li> FIX:Building: configure.ac: Core library version rose to 3:13:0 and the program version rose to 0.9.6. The module version of the subsystem "Transport" rose to 19.</li>
 <li> *: Most close(), iconv_close(), dlclose(), pclose() functions appended by checking the result and warning at problems.</li>
 <li> .,DAQ.JavaLikeCalc: Getting help from the second line for the Control Interface appended in: description of the element fields (TFld) with DAQ-values; name of function IOs (TFunction) with links and attributes builder of the DAQ Logical Level.</li>
+<li> FIX: Rewrote the function TCntrNode::nodeAt() to prevent of call the virtual chldAt() under the lock mChM, so preventing some dead locks in the virtual definitions of chldAt().</li>
 <li> Revised for all templates in the folders =Tmpl=.</li>
 <li> FIX: The tab "Station" of the main page of the OpenSCADA Control Interface appended by the system time information and commonly restructured.</li>
 <li> FIX:data/openscada-proj.in:
@@ -599,11 +601,12 @@
 <p><b><u>Transports</u></b><br />
 </p>
 <ul><li> FIX: The output transports appended by the force stopping at the object system disable-disconnection, not in destructors what is late then there can be lost the socket handlers.</li>
-<li> The IO log of the transports appended by the data modes: "Binary &amp; Text", "Binary", "Text".</li>
+<li> The IO log of the transports appended by the data modes "Binary &amp; Text", "Binary", "Text", and by it writing to a file for very big ones at pointing the log size -1.</li>
 <li> FIX:Sockets: Fixed in processing the not complete writing for the Input part, when the message cuts on the TCP transmitter buffer size. The input buffer size of the Input part bound to the hardware receiver buffer size control and the internal one just frozen to the standard string buffer length since that is not critical and need no control.</li></ul>
 <p><b><u>Transport Protocols</u></b><br />
 </p>
-<ul><li> ModBus: Appended by the option "e" for the register endian switch to LE for generic and BE for strings.</li></ul>
+<ul><li> ModBus: Appended by the option "e" for the register endian switch to LE for generic and BE for strings.</li>
+<li> HTTP: Appended by the HTTP Attributes of disabling the WEBBrowser Cache in whole: "Cache-Control: no-cache, no-store, must-revalidate", "Pragma: no-cache", "Expires: 0".</li></ul>
 <p><b><u>User Interface</u></b><br />
 </p>
 <ul><li> QTStarter,QTCfg,Vision: The common Syntax Highlighter in SnthHgl::rule() switched to the main work using PCRE in TRegExp, since that is 5 TIMES FASTER and very richer comparing to QRegExp; and QRegExp left to be automatically enabled at missing the PCRE 32/16 libraries. The Qt-generic library (lib_qtgen) appended by the static-external functions getFont() and getColor() from UI.Vision and by the object SnthHgl from UI.Vision and UI.QTCfg.</li>

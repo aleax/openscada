@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebUser 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-25 18:26+0200\n"
+"POT-Creation-Date: 2023-03-24 17:39+0200\n"
 "PO-Revision-Date: 2010-03-05 15:57+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -122,6 +122,9 @@ msgstr "Этот объект"
 msgid "Protocol's object"
 msgstr "Объект протокола"
 
+msgid "Schedule service call"
+msgstr ""
+
 msgid "Disabled. "
 msgstr "Отключен. "
 
@@ -146,6 +149,10 @@ msgstr "Включен"
 
 msgid "DB"
 msgstr "БД"
+
+#, c-format
+msgid "Remove from '%s'"
+msgstr ""
 
 msgid "Configuration"
 msgstr "Конфигурация"

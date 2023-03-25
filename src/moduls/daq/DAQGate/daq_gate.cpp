@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.DAQGate file: daq_gate.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.11.4"
+#define MOD_VER		"2.11.6"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -146,21 +146,24 @@ string TMdContr::getStatus( )
 	    tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
 
 	bool isWork = false;
-	for(map<string,StHd>::iterator st = mStatWork.begin(); st != mStatWork.end(); ++st)
-	    if(st->second.cntr > -1)
-		val += TSYS::strMess(_("Station '%s' - ERROR, restoring in %.3g s."), st->first.c_str(), st->second.cntr);
-	    else {
-		int inWrBuf = 0;
-		st->second.aWrRes.lock();
-		for(map<string, map<string,string> >::iterator iPrm = st->second.asynchWrs.begin(); iPrm != st->second.asynchWrs.end(); ++iPrm)
-		    inWrBuf += iPrm->second.size();
-		st->second.aWrRes.unlock();
+	for(map<string,StHd>::iterator st = mStatWork.begin(); st != mStatWork.end(); ++st) {
+	    int inWrBuf = 0;
+	    st->second.aWrRes.lock();
+	    for(map<string, map<string,string> >::iterator iPrm = st->second.asynchWrs.begin(); iPrm != st->second.asynchWrs.end(); ++iPrm)
+		inWrBuf += iPrm->second.size();
+	    st->second.aWrRes.unlock();
 
+	    if(st->second.cntr > -1)
+		val += TSYS::strMess(_("Station '%s' - ERROR, restoring in %.3g s. "), st->first.c_str(), st->second.cntr);
+	    else {
 		val += TSYS::strMess(_("Station '%s' - requests %.6g; "), st->first.c_str(), -st->second.cntr);
-		val += TSYS::strMess(_("read %g values, %g archive's, %g messages; "), st->second.numR, st->second.numRA, st->second.numRM);
-		val += TSYS::strMess(_("wrote %g values, %g messages, in the buffer %d. "), st->second.numW, st->second.numWM, inWrBuf);
+		val += TSYS::strMess(_("read %g values, %g archive's, %g messages; "),
+		    (double)st->second.numR, (double)st->second.numRA, (double)st->second.numRM);
+		val += TSYS::strMess(_("wrote %g values, %g messages. "), (double)st->second.numW, (double)st->second.numWM);
 		isWork = true;
 	    }
+	    if(mAsynchWr || inWrBuf) val += TSYS::strMess(_("To write %d. "), inWrBuf);
+	}
 	if(!isWork) val.replace(0, 1, "10");
     }
 

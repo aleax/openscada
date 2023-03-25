@@ -116,7 +116,7 @@ class TSYS : public TCntrNode
 
     public:
 	//Data
-	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint, oscdID, Bin, Reverse, ShieldSimb, ToLower, Limit, ShieldBin };
+	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint, oscdID, Bin, Reverse, ToLower, Limit, ShieldSymb, ShieldBin };
 	enum IntView	{ Dec, Oct, Hex };
 
 	// Task structure
@@ -349,8 +349,8 @@ class TSYS : public TCntrNode
 	static string pathLevEnd( const string &path, int level, bool decode = true, int *off = NULL );
 	static string path2sepstr( const string &path, char sep = '.' );
 	static string sepstr2path( const string &str, char sep = '.' );
-	static string strEncode( const string &in, Code tp, const string &opt1 = "" );
-	static string strDecode( const string &in, Code tp = Custom, const string &opt1 = "" );
+	static string strEncode( const string &in, Code tp, const string &opt = "" );
+	static string strDecode( const string &in, Code tp = Custom, const string &opt = "" );
 	static string strMess( const char *fmt, ... );
 	static string strLabEnum( const string &base );
 

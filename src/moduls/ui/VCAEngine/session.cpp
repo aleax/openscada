@@ -1094,7 +1094,7 @@ void Session::Notify::commCall( bool doNtf, bool doRes, string &res, string &res
 	}
 	// Prepare environment and execute the external script
 	string cmdSeq = "prcID=ses_"+owner()->id()+"_ntf"+i2s(tp)+" en="+i2s(alEn)+" doNtf="+i2s(doNtf)+" doRes="+i2s(doRes)+" res="+resFile+" resTp="+resTp+
-		" mess=\""+TSYS::strEncode(mess,TSYS::SQL)+"\" lang=\""+TSYS::strEncode(lang,TSYS::SQL)+"\" ./"+wcomProc;
+		" mess=\""+TSYS::strEncode(mess,TSYS::ShieldSymb,"\"")+"\" lang=\""+TSYS::strEncode(lang,TSYS::ShieldSymb,"\"")+"\" ./"+wcomProc;
 	if(!doRes) system(cmdSeq.c_str());
 	else {
 	    FILE *fp = popen(cmdSeq.c_str(), "r");
@@ -1808,8 +1808,9 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
 	    TValFunc::setFunc(&((AutoHD<TFunction>)SYS->nodeAt(mWorkProg)).at());
 	    TValFunc::setUser(ownerSess()->user());
 	    setO(3, new TCntrNodeObj(AutoHD<TCntrNode>(this),ownerSess()->user()));
-	    //  Changing the storage for placing of the dynamic messages translation to the project storage
-	    TValFunc::func()->setStor(ownerSess()->parent().at().DB());
+	    //  Appending the storages by the project storage for placing of the dynamic messages translation there
+	    if(TValFunc::func()->stor().find(ownerSess()->parent().at().DB()) == string::npos)
+		TValFunc::func()->setStor(ownerSess()->parent().at().DB()+";"+TValFunc::func()->stor());
 	}
     }
     if(!val) {

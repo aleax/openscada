@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebUser file: web_user.h
 /***************************************************************************
- *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -95,6 +95,8 @@ class UserPg : public TCntrNode, public TConfig, public TPrmTempl::Impl
 
 	void HTTP( const string &req, SSess &s, TProtocolIn *iprt );
 
+	void perSYSCall( );
+
 	TWEB &owner( ) const;
 
 	//Attributes
@@ -125,7 +127,7 @@ class UserPg : public TCntrNode, public TConfig, public TPrmTempl::Impl
 	string	mDB;
 
 	int	ioRez, ioHTTPreq, ioUrl, ioPage, ioSender, ioUser,
-		ioHTTPvars, ioURLprms, ioCnts, ioThis, ioPrt;
+		ioHTTPvars, ioURLprms, ioCnts, ioThis, ioPrt, ioSchedCall;
 
 	bool	chkLnkNeed;	//Check lnk need flag
 
@@ -181,6 +183,8 @@ class TWEB: public TUI
 
 	void   modInfo( vector<string> &list );
 	string modInfo( const string &name );
+
+	void perSYSCall( unsigned int cnt );
 
 	//Attributes
 	string	mDefPg;

@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the OpenSCADA.UI.WebUser package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2010.
-# Roman Savochenko <roman@oscada.org>, 2010,2015-2018.
+# Roman Savochenko <roman@oscada.org>, 2010-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebUser 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-25 18:26+0200\n"
+"POT-Creation-Date: 2023-03-24 17:39+0200\n"
 "PO-Revision-Date: 2010-10-25 09:57+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: <de@li.org>\n"
@@ -23,8 +23,7 @@ msgstr "Benutzer-WWW-Seite"
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-msgid ""
-"Provides for creating your own web-pages on internal OpenSCADA language."
+msgid "Provides for creating your own web-pages on internal OpenSCADA language."
 msgstr ""
 "Ermöglicht das Erstellen eigener Webseiten in der internen Sprache von "
 "OpenSCADA."
@@ -125,6 +124,9 @@ msgstr "Dieses Objekt"
 msgid "Protocol's object"
 msgstr "Protokollobjekt"
 
+msgid "Schedule service call"
+msgstr "Serviceruf vereinbaren"
+
 msgid "Disabled. "
 msgstr "Ausgeschaltet. "
 
@@ -149,6 +151,10 @@ msgstr "Aktiviert"
 
 msgid "DB"
 msgstr "DB"
+
+#, c-format
+msgid "Remove from '%s'"
+msgstr "Entfernen von '%s'"
 
 msgid "Configuration"
 msgstr "Konfiguration"
@@ -191,3 +197,4 @@ msgstr ""
 "   'cnts' - Elemente des Inhalts für POST in Array<XMLNodeObj>;\n"
 "   'this' - Zeiger auf diese Seite Objekt;\n"
 "   'prt' - Zeiger auf Objekt des Eingangsteils des HTTP-Protokolls."
+

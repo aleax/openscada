@@ -234,13 +234,13 @@ Information variables of the program:
 <li> <i>SQL</i> — SQL-query value;</li>
 <li> <i>Custom</i> — selective coding of the specified characters;</li>
 <li> <i>base64</i> — encoding in the standard Base64;</li>
-<li> <i>FormatPrint</i> — coding/masking of the formating elements for functions like "printf";</li>
+<li> <i>FormatPrint</i> — coding/masking of the formatting elements for functions like "printf";</li>
 <li> <i>oscdID</i> — coding of the nodes' identifiers;</li>
 <li> <i>Bin</i> — encoding of the binary data in text and vice versa;</li>
 <li> <i>Reverse</i> — invert the order of characters in the line;</li>
-<li> <i>ShieldSimb</i> — shielded symbols like to "\n" encoding to real code;</li>
 <li> <i>ToLower</i> — convert to the lower case;</li>
-<li> <i>ShieldBin</i> — shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F].</li></ul>
+<li> <i>ShieldSymb</i> — shielding-encoding symbols with the slash symbol "\" and decoding their back to the real code;</li>
+<li> <i>ShieldBin</i> — shielding-encoding all binary symbols [\x0-\x8\xB-\xC\x0E-\x1F] with the slash symbol "\".</li></ul>
 <p>Types of representations of the integer in the function TSYS::int2str(), and TSYS::ll2str() (enum — TSYS::IntView):
 </p>
 <ul><li> <i>Dec</i> — decimal;</li>
@@ -407,8 +407,8 @@ Information variables of the program:
 <li> <i>static string pathLevEnd( const string &amp;path, int level, bool decode = true, int *off = NULL );</i> — Obtaining of the element/token <i>level</i> of the <i>path</i> from the end with the ability of their decode, starting with the offset <i>off</i> (stopping on the next token end).</li>
 <li> <i>static string path2sepstr( const string &amp;path, char sep = '.' );</i> — Transformation the path into string with the separator <i>sep</i> of the elements.</li>
 <li> <i>static string sepstr2path( const string &amp;str, char sep = '.' );</i> — Transformation of the string with the separator <i>sep</i> of the elements into the path.</li>
-<li> <i>static string strEncode( const string &amp;in, Code tp, const string &amp;opt1 = "" );</i> — Encoding of the string by the specified rule <i>tp</i> and option <i>opt1</i> (symbols by "Custom"). </li>
-<li> <i>static string strDecode( const string &amp;in, Code tp = Custom, const string &amp;opt1 = "" );</i> — Decoding of the string <i>in</i> by the specified rule <i>tp</i> and option <i>opt1</i> (separator or "&lt;text&gt;" for "Bin"). </li>
+<li> <i>static string strEncode( const string &amp;in, Code tp, const string &amp;opt = "" );</i> — Encoding of the string by the specified rule <i>tp</i> and the option <i>opt</i> (symbols by "Custom").</li>
+<li> <i>static string strDecode( const string &amp;in, Code tp = Custom, const string &amp;opt = "" );</i> — Decoding of the string <i>in</i> by the specified rule <i>tp</i> and the option <i>opt</i> (separator or "&lt;text&gt;" for "Bin").</li>
 <li> <i>static string strMess( const char *fmt, ... );</i> — Formation of the string by the template <i>fmt</i> and arguments. It is implemented on the basis of "printf".</li>
 <li> <i>static string strLabEnum( const string &amp;base );</i> — Individual string labels from <i>base</i> forming by increment at end. Supported numbering into decimal, hexadecimal (prefix "0x") or octal (prefix "0") notation.</li>
 <li> <i>string strCompr( const string &amp;in, int lev=-1);</i> — Compression of the string <i>in</i> with the compression level <i>lev</i>.</li>

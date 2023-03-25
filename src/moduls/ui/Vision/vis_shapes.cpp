@@ -230,7 +230,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	    setValue(w, val);
 	    break;
 	case A_FormElName:
-	    shD->name = TSYS::strEncode(val, TSYS::ShieldSimb);
+	    shD->name = TSYS::strDecode(val, TSYS::ShieldSymb);
 	    if(!shD->setType) break;
 	    switch(shD->elType) {
 		case F_CHECK_BOX:	((QCheckBox*)shD->addrWdg)->setText(shD->name.c_str());		break;

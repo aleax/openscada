@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-19 15:09+0200\n"
+"POT-Creation-Date: 2023-03-20 10:09+0200\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -81,21 +81,20 @@ msgstr "Значение"
 msgid "Task terminated! "
 msgstr "Задача прервана! "
 
-msgid "No transport."
-msgstr "Нет транспорта."
+msgid "No transport. "
+msgstr "Нет транспорта. "
 
-msgid "Empty transport."
-msgstr "Пустой транспорт."
+msgid "Empty transport. "
+msgstr "Пустой транспорт. "
 
-msgid "Error the transport."
-msgstr "Ошибка транспорта."
+msgid "Error the transport. "
+msgstr "Ошибка транспорта. "
 
-msgid "Error the connection."
-msgstr "Ошибка соединения."
+msgid "Error the connection. "
+msgstr "Ошибка соединения. "
 
-#, c-format
-msgid "Restoring in %.6g s."
-msgstr "Восстановление через %.6g с."
+msgid "Restoring in %.6g s. "
+msgstr "Восстановление через %.6g с. "
 
 msgid "Acquisition. "
 msgstr "Сбор. "
@@ -121,12 +120,12 @@ msgid "Wrote %g registers, %g coils. "
 msgstr "Записано %g регистров, %g битов. "
 
 #, c-format
-msgid "In the buffer %d. "
-msgstr "В буфере %d. "
-
-#, c-format
 msgid "Errors of connection %g, of response %g. "
 msgstr "Ошибок соединения %g, запроса %g. "
+
+#, c-format
+msgid "To write %d. "
+msgstr ""
 
 #, c-format
 msgid "Connection to the data source: %s."
