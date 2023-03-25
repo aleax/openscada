@@ -1,4 +1,8 @@
 2023-03-25 Roman (stable)
+- Rebuild.
+
+
+2023-03-25 Roman (stable)
 - !!:LibsDB.vcaBase: wlb_Main.RootPgSo: The "Notification: type 2 (TextSpeech) (notify2)" method expanded by the RHVoice support
 	and appended by the builtin syntax highlight for BASH.
     !!: The "Notification: type 1 (Buzzer) (notify1)" method rewrote for the long samples playback in the background,
