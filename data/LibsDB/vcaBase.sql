@@ -10157,7 +10157,7 @@ if(play_value) {
 if((tVl=defUser.toInt()) && (tVl2=defUser.parse(1,"-")).length) {
 	if((SYS.time()-this.ownerSess().userActTm()) < tVl*60)	userSetVis = "";
 	else if(this.ownerSess().reqUser() != tVl2.parse(0,":"))	userSetVis = tVl2;
-}','','',1000,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1664210236);
+}','','',1000,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1679609248);
 INSERT INTO wlb_Main VALUES('ElViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
 xUlEQVRoge2W0Y4URRSG///06eqZRQYkqCuBSQDNSEJcHsBrXsInID6P4Y32QhZ3DKLZENZ1iRPR
 XZmNLHZXV53yYokX63IBw1Crqe+yulPn/6r6dBU3Nu5vbk7x32Q0Oqubm9O7d78ej8e5w7w2u7u7
@@ -17524,7 +17524,7 @@ Container of the control panels — container area to include control panels of 
 Under the control panels container placed a button to start the demo mode — mode in which performed periodic switching for representative frames, changing regimes and other operations by a scenario.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.6.2
+Version: 2.7.0
 License: GPLv2',32,'','','','Елемент-кадр слугує базою для створення користувацьких інтерфейсів, пачатково для управління технологічними процесами, заснованими на об''єктах сигналізації (СО).
 
 Коренева сторінка містить чотири області:
@@ -17552,7 +17552,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Під контейнером панелей управління розташовується кнопка запуску демонстраційного режиму — режиму за яким здійснюється періодичне перемикання показних кадрів, зміна режимів та інших операцій згідно сценарію.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.6.2
+Версія: 2.7.0
 Ліцензія: GPLv2','','Элемент-кадр служит базой для создания пользовательских интерфейсов, начально для управления технологическими процессами, основанными на объектах сигнализации (СО).
 
 Корневая страница содержит четыре области:
@@ -17582,7 +17582,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Корневая страница интерфейса визуализации ТП, построенного на основе объектов сигнализации.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.6.2
+Версия: 2.7.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','1024',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','670',40,'','','','','','','','','','');
@@ -28131,6 +28131,23 @@ INSERT INTO wlb_Main_uio VALUES('RootPgSo','notify2','Notification: type 2 (Text
 #name=Text speech
 #ico=aSound
 
+#<SnthHgl font="monospace">
+# <rule expr="(&quot;(|\\{2}|\\{4}|\\{6}|\\{8})&quot;|&quot;.*[^\\](|\\{2}|\\{4}|\\{6}|\\{8})&quot;)" min="1" color="darkgreen">
+#  <rule expr="\\([xX][a-zA-Z0-9]{2}|[0-7]{3}|.{1})" color="green" font_weight="1" />
+#  <rule expr="\$\w+" color="green" font_weight="1" />
+# </rule>
+# <rule expr="#.*$" color="gray" font_italic="1" />
+# <rule expr="\b(if|else|elif|then|fi|case|esac|for|do|done|while|using|break|continue|function|shift)\b" color="darkblue" font_weight="1" />
+# <rule expr="\b(exit|test|which|sed|echo|rm|mv)\b" color="cyan" font_weight="1" />
+# <rule expr="(\$\w+|\$\{.+\}|\$\(.+\))" color="green" font_weight="1" />
+# <rule expr="\b(var|in)(?=\s+\w)" color="darkblue" font_weight="1" />
+# <rule expr="(\?|\:)" color="darkblue" font_weight="1" />
+# <rule expr="\b(0[xX][0-9a-fA-F]*|[0-9]*\.?[0-9]+|[0-9]*\.?[0-9]+[eE][-+]?[0-9]*|true|false)\b" color="darkorange" />
+# <rule expr="(\=|\!|\+|\-|\&gt;|\&lt;|\*|\/|\%|\||\&amp;|\^|\~)" color="darkblue" font_weight="1" />
+# <rule expr="(\;\;)" color="red" />
+# <rule expr="(\;|\,|\{|\}|\[|\]|\(|\))" color="blue" />
+#</SnthHgl>
+
 if test $doNtf = 1 -a $en = 1 -a -s $res; then
 	play=$(which play)
 	if test "x$play" != "x"; then play -q $res; fi
@@ -28151,9 +28168,18 @@ elif test $doRes = 1 -a "x" != "x$mess"; then
 
 	#Generic TTS for mostly all
 	if test ! -s $res.wav; then
+		RHVoice=$(which RHVoice-test)
 		espeak=$(which espeak)
 		text2wave=$(which text2wave)
-		if test "x$espeak" != "x"; then
+		if test "x$RHVoice" != "x"; then
+			case $lang in
+				uk_*) prof="volodymyr"; ;;
+				ru_*) prof="aleksandr"; ;;
+				en_*) prof="alan"; ;;
+				#!!!! Append here need languages and change voices
+			esac
+			echo $mess > $res.text; $RHVoice -i $res.text -o $res.wav -p $prof
+		elif test "x$espeak" != "x"; then
 			echo "$mess" | $espeak --stdin -s 130 -v $(echo $lang | sed -n "/\(^[^_]*\).*/s//\1/p") -w $res.wav
 		elif test "x$text2wave" != "x"; then
 			case $lang in
@@ -28162,7 +28188,7 @@ elif test $doRes = 1 -a "x" != "x$mess"; then
 				en_*) langFull="english"; ;;
 				#!!!! Append here need languages
 			esac
-			echo $mess > $res.text; text2wave $res.text -o $res.wav -eval "(language_$langFull)"
+			echo $mess > $res.text; $text2wave $res.text -o $res.wav -eval "(language_$langFull)"
 		fi
 	fi
 
@@ -28298,22 +28324,27 @@ INSERT INTO wlb_Main_uio VALUES('RootPgSo','notify1','Notification: type 1 (Buzz
 //name=Buzzer
 //ico=aAlarm
 //resStatic=ntf1
-if(doNtf) {
-	if(en) {
-		if(res.length) {
-			if((play=SYS.system("which play")).length) {
-				SYS.fileWrite(prcID+".res", res);
-				SYS.system(play.parseLine(0)+" -q "+prcID+".res &\necho $! > "+prcID+".pid", true);
-			}
-		}
-		else {
-			if((beep=SYS.system("which beep")).length)
-				SYS.system(beep.parse(0,"\n")+" -f 1000 -l 100000 &\necho $! > "+prcID+".pid", true);
-			else if((play=SYS.system("which play")).length)
-				SYS.system(play.parse(0,"\n")+" -q -n synth 1000000 sin 1000 gain -20 &\necho $! > "+prcID+".pid", true);
-		}
-	} else SYS.system("if test -s "+prcID+".pid; then kill $(cat "+prcID+".pid); rm "+prcID+".pid "+prcID+".res; fi");
 
+//<SnthHgl font="monospace"><rule expr="(&quot;(|\\{2}|\\{4}|\\{6}|\\{8})&quot;|&quot;.*[^\\](|\\{2}|\\{4}|\\{6}|\\{8})&quot;)" min="1" color="darkgreen"><rule expr="\\([xX][a-zA-Z0-9]{2}|[0-7]{3}|.{1})" color="green" font_weight="1" /></rule><blk beg="/\*" end="\*/" color="gray" font_italic="1" /><rule expr="//.*$" color="gray" font_italic="1" /><rule expr="\b(if|else|for|while|using|new|delete|break|continue|return|function|Array|Object|RegExp)\b" color="darkblue" font_weight="1" /><rule expr="\b(var|in)(?=\s+\w)" color="darkblue" font_weight="1" /><rule expr="(\?|\:)" color="darkblue" font_weight="1" /><rule expr="\b(0[xX][0-9a-fA-F]*|[0-9]*\.?[0-9]+|[0-9]*\.?[0-9]+[eE][-+]?[0-9]*|true|false)\b" color="darkorange" /><rule expr="(\=|\!|\+|\-|\&gt;|\&lt;|\*|\/|\%|\||\&amp;|\^|\~)" color="darkblue" font_weight="1" /><rule expr="(\;|\,|\{|\}|\[|\]|\(|\))" color="blue" /></SnthHgl>
+
+if(doNtf) {
+	if(en && ((res.length && (ntfPrg=SYS.system("which play")).length) ||
+				 (!res.length && ((ntfPrg=SYS.system("which beep")).length || (ntfPrg=SYS.system("which play")).length))) &&
+			(SYS.system("test -s "+prcID+".pid",true) ||		//No PID file
+				 SYS.system("ps -A -o \"pid cmd\" | grep \"^ *$(cat "+prcID+".pid).*"+ntfPrg.parseLine(0)+"\" > /dev/null",true)) )	//No notify already
+	{
+		ntfPrg = ntfPrg.parseLine(0);
+		if(res.length && ntfPrg.indexOf("play") >= 0) {
+			SYS.fileWrite(prcID+".res", res);
+			SYS.system(ntfPrg+" -q "+prcID+".res &\necho $! > "+prcID+".pid", true);
+		}
+		else if(!res.length && ntfPrg.indexOf("beep") >= 0)
+			SYS.system(ntfPrg+" -f 1000 -l 100000 &\necho $! > "+prcID+".pid", true);
+		else if(!res.length && ntfPrg.indexOf("play") >= 0)
+			SYS.system(ntfPrg+" -q -n synth 1000000 sin 1000 gain -20 &\necho $! > "+prcID+".pid", true);
+	}
+	else if(!en && !SYS.system("test -s "+prcID+".pid",true))
+		SYS.system("kill $(cat "+prcID+".pid); rm "+prcID+".pid "+prcID+".res;", true);
 }
 else if(doRes && (sox=SYS.system("which sox")).length) {
 	SYS.system(sox.parseLine(0)+" -n -r 8000 "+prcID+".ogg synth 60 sin 1000");

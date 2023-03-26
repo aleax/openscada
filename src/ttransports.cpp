@@ -1549,19 +1549,19 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	switch(mode) {
 	    case 0:	req = TSYS::strEncode(req,TSYS::Bin);	break;
 	    case 1:	//TEXT(LF)
-		for(size_t i_p = 0; (i_p=req.find("\n",i_p)) != string::npos; i_p++)
-		    req.replace(i_p, strlen("\n"), "\x0A");
-		req = TSYS::strEncode(req, TSYS::ShieldSimb);
+		for(size_t iP = 0; (iP=req.find("\n",iP)) != string::npos; iP++)
+		    req.replace(iP, strlen("\n"), "\x0A");
+		req = TSYS::strDecode(req, TSYS::ShieldSymb);
 		break;
 	    case 2:	//TEXT(CR)
-		for(size_t i_p = 0; (i_p=req.find("\n",i_p)) != string::npos; i_p++)
-		    req.replace(i_p, strlen("\n"), "\x0D");
-		req = TSYS::strEncode(req, TSYS::ShieldSimb);
+		for(size_t iP = 0; (iP=req.find("\n",iP)) != string::npos; iP++)
+		    req.replace(iP, strlen("\n"), "\x0D");
+		req = TSYS::strDecode(req, TSYS::ShieldSymb);
 		break;
 	    case 3:	//TEXT(CR/LF)
-		for(size_t i_p = 0; (i_p=req.find("\n",i_p)) != string::npos; i_p+=2)
-		    req.replace(i_p, strlen("\n"), "\x0D\x0A");
-		req = TSYS::strEncode(req, TSYS::ShieldSimb);
+		for(size_t iP = 0; (iP=req.find("\n",iP)) != string::npos; iP+=2)
+		    req.replace(iP, strlen("\n"), "\x0D\x0A");
+		req = TSYS::strDecode(req, TSYS::ShieldSymb);
 		break;
 	}
 

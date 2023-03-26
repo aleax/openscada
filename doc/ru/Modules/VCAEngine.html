@@ -647,13 +647,13 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <span class="c1">//ico={Имя иконки}</span>
 <span class="p">{</span> <span class="nx">Текст</span> <span class="nx">команды</span> <span class="nx">уведомления</span> <span class="nx">для</span> <span class="nx">любого</span> <span class="nx">или</span> <span class="nx">конкретного</span> <span class="nx">визуализатора</span><span class="p">.</span> <span class="p">}</span>
 </pre></div>
-<p>Флаги:
+<p>Flags:
 </p>
-<ul><li> <i>notify[{DL}]</i>, <i>notifyServ[{DL}]</i> — включает уведомление c повтором через время <i>DL</i>, если указано; для <i>DL</i> = 0 повтор производится сразу.</li>
-<li> <i>resource</i> — запрашивать-формировать (принудительно) ресурс уведомления у сервера визуализации, может быть звуковым файлом, текстом или другими данными формирования уведомления; но на данное время уведомители в основном ожидают аудио.</li>
-<li> <i>queue</i> — ресурсы уведомления определяются не только по глобальному признаку нарушения и квитации, а и согласно приоритетной очереди источников уведомления-ресурсов. Очередь формируется на стороне сервера визуализации, а для визуализаторов указывается необходимость работы с ней при запросе ресурсов.</li>
-<li> <i>qMergeMess</i> — объединять уведомления в очереди по равенству сообщения.</li>
-<li> <i>quietanceRet</i> — возможность отзыва-возврата квитации визуализатора, т.е. по сути — обратного включения уведомления.</li></ul>
+<ul><li> <i>notify[{DL}]</i>, <i>notifyServ[{DL}]</i> — enables the notification with the repeating by the time <i>DL</i>, if the set; for <i>DL</i> = 0 the repeat carried out immediately; <i>notifyServ[{DL}]</i> is used to force the server side notification instead visualiser with <i>notify[{DL}]</i>.</li>
+<li> <i>resource</i> — request-form (force) the notification resource from the visualisation server, can be an audio file, a text or other data for the notification produce; but currently the notifiers mostly expect audio.</li>
+<li> <i>queue</i> — the notification resources are determined not only by the global sign of alarming and quietance, but also according to the priority sources queue of the notification-resources. The queue is formed on the side of the visualisation server, and for the visualisers it is indicated the need to work with it when requesting resources.</li>
+<li> <i>qMergeMess</i> — merging the notifications in the queue by equality their messages.</li>
+<li> <i>quietanceRet</i> — possibility of the visualiser for the quietance recall-return i.e. in fact — the notification enable back.</li></ul>
 <p>Наличие поля "resStatic" включает получение ресурса непосредственно из таблицы ресурсов или файла, указывается в способ подобный <a href="#Media">примитиву "Медиа"</a>.
 </p><p>Переменные обмена:
 </p>
@@ -665,26 +665,38 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <li> <i>mess</i> — сообщение-параметры формирования ресурса и уведомления;</li>
 <li> <i>lang</i> — язык текущего пользователя или системы;</li>
 <li> <i>prcID</i> — уникальный идентификатор процедуры (вроде "ses_AGLKS_ntf2"), в основном для безопасного создания временных файлов.</li></ul>
-<p>Примеры и комментарии к работе типовых способов уведомлений:
+<p>The examples and comments to work of the typical notification methods:
 </p>
-<ul><li> Бузер на стороне визуализатора или сервера визуализации:</li></ul>
+<ul><li> Beep (buzzer) on the visualiser (flags=notify0) or the visualisation server (flags=notifyServ0) side with repeating and control the playing:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x02"</li>
 <li> notifyVisVision1 | notify1 = </li></ul></dd></dl>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify|notifyServ|notifyServ</span>
-<span class="k">if</span><span class="p">(</span><span class="nx">en</span><span class="p">)</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"beep -f 1000 -l 1000000 &amp;"</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-<span class="k">else</span> <span class="k">if</span><span class="p">((</span><span class="nx">beepPID</span><span class="o">=</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"pidof beep"</span><span class="p">)).</span><span class="nx">toInt</span><span class="p">())</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"kill "</span><span class="o">+</span><span class="nx">beepPID</span><span class="p">);</span>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify0|notifyServ0</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">ntfPrg</span><span class="o">=</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"which beep"</span><span class="p">)).</span><span class="nx">length</span> <span class="o">&amp;&amp;</span>
+    <span class="p">(</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"test -s "</span><span class="o">+</span><span class="nx">prcID</span><span class="o">+</span><span class="s2">".pid"</span><span class="p">,</span><span class="kc">true</span><span class="p">)</span> <span class="o">||</span>		<span class="c1">//No PID file</span>
+     <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"ps -A -o \"pid cmd\" | grep \"^ *$(cat "</span><span class="o">+</span><span class="nx">prcID</span><span class="o">+</span><span class="s2">".pid).*"</span><span class="o">+</span><span class="nx">ntfPrg</span><span class="p">.</span><span class="nx">parseLine</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">+</span><span class="s2">"\" &gt; /dev/null"</span><span class="p">,</span><span class="kc">true</span><span class="p">))</span> <span class="p">)</span>	<span class="c1">//No notify already</span>
+<span class="p">{</span>
+    <span class="nx">ntfPrg</span> <span class="o">=</span> <span class="nx">ntfPrg</span><span class="p">.</span><span class="nx">parseLine</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="nx">ntfPrg</span><span class="o">+</span><span class="s2">" -f 1000 -l 100000 &amp;\necho $! &gt; "</span><span class="o">+</span><span class="nx">prcID</span><span class="o">+</span><span class="s2">".pid"</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"test -s "</span><span class="o">+</span><span class="nx">prcID</span><span class="o">+</span><span class="s2">".pid"</span><span class="p">,</span><span class="kc">true</span><span class="p">))</span>
+    <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"kill $(cat "</span><span class="o">+</span><span class="nx">prcID</span><span class="o">+</span><span class="s2">".pid); rm "</span><span class="o">+</span><span class="nx">prcID</span><span class="o">+</span><span class="s2">".pid "</span><span class="o">+</span><span class="nx">prcID</span><span class="o">+</span><span class="s2">".res;"</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
 </pre></div>
 <dl><dd><ul><li> notifyVisVision1 | notify1 = </li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
-<span class="c">#flags=notify|notifyServ</span>
+<span class="c">#flags=notify0|notifyServ0</span>
 <span class="k">if</span> <span class="nb">test</span> <span class="nv">$en</span> <span class="o">=</span> 1<span class="p">;</span> <span class="k">then</span>
-	beep -f <span class="m">1000</span> -l <span class="m">1000000</span> <span class="p">&amp;</span>
-<span class="k">else</span>
-	<span class="nv">beepPID</span><span class="o">=</span><span class="k">$(</span>pidof beep<span class="k">)</span>
-	<span class="k">if</span> <span class="nb">test</span> <span class="s2">"x</span><span class="nv">$beepPID</span><span class="s2">"</span> !<span class="o">=</span> <span class="s2">"x"</span><span class="p">;</span> <span class="k">then</span> <span class="nb">kill</span> <span class="nv">$beepPID</span><span class="p">;</span> <span class="k">fi</span>
+    <span class="nv">ntfPrg</span><span class="o">=</span><span class="k">$(</span>which beep<span class="k">)</span>
+    <span class="c">#No PID file || No notify already</span>
+    <span class="k">if</span> <span class="nb">test</span> ! -s <span class="nv">$prcID</span>.pid <span class="o">||</span> ! ps -A -o <span class="s2">"pid cmd"</span> <span class="p">|</span> grep <span class="s2">"^ *</span><span class="k">$(</span>cat <span class="nv">$prcID</span>.pid<span class="k">)</span><span class="s2">.*</span><span class="nv">$ntfPrg</span><span class="s2">"</span> &gt; /dev/null<span class="p">;</span> <span class="k">then</span>
+      <span class="nv">$ntfPrg</span> -f <span class="m">1000</span> -l <span class="m">100000</span> <span class="p">&amp;</span>
+      <span class="nb">echo</span> <span class="nv">$!</span> &gt; <span class="nv">$prcID</span>.pid
+    <span class="k">fi</span>
+<span class="k">elif</span> <span class="nb">test</span> -s <span class="nv">$prcID</span>.pid<span class="p">;</span> <span class="k">then</span>
+    <span class="nb">kill</span> <span class="k">$(</span>cat <span class="nv">$prcID</span>.pid<span class="k">)</span>
+    rm <span class="nv">$prcID</span>.pid <span class="nv">$prcID</span>.res
 <span class="k">fi</span>
 </pre></div>
-<ul><li> Повторяющееся проигрывание готового звукового файла, одного общего, на стороне визуализатора или сервера визуализации:</li></ul>
+<ul><li> Repeating play for a ready audio file, one common, on the visualiser (flags=notify2) or the visualisation server (flags=notifyServ2) side, duration of the audio file for the internal language must be not more 10 seconds:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x04"</li>
 <li> notify2 | notifyVisVision2 =</li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|notifyServ2</span>
@@ -695,7 +707,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <span class="c">#flags=notify2|notifyServ2</span>
 <span class="k">if</span> <span class="nb">test</span> <span class="nv">$en</span> <span class="o">=</span> 1<span class="p">;</span> <span class="k">then</span> play -q alarm.ogg<span class="p">;</span> <span class="k">fi</span>
 </pre></div>
-<ul><li> Проигрывание индивидуального, для источника, звукового файла, на стороне визуализатора:</li></ul>
+<ul><li> Play an individual audio file for the source, on the visualisation server side, duration of the audio file for the internal language must be not more 10 seconds:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x04|res:al_prm1"</li>
 <li> notify2 =</li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=queue</span>
@@ -713,8 +725,8 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <span class="c">#flags=notify2|queue</span>
 <span class="k">if</span> <span class="nb">test</span> <span class="nv">$doNtf</span> <span class="o">=</span> <span class="m">1</span> -a <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
 </pre></div>
-<ul><li> Синтез речи индивидуального сообщения, для источника, на стороне визуализатора:</li></ul>
-<dl><dd><ul><li> alarm = "10|Prm|Текстовое сообщение синтеза речи|0x04"</li>
+<ul><li> Speech synth for an individual message for the source, on the visualiser side, duration of the message for the internal language must be not more 10 seconds:</li></ul>
+<dl><dd><ul><li> alarm = "10|Prm|Text message of the speech synth|0x04"</li>
 <li> notify2 =</li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=queue</span>
 </pre></div>
@@ -735,11 +747,11 @@ ws_BtPress:*:open:/pg_control/pg_terminator
   rm tmpForSpeech
 <span class="k">fi</span>
 </pre></div>
-<ul><li> Подготовка звукового файла, одного общего, и его проигрывание на стороне визуализатора или сервера визуализации:</li></ul>
+<ul><li> Preparing a sound file, one common, and playing it on the side of the visualiser (flags=notifyServ2) or the visualisation server (flags=notifyServ2), duration of the audio file for the internal language must be not more 10 seconds:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x04"</li>
 <li> notify2 = </li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|notifyServ2|resource</span>
-<span class="k">if</span><span class="p">(</span><span class="nx">doRes</span><span class="p">)</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRead</span><span class="p">(</span><span class="s2">"alarm.ogg"</span><span class="p">);</span>  <span class="c1">//Вставить сюда другой метод генерации</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doRes</span><span class="p">)</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRead</span><span class="p">(</span><span class="s2">"alarm.ogg"</span><span class="p">);</span>  <span class="c1">//Insert here a different method of the generation</span>
 <span class="k">if</span><span class="p">(</span><span class="nx">doNtf</span> <span class="o">&amp;&amp;</span> <span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
   <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"play -q tmpPlay"</span><span class="p">);</span>
@@ -749,7 +761,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <dl><dd><ul><li> notify2 = </li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
 <span class="c">#flags=notify2|notifyServ2|resource</span>
-<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doRes</span> <span class="o">=</span> 1<span class="p">;</span> <span class="k">then</span> cp -f alarm.ogg <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>  <span class="c">#Вставить сюда другой метод генерации</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doRes</span> <span class="o">=</span> 1<span class="p">;</span> <span class="k">then</span> cp -f alarm.ogg <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>  <span class="c">#Insert here a different method of the generation</span>
 <span class="k">if</span> <span class="nb">test</span> <span class="nv">$doNtf</span> <span class="o">=</span> <span class="m">1</span> -a <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
 </pre></div>
 <dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
@@ -765,8 +777,8 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <span class="c">#flags=notify2|resource</span>
 <span class="k">if</span> <span class="nb">test</span> <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
 </pre></div>
-<ul><li> Подготовка индивидуального, для источника уведомления, звукового файла через синтез речи, на стороне визуализатора или сервера визуализации:</li></ul>
-<dl><dd><ul><li> alarm = "10|Prm|Текстовое сообщение синтеза речи|0x04"</li>
+<ul><li> Prepare an individual audio file for the source of notification through the speech synth, on side of the visualiser (flags=notify2) or the visualisation server (flags=notifyServ2), duration of the message for the internal language must be not more 10 seconds:</li></ul>
+<dl><dd><ul><li> alarm = "10|Prm|Text message of the speech synth|0x04"</li>
 <li> notify2 =</li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|notifyServ2|queue</span>
 <span class="k">if</span><span class="p">(</span><span class="nx">doRes</span> <span class="o">&amp;&amp;</span> <span class="nx">mess</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
@@ -2966,7 +2978,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <p><b>Object "Session" ( this.ownerSess() )</b>
 </p>
 <ul><li> <i>string user( )</i> — current session user.</li>
-<li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — quiets of the violations <i>wpath</i> with the template <i>quit_tmpl</i>. If <i>wpath</i> is empty string then the global quietance makes. Into the string <i>wpath</i>, by symbol ';', can be enumerated addresses of several widgets. When set the <i>ret</i>, the quietance return is performed.</li>
+<li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — quiets of the violations <i>wpath</i> with the template <i>quit_tmpl</i>. If <i>wpath</i> is empty string then the global quietance makes. In the string <i>wpath</i>, by symbol ';', can be enumerated addresses of several widgets. When set the <i>ret</i>, the quietance return is performed.</li>
 <li> <i>int reqTm( )</i> — last request time in seconds from the epoch of 1/1/1970.</li>
 <li> <i>string reqUser( )</i> — last request user.</li>
 <li> <i>string reqLang( )</i> — last request language.</li>
@@ -3008,7 +3020,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <p><br />
 Deprecated, but supported, the API is represented by a group of functions directly in the module of the VCA engine. Calling these functions from the widget procedure can be done directly by the identifier, since their namespace is defined in the context of the widget procedures.
 </p><p><b>Widgets list (WdgList)</b><br />
-<i>Description:</i> Returns a list of the widgets, into the widgets container, or the child list. If set <i>pg</i> then returns the pages list for projects and sessions.<br />
+<i>Description:</i> Returns a list of the widgets, in the widgets container, or the child list. If set <i>pg</i> then returns the pages list for projects and sessions.<br />
 <i>Parameters:</i>
 </p>
 <table class="wikitable">

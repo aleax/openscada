@@ -1380,7 +1380,7 @@ string TSYS::sepstr2path( const string &str, char sep )
     return rez;
 }
 
-string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
+string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt )
 {
     int iSz;
     string sout;
@@ -1433,7 +1433,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 		}
 	    break;
 	case TSYS::SQL:
-	    if(!opt1.size()) {
+	    if(!opt.size()) {
 		sout.reserve(in.size()+10);
 		for(iSz = 0; iSz < (int)in.size(); iSz++)
 		    switch(in[iSz]) {
@@ -1447,9 +1447,9 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 		//By doubling method
 		sout = in;
 		for(unsigned iSz = 0; iSz < sout.size(); iSz++)
-		    for(unsigned iSmb = 0; iSmb < opt1.size(); iSmb++)
-			if(sout[iSz] == opt1[iSmb])
-			    sout.replace(iSz++, 1, 2, opt1[iSmb]);
+		    for(unsigned iSmb = 0; iSmb < opt.size(); iSmb++)
+			if(sout[iSz] == opt[iSmb])
+			    sout.replace(iSz++, 1, 2, opt[iSmb]);
 	    }
 	    break;
 	case TSYS::Custom: {
@@ -1457,13 +1457,13 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	    char buf[4];
 	    for(iSz = 0; iSz < (int)in.size(); iSz++) {
 		unsigned iSmb;
-		for(iSmb = 0; iSmb < opt1.size(); iSmb++)
-		    if(in[iSz] == opt1[iSmb]) {
+		for(iSmb = 0; iSmb < opt.size(); iSmb++)
+		    if(in[iSz] == opt[iSmb]) {
 			snprintf(buf,sizeof(buf),"%%%02X",(unsigned char)in[iSz]);
 			sout += buf;
 			break;
 		    }
-		if(iSmb >= opt1.size()) sout += in[iSz];
+		if(iSmb >= opt.size()) sout += in[iSz];
 	    }
 	    break;
 	}
@@ -1472,7 +1472,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	    const char *base64alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 	    for(iSz = 0; iSz < (int)in.size(); iSz += 3) {
 		//if(iSz && !(iSz%57))	sout.push_back('\n');
-		if(iSz && !(iSz%57) && opt1.size())	sout += opt1;
+		if(iSz && !(iSz%57) && opt.size()) sout += opt;
 		sout.push_back(base64alph[(unsigned char)in[iSz]>>2]);
 		if((iSz+1) >= (int)in.size()) {
 		    sout.push_back(base64alph[((unsigned char)in[iSz]&0x03)<<4]);
@@ -1521,40 +1521,41 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	case TSYS::Reverse:
 	    for(iSz = in.size()-1; iSz >= 0; iSz--) sout += in[iSz];
 	    break;
-	case TSYS::ShieldSimb:
+	case TSYS::ShieldSymb: {
+	    string optW = opt.size() ? opt+"\\" : "'\"`\\";
 	    sout.reserve(in.size());
-	    for(iSz = 0; iSz < (int)in.size(); iSz++)
-		if(in[iSz] == '\\' && iSz < ((int)in.size()-1)) {
-		    switch(in[iSz+1]) {
-			case 'a':	sout += '\a';	break;
-			case 'b':	sout += '\b';	break;
-			case 'f':	sout += '\f';	break;
-			case 'n':	sout += '\n';	break;
-			case 'r':	sout += '\r';	break;
-			case 't':	sout += '\t';	break;
-			case 'v':	sout += '\v';	break;
-			case 'x': case 'X':
-			    if((iSz+3) < (int)in.size() && isxdigit(in[iSz+2]) && isxdigit(in[iSz+3]))
-			    { sout += (char)strtol(in.substr(iSz+2,2).c_str(),NULL,16); iSz += 2; }
-			    else sout += in[iSz+1];
+	    char buf[10];
+	    for(iSz = 0; iSz < (int)in.size(); ++iSz) {
+		unsigned iSmb = 0;
+		for( ; iSmb < optW.size(); ++iSmb) {
+		    if(in[iSz] != optW[iSmb]) continue;
+		    switch(in[iSz]) {
+			case '\b': sout += "\\b"; break;
+			case '\f': sout += "\\f"; break;
+			case '\n': sout += "\\n"; break;
+			case '\r': sout += "\\r"; break;
+			case '\t': sout += "\\t"; break;
+			case 0 ... 7:
+			case 0x0B:
+			case 0x0E ... 0x1F:
+			    sprintf(buf, "\\%03o", in[iSz]);
+			    sout += buf;
 			    break;
-			default:
-			    if((iSz+3) < (int)in.size() && in[iSz+1] >= '0' && in[iSz+1] <= '7' &&
-							    in[iSz+2] >= '0' && in[iSz+2] <= '7' &&
-							    in[iSz+3] >= '0' && in[iSz+3] <= '7')
-			    { sout += (char)strtol(in.substr(iSz+1,3).c_str(),NULL,8); iSz += 2; }
-			    else sout += in[iSz+1];
+			default: sout += string("\\")+in[iSz]; break;
 		    }
-		    iSz++;
-		} else sout += in[iSz];
+		    break;
+		}
+		if(iSmb >= optW.size()) sout += in[iSz];
+	    }
 	    break;
+	}
 	case TSYS::ShieldBin: {
 	    sout.reserve(in.size());
 	    char buf[10];
 	    for(iSz = 0; iSz < (int)in.size(); iSz++)
 		switch(in[iSz]) {
 		    case 0 ... 8:
-		    case 0xB ... 0xC:
+		    case 0x0B ... 0x0C:
 		    case 0x0E ... 0x1F:
 			sprintf(buf, "\\%03o", in[iSz]);
 			sout += buf;
@@ -1569,7 +1570,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 		sout += (char)tolower(in[iSz]);
 	    break;
 	case TSYS::Limit: {
-	    int lVal = s2i(opt1), off = 0;
+	    int lVal = s2i(opt), off = 0;
 	    if(!lVal) sout = in;
 	    else {
 		for(int oL = 0, cL = 0; off < (int)in.size() && oL < lVal; oL++)
@@ -1594,12 +1595,37 @@ unsigned char TSYS::getBase64Code( unsigned char asymb )
     return 0;
 }
 
-string TSYS::strDecode( const string &in, TSYS::Code tp, const string &opt1 )
+string TSYS::strDecode( const string &in, TSYS::Code tp, const string &opt )
 {
     unsigned iSz;
     string sout;
 
     switch(tp) {
+	case TSYS::ShieldSymb:
+	    sout.reserve(in.size());
+	    for(iSz = 0; iSz < (int)in.size(); iSz++)
+		if(in[iSz] == '\\' && iSz < ((int)in.size()-1)) {
+		    switch(in[iSz+1]) {
+			case 'b':	sout += '\b';	break;
+			case 'f':	sout += '\f';	break;
+			case 'n':	sout += '\n';	break;
+			case 'r':	sout += '\r';	break;
+			case 't':	sout += '\t';	break;
+			case 'x': case 'X':
+			    if((iSz+3) < (int)in.size() && isxdigit(in[iSz+2]) && isxdigit(in[iSz+3]))
+			    { sout += (char)strtol(in.substr(iSz+2,2).c_str(),NULL,16); iSz += 2; }
+			    else sout += in[iSz+1];
+			    break;
+			default:
+			    if((iSz+3) < (int)in.size() && in[iSz+1] >= '0' && in[iSz+1] <= '7' &&
+							    in[iSz+2] >= '0' && in[iSz+2] <= '7' &&
+							    in[iSz+3] >= '0' && in[iSz+3] <= '7')
+			    { sout += (char)strtol(in.substr(iSz+1,3).c_str(),NULL,8); iSz += 2; }
+			    else sout += in[iSz+1];
+		    }
+		    iSz++;
+		} else sout += in[iSz];
+	    break;
 	case TSYS::PathEl: case TSYS::HttpURL: case TSYS::Custom:
 	    sout.reserve(in.size());
 	    for(iSz = 0; iSz < in.size(); iSz++)
@@ -1632,12 +1658,12 @@ string TSYS::strDecode( const string &in, TSYS::Code tp, const string &opt1 )
 		iSz += 4;
 	    }
 	    break;
-	//Binary decoding to hex bytes string. Option <opt1> uses for:
+	//Binary decoding to hex bytes string. Option <opt> uses for:
 	//  "<text>" - includes the text part in right
 	//  "{sep}" - short separator
 	case TSYS::Bin: {
 	    sout.reserve(in.size()*2);
-	    if(opt1 == "<text>") {
+	    if(opt == "<text>") {
 		char buf[3];
 		string txt, offForm = TSYS::strMess("%%0%dx: ", vmax(2,(int)ceil(log(in.size())/log(16))));
 		for(iSz = 0; iSz < in.size() || (iSz%16); ) {
@@ -1651,9 +1677,9 @@ string TSYS::strDecode( const string &in, TSYS::Code tp, const string &opt1 )
 		}
 		break;
 	    }
-	    char buf[3+opt1.size()];
+	    char buf[3+opt.size()];
 	    for(iSz = 0; iSz < in.size(); iSz++) {
-		snprintf(buf, sizeof(buf), "%s%02X", (iSz&&opt1.size())?(((iSz)%16)?opt1.c_str():"\n"):"", (unsigned char)in[iSz]);
+		snprintf(buf, sizeof(buf), "%s%02X", (iSz&&opt.size())?(((iSz)%16)?opt.c_str():"\n"):"", (unsigned char)in[iSz]);
 		sout += buf;
 	    }
 	    break;
@@ -3030,11 +3056,11 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if(iid == "strCodeConv" && prms.size() >= 3)
 	return Mess->codeConv((prms[1].getS().size() ? prms[1].getS() : Mess->charset()),
 			(prms[2].getS().size() ? prms[2].getS() : Mess->charset()), prms[0].getS());
-    // string strEncode( string src, string tp = "Bin", string opt1 = "" ) - String encode from <src> by <tp> and options <opt1>.
+    // string strEncode( string src, string tp = "Bin", string opt = "" ) - String encode from <src> by <tp> and options <opt>.
     //  src - source;
     //  tp  - encode type: "PathEl", "HttpURL", "HTML", "JavaScript", "SQL", "Custom", "Base64", "FormatPrint",
-    //			   "OscdID", "Bin", "Reverse", "ShieldSimb", "ToLower", "Limit", "ShieldBin"
-    //  opt1 - option 1, symbols for "Custom"
+    //			   "OscdID", "Bin", "Reverse", "ToLower", "Limit", "ShieldSymb", "ShieldBin"
+    //  opt - option, symbols for "Custom"
     if(iid == "strEncode" && prms.size() >= 1) {
 	string stp = (prms.size()>1) ? prms[1].getS() : "Bin";
 	Code tp = (Code)0;
@@ -3049,17 +3075,17 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	else if(stp == "OscdID")	tp = oscdID;
 	else if(stp == "Bin")		tp = Bin;
 	else if(stp == "Reverse")	tp = Reverse;
-	else if(stp == "ShieldSimb")	tp = ShieldSimb;
 	else if(stp == "ToLower")	tp = ToLower;
 	else if(stp == "Limit")		tp = Limit;
+	else if(stp == "ShieldSymb")	tp = ShieldSymb;
 	else if(stp == "ShieldBin")	tp = ShieldBin;
 	else return "";
 	return strEncode(prms[0].getS(), tp, (prms.size()>2) ? prms[2].getS() : "");
     }
-    // string strDecode( string src, string tp = "Bin", string opt1 = "" ) - String decode from <src> by <tp> and options <opt1>.
+    // string strDecode( string src, string tp = "Bin", string opt = "" ) - String decode from <src> by <tp> and options <opt>.
     //  src - source;
-    //  tp  - encode type: "PathEl", "HttpURL", "Custom", "Base64", "Bin"
-    //  opt1 - option 1, separator for "Bin"
+    //  tp  - encode type: "PathEl", "HttpURL", "Custom", "Base64", "Bin", "ShieldSymb"
+    //  opt - option, separator for "Bin"
     if(iid == "strDecode" && prms.size() >= 1) {
 	string stp = (prms.size()>1) ? prms[1].getS() : "Bin";
 	Code tp = (Code)0;
@@ -3068,6 +3094,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	else if(stp == "Custom")	tp = Custom;
 	else if(stp == "Base64")	tp = base64;
 	else if(stp == "Bin")		tp = Bin;
+	else if(stp == "ShieldSymb")	tp = ShieldSymb;
 	else return "";
 	return strDecode(prms[0].getS(), tp, (prms.size()>2) ? prms[2].getS() : "");
     }

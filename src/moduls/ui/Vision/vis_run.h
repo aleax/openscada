@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_run.h
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -98,7 +98,7 @@ class VisRun : public QMainWindow
 		//Methods
 		explicit Notify( ) : tp(-1), comIsExtScript(false),
 		    f_notify(false), f_resource(false), f_queue(false), f_quietanceRet(false), delay(0), mOwner(NULL), actAlrm(NULL)	{ }
-		Notify( uint8_t tp, const string &pgProps, VisRun *own );
+		Notify( uint8_t tp, const string &pgProps, VisRun *own, bool isPriorProc = false );
 		~Notify( );
 
 		string	pgCrtor( );
@@ -127,7 +127,7 @@ class VisRun : public QMainWindow
 		int8_t	tp;			//Type
 		unsigned alSt;			//Alarm state
 		int	repDelay;		//Repeate delay, in seconds. -1 by default for disabled repeating
-		unsigned comIsExtScript	:1;	//The command detected and used as some intepretator's script like BASH, Perl, PHP and so on.
+		unsigned comIsExtScript	:1;	//The command detected and used as some intepretator's script like BASH, Perl, PHP and so on
 		// Flags
 		unsigned f_notify	:1;	//Notification enabled
 		unsigned f_resource	:1;	//Request the resource for notification: sound file, text or other data

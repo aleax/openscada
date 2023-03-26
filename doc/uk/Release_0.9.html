@@ -327,40 +327,14 @@
 <li> Адаптацію до роботи в оточені операційних систем QNX та MS Windows.</li></ul>
 <h2><span class="mw-headline" id=".D0.9E.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">7</span> Оновлення</span></h2>
 <h3><span class="mw-headline" id=".5B01.03.2023.5D_.D0.A8.D0.9E.D0.A1.D0.A2.D0.95_.D0.BE.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">7.1</span> [01.03.2023] ШОСТЕ оновлення</span></h3>
-<div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
-<ul><li> <b>Стан:</b> <span style="color: red">тестування та після-складання ...</span></li></ul>
-<p>Загальний процес випуску, користувачам для оцінки ваших очікувань та розробникам для нагадування завдань:<br />
-<b><u>1. Тиждень приготування та складання:</u></b><br />
-</p>
-<ul><li> Складання останньої Робочої (Work) SVN-ревізії для всіх оточень нерегулярного складання щоб забезпечити ранне та широке тестування прийдешнього LTS релізу.</li>
-<li> Анонсування початку процесу випуску:
-<ul><li> створення нової <a href="index.html" title="Special:MyLanguage/Documents">сторінки релізу</a> або <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">сторінки оновлення</a> на Wiki;</li>
-<li> створення нової новини-сторінки на <a class="external text" href="http://oscada.org/en/main/%7Cофіційному" rel="nofollow noreferrer noopener" target="_blank">сайті OpenSCADA</a>;</li>
-<li> створення нового повідомлення-посилання на новину-сторінку на <a class="external text" href="https://www.facebook.com/Roman.Savochenko" rel="nofollow noreferrer noopener" target="_blank">FaceBook</a> та <a class="external text" href="https://www.linkedin.com/in/roman-savochenko-71b50272/" rel="nofollow noreferrer noopener" target="_blank">LinkedIn</a>;</li></ul></li>
-<li> Злиття змін Робочої (Work) версії, або копіювання цілком дерева Робочої гілки, до LTS гілки-дерева.</li>
-<li> Внесення деяких змін, специфічних до LTS, стосовно підняття версії:
-<ul><li> оновлення <b>configure.ac</b> щодо версії випуску-оновлення та бібліотеки ядра;</li>
-<li> оновлення <b>data/*.spec</b> та <b>data/{debian,debian_mod}/changelog</b> стосовно нового номеру версії та доповнення протоколу змін файлів новими записами випуску-оновлення.</li></ul></li>
-<li> Формування-доповнення ПротоколуЗмін LTS змінами з ПротоколуЗмін Work, групуючи зміни за розташуванням та сортуючи їх за станом виправлення та рівнем, із комбінування нових можливостей у одному елементі та без видалення будь-яких відмінних змін.</li>
-<li> Копіювання значних змін із сформованого ПротоколуЗмін LTS до відповідної сторінки релізу-оновлення, беручи зміни за рівнем більш або рівні "!!".</li>
-<li> Переклад сторінок релізу-оновлення, оновлення "<a href="../en/To_do.html" title="Special:MyLanguage/Works/To do">Завдання (ToDo)</a>" та "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Works/Road_map" title="Special:MyLanguage/Works/Road map">Дорожньої карти (RoadMap)</a>".</li>
-<li> Генерація актуальної позамережевої документації використовуючи сервісну процедуру "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
-<li> Застосування-вивантаження змін LTS дерева до репозиторію та складання цього.</li>
-<li> Анонсування релізу-оновлення.</li></ul>
-<p><b><u>2. Тиждень(і) тестування та після-складання:</u></b><br />
-</p>
-<ul><li> Гаряче тестування збірок релізу.</li>
-<li> Завершення та виправлення перекладу ПротоколуЗмін та документації.</li>
-<li> Генерація актуальної позамережевої документації використовуючи сервісну процедуру "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
-<li> Застосування-вивантаження виправлень релізу до репозиторію та складання цього щодо другої збірки, і для кожного тижня виправлення критичних помилок — перший тиждень без критичних виправлень означатиме завершення випуску LTS, тож, КОРИСТУВАЧІ, тестуйте ретельно LTS реліз щоб потім не скаржитись на його кінцеву збірку!</li></ul>
-</div>
-<p>Це оновлення <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релізу 0.9 LTS</a> виправляє біля 70 помилок та додає БАГАТО удосконалень із декількома значними-концептуальними, з якими цілком можна ознайомитися у <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2876" rel="nofollow noreferrer noopener" target="_blank">протоколі змін оновлення</a>.
+<p>Це оновлення <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релізу 0.9 LTS</a> виправляє біля 70 помилок та додає БАГАТО удосконалень із декількома значними-концептуальними, з якими цілком можна ознайомитися у <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2879" rel="nofollow noreferrer noopener" target="_blank">протоколі змін оновлення</a>.
 </p><p><b><u><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Linux Дистрибутив Автоматизації проєкту OpenSCADA</a></u></b><br />
 </p>
 <ul><li> оновлення TDE до 14.0.13;</li>
-<li> виправлення noatun, TDESVN, basket, KGpg, відтак доповнення колекції дистрибутиву новими латаними пакетами "tdesvn-trinity" та "basket-trinity";</li>
-<li> деяке вдосконалення та оновлення Апаратного Менеджеру TDE, KCalc, holiday_ua;</li>
+<li> виправлення KDesktop, Апаратного Менеджеру TDE, noatun, TDESVN, basket, KGpg, відтак доповнення колекції дистрибутиву новими латаними пакетами "tdelibs-trinity", "tdebase-trinity", "tdesvn-trinity" та "basket-trinity";</li>
+<li> деяке вдосконалення та оновлення KCalc, holiday_ua;</li>
 <li> завершення перекладу Українською для KDiff3 та showfoto;</li>
+<li> доповнення дистрибутиву Debian 11 пакетами RHVoice — Синтезатор мови із багатьма голосами для десятку мов;</li>
 <li> переклад сторінки підпроєкту Українською.</li></ul>
 <p><b><u>Основні WWW-ресурси, документація проєкту та підпроєктів</u></b><br />
 </p>
@@ -506,7 +480,10 @@
 <li> FIX: Виправлено опрацювання прапорця IO::TransltText для рядків.</li>
 <li> FIX: Сервісний запит "list:/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/%2fserv%2fattr" виправлено у перекладі назви атрибуту.</li></ul></li>
 <li> FIX:Транспорти,UI.{QTCfg,Vision,WebCfgD}: Функцію TTransportS::extHostList() доповнено аргументом "lang" для отримання перекладеними назв віддалених хостів.</li>
-<li> FIX:Protocol.ModBus: Виправлено-адаптовано у динамічному перекладі назв ВВ.</li></ul>
+<li> FIX:Protocol.ModBus: Виправлено-адаптовано у динамічному перекладі назв ВВ.</li>
+<li> FIX:Користувацький Інтерфейс:
+<ul><li> FIX:VCAEngine: Виправлено динамічний переклад tr() щодо втрати перекладу після очищення кешу перекладу та розміщення зайвих повідомлень до таблиці проєкту "Trs".</li>
+<li> FIX:WebUser: Виправлено-адаптовано динамічного перекладу назв ВВ.</li></ul></li></ul>
 <p><b><u>OpenSCADA бібліотеки та проєкти</u></b><br />
 </p>
 <ul><li> FIX:LibsDB.OscadaLibs:
@@ -514,6 +491,7 @@
 <li> Бібліотеку tmplib_DevLib доповнено шаблоном "Прилади ТОВ СЛОТ (SLOT)".</li></ul></li>
 <li> FIX:LibsDB.vcaBase:
 <ul><li> wlb_Main.storeHouse: Значним чином розширено: реалізацією підтримки процедур для логічних стовпчиків; реалізацією звітності всієї видимої таблиці та обраного запису.</li>
+<li> wlb_Main.RootPgSo: Метод "Сповіщення: тип 2 (МовленняТексту) (notify2)" розширено підтримкою RHVoice і доповнено вбудованим підсвітленням синтаксису для BASH. Метод "Сповіщення: тип 1 (Гудок) (notify1)" переписано щодо програвання тривалих зразків у фоні, тобто із контролем зупинки програвання семплу і перезапуску лише у цьому випадку. Також доповнено підсвітленням синтаксису.</li>
 <li> FIX:wlb_doc.docRepDay: Дещо вдосконалено та доповнено щодо: групування стовпців у заголовку, прямого читання значень рядків, вимкнення кольорів у таблиці за EVAL шкали.</li>
 <li> wlb_doc.docUsersSet: Додано конфігурацію "Категорії повідомлень (messCat)".</li></ul></li></ul>
 <p><b><u>API</u></b><br />
@@ -526,7 +504,8 @@
 <li> Запит Інтерфейсу Управління "chlds:/{nPath}/%2fobj" доповнено не створенням порожніх тегів піктограм "ico".</li>
 <li> NSTR_BUF_LEN(50) виокремлено у CFG_A_LEN (100) для використання у якості максимуму розміру атрибуту конфігураційної клітинки у XML.</li>
 <li> Аргумент "init" видалено із setIcoDir(), setDocDir(), setLang() із перенесенням під загальний механізм очищення.</li>
-<li> Доповнення перелічення MdfSYSFlds полями: MDF_Name, MDF_MESS, MDF_TR, MDF_DBG, MDF_RD.</li></ul></li>
+<li> Доповнення перелічення MdfSYSFlds полями: MDF_Name, MDF_MESS, MDF_TR, MDF_DBG, MDF_RD.</li>
+<li> Кодування TSYS::ShieldSimb функції TSYS::strEncode() перейменовано у TSYS::ShieldSymb, перенесено до функції TSYS::strDecode() і у TSYS::strEncode() доповнено загальним. Та функцію Користувацького API SYS.strDecode() доповнено методом декодування "ShieldSymb".</li></ul></li>
 <li> БД: Запит Інтерфейсу Управління "call:/BD/{MOD}/{DB}/%2fserv%2fSQL" доповнено опрацюванням атрибуту "intoTrans" як EVAL за відсутності та очищенням тексту запиту у відповіді.</li>
 <li> DAQ::Value: Сервісний запит "get:/serv/attr" Інтерфейсу Управління попереджено від очищення підтегів "el" за відсутності репрезентативного атрибуту, їх значення встановлюється у EVAL для коректного позначення опрацьованими у DAQ.DAQGate та не продовжувати їх запит у кожному циклі.</li>
 <li> Архіви-Історія: Тип зв'язку архіву значень "Пасивний атрибут параметру (TVArchive::PassiveAttr)" перейменовано у "DAQ атрибут (TVArchive::DAQAttr)". Тип зв'язку архіву значень "Активний атрибут параметру" перейменовано у "Активний DAQ атрибут" із позначкою ЗАСТАРІЛЕ.</li>
@@ -634,7 +613,8 @@
 <li> запобігання втраті фокусу одразу після входження у редагування клітинки;</li>
 <li> виправлення встановлення значення логічного за входження у редагування клітинки;</li>
 <li> перелаштування таблиці за зростання довжини таблиці.</li></ul></li>
-<li> Встановлення закриття включених сторінок після декількох появ рядка (4) — для запобігання закриттю всіх сторінок за швидкої навігації.</li></ul></li></ul>
+<li> Встановлення закриття включених сторінок після декількох появ рядка (4) — для запобігання закриттю всіх сторінок за швидкої навігації.</li></ul></li>
+<li> WebUser: Розширено щодо можливості планувати виклику користувацьких процедур у сервісному циклі, для фонової обробки деяких даних.</li></ul>
 <h3><span class="mw-headline" id=".5B22.02.2022.5D_.D0.9F.27.D0.AF.D0.A2.D0.95_.D0.BE.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">7.2</span> [22.02.2022] П'ЯТЕ оновлення</span></h3>
 <p>Це оновлення <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релізу 0.9 LTS</a> виправляє біля 50 помилок та додає БАГАТО удосконалень із декількома значними-концептуальними, з якими цілком можна ознайомитися у <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2831" rel="nofollow noreferrer noopener" target="_blank">протоколі змін оновлення</a>.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> <b><u>Важливі дії розробника модулів OpenSCADA за оновленням</u></b><br />

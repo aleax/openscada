@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.11.5"
+#define MOD_VER		"2.11.6"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -157,11 +157,12 @@ string TMdContr::getStatus( )
 		val += TSYS::strMess(_("Station '%s' - ERROR, restoring in %.3g s. "), st->first.c_str(), st->second.cntr);
 	    else {
 		val += TSYS::strMess(_("Station '%s' - requests %.6g; "), st->first.c_str(), -st->second.cntr);
-		val += TSYS::strMess(_("read %g values, %g archive's, %g messages; "), st->second.numR, st->second.numRA, st->second.numRM);
-		val += TSYS::strMess(_("wrote %g values, %g messages. "), st->second.numW, st->second.numWM);
+		val += TSYS::strMess(_("read %g values, %g archive's, %g messages; "),
+		    (double)st->second.numR, (double)st->second.numRA, (double)st->second.numRM);
+		val += TSYS::strMess(_("wrote %g values, %g messages. "), (double)st->second.numW, (double)st->second.numWM);
 		isWork = true;
 	    }
-	    if(inWrBuf) val += TSYS::strMess(_("To write %d. "), inWrBuf);
+	    if(mAsynchWr || inWrBuf) val += TSYS::strMess(_("To write %d. "), inWrBuf);
 	}
 	if(!isWork) val.replace(0, 1, "10");
     }

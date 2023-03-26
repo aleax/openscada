@@ -61,7 +61,7 @@
 <p>The module provides OpenSCADA for visual control area engine (VCA). The module itself does not implement visualization of VCA, but contains data in accordance with the concept "Model/Data — Interface". The visualization of this module's data is performed by the visualization modules of VCA, such as <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> and <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a>.
 </p><p>Visual control area (VCA) is an integral part of the SCADA system. It applies to the client stations with a view to providing accessible information about the control object and to for the the issuance of the control actions to the object. In various practical situations and conditions the VCA, based on different principles of visualization, may by applied. For example, this may be the library of widgets Qt, GTK+, WxWidgets or hypertext mechanisms based on the technologies HTML, XHTML, XML, CSS and JavaScript, or third-party applications of visualization, realized in various programming languages Java, Python, etc. Any of these principles has its advantages and disadvantages, the combination of which could become an insurmountable obstacle to the use of VCA in a practical case. For example, technologies like the Qt library can create highly-productive VCA, which will undoubtedly important for the operator station for control the technological processes (TP). However, the need for installation of that client software in some cases may make using of it impossible. On the other hand, Web-technology does not require installation on client systems and is extremely multi-platform (it is enough to create a link to the Web-server at any Web-browser) that is most important for various engineering and administrative stations, but the productivity and reliability of such interfaces is lower, that actually eliminates the using of them at the operator stations of TP.
 </p><p>OpenSCADA has extremely flexible architecture that allows you to create external interfaces, including user, in any manner and taste. For example, the OpenSCADA configuration environment available now as by means of the Qt-library, and also the Web-based.
-</p><p>At the same time, independent creation of the VCA implementations in different basis may cause the inability to use the configuration of one VCA into another one. That is inconvenient and limited from the user side, as well as costly in terms of implementation and follow-up support.
+</p><p>At the same time, independent creation of the VCA implementations in different basis may cause the inability to use the configuration of one VCA in another one. That is inconvenient and limited from the user side, as well as costly in terms of implementation and follow-up support.
 </p><p>In order to avoid these problems, as well as to create as soon as possible the full spectrum of different types of VCA, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA" title="Special:MyLanguage/Sub-projects/VCA">the project for the construction of the concept of VCA </a> is founded. The result of this project was this engine module (data model) of VCA, as well as direct visualization modules <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> and <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a>.
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -226,9 +226,9 @@
 </p><p><br />
 </p>
 <h3><span class="mw-headline" id="Styles"><span class="mw-headline-number">3.4</span> Styles</span></h3>
-<p>It knows that people can have individual features in the perception of graphical information. If these features are not taken into account, it is possible to obtain the rejection and abruption of the user to the interface of VC. This rejection and abruption can lead to fatal errors in the management of TP, as well as traumatize the human by the continuous work with the interface. In SCADA systems, arrangements have been made that regulate the requirements for creating the unified UI interface, which is normally perceived by most people. This is practically eliminates the features of people with some deviations.
-</p><p>In order to take this into account and allow centralized and easy to change the visual properties of the interface module is implementing a theme manager of the visualization interface.
-</p><p>User can create many themes, each of which will keep the color, font and other properties of the frame elements. Simple changing of the theme will allow you to change the interface of VC, and the possibility of appointing an individual theme in the user's profile allows to take into account his individual features.
+<p>It knows that people can have individual features in the perception of graphical information. If these features are not taken in the account, it is possible to obtain the rejection and abruption of the user to the interface of VC. This rejection and abruption can lead to fatal errors in the management of TP, as well as traumatize the human by the continuous work with the interface. In SCADA systems, arrangements have been made that regulate the requirements for creating the unified UI interface, which is normally perceived by most people. This is practically eliminates the features of people with some deviations.
+</p><p>In order to take this in the account and allow centralized and easy to change the visual properties of the interface module is implementing a theme manager of the visualization interface.
+</p><p>User can create many themes, each of which will keep the color, font and other properties of the frame elements. Simple changing of the theme will allow you to change the interface of VC, and the possibility of appointing an individual theme in the user's profile allows to take in the account his individual features.
 </p><p>To realize this opportunity, when creating a frame, it is necessary for the properties of color, font and others set the "Configuration" (of the table in the "Process" tab) in the value of "From style". And in the parameter "Configuration template" to specify the identifier of the style field. Next, this field will automatically appear in the style manager and can be modified there. The style manager is available on the project configuration page in the tab "Styles". In this tab, you can the styles create, delete and edit, delete their fields.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:683px;"><a class="image" href="http://oscada.org/wiki/File:VCA_prj_stl.png"><img class="thumbimage" height="658" src="../files/VCA_prj_stl.png" width="681" /></a>  <div class="thumbcaption">Figure. Tab "Styles" of the configuration page of the project.</div></div></div></div>
@@ -608,14 +608,14 @@ Where:
 <li> the second byte indicates the type of notification, as well as in the attribute "alarm";</li>
 <li> the third byte indicates the type of notification without quietance, as well as in the attribute "alarm";</li>
 <li> the fourth byte has a special appointment, which is defined by separate bits:
-<ul><li> bit 0 — indicates, by sets, to the quietance fact of the notification into first byte;</li>
+<ul><li> bit 0 — indicates, by sets, to the quietance fact of the notification in the first byte;</li>
 <li> bit 1 — indicates, by sets it and the bit 0, to the quietance return — enable back the quietance.</li></ul></li></ul>
 <p><b>Alarm forming and receiving of it by the visualiser.</b><br />
 The alarm forming is performed by the widget itself, by setting its own attribute "alarm" in appropriate way and, in accordance with it, the attribute "alarmSt" of the current and the parent widget. Visualisers receive signal notifications using the standard mechanism of notification about changes of the widget attributes.
-</p><p>Taking into account that the processing of the signalling conditions is made in the widgets, the pages containing the objects of signalling should be executed in the background, regardless of their openness to the moment. This is done by setting a flag of the background execution of the page.
+</p><p>Taking in account that the processing of the signalling conditions is made in the widgets, the pages containing the objects of signalling should be executed in the background, regardless of their openness to the moment. This is done by setting a flag of the background execution of the page.
 </p><p>Although the mechanism of signalling is built in the visualisation area, the possibility of forming non-visual elements of signalling remains, for example, by creating a page that will never open.
 </p><p><b>Quietance</b><br />
-Quietance — approving process is a fact of the operative personal take its attention to the violation into the TP work. The process mostly means of take actions for the violation eliminating and pressing to the button of the alarm quieting.
+Quietance — approving process is a fact of the operative personal take its attention to the violation in the TP work. The process mostly means of take actions for the violation eliminating and pressing to the button of the alarm quieting.
 </p><p>Quietance performs by specifying the root of the branch of the widgets and the types of notification, which allows to make quietance on the side of the visualiser, as in groups, for example, on the signalling object, and individually by the object of the source. It is possible to independently quietance different types of alarms. Setting of the quietance is made by the simple modification of the attribute "alarmSt".
 </p><p>Example of the script to work with the signals gives below:
 </p>
@@ -637,13 +637,13 @@ The first and the typical method of notifications is screen's light notification
 </p><p>In order to realize this possibility, the external methods of the notification and the corresponding notification types, are freely described for the visualisation server and the visualiser itself. On the side of the visualisation server, the formation/receipt of the notification resource and the notification itself is described. On the side of the visualiser, the notification is described according to the resources of the visualisation server.
 </p><p>Description of the rules and scenarios of the notifications performs with user attributes of the text type for pages of the visualisation project, which applies at the page open. That is, potentially, for each open page, you can describe your own rules of the notification, though, it's usually enough and describes the general rules of the notification on the project's main page — a page that opens one-off and does not close at work:
 </p>
-<ul><li> For the visualisation server/engine, by the attribute "notify{N}" into the format:</li></ul>
+<ul><li> For the visualisation server/engine, by the attribute "notify{N}" in the format:</li></ul>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre><span class="c1">//flags=notifyServ[{DL}][|resource[|queue[|qMergeMess]]]</span>
 <span class="c1">//resStatic={ResourceFile}</span>
 <span class="k">if</span><span class="p">(</span><span class="nx">doRes</span><span class="p">)</span> <span class="p">{</span> <span class="nx">The</span> <span class="nx">command</span> <span class="nx">text</span> <span class="nx">to</span> <span class="nx">form</span> <span class="nx">the</span> <span class="nx">resource</span><span class="p">.</span> <span class="p">}</span>
 <span class="k">if</span><span class="p">(</span><span class="nx">doNtf</span><span class="p">)</span> <span class="p">{</span> <span class="nx">The</span> <span class="nx">command</span> <span class="nx">text</span> <span class="nx">to</span> <span class="nx">notify</span><span class="p">.</span> <span class="p">}</span>
 </pre></div>
-<ul><li> For a visualiser by the attribute "notifyVis[Vision|WebVision]{N}" into the format:</li></ul>
+<ul><li> For a visualiser by the attribute "notifyVis[Vision|WebVision]{N}" in the format:</li></ul>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre><span class="c1">//flags=notify[{DL}][|resource[|queue[|quietanceRet]]]</span>
 <span class="c1">//name={The notifier name}</span>
 <span class="c1">//ico={The icon name}</span>
@@ -651,10 +651,10 @@ The first and the typical method of notifications is screen's light notification
 </pre></div>
 <p>Flags:
 </p>
-<ul><li> <i>notify[{DL}]</i>, <i>notifyServ[{DL}]</i> — enables the notification with the repeating by the time <i>DL</i>, if the set; for <i>DL</i> = 0 the repeat carried out immediately.</li>
+<ul><li> <i>notify[{DL}]</i>, <i>notifyServ[{DL}]</i> — enables the notification with the repeating by the time <i>DL</i>, if the set; for <i>DL</i> = 0 the repeat carried out immediately; <i>notifyServ[{DL}]</i> is used to force the server side notification instead visualiser with <i>notify[{DL}]</i>.</li>
 <li> <i>resource</i> — request-form (force) the notification resource from the visualisation server, can be an audio file, a text or other data for the notification produce; but currently the notifiers mostly expect audio.</li>
 <li> <i>queue</i> — the notification resources are determined not only by the global sign of alarming and quietance, but also according to the priority sources queue of the notification-resources. The queue is formed on the side of the visualisation server, and for the visualisers it is indicated the need to work with it when requesting resources.</li>
-<li> <i>qMergeMess</i> — merging the notifications into the queue by equality their messages.</li>
+<li> <i>qMergeMess</i> — merging the notifications in the queue by equality their messages.</li>
 <li> <i>quietanceRet</i> — possibility of the visualiser for the quietance recall-return i.e. in fact — the notification enable back.</li></ul>
 <p>Presence of the field "resStatic" enables the resource obtaining directly from the resource table or a file, pointed in the way like to <a href="#Media">the "Media" primitive</a>.
 </p><p>The exchanging variables:
@@ -669,24 +669,42 @@ The first and the typical method of notifications is screen's light notification
 <li> <i>prcID</i> — the procedure unique ID (like to "ses_AGLKS_ntf2"), mostly for temporary files safe creation.</li></ul>
 <p>The examples and comments to work of the typical notification methods:
 </p>
-<ul><li> Beep (buzzer) on the visualiser or the visualisation server side:</li></ul>
+<ul><li> Beep (buzzer) on the visualiser (flags=notify0) or the visualisation server (flags=notifyServ0) side with repeating and control the playing:</li></ul>
+<p>&lt;/translate&gt;
+</p>
 <dl><dd><ul><li> alarm = "10|Prm||0x02"</li>
 <li> notifyVisVision1 | notify1 = </li></ul></dd></dl>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify|notifyServ</span>
-<span class="k">if</span><span class="p">(</span><span class="nx">en</span><span class="p">)</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"beep -f 1000 -l 1000000 &amp;"</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-<span class="k">else</span> <span class="k">if</span><span class="p">((</span><span class="nx">beepPID</span><span class="o">=</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"pidof beep"</span><span class="p">)).</span><span class="nx">toInt</span><span class="p">())</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"kill "</span><span class="o">+</span><span class="nx">beepPID</span><span class="p">);</span>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify0|notifyServ0</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">ntfPrg</span><span class="o">=</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"which beep"</span><span class="p">)).</span><span class="nx">length</span> <span class="o">&amp;&amp;</span>
+    <span class="p">(</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"test -s "</span><span class="o">+</span><span class="nx">prcID</span><span class="o">+</span><span class="s2">".pid"</span><span class="p">,</span><span class="kc">true</span><span class="p">)</span> <span class="o">||</span>		<span class="c1">//No PID file</span>
+     <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"ps -A -o \"pid cmd\" | grep \"^ *$(cat "</span><span class="o">+</span><span class="nx">prcID</span><span class="o">+</span><span class="s2">".pid).*"</span><span class="o">+</span><span class="nx">ntfPrg</span><span class="p">.</span><span class="nx">parseLine</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">+</span><span class="s2">"\" &gt; /dev/null"</span><span class="p">,</span><span class="kc">true</span><span class="p">))</span> <span class="p">)</span>	<span class="c1">//No notify already</span>
+<span class="p">{</span>
+    <span class="nx">ntfPrg</span> <span class="o">=</span> <span class="nx">ntfPrg</span><span class="p">.</span><span class="nx">parseLine</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="nx">ntfPrg</span><span class="o">+</span><span class="s2">" -f 1000 -l 100000 &amp;\necho $! &gt; "</span><span class="o">+</span><span class="nx">prcID</span><span class="o">+</span><span class="s2">".pid"</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"test -s "</span><span class="o">+</span><span class="nx">prcID</span><span class="o">+</span><span class="s2">".pid"</span><span class="p">,</span><span class="kc">true</span><span class="p">))</span>
+    <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"kill $(cat "</span><span class="o">+</span><span class="nx">prcID</span><span class="o">+</span><span class="s2">".pid); rm "</span><span class="o">+</span><span class="nx">prcID</span><span class="o">+</span><span class="s2">".pid "</span><span class="o">+</span><span class="nx">prcID</span><span class="o">+</span><span class="s2">".res;"</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
 </pre></div>
 <dl><dd><ul><li> notifyVisVision1 | notify1 = </li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
-<span class="c">#flags=notify|notifyServ</span>
+<span class="c">#flags=notify0|notifyServ0</span>
 <span class="k">if</span> <span class="nb">test</span> <span class="nv">$en</span> <span class="o">=</span> 1<span class="p">;</span> <span class="k">then</span>
-	beep -f <span class="m">1000</span> -l <span class="m">1000000</span> <span class="p">&amp;</span>
-<span class="k">else</span>
-	<span class="nv">beepPID</span><span class="o">=</span><span class="k">$(</span>pidof beep<span class="k">)</span>
-	<span class="k">if</span> <span class="nb">test</span> <span class="s2">"x</span><span class="nv">$beepPID</span><span class="s2">"</span> !<span class="o">=</span> <span class="s2">"x"</span><span class="p">;</span> <span class="k">then</span> <span class="nb">kill</span> <span class="nv">$beepPID</span><span class="p">;</span> <span class="k">fi</span>
+    <span class="nv">ntfPrg</span><span class="o">=</span><span class="k">$(</span>which beep<span class="k">)</span>
+    <span class="c">#No PID file || No notify already</span>
+    <span class="k">if</span> <span class="nb">test</span> ! -s <span class="nv">$prcID</span>.pid <span class="o">||</span> ! ps -A -o <span class="s2">"pid cmd"</span> <span class="p">|</span> grep <span class="s2">"^ *</span><span class="k">$(</span>cat <span class="nv">$prcID</span>.pid<span class="k">)</span><span class="s2">.*</span><span class="nv">$ntfPrg</span><span class="s2">"</span> &gt; /dev/null<span class="p">;</span> <span class="k">then</span>
+      <span class="nv">$ntfPrg</span> -f <span class="m">1000</span> -l <span class="m">100000</span> <span class="p">&amp;</span>
+      <span class="nb">echo</span> <span class="nv">$!</span> &gt; <span class="nv">$prcID</span>.pid
+    <span class="k">fi</span>
+<span class="k">elif</span> <span class="nb">test</span> -s <span class="nv">$prcID</span>.pid<span class="p">;</span> <span class="k">then</span>
+    <span class="nb">kill</span> <span class="k">$(</span>cat <span class="nv">$prcID</span>.pid<span class="k">)</span>
+    rm <span class="nv">$prcID</span>.pid <span class="nv">$prcID</span>.res
 <span class="k">fi</span>
 </pre></div>
-<ul><li> Repeating play for ready audio file, one common, on the visualiser or the visualisation server side:</li></ul>
+<p>&lt;translate&gt;
+</p>
+<ul><li> Repeating play for a ready audio file, one common, on the visualiser (flags=notify2) or the visualisation server (flags=notifyServ2) side, duration of the audio file for the internal language must be not more 10 seconds:</li></ul>
+<p>&lt;/translate&gt;
+</p>
 <dl><dd><ul><li> alarm = "10|Prm||0x04"</li>
 <li> notify2 | notifyVisVision2 =</li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|notifyServ2</span>
@@ -697,7 +715,11 @@ The first and the typical method of notifications is screen's light notification
 <span class="c">#flags=notify2|notifyServ2</span>
 <span class="k">if</span> <span class="nb">test</span> <span class="nv">$en</span> <span class="o">=</span> 1<span class="p">;</span> <span class="k">then</span> play -q alarm.ogg<span class="p">;</span> <span class="k">fi</span>
 </pre></div>
-<ul><li> Play an individual audio file for the source, on the visualisation server side:</li></ul>
+<p>&lt;translate&gt;
+</p>
+<ul><li> Play an individual audio file for the source, on the visualisation server side, duration of the audio file for the internal language must be not more 10 seconds:</li></ul>
+<p>&lt;/translate&gt;
+</p>
 <dl><dd><ul><li> alarm = "10|Prm||0x04|res:al_prm1"</li>
 <li> notify2 =</li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=queue</span>
@@ -715,9 +737,13 @@ The first and the typical method of notifications is screen's light notification
 <span class="c">#flags=notify2|queue</span>
 <span class="k">if</span> <span class="nb">test</span> <span class="nv">$doNtf</span> <span class="o">=</span> <span class="m">1</span> -a <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
 </pre></div>
-<ul><li> Speech synth for an individual message for the source, on the visualiser side:</li></ul>
-<dl><dd><ul><li> alarm = "10|Prm|Text message of the speech synth|0x04"</li>
-<li> notify2 =</li></ul></dd></dl>
+<p>&lt;translate&gt;
+</p>
+<ul><li> Speech synth for an individual message for the source, on the visualiser side, duration of the message for the internal language must be not more 10 seconds:</li></ul>
+<dl><dd><ul><li> alarm = "10|Prm|Text message of the speech synth|0x04"</li></ul></dd></dl>
+<p>&lt;/translate&gt;
+</p>
+<dl><dd><ul><li> notify2 =</li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=queue</span>
 </pre></div>
 <dl><dd><ul><li> notifyVisVision2 = </li></ul></dd></dl>
@@ -737,7 +763,11 @@ The first and the typical method of notifications is screen's light notification
   rm tmpForSpeech
 <span class="k">fi</span>
 </pre></div>
-<ul><li> Preparing a sound file, one common, and playing it on the side of the visualiser or the visualisation server:</li></ul>
+<p>&lt;translate&gt;
+</p>
+<ul><li> Preparing a sound file, one common, and playing it on the side of the visualiser (flags=notifyServ2) or the visualisation server (flags=notifyServ2), duration of the audio file for the internal language must be not more 10 seconds:</li></ul>
+<p>&lt;/translate&gt;
+</p>
 <dl><dd><ul><li> alarm = "10|Prm||0x04"</li>
 <li> notify2 = </li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|notifyServ2|resource</span>
@@ -767,9 +797,13 @@ The first and the typical method of notifications is screen's light notification
 <span class="c">#flags=notify2|resource</span>
 <span class="k">if</span> <span class="nb">test</span> <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
 </pre></div>
-<ul><li> Prepare an individual audio file for the source of notification through the speech synth, on side of the visualiser or the visualisation server:</li></ul>
-<dl><dd><ul><li> alarm = "10|Prm|Text message of the speech synth|0x04"</li>
-<li> notify2 =</li></ul></dd></dl>
+<p>&lt;translate&gt;
+</p>
+<ul><li> Prepare an individual audio file for the source of notification through the speech synth, on side of the visualiser (flags=notify2) or the visualisation server (flags=notifyServ2), duration of the message for the internal language must be not more 10 seconds:</li></ul>
+<dl><dd><ul><li> alarm = "10|Prm|Text message of the speech synth|0x04"</li></ul></dd></dl>
+<p>&lt;/translate&gt;
+</p>
+<dl><dd><ul><li> notify2 =</li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|notifyServ2|queue</span>
 <span class="k">if</span><span class="p">(</span><span class="nx">doRes</span> <span class="o">&amp;&amp;</span> <span class="nx">mess</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpText"</span><span class="p">,</span> <span class="nx">mess</span><span class="p">);</span>
@@ -1252,7 +1286,7 @@ Where:
 <p>The engine of the visualization environment provides activation of the visualizer specific attributes. The activation process performs at opening a session of the project and means for the project: creation of the specific attribute with the specified properties, at case it lack, and activation for tracing its modification by the engine of the visualization environment, like to the attributes of forming primitive's shapes. To direct specifying such attribute you can also use the prefix "vs_" to the attribute identifiers, what is mach faster and excludes of the activation stage. For the specific attributes list of the visualizer you can see the documentation of the proper visualizer.
 </p>
 <h4><span class="mw-headline" id="Elementary_graphical_figure_.28ElFigure.29"><span class="mw-headline-number">3.9.1</span> <span id="ElFigure" title="#ElFigure">Elementary graphical figure (ElFigure)</span></span></h4>
-<p>The primitive is the basis for drawing basic graphical shapes with their possible combinations in a single object. Taking into account the wide range of various shapes, which must be maintained by the primitive, and at the same time the primitive must be simple enough for using and, if possible, for implementation, it was decided to limit the list of the basic figures used for the construction of the resulting graphics to these figures: line, arc, Bézier curve and fill of the enclosed spaces. Based at these basic figures, it is possible to construct derived figures by combining the basic. In the context of the primitive, there is a possibility to set the transparency of the color in the range [0...255], where '0' — complete transparency.
+<p>The primitive is the basis for drawing basic graphical shapes with their possible combinations in a single object. Taking in the account the wide range of various shapes, which must be maintained by the primitive, and at the same time the primitive must be simple enough for using and, if possible, for implementation, it was decided to limit the list of the basic figures used for the construction of the resulting graphics to these figures: line, arc, Bézier curve and fill of the enclosed spaces. Based at these basic figures, it is possible to construct derived figures by combining the basic. In the context of the primitive, there is a possibility to set the transparency of the color in the range [0...255], where '0' — complete transparency.
 </p><p><b>Table.</b> List of additional properties/attributes of the primitive "Elementary figure (ElFigure)"
 </p>
 <table class="wikitable">
@@ -1643,9 +1677,9 @@ Where:
 <td> Mode </td>
 <td> 24 </td>
 <td> Operation mode of the button:
-<ul><li> "Standard" — normal button which allows repeating events on it hold, the parameters into "value";</li>
-<li> "Checkable" — check button, values into "value";</li>
-<li> "Menu" — opens menu on press, items list into "value";</li>
+<ul><li> "Standard" — normal button which allows repeating events on it hold, the parameters in "value";</li>
+<li> "Checkable" — check button, values in "value";</li>
+<li> "Menu" — opens menu on press, items list in "value";</li>
 <li> "Load" — provides for loading of the user-space small files through the visual interface; on the mode the button press will open the selection file dialog for loading and the file content next saving to the attribute "value";</li>
 <li> "Save" — provides for saving of the user-space small files through the visual interface; on the file content writing to the attribute "value" for user will: open the selecting/setting file dialog, save the attribute "value" content to the file, after the selecting, and set clean the attribute "value".</li></ul>
 </td></tr>
@@ -1710,7 +1744,7 @@ Where:
 <td> set </td>
 <td> Setting value </td>
 <td> 23 </td>
-<td> Value of edition of a cell of the table which address into the event "<b>ws_TableEdit_{colN}_{rowN}</b>".
+<td> Value of edition of a cell of the table which address in the event "<b>ws_TableEdit_{colN}_{rowN}</b>".
 </td></tr>
 <tr>
 <td> value </td>
@@ -1744,23 +1778,23 @@ Where:
 <dd>"h" — Row of the headers. Possible attributes of the header cell tag for the column as a whole:
 <ul><li> "width" — column width, in pixels or percents (10%);</li>
 <li> "edit" — allowing to the cells of the row edition (0 or 1), by default — no (0);</li>
-<li> "color" — column color as a whole into the color name or code;</li>
-<li> "colorText" — color of the column text as a whole into the color name or code;</li>
+<li> "color" — column color as a whole in the color name or code;</li>
+<li> "colorText" — color of the column text as a whole in the color name or code;</li>
 <li> "font" — font of the column text in the typical OpenSCADA string;</li>
 <li> "prec" — value precision of the real type cells in the column;</li>
 <li> "sort" — sorting by the column [0 - Ascending-default; 1 - Descending];</li>
 <li> "align" — alignment the column for: "left", "right" and "center".</li></ul></dd>
 <dd>"r" — Row of the values. Possible attributes of the row cell tag for the row as a whole:
-<ul><li> "color" — row color as a whole into the color name or code;</li>
-<li> "colorText" — color of the row text as a whole into the color name or code;</li>
+<ul><li> "color" — row color as a whole in the color name or code;</li>
+<li> "colorText" — color of the row text as a whole in the color name or code;</li>
 <li> "font" — font of the cell text in the typical OpenSCADA string;</li>
 <li> "prec" — value precision of the real type cells in the row.</li></ul></dd>
 <dd>"s", "t", "i", "r", "b" — cells of the data types "String", "Text", "Integer", "Real" and "Logical". Possible attributes:
 <ul><li> "color" — cell color;</li>
-<li> "colorText" — color of the cell text into the color name or code;</li>
+<li> "colorText" — color of the cell text in the color name or code;</li>
 <li> "font" — font of the cell text in the typical OpenSCADA string;</li>
 <li> "prec" — value precision of the real type cell;</li>
-<li> "img" — image of the cell into the form "<b>[{src}:]{name}</b>", the details above;</li>
+<li> "img" — image of the cell in the form "<b>[{src}:]{name}</b>", the details above;</li>
 <li> "edit" — allowing the cell edition (0 or 1), by default - no (0);</li>
 <li> "align" — alignment the cell for: "left", "right" and "center".</li></ul></dd></dl>
 </td></tr>
@@ -2908,7 +2942,7 @@ Where:
 <p><b>Object "Session" ( this.ownerSess() )</b>
 </p>
 <ul><li> <i>string user( )</i> — current session user.</li>
-<li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — quiets of the violations <i>wpath</i> with the template <i>quit_tmpl</i>. If <i>wpath</i> is empty string then the global quietance makes. Into the string <i>wpath</i>, by symbol ';', can be enumerated addresses of several widgets. When set the <i>ret</i>, the quietance return is performed.</li>
+<li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — quiets of the violations <i>wpath</i> with the template <i>quit_tmpl</i>. If <i>wpath</i> is empty string then the global quietance makes. In the string <i>wpath</i>, by symbol ';', can be enumerated addresses of several widgets. When set the <i>ret</i>, the quietance return is performed.</li>
 <li> <i>int reqTm( )</i> — last request time in seconds from the epoch of 1/1/1970.</li>
 <li> <i>string reqUser( )</i> — last request user.</li>
 <li> <i>string reqLang( )</i> — last request language.</li>
@@ -2950,7 +2984,7 @@ Where:
 <p><br />
 Deprecated, but supported, the API is represented by a group of functions directly in the module of the VCA engine. Calling these functions from the widget procedure can be done directly by the identifier, since their namespace is defined in the context of the widget procedures.
 </p><p><b>Widgets list (WdgList)</b><br />
-<i>Description:</i> Returns a list of the widgets, into the widgets container, or the child list. If set <i>pg</i> then returns the pages list for projects and sessions.<br />
+<i>Description:</i> Returns a list of the widgets, in the widgets container, or the child list. If set <i>pg</i> then returns the pages list for projects and sessions.<br />
 <i>Parameters:</i>
 </p>
 <table class="wikitable">

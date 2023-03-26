@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_run.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1840,7 +1840,7 @@ void VisRun::ntfReg( int8_t tp, const string &props, const string &pgCrtor, bool
 
     vector<string> pgPropsQ;
 
-    //Search for presented notification type
+    //Searching for the presented notification type
     map<uint8_t,Notify*>::iterator iN = mNotify.find(tp);
     if(iN != mNotify.end()) {
 	if(pgCrtor == iN->second->pgCrtor() && (props == iN->second->props() || !prior)) return;
@@ -1861,9 +1861,9 @@ void VisRun::ntfReg( int8_t tp, const string &props, const string &pgCrtor, bool
 	ntfSet &= ~(1<<tp);
     }
     //Creation new or replacing present one
-    if(props.size())		mNotify[tp] = new Notify(tp, pgCrtor+"\n"+props, this);
+    if(props.size())		mNotify[tp] = new Notify(tp, pgCrtor+"\n"+props, this, prior);
     //Take and place a notificator from the queue
-    else if(pgPropsQ.size())	{ mNotify[tp] = new Notify(tp, pgPropsQ.back(), this); pgPropsQ.pop_back(); }
+    else if(pgPropsQ.size())	{ mNotify[tp] = new Notify(tp, pgPropsQ.back(), this, prior); pgPropsQ.pop_back(); }
     else return;
 
     mNotify[tp]->pgPropsQ = pgPropsQ;
@@ -2027,8 +2027,10 @@ void VisRun::updatePage( )
 
 //* Notify: Generic notifying object.		 *
 //************************************************
-VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pgProps(ipgProps),
-    tp(itp), alSt(0xFFFFFFFF), repDelay(-1), comIsExtScript(false), f_notify(false), f_resource(false), f_queue(false), f_quietanceRet(false),
+VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown, bool isPriorProc ) : pgProps(ipgProps),
+    tp(itp), alSt(0/*xFFFFFFFF*/),	//!!!!: 0 - to notify the active alarms at the start from the procedures, also as for Phonon
+    repDelay(-1), comIsExtScript(false),
+    f_notify(false), f_resource(false), f_queue(false), f_quietanceRet(false),
     toDo(false), alEn(false), delay(0), queueCurTm(0), dataM(true), mOwner(iown), actAlrm(NULL), ntfPlay(NULL)
 {
     //Parsing the properties
@@ -2051,7 +2053,7 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
 	else if(name.empty() && (size_t)(fPos=iLn.find("name=")) != string::npos) name = iLn.substr(fPos+5);
 
 #ifdef HAVE_PHONON
-    if(f_notify && (f_queue || f_resource))
+    if(f_notify && (f_queue || f_resource) && !isPriorProc)
 	ntfPlay = new VideoPlayer(Phonon::MusicCategory);
 #endif
 
@@ -2245,8 +2247,7 @@ void VisRun::Notify::commCall( string &res, string &resTp, const string &mess, c
 	    write(hdRes, res.data(), res.size());
 	    if(::close(hdRes) != 0)
 		mess_warning(mod->nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hdRes, strerror(errno), errno);
-	}
-	else resFile = "";
+	} else resFile = "";
     }
 
     //Playing by an internal mechanism (Phonon)
@@ -2258,7 +2259,7 @@ void VisRun::Notify::commCall( string &res, string &resTp, const string &mess, c
     if(comIsExtScript)
 	// Prepare environment and execute the external script
 	system(("prcID=sesRun_"+owner()->workSess()+"_ntf"+i2s(tp)+" en="+i2s(alEn)+" doNtf=1 doRes=0 res="+resFile+" resTp="+resTp+
-	    " mess=\""+TSYS::strEncode(mess,TSYS::SQL)+"\" lang=\""+TSYS::strEncode(lang,TSYS::SQL)+"\" ./"+wcomProc).c_str());
+	    " mess=\""+TSYS::strEncode(mess,TSYS::ShieldSymb,"\"")+"\" lang=\""+TSYS::strEncode(lang,TSYS::ShieldSymb,"\"")+"\" ./"+wcomProc).c_str());
     else {
 	// Prepare and execute internal procedure
 	TValFunc funcV;
@@ -2295,7 +2296,7 @@ void *VisRun::Notify::Task( void *intf )
 	do {
 	    if(delayCnt) { TSYS::sysSleep(1); delayCnt--; continue; }
 
-	    //  Get the resources for the notification
+	    //  Geting the resources of the notification
 	    if((ntf.f_queue || ntf.f_resource) && ntf.alEn) ntfRes = ntf.ntfRes(ntfResTp, ntfMess, ntfLang);
 
 	    //  Same notification

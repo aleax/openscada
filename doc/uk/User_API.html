@@ -475,27 +475,28 @@
 <li><i>string strFromCharCode( int char1, int char2, int char3, ... );</i> — створює рядок з кодів символів <i>char1</i>, <i>char2</i> ... <i>charN</i>.</li>
 <li><i>string strFromCharUTF([string type = "UTF-8",] int char1, int char2, int char3, ...);</i> — створює рядок з UTF символів <i>char1</i>, <i>char2</i> ... <i>charN</i>. Наступні типи символу підтримуються: UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, UTF-32BE.</li>
 <li><i>string strCodeConv( string src, string fromCP, string toCP );</i> — перекодовує текст <i>src</i> з кодування <i>fromCP</i> у <i>toCP</i>. Якщо кодування опущено (порожній рядок), то використовується внутрішнє.</li>
-<li><i>string strEncode( string src, string tp = "Bin", string opt1 = "" );</i> — кодує рядок <i>src</i> за правилом <i>tp</i> та опції <i>opt1</i>. Доступні правила:
+<li><i>string strEncode( string src, string tp = "Bin", string opt = "" );</i> — кодує рядок <i>src</i> за правилом <i>tp</i> та опції <i>opt</i>. Доступні правила:
 <dl><dd>"PathEl" — символи <b>[/%]</b> у "%2f" та "%25", відповідно;</dd>
 <dd>"HttpURL" — символи <b>[ \t%]</b> та "&gt; 0x80" у "%20", "%09", "%25" та інше;</dd>
 <dd>"HTML" — символи HTML-сутностей <b>[&gt;&lt;"&amp;']</b> у "&amp;gt;", "&amp;lt;", "&amp;quot;" та інше;</dd>
 <dd>"JavaScript" — символ '\n' екрануванням "\\n";</dd>
-<dd>"SQL" — екранування-захист символів <b>['"`\]</b>, доданням символу '\' або дублювання перелічених у <i>opt1</i> символів;</dd>
-<dd>"Custom" — символів вказаних у <i>opt1</i> у вигляд "%NN";</dd>
-<dd>"Base64" — бінарне кодування у Base 64, де у <i>opt1</i> встановлюються символ(и) переривання рядку після 57 символів;</dd>
+<dd>"SQL" — екранування-захист символів <b>['"`\]</b>, доданням символу '\' або дублювання перелічених у <i>opt</i> символів;</dd>
+<dd>"Custom" — символів вказаних у <i>opt</i> у вигляд "%NN";</dd>
+<dd>"Base64" — бінарне кодування у Base 64, де у <i>opt</i> встановлюються символ(и) переривання рядку після 57 символів;</dd>
 <dd>"FormatPrint" — символ '%' в "%%";</dd>
 <dd>"OscdID" — майже всі символи на кшталт <b>[ /\&amp;(]</b> у '_';</dd>
 <dd>"Bin" — перелік ASCII байтів ("XX XX XX XX ...") у бінарне представлення;</dd>
 <dd>"Reverse" — інверсія послідовності;</dd>
-<dd>"ShieldSimb" — захищені символи типу '\a', '\b', ..., '\0NNN', '\xNN' у бінарне представлення;</dd>
 <dd>"ToLower" — символи до нижнього регістру;</dd>
-<dd>"Limit" — обмеження рядку довжиною у <i>opt1</i>, враховуючи змінну довжину UTF-8;</dd>
-<dd>"ShieldBin" — захист бінарних символів [\x0-\x8\xB-\xC\x0E-\x1F].</dd></dl>
+<dd>"Limit" — обмеження рядку довжиною у <i>opt</i>, враховуючи змінну довжину UTF-8;</dd>
+<dd>"ShieldSymb" — захист символів із <i>opt</i> (типово ['"`]) символом слешу "\" на кшталт '\n', '\r', ..., '\0NNN';</dd>
+<dd>"ShieldBin" — захист усіх бінарних символів [\x0-\x8\xB-\xC\x0E-\x1F] символом слешу "\".</dd></dl>
 </li>
-<li><i>string strDecode( string src, string tp = "Bin", string opt1 = "" );</i> — декодує рядок <i>src</i> за правилом <i>tp</i> та опції <i>opt1</i>. Доступні правила:
+<li><i>string strDecode( string src, string tp = "Bin", string opt = "" );</i> — декодує рядок <i>src</i> за правилом <i>tp</i> та опції <i>opt</i>. Доступні правила:
 <dl><dd>"PathEl", "HttpURL", "Custom" — символи вигляду "%NN" у бінарне представлення;</dd>
 <dd>"Base64" — відповідно з Base 64;</dd>
-<dd>"Bin" — бінарний рядок у ASCII байти ("XX XX XX XX ..   A.b.c.."), <i>opt1</i> вказує на роздільник або "&lt;text&gt;", для включення зміщення ліворуч та текстової частини праворуч.</dd></dl>
+<dd>"Bin" — бінарний рядок у ASCII байти ("XX XX XX XX ..   A.b.c.."), <i>opt</i> вказує на роздільник або "&lt;text&gt;", для включення зміщення ліворуч та текстової частини праворуч;</dd>
+<dd>"ShieldSymb" — захищені символи на кшталт '\n', '\r', ..., '\0NNN', '\xNN' у бінарне представлення.</dd></dl>
 </li></ul>
 <h2><span class="mw-headline" id=".D0.91.D1.83.D0.B4.D1.8C_.D1.8F.D0.BA.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.28TCntrNode.29_.D0.B4.D0.B5.D1.80.D0.B5.D0.B2.D0.B0_OpenSCADA_.28SYS..2A.29"><span class="mw-headline-number">4</span> <span id="TCntrNode" title="#TCntrNode">Будь який об'єкт (TCntrNode) дерева OpenSCADA (SYS.*)</span></span></h2>
 <p>Функції об'єкту:

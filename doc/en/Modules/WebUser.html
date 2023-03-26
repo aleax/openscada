@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/WebUser</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/WebUser.html" title="Модули/Web пользователя (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/WebUser.html" title="Модулі/Web користувача (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/WebUser.html" title="Модули/Web пользователя (94% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/WebUser.html" title="Модулі/Web користувача (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">WebUser</a> </td>
 <td> User WWW-page
 </td>
-<td> 1.5 </td>
+<td> 1.6 </td>
 <td> GPL2 </td>
 <td> ui_WebUser.so </td>
 <td> en,uk,ru,de </td>
@@ -79,7 +79,8 @@
 <li> <i>URL's parameters (URLprms)</i> &lt;Object&gt; — URL parameters;</li>
 <li> <i>Content items (cnts)</i> &lt;Object::Array&lt;XMLNodeObj&gt;&gt; — content items for POST;</li>
 <li> <i>This object (this)</i> &lt;Object&gt; — pointer to this page's object;</li>
-<li> <i>Protocol's object (prt)</i> &lt;Object&gt; — pointer to the input part object of the HTTP protocol.</li></ul>
+<li> <i>Protocol's object (prt)</i> &lt;Object&gt; — pointer to the input part object of the HTTP protocol;</li>
+<li> <i>Schedule service call (schedCall)</i> &lt;Integer&gt; — write here the time value in seconds for scheduling the procedure context execution in a service call; <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> the service calls are performed in the periodicity 10 seconds usually, so you can schedule the calls not often than at 10 seconds.</li></ul>
 <p>The overall scenario of the user's page request:
 </p>
 <ul><li> External network station generates an HTTP request with the following form of URI "/WebUser/{UserPage}" which falls on the OpenSCADA transport with the value of the configuration field "Protocol" equal to "HTTP".</li>

@@ -155,11 +155,12 @@ string TMdContr::getStatus( )
 	    val += TSYS::strMess(_("Spent time %s[%s]. "),
 			tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(),
 			tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
-	    val += TSYS::strMess(_("Read %g(%g) registers, %g(%g) coils. "), numRReg, numRRegIn, numRCoil, numRCoilIn);
-	    val += TSYS::strMess(_("Wrote %g registers, %g coils. "), numWReg, numWCoil);
-	    val += TSYS::strMess(_("Errors of connection %g, of response %g. "), numErrCon, numErrResp);
+	    val += TSYS::strMess(_("Read %g(%g) registers, %g(%g) coils. "),
+				    (double)numRReg, (double)numRRegIn, (double)numRCoil, (double)numRCoilIn);
+	    val += TSYS::strMess(_("Wrote %g registers, %g coils. "), (double)numWReg, (double)numWCoil);
+	    val += TSYS::strMess(_("Errors of connection %g, of response %g. "), (double)numErrCon, (double)numErrResp);
 	}
-	if(asynchWrs.size()) val += TSYS::strMess(_("To write %d. "), asynchWrs.size());
+	if(mAsynchWr || asynchWrs.size()) val += TSYS::strMess(_("To write %d. "), asynchWrs.size());
     }
 
     return val;

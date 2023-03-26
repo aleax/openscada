@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.5.14"
+#define MOD_VER		"1.6.0"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -173,6 +173,31 @@ void TWEB::modStop( )
 	uPgAt(ls[iN]).at().setEnable(false);
 
     runSt = false;
+}
+
+void TWEB::modInfo( vector<string> &list )
+{
+    TModule::modInfo(list);
+    list.push_back("SubType");
+    list.push_back("Auth");
+}
+
+string TWEB::modInfo( const string &name )
+{
+    if(name == "SubType")	return SUB_TYPE;
+    if(name == "Auth")		return "0";
+
+    return TModule::modInfo(name);
+}
+
+void TWEB::perSYSCall( unsigned int cnt )
+{
+    AutoHD<UserPg> up;
+    vector<string> ls;
+    uPgList(ls);
+    for(unsigned iN = 0; iN < ls.size(); iN++)
+	if((up=uPgAt(ls[iN])).at().enableStat())
+	    up.at().perSYSCall();
 }
 
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr )
@@ -328,7 +353,7 @@ UserPg::UserPg( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), TPrmTempl::Impl(this, ("WebUserPg_"+iid).c_str()), cntReq(0), isDAQTmpl(false),
     mId(cfg("ID")), mAEn(cfg("EN").getBd()), mEn(false), mTimeStamp(cfg("TIMESTAMP").getId()), mDB(idb),
     ioRez(-1), ioHTTPreq(-1), ioUrl(-1), ioPage(-1), ioSender(-1), ioUser(-1),
-    ioHTTPvars(-1), ioURLprms(-1), ioCnts(-1), ioThis(-1), ioPrt(-1),
+    ioHTTPvars(-1), ioURLprms(-1), ioCnts(-1), ioThis(-1), ioPrt(-1), ioSchedCall(-1),
     chkLnkNeed(false)
 {
     mId = iid;
@@ -404,13 +429,13 @@ void UserPg::setProg( const string &iprg )	{ cfg("PROG").setS(progLang()+"\n"+ip
 
 void UserPg::HTTP( const string &req, SSess &s, TProtocolIn *iprt )
 {
+    string tstr, httpIt;
+    map<string,string>::iterator prmEl;
+
+    MtxAlloc res1(reqRes, true);
+    ResAlloc res2(cfgRes, false);
+
     try {
-	string tstr, httpIt;
-	map<string,string>::iterator prmEl;
-
-	MtxAlloc res1(reqRes, true);
-	ResAlloc res2(cfgRes, false);
-
 	//Load inputs
 	inputLinks();
 	setS(ioHTTPreq, req);
@@ -467,12 +492,45 @@ void UserPg::HTTP( const string &req, SSess &s, TProtocolIn *iprt )
 	cntReq++;
 
     } catch(TError &err) {
-	MtxAlloc res1(reqRes, true);
-	ResAlloc res2(cfgRes, false);
 	if(func() && ioThis >= 0) setO(ioThis, new TEValObj());
 	if(func() && ioPrt >= 0) setO(ioPrt, new TEValObj());
 	throw;
     }
+}
+
+void UserPg::perSYSCall( )
+{
+    MtxAlloc res1(reqRes, true);
+    ResAlloc res2(cfgRes, false);
+
+    int schedCall = 0;
+    if(ioSchedCall < 0 || !(schedCall=getI(ioSchedCall))) return;
+    setI(ioSchedCall, (schedCall=vmax(0,schedCall-SERV_TASK_PER)));
+    if(schedCall)	return;
+
+    try {
+	//Load inputs
+	inputLinks();
+	setS(ioHTTPreq, "");
+	setS(ioUrl, "");
+	setS(ioPage, "");
+	if(ioSender >= 0) setS(ioSender, "<SYS>");
+	if(ioUser >= 0) setS(ioUser, "");
+	setO(ioHTTPvars, new TVarObj());
+	if(ioURLprms >= 0) setO(ioURLprms, new TVarObj());
+	if(ioCnts >= 0) setO(ioCnts, new TArrayObj());
+	if(ioThis >= 0) setO(ioThis, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
+	if(ioPrt >= 0) setO(ioPrt, new TEValObj());
+
+	//Call processing
+	setMdfChk(true);
+	calc();
+
+	//Get outputs
+	outputLinks();
+    } catch(TError &err) { }
+
+    if(ioThis >= 0) setO(ioThis, new TEValObj());
 }
 
 void UserPg::load_( TConfig *icfg )
@@ -528,7 +586,7 @@ void UserPg::saveIO( )
 	cf.cfg("PG_ID").setS(id(), true);
 	for(int iIO = 0; iIO < func()->ioSize(); iIO++) {
 	    if(iIO == ioRez || iIO == ioHTTPreq || iIO == ioUrl || iIO == ioPage || iIO == ioSender || iIO == ioUser ||
-		iIO == ioHTTPvars || iIO == ioURLprms || iIO == ioCnts || iIO == ioThis || iIO == ioPrt ||
+		iIO == ioHTTPvars || iIO == ioURLprms || iIO == ioCnts || iIO == ioThis || iIO == ioPrt || iIO == ioSchedCall ||
 		func()->io(iIO)->flg()&TPrmTempl::LockAttr) continue;
 	    cf.cfg("ID").setS(func()->io(iIO)->id());
 	    cf.cfg("VALUE").setNoTransl(func()->io(iIO)->type() != IO::String || (func()->io(iIO)->flg()&TPrmTempl::CfgLink));
@@ -587,6 +645,7 @@ void UserPg::setEnable( bool vl )
 		if((ioCnts=func()->ioId("cnts")) >= 0 && func()->io(ioCnts)->type() != IO::Object)	ioCnts = -1;
 		if((ioThis=func()->ioId("this")) >= 0 && func()->io(ioThis)->type() != IO::Object)	ioThis = -1;
 		if((ioPrt=func()->ioId("prt")) >= 0 && func()->io(ioPrt)->type() != IO::Object)		ioPrt = -1;
+		if((ioSchedCall=func()->ioId("schedCall")) >= 0 && func()->io(ioSchedCall)->type() != IO::Integer) ioSchedCall = -1;
 
 		if(!(ioRez >= 0 && ioHTTPreq >= 0 && ioUrl >= 0 && ioPage >= 0 && ioHTTPvars >=0))
 		    throw err_sys(_("The template '%s' does not have one or more required attribute in the needed type: rez=%d, HTTPreq=%d, url=%d, HTTPvars=%d.\n"
@@ -607,6 +666,7 @@ void UserPg::setEnable( bool vl )
 	    ioCnts	= funcIO.ioAdd(new IO("cnts",trS("Content items"),IO::Object,IO::Default));
 	    ioThis	= funcIO.ioAdd(new IO("this",trS("This object"),IO::Object,IO::Default));
 	    ioPrt	= funcIO.ioAdd(new IO("prt",trS("Protocol's object"),IO::Object,IO::Default));
+	    ioSchedCall	= funcIO.ioAdd(new IO("schedCall",trS("Schedule service call"),IO::Integer,IO::Output));
 
 	    string workProg = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().
 		compileFunc(TSYS::strSepParse(progLang(),1,'.'),funcIO,prog());
@@ -813,19 +873,4 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	if(pos >= content.size()) return;
 	cnt[cnt.size()-1].setText(content.substr(pos,content.find(string(c_term)+c_end+boundary,pos)-pos));
     }
-}
-
-void TWEB::modInfo( vector<string> &list )
-{
-    TModule::modInfo(list);
-    list.push_back("SubType");
-    list.push_back("Auth");
-}
-
-string TWEB::modInfo( const string &name )
-{
-    if(name == "SubType")	return SUB_TYPE;
-    if(name == "Auth")		return "0";
-
-    return TModule::modInfo(name);
 }
