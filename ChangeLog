@@ -1,3 +1,11 @@
+2023-04-01 Roman (stable)
+- !!:DAQ.JavaLikeCalc: Expansion-finishing the object's cycle implementation "for({var} in {obj}) {body of the loop}"
+	by the possibility of pointing as the Object <obj> of the included ones through the properties or from the results.
+    !!: The constant values appended by "null" as a synonym to EVAL (EVAL_REAL).
+    All the constants appended to the syntax highlighting as the values like to "true" and "false".
+- UI.WebUser: Tooltip appended by description the property "schedCall".
+
+
 2023-03-25 Roman (stable)
 - Rebuild.
 

@@ -42,7 +42,7 @@
 <td> Provides for creating your own web-pages on internal OpenSCADA language.
 </td></tr></table>
 <p>The module provides the user with a mechanism to create WWW-pages, and can process other WWW-requests in internal OpenSCADA language, usually <a href="../Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, without involving low level programming. As a page processor, the module allows you to use <a href="../Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">standard DAQ templates</a>. Using DAQ templates allows you to create WWW-page libraries and call them in this module multiple times as their implementations, as well as provide the data context of the template with their connection to the data of the subsystem "Data Acquisition".
-</p><p>Except of the module's belonging to OpenSCADA it also belongs and is the module of the <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> transport protocol module. Actually, the module WebUser call is made from Protocol.HTTP and through the enhanced communication mechanism, by the exported into the module functions: HTTP_GET(), HTTP_POST().
+</p><p>Except of the module's belonging to OpenSCADA it also belongs and is the module of the <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> transport protocol module. Actually, the module WebUser call is made from Protocol.HTTP and through the enhanced communication mechanism, by exported functions of the module: HTTP_GET(), HTTP_POST().
 </p><p>Addressing of the pages begins with the second element of the URI. It is connected with the fact that the first element of the URI is used to identify the user WWW-interface module. For example, URL <i>http://localhost.localdomain:10002/WebUser/UserPage</i> can be deciphered as a call of the user page "UserPage" of this module on the host "localhost.localdomain" on port 10002. In the case of absence of the second element of URI and instruction to display an index of the user pages in the configuration, the index of the pages is generated (Fig.1).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:650px;"><a class="image" href="http://oscada.org/wiki/File:WebUser_idx.png"><img class="thumbimage" height="297" src="../files/WebUser_idx.png" width="648" /></a>  <div class="thumbcaption">Fig.1. Index of the user pages.</div></div></div></div>
@@ -80,7 +80,7 @@
 <li> <i>Content items (cnts)</i> &lt;Object::Array&lt;XMLNodeObj&gt;&gt; — content items for POST;</li>
 <li> <i>This object (this)</i> &lt;Object&gt; — pointer to this page's object;</li>
 <li> <i>Protocol's object (prt)</i> &lt;Object&gt; — pointer to the input part object of the HTTP protocol;</li>
-<li> <i>Schedule service call (schedCall)</i> &lt;Integer&gt; — write here the time value in seconds for scheduling the procedure context execution in a service call; <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> the service calls are performed in the periodicity 10 seconds usually, so you can schedule the calls not often than at 10 seconds.</li></ul>
+<li> <i>Scheduling the next service call (schedCall)</i> &lt;Integer&gt; — write here the time value in seconds for scheduling the procedure context execution in a service call; <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> the service calls are performed in the periodicity 10 seconds usually, so you can schedule the calls not often than at 10 seconds.</li></ul>
 <p>The overall scenario of the user's page request:
 </p>
 <ul><li> External network station generates an HTTP request with the following form of URI "/WebUser/{UserPage}" which falls on the OpenSCADA transport with the value of the configuration field "Protocol" equal to "HTTP".</li>
@@ -104,5 +104,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebUser/en">Modules/WebUser/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2873</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebUser/en">Modules/WebUser/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2880</td></tr></table></body>
 </html>

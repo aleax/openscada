@@ -93,24 +93,25 @@
 
 <h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.B8.D0.B9_.D1.8F.D0.B7.D1.8B.D0.BA_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F_JavaLikeCalc"><span class="mw-headline-number">1</span> <span id="JavaLikeCalc" title="#JavaLikeCalc"><a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">Пользовательский язык программирования JavaLikeCalc</a></span></span></h2>
 <h3><span class="mw-headline" id=".D0.AD.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B_.D1.8F.D0.B7.D1.8B.D0.BA.D0.B0"><span class="mw-headline-number">1.1</span> Элементы языка</span></h3>
-<p><i>Ключевые слова:</i> if, else, while, for, break, continue, return, function, using, true, false.<br />
+<p><i>Ключевые слова:</i> <b>if</b>, <b>else</b>, <b>while</b>, <b>for</b>, <b>in</b>, <b>break</b>, <b>continue</b>, <b>return</b>, <b>function</b>, <b>using</b>.<br />
 <i>Постоянные:</i>
 </p>
-<ul><li> десятичные: цифры 0-9 (12, 111, 678);</li>
-<li> восьмеричные: цифры 0-7 (012, 011, 076);</li>
-<li> шестнадцатеричные: цифры 0-9, буквы a-f или A-F (0x12, 0XAB);</li>
-<li> вещественные: 345.23, 2.1e5, 3.4E-5, 3e6;</li>
-<li> логические: true, false;</li>
-<li> строковые: "hello", без перехода на другую строку однако с поддержкой прямой конкатенации строковых констант.</li></ul>
+<ul><li> десятичные: цифры <b>0-9</b> (12, 111, 678);</li>
+<li> восьмеричные: цифры <b>0-7</b> (012, 011, 076);</li>
+<li> шестнадцатеричные: цифры <b>0-9</b>, буквы <b>a-f</b> или <b>A-F</b> (0x12, 0XAB);</li>
+<li> вещественные: <b>345.23</b>, <b>2.1e5</b>, <b>3.4E-5</b>, <b>3e6</b>;</li>
+<li> логические: <b>true</b>, <b>false</b>;</li>
+<li> строковые: <b>"hello"</b>, без перехода на другую строку однако с поддержкой прямой конкатенации строковых констант.</li></ul>
 <p><i>Типы переменных:</i>
 </p>
-<ul><li> целое: -2<sup>63</sup>...2<sup>63</sup>, EVAL_INT(-9223372036854775807);</li>
-<li> вещественное: 3.4 * 10<sup>308</sup>, EVAL_REAL(-1.79E308);</li>
-<li> логическое: false, true, EVAL_BOOL(2);</li>
-<li> строка: последовательность символов-байтов (0...255) любой длины, ограниченной объёмом памяти и хранилищем в БД; EVAL_STR("&lt;EVAL&gt;").</li></ul>
-<p><i>Встроенные константы:</i> pi = 3.14159265..., e = 2.71828182..., EVAL_BOOL(2), EVAL_INT(-9223372036854775807), EVAL_REAL,EVAL(-1.79E308), EVAL_STR("&lt;EVAL&gt;")<br />
+<ul><li> целое: <b>-2<sup>63</sup></b> ... <b>2<sup>63</sup></b>, <b>EVAL_INT</b>(-9223372036854775807);</li>
+<li> вещественное: <b>3.4*10<sup>308</sup></b>, <b>EVAL_REAL</b>(-1.79E308);</li>
+<li> логическое: <b>false</b>, <b>true</b>, <b>EVAL_BOOL</b>(2);</li>
+<li> строка: последовательность символов-байтов (0...255) любой длины, ограниченной объёмом памяти и хранилищем в БД; <b>EVAL_STR</b>("&lt;EVAL&gt;").</li></ul>
+<p><i>Встроенные константы:</i> <b>pi</b> = 3.14159265..., <b>e</b> = 2.71828182..., <b>EVAL_BOOL</b>(2), <b>EVAL_INT</b>(-9223372036854775807), <b>null</b>,<b>EVAL</b>,<b>EVAL_REAL</b>(-1.79E308), <b>EVAL_STR</b>("&lt;EVAL&gt;")<br />
 <i>Глобальные атрибуты параметров DAQ (начиная с подсистемы "DAQ" и в виде <b>{Тип модуля DAQ}.{Объект контроллера}.{Параметр}.{Атрибут}</b>).</i><br />
 <i>Функции и параметры <a href="User_API.html" title="Special:MyLanguage/Documents/User API">объектной модели OpenSCADA</a>.</i>
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> The <b>EVAL</b> (Error VALue) variants and <b>null</b> are processed specially in conversion one to one depending on used the base type, that is you are free in use only <b>null</b> or <b>EVAL</b> for any cases.
 </p>
 <h3><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.86.D0.B8.D0.B8_.D1.8F.D0.B7.D1.8B.D0.BA.D0.B0"><span class="mw-headline-number">1.2</span> Операции языка</span></h3>
 <p>Операции, поддерживаемые языком, представлены в таблице ниже. Приоритет операций уменьшается сверху вниз. Операции с одинаковым приоритетом входят в одну цветовую группу.
@@ -180,7 +181,7 @@
 <h3><span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.82.D0.BE.D1.80.D1.8B_.D1.8F.D0.B7.D1.8B.D0.BA.D0.B0"><span class="mw-headline-number">1.4</span> Операторы языка</span></h3>
 <p>Общий перечень операторов языка:
 </p>
-<ul><li> <i>var</i> — оператор инициализации переменной; указание переменной без присваивания значения резервирует её со значением EVAL, что позволяет осуществлять одноразовую инициализацию сложных типов данных вроде объекта, через проверку на "isEVal()";</li>
+<ul><li> <i>var</i> — оператор инициализации переменной; указание переменной без присваивания значения резервирует её со значением <b>null</b>-<b>EVAL</b>, что позволяет осуществлять одноразовую инициализацию сложных типов данных вроде объекта, через прямое сравнение и проверку на <i>isEVal()</i>;</li>
 <li> <i>if</i> — оператор условия "ЕСЛИ";</li>
 <li> <i>else</i> — оператор условия "ИНАЧЕ";</li>
 <li> <i>while</i> — определение цикла "ПОКА";</li>
@@ -192,7 +193,7 @@
 <li> <i>using</i> — позволяет установить область видимости внешних функций часто используемой библиотеки (<b>using Special.FLibSYS;</b>) для последующего обращения только по имени функции, не имеет эффекта для объектного доступа;</li>
 <li> <i>return</i> — прерывание функции и возврат результата, который копируется в атрибут с флагом возврата (<b>return 123;</b>); в середине внутренней функции осуществляется её завершение с указанным результатом;</li>
 <li> <i>new</i> — создание объекта, реализовано для: общий объект "Object", массив "Array" и регулярные выражения "RegExp";</li>
-<li> <i>delete</i> — удаление/освобождение объекта или его свойств, при этом: внутренние переменные устанавливаются в EVAL, внешние заменяются пустым объектом, а свойства объекта очищаются.</li></ul>
+<li> <i>delete</i> — удаление/освобождение объекта или его свойств, при этом: внутренние переменные устанавливаются в <b>null</b>-<b>EVAL</b>, внешние заменяются пустым объектом, а свойства объекта очищаются.</li></ul>
 <h4><span class="mw-headline" id=".D0.A3.D1.81.D0.BB.D0.BE.D0.B2.D0.BD.D1.8B.D0.B5_.D0.BE.D0.BF.D0.B5.D1.80.D0.B0.D1.82.D0.BE.D1.80.D1.8B"><span class="mw-headline-number">1.4.1</span> Условные операторы</span></h4>
 <p>Языком поддерживаются два типа условий. Первый — это операции условия для использования внутри выражения, второй — глобальный, основанный на условных операторах.
 </p><p>Условие внутри выражения строится на операциях '?' и ':'. В качестве примера можно записать следующее практическое выражение:
@@ -224,7 +225,7 @@
 </p><p>Оператор "return", в середине внутренней функции, осуществляет контролируемое её завершение и помещение указанной переменной, или результата выражения, как результат вызываемой внутренней функции.
 </p><p>Пример типового определения и использования внутренней функции представлен далее:
 </p>
-<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="kd">function</span> <span class="nx">sum</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="p">((</span><span class="nx">b</span><span class="o">==</span><span class="nx">EVAL</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">b</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="nx">c</span><span class="o">==</span><span class="nx">EVAL</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">c</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="nx">d</span><span class="o">==</span><span class="nx">EVAL</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">d</span><span class="p">);</span> <span class="p">}</span>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="kd">function</span> <span class="nx">sum</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="p">((</span><span class="nx">b</span><span class="o">==</span><span class="kc">null</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">b</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="nx">c</span><span class="o">==</span><span class="kc">null</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">c</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="nx">d</span><span class="o">==</span><span class="kc">null</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">d</span><span class="p">);</span> <span class="p">}</span>
 <span class="nx">rez</span> <span class="o">=</span> <span class="nx">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
 </pre></div>
 <h4><span class="mw-headline" id=".D0.A1.D0.BF.D0.B5.D1.86.D0.B8.D0.B0.D0.BB.D1.8C.D0.BD.D1.8B.D0.B5_.D1.81.D0.B8.D0.BC.D0.B2.D0.BE.D0.BB.D1.8B_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.BE.D0.B2.D1.8B.D1.85_.D0.BF.D0.B5.D1.80.D0.B5.D0.BC.D0.B5.D0.BD.D0.BD.D1.8B.D1.85"><span class="mw-headline-number">1.4.4</span> Специальные символы строковых переменных</span></h4>
@@ -241,7 +242,7 @@
 <p><br />
 </p>
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.D1.89.D0.B5.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.BD.D1.8B.D0.B5_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.B8.D0.B5_.D0.BE.D0.B1.D1.8A.D0.B5.D0.BA.D1.82.D1.8B"><span class="mw-headline-number">2</span> Общесистемные пользовательские объекты</span></h2>
-<p>JavaLikeCalc предоставляет поддержку типа данных объект "Object". Объект представляет собой ассоциативный контейнер свойств и функций. Свойства могут содержать как данные четырёх базовых типов, так и другие объекты. Доступ к свойствам объекта может осуществляться посредством записи имён свойств к объекту <i>obj.prop</i>, через точку, а также посредством заключения имени свойства в квадратные скобки <i>obj["prop"]</i>. Очевидно, что первый механизм статичен, а второй позволяет указывать имя свойства через переменную. Удалить свойство объекта можно директивой "delete". Имя свойства через точку не должно начинаться с цифры и содержать символы операций, иначе, для первой цифры, должен использоваться <a href="User_API.html" title="Special:MyLanguage/Documents/User API">префикс объекта</a> — <b>SYS.BD.SQLite.db_1s</b>, или осуществляться запись в квадратных скобках — <b>SYS.BD.SQLite["1+s"]</b>, для символов операций в названии. Чтение неопределённого свойства вернёт <b>EVAL</b>. Создание объекта осуществляется посредством ключевого слова <i>new</i>: <b>varO = new Object()</b>. Базовое определение объекта не содержит функций. Операции копирования объекта, на самом деле, делают ссылку на исходный объект. При удалении объекта осуществляется уменьшение счётчика ссылок, а при достижении счётчика нуля, объект удаляется физически.
+<p>JavaLikeCalc предоставляет поддержку типа данных объект "Object". Объект представляет собой ассоциативный контейнер свойств и функций. Свойства могут содержать как данные четырёх базовых типов, так и другие объекты. Доступ к свойствам объекта может осуществляться посредством записи имён свойств к объекту <i>obj.prop</i>, через точку, а также посредством заключения имени свойства в квадратные скобки <i>obj["prop"]</i>. Очевидно, что первый механизм статичен, а второй позволяет указывать имя свойства через переменную. Удалить свойство объекта можно директивой "delete". Имя свойства через точку не должно начинаться с цифры и содержать символы операций, иначе, для первой цифры, должен использоваться <a href="User_API.html" title="Special:MyLanguage/Documents/User API">префикс объекта</a> — <b>SYS.BD.SQLite.db_1s</b>, или осуществляться запись в квадратных скобках — <b>SYS.BD.SQLite["1+s"]</b>, для символов операций в названии. Чтение неопределённого свойства вернёт <b>null</b>-<b>EVAL</b>. Создание объекта осуществляется посредством ключевого слова <i>new</i>: <b>varO = new Object()</b>. Базовое определение объекта не содержит функций. Операции копирования объекта, на самом деле, делают ссылку на исходный объект. При удалении объекта осуществляется уменьшение счётчика ссылок, а при достижении счётчика нуля, объект удаляется физически.
 </p><p>Разные компоненты OpenSCADA могут доопределять базовый объект особыми свойствами и функциями. Стандартным расширением объекта является массив "Array", который создаётся командой <b>varO = new Array(prm1,prm2,prm3,...,prmN)</b>. Перечисленные через запятую параметры помещаются в массив в исходном порядке. Если параметр только один то массив инициируется указанным количеством пустых элементов. Особенностью массива является то, что он работает со свойствами, как с индексами и основным механизмом обращения является заключение индекса в квадратные скобки <i>arr[1]</i>. Массив хранит свойства в собственном контейнере одномерного массива. Цифровые свойства массива используются для доступа непосредственно к массиву, а символьные работают как свойства объекта. Детальнее про свойства и функции массива можно прочитать по <a href="User_API.html#Array" title="Special:MyLanguage/Documents/User API">ссылке</a>.
 </p><p>Объект регулярного выражения "RegExp" создаётся командой <b>varO = new RegExp(pat, flg)</b>, где <i>pat</i> — шаблон регулярного выражения, а <i>flg</i> — флаги поиска. Объект работы с регулярными выражениями основан на библиотеке "PCRE". При глобальном поиске устанавливается атрибут объекта "lastIndex", что позволяет продолжить поиск при следующем вызове функции. В случае неудачного поиска атрибут "lastIndex" сбрасывается в ноль. Детальнее про свойства и функции объекта регулярного выражения можно прочитать по <a href="User_API.html#RegExp" title="Special:MyLanguage/Documents/User API">ссылке</a>.
 </p><p>Для произвольного доступа к аргументам функции предусмотрен объект аргументов, обратиться к которому можно посредством символа "arguments". Этот объект содержит свойство "length" с количеством аргументов у функции и позволяет обратиться к значению аргумента посредством его <b>номера</b> или <b>идентификатора</b>. Рассмотрим перебор аргументов по циклу:
@@ -255,7 +256,7 @@
 <ul><li> Нулевой тип, функции:
 <ul><li> <i>bool isEVal();</i> — возвращает "true".</li></ul></li></ul>
 <ul><li> Логический тип, функции:
-<ul><li> <i>bool isEVal(); bool isNaN( );</i> — проверяет значение на "EVAL".</li>
+<ul><li> <i>bool isEVal(); bool isNaN( );</i> — проверяет значение на <b>null</b>-<b>EVAL</b>.</li>
 <li> <i>string toString();</i> — представляет значение в виде строки "true" или "false".</li></ul></li></ul>
 <dl><dd><ul><li> <i>real toReal();</i> — читает логическое значение как вещественное число.</li>
 <li> <i>int toInt();</i> — читает логическое значение как целое число.</li></ul></dd></dl>
@@ -265,7 +266,7 @@
 <li> <i>MIN_VALUE</i> — минимальное значение;</li>
 <li> <i>NaN</i> — недостоверное значение.</li></ul>
 <dl><dt> <i>Функции:</i></dt></dl>
-<ul><li> <i>bool isEVal(); bool isNaN( );</i> — проверяет значение на "EVAL", и не число для Вещественного.</li>
+<ul><li> <i>bool isEVal(); bool isNaN( );</i> — проверяет значение на <b>null</b>-<b>EVAL</b>, и не число для Вещественного.</li>
 <li> <i>string toExponential( int numbs = -1 );</i> — возвращает строку отформатированного числа, в экспоненциальной нотации и количеством значащих цифр <i>numbs</i>. Если <i>numbs</i> отсутствует то цифр будет столько сколько необходимо.</li>
 <li> <i>string toFixed( int numbs = 0, int len = 0, bool sign = false );</i> — возвращает строку отформатированного числа в нотации с фиксированной точкой и количеством цифр после десятичной точки <i>numbs</i>, с минимальной длиной <i>len</i> и обязательным знаком <i>sign</i>. Если <i>numbs</i> отсутствует то количество цифр после десятичной точки равно нулю.</li>
 <li> <i>string toPrecision( int prec = -1 );</i> — возвращает строку отформатированного числа с количеством значащих цифр <i>prec</i>. </li>
@@ -276,7 +277,7 @@
 <dl><dd><dl><dt> <i>Свойства:</i></dt></dl>
 <ul><li> <i>int length</i> — длина строки.</li></ul>
 <dl><dt><i>Функции:</i></dt></dl>
-<ul><li> <i>bool isEVal();</i> — проверяет значение на "EVAL".</li>
+<ul><li> <i>bool isEVal();</i> — проверяет значение на <b>null</b>-<b>EVAL</b>.</li>
 <li> <i>bool isNaN( bool whole = true );</i> — проверяет строку на не число, и в целом <i>whole</i>.</li>
 <li> <i>string charAt( int symb, string type = "" );</i> — достаёт из строки символ под номером <i>symb</i> типа <i>type</i>. Следующие типы символа поддерживаются: ""-ASCII и простой один байт, UTF-8, UTF-16, UTF-32. В случае с UTF-8, позиция символа <i>symb</i> меняется в позицию следующего символа поскольку длина символов этого типа переменная.</li>
 <li> <i>int charCodeAt( int symb, string type = "" );</i> — достаёт из строки код символа <i>symb</i> типа <i>type</i>. Следующие типы символа поддерживаются: ""-ASCII и простой один байт, UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, UTF-32BE. В случае с UTF-8, позиция символа <i>symb</i> меняется в позицию следующего символа поскольку длина символов этого типа переменная.</li>
@@ -1013,5 +1014,5 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/ru">Documents/User_API/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2873</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/ru">Documents/User_API/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2880</td></tr></table></body>
 </html>

@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.6.0"
+#define MOD_VER		"1.6.1"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -666,7 +666,7 @@ void UserPg::setEnable( bool vl )
 	    ioCnts	= funcIO.ioAdd(new IO("cnts",trS("Content items"),IO::Object,IO::Default));
 	    ioThis	= funcIO.ioAdd(new IO("this",trS("This object"),IO::Object,IO::Default));
 	    ioPrt	= funcIO.ioAdd(new IO("prt",trS("Protocol's object"),IO::Object,IO::Default));
-	    ioSchedCall	= funcIO.ioAdd(new IO("schedCall",trS("Schedule service call"),IO::Integer,IO::Output));
+	    ioSchedCall	= funcIO.ioAdd(new IO("schedCall",trS("Scheduling the next service call"),IO::Integer,IO::Output));
 
 	    string workProg = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().
 		compileFunc(TSYS::strSepParse(progLang(),1,'.'),funcIO,prog());
@@ -735,11 +735,12 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 			    "   'page' - Get/Post page's content;\n"
 			    "   'sender' - request sender;\n"
 			    "   'user' - authenticated user;\n"
-			    "   'HTTPvars' - HTTP variables into Object;\n"
-			    "   'URLprms' - URL's parameters into Object;\n"
-			    "   'cnts' - content items for POST into Array<XMLNodeObj>;\n"
+			    "   'HTTPvars' - HTTP variables in Object;\n"
+			    "   'URLprms' - URL's parameters in Object;\n"
+			    "   'cnts' - content items for POST in Array<XMLNodeObj>;\n"
 			    "   'this' - pointer to object of this page;\n"
-			    "   'prt' - pointer to object of the input part of the HTTP protocol."));
+			    "   'prt' - pointer to object of the input part of the HTTP protocol;\n"
+			    "   'schedCall' - scheduling the next service call in the Integer type for seconds."));
 		else if(func()) TPrmTempl::Impl::cntrCmdProc(opt, "/prgm/cfg");
 	    }
 	}

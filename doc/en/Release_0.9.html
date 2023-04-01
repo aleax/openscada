@@ -327,40 +327,14 @@
 <li> Adaptation to work in the environment of the operating systems QNX and MS Windows.</li></ul>
 <h2><span class="mw-headline" id="Updates"><span class="mw-headline-number">7</span> Updates</span></h2>
 <h3><span class="mw-headline" id=".5B01.03.2023.5D_The_SIXTH_update"><span class="mw-headline-number">7.1</span> [01.03.2023] The SIXTH update</span></h3>
-<div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
-<ul><li> <b>State:</b> <span style="color:red">testing and post building ...</span></li></ul>
-<p>The common releasing process, for the users to estimate your expectations and for the developers to remind the tasks:<br />
-<b><u>1. The preparing and building week:</u></b><br />
-</p>
-<ul><li> Building the last Work SVN-revision for all environments of the irregular building to provide early and wide testing the coming LTS release.</li>
-<li> Announcing the releasing process start:
-<ul><li> creating a new <a href="index.html" title="Special:MyLanguage/Documents">release page</a> or <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">update page</a> on Wiki;</li>
-<li> creating a new news-page on <a class="external text" href="http://oscada.org/en/main/%7Cthe" rel="nofollow noreferrer noopener" target="_blank">official OpenSCADA site</a>;</li>
-<li> creating a new post-link to the news-page on <a class="external text" href="https://www.facebook.com/Roman.Savochenko" rel="nofollow noreferrer noopener" target="_blank">FaceBook</a> and <a class="external text" href="https://www.linkedin.com/in/roman-savochenko-71b50272/" rel="nofollow noreferrer noopener" target="_blank">LinkedIn</a>;</li></ul></li>
-<li> Merging the Work branch changes or copying the whole Work branch tree to the LTS branch-tree.</li>
-<li> Making some LTS specific changes about the version rise:
-<ul><li> updating <b>configure.ac</b> for version of the release-update and core library;</li>
-<li> updating <b>data/*.spec</b> and <b>data/{debian,debian_mod}/changelog</b> for the new version number and appending the files' changelog for new release-update entry.</li></ul></li>
-<li> Forming-appending the LTS ChangeLog by the changes from the Work ChangeLog, grouping the changes by the location and sorting them by the fixing status and the level, with combination new features under one item and without removing any different changes.</li>
-<li> Copying the significant changes from the formed LTS ChangeLog to the related page of the release-update, taking the changes in the level more or even than "!!".</li>
-<li> Translating the release-update pages, updating the <a href="To_do.html" title="Special:MyLanguage/Works/To do">ToDo</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Works/Road_map" title="Special:MyLanguage/Works/Road map">RoadMap</a>.</li>
-<li> Generating the actual offline documentation using the service procedure "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
-<li> Committing the LTS tree changes to the repository and building that.</li>
-<li> Announcing the release-update.</li></ul>
-<p><b><u>2. The testing and post building week(s):</u></b><br />
-</p>
-<ul><li> Hot testing the release build.</li>
-<li> Finishing and fixing the ChangeLog translating and the documentation.</li>
-<li> Generating the actual offline documentation using the service procedure "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
-<li> Committing the release fixes to the repository and building that for the second build, and for each week of appearing critical fixes — the first week without the critical fixes means the final the LTS releasing, so, USERS, test closely the LTS release for not complain to it final build!</li></ul>
-</div>
-<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 70 bugs and appends MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2876" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
+<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 70 bugs and appends MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2879" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
 </p><p><b><u><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Automation Linux distributive of the project OpenSCADA</a></u></b><br />
 </p>
 <ul><li> updating TDE to 14.0.13;</li>
-<li> fixing noatun, TDESVN, basket, KGpg, than appending the new patched packages "tdesvn-trinity" and "basket-trinity" to the distributive collection;</li>
-<li> some improving and updating TDE HW Manager, KCalc, holiday_ua;</li>
+<li> fixing KDesktop, TDE HW Manager, noatun, TDESVN, basket, KGpg, than appending the new patched packages "tdelibs-trinity", "tdebase-trinity", "tdesvn-trinity" and "basket-trinity" to the distributive collection;</li>
+<li> some improving and updating KCalc, holiday_ua;</li>
 <li> complete translation to Ukrainian for KDiff3 and showfoto;</li>
+<li> appending the Debian 11 distributive by packages of RHVoice — Speech synthesizer with many voices for ten languages;</li>
 <li> translation the subproject page to Ukrainian.</li></ul>
 <p><b><u>Main WWW-resources, documentation of the project and subprojects</u></b><br />
 </p>
@@ -506,7 +480,10 @@
 <li> FIX: Fixed in the flag IO::TransltText processing for strings.</li>
 <li> FIX: The service request "list:/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/%2fserv%2fattr" fixed in the attribute name translation.</li></ul></li>
 <li> FIX:Transports,UI.{QTCfg,Vision,WebCfgD}: The function TTransportS::extHostList() appended by an argument "lang" to receive translated names of remote hosts.</li>
-<li> FIX:Protocol.ModBus: Fixed-adapted in the IO name dynamic translation.</li></ul>
+<li> FIX:Protocol.ModBus: Fixed-adapted in the IO name dynamic translation.</li>
+<li> FIX:UI:
+<ul><li> FIX:VCAEngine: The dynamic translation of tr() fixed in the translation loss after the translation cache cleaning and placing the spare messages to the project's table "Trs".</li>
+<li> FIX:WebUser: Fixed-adapted for the dynamic translation of the IO names.</li></ul></li></ul>
 <p><b><u>OpenSCADA libraries and projects</u></b><br />
 </p>
 <ul><li> FIX:LibsDB.OscadaLibs:
@@ -514,6 +491,7 @@
 <li> The library tmplib_DevLib appended by the template "Slot LTD devices (SLOT)".</li></ul></li>
 <li> FIX:LibsDB.vcaBase:
 <ul><li> wlb_Main.storeHouse: Significantly expanded by: implementation the procedures support for the logical columns; implementation the report of all visible table and a selected record.</li>
+<li> wlb_Main.RootPgSo: The "Notification: type 2 (TextSpeech) (notify2)" method expanded by the RHVoice support and appended by the builtin syntax highlight for BASH. The "Notification: type 1 (Buzzer) (notify1)" method rewrote for the long samples playback in the background, that is with control the sample playing stop and restarting only in the case. Appended also by the syntax highlight.</li>
 <li> FIX:wlb_doc.docRepDay: Some improved and appended by: the columns grouping in the header, string values direct reading, colors disable in the table at EVAL scale.</li>
 <li> wlb_doc.docUsersSet: Added by the "Message category (messCat)" configuration.</li></ul></li></ul>
 <p><b><u>API</u></b><br />
@@ -526,7 +504,8 @@
 <li> The Control Interface request "chlds:/{nPath}/%2fobj" appended by not creating the empty icon tags "ico".</li>
 <li> NSTR_BUF_LEN(50) split to CFG_A_LEN (100) for using in the maximum attribute size of the configuration cell in XML.</li>
 <li> The argument "init" removed from setIcoDir(), setDocDir(), setLang() during moving under the generic clearing mechanism.</li>
-<li> Appending the enumeration MdfSYSFlds by the fields: MDF_Name, MDF_MESS, MDF_TR, MDF_DBG, MDF_RD.</li></ul></li>
+<li> Appending the enumeration MdfSYSFlds by the fields: MDF_Name, MDF_MESS, MDF_TR, MDF_DBG, MDF_RD.</li>
+<li> The TSYS::ShieldSimb encoding of the function TSYS::strEncode() renamed to TSYS::ShieldSymb, moved to the function TSYS::strDecode() and in TSYS::strEncode() appended by the common one. And the UserAPI function SYS.strDecode() appended by the decoding method "ShieldSymb".</li></ul></li>
 <li> DB: The Control Interface request "call:/BD/{MOD}/{DB}/%2fserv%2fSQL" appended by processing the "intoTrans" attribute as EVAL at missing and clearing the request text in the response.</li>
 <li> DAQ::Value: The service request "get:/serv/attr" of the Control Interface prevented from clearing the "el" subtags at missing the representing attribute, them value is set to EVAL for true mark that as processed in DAQ.DAQGate and don't continue them request in each cycle.</li>
 <li> Archives-History: The value archive link type "Passive param. attribute (TVArchive::PassiveAttr)" renamed to "DAQ attribute (TVArchive::DAQAttr)". The value archive link type "Active param. attribute" renamed to "Active DAQ attribute" with that mark as DEPRECATED.</li>
@@ -634,7 +613,8 @@
 <li> preventing the focus loss just after entry to the cell editing;</li>
 <li> fixing the boolean value setting at entry to the cell editing;</li>
 <li> the table refitting at growing the column string length.</li></ul></li>
-<li> The included pages closing set after several (4) row appears — to prevent of closing all pages at fast navigation.</li></ul></li></ul>
+<li> The included pages closing set after several (4) row appears — to prevent of closing all pages at fast navigation.</li></ul></li>
+<li> WebUser: Expanded by a possibility of schedule the user procedures call in the service cycle, for the background processing of some data.</li></ul>
 <h3><span class="mw-headline" id=".5B22.02.2022.5D_The_FIFTH_update"><span class="mw-headline-number">7.2</span> [22.02.2022] The FIFTH update</span></h3>
 <p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 50 bugs and appends MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2831" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> <b><u>Significant actions of the developer of the OpenSCADA modules on the update</u></b><br />
@@ -1746,5 +1726,5 @@ FIX: The "Translations" tab expansion and fixing for:
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/en">Documents/Release_0.9/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2873</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/en">Documents/Release_0.9/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2880</td></tr></table></body>
 </html>

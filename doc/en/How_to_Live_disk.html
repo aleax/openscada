@@ -40,14 +40,13 @@
 <p>Currently, hybrid ISO images of "the live disks" (*LiveCD_USB.iso) are built mostly, which can be written directly to CD/DVD, USB-Flash, and also extract the contents for recording on USB-Flash with the FAT or EXT file systems.
 </p><p>The main option for creating a "live disk" is the recording on a CD/DVD, which allows you to use the standard tools of the original operating system. Additional, though in fact, already the main one, is the write to USB-Flash, which can be carried out from the environment of the Linux operating system, for example, from the environment of the same "live disk", recorded and downloaded earlier from a CD/DVD; or from the MS Windows operating system via Win32DiskImager.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Writing a "live disk" image on USB-Flash will erase all data and make it unusable for use as a data storage unless you take into account the ability to write to a partition of the changes saving of the environment of the OS live disk that will be created when first downloaded from the live disk, in case ALTLinux, or user in the case of Debian.
-</p><p>The address of the disk to write the ISO-image is "/dev/sd{x}" and you can found it by calling the <b>$ dmesg</b> console command immediately after connecting the target USB-Flash disk. From the Linux environment, an ISO-image can be written as follows:
+</p><p>The address of the disk to write the ISO-image is "/dev/sd{x}" and you can found it by calling the <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">dmesg</span> console command immediately after connecting the target USB-Flash disk. From the Linux environment, an ISO-image can be written as follows:
 </p>
-<pre style="white-space: pre-wrap;">
-# Recording an ISO-image to USB-Flash:
-$ dd if=Debian_9-OpenSCADA_0.9.0-TDE_R14-amd64-LiveCD_USB.iso of=/dev/sd{x} bs=4096
-# Recording an ISO-image directly from the loaded CD/DVD live disk:
-$ dd if=/dev/sr0 of=/dev/sd{x} bs=4096
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c"># Recording an ISO-image to USB-Flash:</span>
+dd <span class="k">if</span><span class="o">=</span>Debian_9-OpenSCADA_0.9.0-TDE_R14-amd64-LiveCD_USB.iso <span class="nv">of</span><span class="o">=</span>/dev/sd<span class="o">{</span>x<span class="o">}</span> <span class="nv">bs</span><span class="o">=</span>4096
+<span class="c"># Recording an ISO-image directly from the loaded CD/DVD live disk:</span>
+dd <span class="k">if</span><span class="o">=</span>/dev/sr0 <span class="nv">of</span><span class="o">=</span>/dev/sd<span class="o">{</span>x<span class="o">}</span> <span class="nv">bs</span><span class="o">=</span>4096
+</pre></div>
 <h3><span class="mw-headline" id="Live_USB-Flash_disk_with_the_file-system_FAT_or_EXT"><span class="mw-headline-number">2</span> Live USB-Flash disk with the file-system FAT or EXT</span></h3>
 <p>Earlier, separate builds of images were made for recording them on the FAT file system. Currently, these images are specially built only for FirmWare of a number of PLCs (*flash.tar). You can use the hybrid ISO-images described in the section above to create live USB flash disks of general purpose.
 </p><p>The advantage of the live disk on USB-Flash, as it was previously mentioned, is a combination of USB-Flash drive features as a data storage and as a live disc at the same time. Also on the basis you can create compact, reliable and functional solutions of the embedded systems based on OpenSCADA, such as Programmable Logic Controllers (PLC), the panel controllers (with a touch screen), as well as simple SCADA-servers and operator "quickly made" SCADA-stations, by recording a live disk to the stationary data storage (HDD, SSD or Flash). The reliability of this solution is achieved by placing the main non-modifiable software in the packed file, and operational data on the journaled file system.
@@ -59,23 +58,23 @@ $ dd if=/dev/sr0 of=/dev/sd{x} bs=4096
 <ul><li> <i>Debian</i>: the directories "isolinux" and "live"; rename the directory "isolinux" to "syslinux", on the target file system.</li>
 <li> <i>ALTLinux</i>: the directory "syslinux" and file "live".</li></ul></li>
 <li> Rename the file "syslinux/isolinux.cfg" to "syslinux/syslinux.cfg", for FAT, or "syslinux/extlinux.cfg", for EXT.</li>
-<li> <i>ALTLinux</i>: Append to the argument "append", of the section "label live" of the file "syslinux/syslinux.cfg", the sub-string "automatic=method:disk,label:MY_LAB" or "automatic=method:disk,uuid:MY-UUID", where MY_LAB and MY-UUID you can obtain, for partition of "the live disk", by the command aid <b>$ blkid</b>.</li>
+<li> <i>ALTLinux</i>: Append to the argument "append", of the section "label live" of the file "syslinux/syslinux.cfg", the sub-string "automatic=method:disk,label:MY_LAB" or "automatic=method:disk,uuid:MY-UUID", where MY_LAB and MY-UUID you can obtain, for partition of "the live disk", by the command aid <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">blkid</span>.</li>
 <li> <i>ALTLinux</i>: Replace the file "syslinux/gfxboot.c32" to analogous one file from current file system (ordinary it is placed into the directory "/usr/lib/syslinux/").</li>
-<li> Install boot-loader from the command line, all from the superuser: <b>$ su -</b>
-<ul><li> Unmount the disk: <b>$ umount /dev/sd{x}1</b></li>
-<li> Initialize the MBR of the disk to the correct value: <b>$ ms-sys -s /dev/sd{x}</b></li>
-<li> Initialize the boot loader: <b>$ syslinux /dev/sd{x}1</b></li></ul></li></ul>
-<p>For a "live disk" image on FAT (ALTLinux), everything from superuser: <b>$ su -</b>
+<li> Install boot-loader from the command line, all from the superuser: <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">su -</span>
+<ul><li> Unmount the disk: <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">umount /dev/sd{x}1</span></li>
+<li> Initialize the MBR of the disk to the correct value: <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">ms-sys -s /dev/sd{x} </span></li>
+<li> Initialize the boot loader: <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">syslinux /dev/sd{x}1 </span></li></ul></li></ul>
+<p>For a "live disk" image on FAT (ALTLinux), everything from superuser: <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">su -</span>
 </p>
-<ul><li> Connect the target disk and obtain its address: <b>$ dmesg</b></li>
-<li> Mount: <b>$ mkdir /mnt/tmp; mount /dev/sd{x}1 /mnt/tmp</b></li>
-<li> Unpack the contents of the firmware archive onto the mounted disk: <b>$ cd /mnt/tmp; tar xvf /var/tmp/LP8x81-ALTLinux6-OpenSCADA_0.9+r2302-i586-plc-rt1-up.flash.tar</b></li>
-<li> Find out the UUID for the filesystem of the target disk: <b>$ blkid | grep /dev/sd{x}1</b></li>
+<ul><li> Connect the target disk and obtain its address: <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">dmesg</span></li>
+<li> Mount: <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">mkdir /mnt/tmp; mount /dev/sd{x}1 /mnt/tmp </span></li>
+<li> Unpack the contents of the firmware archive onto the mounted disk: <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">cd /mnt/tmp; tar xvf /var/tmp/LP8x81-ALTLinux6-OpenSCADA_0.9+r2302-i586-plc-rt1-up.flash.tar </span></li>
+<li> Find out the UUID for the filesystem of the target disk: <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">blkid </span></li>
 <li> Modify the file "/mnt/tmp/syslinux/syslinux.cfg" at the end of the line "append initrd=alt0/full.cz live ... disk,uuid:4EB3-0478", where it is necessary to set the previously obtained UUID.</li>
 <li> Add or modify the file "/mnt/tmp/syslinux/lang" for specify the locale-language of the interface by default, for Ukrainian — "uk_UA", for Russian — "ru_RU", otherwise it will be English.</li>
-<li> Unmount the disk: <b>$ umount /dev/sd{x}1</b></li>
-<li> Initialize the MBR of the disk to the correct value: <b>$ ms-sys -s /dev/sd{x}</b></li>
-<li> Initialize the boot loader: <b>$ syslinux /dev/sd{x}1</b></li></ul>
+<li> Unmount the disk: <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">umount /dev/sd{x}1 </span></li>
+<li> Initialize the MBR of the disk to the correct value: <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">ms-sys -s /dev/sd{x} </span></li>
+<li> Initialize the boot loader: <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">syslinux /dev/sd{x}1 </span></li></ul>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> This method of the live disk deploying requires knowledge of Linux and the command line interface (console), as well as the basics of the disks partitioning because with an wrong initial partitioning of media the booting may not be passed.
 </p>
 <h3><span class="mw-headline" id="Saving_the_working_data_of_the_live_disk_to_the_USB-Flash_partition"><span class="mw-headline-number">3</span> <span id="UserData" title="#UserData">Saving the working data of the live disk to the USB-Flash partition</span></span></h3>
@@ -99,5 +98,5 @@ $ dd if=/dev/sr0 of=/dev/sd{x} bs=4096
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Live_disk/en">Documents/How_to/Live_disk/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2873</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Live_disk/en">Documents/How_to/Live_disk/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2880</td></tr></table></body>
 </html>

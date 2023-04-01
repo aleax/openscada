@@ -93,24 +93,25 @@
 
 <h2><span class="mw-headline" id="The_user_programming_language_JavaLikeCalc"><span class="mw-headline-number">1</span> <span id="JavaLikeCalc" title="#JavaLikeCalc"><a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">The user programming language JavaLikeCalc</a></span></span></h2>
 <h3><span class="mw-headline" id="Elements_of_the_language"><span class="mw-headline-number">1.1</span> Elements of the language</span></h3>
-<p><i>Keywords:</i> if, else, while, for, break, continue, return, function, using, true, false.<br />
+<p><i>Keywords:</i> <b>if</b>, <b>else</b>, <b>while</b>, <b>for</b>, <b>in</b>, <b>break</b>, <b>continue</b>, <b>return</b>, <b>function</b>, <b>using</b>.<br />
 <i>Constants:</i>
 </p>
-<ul><li> decimal: digits 0-9 (12, 111, 678);</li>
-<li> octal: digits 0-7 ( 012, 011, 076);</li>
-<li> hexadecimal: digits 0-9, letters a-f or A-F (0x12, 0XAB);</li>
-<li> real: 345.23, 2.1e5, 3.4E-5, 3e6;</li>
-<li> boolean: true, false;</li>
-<li> string: "hello", without going to the next line, however, with the support of direct concatenation of the string constants.</li></ul>
+<ul><li> decimal: digits <b>0-9</b> (12, 111, 678);</li>
+<li> octal: digits <b>0-7</b> (012, 011, 076);</li>
+<li> hexadecimal: digits <b>0-9</b>, letters <b>a-f</b> or <b>A-F</b> (0x12, 0XAB);</li>
+<li> real: <b>345.23</b>, <b>2.1e5</b>, <b>3.4E-5</b>, <b>3e6</b>;</li>
+<li> boolean: <b>true</b>, <b>false</b>;</li>
+<li> string: <b>"hello"</b>, without going to the next line, however, with the support of direct concatenation of the string constants.</li></ul>
 <p><i>Types of variables:</i>
 </p>
-<ul><li> integer: -2<sup>63</sup>...2<sup>63</sup>, EVAL_INT(-9223372036854775807);</li>
-<li> real: 3.4 * 10<sup>308</sup>, EVAL_REAL(-1.79E308);</li>
-<li> Boolean: false, true, EVAL_BOOL(2);</li>
-<li> string: a sequence of character-bytes (0...255) of any length, limited by the capacity of the memory and DB storage;</li></ul>
-<p><i>Built-in constants:</i> pi = 3.14159265..., e = 2.71828182..., EVAL_BOOL(2), EVAL_INT(-9223372036854775807), EVAL_REAL,EVAL(-1.79E308), EVAL_STR("&lt;EVAL&gt;")<br />
+<ul><li> integer: <b>-2<sup>63</sup></b> ... <b>2<sup>63</sup></b>, <b>EVAL_INT</b>(-9223372036854775807);</li>
+<li> real: <b>3.4*10<sup>308</sup></b>, <b>EVAL_REAL</b>(-1.79E308);</li>
+<li> Boolean: <b>false</b>, <b>true</b>, <b>EVAL_BOOL</b>(2);</li>
+<li> string: a sequence of character-bytes (0...255) of any length, limited by the capacity of the memory and DB storage; <b>EVAL_STR</b>("&lt;EVAL&gt;").</li></ul>
+<p><i>Built-in constants:</i> <b>pi</b> = 3.14159265..., <b>e</b> = 2.71828182..., <b>EVAL_BOOL</b>(2), <b>EVAL_INT</b>(-9223372036854775807), <b>null</b>,<b>EVAL</b>,<b>EVAL_REAL</b>(-1.79E308), <b>EVAL_STR</b>("&lt;EVAL&gt;")<br />
 <i>Global attributes of the DAQ parameter (starting from the subsystem "DAQ", as follows <b>{Type of DAQ module}.{Controller}.{Parameter}.{Attribute}</b>).</i><br />
 <i>The functions and parameters of <a href="User_API.html" title="Special:MyLanguage/Documents/User API">the object model of OpenSCADA</a>.</i>
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The <b>EVAL</b> (Error VALue) variants and <b>null</b> are processed specially in conversion one to one depending on used the base type, that is you are free in use only <b>null</b> or <b>EVAL</b> for any cases.
 </p>
 <h3><span class="mw-headline" id="Operations_of_the_language"><span class="mw-headline-number">1.2</span> Operations of the language</span></h3>
 <p>The operations supported by the language are presented in the table below. Priority of the operations is reduced from top to bottom. Operations with the same priority are in the same color group.
@@ -180,7 +181,7 @@
 <h3><span class="mw-headline" id="Operators_of_the_language"><span class="mw-headline-number">1.4</span> Operators of the language</span></h3>
 <p>The total list of the operators of the language:
 </p>
-<ul><li> <i>var</i> — operator of initialization of a variable; specifying a variable without assigning a value sets it to EVAL, which allows for one-time initialization of complex data types, such as an object, through an "isEVal ()" check;</li>
+<ul><li> <i>var</i> — operator of initialization of a variable; specifying a variable without assigning a value sets it to <b>null</b>-<b>EVAL</b>, which allows for one-time initialization of complex data types, such as an object, through the direct comparing and checking by <i>isEVal()</i>;</li>
 <li> <i>if</i> — operator "IF" of the condition;</li>
 <li> <i>else</i> — operator "ELSE" of the condition;</li>
 <li> <i>while</i> — definition of the "WHILE" loop;</li>
@@ -192,7 +193,7 @@
 <li> <i>using</i> — allows you to set the visibility space of the external functions of the often used libraries (<b>using Special.FLibSYS;</b>) for the next access only by the name of the function, has no effect for object access;</li>
 <li> <i>return</i> — interrupt function and return the result that is copied to an attribute marked as return one (<b>return 123;</b>); in the middle of the internal function it is completed with a definite result;</li>
 <li> <i>new</i> — creating an object, implemented for: the generic object "Object", massif "Array" and regular expressions "RegExp".</li>
-<li> <i>delete</i> — delete/free of an object or its properties, while: internal variables are set in EVAL, external ones are replaced by an empty object, and the properties of the object are cleared.</li></ul>
+<li> <i>delete</i> — delete/free of an object or its properties, while: internal variables are set in <b>null</b>-<b>EVAL</b>, external ones are replaced by an empty object, and the properties of the object are cleared.</li></ul>
 <h4><span class="mw-headline" id="Conditional_operators"><span class="mw-headline-number">1.4.1</span> Conditional operators</span></h4>
 <p>The language supports two types of conditions. First — this is the operation of condition for use within the expression, second — a global, based on the conditional operators.
 </p><p>The condition inside an expression is based on the operations '?' and ':'. As an example we'll write the following practical expression:
@@ -224,7 +225,7 @@ Where:
 </p><p>Operator "return" into the internal function makes controllable finishing of the function execution and places a pointed variable or an expression result as the internal function call result.
 </p><p>An example of the internal function declaration and using in typical way shown next:
 </p>
-<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="kd">function</span> <span class="nx">sum</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="p">((</span><span class="nx">b</span><span class="o">==</span><span class="nx">EVAL</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">b</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="nx">c</span><span class="o">==</span><span class="nx">EVAL</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">c</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="nx">d</span><span class="o">==</span><span class="nx">EVAL</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">d</span><span class="p">);</span> <span class="p">}</span>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="kd">function</span> <span class="nx">sum</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="p">((</span><span class="nx">b</span><span class="o">==</span><span class="kc">null</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">b</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="nx">c</span><span class="o">==</span><span class="kc">null</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">c</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="nx">d</span><span class="o">==</span><span class="kc">null</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">d</span><span class="p">);</span> <span class="p">}</span>
 <span class="nx">rez</span> <span class="o">=</span> <span class="nx">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
 </pre></div>
 <h4><span class="mw-headline" id="Special_characters_of_the_string_variables"><span class="mw-headline-number">1.4.4</span> Special characters of the string variables</span></h4>
@@ -241,7 +242,7 @@ Where:
 <p><br />
 </p>
 <h2><span class="mw-headline" id="System-wide_user_objects"><span class="mw-headline-number">2</span> System-wide user objects</span></h2>
-<p>JavaLikeCalc provides support of the data type "Object". The data type "Object" is an associated container of properties and functions. The properties can support data of fourth basic types and other objects. Access to object properties can be done through the record of property names to the object <i>obj.prop</i>, through a dot, and also through the inclusion of the property name in square brackets <i>obj["prop"]</i>. It is obvious that the first mechanism is static, while the second lets you to specify the name of the property through a variable. The name of the property through the dot must not start with a digit and contain operations symbols; otherwise, for the first digit, the <a href="User_API.html" title="Special:MyLanguage/Documents/User API">object prefix</a> should be used — <b>SYS.BD.SQLite.db_1s</b>, or write in square brackets — <b>SYS.BD.SQLite["1+s"]</b>, for operations symbols in the name. Object's properties removing you can perform by the operator "delete". Reading of an undefined property will return <b>EVAL</b>. Creating an object is carried by the keyword <i>new</i>: <b>varO = new Object()</b>. The basic definition of the object does not contain functions. Copying of an object is actually makes the reference to the original object. When you delete an object is carried out the reducing of the reference count, and when the count is set to zero then the object is removed physically.
+<p>JavaLikeCalc provides support of the data type "Object". The data type "Object" is an associated container of properties and functions. The properties can support data of fourth basic types and other objects. Access to object properties can be done through the record of property names to the object <i>obj.prop</i>, through a dot, and also through the inclusion of the property name in square brackets <i>obj["prop"]</i>. It is obvious that the first mechanism is static, while the second lets you to specify the name of the property through a variable. The name of the property through the dot must not start with a digit and contain operations symbols; otherwise, for the first digit, the <a href="User_API.html" title="Special:MyLanguage/Documents/User API">object prefix</a> should be used — <b>SYS.BD.SQLite.db_1s</b>, or write in square brackets — <b>SYS.BD.SQLite["1+s"]</b>, for operations symbols in the name. Object's properties removing you can perform by the operator "delete". Reading of an undefined property will return <b>null</b>-<b>EVAL</b>. Creating an object is carried by the keyword <i>new</i>: <b>varO = new Object()</b>. The basic definition of the object does not contain functions. Copying of an object is actually makes the reference to the original object. When you delete an object is carried out the reducing of the reference count, and when the count is set to zero then the object is removed physically.
 </p><p>Different components of OpenSCADA can define the basic object with special properties and functions. The standard extension of the object is an array "Array", which is created by the command <b>varO = new Array(prm1,prm2,prm3,...,prmN)</b>. Comma-separated parameters are placed in the array in the original order. If the parameter is the only one the array is initiated by the specified number of empty elements. Peculiarity of the array is that it works with the properties as the indexes and the main mechanism of addressing is placing the index into square brackets <i>arr[1]</i> is accessible. Array stores the properties in its own container of the one-dimensional array. Digital properties of the array are used to access directly to the array, and the characters work as the object properties. For more details about the properties and functions of the array can be read <a href="User_API.html#Array" title="Special:MyLanguage/Documents/User API">here</a>.
 </p><p>The object of regular expression "RegExp" is created by command <b>varO = new RegExp(pat, flg)</b>, where <i>pat</i> — pattern of the regular expression, and <i>flg</i> — match flags. The object for work with regular expressions, based on the library "PCRE". In the global search set object attribute "lastIndex", which allows you to continue searching for the next function call. In the case of an unsuccessful search for the attribute "lastIndex" reset to zero. For more details about the properties and functions of the regular expression object can be read <a href="User_API.html#RegExp" title="Special:MyLanguage/Documents/User API">here</a>.
 </p><p>For random access to the function arguments provided the arguments object, which you can refer to by the symbol "arguments". This object contains the property "length" with a number of arguments in the function and allows you to access to a value of the argument by its <b>number</b> or <b>ID</b>. Consider the enumeration of the arguments on the cycle:
@@ -255,7 +256,7 @@ Where:
 <ul><li> NULL type, functions:
 <ul><li> <i>bool isEVal();</i> — returns "true".</li></ul></li></ul>
 <ul><li> Logical type, functions:
-<ul><li> <i>bool isEVal(); bool isNaN( );</i> — checks the value to "EVAL".</li>
+<ul><li> <i>bool isEVal(); bool isNaN( );</i> — checks the value to <b>null</b>-<b>EVAL</b>.</li>
 <li> <i>string toString();</i> — performs the value as the string "true" or "false".</li></ul></li></ul>
 <dl><dd><ul><li> <i>real toReal();</i> — reads this Boolean as a real number.</li>
 <li> <i>int toInt();</i> — reads this Boolean as an integer number.</li></ul></dd></dl>
@@ -265,7 +266,7 @@ Where:
 <li> <i>MIN_VALUE</i> — minimum value;</li>
 <li> <i>NaN</i> —  error value.</li></ul>
 <dl><dt> <i>Functions:</i></dt></dl>
-<ul><li> <i>bool isEVal(); bool isNaN( );</i> — checks the value to "EVAL", and NaN for Real.</li>
+<ul><li> <i>bool isEVal(); bool isNaN( );</i> — checks the value to <b>null</b>-<b>EVAL</b>, and NaN for Real.</li>
 <li> <i>string toExponential( int numbs = -1 );</i> — returns the string of the number, formatted in the exponential notation, and with the number of significant digits <i>numbs</i>. If <i>numbs</i> is missing the number of digits will have as much as needed.</li>
 <li> <i>string toFixed( int numbs = 0, int len = 0, bool sign = false );</i> — returns the string of the number, formatted in the notation of fixed-point, and with the number of significant digits after the decimal point <i>numbs</i>, for minimum length <i>len</i> and compulsion to the presence of a <i>sign</i>. If <i>numbs</i> is missing, the number of digits after the decimal point is equal to zero.</li>
 <li> <i>string toPrecision( int prec = -1 );</i> — returns the string of the number, formatted with the number of significant digits <i>prec</i>.</li>
@@ -276,7 +277,7 @@ Where:
 <dl><dd><dl><dt> <i>Properties:</i></dt></dl>
 <ul><li> <i>int length</i> — string length. </li></ul>
 <dl><dt> <i>Functions:</i></dt></dl>
-<ul><li> <i>bool isEVal();</i> — checks value to "EVAL".</li>
+<ul><li> <i>bool isEVal();</i> — checks value to <b>null</b>-<b>EVAL</b>.</li>
 <li> <i>bool isNaN( bool whole = true );</i> — checks the string to Not A Number and in whole for <i>whole</i>. </li>
 <li> <i>string charAt( int symb, string type = "" );</i> — extracts from the string the symbol <i>symb</i> for the <i>type</i>. These types of the symbol are supported: ""-ASCII and raw one byte code, UTF-8, UTF-16, UTF-32. In the case of UTF-8, the symbol position <i>symb</i> is changed to the next symbol position due to length of this symbols type is variable one.</li>
 <li> <i>int charCodeAt( int symb, string type = "" );</i> — extracts from the string the symbol code <i>symb</i> for the <i>type</i>. These types of the symbol are supported: ""-ASCII and raw one byte code, UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, UTF-32BE. In the case of UTF-8, the symbol position <i>symb</i> is changed to the next symbol position due to length of this symbols type is variable one.</li>
@@ -1013,5 +1014,5 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/en">Documents/User_API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2873</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/en">Documents/User_API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2880</td></tr></table></body>
 </html>

@@ -42,7 +42,7 @@
 <td> Забезпечує створення власних WWW-сторінок на внутрішній мові OpenSCADA.
 </td></tr></table>
 <p>Модуль надає користувачу механізм створення WWW-сторінок, а також дозволяє обробляти інші WWW-запити на внутрішній мові OpenSCADA, зазвичай це <a href="../Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, не залучаючи при цьому низькорівневого програмування. У ролі обробнику сторінок модуль дозволяє використовувати <a href="../Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">стандартні шаблони DAQ</a>. Використання шаблонів DAQ дозволяє створювати бібліотеки WWW-сторінок та виклик їх у цьому модулі багаторазово, як їх реалізації, а також надає контекст даних виконання шаблону із їх зв'язуванням з даними підсистеми "Збір Даних".
-</p><p>Окрім приналежності модуля до OpenSCADA він також належить та є модулем модуля транспортного протоколу <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a>. Власне виклик модулю WebUser здійснюється з Protocol.HTTP та за посередництвом розширеного механізму комунікації, експортованими у цьому модулі функціями: HTTP_GET(), HTTP_POST().
+</p><p>Окрім приналежності модуля до OpenSCADA він також належить та є модулем модуля транспортного протоколу <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a>. Власне виклик модулю WebUser здійснюється з Protocol.HTTP та за посередництвом розширеного механізму комунікації, експортованими функціями цього модуля: HTTP_GET(), HTTP_POST().
 </p><p>Адресація сторінок починається із другого елементу URI. Що пов'язано із тим, що перший елемент URI використовується для ідентифікації самого модуля користувацького WWW-інтерфейсу. Наприклад, URL <i>http://localhost.localdomain:10002/WebUser/UserPage</i> можна розшифрувати як виклик користувацької сторінки "UserPage" цього модуля на хості "localhost.localdomain" через порт 10002. У випадку відсутності другого елементу URI та вказання на відображення індексу користувацьких сторінок у конфігурації — формується індекс сторінок (рис.1).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:624px;"><a class="image" href="http://oscada.org/wiki/File:WebUser_idx_uk.png"><img class="thumbimage" height="288" src="../files/WebUser_idx_uk.png" width="622" /></a>  <div class="thumbcaption">Рис.1. Індекс користувацьких сторінок.</div></div></div></div>
@@ -80,7 +80,7 @@
 <li> <i>Елементи вмісту (cnts)</i> &lt;Об'єкт::Array&lt;XMLNodeObj&gt;&gt; — елементи вмісту для POST;</li>
 <li> <i>Цей об'єкт (this)</i> &lt;Об'єкт&gt; — вказівник на об'єкт цієї сторінки;</li>
 <li> <i>Об'єкт протоколу (prt)</i> &lt;Об'єкт&gt; — вказівник на об'єкт вхідної частини HTTP-протоколу;</li>
-<li> <i>Планування сервісного виклику (schedCall)</i> &lt;Ціле&gt; — запишіть тут значення часу у секундах для планування виконання контексту процедури у сервісному виклику; <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> сервісні виклики зазвичай здійснюються із періодичністю 10 секунд, тож ви можете планувати такі виклики не частіше за 10 секунд.</li></ul>
+<li> <i>Планування наступного сервісного виклику (schedCall)</i> &lt;Ціле&gt; — запишіть тут значення часу у секундах для планування виконання контексту процедури у сервісному виклику; <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> сервісні виклики зазвичай здійснюються із періодичністю 10 секунд, тож ви можете планувати такі виклики не частіше за 10 секунд.</li></ul>
 <p>Загальний сценарій запиту користувацької сторінки:
 </p>
 <ul><li> Зовнішня мережева станція формує HTTP запит з URI виду "/WebUser/{UserPage}", який попадає на транспорт OpenSCADA із значенням поля конфігурації "Протокол", рівного "HTTP".</li>
@@ -104,5 +104,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebUser/uk">Modules/WebUser/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2873</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebUser/uk">Modules/WebUser/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2880</td></tr></table></body>
 </html>

@@ -2505,6 +2505,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		if(mess_lev() == TMess::Debug)
 		    mess_debug(nodePath().c_str(), "%ph: CycleObj %d: %d|%d|%d.", cprg, ptr->obj, ptr->body, ptr->val, ptr->end);
 #endif
+		exec(val, cprg+sizeof(SCode), dt);	//!!!! Execution the object expression for accessing the property objects and as results
 		TVariant obj = getVal(val, reg[ptr->obj]);
 		if(obj.type() == TVariant::Object) {
 		    vector<string> pLs;
