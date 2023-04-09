@@ -45,7 +45,7 @@ using namespace OSCADA;
 #define DAQ_NAME	trS("Client ModBus")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"3.6.8"
+#define DAQ_MVER	"3.7.0"
 #define DAQ_AUTHORS	trS("Roman Savochenko")
 #define DAQ_DESCR	trS("Provides implementation of the client ModBus service. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define DAQ_LICENSE	"GPL2"
@@ -165,9 +165,9 @@ class TMdContr: public TController
 
 	void regVal( int reg, const string &dt = "R", bool separate = false );	//Register value for acquisition
 	TVariant getVal( const string &addr, MtxString &err );		//Unified value request from string address
-	int64_t getValR( int addr, MtxString &err, bool in = false, bool isLE = false ); //Get register value
+	int64_t getValR( int addr, MtxString &err, bool in = false, bool isLE = false );	//Get register value
 	char getValC( int addr, MtxString &err, bool in = false );	//Get coins value
-	bool setVal( const TVariant &val, const string &addr, MtxString &err, bool chkAssync = false );	//Unified value set by string address
+	bool setVal( const TVariant &val, const string &addr, MtxString &err, bool isGeneric = false );	//Unified value set by string address
 	bool setValR( uint16_t val, int addr, MtxString &err, bool isLE = false );		//Set register value
 	bool setValRs( const map<int,uint16_t> &regs, MtxString &err, bool isLE = false );	//Set multiply registers
 	bool setValC( char val, int addr, MtxString &err );		//Set coins value
@@ -220,7 +220,8 @@ class TMdContr: public TController
 	char	&mMerge,			//Fragments of register merge
 		&mMltWr,			//Use multi-write functions(15,16)
 		&mAsynchWr;			//Asynchronous write
-	int64_t	&reqTm,				//Request timeout in milliseconds
+	int64_t	&mOmitRdCyclForWr,		//Omit cycles for read back of written
+		&reqTm,				//Request timeout in milliseconds
 		&restTm,			//Restore timeout in seconds
 		&connTry;			//Connections try
 	int64_t	mPer;
@@ -234,6 +235,7 @@ class TMdContr: public TController
 	vector<SDataRec>	acqBlksCoil;	//Acquisition data blocks for coils
 	vector<SDataRec>	acqBlksCoilIn;	//Acquisition data blocks for input coils
 	map<string, string>	asynchWrs;	//Asynchronous writers list
+	map<string, int>	omitRdCycl;	//Omit cycles for read back of written
 
 	float	tmDelay;			//Delay time for next try connect
 

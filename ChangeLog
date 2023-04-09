@@ -1,3 +1,13 @@
+2023-04-09 Roman (stable)
+- FIX:LibsDB.vcaBase: Finishing the word "Quittance" fixing to Quietance.
+- FIX:wlb_doc.docUsersSet: Appended by encoding the value fields also, due to there can be not just digits now.
+- !:DAQ.DAQGate: The function TMdContr::messSet() of the DAQ related messages setting adapted to support attributes
+    in the parameter address for significant attributes of the generic-container parameters,
+    that is needed for the messages transmission from the up stations to the down ones.
+- !:DAQ.ModBus: Appended by the parameter "Omit cycles for read back of written" for separate control such feature
+    apart from the asynchronous writing.
+
+
 2023-04-01 Roman (stable)
 - !!:DAQ.JavaLikeCalc: Expansion-finishing the object's cycle implementation "for({var} in {obj}) {body of the loop}"
 	by the possibility of pointing as the Object <obj> of the included ones through the properties or from the results.

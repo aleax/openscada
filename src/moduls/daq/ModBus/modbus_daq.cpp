@@ -67,6 +67,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("FRAG_MERGE",trS("Merging of the data fragments"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fldAdd(new TFld("WR_MULTI",trS("Using the multi-items writing functions (15,16)"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fldAdd(new TFld("WR_ASYNCH",trS("Asynchronous write"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    fldAdd(new TFld("WR_OMIT_CYCL_RD",trS("Omit cycles for read back of written"),TFld::Integer,TFld::NoFlag,"2","0","0;9"));
     fldAdd(new TFld("TM_REQ",trS("Timeout of connection, milliseconds"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));
     fldAdd(new TFld("TM_REST",trS("Timeout of restore, seconds"),TFld::Integer,TFld::NoFlag,"4","30","1;3600"));
     fldAdd(new TFld("REQ_TRY",trS("Request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;9"));
@@ -106,7 +107,8 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	mPrior(cfg("PRIOR").getId()), mNode(cfg("NODE").getId()), blkMaxSz(cfg("MAX_BLKSZ").getId()),
 	mSched(cfg("SCHEDULE")), mPrt(cfg("PROT")), mAddr(cfg("ADDR")),
 	mMerge(cfg("FRAG_MERGE").getBd()), mMltWr(cfg("WR_MULTI").getBd()), mAsynchWr(cfg("WR_ASYNCH").getBd()),
-	reqTm(cfg("TM_REQ").getId()), restTm(cfg("TM_REST").getId()), connTry(cfg("REQ_TRY").getId()),
+	mOmitRdCyclForWr(cfg("WR_OMIT_CYCL_RD").getId()), reqTm(cfg("TM_REQ").getId()), restTm(cfg("TM_REST").getId()),
+	connTry(cfg("REQ_TRY").getId()),
 	mPer(1e9), prcSt(false), callSt(false), endrunReq(false), alSt(-1),
 	tmDelay(0), numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0)
 {
@@ -429,7 +431,7 @@ char TMdContr::getValC( int addr, MtxString &err, bool in )
     return rez;
 }
 
-bool TMdContr::setVal( const TVariant &val, const string &addr, MtxString &w_err, bool chkAssync )
+bool TMdContr::setVal( const TVariant &val, const string &addr, MtxString &w_err, bool isGeneric )
 {
     int off = 0;
     string tp = TSYS::strParse(addr, 0, ":", &off);
@@ -439,11 +441,13 @@ bool TMdContr::setVal( const TVariant &val, const string &addr, MtxString &w_err
     string mode = TSYS::strParse(addr, 0, ":", &off);
 
     //Registering for the later common writing in the asynchronous mode and pass updating the just writed values
-    if(chkAssync) {
-	aWrRes.lock(); asynchWrs[addr] = val.getS(); aWrRes.unlock();
-	if(mAsynchWr)	return true;
+    if(isGeneric) {
+	if(mOmitRdCyclForWr) { aWrRes.lock(); omitRdCycl[addr] = mOmitRdCyclForWr; aWrRes.unlock(); }
+	if(mAsynchWr) {
+	    aWrRes.lock(); asynchWrs[addr] = val.getS(); aWrRes.unlock();
+	    return true;
+	}
     }
-    //if(chkAssync && mAsynchWr) { MtxAlloc resAsWr(aWrRes, true); asynchWrs[addr] = val.getS(); return true; }
 
     //For direct writing we need the good connection in any event
     if(tmDelay > 0) {
@@ -954,7 +958,14 @@ TVariant TMdContr::objFuncCall( const string &iid, vector<TVariant> &prms, const
 bool TMdContr::inWr( const string &addr )
 {
     aWrRes.lock();
+
+    //At presence in the writing buffer
     bool rez = (asynchWrs.find(addr) != asynchWrs.end());
+
+    //During the omitting cycles
+    if(!rez && (rez=(omitRdCycl.find(addr)!=omitRdCycl.end())) && (--omitRdCycl[addr]) <= 0)
+	omitRdCycl.erase(addr);
+
     aWrRes.unlock();
 
     return rez;
@@ -987,6 +998,11 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/TM_REQ",EVAL_STR,RWRWR_,"root",SDAQ_ID,1,
 	    "help",_("Individual connection timeout for the device polled by this task.\n"
 		    "For zero value, the total connection timeout is used from the used output transport."));
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/WR_OMIT_CYCL_RD",EVAL_STR,RWRWR_,"root",SDAQ_ID,1,
+	    "help",_("Can be useful for PLC which applying the changes not fast "
+		     "and they are processed in some significant time depending on the PLC load.\n"
+		     "So, the cycles value then specifies count of the omitting read cycles "
+		     "before reading back the changed value, preventing the value twinkle."));
 	return;
     }
 
@@ -1474,7 +1490,7 @@ void TMdPrm::vlGet( TVal &val )
 	if(owner().tmDelay > -1) val.setS(owner().getStatus(), 0, true);
 	else if(acqErr.getVal().size()) val.setS(acqErr.getVal(), 0, true);
 	else if(lCtx && lCtx->idErr >= 0) val.setS(lCtx->getS(lCtx->idErr), 0, true);
-	else val.setS("0",0,true);
+	else val.setS("0", 0, true);
     }
 }
 

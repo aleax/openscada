@@ -30,7 +30,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 3.6 </td>
+<td> 3.7 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -272,7 +272,7 @@
 <h3><span class="mw-headline" id=".D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="mw-headline-number">3.1</span> Объект контроллера</span></h3>
 <p>Для добавления источника данных ModBus создаётся и конфигурируется объект контроллера OpenSCADA. Пример вкладки конфигурации объекта контроллера данного типа изображен на рисунке 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_cntr.png"><img class="thumbimage" height="909" src="../../en/files/ModBus_cntr.png" width="773" /></a>  <div class="thumbcaption">Рис.8. Вкладка конфигурации объекта контроллера.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:845px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_cntr.png"><img class="thumbimage" height="936" src="../../en/files/ModBus_cntr.png" width="843" /></a>  <div class="thumbcaption">Рис.8. Вкладка конфигурации объекта контроллера.</div></div></div></div>
 <p>Using this tab you can set:
 </p>
 <ul><li> The state of the controller object, as follows: Status, "Enabled", "Running" and the name of the database containing the configuration.</li></ul>
@@ -290,8 +290,9 @@
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Installing of this parameter must be approached with caution, since not all devices support access to the registers between fragments.</dd></dl>
 <ul><li> Using the multi-items writing functions (<b>15</b>, <b>16</b>). Instead one-item writing will be used the multi-items functions.</li>
 <li> Asynchronous write. Enables asynchronously writing of the changes to the controller, in the general acquisition cycle and after the data acquisition itself, blocking of reading the written values on one cycle (before the writing buffer clearing).</li></ul>
-<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> This mode also prevents for lost the writing data at the connection lost and the wrote data will be transmitted just the connection will be restored. At that, this blocks the reading of the just written data to allow the PLC time to accept changes.</dd></dl>
-<ul><li> Timeout of connection in milliseconds. Specifies the time interval during which the answer is expected. If there is zero waiting time the transport waiting time by default is used. Allows taking into account individual properties of the controller in the common network.</li>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> This mode also prevents for lost the writing data at the connection loss and the wrote data will be transmitted just the connection will be restored.</dd></dl>
+<ul><li> Omit cycles for read back of written. Can be useful for PLC which applying the changes not fast and they are processed in some significant time depending on the PLC load. So, the cycles value then specifies count of the omitting read cycles before reading back the changed value, preventing the value twinkle.</li>
+<li> Timeout of connection in milliseconds. Specifies the time interval during which the answer is expected. If there is zero waiting time the transport waiting time by default is used. Allows taking into account individual properties of the controller in the common network.</li>
 <li> Timeout of restore in seconds. Specifies the time interval after which the re-attempt of the request to previously inaccessible device is done.</li>
 <li> Request tries for the protocols RTU and ASCII. Indicates the number of attempts by the repetition of the request in case of incomplete or damaged answer.</li>
 <li> Maximum size of the request block in bytes, useful for controllers with such limits.</li></ul>

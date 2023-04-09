@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.11.6"
+#define MOD_VER		"2.12.0"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -871,8 +871,19 @@ void TMdContr::messSet( const string &mess, int lev, const string &type2Code, co
     if(mMessLev.getI() < 0 || prm.empty() || type2Code.size() < 2) return;
 
     AutoHD<TMdPrm> sprm;
-    if((sprm=SYS->daq().at().prmAt(DAQPath()+"."+prm,'.',true)).freeStat() && (sprm=nodeAt(prm,0,'.',0,true)).freeStat())
-	return;
+
+    //Marking the last item as a possible attribute
+    int aOff = prm.size(); TSYS::strParseEnd(prm, 0, ".", &aOff);
+
+    //Checking for just a parameter
+    if(!(sprm=SYS->daq().at().prmAt(DAQPath()+"."+prm,'.',true)).freeStat() || !(sprm=nodeAt(prm,0,'.',0,true)).freeStat())
+	aOff = -1;
+    // and an attribute
+    else if(!SYS->daq().at().attrAt(DAQPath()+"."+prm,'.',true).freeStat())
+	sprm = SYS->daq().at().prmAt(DAQPath()+"."+prm.substr(0,aOff+1), '.', true);
+    else if(!AutoHD<TVal>(nodeAt(prm,0,'.',0,true)).freeStat())
+	sprm = nodeAt(prm.substr(0,aOff+1), 0, '.', 0, true);
+    if(sprm.freeStat())	return;
 
     //Sending the message to the remote stations
     string scntr;
@@ -883,7 +894,7 @@ void TMdContr::messSet( const string &mess, int lev, const string &type2Code, co
 
 	    int tOff = 0; TSYS::pathLev(sprm.at().prmAddr(), 1, true, NULL, &tOff);
 	    string  dModCntr = sprm.at().prmAddr().substr(0, tOff),
-		    dPrm = sprm.at().prmAddr().substr(tOff);
+		    dPrm = sprm.at().prmAddr().substr(tOff) + ((aOff>0)?"/"+prm.substr(aOff+2):"");
 	    XMLNode req("set");
 	    req.setAttr("path", "/"+scntr+"/DAQ/"+dModCntr+"%2fserv%2fmess")->
 		setAttr("type2Code", type2Code.substr(0,type2Code.size()-2)+(SYS->prjNm().size()?SYS->prjNm():SYS->id())+"("+id()+"):"+type2Code.substr(type2Code.size()-2))->
