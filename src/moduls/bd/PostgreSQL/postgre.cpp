@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.0.6"
+#define MOD_VER		"3.1.0"
 #define AUTHORS		trS("Roman Savochenko, Maxim Lysenko (2010-2011)")
 #define DESCRIPTION	trS("DB module. Provides support of the DBMS PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -242,7 +242,7 @@ TTable *MBD::openTable( const string &inm, bool icreate )
 
 void MBD::create( const string &nm, bool toCreate )
 {
-    vector< vector<string> > tbl;
+    /*vector< vector<string> > tbl;
     sqlReq("SELECT count(*) "
 	  "FROM pg_catalog.pg_class c "
 	    "JOIN pg_catalog.pg_roles r ON r.oid = c.relowner "
@@ -253,7 +253,13 @@ void MBD::create( const string &nm, bool toCreate )
 	    "AND pg_catalog.pg_table_is_visible(c.oid) "
 	    "AND c.relname = '" + TSYS::strEncode(nm,TSYS::SQL,"'") + "'", &tbl);
     if(toCreate && tbl.size() == 2 && tbl[1][0] == "0")
+	sqlReq("CREATE TABLE \"" + TSYS::strEncode(nm,TSYS::SQL,"\"")+ "\"(\"<<empty>>\" character(20) NOT NULL DEFAULT '' PRIMARY KEY)");*/
+
+    try { sqlReq("SELECT * FROM \"" + TSYS::strEncode(nm,TSYS::SQL,"\"") + "\" LIMIT 0;"); }
+    catch(...) {
+	if(!toCreate) throw;
 	sqlReq("CREATE TABLE \"" + TSYS::strEncode(nm,TSYS::SQL,"\"")+ "\"(\"<<empty>>\" character(20) NOT NULL DEFAULT '' PRIMARY KEY)");
+    }
 }
 
 void MBD::getStructDB( const string &nm, vector<TTable::TStrIt> &tblStrct )
@@ -447,7 +453,6 @@ rep:
     rqTm = 1e-6*(SYS->curTime()-tmBeg); rqTmAll += rqTm;
     if(rqTm > rqTmMax) rqTmMaxVl = req;
     rqTmMax = vmax(rqTmMax, rqTm); rqTmMin = vmin(rqTmMin, rqTm);
-
 }
 
 void MBD::cntrCmdProc( XMLNode *opt )
@@ -537,7 +542,7 @@ void MTable::fieldStruct( TConfig &cfg )
 
 void MTable::fieldFix_( TConfig &cfg, const string &ilangLs, bool recurse )
 {
-    if(tblStrct.empty()) throw err_sys(_("Table is empty."));
+    //if(tblStrct.empty()) throw err_sys(_("Table is empty."));
 
     bool appMode = cfg.reqKeys() || (cfg.incomplTblStruct() && !isEmpty());	//Only for append no present fields
 
@@ -651,7 +656,7 @@ void MTable::fieldFix_( TConfig &cfg, const string &ilangLs, bool recurse )
 	    owner().sqlReq("DROP TABLE \"" + TSYS::strEncode(name(),TSYS::SQL,"\"")+ "\"");
 	    owner().create(name(), true);
 	    owner().getStructDB(name(), tblStrct);	//Update the table structure information
-	    fieldFix_(cfg, langLs, true);
+	    fieldFix_(cfg, ilangLs, true);
 	}
     }
 }

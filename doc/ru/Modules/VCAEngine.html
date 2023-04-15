@@ -3325,11 +3325,11 @@ Deprecated, but supported, the API is represented by a group of functions direct
 <dl><dd><b><u>Obtaining the project list expanded by some options</u></b><br /></dd>
 <dd>REQ: <i>&lt;get path="/UI/VCAEngine/[%2fbr%2fprj_|%2fprm%2fcfg%2fprj]" chkUserPerm="<b>{chkUserPerm}</b>" getChPgN="<b>{getChPgN}</b>" noName="<b>{noName}</b>" /&gt;</i>
 <ul><li> <i>chkUserPerm</i> — checking for the user permition before listing [0|1];</li>
-<li> <i>getChPgN</i> — requesting for quantity of the child pages in the progects [0|1];</li>
+<li> <i>getChPgN</i> — requesting for quantity of the child pages in the projects [0|1];</li>
 <li> <i>noName</i> — do not return for names of the pages [0|1].</li></ul></dd>
 <dd>RESP: <i>&lt;get path="/UI/VCAEngine/[%2fbr%2fprj_|%2fprm%2fcfg%2fprj]" chkUserPerm="{chkUserPerm}" getChPgN="{getChPgN}" noName="{noName}" rez="<b>0</b>"&gt;<b>{projects}</b>&lt;/get&gt;</i>
 <ul><li> <i>projects</i> — projects list in the tags "el", where the name is in the tag text and the identifier in the attribute "id". Expanded by the extra attributes:
-<ul><li> "chPgN" — quantity of the child pages in the progect at setting "getChPgN".</li></ul></li></ul></dd></dl>
+<ul><li> "chPgN" — quantity of the child pages in the project at setting "getChPgN".</li></ul></li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">getChPgN=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fbr%2fprj_"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">chPgN=</span><span class="s">"2"</span> <span class="na">id=</span><span class="s">"AGLKS"</span><span class="nt">&gt;</span>AGLKS<span class="nt">&lt;/el&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">chPgN=</span><span class="s">"2"</span> <span class="na">id=</span><span class="s">"archBrowser"</span><span class="nt">&gt;</span>Archives browser<span class="nt">&lt;/el&gt;</span>
@@ -3341,9 +3341,29 @@ Deprecated, but supported, the API is represented by a group of functions direct
 <ul><li> <i>proj</i> — identifier of the project.</li></ul></dd>
 <dd>RESP: <i>&lt;read path="/UI/VCAEngine/prj_{proj}/%2fserv%2faccess" rez="<b>0</b>"&gt;<b>{access}</b>&lt;/get&gt;</i>
 <ul><li> <i>access</i> — the access presence status [0|1].</li></ul></dd></dl>
+<p>&lt;/translate&gt;
+</p>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;read</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/prj_AGLKS/%2fserv%2faccess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/read&gt;</span>
 </pre></div>
-<p><b><u>The project sessions</u></b><br />
+<p>&lt;translate&gt;
+<b><u>The project sessions</u></b><br />
+</p>
+<dl><dd><b><u>Obtaining the session list expanded by some options</u></b><br /></dd>
+<dd>REQ: <i>&lt;get path="/UI/VCAEngine/[%2fbr%2fses_|%2fses%2fses]" chkUserPerm="<b>{chkUserPerm}</b>" onlyMy="<b>{onlyMy}</b>" /&gt;</i>
+<ul><li> <i>chkUserPerm</i> — checking for the user permition before listing [0|1];</li>
+<li> <i>onlyMy</i> — listening only my own sessions [0|1].</li></ul></dd>
+<dd>RESP: <i>&lt;get path="/UI/VCAEngine/[%2fbr%2fses_|%2fses%2fses]" chkUserPerm="{chkUserPerm}" onlyMy="{onlyMy}" rez="<b>0</b>"&gt;<b>{sessions}</b>&lt;/get&gt;</i>
+<ul><li> <i>sessions</i> — sessions list in the tags "el", where the identifier is in the tag text. Expanded by the extra attributes:
+<ul><li> "user" — user of the session;</li>
+<li> "proj" — project of the session.</li></ul></li></ul></dd></dl>
+<p>&lt;/translate&gt;
+</p>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fses%2fses"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">onlyMy=</span><span class="s">"1"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="na">proj=</span><span class="s">"AGLKS"</span><span class="nt">&gt;</span>AGLKS<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="na">proj=</span><span class="s">"AGLKS"</span><span class="nt">&gt;</span>AGLKS0<span class="nt">&lt;/el&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
+</pre></div>
+<p>&lt;translate&gt;
 </p>
 <dl><dd><b><u>Obtaining the sessions list of the specified VCA project</u></b><br /></dd>
 <dd>REQ: <i>&lt;list path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" /&gt;</i>
@@ -3355,17 +3375,22 @@ Deprecated, but supported, the API is represented by a group of functions direct
 <span class="nt">&lt;/list&gt;</span>
 </pre></div>
 <dl><dd><b><u>Connection to the specified VCA project or the project session</u></b><br /></dd>
-<dd>REQ: <i>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" sess="<b>{session}</b>" userChange="<b>{userChange}</b>" /&gt;</i>
+<dd>REQ: <i>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" sess="<b>{session}</b>" userChange="<b>{userChange}</b>" onlyMy="<b>{onlyMy}</b>" /&gt;</i>
 <ul><li> <i>project</i> — identifier of the requested project, empty for connection to the available session;</li>
 <li> <i>session</i> — identifier of the already present session, empty at a new session creation;</li>
-<li> <i>userChange</i> — sign of the user changing [0|1], that is updation the user information.</li></ul></dd>
-<dd>RESP: <i>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" sess="<b>{session}</b>" userChange="{userChange}" rez="<b>0</b>" conId="<b>{conId}</b>" userIsRoot="<b>{userIsRoot}</b>" /&gt;</i>
+<li> <i>onlyMy</i> — sign of connection-reconnection to the session only when it is my;</li>
+<li> <i>userChange</i> — sign of the user changing [0|1] of the session, that is updation the user information.</li></ul></dd>
+<dd>RESP: <i>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" sess="<b>{session}</b>" userChange="{userChange}" onlyMy="{onlyMy}" rez="<b>0</b>" conId="<b>{conId}</b>" userIsRoot="<b>{userIsRoot}</b>" /&gt;</i>
 <ul><li> <i>conId</i> — the session connection identifier, used in next requests;</li>
 <li> <i>project</i> — the project identifier of the successfully connected session;</li>
 <li> <i>session</i> — identifier of the new created session of the successfully connected project;</li>
 <li> <i>userIsRoot</i> — the user has the root permition [0|1].</li></ul></dd></dl>
+<p>&lt;/translate&gt;
+</p>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;connect</span> <span class="na">conId=</span><span class="s">"50860885"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fsess"</span> <span class="na">prj=</span><span class="s">"AGLKS"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">sess=</span><span class="s">"AGLKS"</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="na">userIsRoot=</span><span class="s">"1"</span> <span class="nt">/&gt;</span>
 </pre></div>
+<p>&lt;translate&gt;
+</p>
 <dl><dd><b><u>Disconnection the specified VCA project session</u></b><br /></dd>
 <dd>Sessions with zero connections are closed here also.<br /></dd>
 <dd>REQ: <i>&lt;disconnect path="/UI/VCAEngine/%2fserv%2fsess" sess="<b>{session}</b>" conId="<b>{conId}</b>" /&gt;</i>
@@ -3385,12 +3410,16 @@ Deprecated, but supported, the API is represented by a group of functions direct
 <ul><li> <i>ID</i> — identifier of the page;</li>
 <li> <i>pgGrp</i> — the pages group for early calculation the page including;</li>
 <li> <i>nUpdWdgs</i> — quantity of the updated widgets after the last request and for not empty "clock".</li></ul></li></ul></dd></dl>
+<p>&lt;/translate&gt;
+</p>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;openlist</span> <span class="na">conId=</span><span class="s">"52760577"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/%2fserv%2fpg"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"1403"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;pg&gt;</span>/ses_AGLKS/pg_so<span class="nt">&lt;/pg&gt;</span>
   <span class="nt">&lt;pg</span> <span class="na">pgGrp=</span><span class="s">"so"</span><span class="nt">&gt;</span>/ses_AGLKS/pg_so/pg_1/pg_mn/pg_1<span class="nt">&lt;/pg&gt;</span>
   <span class="nt">&lt;pg</span> <span class="na">pgGrp=</span><span class="s">"cntr"</span><span class="nt">&gt;</span>/ses_AGLKS/pg_control/pg_ElCadr<span class="nt">&lt;/pg&gt;</span>
 <span class="nt">&lt;/openlist&gt;</span>
 </pre></div>
+<p>&lt;translate&gt;
+</p>
 <dl><dd><b><u>Opening or closing for the specified page of the project session</u></b><br /></dd>
 <dd>REQ[<b>{owner}-{grp}</b>]: <i>&lt;[open|close] path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2fpg" pg="<b>{page}</b>" /&gt;</i>
 <ul><li> <i>owner</i>, <i>grp</i> — writing access for the project owner or a user in group and regarding to the project permissions;</li>

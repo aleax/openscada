@@ -93,6 +93,8 @@ void TBDS::dbList( vector<string> &ls, char flg )
 	return;
     }
 
+    if(flg&LsInclGenFirst) ls.push_back("*.*");
+
     AutoHD<TBDS> dbs = SYS->db();
 
     vector<string> tdb_ls, db_ls;
@@ -102,15 +104,14 @@ void TBDS::dbList( vector<string> &ls, char flg )
 	AutoHD<TTypeBD> tbd = dbs.at().at(tdb_ls[iTp]);
 	tbd.at().list(db_ls);
 	for(unsigned iDB = 0; iDB < db_ls.size(); iDB++)
-	    if(!(flg&LsInclGenFirst) || (tdb_ls[iTp]+"."+db_ls[iDB]) != SYS->workDB())
-		sortIts.push_back(pair<int,string>(tbd.at().at(db_ls[iDB]).at().lsPr()*10+tbd.at().lsPr(),
+	    //if(!(flg&LsInclGenFirst) || (tdb_ls[iTp]+"."+db_ls[iDB]) != SYS->workDB())
+	    if((tdb_ls[iTp]+"."+db_ls[iDB]) == SYS->workDB())	ls.push_back(tdb_ls[iTp]+"."+db_ls[iDB]);
+	    else sortIts.push_back(pair<int,string>(tbd.at().at(db_ls[iDB]).at().lsPr()*10+tbd.at().lsPr(),
 						    tdb_ls[iTp]+"."+db_ls[iDB]));
     }
 
     sort(sortIts.begin(), sortIts.end());
     reverse(sortIts.begin(), sortIts.end());
-
-    if(flg&LsInclGenFirst) ls.push_back("*.*");
     for(unsigned iLs = 0; iLs < sortIts.size(); ++iLs)
 	ls.push_back(sortIts[iLs].second);
 }
@@ -1412,7 +1413,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 
 bool TTable::fieldSQLSeek( int row, TConfig &cfg, const string &cacheKey, int flags )
 {
-    if(tblStrct.empty()) throw err_sys(_("Table is empty."));
+    if(tblStrct.empty()) return false;	// throw err_sys(_("Table is empty."));
     mLstUse = SYS->sysTm();
 
     //cfg.cfgToDefault();	//reset the not key and viewed fields
@@ -1498,7 +1499,7 @@ void TTable::fieldSQLGet( TConfig &cfg )
 {
     vector< vector<string> > tbl;
 
-    if(tblStrct.empty()) throw err_sys(_("Table is empty."));
+    if(tblStrct.empty()) return; //throw err_sys(_("Table is empty."));
     mLstUse = SYS->sysTm();
 
     string sid, req_where, first_key, ls;
@@ -1548,7 +1549,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
 
     vector< vector<string> > tbl;
 
-    if(tblStrct.empty()) throw err_sys(_("Table is empty."));
+    //if(tblStrct.empty()) throw err_sys(_("Table is empty."));
     mLstUse = SYS->sysTm();
 
     string sid, req_where;

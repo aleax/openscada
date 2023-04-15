@@ -1,3 +1,21 @@
+2023-04-15 Roman (stable)
+- FIX:SYS: The static messages translation function improved in omitting empty messages for the binary strings
+    with only zero symbols.
+- !!:FIX:DB,DB.PostgreSQL: Processing the table emptiness some softened during problems in DB.PostgreSQL about that,
+	that is no exception generated now.
+    !!:FIX:DB.PostgreSQL: Switched to the standard way of detection the missing Tables with it creation at "toCreate"
+	and the exceptions generating else, so preventing the message "Table is empty.".
+- DB: The DBs listing function appended of placing the "Work DB" on the top always, as the most priority one.
+- DAQ.ModBus: The syntax highlight rules appended also by the true rules of highlighting bits in the form "R_b:123.12".
+- !:FIX:Protocol.UserProtocol: Appended by releasing the User Node functions at the disable.
+    Fixed-adapted for the dynamic translation of the IO names.
+- FIX:UI.QTCfg: Restored in positioning at the navigation tree search.
+- UI.VCAEngine: The control request "connect:/serv/sess" appended by the attribute "onlyMy" for connection only
+    to own sessions, and the request "get:/ses/ses" appended by the same attribute for listing only own ones.
+- FIX:UI.Vision: The User login dialog appended of clearing the password field in the not auto login mode.
+- !:UI.WebVision: Improved in processing the connections of the ordinal users to own VCA-sessions.
+
+
 2023-04-09 Roman (stable)
 - FIX:LibsDB.vcaBase: Finishing the word "Quittance" fixing to Quietance.
 - FIX:wlb_doc.docUsersSet: Appended by encoding the value fields also, due to there can be not just digits now.

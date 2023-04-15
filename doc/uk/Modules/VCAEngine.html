@@ -3345,6 +3345,19 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 </pre></div>
 <p><b><u>Сеанси проєктів</u></b><br />
 </p>
+<dl><dd><b><u>Отримання переліку сеансів розширене деякими параметрами</u></b><br /></dd>
+<dd>REQ: <i>&lt;get path="/UI/VCAEngine/[%2fbr%2fses_|%2fses%2fses]" chkUserPerm="<b>{chkUserPerm}</b>" onlyMy="<b>{onlyMy}</b>" /&gt;</i>
+<ul><li> <i>chkUserPerm</i> — перевірка прав користувача перед доданням до переліку [0|1];</li>
+<li> <i>onlyMy</i> — додавати до переліку лише мої власні сеанси [0|1].</li></ul></dd>
+<dd>RESP: <i>&lt;get path="/UI/VCAEngine/[%2fbr%2fses_|%2fses%2fses]" chkUserPerm="{chkUserPerm}" onlyMy="{onlyMy}" rez="<b>0</b>"&gt;<b>{sessions}</b>&lt;/get&gt;</i>
+<ul><li> <i>sessions</i> — перелік сеансів у тегах "el", де ідентифікатор у тексті тегу. Розширено додатковими атрибутами:
+<ul><li> "user" — користувач сеансу;</li>
+<li> "proj" — проєкт сеансу.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fses%2fses"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">onlyMy=</span><span class="s">"1"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="na">proj=</span><span class="s">"AGLKS"</span><span class="nt">&gt;</span>AGLKS<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="na">proj=</span><span class="s">"AGLKS"</span><span class="nt">&gt;</span>AGLKS0<span class="nt">&lt;/el&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
+</pre></div>
 <dl><dd><b><u>Отримання переліку сеансів визначеного проєкту СВУ</u></b><br /></dd>
 <dd>ЗАП: <i>&lt;list path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" /&gt;</i>
 <ul><li> <i>project</i> — ідентифікатор запитаного проєкту.</li></ul></dd>
@@ -3355,11 +3368,12 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <span class="nt">&lt;/list&gt;</span>
 </pre></div>
 <dl><dd><b><u>Підключення до визначеного проєкту СВУ або сеансу проєкту</u></b><br /></dd>
-<dd>ЗАП: <i>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" sess="<b>{session}</b>" userChange="<b>{userChange}</b>" /&gt;</i>
+<dd>ЗАП: <i>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" sess="<b>{session}</b>" userChange="<b>{userChange}</b>" onlyMy="<b>{onlyMy}</b>" /&gt;</i>
 <ul><li> <i>project</i> — ідентифікатор запитаного проєкту, порожнє при підключені до наявного сеансу;</li>
 <li> <i>session</i> — ідентифікатор вже наявного сеансу, порожнє для створення нового сеансу;</li>
+<li> <i>onlyMy</i> — ознака підключення-перепідключення до сеансу лише якщо він мій;</li>
 <li> <i>userChange</i> — ознака зміни користувача [0|1], тобто для оновлення інформації користувача.</li></ul></dd>
-<dd>ВІДП: <i>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" sess="<b>{session}</b>" userChange="{userChange}" rez="<b>0</b>" conId="<b>{conId}</b>" userIsRoot="<b>{userIsRoot}</b>" /&gt;</i>
+<dd>ВІДП: <i>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" sess="<b>{session}</b>" userChange="{userChange}" onlyMy="{onlyMy}" rez="<b>0</b>" conId="<b>{conId}</b>" userIsRoot="<b>{userIsRoot}</b>" /&gt;</i>
 <ul><li> <i>conId</i> — ідентифікатор підключення сеансу, використовується у подальших запитах;</li>
 <li> <i>project</i> — ідентифікатор проєкту успішно підключеного сеансу;</li>
 <li> <i>session</i> — ідентифікатор новоствореного сеансу успішно підключеного проєкту;</li>

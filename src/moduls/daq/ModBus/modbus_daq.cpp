@@ -1569,7 +1569,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("rule")->setAttr("expr","^#[^\n]*")->setAttr("color","gray")->setAttr("font_italic","1");
 	opt->childAdd("rule")->setAttr("expr","^(CI?|RI?_b1[0-5]|RI?_b[0-9]?|RI?_i[248]?|RI?_u[24]?|RI?_[fd]|RI?_s[^:]*|RI?)")->setAttr("color","darkorange");
 	XMLNode *g0 = opt->childAdd("rule")->setAttr("expr","(?<=:).*");
-	    g0->childAdd("rule")->setAttr("expr","^(0?[xX]?[0-9a-fA-F]*)(\\.[0-7]|,(0?[xX]?[0-9a-fA-F]*),?(0?[xX]?[0-9a-fA-F]*),?(0?[xX]?[0-9a-fA-F]*)|)")->setAttr("color","blue");
+	    g0->childAdd("rule")->setAttr("expr","^(0?[xX]?[0-9a-fA-F]*)(\\.1[0-5]|\\.[0-9]|,(0?[xX]?[0-9a-fA-F]*),?(0?[xX]?[0-9a-fA-F]*),?(0?[xX]?[0-9a-fA-F]*)|)")->setAttr("color","blue");
 	    XMLNode *g1 = g0->childAdd("rule")->setAttr("expr","(?<=:).*");
 		g1->childAdd("rule")->setAttr("expr","[rws~e]*(?<!:)")->setAttr("color","red");
 		XMLNode *g2 = g1->childAdd("rule")->setAttr("expr","(?<=:).*");
