@@ -874,7 +874,8 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 string TMess::I18N( const string &imess, const char *mLang, const char *d_name )
 {
 #ifdef HAVE_LIBINTL_H
-    if(imess.empty()) return "";
+    if(imess.empty() || (TSYS::strParse(imess,0,string(1,0)).empty() && TSYS::strParse(imess,1,string(1,0)).empty()))
+	return "";
     if(TSYS::strParse(imess,2,string(1,0)).size()) return imess;	//That is a dynamic data changing message - pass
 
     int doff = 0;

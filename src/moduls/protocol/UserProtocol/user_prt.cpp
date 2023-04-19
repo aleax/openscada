@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.UserProtocol file: user_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.5.11"
+#define MOD_VER		"1.5.13"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -600,7 +600,11 @@ void UserPrt::setEnable( bool vl )
 
 	//Load IO
 	loadIO();
-    } else cleanLnks(true);
+    }
+    else {
+	cleanLnks(true);
+	setFunc(NULL);
+    }
 
     mEn = vl;
 }
@@ -732,7 +736,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 
 		for(int id = 0; id < func()->ioSize(); id++) {
 		    if(nId)	nId->childAdd("el")->setText(func()->io(id)->id());
-		    if(nNm)	nNm->childAdd("el")->setText(func()->io(id)->name());
+		    if(nNm)	nNm->childAdd("el")->setText(trD(func()->io(id)->name()));
 		    if(nType)	nType->childAdd("el")->setText(i2s(func()->io(id)->type()));
 		    if(nVal)	nVal->childAdd("el")->setText(getS(id));
 		}

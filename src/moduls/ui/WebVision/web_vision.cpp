@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"6.8.2"
+#define MOD_VER		"6.8.3"
 #define AUTHORS		trS("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	trS("Visual operation user interface, based on the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -389,10 +389,10 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 			TSYS::strMess(_("Welcome \"%s (%s)\"!"),SYS->security().at().usrAt(ses.user).at().descr().c_str(),("<a href='/login/" MOD_ID "'>"+ses.user+"</a>").c_str())+
 			"</th></tr>\n";
 
-		// Get present sessions list
+		// Getting the present sessions list
 		string self_prjSess, prjSesEls = "";
 		XMLNode req("get");
-		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
+		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1")->setAttr("onlyMy", ses.isRoot()?"0":"1");
 		cntrIfCmd(req, ses);
 		ResAlloc sesRes(mSesRes, false);
 		for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
@@ -536,11 +536,15 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		    }
 
 		    // Try to connect the VCA-session at missing the Web-session
-		    if(vs.freeStat() && !ses.prm.size() && ses.isRoot()) {
+		    if(vs.freeStat() && !ses.prm.size()) {	//!!!! Any user can to try the VCA-session connect otherwise ordinal users
+								//     will get the local sessions in the list but cannot connect to them
 			XMLNode req("get"); req.setAttr("path", ses.url+"/%2fobj%2fst%2fen");
 			//  Connecting and creation a new Web-session for the VCA-session
 			if(!cntrIfCmd(req,ses) && s2i(req.text())) {
-			    req.setName("connect")->setAttr("path", "/%2fserv%2fsess")->setAttr("sess", sesnm)->setAttr("remoteSrcAddr", sender);
+			    req.setName("connect")->setAttr("path", "/%2fserv%2fsess")->
+						    setAttr("sess", sesnm)->
+						    setAttr("remoteSrcAddr", sender)->
+						    setAttr("onlyMy", ses.isRoot()?"0":"1");
 			    if(cntrIfCmd(req,ses)) {
 				page = messPost(req.attr("mcat").c_str(), req.text().c_str(), TWEB::Error);
 				return;

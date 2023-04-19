@@ -494,10 +494,10 @@ msgid "<EVAL>"
 msgstr "<EVAL>"
 
 msgid "On"
-msgstr "Вкл"
+msgstr "Да"
 
 msgid "Off"
-msgstr "Выкл"
+msgstr "Нет"
 
 msgid "Applying the changes"
 msgstr "Принятие изменений"

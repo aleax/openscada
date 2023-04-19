@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.11.2"
+#define MOD_VER		"7.11.3"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -682,6 +682,9 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		throw TError(nodePath().c_str(),_("Connecting to the session is not permitted for '%s'."),opt->attr("user").c_str());
 	    // Connect to present session
 	    if(!sess.empty()) {
+		if(s2i(opt->attr("onlyMy")) && opt->attr("user") != sesAt(sess).at().user())
+		    throw TError(nodePath().c_str(), _("That is not my session."));
+
 		opt->setAttr("conId", i2s(sesAt(sess).at().connect(s2i(opt->attr("userChange")))));
 		opt->setAttr("prj", sesAt(sess).at().projNm());
 		if(s2i(opt->attr("userChange"))) {
@@ -833,10 +836,12 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    vector<string> lst;
 	    sesList(lst);
 	    bool chkUserPerm = s2i(opt->attr("chkUserPerm"));
+	    bool onlyMy = s2i(opt->attr("onlyMy"));
 	    for(unsigned iA = 0; iA < lst.size(); iA++) {
 		if(chkUserPerm) {
 		    AutoHD<Project> prj = sesAt(lst[iA]).at().parent();
-		    if(!SYS->security().at().access(opt->attr("user"),SEC_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()))
+		    if(!SYS->security().at().access(opt->attr("user"),SEC_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()) ||
+			    (onlyMy && opt->attr("user") != sesAt(lst[iA]).at().user()))
 			continue;
 		}
 		opt->childAdd("el")->setAttr("user",sesAt(lst[iA]).at().user())->

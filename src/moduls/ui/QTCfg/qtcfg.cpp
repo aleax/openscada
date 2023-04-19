@@ -693,7 +693,7 @@ void ConfApp::treeSearch( )
 	else if(QString(TSYS::pathLevEnd(pi->child(iC)->text(2).toStdString(),0).c_str()).contains(wvl,Qt::CaseInsensitive)) break;
     }
     if(iC < pi->childCount()) {
-	pi->treeWidget()->setCurrentItem(pi->child(iC));//, 0, QItemSelectionModel::Clear|QItemSelectionModel::Select);
+	pi->treeWidget()->setCurrentItem(pi->child(iC), 0, QItemSelectionModel::Clear|QItemSelectionModel::Select);
 	pi->treeWidget()->scrollTo(pi->treeWidget()->currentIndex());
     }
     else if(fromCur) { sl->setModified(true); treeSearch(); }

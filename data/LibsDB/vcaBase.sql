@@ -12497,7 +12497,7 @@ if(((cnt++)%(f_frq*1) == 0 || f_start || toUpdate) && !f_stop) {
 	items += "<h><s width=''0px''>ID</s>";
 	for(vC = "", off = 0; (vC=colms.parse(0,",",off)).length; )
 		if(vC == "atm")			items += "<s>"+tr("Alarm time")+"</s>";
-		else if(vC == "qttm")	items += "<s>"+tr("Quittance time")+"</s>";
+		else if(vC == "qttm")	items += "<s>"+tr("Quietance time")+"</s>";
 		else if(vC == "lev")	items += "<s>"+tr("Lev.")+"</s>";
 		else if(vC == "type")	items += "<s align=''center''>"+tr("Type")+"</s>";
 		else if(vC == "cat")	items += "<s>"+tr("Category")+"</s>";
@@ -12866,7 +12866,7 @@ if((((cnt++)%(f_frq*1) == 0 && !wTm) || f_start || toUpdate) && !f_stop) {
 		for(vC = "", off = 0; (vC=colms.parse(0,",",off)).length; ) {
 			tvl = ""; toEdit = false;
 			if(vC == "atm")			tvl = tr("Alarm time");
-			else if(vC == "qttm")	tvl = tr("Quittance time");
+			else if(vC == "qttm")	tvl = tr("Quietance time");
 			else if(vC == "nrmtm")	{ tvl = tr("Norm"); colVars[vC] = new Object(); }
 			else if(vC == "lev")	tvl = tr("Lev.");
 			else if(vC == "type")	tvl = tr("Type");
@@ -17239,7 +17239,7 @@ INSERT INTO Trs VALUES('Dimension','Одиниця виміру','Единица
 INSERT INTO Trs VALUES('Message','Повідомлення','Сообщение','');
 INSERT INTO Trs VALUES('(background)','(фоновий)','(фоновый)','');
 INSERT INTO Trs VALUES('Alarm time','Час сигналу','Время сигнала','');
-INSERT INTO Trs VALUES('Quittance time','Час підтвердження','Время подтверждения','');
+INSERT INTO Trs VALUES('Quietance time','Час підтвердження','Время подтверждения','');
 INSERT INTO Trs VALUES('Lev.','Рів.','Ур.','');
 INSERT INTO Trs VALUES('Category','Категорія','Категория','');
 INSERT INTO Trs VALUES('Parameter','Параметр','Параметр','');
@@ -22398,7 +22398,7 @@ Version: 1.2.0',32,'','','','!!!!: Перенесено до бібліотек�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.2.0','','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsAct','contextMenu','Quittance:qtc',32,'','','','Підтвердження:qtc','','Подтверждение:qtc','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsAct','contextMenu','Quietance:qtc',32,'','','','Підтвердження:qtc','','Подтверждение:qtc','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsAct','evProc','usr_goquiet::open:/pg_control/pg_ElCadr',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsAct','set','',8,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsAct','value','',8,'','','','','','','','','','');
@@ -22422,7 +22422,7 @@ INSERT INTO wlb_Main_io VALUES('alarmsSt','geomY','40',40,'','','alarms','','','
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomW','895',32,'','','alarms','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomH','509',40,'','','alarms','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','geomZ','15',32,'','','alarms','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsSt','contextMenu','Quittance:qtc',32,'','','alarms','Підтвердження:qtc','','Подтверждение:qtc','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsSt','contextMenu','Quietance:qtc',32,'','','alarms','Підтвердження:qtc','','Подтверждение:qtc','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','active','1',32,'','','alarms','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','elType','9',32,'','','alarms','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','value','',8,'','','alarms','','','','','','','');
@@ -28233,12 +28233,12 @@ Rows in the form "{lev}[{slev}]{quitt}:{color}:{font}:{fontColor}".',131205,'#<S
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','vHdrVis','Show header: vertical',131072,'0',8,'','','','Показувати заголовок: вертикальний','','','Показывать заголовок: вертикальный','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','hideAttrs','Attributes list of the passport to hide',131077,'',10,'<page>|paspHideAttrs','','','Перелік атрибутів паспорту для приховування','','','Перечень атрибутов паспорта для скрытия','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','name_','For save original name',131077,'',8,'','','','Для збереження оригінальної назви','','','Для сохранения исходного наименования','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsAct','com','Quittance: command',131072,'0',8,'','','','Підтвердження: команда','','','Подтверждение: команда','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsAct','digStts','Quittance: statuses',131077,'QUITT-blue',0,'','','','Підтвердження: стани','','','Подтверждение: состояния','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsAct','digComs','Quittance: commands',131077,'QUITT-blue',8,'','','','Підтвердження: команди','','','Подтверждение: команды','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsAct','st_open','Quittance: state',131072,'0',8,'','','','Підтвердження: стан','','','Подтверждение: состояние','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsAct','DESCR','Quittance: description',131077,'',8,'','','','Підтвердження: опис','','','Подтверждение: описание','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsAct','NAME','Quittance: name',131077,'',8,'','','','Підтвердження: ім''я','','','Подтверждение: имя','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsAct','com','Quietance: command',131072,'0',8,'','','','Підтвердження: команда','','','Подтверждение: команда','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsAct','digStts','Quietance: statuses',131077,'QUITT-blue',0,'','','','Підтвердження: стани','','','Подтверждение: состояния','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsAct','digComs','Quietance: commands',131077,'QUITT-blue',8,'','','','Підтвердження: команди','','','Подтверждение: команды','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsAct','st_open','Quietance: state',131072,'0',8,'','','','Підтвердження: стан','','','Подтверждение: состояние','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsAct','DESCR','Quietance: description',131077,'',8,'','','','Підтвердження: опис','','','Подтверждение: описание','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsAct','NAME','Quietance: name',131077,'',8,'','','','Підтвердження: ім''я','','','Подтверждение: имя','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','colDscrCustNames','Names list of the user fields, separated by '';''',131333,'',8,'','','','Перелік назв користувацьких полів, поділених '';''','','','Перечень наименований пользовательских полей, поделённых '';''','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','alArch','Alarms archiver, "{ArhMod}.{Arh}"',131077,'FSArch.alarms',8,'','','','Архіватор сигналів, "{ArhMod}.{Arh}"','','','Архиватор сигналов, "{ArhMod}.{Arh}"','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','colDscrCustNames','Names list of the custom fields, separated by '';''',131333,'',8,'','','','Перелік назв користувацьких полів, поділених '';''','','','Перечень наименований пользовательских полей, поделённых '';''','','','','','','');
@@ -28260,12 +28260,12 @@ Rows in the form "{lev}[{slev}]{quitt}{act}:{color}:{font}:{fontColor}".',131205
 Строки в форме "{lev}[{slev}]{quiet}{act}:{color}:{font}:{fontColor}".','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','messLim','Messages limit, quantity',131073,'1000|',8,'','','','Обмеження повідомлень, кількість','','','Ограничение сообщений, количество','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','vHdrVis','Show header: vertical',131072,'1',8,'','','','Показувати заголовок: вертикальний','','','Показывать заголовок: вертикальный','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsSt','DESCR','Quittance: description',131077,'',8,'','','alarms','Підтвердження: опис','','','Подтверждение: описание','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsSt','NAME','Quittance: name',131077,'',8,'','','alarms','Підтвердження: ім''я','','','Подтверждение: имя','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsSt','com','Quittance: command',131072,'0',8,'','','alarms','Підтвердження: команда','','','Подтверждение: команда','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsSt','digComs','Quittance: commands',131077,'QUITT-blue',8,'','','alarms','Підтвердження: команди','ПІДТВ-blue','','Подтверждение: команды','ПОДТВ-blue','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsSt','digStts','Quittance: statuses',131077,'QUITT-blue',0,'','','alarms','Підтвердження: стани','ПІДТВ-blue','','Подтверждение: состояния','ПОДТВ-blue','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsSt','st_open','Quittance: state',131072,'0',8,'','','alarms','Підтвердження: стан','','','Подтверждение: состояние','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsSt','DESCR','Quietance: description',131077,'',8,'','','alarms','Підтвердження: опис','','','Подтверждение: описание','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsSt','NAME','Quietance: name',131077,'',8,'','','alarms','Підтвердження: ім''я','','','Подтверждение: имя','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsSt','com','Quietance: command',131072,'0',8,'','','alarms','Підтвердження: команда','','','Подтверждение: команда','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsSt','digComs','Quietance: commands',131077,'QUITT-blue',8,'','','alarms','Підтвердження: команди','ПІДТВ-blue','','Подтверждение: команды','ПОДТВ-blue','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsSt','digStts','Quietance: statuses',131077,'QUITT-blue',0,'','','alarms','Підтвердження: стани','ПІДТВ-blue','','Подтверждение: состояния','ПОДТВ-blue','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsSt','st_open','Quietance: state',131072,'0',8,'','','alarms','Підтвердження: стан','','','Подтверждение: состояние','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','report','Report',131205,'',8,'','','go_report','Звіт','','','Отчёт','','','','','Извештај','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','messCat','Message category',131077,'*al*:*',8,'','','','Категорія повідомлень','','','Категория сообщений','','','','','Категорије порука','');
 INSERT INTO wlb_Main_uio VALUES('ImgLab','DESCR','Parameter: description',131077,'',10,'Parameter|DESCR','','','Параметр: опис','','','Параметр: описание','','','','','Параметар: опис','');
@@ -28570,8 +28570,8 @@ INSERT INTO wlb_doc_io VALUES('docUsersSet','tmpl','<body docProcLang="JavaLikeC
 			"<TD>"+Special.FLibSYS.strEnc2HTML(user)+"</TD>"+
 			"<TD>"+Special.FLibSYS.strEnc2HTML((tVl.length?tVl+" > ":"")+mVal.parse(0, ":"))+"</TD>"+
 			"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(1,":"))+"</TD>"+
-			"<TD>"+mVal.parse(2,":")+"</TD>"+
-			"<TD>"+mVal.parse(3,":")+"</TD>";
+			"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(2,":"))+"</TD>"+
+			"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(3,":"))+"</TD>";
 	?>
   </TR>
 </TABLE>
@@ -29056,11 +29056,11 @@ License: GPLv2',32,'','','','Документ слугує для генерац
 INSERT INTO wlb_doc_io VALUES('docUsersSet','dscr','The document is provided for generating a report of the user interruptions. The document is the dynamic type, so you can specify the data time and depth. The document commonly uses and represents the messages structure "User-operator actions". As a data source of this document is the message archive.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.8.0
+Version: 1.8.1
 License: GPLv2',32,'','','','Документ слугує для генерації звіту з втручань користувача. Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє структуру повідомлень "Дії користувача-оператора". У якості джерела даних документу виступає архів повідомлень.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.8.0
+Версія: 1.8.1
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepDay','doc','',40,'','','doc','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepMonth','doc','',40,'','','doc','','','','','','','');

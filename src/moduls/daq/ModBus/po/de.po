@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-20 10:09+0200\n"
+"POT-Creation-Date: 2023-04-08 17:49+0300\n"
 "PO-Revision-Date: 2010-10-10 23:11+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -49,6 +49,9 @@ msgstr "Verwenden Sie Multi-Artikel schreiben Funktionen (15,16)"
 
 msgid "Asynchronous write"
 msgstr "Asynchronous Rekord"
+
+msgid "Omit cycles for read back of written"
+msgstr "Zyklen zum Rücklesen des Geschriebenen auslassen"
 
 msgid "Timeout of connection, milliseconds"
 msgstr "Verbindungstimeout, Millisekunden"
@@ -98,6 +101,7 @@ msgstr "Fehler beim Transport. "
 msgid "Error the connection. "
 msgstr "Fehler beim Verbinden. "
 
+#, c-format
 msgid "Restoring in %.6g s. "
 msgstr "Wiederherstellung in %.6g sek. "
 
@@ -186,6 +190,17 @@ msgstr ""
 "Gerät.\n"
 "Bei einem Wert von Null wird das gesamte Verbindungstimeout vom verwendeten "
 "Ausgabetransport verwendet."
+
+msgid ""
+"Can be useful for PLC which applying the changes not fast and they are "
+"processed in some significant time depending on the PLC load.\n"
+"So, the cycles value then specifies count of the omitting read cycles before "
+"reading back the changed value, preventing the value twinkle."
+msgstr ""
+"Kann für PLC nützlich sein, die die Änderungen nicht schnell anwenden und sie in "
+"Abhängigkeit von der PLC-Last in erheblicher Zeit verarbeitet werden.\n"
+"Der Zyklenwert gibt dann die Anzahl der fehlenden Lesezyklen an, bevor der "
+"geänderte Wert zurückgelesen wird, wodurch das Blinken des Werts verhindert wird."
 
 msgid "11:No value received."
 msgstr "11:Kein Wert erhalten."
@@ -378,8 +393,7 @@ msgstr "Fehler der Serverantwort"
 
 #, c-format
 msgid "The response Transaction ID %d is not suitable to the request one %d."
-msgstr ""
-"Die Antworttransaktions-ID %d ist nicht für die Anforderung %d geeignet."
+msgstr "Die Antworttransaktions-ID %d ist nicht für die Anforderung %d geeignet."
 
 msgid "Not full response"
 msgstr "Nicht voll antworten"
@@ -414,8 +428,7 @@ msgid "1:%02X:Function is not supported."
 msgstr "1:%02X:Funktion wird nicht unterstützt."
 
 msgid "2:Request address is not allowed or the query range is too large."
-msgstr ""
-"2:Adresse anfordern ist nicht erlaubt oder der Abfragebereich ist zu groß."
+msgstr "2:Adresse anfordern ist nicht erlaubt oder der Abfragebereich ist zu groß."
 
 msgid "3:Illegal value of the data in the request."
 msgstr "3:Illegale Datenwert in der Anfrage."
@@ -654,3 +667,4 @@ msgid ""
 msgstr ""
 "Bietet die Implementierung von ModBus-Protokollen. ModBus/TCP, ModBus/RTU "
 "und ModBus/ASCII-Protokolle werden unterstützt."
+

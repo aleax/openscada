@@ -479,10 +479,10 @@ msgid "<EVAL>"
 msgstr "<EVAL>"
 
 msgid "On"
-msgstr "Вкл"
+msgstr "Так"
 
 msgid "Off"
-msgstr "Викл"
+msgstr "Ні"
 
 msgid "Applying the changes"
 msgstr "Прийняття змін"

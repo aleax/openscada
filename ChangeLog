@@ -1,3 +1,33 @@
+2023-04-18 Roman 0.9.6
+- FIX:LibsDB.vcaBase: Finishing the word "Quittance" fixing to Quietance.
+    FIX:wlb_doc.docUsersSet: Appended by encoding the value fields also, due to there can be not just digits now.
+- !!:FIX:DB,DB.PostgreSQL: Processing the table emptiness some softened during problems in DB.PostgreSQL about that,
+	that is no exception generated now.
+    !!:FIX:DB.PostgreSQL: Switched to the standard way of detection the missing Tables with them creation at "toCreate"
+	and the exceptions generating else, so preventing the message "Table is empty.".
+- FIX:SYS: The static messages translation function improved in omitting empty messages for the binary strings with only zero symbols.
+- DB: The DBs listing function appended of placing the "Work DB" on the top always, as the most priority one.
+- !!:DAQ.JavaLikeCalc: Expansion-finishing the object's cycle implementation "for({var} in {obj}) {body of the loop}"
+	by the possibility of pointing as the Object <obj> of the included ones through the properties or from the results.
+    !!: The constant values appended by "null" as a synonym to EVAL (EVAL_REAL).
+    All the constants appended to the syntax highlighting as the values like to "true" and "false".
+- !!:DAQ.ModBus: Appended by the parameter "Omit cycles for read back of written" for control such feature
+	apart from the asynchronous writing.
+    The syntax highlight rules appended also by the true rules of highlighting bits in the form "R_b:123.12".
+- !!:DAQ.DAQGate: The function TMdContr::messSet() of the DAQ related messages setting adapted to support attributes
+    in the parameter address for significant attributes of the generic-container parameters,
+    that is needed for the messages transmission from the up stations to the down ones.
+- !:FIX:Protocol.UserProtocol: Appended by releasing the User Node functions at the disable.
+    Fixed-adapted for the dynamic translation of the IO names.
+- FIX:UI.QTCfg: Restored in positioning at the navigation tree search.
+    Translation of the checking messages "On", "Off" changed to more suitable ones "Так", "Ні".
+- UI.VCAEngine: The control request "connect:/serv/sess" appended by the attribute "onlyMy" for connection only
+    to own sessions, and the request "get:/ses/ses" appended by the same attribute for listing only own ones.
+- FIX:UI.Vision: The User login dialog appended of clearing the password field in the not auto login mode.
+- !!:UI.WebVision: Improved in processing the connections of the ordinal users to own VCA-sessions.
+- UI.WebUser: Tooltip appended by description the property "schedCall".
+
+
 2023-03-26 Roman 0.9.6
 - !!:LibsDB.vcaBase: wlb_Main.RootPgSo: The "Notification: type 2 (TextSpeech) (notify2)" method expanded by the RHVoice support
         and appended by the builtin syntax highlight for BASH.
