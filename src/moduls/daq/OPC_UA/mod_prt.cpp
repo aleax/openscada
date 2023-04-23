@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.OPC_UA file: mod_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -881,7 +881,7 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	MtxAlloc res(secRes, true);
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR)) { mSec.push_back(UA::SecuritySetting("None",MS_None)); modif(); return; }
 	int row = s2i(opt->attr("row"));
-	if(row < 0 || row >= (int)mSec.size()) throw TError(nodePath().c_str(),_("No present selected row."));
+	if(row < 0 || row >= (int)mSec.size()) throw TError(nodePath(), _("No present selected row."));
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR)) { mSec.erase(mSec.begin()+row); modif(); return; }
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR)) {
 	    int col = s2i(opt->attr("col"));

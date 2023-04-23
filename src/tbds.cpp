@@ -418,7 +418,7 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, char f
 
     if(!db_true && !(flags&NoException)) {
 	if(dbErr.cat.empty()) throw SYS->db().at().err_sys("%s", dbErr.mess.empty() ? _("The requested entry is missing.") : dbErr.mess.c_str());
-	throw TError(dbErr.cat.c_str(), "%s", dbErr.mess.empty() ? _("The requested entry is missing.") : dbErr.mess.c_str());
+	throw TError(dbErr.cat, dbErr.mess.empty() ? _("The requested entry is missing.") : dbErr.mess);
     }
 
     return db_true;
@@ -655,7 +655,7 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, char f
 	}
     }
 
-    if(!db_true && !(flags&NoException) && !dbErr.cat.empty()) throw TError(dbErr.cat.c_str(), "%s", dbErr.mess.c_str());
+    if(!db_true && !(flags&NoException) && !dbErr.cat.empty()) throw TError(dbErr.cat, dbErr.mess);
 
     return db_true;
 }

@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.8.5"
+#define MOD_VER		"3.8.6"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -523,7 +523,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	string rcod	= TSYS::strParse(tw, 1, " ");
 	string rstr	= TSYS::strParse(tw, 2, " ");
 	if((protocol != "HTTP/1.0" && protocol != "HTTP/1.1") || rcod.empty() || rstr.empty())
-	    throw TError(nodePath().c_str(),_("Error the HTTP response"));
+	    throw TError(nodePath(), _("Error the HTTP response"));
 	io.setAttr("Protocol",protocol)->setAttr("RezCod",rcod)->setAttr("RezStr",rstr);
 
 	//Parse parameters
@@ -553,7 +553,7 @@ next_ch:
 	    (c_lng == -2 && ((int)(resp.size()-pos) < (ch_ln+5) || resp.find("\x0D\x0A",pos+ch_ln+2) == string::npos))))
 	{
 	    resp_len = tro.messIO(NULL, 0, buf, sizeof(buf));
-	    if(!resp_len) throw TError(nodePath().c_str(), _("Not full response."));
+	    if(!resp_len) throw TError(nodePath(), _("Not full response."));
 	    resp.append(buf, resp_len);
 	}
 
@@ -861,7 +861,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	//Send request to the module
 	try {
 	    AutoHD<TModule> wwwmod = SYS->ui().at().modAt(name_mod);
-	    if(wwwmod.at().modInfo("SubType") != "WWW") throw TError(nodePath().c_str(),_("No WWW subtype module found!"));
+	    if(wwwmod.at().modInfo("SubType") != "WWW") throw TError(nodePath(), _("No WWW subtype module found!"));
 	    if(s2i(wwwmod.at().modInfo("Auth")) && user.empty()) {
 		// Check for auto-login
 		user = mod->autoLogGet(sender);

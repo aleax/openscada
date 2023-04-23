@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.SSL file: modssl.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,7 +42,7 @@
 #define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.4.8"
+#define MOD_VER		"3.4.9"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.")
@@ -967,7 +967,7 @@ void TSocketOut::start( int tmCon )
 
     MtxAlloc resReq(reqRes(), true);
     if(runSt) return;
-    if(SYS->stopSignal()) throw TError(nodePath().c_str(), _("We are stopping!"));
+    if(SYS->stopSignal()) throw TError(nodePath(), _("We are stopping!"));
 
     ctx = NULL;
     ssl = NULL;
@@ -1169,7 +1169,7 @@ void TSocketOut::start( int tmCon )
 	if(sockFd >= 0) break;
     }
 
-    if(sockFd < 0) throw TError(nodePath().c_str(), "%s", aErr.c_str());
+    if(sockFd < 0) throw TError(nodePath(), aErr);
 
     } catch(TError &err) {
 	if(logLen()) pushLogMess(TSYS::strMess(_("Error connecting: %s"),err.mess.c_str()));
@@ -1226,7 +1226,7 @@ int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int ti
 
     MtxAlloc res(reqRes(), true);
 
-    if(!runSt) throw TError(nodePath().c_str(), _("Transport is not connected!"));
+    if(!runSt) throw TError(nodePath(), _("Transport is not connected!"));
 
 repeate:
     if(reqTry++ >= wAttempts)	{ mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(), _("Error requesting: %s"), err.c_str()); }
@@ -1302,7 +1302,7 @@ repeate:
 		    }
 		}
 		mLstReqTm = TSYS::curTime();
-		throw TError(nodePath().c_str(), err.c_str());
+		throw TError(nodePath(), err);
 	    }
 	    else if(kz < 0) {
 		err = TSYS::strMess("%s (%d)", strerror(errno), errno);

@@ -2465,7 +2465,7 @@ Error values for the different data types (definition):
 <li> <i>path</i> — шлях, складається безпосередньо зі шляху до вузла та адреси конкретного елемента у інформаційній структурі вузла, де адреса конкретного елементу це теж шлях, що кодується для символу "/" у "%2f" та записується останнім елементом-файлом загального шляху, наприклад — "/sub_DAQ/mod_ModBus/cntr_testTCP/%2fcntr%2fcfg%2fNAME";</li>
 <li> <i>user</i> — користувач програми від ім'я якого спрямовано запит, зазвичай ставиться автоматично;</li>
 <li> <i>text</i> — текст або результат запиту.</li></ul>
-<p>Результат запиту маркується у відповіді встановленням атрибуту <i>rez</i> в значення: 0-вдалий, 1-попередження, 2-помилка. У випадку помилки та попередження, повідомлення записується до тексту <i>text</i> тегу та атрибуту <i>mcat</i> (категорія повідомлення): <i>&lt;{req} path="{path}" user="{user}" rez="<b>2</b>" mcat="<b>/sub_DAQ/mod_BlockCalc</b>"&gt;<b>Неможливо видалити вузол</b>&lt;/{req}&gt;</i>
+<p>Результат запиту маркується у відповіді встановленням атрибуту <i>rez</i> в значення: 0-вдалий, 1-попередження, 2-помилка. У випадку помилки повідомлення записується до тексту <i>text</i> тегу та атрибуту <i>mcat</i> (категорія повідомлення) — <i>&lt;{req} path="{path}" user="{user}" rez="<b>2</b>" mcat="<b>/sub_DAQ/mod_BlockCalc</b>"&gt;<b>Неможливо видалити вузол</b>&lt;/{req}&gt;</i>. У випадку попередження повідомлення записується до атрибуту "mtxt" та атрибуту <i>mcat</i> (категорія повідомлення) зі збереженням основних даних тегу — <i>&lt;{req} path="{path}" user="{user}" rez="<b>1</b>" mcat="<b>/sub_DAQ/mod_BlockCalc</b>" mtxt="<b>Перезапустити після операції!</b>"&gt;{основні дані}&lt;/{req}&gt;</i>.
 </p><p>Запит групування "CntrReqs" обробляється на рівні API вузла та не потребує окремої обробки у користувацькому коді. Фактично, до тегу "CntrReqs" можуть включатися будь які інші запити із можливістю ієрархічного групування шляхом включення внутрішніх тегів "CntrReqs". Єдиним атрибутом цього тегу є атрибут <i>path</i>, який вказує шлях до вузла та є основою для внутрішніх запитів.
 </p>
 <div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;CntrReqs</span> <span class="na">path=</span><span class="s">"/sub_DAQ/cntr_gate"</span><span class="nt">&gt;</span>
@@ -4247,8 +4247,8 @@ Error codes (enum — TError::Codes):
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>TError( );</i> — Default-empty constructor.</li>
-<li> <i>TError( const char *cat, const char *mess, ... );</i> — Initialization of the error with the category <i>cat</i> and the message <i>mess</i> + arguments.</li>
-<li> <i>TError( int cod, const char *cat, const char *mess, ... );</i> — Initialization of the error with the <i>code</i>, the category <i>cat</i> and the message <i>mess</i> + arguments.</li></ul>
+<li> <i>TError( const char *cat, const char *mess, ... ); TError( const string &amp;icat, const string &amp;imess );</i> — Initialization of the error with the category <i>cat</i> and the message <i>mess</i> + arguments.</li>
+<li> <i>TError( int cod, const char *cat, const char *mess, ... ); TError( int icod, const string &amp;icat, const string &amp;imess );</i> — Initialization of the error with the <i>code</i>, the category <i>cat</i> and the message <i>mess</i> + arguments.</li></ul>
 <p><b>Public attributes:</b>
 </p>
 <ul><li> <i>int cod;</i> — The error code.</li>

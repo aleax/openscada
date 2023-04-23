@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.DiamondBoards file: diamond.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("Diamond DAQ boards")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.21"
+#define MOD_VER		"2.1.22"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides an access to \"Diamond Systems\" DAQ boards. Includes main support for all generic boards.")
 #define LICENSE		"GPL2"
@@ -394,7 +394,7 @@ void TMdPrm::enable( )
     if(enableStat()) return;
 
     //Check inited of Diamond API
-    if(!mod->drvInitOk()) throw TError(nodePath().c_str(),_("DSC driver is not initialized!"));
+    if(!mod->drvInitOk()) throw TError(nodePath(), _("DSC driver is not initialized!"));
     dev = mod->devs[mTP];
     if(dev.name.empty())  throw TError(nodePath().c_str(),_("Select device %d error!"),mTP);
     dev.AI = (dev.AI&0xFFFF00) | vmin(dev.AI&0xFF, s2i(modPrm("modAI",i2s(dev.AI&0xFF))));

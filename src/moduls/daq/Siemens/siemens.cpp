@@ -43,7 +43,7 @@
 #define MOD_NAME	trS("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"4.4.13"
+#define MOD_VER		"4.4.14"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -673,7 +673,7 @@ void TMdContr::connectRemotePLC( bool initOnly )
     switch(mType) {
 	case CIF_PB:
 	    if(!(owner().cif_devs[0].present||owner().cif_devs[1].present||owner().cif_devs[2].present||owner().cif_devs[3].present))
-		throw TError(nodePath().c_str(), _("No one driver or board are present."));
+		throw TError(nodePath(), _("No one driver or board are present."));
 	    break;
 	case ISO_TCP:
 	case ISO_TCP243: {
@@ -685,7 +685,7 @@ void TMdContr::connectRemotePLC( bool initOnly )
 	    MtxAlloc res1(reqAPIRes, true);
 	    _daveOSserialType fds;
 	    fds.wfd = fds.rfd = openSocket(102, addr().c_str());
-	    if(fds.rfd <= 0) throw TError(nodePath().c_str(), _("Error opening the remote PLC socket."));
+	    if(fds.rfd <= 0) throw TError(nodePath(), _("Error opening the remote PLC socket."));
 
 	    ResAlloc res2(mod->resAPI, true);
 	    di = daveNewInterface(fds, (char*)(string("IF")+id()).c_str(), 0,
@@ -697,7 +697,7 @@ void TMdContr::connectRemotePLC( bool initOnly )
 		    mess_warning(nodePath().c_str(), _("Closing the socket %d error '%s (%d)'!"), fds.wfd, strerror(errno), errno);
 		free(dc); dc = NULL;
 		free(di); di = NULL;
-		throw TError(nodePath().c_str(), _("Error connecting to the PLC."));
+		throw TError(nodePath(), _("Error connecting to the PLC."));
 	    }
 	    break;
 	}
@@ -705,7 +705,7 @@ void TMdContr::connectRemotePLC( bool initOnly )
 	case SELF_ISO_TCP:
 	    tr = SYS->transport().at().at(TSYS::strParse(addrTr(),0,".")).at().outAt(TSYS::strParse(addrTr(),1,"."));
 	    //try { tr.at().start(); }
-	    //catch(TError &err) { throw TError(nodePath().c_str(), _("Error connecting.")); }
+	    //catch(TError &err) { throw TError(nodePath(), _("Error connecting.")); }
 	    reset();
 	    break;
 	default: throw TError(nodePath().c_str(), _("The connection type '%d' is not supported."), mType);
@@ -887,7 +887,7 @@ void TMdContr::getDB( int n_db, long offset, string &buffer )
 		XMLNode req("ISO-TCP");
 		req.setAttr("id", "read")->setAttr("db", i2s(n_db))->setAttr("off", i2s(offset))->setAttr("size", i2s(buffer.size()));
 		reqService(req);
-		if(req.attr("err").size()) throw TError(s2i(req.attr("errCod")), "", "%s", req.attr("err").c_str());
+		if(req.attr("err").size()) throw TError(s2i(req.attr("errCod")), "", req.attr("err"));
 		if(req.text().size() != buffer.size()) throw TError("read", _("Size of the response data block %d != %d."), req.text().size(), buffer.size());
 		buffer.replace(0, buffer.size(), req.text());	//!!!! But assign() temporary the block size changes
 		break;
@@ -1034,7 +1034,7 @@ void TMdContr::putDB( int n_db, long offset, const string &buffer )
 		XMLNode req("ISO-TCP");
 		req.setAttr("id", "write")->setAttr("db", i2s(n_db))->setAttr("off", i2s(offset))->setText(buffer);
 		reqService(req);
-		if(req.attr("err").size()) throw TError(s2i(req.attr("errCod")), "", "%s", req.attr("err").c_str());
+		if(req.attr("err").size()) throw TError(s2i(req.attr("errCod")), "", req.attr("err"));
 		break;
 	    }
 	}
@@ -1061,11 +1061,11 @@ void TMdContr::reqService( XMLNode &io )
 	if(!isInitiated) {
 	    XMLNode req("ISO-TCP"); req.setAttr("id", "connect");
 	    protIO(req);
-	    if(!req.attr("err").empty()) throw TError(req.attr("id").c_str(), "%s", req.attr("err").c_str());
+	    if(!req.attr("err").empty()) throw TError(req.attr("id"), req.attr("err"));
 
 	    req.clear()->setAttr("id", "OpenS7Connection");
 	    protIO(req);
-	    if(!req.attr("err").empty()) throw TError(req.attr("id").c_str(), "%s", req.attr("err").c_str());
+	    if(!req.attr("err").empty()) throw TError(req.attr("id"), req.attr("err"));
 
 	    isInitiated = true;
 	}
@@ -1253,7 +1253,7 @@ void TMdContr::protIO( XMLNode &io )
 	    switch(sCd) {
 		case ISOTCP_OpenS7Connection: {
 		    if(szPrm != 8) throw TError(io.attr("id").c_str(), _("Parameters part size does not match for expected value, %d."), 8);
-		    if((int)iN(tpkt,off,1) != sCd) throw TError(io.attr("id").c_str(), _("Inconsistency of the response function."));
+		    if((int)iN(tpkt,off,1) != sCd) throw TError(io.attr("id"), _("Inconsistency of the response function."));
 		    iN(tpkt, off, 1);
 		    iN(tpkt, off, 2);
 		    iN(tpkt, off, 2);
@@ -1262,7 +1262,7 @@ void TMdContr::protIO( XMLNode &io )
 		}
 		case ISOTCP_Read: {
 		    if(szPrm != 2) throw TError(io.attr("id").c_str(), _("Parameters part size does not match for expected value, %d."), 2);
-		    if((int)iN(tpkt,off,1) != sCd) throw TError(io.attr("id").c_str(), _("Inconsistency of the response function."));
+		    if((int)iN(tpkt,off,1) != sCd) throw TError(io.attr("id"), _("Inconsistency of the response function."));
 		    iN(tpkt, off, 1);
 		    // Data part
 		    uint8_t iDErr = iN(tpkt, off, 1);
@@ -1288,7 +1288,7 @@ void TMdContr::protIO( XMLNode &io )
 		}
 		case ISOTCP_Write: {
 		    if(szPrm != 2) throw TError(io.attr("id").c_str(), _("Parameters part size does not match for expected value, %d."), 2);
-		    if((int)iN(tpkt,off,1) != sCd) throw TError(io.attr("id").c_str(), _("Inconsistency of the response function."));
+		    if((int)iN(tpkt,off,1) != sCd) throw TError(io.attr("id"), _("Inconsistency of the response function."));
 		    iN(tpkt, off, 1);
 		    // Data part
 		    uint8_t iDErr = iN(tpkt, off, 1);
@@ -1667,7 +1667,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 const char *TMdContr::iVal( const string &rb, int &off, char vSz )
 {
     off += vSz;
-    if(off > (int)rb.size()) throw TError(mod->nodePath().c_str(), "Buffer size is lesser requested value.");
+    if(off > (int)rb.size()) throw TError(mod->nodePath(), "Buffer size is lesser requested value.");
 
     return rb.data()+off-vSz;
 }
@@ -1675,7 +1675,7 @@ const char *TMdContr::iVal( const string &rb, int &off, char vSz )
 uint32_t TMdContr::iN( const string &rb, int &off, uint8_t vSz )
 {
     vSz = std::max(0, std::min((int)vSz,4));
-    if((off+vSz) > (int)rb.size()) throw TError(mod->nodePath().c_str(), "Buffer size is lesser requested value.");
+    if((off+vSz) > (int)rb.size()) throw TError(mod->nodePath(), "Buffer size is lesser requested value.");
     union { uint32_t v; char c[4]; } dt;
     dt.v = 0;
     while(vSz) dt.c[--vSz] = rb[off++];
@@ -2134,7 +2134,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     /*string a_path = opt->attr("path");
     if(a_path.compare(0,6,"/serv/") == 0) {
 	if(a_path == "/serv/tmplAttr") {
-	    if(!enableStat() || !func()) throw TError(nodePath().c_str(), _("Parameter disabled or error."));
+	    if(!enableStat() || !func()) throw TError(nodePath(), _("Parameter disabled or error."));
 	    if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 		for(int i_a = 0; i_a < ioSize(); i_a++)
 		    opt->childAdd("a")->setAttr("id",func()->io(i_a)->id())->setText(getS(i_a));

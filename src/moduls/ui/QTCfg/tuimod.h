@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: tuimod.h
 /***************************************************************************
- *   Copyright (C) 2004-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2004-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -79,7 +79,8 @@ class TUIMod: public TUI
 	QIcon icon( );
 
 	// Common
-	void postMess( const string &cat, const string &mess, MessLev type = Info, QWidget *parent = 0 );
+	void postMess( const string &cat, const string &mess, MessLev type = Info, QWidget *parent = NULL );
+	void postMessCntr( const XMLNode &reqO, QWidget *parent = NULL );
 	string setHelp( const string &help, const string &addr = "", QWidget *w = NULL );
 
     protected:

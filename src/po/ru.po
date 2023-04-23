@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-18 10:22+0200\n"
+"POT-Creation-Date: 2023-04-22 21:54+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -662,9 +662,6 @@ msgstr "Таблица - смещение, размер"
 
 msgid "Data"
 msgstr "Данные"
-
-msgid "Table is empty."
-msgstr "Таблица пуста."
 
 #, c-format
 msgid "Row \"%s\" is not present. Are you saved the object?"
@@ -2333,18 +2330,22 @@ msgstr ""
 "Фильтр источников для ограничения работы менеджера некоторыми БД, источник "
 "должен просто содержать такую подстроку."
 
+#, fuzzy
 msgid ""
 "Enable for checking the base messages translation equality in different "
 "sources\n"
 "and fixing by: propagation the translations to empty sources, clearing the "
-"double to base translations and merging the base messages as the "
-"translations."
+"double to base translations."
 msgstr ""
 "Включить проверку на предмет одинаковости перевода базового сообщения в "
 "разных источниках\n"
 "и исправление на предмет: распространения перевода на пустые источники, "
 "очистки дублирования базовых сообщений и объединения базовых сообщений как "
 "переводы."
+
+#, fuzzy
+msgid "... and fixing by merging the base messages as the translations."
+msgstr "Объединение базового сообщения с переводом '%s' для '%s' > '%s'."
 
 msgid ""
 "Pass the specified number of the table items from the top, useful for very "
@@ -2501,11 +2502,22 @@ msgid "Propagation the translation '%s' to all empty sources for '%s'.'%s'."
 msgstr "Распространение перевода '%s' на все пустые источники для '%s'.'%s'."
 
 #, c-format
+msgid ""
+"The base message '%s' is laid in the source '%s (%s)' only and that cannot "
+"be changed.\n"
+"So, remove the base message if that removed in the source code for tr() or "
+"ignore if the base is correct and it is equal to some translation."
+msgstr ""
+
+#, c-format
 msgid "Merging the base message to the translation '%s' for '%s' > '%s'."
 msgstr "Объединение базового сообщения с переводом '%s' для '%s' > '%s'."
 
 msgid "<<<Base changed>>>\n"
 msgstr "<<<База изменена>>>\n"
+
+msgid "Some fixes performed to the translation: "
+msgstr ""
 
 msgid "Transport type"
 msgstr "Тип транспорта"
@@ -3001,6 +3013,9 @@ msgstr "Имя проекта установлено в:"
 
 msgid "already started."
 msgstr "уже запущен."
+
+#~ msgid "Table is empty."
+#~ msgstr "Таблица пуста."
 
 #, c-format
 #~ msgid "<<<Translation changed>>>\n"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-18 10:22+0200\n"
+"POT-Creation-Date: 2023-04-22 21:54+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -577,9 +577,6 @@ msgid "Table offset, size"
 msgstr ""
 
 msgid "Data"
-msgstr ""
-
-msgid "Table is empty."
 msgstr ""
 
 #, c-format
@@ -1921,7 +1918,10 @@ msgstr ""
 
 msgid ""
 "Enable for checking the base messages translation equality in different sources\n"
-"and fixing by: propagation the translations to empty sources, clearing the double to base translations and merging the base messages as the translations."
+"and fixing by: propagation the translations to empty sources, clearing the double to base translations."
+msgstr ""
+
+msgid "... and fixing by merging the base messages as the translations."
 msgstr ""
 
 msgid "Pass the specified number of the table items from the top, useful for very big projects which are limited in time of the table complete processing."
@@ -2062,10 +2062,19 @@ msgid "Propagation the translation '%s' to all empty sources for '%s'.'%s'."
 msgstr ""
 
 #, c-format
+msgid ""
+"The base message '%s' is laid in the source '%s (%s)' only and that cannot be changed.\n"
+"So, remove the base message if that removed in the source code for tr() or ignore if the base is correct and it is equal to some translation."
+msgstr ""
+
+#, c-format
 msgid "Merging the base message to the translation '%s' for '%s' > '%s'."
 msgstr ""
 
 msgid "<<<Base changed>>>\n"
+msgstr ""
+
+msgid "Some fixes performed to the translation: "
 msgstr ""
 
 msgid "Transport type"

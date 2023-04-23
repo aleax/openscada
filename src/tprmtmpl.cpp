@@ -440,7 +440,7 @@ string TPrmTempl::Impl::lnkAddr( int num, bool spec ) const
 {
     MtxAlloc res(const_cast<ResMtx&>(lnkRes), true);
     map<int,SLnk>::const_iterator it = lnks.find(num);
-    if(it == lnks.end()) throw TError(obj->nodePath().c_str(), _("Error of parameter ID."));
+    if(it == lnks.end()) throw TError(obj->nodePath(), _("Error of parameter ID."));
     return spec ? it->second.addrSpec : it->second.addr;
 }
 
@@ -448,7 +448,7 @@ void TPrmTempl::Impl::lnkAddrSet( int num, const string &vl, bool spec )
 {
     MtxAlloc res(lnkRes, true);
     map<int,SLnk>::iterator it = lnks.find(num);
-    if(it == lnks.end()) throw TError(obj->nodePath().c_str(), _("Error of parameter ID."));
+    if(it == lnks.end()) throw TError(obj->nodePath(), _("Error of parameter ID."));
     if(spec)	it->second.addrSpec = vl;
     else if(it->second.addr != vl) {
 	it->second.addr = vl;
@@ -755,7 +755,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 	    string p_vl = TSYS::strParse(opt->text(), 0, " ");
 	    bool isPath = (p_vl.find("prm:") == 0);
 	    if(pC && p_vl == (isPath?TSYS::path2sepstr(pC->DAQPath(),'.'):pC->DAQPath()))
-		throw TError(obj->nodePath().c_str(),_("Error, recursive linking."));
+		throw TError(obj->nodePath(),_("Error, recursive linking."));
 	    AutoHD<TValue> prm = SYS->daq().at().prmAt(isPath?p_vl.substr(4):p_vl, isPath?0:'.', true, obj);
 
 	    for(map<int,SLnk>::iterator iL = lnks.begin(); iL != lnks.end(); ++iL)
@@ -803,7 +803,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 		//if(TSYS::strSepParse(a_vl,0,'.') == owner().owner().modId() &&
 		//	TSYS::strSepParse(a_vl,1,'.') == owner().id() &&
 		//	TSYS::strSepParse(a_vl,2,'.') == id())
-		//    throw TError(nodePath().c_str(),_("Error, recursive linking."));
+		//    throw TError(nodePath(),_("Error, recursive linking."));
 		lnkAddrSet(iIO, a_vl);
 		initLnks();
 	    }

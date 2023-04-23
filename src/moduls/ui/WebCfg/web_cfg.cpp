@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebCfg file: web_cfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2004-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.0.0"
+#define MOD_VER		"2.0.1"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the WEB-based configurator of the OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -175,13 +175,13 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 	else {
 	    ses.pg_info.setName("info");
 	    ses.pg_info.setAttr("path", ses.url)->setAttr("user", ses.user);
-	    if(cntrIfCmd(ses.pg_info)) throw TError(ses.pg_info.attr("mcat").c_str(),"%s",ses.pg_info.text().c_str());
+	    if(cntrIfCmd(ses.pg_info)) throw TError(ses.pg_info.attr("mcat"), ses.pg_info.text());
 	    ses.root = ses.pg_info.childGet(0);
 
 	    if(ses.root->name()=="img") {
 		// Transfer page image
 		XMLNode req("get"); req.setAttr("path", ses.url)->setAttr("user", ses.user);
-		if(cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(),"%s",req.text().c_str());
+		if(cntrIfCmd(req)) throw TError(req.attr("mcat"), req.text());
 		ses.page=TSYS::strDecode(req.text(),TSYS::base64);
 		page = httpHead("200 OK",ses.page.size(),string("image/")+req.attr("tp"))+ses.page;
 		return;
@@ -668,7 +668,7 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
     try {
 	ses.pg_info.setName("info");
 	ses.pg_info.setAttr("path", ses.url)->setAttr("user", ses.user);
-	if(cntrIfCmd(ses.pg_info)) throw TError(ses.pg_info.attr("mcat").c_str(),"%s",ses.pg_info.text().c_str());
+	if(cntrIfCmd(ses.pg_info)) throw TError(ses.pg_info.attr("mcat"), ses.pg_info.text());
 	ses.root = ses.pg_info.childGet(0);
 
 	// Parse post category and path to area
@@ -686,7 +686,7 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 	    else if(!(kz&0x02)) {
 		ses.pg_info.setName("info");
 		ses.pg_info.setAttr("path", ses.url)->setAttr("user", ses.user);
-		if(cntrIfCmd(ses.pg_info)) throw TError(ses.pg_info.attr("mcat").c_str(),"%s",ses.pg_info.text().c_str());
+		if(cntrIfCmd(ses.pg_info)) throw TError(ses.pg_info.attr("mcat"), ses.pg_info.text());
 		ses.root = ses.pg_info.childGet(0);
 		getHead(ses);
 		getArea(ses, *ses.root, "/");

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.AMRDevs file: da_Kontar.cpp
 /***************************************************************************
- *   Copyright (C) 2014-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2014-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -214,7 +214,7 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 		if(trsO[iT].at().conPrm("M_PLC").getI() == cntrMN) { trO = trsO[iT]; ePrm->prevTr = trO.at().id(); }
 	    }
 	}
-	if(trO.freeStat()) throw TError(p->nodePath().c_str(), _("No a propper connection from PLC."));
+	if(trO.freeStat()) throw TError(p->nodePath(), _("No a propper connection from PLC."));
 
 	//Main request prepare
 	mbap.reserve(pdu.size()+17);

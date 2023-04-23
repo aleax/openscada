@@ -1554,7 +1554,7 @@ void TMdPrm::enable()
 	if(type().name == "tp_ODOR") mDA = new B_ODOR(*this, cfg("DEV_ID").getI(), cfg("CHAN_COUNT").getI(), cfg("WITH_PARAMS").getB());
 	if(type().name == "tp_GKR") mDA = new B_GKR(*this, cfg("DEV_ID").getI(), cfg("CHAN_COUNT").getI(), cfg("WITH_PARAMS").getB());
     }
-    if(mDA == NULL) throw TError(nodePath().c_str(), _("No one device selected."));
+    if(mDA == NULL) throw TError(nodePath(), _("No one device selected."));
 
     owner().prmEn(this, true);	//Put to process
 

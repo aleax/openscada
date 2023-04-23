@@ -351,14 +351,14 @@ void Widget::setEnable( bool val, bool force )
 void Widget::linkToParent( )
 {
     if(sTrm(parentAddr()).empty() || parentAddr() == addr())
-	throw TError(nodePath().c_str(),_("Parent item is empty or equal to itself!"));
+	throw TError(nodePath(), _("Parent item is empty or equal to itself!"));
     if(!mParent.freeStat()) ;	//connected early due to the parent name/address specific
     else if(parentAddr() == "..") mParent = AutoHD<TCntrNode>(nodePrev());
     else mParent = mod->nodeAt(parentAddr());
 
     if(isLink() && dynamic_cast<Widget*>(nodePrev()) && mParent.at().addr() == ((Widget*)nodePrev())->addr()) {
 	mParent.free();
-	throw TError(nodePath().c_str(),_("Parent is identical to the owner for the link!"));
+	throw TError(nodePath(), _("Parent is identical to the owner for the link!"));
     }
 
     //Register of heritater
@@ -758,7 +758,7 @@ bool Widget::wdgPresent( const string &wdg ) const	{ return chldPresent(inclWdg,
 
 void Widget::wdgAdd( const string &wid, const string &name, const string &path, bool force )
 {
-    if(!isContainer())  throw TError(nodePath().c_str(),_("The widget is not a container!"));
+    if(!isContainer())  throw TError(nodePath(), _("The widget is not a container!"));
     if(wdgPresent(wid)) return;
 
     chldAdd(inclWdg, new Widget(wid,path));
@@ -1392,7 +1392,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 
 	bool is_pl = (a_path.substr(0,14) == "/links/lnk/pl_");
 	if(!(srcwdg.at().attrAt(nattr).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut))) {
-	    if(!is_pl) throw TError(nodePath().c_str(),_("The variable is not a link"));
+	    if(!is_pl) throw TError(nodePath(), _("The variable is not a link"));
 	    vector<string> aLs;
 	    string p_nm = TSYS::strSepParse(srcwdg.at().attrAt(nattr).at().cfgTempl(),0,'|');
 	    srcwdg.at().attrList(aLs);
@@ -1401,7 +1401,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(aLs[iA]).at().cfgTempl(),0,'|') &&
 		    !(srcwdg.at().attrAt(aLs[iA]).at().flgSelf()&Attr::CfgConst))
 		{ nattr = aLs[iA]; break; }
-	    if(iA >= aLs.size()) throw TError(nodePath().c_str(),_("The variable is not a link"));
+	    if(iA >= aLs.size()) throw TError(nodePath(), _("The variable is not a link"));
 	}
 
 	string m_prm = srcwdg.at().attrAt(nattr).at().cfgVal();

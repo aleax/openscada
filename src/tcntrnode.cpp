@@ -109,7 +109,7 @@ TError TCntrNode::err_sys( const char *fmt,  ... ) const
 	    first = false;
 	}
 
-    return TError(nodePath().c_str(), "%s", mess.c_str());
+    return TError(nodePath(), mess);
 }
 
 TError TCntrNode::err_sys( int cod, const char *fmt,  ... ) const
@@ -129,7 +129,7 @@ TError TCntrNode::err_sys( int cod, const char *fmt,  ... ) const
 	    first = false;
 	}
 
-    return TError(cod, nodePath().c_str(), "%s", mess.c_str());
+    return TError(cod, nodePath(), mess);
 }
 
 void TCntrNode::nodeDelAll( )
@@ -230,11 +230,9 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	    opt->attrDel("reforwardRedundReq");
 	}
     } catch(TError &err) {
-	if(err.cod == TError::Core_CntrWarning) opt->setAttr("rez", i2s(err.cod));
-	else opt->setAttr("rez", i2s(TError::Core_CntrError));
-	opt->childClear();
+	if(err.cod == TError::Core_CntrWarning) opt->setAttr("rez", i2s(err.cod))->setAttr("mtxt", err.mess);
+	else opt->setAttr("rez", i2s(TError::Core_CntrError))->setText(err.mess)->childClear();
 	opt->setAttr("mcat", err.cat);
-	opt->setText(err.mess);
     }
 
     opt->setAttr("path", path);
@@ -434,7 +432,7 @@ void TCntrNode::nodeCopy( const string &src, const string &dst, const string &us
 	if(idm) brReq.setAttr("id", dEl);
 	else brReq.setText(dEl);
 	dstN.at().cntrCmd(&brReq);
-	if(s2i(brReq.attr("rez")))	throw TError(brReq.attr("mcat").c_str(), brReq.text().c_str());
+	if(s2i(brReq.attr("rez")))	throw TError(brReq.attr("mcat"), brReq.text());
     }
 
     //Same copy call
@@ -615,6 +613,7 @@ string TCntrNode::storage( const string &cnt, bool forQueueOfData ) const
 void TCntrNode::setStorage( string &cnt, const string &vl, bool forQueueOfData )
 {
     dataRes().lock();
+    if(cnt.empty()) { cnt = vl; dataRes().unlock(); return; }
     string prcS = cnt, prcS_, tLn;
     dataRes().unlock();
 

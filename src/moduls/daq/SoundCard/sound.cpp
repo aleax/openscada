@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SoundCard file: sound.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_NAME	trS("Sound card")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.8.9"
+#define MOD_VER		"0.8.10"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides an access to the sound card.")
 #define LICENSE		"GPL2"
@@ -210,8 +210,8 @@ void TMdContr::start_( )
 	    if(Pa_GetDeviceInfo(i_d)->maxInputChannels && card() == Pa_GetDeviceInfo(i_d)->name)
 	    { iParam.device = i_d; break; }
     if(iParam.device < 0) throw TError(nodePath().c_str(),_("Error of the selected device '%s' or default device is not available."),card().c_str());
-    if(!numChan) throw TError(nodePath().c_str(),_("No channel is set up for acquisition."));
-    if(!smplSize) throw TError(nodePath().c_str(),_("Error setting sample type."));
+    if(!numChan) throw TError(nodePath(), _("No channel is set up for acquisition."));
+    if(!smplSize) throw TError(nodePath(), _("Error setting sample type."));
 
     iParam.channelCount = numChan;
     iParam.sampleFormat = mSmplType;
@@ -219,12 +219,12 @@ void TMdContr::start_( )
     iParam.hostApiSpecificStreamInfo = NULL;
 
     PaError err = Pa_OpenStream(&stream, &iParam, NULL, mSmplRate, 0/*mSmplRate/2*/, paClipOff, recordCallback, this);
-    if(err != paNoError) throw TError(nodePath().c_str(),"Pa_OpenStream: %s",Pa_GetErrorText(err));
+    if(err != paNoError) throw TError(nodePath().c_str(), "Pa_OpenStream: %s", Pa_GetErrorText(err));
 
     corTm = SYS->sysTm();
     firstCall = true;
     err = Pa_StartStream(stream);
-    if(err != paNoError) throw TError(nodePath().c_str(),"Pa_StartStream: %s",Pa_GetErrorText(err));
+    if(err != paNoError) throw TError(nodePath().c_str(), "Pa_StartStream: %s", Pa_GetErrorText(err));
 }
 
 void TMdContr::stop_( )
@@ -234,9 +234,9 @@ void TMdContr::stop_( )
     //Close and stop stream
     endrunReq = true;
     if(TSYS::eventWait(prcSt,false,nodePath()+"stream_stop",5))
-	throw TError(nodePath().c_str(),_("Sound stream is not stopped!"));
+	throw TError(nodePath(), _("Sound stream is not stopped!"));
     PaError err = Pa_CloseStream(stream);
-    if(err != paNoError) throw TError(nodePath().c_str(),"Pa_CloseStream: %s",Pa_GetErrorText(err));
+    if(err != paNoError) throw TError(nodePath().c_str(), "Pa_CloseStream: %s", Pa_GetErrorText(err));
 
     //Clear the process parameters list
     pHd.clear();

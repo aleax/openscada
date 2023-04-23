@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsecurity.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -144,7 +144,8 @@ void TSecurity::load_( )
 	    for(int fld_cnt = 0; TBDS::dataSeek(itLs[iIt]+"."+subId()+"_user",nodePath()+subId()+"_user",fld_cnt++,g_cfg,TBDS::UseCache); ) {
 		name = g_cfg.cfg("NAME").getS();
 		if(!usrPresent(name)) usrAdd(name, itLs[iIt]);
-		if(usrAt(name).at().DB() == itLs[iIt]) usrAt(name).at().load(&g_cfg);
+		if(usrAt(name).at().DB() == itLs[iIt] || usrAt(name).at().DB().empty())
+		    usrAt(name).at().load(&g_cfg);
 		usrAt(name).at().setDB(itLs[iIt], true);
 		itReg[name] = true;
 	    }
@@ -174,7 +175,8 @@ void TSecurity::load_( )
 	    for(int fld_cnt = 0; TBDS::dataSeek(itLs[iIt]+"."+subId()+"_grp",nodePath()+subId()+"_grp",fld_cnt++,g_cfg,TBDS::UseCache); ) {
 		name = g_cfg.cfg("NAME").getS();
 		if(!grpPresent(name)) grpAdd(name, itLs[iIt]);
-		if(grpAt(name).at().DB() == itLs[iIt]) grpAt(name).at().load(&g_cfg);
+		if(grpAt(name).at().DB() == itLs[iIt] || grpAt(name).at().DB().empty())
+		    grpAt(name).at().load(&g_cfg);
 		grpAt(name).at().setDB(itLs[iIt], true);
 		itReg[name] = true;
 	    }

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.BFN file: mod_BFN.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.27"
+#define MOD_VER		"0.6.28"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Support Big Farm Net (BFN) modules for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -449,7 +449,7 @@ void TMdContr::reqBFN(XMLNode &io)
     if(req.attr("err").empty()) {
 	XMLNode rez;
 	try { rez.load(req.text()); }
-	catch(TError &err) { throw TError(nodePath().c_str(),_("Error parsing the respond. The respond seems incomplete.")); }
+	catch(TError &err) { throw TError(nodePath(), _("Error parsing the respond. The respond seems incomplete.")); }
 	string rCod = rez.childGet("SOAP-ENV:Body")->childGet("imwlws:"+reqName+"Response")->childGet("res")->text();
 	if(s2i(rCod)) io.setAttr("err",rCod);
 	else {

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: project.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -982,7 +982,7 @@ TCntrNode &Page::operator=( const TCntrNode &node )
 	}
 
 	if(lnkErrEls.size())
-	    throw TError(Engine::NotResLnk, nodePath().c_str(), "The copying operation is terminated by the not resolved links.");
+	    throw TError(Engine::NotResLnk, nodePath(), "The copying operation is terminated by the not resolved links.");
     }
 
     return *this;
@@ -1369,7 +1369,7 @@ void Page::setEnable( bool val, bool force )
 
     if(val && !parent().freeStat() && parent().at().rootId() != "Box" && !(prjFlags()&Page::Link)) {
 	Widget::setEnable(false);
-	throw TError(nodePath().c_str(),_("As a page, only a box based widget can be used!"));
+	throw TError(nodePath(), _("As a page, only a box based widget can be used!"));
     }
 
     if(val) {
@@ -1405,7 +1405,7 @@ void Page::setEnable( bool val, bool force )
 
 void Page::wdgAdd( const string &wid, const string &name, const string &ipath, bool force )
 {
-    if(!isContainer())  throw TError(nodePath().c_str(),_("The widget is not a container!"));
+    if(!isContainer())  throw TError(nodePath(), _("The widget is not a container!"));
     if(wdgPresent(wid)) throw err_sys(_("The widget '%s' is already present!"), wid.c_str());
 
     bool toRestoreInher = false;
@@ -1472,7 +1472,7 @@ string Page::pageAdd( const string &iid, const string &name, const string &orig 
 {
     if(pagePresent(iid)) throw err_sys(_("The page '%s' is already present!"), iid.c_str());
     if(!(prjFlags()&(Page::Container|Page::Template)))
-	throw TError(Engine::NoContainer, nodePath().c_str(), _("Page is not a container or a template!"));
+	throw TError(Engine::NoContainer, nodePath(), _("Page is not a container or a template!"));
 
     string id = chldAdd(mPage, new Page(TSYS::strEncode(sTrm(iid),TSYS::oscdID),orig));
     pageAt(id).at().setName(name);
@@ -1485,7 +1485,7 @@ void Page::pageAdd( Page *iwdg )
     if(pagePresent(iwdg->id()))	delete iwdg;
     if(!(prjFlags()&(Page::Container|Page::Template))) {
 	delete iwdg;
-	throw TError(Engine::NoContainer, nodePath().c_str(), _("Page is not a container or a template!"));
+	throw TError(Engine::NoContainer, nodePath(), _("Page is not a container or a template!"));
     } else chldAdd(mPage, iwdg);
 }
 
@@ -1629,9 +1629,9 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	    nodeList(ls, "pg_");
 	    if(ls.size()) {
 		if(difFlgs&Page::Template && !(newFlgs&Page::Template))
-		    throw TError(TError::Core_CntrWarning, nodePath().c_str(), _("Consider to remove included pages linked to this page as a template due to it is not the template more!"));
+		    throw TError(TError::Core_CntrWarning, nodePath(), _("Consider to remove included pages linked to this page as a template due to it is not the template more!"));
 		if(difFlgs&Page::Container && !(newFlgs&Page::Container))
-		    throw TError(TError::Core_CntrWarning, nodePath().c_str(), _("Consider to remove included pages due to this page is not a container more!"));
+		    throw TError(TError::Core_CntrWarning, nodePath(), _("Consider to remove included pages due to this page is not a container more!"));
 	    }
 	}
     }
@@ -1721,7 +1721,7 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 
 	bool is_pl = (a_path.substr(0,14) == "/links/lnk/pl_");
 	if(!(srcwdg.at().attrAt(nattr).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut))) {
-	    if(!is_pl) throw TError(nodePath().c_str(),_("The variable is not a link"));
+	    if(!is_pl) throw TError(nodePath(), _("The variable is not a link"));
 	    vector<string> a_ls;
 	    string p_nm = TSYS::strSepParse(srcwdg.at().attrAt(nattr).at().cfgTempl(),0,'|');
 	    srcwdg.at().attrList(a_ls);
@@ -1730,7 +1730,7 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[iA]).at().cfgTempl(),0,'|') &&
 		    !(srcwdg.at().attrAt(a_ls[iA]).at().flgSelf()&Attr::CfgConst))
 		{ nattr = a_ls[iA]; break; }
-	    if(iA >= a_ls.size()) throw TError(nodePath().c_str(),_("The variable is not a link"));
+	    if(iA >= a_ls.size()) throw TError(nodePath(), _("The variable is not a link"));
 	}
 
 	string m_prm = srcwdg.at().attrAt(nattr).at().cfgVal();

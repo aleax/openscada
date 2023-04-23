@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"5.6.0"
+#define MOD_VER		"5.6.1"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -467,7 +467,7 @@ void Contr::enable_( )
 	    wfnc = TSYS::strSepParse(fnc(), 1, '.');
     if(wfnc == _("{NewFunction}")) throw TError(nodePath().c_str(), _("Enter your new function name instead '%s'!"), wfnc.c_str());
     if(lfnc.empty() || wfnc.empty() || !(mod->lbPresent(lfnc) || SYS->daq().at().tmplLibPresent(lfnc)))
-	throw TError(nodePath().c_str(),_("Function or DAQ template '%s' is not present or empty."), fnc().c_str());
+	throw TError(nodePath().c_str(), _("Function or DAQ template '%s' is not present or empty."), fnc().c_str());
 
     //Try JavaLikeCalc function
     if(mod->lbPresent(lfnc) && mod->lbAt(lfnc).at().present(wfnc))
@@ -682,7 +682,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path.find("/serv/") == 0) {
 	if(a_path == "/serv/fncAttr") {
-	    if(!startStat() || !func()) throw TError(nodePath().c_str(),_("Function is missing or not started."));
+	    if(!startStat() || !func()) throw TError(nodePath(), _("Function is missing or not started."));
 	    if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 		for(int iA = 0; iA < ioSize(); iA++)
 		    opt->childAdd("a")->setAttr("id",func()->io(iA)->id())->setText(getS(iA));
@@ -784,7 +784,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"del",isDAQTmpl?R_R_R_:RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    int row = s2i(opt->attr("row"));
 	    if(func()->io(row)->flg()&Func::SysAttr)
-		throw TError(nodePath().c_str(),_("Deleting a locked attribute is not allowed."));
+		throw TError(nodePath(), _("Deleting a locked attribute is not allowed."));
 	    ((Func *)func())->ioDel(row);
 	    modif();
 	}
@@ -794,9 +794,9 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    int row = s2i(opt->attr("row"));
 	    int col = s2i(opt->attr("col"));
 	    if((col == 0 || col == 1) && !opt->text().size())
-		throw TError(nodePath().c_str(),_("Empty value is not allowed."));
+		throw TError(nodePath(), _("Empty value is not allowed."));
 	    if(!isDAQTmpl && func()->io(row)->flg()&Func::SysAttr)
-		throw TError(nodePath().c_str(),_("Changing the locked attribute is not allowed."));
+		throw TError(nodePath(), _("Changing the locked attribute is not allowed."));
 	    switch(col) {
 		case 0:
 		    if(isDAQTmpl)	break;

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.BlockCalc file: block.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -392,7 +392,7 @@ void Block::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path.find("/serv/") == 0) {
 	if(a_path == "/serv/attr") {
-	    if(!enable() || !func()) throw TError(nodePath().c_str(),_("Block disabled or error."));
+	    if(!enable() || !func()) throw TError(nodePath(), _("Block disabled or error."));
 	    if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD) )
 		for(int iA = 0; iA < ioSize(); iA++)
 		    opt->childAdd("a")->setAttr("id",func()->io(iA)->id())->setText(getS(iA));

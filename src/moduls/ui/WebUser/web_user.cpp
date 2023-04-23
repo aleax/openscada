@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.6.1"
+#define MOD_VER		"1.6.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -262,7 +262,7 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 		return;
 	    }
 	    else if(!(uPg=defPg()).empty() && uPg != "*") up = uPgAt(uPg);
-	    else throw TError(nodePath().c_str(), _("The page is not present"));
+	    else throw TError(nodePath(), _("The page is not present"));
 	}
 
 	up.at().HTTP("GET", ses, iprt);
@@ -298,7 +298,7 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 	}
 	if(up.freeStat()) {
 	    if(!(uPg=defPg()).empty() && uPg != "*") up = uPgAt(uPg);
-	    else throw TError(nodePath().c_str(), _("The page is not present"));
+	    else throw TError(nodePath(), _("The page is not present"));
 	}
 
 	up.at().HTTP("POST", ses, iprt);

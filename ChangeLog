@@ -1,3 +1,20 @@
+2023-04-22 Roman (stable)
+- !!:LibsDB.OscadaLibs: The templates library DevLib appended by initial implementation of
+	the counters "FF LE-03MB CT (FF_LE)" and Ergomera 625(ergomera625).
+    Some automatic fixed for the translations.
+- !!!!:SYS,UI.{QTCfg,WebCfgD}: The Control Requests code TError::Core_CntrWarning expanded
+    for the warning messages pass in the attribute "mtxt" with the main data storing.
+- SYS,Security,UI.VCAEngine.Libs: Adapted to load empty objects (automaticly created) from the first source with such data,
+    when the source can be inaccessible at the main starting time.
+- !!!!:SYS: The translation page moved in the notification about fixes to pass them to the user through
+	the expanded Control Interface warnings. The flag "chkAndFix" of the translation page splitted to "chkAndFix".
+    !!!!: The TError object expanded by new constructors with the "const string &" type arguments
+	for no limiting strings and the convenience.
+    !: The function TCntrNode::setStorage() of the storages processing expanded by just replacing of the empty queue.
+- !!:UI.{QTCfg.WebCfgD}: Unified in notification the errors of the Control Interface during improvement
+    the code TError::Core_CntrWarning and QMessageBox appended of the detailed text at the message longer for 255.
+
+
 2023-04-15 Roman (stable)
 - FIX:SYS: The static messages translation function improved in omitting empty messages for the binary strings
     with only zero symbols.

@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.SelfSystem file: self.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,7 +32,7 @@
 #define MOD_NAME	trS("Own protocol of OpenSCADA")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.9.6"
+#define MOD_VER		"1.9.7"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -280,7 +280,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    return;
 	}
 
-	if(iTr >= reqTrs) throw TError(nodePath().c_str(), "%s", errTr.c_str());
+	if(iTr >= reqTrs) throw TError(nodePath(), errTr);
 
     } catch(TError &err) {
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error the request: %s"), err.mess.c_str());

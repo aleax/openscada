@@ -363,7 +363,7 @@ void Func::progCompile( )
 	buildClear();
 	workClear();
 	runSt = false;
-	throw TError(nodePath().c_str(), "%s", tErr.c_str());
+	throw TError(nodePath(), tErr);
     }
     cntrInF = mInFncs.size();
 
@@ -624,7 +624,7 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
 	    break;
 	case Reg::String: {
 	    string sval = *rez->val().s;
-	    //if(sval.size() > 255) throw TError(nodePath().c_str(),_("String-constant size is more for 255 symbols."));
+	    //if(sval.size() > 255) throw TError(nodePath(), _("String-constant size is more for 255 symbols."));
 	    prg += (uint8_t)Reg::MviS;
 	    prg.append((char*)&addr, sizeof(uint16_t));
 	    prg += (uint8_t)vmin(255, sval.size());
@@ -670,7 +670,7 @@ Reg *Func::cdMviObject( )
 
 Reg *Func::cdMviArray( int p_cnt )
 {
-    if(p_cnt > 255) throw TError(nodePath().c_str(),_("Array has more than 255 elements."));
+    if(p_cnt > 255) throw TError(nodePath(), _("Array has more than 255 elements."));
     deque<int> p_pos;
 
     //Mvi all parameters
@@ -699,7 +699,7 @@ Reg *Func::cdMviArray( int p_cnt )
 
 Reg *Func::cdMviRegExp( int p_cnt )
 {
-    if(p_cnt < 1 || p_cnt > 2) throw TError(nodePath().c_str(),_("RegExp requires one or two parameters."));
+    if(p_cnt < 1 || p_cnt > 2) throw TError(nodePath(), _("RegExp requires one or two parameters."));
 
     Reg *rg_expr = NULL;
     Reg *rg_arg  = NULL;
@@ -1139,7 +1139,7 @@ Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
 
     //if( (prm1 && !prm1->objEl() && prm1->vType(this) == Reg::String) ||
     //	(prm2 && !prm2->objEl() && prm2->vType(this) == Reg::String) )
-    //	throw TError(nodePath().c_str(),_("Built-in functions don't support the string type"));
+    //	throw TError(nodePath(), _("Built-in functions don't support the string type"));
 
     //Free parameter's registers
     if(prm1)	{ prm1 = cdMvi(prm1); p1_pos = prm1->pos(); }
@@ -1258,8 +1258,8 @@ Reg *Func::cdIntFnc( int fOff, int pCnt, bool proc )
 
 Reg *Func::cdObjFnc( Reg *obj, const string &fNm, int p_cnt )
 {
-    if(fNm.size() > 254)throw TError(nodePath().c_str(), _("Function name is longer than 254."));
-    if(p_cnt > 255)	throw TError(nodePath().c_str(), _("Object function contains more than 255 parameters."));
+    if(fNm.size() > 254)throw TError(nodePath(), _("Function name is longer than 254."));
+    if(p_cnt > 255)	throw TError(nodePath(), _("Object function contains more than 255 parameters."));
 
     Reg *rez = NULL;
     deque<int> p_pos;
@@ -1812,7 +1812,7 @@ AutoHD<TVarObj> Func::getValO( TValFunc *io, RegW &rg )
 		if(io->ioType(rg.val().io) == IO::Object) return io->getO(rg.val().io);
 	    default:	break;
 	}
-	throw TError(nodePath().c_str(),_("Obtaining an object from a non-object register"));
+	throw TError(nodePath(), _("Obtaining an object from a non-object register"));
     }
     else return getVal(io,rg).getO();
 }
@@ -1925,7 +1925,7 @@ void Func::calc( TValFunc *val )
     try {
 	ExecData dt = { SYS->sysTm(), 0 };
 	exec(val, (const uint8_t*)prg.c_str(), dt);
-	if(dt.flg&0x08) throw TError(nodePath().c_str(),_("Function is interrupted by an error"));
+	if(dt.flg&0x08) throw TError(nodePath(), _("Function is interrupted by an error"));
     } catch(...) { fRes().resRelease(); throw; }
     fRes().resRelease();
 }
@@ -2957,7 +2957,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 	    }
 	    default:
 		setStart(false);
-		throw TError(nodePath().c_str(),_("Error operation %c(%xh). Function '%s' stopped."),*cprg,*cprg,id().c_str());
+		throw TError(nodePath().c_str(), _("Error operation %c(%xh). Function '%s' stopped."), *cprg, *cprg,id().c_str());
 	}
     }
 }
@@ -3073,7 +3073,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 	    int row = s2i(opt->attr("row"));
 	    int col = s2i(opt->attr("col"));
 	    if((col == 0 || col == 1) && !opt->text().size())
-		throw TError(nodePath().c_str(),_("Empty value is not allowed."));
+		throw TError(nodePath(), _("Empty value is not allowed."));
 	    switch(col) {
 		case 0:	io(row)->setId(opt->text());	break;
 		case 1:	io(row)->setName(trDSet(io(row)->name(),opt->text()));	break;

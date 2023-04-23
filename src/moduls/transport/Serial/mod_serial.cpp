@@ -55,7 +55,7 @@
 #define MOD_NAME	trS("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.6.7"
+#define MOD_VER		"2.6.8"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	trS("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -195,7 +195,7 @@ void TTr::writeLine( int fd, const string &ln, bool noNewLn )
     string obuf = ln + (noNewLn?"":"\x0D\x0A");
     for(unsigned wOff = 0, kz = 0; wOff != obuf.size(); wOff += kz)
 	if((kz=write(fd,obuf.data()+wOff,obuf.size()-wOff)) <= 0)
-	    throw TError(mod->nodePath().c_str(),_("Error writing a line."));
+	    throw TError(mod->nodePath(), _("Error writing a line."));
     mess_debug(mod->nodePath().c_str(), _("Sent to the modem %d: '%s'."), fd, ln.c_str());
 }
 
@@ -216,7 +216,7 @@ string TTr::expect( int fd, const string& expLst, int tm )
 	FD_ZERO(&rd_fd); FD_SET(fd,&rd_fd);
 	kz = select(fd+1,&rd_fd,NULL,NULL,&tv);
 	if(kz == 0)	continue;
-	else if(kz < 0) throw TError(mod->nodePath().c_str(),_("Error reading from the serial interfaces."));
+	else if(kz < 0) throw TError(mod->nodePath(), _("Error reading from the serial interfaces."));
 	else if(FD_ISSET(fd,&rd_fd)) {
 	    rl = read(fd, buf, sizeof(buf));
 	    rez.append(buf,rl);
@@ -979,7 +979,7 @@ void TTrOut::start( int tmCon )
 		mSPI = true;
 	    else
 #endif
-		throw TError(nodePath().c_str(), "%s", tErr.c_str());
+		throw TError(nodePath(), tErr);
 	}
 	if(!mI2C && !mSPI) {
 	    tio.c_iflag = 0;
@@ -1117,10 +1117,10 @@ void TTrOut::start( int tmCon )
 		TTr::writeLine(fd,telNumb);
 		if((rez=TTr::expect(fd,mdmCnctResp()+"\n"+mdmBusyResp()+"\n"+mdmNoCarResp()+"\n"+mdmNoDialToneResp(),mdmTm())) != mdmCnctResp())
 		{
-		    if(rez == mdmBusyResp())		throw TError(nodePath().c_str(), _("Modem busy"));
-		    else if(rez == mdmNoCarResp())	throw TError(nodePath().c_str(), _("Modem no carrier"));
-		    else if(rez == mdmNoDialToneResp())	throw TError(nodePath().c_str(), _("Modem no dial tone"));
-		    else				throw TError(nodePath().c_str(), _("Modem no connected"));
+		    if(rez == mdmBusyResp())		throw TError(nodePath(), _("Modem busy"));
+		    else if(rez == mdmNoCarResp())	throw TError(nodePath(), _("Modem no carrier"));
+		    else if(rez == mdmNoDialToneResp())	throw TError(nodePath(), _("Modem no dial tone"));
+		    else				throw TError(nodePath(), _("Modem no connected"));
 		}
 		mLstReqTm = TSYS::curTime();
 		mMdmDataMode = true;
@@ -1201,7 +1201,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 
     MtxAlloc res(reqRes(), true);
 
-    if(!runSt) throw TError(nodePath().c_str(),_("Transport is not connected!"));
+    if(!runSt) throw TError(nodePath(), _("Transport is not connected!"));
 
     int wReqTm = s2i(TSYS::strParse(timings(),0,":",&off));
     wReqTm = time ? time : wReqTm;
@@ -1285,11 +1285,11 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 		for(int r_off = 0; r_off < oLen; ) {
 		    kz = read(fd, echoBuf, vmin(oLen-r_off,(int)sizeof(echoBuf)));
 		    if(kz == 0 || (kz == -1 && errno == EAGAIN)) {
-			if((TSYS::curTime()-mLstReqTm) > wCharTm*oLen*1e3) throw TError(nodePath().c_str(), _("Timeouted!"));
+			if((TSYS::curTime()-mLstReqTm) > wCharTm*oLen*1e3) throw TError(nodePath(), _("Timeouted!"));
 			sched_yield();
 			continue;
 		    }
-		    if(kz < 0 || memcmp(echoBuf,oBuf+r_off,kz) != 0) throw TError(nodePath().c_str(),_("Error reading the echo request."));
+		    if(kz < 0 || memcmp(echoBuf,oBuf+r_off,kz) != 0) throw TError(nodePath(), _("Error reading the echo request."));
 		    r_off += kz;
 		}
 	    } else tcdrain(fd);
@@ -1313,7 +1313,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 		if(logLen()) pushLogMess(_("Reading timeouted"));
 		if(wKeepAliveTm < 0 && oLen > 0 && !notStopOnProceed()) stop();
 	    }
-	    throw TError(nodePath().c_str(), _("Reading timeouted."));
+	    throw TError(nodePath(), _("Reading timeouted."));
 	}
 	else if(kz < 0) {
 	    err = TSYS::strMess("%s (%d)", strerror(errno), errno);

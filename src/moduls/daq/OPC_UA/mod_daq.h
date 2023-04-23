@@ -46,7 +46,7 @@ using namespace OPC;
 #define DAQ_NAME	trS("Client OPC-UA")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"2.6.14"
+#define DAQ_MVER	"2.6.15"
 #define DAQ_AUTOR	trS("Roman Savochenko")
 #define DAQ_DESCR	trS("Provides OPC-UA client service implementation.")
 #define DAQ_LICENSE	"GPL2"

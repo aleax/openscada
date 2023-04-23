@@ -327,14 +327,15 @@
 <li> Адаптацию к работе в окружении операционных систем QNX и MS Windows.</li></ul>
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">7</span> Обновления</span></h2>
 <h3><span class="mw-headline" id=".5B01.03.2023.5D_.D0.A8.D0.95.D0.A1.D0.A2.D0.9E.D0.95_.D0.BE.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5"><span class="mw-headline-number">7.1</span> [01.03.2023] ШЕСТОЕ обновление</span></h3>
-<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 70 bugs and appends MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2879" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
+<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 70 bugs and appends MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2883" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
 </p><p><b><u><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Automation Linux distributive of the project OpenSCADA</a></u></b><br />
 </p>
 <ul><li> updating TDE to 14.0.13;</li>
+<li> initial appending the calendar from the World Creation at which year 2023 is 7531;</li>
 <li> fixing KDesktop, TDE HW Manager, noatun, TDESVN, basket, KGpg, KPDF, disabling thumbnails for video, than appending the new patched packages "tdelibs-trinity", "tdebase-trinity", "tdegraphics-trinity", "tdesvn-trinity" and "basket-trinity" to the distributive collection;</li>
 <li> some improving and updating KCalc, holiday_ua, korganizer;</li>
 <li> complete translation to Ukrainian for KDiff3 and showfoto;</li>
-<li> appending the Debian 11 distributive by packages of RHVoice — Speech synthesizer with many voices for ten languages;</li>
+<li> appending the Debian 11,10,9 distributives by packages of RHVoice — Speech synthesizer with many voices for ten languages;</li>
 <li> translation the subproject page to Ukrainian.</li></ul>
 <p><b><u>Main WWW-resources, documentation of the project and subprojects</u></b><br />
 </p>
@@ -352,14 +353,15 @@
 <dl><dd> (<a href="#VCAProd">Productivity optimisation of the VCA interface</a>, <a href="#AssocOutTrToIn">Unification the associated output transports to the input one AND the generic output transport connection</a>, <a href="#MessTrFix">Messages Translation — fixes of the conceptual changes of the previous update</a>)</dd></dl>
 <ul><li> OpenSCADA "Transport" subsystem: 18 =&gt; <b>19</b></li></ul>
 <dl><dd> (<a href="#AssocOutTrToIn">Unification the associated output transports to the input one AND the generic output transport connection</a>)</dd></dl>
-<ul><li> DAQ.DAQGate: 2.9 =&gt; <b>2.11</b></li>
-<li> DAQ.JavaLikeCalc: 5.4 =&gt; <b>5.5</b></li>
+<ul><li> DAQ.DAQGate: 2.9 =&gt; <b>2.12</b></li>
+<li> DAQ.JavaLikeCalc: 5.4 =&gt; <b>5.6</b></li>
 <li> DAQ.LogicLev: 2.6 =&gt; <b>2.7</b></li>
-<li> {DAQ,Protocol}.ModBus: 3.4 =&gt; <b>3.6</b>, 2.9 =&gt; <b>2.10</b></li>
+<li> {DAQ,Protocol}.ModBus: 3.4 =&gt; <b>3.7</b>, 2.9 =&gt; <b>2.10</b></li>
 <li> Archive.FSArch: 3.7 =&gt; <b>3.8</b></li>
 <li> Transport.Sockets: 4.3 =&gt; <b>4.5</b></li></ul>
 <dl><dd> (<a href="#AssocOutTrToIn">Unification the associated output transports to the input one AND the generic output transport connection</a>)</dd></dl>
-<ul><li> UI.QTStarter: 5.12 =&gt; <b>5.14</b></li>
+<ul><li> BD.PostgreSQL: 3.0 =&gt; <b>3.1</b></li>
+<li> UI.QTStarter: 5.12 =&gt; <b>5.14</b></li>
 <li> UI.QTCfg: 5.9 =&gt; <b>5.12</b></li>
 <li> UI.VCAEngine: 7.8 =&gt; <b>7.11</b></li></ul>
 <dl><dd> (<a href="#VCAProd">Productivity optimisation of the VCA interface</a>)</dd></dl>
@@ -466,6 +468,7 @@
 <ul><li> FIX: Prevented from propagating the base language column of the translations table "Tr" in the SINGLE translation mode and the base language.</li>
 <li> FIX: The string EVal value "&lt;EVAL&gt;" appended as not translated one to prevent that translation in VCAEngine for NULL DB values.</li>
 <li> FIX: The translation manager prevented in the marked base changing to a human readable form at all, since that used as a key.</li>
+<li> FIX: The static messages translation function improved in omitting empty messages for the binary strings with only zero symbols.</li>
 <li> TFunction::operator=() finished in adaption to the IO name translation.</li>
 <li> Writing to the configuration in XML prevented in doubling the translated field for the configuration contexts.</li></ul></li>
 <li> FIX:DB:
@@ -510,7 +513,7 @@
 <li> DAQ::Value: The service request "get:/serv/attr" of the Control Interface prevented from clearing the "el" subtags at missing the representing attribute, them value is set to EVAL for true mark that as processed in DAQ.DAQGate and don't continue them request in each cycle.</li>
 <li> Archives-History: The value archive link type "Passive param. attribute (TVArchive::PassiveAttr)" renamed to "DAQ attribute (TVArchive::DAQAttr)". The value archive link type "Active param. attribute" renamed to "Active DAQ attribute" with that mark as DEPRECATED.</li>
 <li> Transports: The function TTransportIn::assTrO() renamed to TTransportIn::associateTrO(). The TTransportOut::isNetwork() virtual function sign moved to the TTypeTransport object with linking the old one to new one, for marking all module as the network one.</li>
-<li> UI.VCAEngine: The Control Interface request "get:/UI/VCAEngine/%2fserv%2fwlbBr" appended by not creating the empty icon tags "ico".</li></ul>
+<li> UI.VCAEngine: The Control Interface request "get:/UI/VCAEngine/%2fserv%2fwlbBr" appended by not creating the empty icon tags "ico". The request "connect:/serv/sess" appended by the attribute "onlyMy" for connection only to own sessions, and the request "get:/ses/ses" appended by the same attribute for listing only own ones.</li></ul>
 <p><i>Appends</i>:
 </p>
 <ul><li> SYS:
@@ -553,19 +556,25 @@
 <ul><li> the Base Language Name used also for obtaining the icon, so now checked: The Translated Name, the Base Language Name, ID;</li>
 <li> the icon obtaining mechanism moved in a new separated function TSYS::ico().</li></ul></li>
 <li> TRegExp: Appended by the 16 and 32 modes support by the pcre16 and pcre32 libraries respectively and only for the search() function currently.</li></ul>
+<p><b><u>DB</u></b><br />
+</p>
+<ul><li> FIX:.,PostgreSQL: Processing the table emptiness some softened during problems in DB.PostgreSQL about that, that is no exception generated now.
+<ul><li> FIX:PostgreSQL: Switched to the standard way of detection the missing Tables with them creation at "toCreate" and the exceptions generating else, so preventing the message "Table is empty.".</li></ul></li></ul>
 <p><b><u>DAQ</u></b><br />
 </p>
 <ul><li> The Logical Level linking appended by a form of the address representing as the prefixed path "prm:/node/node", so with support of the relative addressing at "." and "..":
 <ul><li> the DAQ item linking functions expanded by the base node specifying in the attribute "ndBase", for: ctrListPrmAttr(), daqAt(), prmAt(), attrAt();</li>
 <li> the implementation object TPrmTempl::Impl of the Logical Level of the DAQ-template expanded for the new linking support.</li></ul></li>
 <li> FIX: Setting the LogicalLevel links prevented from cleaning all the string after the space at the link constants "val:".</li>
-<li> ModBus: Appended by the option "e" for the register endian switch to LE for generic and BE for strings. The string extension of the registers appended by the input charset conversion.</li>
+<li> ModBus: Appended by the option "e" for the register endian switch to LE for generic and BE for strings. The string extension of the registers appended by the input charset conversion. Appended by the parameter "Omit cycles for read back of written" for control such feature apart from the asynchronous writing.</li>
 <li> FIX:DAQGate:
 <ul><li> FIX: The message categories in catsPat() of obtaining the data source messages of the Controller Object switched to generate own detailed rules of the regular expression from the specified remote controllers — to prevent very redundant messages obtaining.</li>
 <li> FIX: Improved-fixed in the Controller Alarm status formation for multiple stations, when ALARM it is at missing connection of all stations.</li>
 <li> The sync() function of the controller object rewrote completely in the "Removing remotely missed parameters" section for:
 <ul><li> processing the parameter's representing stations: removing completely for missing stations and parameters with no station;</li>
-<li> removing disabled parameters and the logical containers at the flag "Allow the automatic removal of parameters and attributes".</li></ul></li></ul></li>
+<li> removing disabled parameters and the logical containers at the flag "Allow the automatic removal of parameters and attributes".</li></ul></li>
+<li> The function TMdContr::messSet() of the DAQ related messages setting adapted to support attributes in the parameter address for significant attributes of the generic-container parameters, that is needed for the messages transmission from the up stations to the down ones.</li></ul></li>
+<li> JavaLikeCalc: Expansion-finishing the object's cycle implementation "<b>for({var} in {obj}) {body of the loop}</b>" by the possibility of pointing as the Object &lt;obj&gt; of the included ones through the properties or from the results. The constant values appended by "null" as a synonym to EVAL (EVAL_REAL).</li>
 <li> OPC_UA: Finished in the writing support through custom flags of the Standard mode and the type obtaining from IO for the Logical mode.</li></ul>
 <p><b><u>Archives-History</u></b><br />
 </p>
@@ -613,7 +622,8 @@
 <li> preventing the focus loss just after entry to the cell editing;</li>
 <li> fixing the boolean value setting at entry to the cell editing;</li>
 <li> the table refitting at growing the column string length.</li></ul></li>
-<li> The included pages closing set after several (4) row appears — to prevent of closing all pages at fast navigation.</li></ul></li>
+<li> The included pages closing set after several (4) row appears — to prevent of closing all pages at fast navigation;</li>
+<li> Improved in processing the connections of the ordinal users to own VCA-sessions.</li></ul></li>
 <li> WebUser: Expanded by a possibility of schedule the user procedures call in the service cycle, for the background processing of some data.</li></ul>
 <h3><span class="mw-headline" id=".5B22.02.2022.5D_.D0.9F.D0.AF.D0.A2.D0.9E.D0.95_.D0.BE.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5"><span class="mw-headline-number">7.2</span> [22.02.2022] ПЯТОЕ обновление</span></h3>
 <p>Это обновление <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релиза 0.9 LTS</a> исправляет около 50 ошибок и добавляет МНОЖЕСТВО улучшений с несколькими значительными-концептуальными, с которыми целиком можно ознакомиться в <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2831" rel="nofollow noreferrer noopener" target="_blank">протоколе изменений обновления</a>.

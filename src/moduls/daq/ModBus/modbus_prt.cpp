@@ -284,11 +284,11 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		//Wait tail
 		while(rez.size() < (resp_sz+6) && rez.size() < MODBUS_FRM_LIM) {
 		    resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), reqTm);
-		    if(!resp_len) throw TError(nodePath().c_str(),_("Not full response"));
+		    if(!resp_len) throw TError(nodePath(), _("Not full response"));
 		    rez.append(buf, resp_len);
 		}
 		if(rez.size() >= MODBUS_FRM_LIM)
-		    throw TError(nodePath().c_str(), (i2s(TError::Tr_ErrResponse)+":"+_("Error of the response: Too large.")).c_str());
+		    throw TError(nodePath(), i2s(TError::Tr_ErrResponse)+":"+_("Error of the response: Too large."));
 		pdu = rez.substr(7);
 	    }
 	}
@@ -1517,14 +1517,14 @@ void Node::cntrCmdProc( XMLNode *opt )
 		}
 	    }
 	    if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR)) {
-		if(enableStat()) throw TError(nodePath().c_str(),_("Turn off the node for this operation"));
+		if(enableStat()) throw TError(nodePath(), _("Turn off the node for this operation"));
 		IO *ioPrev = f->ioSize() ? f->io(f->ioSize()-1) : NULL;
 		if(ioPrev) f->ioAdd(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~TPrmTempl::LockAttr)));
 		else f->ioAdd(new IO("new",trDSet("",_("New IO")),IO::Integer,IO::Output));
 		modif();
 	    }
 	    if(ctrChkNode(opt,"ins",RWRWR_,"root",SPRT_ID,SEC_WR)) {
-		if(enableStat()) throw TError(nodePath().c_str(),_("Turn off the node for this operation"));
+		if(enableStat()) throw TError(nodePath(), _("Turn off the node for this operation"));
 		int row = s2i(opt->attr("row"));
 		IO *ioPrev = row ? f->io(row-1) : NULL;
 		if(ioPrev) f->ioIns(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~TPrmTempl::LockAttr)), row);
@@ -1532,23 +1532,23 @@ void Node::cntrCmdProc( XMLNode *opt )
 		modif();
 	    }
 	    if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR)) {
-		if(enableStat()) throw TError(nodePath().c_str(),_("Turn off the node for this operation"));
+		if(enableStat()) throw TError(nodePath(), _("Turn off the node for this operation"));
 		int row = s2i(opt->attr("row"));
 		if(f->io(row)->flg()&TPrmTempl::LockAttr)
-		    throw TError(nodePath().c_str(),_("Deleting a locked attribute is not allowed."));
+		    throw TError(nodePath(), _("Deleting a locked attribute is not allowed."));
 		f->ioDel(row);
 		modif();
 	    }
 	    if(ctrChkNode(opt,"move",RWRWR_,"root",SPRT_ID,SEC_WR)) {
-		if(enableStat()) throw TError(nodePath().c_str(),_("Turn off the node for this operation"));
+		if(enableStat()) throw TError(nodePath(), _("Turn off the node for this operation"));
 		f->ioMove(s2i(opt->attr("row")), s2i(opt->attr("to"))); modif();
 	    }
 	    if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR)) {
 		int row = s2i(opt->attr("row"));
 		string col = opt->attr("col");
-		if(enableStat() && col != "vl") throw TError(nodePath().c_str(),_("Turn off the node for this operation"));
-		if(f->io(row)->flg()&TPrmTempl::LockAttr)	throw TError(nodePath().c_str(),_("Changing a locked attribute is not allowed."));
-		if((col == "id" || col == "nm") && !opt->text().size())	throw TError(nodePath().c_str(),_("Empty value is not allowed."));
+		if(enableStat() && col != "vl") throw TError(nodePath(), _("Turn off the node for this operation"));
+		if(f->io(row)->flg()&TPrmTempl::LockAttr)	throw TError(nodePath(), _("Changing a locked attribute is not allowed."));
+		if((col == "id" || col == "nm") && !opt->text().size())	throw TError(nodePath(), _("Empty value is not allowed."));
 		if(col == "id")		f->io(row)->setId(opt->text());
 		else if(col == "nm")	f->io(row)->setName(trDSet(f->io(row)->name(),opt->text()));
 		else if(col == "tp")	f->io(row)->setType((IO::Type)s2i(opt->text()));

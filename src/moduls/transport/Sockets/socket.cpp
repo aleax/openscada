@@ -61,7 +61,7 @@
 #define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.5.4"
+#define MOD_VER		"4.5.5"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov(2014)")
 #define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -357,7 +357,7 @@ void TSocketIn::start( )
 	    break;	//OK
 	}
 
-	if(sockFd < 0) throw TError(nodePath().c_str(), "%s", aErr.c_str());
+	if(sockFd < 0) throw TError(nodePath(), aErr);
     }
     else if(type == S_UNIX) {
 	if((sockFd=socket(PF_UNIX,SOCK_STREAM,0)) == -1)
@@ -1184,7 +1184,7 @@ void TSocketOut::start( int itmCon )
     MtxAlloc res(reqRes(), true);
 
     if(runSt) return;
-    if(SYS->stopSignal()) throw TError(nodePath().c_str(), _("We are stopping!"));
+    if(SYS->stopSignal()) throw TError(nodePath(), _("We are stopping!"));
 
     //Status clear
     trIn = trOut = respTm = respTmMax = 0;
@@ -1218,7 +1218,7 @@ void TSocketOut::start( int itmCon )
     if(type == S_FORCE) {
 	sockFd = s2i(TSYS::strParse(addr_,0,":",&aOff));
 	int rez;
-	if(sockFd < 0)	throw TError(nodePath().c_str(), _("The force socket is deactivated!"));
+	if(sockFd < 0)	throw TError(nodePath(), _("The force socket is deactivated!"));
 	else if((rez=fcntl(sockFd,F_GETFL,0)) < 0 || fcntl(sockFd,F_SETFL,rez|O_NONBLOCK) < 0) {
 	    if(close(sockFd) != 0)
 		mess_warning(nodePath().c_str(), _("Closing the socket %d error '%s (%d)'!"), sockFd, strerror(errno), errno);
@@ -1309,7 +1309,7 @@ void TSocketOut::start( int itmCon )
 	    if(sockFd >= 0) break;
 	}
 
-	if(sockFd < 0) throw TError(nodePath().c_str(), "%s", aErr.c_str());
+	if(sockFd < 0) throw TError(nodePath(), aErr);
     }
     else if(type == S_UNIX) {
 	string path = TSYS::strParse(addr_, 0, ":", &aOff);
@@ -1413,7 +1413,7 @@ int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int ti
     if(time) { prevTmOut = tmCon(); setTmCon(time); }
 
     try {
-	if(!runSt) throw TError(nodePath().c_str(), _("Transport is not connected!"));
+	if(!runSt) throw TError(nodePath(), _("Transport is not connected!"));
 
 repeate:
 	if(reqTry++ >= wAttempts) { mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(), _("Error requesting: %s"), err.c_str()); }
@@ -1486,7 +1486,7 @@ repeate:
 		    }
 		}
 		mLstReqTm = TSYS::curTime();
-		throw TError(nodePath().c_str(), err.c_str());
+		throw TError(nodePath(), err);
 	    }
 	    else if(kz < 0) {
 		err = TSYS::strMess("%s (%d)", strerror(errno), errno);

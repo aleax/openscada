@@ -330,7 +330,7 @@ void TTrOut::start( int itmCon )
     MtxAlloc res(reqRes(), true);
 
     if(runSt) return;
-    if(SYS->stopSignal()) throw TError(nodePath().c_str(), _("We are stopping!"));
+    if(SYS->stopSignal()) throw TError(nodePath(), _("We are stopping!"));
 
     //???? Init-prepare here the connection properties and establish the connection for the connectable transports
 
@@ -362,7 +362,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 
     MtxAlloc res(reqRes(), true);
 
-    if(!runSt) throw TError(nodePath().c_str(), _("Transport is not connected!"));
+    if(!runSt) throw TError(nodePath(), _("Transport is not connected!"));
 
     //???? Perform the messages exchenging just here
 

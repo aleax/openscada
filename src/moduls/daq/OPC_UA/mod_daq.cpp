@@ -628,7 +628,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	reqService(req);
 	if(!req.attr("err").empty()) {
 	    //mess_err(nodePath().c_str(), "%s", req.attr("err").c_str());
-	    throw TError(nodePath().c_str(), "%s", req.attr("err").c_str());
+	    throw TError(nodePath(), req.attr("err"));
 	}
 
 	// Get result
@@ -933,7 +933,7 @@ void TMdPrm::loadDATA( bool incl )
 	    //>> Browse request for get child nodes
 	    /*req.setAttr("id","Browse")->childAdd("node")->setAttr("nodeId",cNodeId)->setAttr("browseDirection",i2s(TProt::BD_BOTH));
 	    reqOPC(req);
-	    if( !req.attr("err").empty() || !req.childSize() ) throw TError(nodePath().c_str(),"%s",req.attr("err").c_str());
+	    if(!req.attr("err").empty() || !req.childSize()) throw TError(nodePath(), req.attr("err"));
 	    XMLNode *rn = req.childGet(0);*/
 	}
     }

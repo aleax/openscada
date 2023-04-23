@@ -5287,6 +5287,304 @@ else {
 	tErr += ((sched.length && !sched.isEVal())?"; "+tr("Next scheduled call")+" "+SYS.strftime(SYS.cron(sched,schedTrueTm)):"") + (prcSt.length?"; "+prcSt:"");
 }
 f_err = tErr;','','',1672837570);
+INSERT INTO tmplib_DevLib VALUES('FF_LE','FF LE-03MB CT','','','','','',240,0,'JavaLikeCalc.JavaScript
+//Same request to the device
+function req(data, pref, respPref) {
+	if(data == EVAL)	data = "";
+
+	for(SUM = 0, iCh = 0; iCh < data.length; iCh++)
+		SUM += data.charCodeAt(iCh);
+
+	req = pref + data + SYS.strFromCharCode(SUM&0xFF, 0x16);
+
+	SYS.messDebug("/FF/"+this.cfg("SHIFR"), tr("Request")+": "+SYS.strDecode(req,"Bin"," "));
+
+	resp = tr.messIO(req);
+	//Waiting the acceptance
+	while(resp.length && (tresp=tr.messIO("")).length) resp += tresp;
+	if(resp.length < 21 || resp.indexOf(respPref) != 0 || resp.charCodeAt(resp.length-1) != 0x16)
+		return tr("3:No response or the response is inconsistent. ");
+
+	data = resp.slice(respPref.length, -2);
+
+	SYS.messDebug("/FF/"+this.cfg("SHIFR"), tr("Response")+": "+SYS.strDecode(data,"Bin"," "));
+
+	for(SUM = 0, iCh = 0; iCh < data.length; iCh++)
+		SUM += data.charCodeAt(iCh);
+	if(resp.charCodeAt(resp.length-2) != (SUM&0xFF))
+		return tr("3:Control sum error "+(SUM&0xFF)+" != "+resp.charCodeAt(resp.length-2));
+
+	return "0";
+}
+
+if(f_start || f_stop) return;
+
+tErr = "";
+
+if(!(tr=SYS.Transport.outAt(transport)) || !tr.start(true))
+	tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else if(addr < 0 || addr > 255)
+	tErr = "2:"+tr("Address ''%1'' out of range [0...255].").replace("%1",addr.toString());
+else {
+	//Reading the electricity information
+	if(!tErr.toInt()) {
+		data = SYS.strFromCharCode(0x7B, addr);
+		if((tErr=req(data,SYS.strFromCharCode(0x10),SYS.strFromCharCode(0x68,0x5D,0x5D,0x68))).toInt()) ;
+		else if(data.charCodeAt(1) != addr)	tErr = tr("4:Error the address response");
+		else {
+			EnActFull = SYS.strDecode(SYS.strEncode(data.slice(17+6*0,17+6*0+4),"Reverse"),"Bin").toInt() / 100;
+			EnActImp = SYS.strDecode(SYS.strEncode(data.slice(17+6*1,17+6*1+4),"Reverse"),"Bin").toInt() / 100;
+			EnActExp = SYS.strDecode(SYS.strEncode(data.slice(17+6*2,17+6*2+4),"Reverse"),"Bin").toInt() / 100;
+			EnActFullDrop = SYS.strDecode(SYS.strEncode(data.slice(17+6*3,17+6*3+4),"Reverse"),"Bin").toInt() / 100;
+			EnActImpDrop = SYS.strDecode(SYS.strEncode(data.slice(17+6*4,17+6*4+4),"Reverse"),"Bin").toInt() / 100;
+			EnActExpDrop = SYS.strDecode(SYS.strEncode(data.slice(17+6*5,17+6*5+4),"Reverse"),"Bin").toInt() / 100;
+
+			EnReactFull = (tVl=SYS.strDecode(SYS.strEncode(data.slice(54+7*0,54+7*0+4),"Reverse"),"Bin")).toInt() / 100;
+			EnReactImp = (tVl=SYS.strDecode(SYS.strEncode(data.slice(54+7*1,54+7*1+4),"Reverse"),"Bin")).toInt() / 100;
+			EnReactExp = (tVl=SYS.strDecode(SYS.strEncode(data.slice(54+7*2,54+7*2+4),"Reverse"),"Bin")).toInt() / 100;
+			EnReactFullDrop = (tVl=SYS.strDecode(SYS.strEncode(data.slice(54+7*3,54+7*3+4),"Reverse"),"Bin")).toInt() / 100;
+			EnReactImpDrop = (tVl=SYS.strDecode(SYS.strEncode(data.slice(54+7*4,54+7*4+4),"Reverse"),"Bin")).toInt() / 100;
+			EnReactExpDrop = (tVl=SYS.strDecode(SYS.strEncode(data.slice(54+7*5,54+7*5+4),"Reverse"),"Bin")).toInt() / 100;
+		}
+	}
+
+	//Reading the Instanceous
+	if(!tErr.toInt()) {
+		data = SYS.strFromCharCode(0x53, addr, 0xB1);
+		if((tErr=req(data,SYS.strFromCharCode(0x68,0x03,0x03,0x68),SYS.strFromCharCode(0x68,0x90,0x90,0x68))).toInt()) ;
+		else if(data.charCodeAt(1) != addr)	tErr = tr("4:Error the address response");
+		else {
+			V_L1 = SYS.strDecode(SYS.strEncode(data.slice(18+6*0,18+6*0+3),"Reverse"),"Bin").toInt() / 100;
+			V_L2 = SYS.strDecode(SYS.strEncode(data.slice(18+6*1,18+6*1+3),"Reverse"),"Bin").toInt() / 100;
+			V_L3 = SYS.strDecode(SYS.strEncode(data.slice(18+6*2,18+6*2+3),"Reverse"),"Bin").toInt() / 100;
+			V_L12 = SYS.strDecode(SYS.strEncode(data.slice(18+6*3,18+6*3+3),"Reverse"),"Bin").toInt() / 100;
+			V_L23 = SYS.strDecode(SYS.strEncode(data.slice(18+6*4,18+6*4+3),"Reverse"),"Bin").toInt() / 100;
+			V_L31 = SYS.strDecode(SYS.strEncode(data.slice(18+6*5,18+6*5+3),"Reverse"),"Bin").toInt() / 100;
+			I_1 = SYS.strDecode(SYS.strEncode(data.slice(18+6*6,18+6*6+3),"Reverse"),"Bin").toInt() / 1000;
+			I_2 = SYS.strDecode(SYS.strEncode(data.slice(18+6*7,18+6*7+3),"Reverse"),"Bin").toInt() / 1000;
+			I_3 = SYS.strDecode(SYS.strEncode(data.slice(18+6*8,18+6*8+3),"Reverse"),"Bin").toInt() / 1000;
+			I_N = SYS.strDecode(SYS.strEncode(data.slice(18+6*9,18+6*9+3),"Reverse"),"Bin").toInt() / 1000;
+
+			P = SYS.strDecode(SYS.strEncode(data.slice(77+5*0,77+5*0+3),"Reverse"),"Bin").toInt() / 100;
+			P_1 = SYS.strDecode(SYS.strEncode(data.slice(77+5*1,77+5*1+3),"Reverse"),"Bin").toInt() / 100;
+			P_2 = SYS.strDecode(SYS.strEncode(data.slice(77+5*2,77+5*2+3),"Reverse"),"Bin").toInt() / 100;
+			P_3 = SYS.strDecode(SYS.strEncode(data.slice(77+5*3,77+5*3+3),"Reverse"),"Bin").toInt() / 100;
+
+			Pr = SYS.strDecode(SYS.strEncode(data.slice(98+6*0,98+6*0+3),"Reverse"),"Bin").toInt() / 100;
+			Pr_1 = SYS.strDecode(SYS.strEncode(data.slice(98+6*1,98+6*1+3),"Reverse"),"Bin").toInt() / 100;
+			Pr_2 = SYS.strDecode(SYS.strEncode(data.slice(98+6*2,98+6*2+3),"Reverse"),"Bin").toInt() / 100;
+			Pr_3 = SYS.strDecode(SYS.strEncode(data.slice(98+6*3,98+6*3+3),"Reverse"),"Bin").toInt() / 100;
+
+			CoefP = SYS.strDecode(SYS.strEncode(data.slice(122+5*0,122+5*0+2),"Reverse"),"Bin").toInt() / 1000;
+			CoefP_1 = SYS.strDecode(SYS.strEncode(data.slice(122+5*1,122+5*1+2),"Reverse"),"Bin").toInt() / 1000;
+			CoefP_2 = SYS.strDecode(SYS.strEncode(data.slice(122+5*2,122+5*2+2),"Reverse"),"Bin").toInt() / 1000;
+			CoefP_3 = SYS.strDecode(SYS.strEncode(data.slice(122+5*3,122+5*3+2),"Reverse"),"Bin").toInt() / 1000;
+		}
+	}
+}
+
+//Error set
+if(!tErr.length)	tErr = "0";
+if(tErr.toInt()) {
+	if(!tr.isEVal() && tr.start()) tr.start(false);
+	if(f_err != tErr)
+		SYS.messDebug("/FF/"+this.cfg("SHIFR"), tr("Error")+": "+tErr);
+}
+f_err = tErr;','','',1681968337);
+INSERT INTO tmplib_DevLib VALUES('ergomera625','Ergomera 625','','','','','',30,0,'JavaLikeCalc.JavaScript
+//Same request to the device
+function req(PDU) {
+	// For placing into the module ModBus
+	if(!transport.length)	return this.cntr().messIO(PDU);
+
+	// For other logical level
+	reqO = SYS.XMLNode(mbType).setAttr("id","EM625").setAttr("node",(addr%256)&0xFF).setText(PDU);
+	if((rez=tr.messIO(reqO,"ModBus")).length)	return "10:"+rez;
+	PDU = reqO.text();
+
+	return reqO.attr("err");
+}
+
+if(f_start) {
+	transport_ = transport;
+	tr = EVAL;
+	dt = new Object();
+	items_ = "";
+}
+
+//Parse the items set and create user attributes
+if(items != items_) {
+	items_ = items;
+	// Mark for check to deletion needs
+	for(var iDt in dt)
+		if(iDt != "10000") dt[iDt].mark = false;
+	// Append/Update present ones
+	for(off = 0; (sIt=items.parseLine(0,off)).length || off < items.length; ) {
+		if(!sIt.length || sIt[0] == "#")	continue;
+		off1 = 0;
+		itO = new Object();
+		itO.tp = sIt.parse(0, ":", off1);
+		tmpAddr = sIt.parse(0, ":", off1);
+		itO.addr = tmpAddr.toInt();
+		itO.md = sIt.parse(0, ":", off1);
+		itO.id = sIt.parse(0, ":", off1);
+		itO.nm = sIt.slice(off1);
+		if(!itO.nm.length) itO.nm = itO.id;
+		dt[itO.addr.toString(16,5)] = itO;
+		if(itO.tp == "u" || itO.tp == "i" || itO.tp == "u2" || itO.tp == "i2")	{ wTp = "integer"; itO.sz = 2; }
+		else if(itO.tp == "u4" || itO.tp == "i4")	{ wTp = "integer"; itO.sz = 4; }
+		else if(itO.tp == "s")	{ wTp = "string"; itO.sz = 16; }
+		else { wTp = "real"; itO.sz = 4; }
+		itO.rd = (itO.md.indexOf("r") >= 0);
+		itO.wr = (itO.md.indexOf("w") >= 0);
+		itO.rev = (itO.md.indexOf("~") >= 0);
+		if(!itO.wr)	wTp += "|ro";
+		if(itO.rd || itO.wr) {
+			this.attrAdd(itO.id, itO.nm, wTp);
+			if(itO.wr)	itO.val = this[itO.id].get();
+			itO.mark = true;
+			//SYS.messInfo("/ED","itO="+itO.id+"; tmpAddr="+tmpAddr+"; addr="+itO.addr);
+		}
+	}
+	dt["10000"] = EVAL;
+	// Check, remove item and set to EVAL the attribute
+	for(var iDt in dt) {
+		if(iDt == "10000" || dt[iDt].mark)	continue;
+		this[dt[iDt].id].set(EVAL, 0, 0, true);
+		delete dt[iDt];
+	}
+}
+
+if(f_start || f_stop) return;
+
+tErr = "";
+
+//Checking for the transport change and connect
+if(tr.isEVal() || transport != transport_)	{
+	if(!transport.length) {
+		if(!((tVl=this.cntr().cfg("PROT")) == "RTU" || tVl == "ASCII" || tVl == "TCP")) {
+			tr = EVAL;
+			tErr = "1:"+tr("Output transport is empty and the controller object is not ModBus.");
+		}
+		else {
+			tr = new Object();
+			maxBlkSz = this.cntr().cfg("MAX_BLKSZ");
+			if(maxBlkSz.isEVal())	maxBlkSz = 12;
+			fragMerge = this.cntr().cfg("FRAG_MERGE");
+			if(fragMerge.isEVal())	fragMerge = false;
+		}
+	} else tr = (tr_=SYS.Transport.outAt(transport)) ? tr_ : EVAL;
+
+	maxBlkSz = max(10, min(200,maxBlkSz));
+	transport_ = transport;
+}
+if(tErr.toInt()) ;
+else if(tr.isEVal())
+	tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+//else if(addr < 0 || addr > 247)
+//	tErr = "2:"+tr("Address ''%1'' out of range [0...247].").replace("%1",addr.toString());
+else {
+	//Check for changed attributes and perform writing
+	for(var iDt in dt) {
+		isEOL = (iDt == "10000");
+		itO = dt[iDt];
+		tVl = this[itO.id].get();
+		if(isEOL || !itO.wr || tVl.isEVal() || itO.val == tVl)	continue;
+		PDU = Special.FLibSYS.IO("", "", "b");
+		PDU.wr(16,"uint8").wr(itO.addr,"uint16").wr(floor(itO.sz/2),"uint16").wr(itO.sz,"uint8");
+		if(itO.tp == "u" || itO.tp == "u2")			PDU.wr(tVl,"uint16");
+		else if(itO.tp == "i" || itO.tp == "i2")	PDU.wr(tVl,"int16");
+		else if(itO.tp == "u4")	{
+			if(itO.rev)	PDU.wr(tVl>>16, "uint16").wr(tVl&0xFFFF, "uint16");
+			else	PDU.wr(tVl&0xFFFF, "uint16").wr(tVl>>16, "uint16");
+		}
+		else if(itO.tp == "i4") {
+			if(itO.rev)	PDU.wr(tVl>>16, "int16").wr(tVl&0xFFFF, "uint16");
+			else	PDU.wr(tVl&0xFFFF, "uint16").wr(tVl>>16, "int16");
+		}
+		else if(itO.tp == "s")		PDU.wr(tVl.slice(0,16),"char").wr(" ","char",16-min(16,tVl.length));
+		else {
+			w1 = w2 = 0;
+			if(itO.rev)	Special.FLibSYS.floatSplitWord(tVl, w2, w1);
+			else	Special.FLibSYS.floatSplitWord(tVl, w1, w2);
+			PDU.wr(w1, "uint16").wr(w2, "uint16");
+		}
+		//SYS.messInfo("/ED","reqPDU="+SYS.strDecode(PDU.string,"Bin"," "));
+		if(!req(PDU.string).toInt())	itO.val = tVl;
+		//SYS.messInfo("/ED","respPDU="+SYS.strDecode(PDU.string,"Bin"," "));
+	}
+
+	//Same requests for the data
+	blk = new Array();
+	for(var iDt in dt) {
+		isEOL = (iDt == "10000");
+		itO = dt[iDt];
+		//SYS.messInfo("/ED","iDt="+iDt+"; isEOL="+isEOL);
+		if(!isEOL && (!blk.length || (
+				(itO.addr-blk[0].addr+1+floor((itO.sz-2)/2)) <= floor(maxBlkSz/2) && (fragMerge || (itO.addr-blk[blk.length-1].addr-floor((blk[blk.length-1].sz-2)/2)) <= 1) ))) {
+			if(itO.rd) blk.push(itO);
+			continue;
+		}
+		//Send request for this block
+		if(blk.length) {
+			regN = (blk[blk.length-1].addr - blk[0].addr) + 1 + floor((blk[blk.length-1].sz-2)/2);
+			PDU = SYS.strFromCharCode(3, (blk[0].addr>>8)&0xFF, blk[0].addr&0xFF, 0, regN);
+			//SYS.messInfo("/ED","reqPDU="+SYS.strDecode(PDU,"Bin"," "));
+			if((tErr=req(PDU)).toInt()) break;
+			//SYS.messInfo("/ED","respPDU="+SYS.strDecode(PDU,"Bin"," "));
+			io = Special.FLibSYS.IO(PDU, "", "b");
+			rF = io.read("uint8", 1); rN = io.read("uint8", 1);
+			if(rF != 3 || (io.length-2) != rN) { tErr = "10:"+tr("Inconsistent respond''s length."); break; }
+			for(iB = 0; iB < blk.length; iB++) {
+				itO1 = blk[iB];
+				io.pos = 2 + (itO1.addr-blk[0].addr)*2;
+				if(itO1.tp == "u" || itO1.tp == "u2")			tVl = io.read("uint16", 1);
+				else if(itO1.tp == "i" || itO1.tp == "i2")	tVl = io.read("int16", 1);
+				else if(itO1.tp == "u4")
+					tVl = itO1.rev ? io.read("uint16", 1)*65536 + io.read("uint16", 1) :
+											io.read("uint16", 1) + io.read("uint16", 1)*65536;
+				else if(itO1.tp == "i4")
+					tVl = itO1.rev ? io.read("int16", 1)*65536 + io.read("uint16", 1) :
+											io.read("uint16", 1) + io.read("int16", 1)*65536;
+				else if(itO1.tp == "s")	tVl = io.read("char", blk[0].sz);
+				else {
+					w1 = io.read("uint16", 1); w2 = io.read("uint16", 1);
+					tVl = itO1.rev ? Special.FLibSYS.floatMergeWord(w2, w1) :
+											Special.FLibSYS.floatMergeWord(w1, w2);
+					//tVl = io.read("float", 1, "l");
+				}
+				if(itO1.wr && itO1.val != this[itO1.id].get())	{ itO1.val = tVl; continue; }
+				this[itO1.id].set(tVl, 0, 0, true);
+				itO1.val = tVl;
+			}
+			blk = new Array(); blk.push(itO);
+		}
+	}
+
+	//Requesting the hourly archive
+	/*if(!tErr.toInt()) {
+		PDU = SYS.strFromCharCode(0x41, 0, 0x07, 0x02, 0x17, 0x18, 0, 0);
+		if(!(tErr=req(PDU)).toInt()) {
+			SYS.messInfo("/EM625","respPDU="+SYS.strDecode(PDU,"Bin"," "));
+
+			PDU = SYS.strFromCharCode(0x43);
+			if(!(tErr=req(PDU)).toInt())
+				SYS.messInfo("/EM625","respPDU="+SYS.strDecode(PDU,"Bin"," "));
+		}
+	}*/
+}
+
+if(!tErr.length)	tErr = "0";
+if(tErr.toInt()) {
+	if(!tr.isEVal() && tr.start()) tr.start(false);
+	if(f_err != tErr)
+		for(var iDt in dt) {
+			itO = dt[iDt];
+			if(iDt == "10000")	continue;
+			this[itO.id].set(EVAL, 0, 0, true);
+		}
+}
+f_err = tErr;','','',1681968337);
 CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_PrescrTempl VALUES('timer','Command — Timer','Команда — Таймер','Команда — Таймер','Template of a command of the prescription typical timer. The timer is only designed to hold time between other action steps and for example, so it only has one attribute, "Time" in seconds.
 
@@ -12668,6 +12966,7 @@ INSERT INTO Trs VALUES('Trace for current time=%1','','','');
 INSERT INTO Trs VALUES('Initial reading in time=%1','','','');
 INSERT INTO Trs VALUES('Hours: ','','','');
 INSERT INTO Trs VALUES('Next scheduled call','','','');
+INSERT INTO Trs VALUES('4:Error the address response','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_base_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_base_io VALUES('digAlarm','in','Input',3,144,'Input|in',2,'Вхід','','Вход','','');
 INSERT INTO tmplib_base_io VALUES('simleBoard','in','Input',2,128,'Parameter|var',0,'Вхід','','Вход','','');
@@ -12966,10 +13265,10 @@ INSERT INTO tmplib_base_io VALUES('UPS','this','Object',4,0,'',16,'Об''єкт'
 INSERT INTO tmplib_base_io VALUES('UPS','SHIFR','Code',0,0,'',17,'Шифр','','Шифр','','');
 INSERT INTO tmplib_base_io VALUES('UPS','NAME','Name',0,0,'',18,'Ім''я','','Имя','','Име');
 INSERT INTO tmplib_base_io VALUES('UPS','DESCR','Description',0,0,'',19,'Опис','','Описание','','Опис');
-INSERT INTO tmplib_base_io VALUES('initConAssociateTrs','inTransport','Input transport',0,64,'InitiateCons',0,'Вхідний транспорт','InitiateCons','Входной транспорт','','');
+INSERT INTO tmplib_base_io VALUES('initConAssociateTrs','inTransport','Input transport',0,64,'InitiateCons',0,'Вхідний транспорт','','Входной транспорт','','');
 INSERT INTO tmplib_base_io VALUES('initConAssociateTrs','outTrTm','Output transport timeouts',0,64,'10:0.1',1,'Таймаути вихідних транспортів','','Таймауты выходных транспортов','','');
 INSERT INTO tmplib_base_io VALUES('initConAssociateTrs','prcTr','Processed transports',4,17,'',3,'Опрацьовані транспорти','','Обработанные транспорты','','');
-INSERT INTO tmplib_base_io VALUES('initConAssociateTrs','srcObjPath','Source object path',0,64,'ModBus:%2fcntr%2fcfg%2fADDR',2,'Шлях об''єкту джерела','ModBus:%2fcntr%2fcfg%2fADDR','Путь объекта источника','','');
+INSERT INTO tmplib_base_io VALUES('initConAssociateTrs','srcObjPath','Source object path',0,64,'ModBus:%2fcntr%2fcfg%2fADDR',2,'Шлях об''єкту джерела','','Путь объекта источника','','');
 INSERT INTO tmplib_base_io VALUES('SNMP','alSup','Violations suppress',3,32,'',2,'Придушення порушень','','Подавление нарушений','','');
 INSERT INTO tmplib_base_io VALUES('SNMP','alDelay','Violations delay, seconds',2,32,'0',3,'Затримка порушень, секунди','','Задержка нарушений, секунды','','');
 INSERT INTO tmplib_base_io VALUES('UPS','alSup','Violations suppress',3,32,'',1,'Придушення порушень','','Подавление нарушений','','');
@@ -13534,14 +13833,12 @@ Rows in the form "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".',0,36,'#<Sn
 
 ',5,'Набор элементов
 Строки в формате "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".','','Набір елементів
-Рядки у форматі "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".','#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr=":[rw~]*:" color="red"/><rule expr=":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)" color="blue"/><rule expr="^(u|i|u2|i2|u4|i4|r|s)" color="darkorange"/><rule expr="\\:" color="blue"/></SnthHgl>
-
-','');
+Рядки у форматі "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','tr','Output transport',4,0,'',6,'Выходной транспорт','','Вихідний транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','this','Object',4,0,'',7,'Объект','','Об''єкт','','');
 INSERT INTO tmplib_DevLib_io VALUES('MTP4D','zeroP','Set zero',3,32,'',4,'Установить ноль','','Встановити нуль','','');
 INSERT INTO tmplib_DevLib_io VALUES('MTP4D','zeroAP','Set atmosphere',3,32,'',5,'Установить атмосферу','','Встановити атмосферу','','');
-INSERT INTO tmplib_DevLib_io VALUES('SLOT','transport','Transport',0,64,'Sockets.SLOT:10.39.77.10:4001',0,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','transport','Transport',0,64,'Sockets.SLOT:10.39.77.10:4001',0,'Транспорт','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','modem','Modem
 In the format "{TelN}[:{Init1}[:{Init2}[...{InitN}]]]"',0,64,'',1,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','modemTm','Modem times
@@ -13554,7 +13851,7 @@ INSERT INTO tmplib_DevLib_io VALUES('SLOT','arhD','OpenSCADA archiver for device
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',8,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','reset','Reset the archives reading',3,32,'',9,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','devTime','Device time',0,16,'',10,'','','','','');
-INSERT INTO tmplib_DevLib_io VALUES('SLOT','devTp','Device type',0,16,'',11,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','devTp','Device type',0,16,'',11,'Тип устройства','','Тип пристрою','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','devSWVers','Device software version',0,16,'',12,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','devSN','Device Serial Number',1,16,'',13,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','devModel','Device model',0,16,'',14,'','','','','');
@@ -13594,11 +13891,62 @@ INSERT INTO tmplib_DevLib_io VALUES('SLOT','T','Temperature, °С [arh]',2,16,''
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','Fstd','Volume standard cond., m3 [arh]',2,16,'',48,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','Fwork','Volume work cond., m3 [arh]',2,16,'',49,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','itSt','Item status [arh]',0,16,'',50,'','','','','');
-INSERT INTO tmplib_DevLib_io VALUES('SLOT','tr','Output transport',4,1,'',51,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','tr','Output transport',4,1,'',51,'Выходной транспорт','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','reqCntr','Counter of the requests and the reconnection waiting (negative)',2,0,'0',52,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','arhLastD','Daily archive last item',1,0,'0',53,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','arhLastH','Hourly archive last item',1,0,'0',54,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','this','Object of the parameter',4,0,'',55,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','transport','Transport',0,64,'Sockets.LE:10.39.170.2:9761',0,'Транспорт','','Transport','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','addr','Device address [0...255]',1,64,'1',1,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','tr','Output transport',4,1,'',2,'Выходной транспорт','','Output transport','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','EnActFull','Energy Active Full, kWh',2,17,'',3,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','EnActImp','Energy Active Import, kWh',2,17,'',4,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','EnActExp','Energy Active Export, kWh',2,17,'',5,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','EnActFullDrop','Energy Active Full drops, kWh',2,17,'',6,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','EnActImpDrop','Energy Active Import drops, kWh',2,17,'',7,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','EnActExpDrop','Energy Active Export drops, kWh',2,17,'',8,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','EnReactFull','Energy Reactive Full, kVAh',2,17,'',9,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','EnReactImp','Energy Reactive Import, kWh',2,17,'',10,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','EnReactExp','Energy Reactive Export, kWh',2,17,'',11,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','EnReactFullDrop','Energy Reactive Full drops, kWh',2,17,'',12,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','EnReactImpDrop','Energy Reactive Import drops, kWh',2,17,'',13,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','EnReactExpDrop','Energy Reactive Export drops, kWh',2,17,'',14,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','V_L1','Voltage L1, V',2,17,'',15,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','V_L2','Voltage L2, V',2,17,'',16,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','V_L3','Voltage L3, V',2,17,'',17,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','V_L12','Voltage L1-L2, V',2,17,'',18,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','V_L23','Voltage L2-L3, V',2,17,'',19,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','V_L31','Voltage L3-L1, V',2,17,'',20,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','I_1','Current L1, A',2,17,'',21,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','I_2','Current L2, A',2,17,'',22,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','I_3','Current L3, A',2,17,'',23,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','I_N','Current N, A',2,17,'',24,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','P','P Full, kW',2,17,'',25,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','P_1','P L1, kW',2,17,'',26,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','P_2','P L2, kW',2,17,'',27,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','P_3','P L3, kW',2,17,'',28,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','Pr','Pr Full, kVA',2,17,'',29,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','Pr_1','Pr 1, kVA',2,17,'',30,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','Pr_2','Pr 2, kVA',2,17,'',31,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','Pr_3','Pr 3, kVA',2,17,'',32,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','CoefP','CoefP Full',2,17,'',33,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','CoefP_1','CoefP 1',2,17,'',34,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','CoefP_2','CoefP 2',2,17,'',35,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','CoefP_3','CoefP 3',2,17,'',36,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','this','Object',4,0,'',37,'Объект','','Об''єкт','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera625','transport','Transport',0,64,'Sockets.em625:10.39.170.4:5555',0,'Транспорт','','Транспорт','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera625','addr','Device address, [0...247]',1,64,'1',1,'Адрес устройства, [0...247]','','Адреса пристрою, [0...247]','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera625','mbType','ModBus type, [RTU|ASCII|TCP]',0,64,'RTU',2,'Тип ModBus, [RTU|ASCII|TCP]','','Тип ModBus, [RTU|ASCII|TCP]','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera625','maxBlkSz','ModBus maximum block size, [10...200]',1,64,'200',3,'Максимальный размер блока ModBus, [10...200]','','Максимальний розмір блоку ModBus, [10...200]','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera625','fragMerge','ModBus blocks merging',3,64,'1',4,'Объединение блоков ModBus','','Поєднання блоків ModBus','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera625','items','Items set
+Rows in the form "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".',0,36,'#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr=":[rw~]*:" color="red"/><rule expr=":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)" color="blue"/><rule expr="^(u|i|u2|i2|u4|i4|r|s)" color="darkorange"/><rule expr="\\:" color="blue"/></SnthHgl>
+
+',5,'Набор элементов
+Строки в формате "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".','','Набір елементів
+Рядки у форматі "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera625','tr','Вихідний транспорт',4,0,'',6,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera625','this','Object',4,0,'',7,'Объект','','Об''єкт','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_LowDevLib_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '0' ,"FLAGS" INTEGER DEFAULT '0' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '0' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_LowDevLib_io VALUES('1602A','transport','Transport of the I2C, Serial (i2c) or
 GPIO address with function put(), mostly it''s BCM2835 (DAQ.BCM2835.pi.pi)',0,64,'i2c',0,'','','','','');
@@ -13696,12 +14044,12 @@ INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','pin_cs','CS pin number of the 
 INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','pin_sclk','SCLK pin number of the GPIO',1,64,'11',2,'','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','pin_miso','MISO pin number of the GPIO',1,64,'9',3,'','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','t','T, °С',2,17,'',4,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','transport','Transport',0,64,'Serial.RD:/dev/rfcomm0:9600||1000:40-20',0,'Транспорт','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','transport','Transport',0,64,'Serial.RD:/dev/rfcomm0:9600||1000:40-20',0,'Транспорт','Транспорт','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','V','Volts',2,16,'',2,'Вольти','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','A','Amperes',2,16,'',3,'Ампери','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','this','Object',4,0,'',21,'Об''єкт','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','this','Object',4,0,'',21,'Об''єкт','Объект','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','W','Watts',2,16,'',4,'Вати','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','T','Temperature, °С',1,16,'',5,'Температура, °С','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','T','Temperature, °С',1,16,'',5,'Температура, °С','Температура, °С','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','grps','Groups',0,20,'',12,'Групи','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','chMode','Charging Mode',0,16,'',15,'Режим Зарядження','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','recAh','Record, Ah',2,16,'',8,'Запис, АГ','','','','');

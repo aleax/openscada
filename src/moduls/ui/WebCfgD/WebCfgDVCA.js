@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebCfgD file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2008-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,6 +35,8 @@ var SEC_RD = 0x04;	//Read access
 var copyBuf = '0';	//Copy node address buffer
 var genReqs = null;	//Generic request object
 var limTblItmCnt = 300;	//Limit of the table item content
+var Er_NoError = 0;	//Error code of no error
+var Er_Core_CntrWarning = 1; //Error code of warning the Control Interface
 
 //Browser type detect
 var isNN = navigator.appName.indexOf('Netscape') != -1;
@@ -274,6 +276,14 @@ function setStatus( mess, tm )
 }
 
 /***************************************************
+ * alertCntr - Control Interface specific alert.   *
+ ***************************************************/
+function alertCntr( reqO )
+{
+    if(reqO) alert(reqO.getAttribute("mtxt") ? reqO.getAttribute("mtxt") : reqO.textContent);
+}
+
+/***************************************************
  * expand - Expand/roll select subtree.            *
  ***************************************************/
 function expand( el, val, upTree )
@@ -446,14 +456,14 @@ function pageDisplay( path, isComplete )
 	document.getElementById('selPath').innerText = selPath;
 
 	pgInfo = servGet(selPath, 'com=info');
-	if(parseInt(pgInfo.getAttribute('rez')) != 0) { alert(pgInfo.textContent); return; }
+	if(parseInt(pgInfo.getAttribute('rez')) != Er_NoError) { alertCntr(pgInfo); return; }
 	pgInfo.setAttribute('path', selPath);
 	root = pgInfo.childNodes[0];
     }
     else {
 	// Check the new node structure and the old node
 	var iTree = servGet(selPath,'com=info');
-	if(parseInt(iTree.getAttribute('rez')) != 0) { alert(iTree.textContent); return; }
+	if(parseInt(iTree.getAttribute('rez')) != Er_NoError) { alertCntr(iTree); return; }
 	if(chkStruct(root,iTree.childNodes[0]))
 	{ pgInfo = iTree; pgInfo.setAttribute('path',selPath); root = pgInfo.childNodes[0]; }
     }
@@ -701,7 +711,7 @@ function selectChildRecArea( node, aPath, cBlk )
 					var inpId = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value;
 					var inpName = idm ? dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].value : inpId;
 					var rez = servSet(this.itPath,'com=com',"<add "+(idm?("id='"+inpId+"'"):"")+">"+inpName+"</add>",true);
-					if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+					if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
 					if(this.srcNode.getAttribute('tp') == 'br') treeUpdate();
 					pageRefresh();
 					document.body.dlgWin.close();
@@ -716,7 +726,7 @@ function selectChildRecArea( node, aPath, cBlk )
 					var inpName = idm ? dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].value : inpId;
 					var com = "<ins "+(idm?("id='"+inpId+"' "):"")+" pos='"+this.selectedIndex+"' p_id='"+this.lsId+"'>"+inpName+"</ins>";
 					var rez = servSet(this.itPath,'com=com',com,true);
-					if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+					if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
 					if(this.srcNode.getAttribute('tp') == 'br') treeUpdate();
 					pageRefresh();
 					document.body.dlgWin.close();
@@ -733,7 +743,7 @@ function selectChildRecArea( node, aPath, cBlk )
 					var inpName = idm ? dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].value : inpId;
 					var com = "<edit "+(idm?("id='"+inpId+"' "):"")+" pos='"+this.selectedIndex+"' p_id='"+this.lsId+"'>"+inpName+"</edit>";
 					var rez = servSet(this.itPath,'com=com',com,true);
-					if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+					if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
 					if(this.srcNode.getAttribute('tp') == 'br') treeUpdate();
 					pageRefresh();
 					document.body.dlgWin.close();
@@ -744,14 +754,14 @@ function selectChildRecArea( node, aPath, cBlk )
 			    else if(posId == 'up' || posId == 'down') {
 				var c_new = (posId == 'down') ? c_new = this.selectedIndex+1 : this.selectedIndex-1;
 				var rez = servSet(this.parentNode.itPath,'com=com',"<move pos='"+this.selectedIndex+"' to='"+c_new+"'/>",true);
-				if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+				if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
 				pageRefresh();
 			    }
 			    else if(posId == 'del') {
 				var com = idm ? ("<del pos='"+this.selectedIndex+"' id='"+this.parentNode.lsId+"'/>") :
 						("<del pos='"+this.selectedIndex+"'>"+this.parentNode.lsText+"</del>");
 				var rez = servSet(this.parentNode.itPath,'com=com',com,true);
-				if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+				if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
 				if(this.parentNode.srcNode.getAttribute('tp') == 'br') treeUpdate();
 				pageRefresh();
 			    }
@@ -773,7 +783,10 @@ function selectChildRecArea( node, aPath, cBlk )
 	    while(val.childNodes.length) val.removeChild(val.childNodes[0]);
 	    var dataReq = servGet(brPath,'com=get');
 	    if(!dataReq) continue;
-	    if(parseInt(dataReq.getAttribute('rez')) != 0) { alert(dataReq.textContent); continue; }
+	    if((rezCod=parseInt(dataReq.getAttribute('rez'))) != Er_NoError) {
+		alertCntr(dataReq);
+		if(rezCod != Er_Core_CntrWarning) continue;
+	    }
 	    for(var iEl = 0; iEl < dataReq.childNodes.length; iEl++)
 		if(dataReq.childNodes[iEl].nodeName.toLowerCase() == 'el') {
 		    var opt = document.createElement('option');
@@ -860,7 +873,7 @@ function selectChildRecArea( node, aPath, cBlk )
 			com += ">"+strEncode(val)+"</set>";
 
 			var rez = servSet(this.itPath, 'com=com', com, true);
-			if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+			if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
 			else this.srcNode.childNodes[col].childNodes[row].innerText = val;
 			if(!parseInt(rez.getAttribute('noReload'))) setTimeout('pageRefresh()', 500);
 			else this.setElements(true);
@@ -950,7 +963,10 @@ function selectChildRecArea( node, aPath, cBlk )
 		table.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
 
 		var dataReq = servGet(brPath,'com=get');
-		if(dataReq && parseInt(dataReq.getAttribute('rez')) != 0) { alert(dataReq.textContent); continue; }
+		if(dataReq && (rezCod=parseInt(dataReq.getAttribute('rez'))) != Er_NoError) {
+		    alertCntr(dataReq);
+		    if(rezCod != Er_Core_CntrWarning) continue;
+		}
 
 		//   Copy values to the info tree
 		for(var iCl = 0; dataReq && iCl < dataReq.childNodes.length; iCl++) {
@@ -1050,7 +1066,7 @@ function selectChildRecArea( node, aPath, cBlk )
 					    }
 					    if(com.length) {
 						var rez = servSet(this.itPath,'com=com',com,true);
-						if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+						if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
 						if(!parseInt(rez.getAttribute('noReload'))) setTimeout('pageRefresh()', 200);
 					    }
 					    return false;
@@ -1250,7 +1266,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		    if(this.srcNode.getAttribute('tp') == 'lnk') {
 			var dataReq = servGet(selPath+'/'+this.brPath,'com=get');
 			if(!dataReq) return false;
-			else if(parseInt(dataReq.getAttribute('rez')) != 0) { alert(dataReq.textContent); return false; }
+			else if(parseInt(dataReq.getAttribute('rez')) != Er_NoError) { alertCntr(dataReq); return false; }
 			selectPage('/'+pathLev(selPath,0)+dataReq.textContent);
 		    }
 		    else {
@@ -1260,7 +1276,7 @@ function selectChildRecArea( node, aPath, cBlk )
 			this.srcNode.childNodes[f_com].textContent+"</"+this.srcNode.childNodes[f_com].nodeName+">";
 			com += '</set>';
 			var rez = servSet(selPath+'/'+this.brPath,'com=com',com,true);
-			if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+			if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
 			pageRefresh();
 		    }
 		    return false;
@@ -1294,7 +1310,10 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
     if(!comm) {
 	dataReq = servGet(brPath,'com=get');
 	if(!dataReq) dataReq = document.createElement('get');
-	else if(parseInt(dataReq.getAttribute('rez')) != 0) { alert(dataReq.textContent); dataReq.textContent = ''; }
+	else if((rezCod=parseInt(dataReq.getAttribute('rez'))) != Er_NoError) {
+	    alertCntr(dataReq);
+	    if(!dataReq.getAttribute("mtxt")) dataReq.textContent = '';
+	}
     }
 
     //View select fields
@@ -1320,7 +1339,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 		    if(this.itComm) this.srcNode.textContent = selId ? selId : selVal;
 		    else {
 			var rez = servSet(this.itPath, 'com=com', '<set>'+strEncode(selId?selId:selVal)+'</set>', true);
-			if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+			if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
 			setTimeout('pageRefresh()', 500);
 		    }
 		    return false;
@@ -1404,7 +1423,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 			if(this.itComm) this.srcNode.textContent = this.checked ? '1' : '0';
 			else {
 			    var rez = servSet(this.itPath, 'com=com', '<set>'+(this.checked?'1':'0')+'</set>', true);
-			    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+			    if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
 			    setTimeout('pageRefresh()', 500);
 			}
 			return false;
@@ -1462,7 +1481,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 			btApply.onclick = function( ) {
 			    var wEl = this.parentNode.parentNode;
 			    var rez = servSet(wEl.childNodes[2].itPath, 'com=com', '<set>'+strEncode(wEl.childNodes[2].value,'html')+'</set>', true);
-			    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+			    if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
 			    else wEl.childNodes[2].defaultValue = wEl.childNodes[2].value;
 			    setTimeout('pageRefresh()',500);
 			    wEl.removeChild(this.parentNode);
@@ -1541,7 +1560,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 			    vT = val_w.childNodes[0].value.split("T")[1].split(":");
 			    var dt = new Date(parseInt(vD[0]), parseInt(vD[1])-1, parseInt(vD[2]), parseInt(vT[0]), parseInt(vT[1]), parseInt(vT[2]));
 			    var rez = servSet(val_w.itPath, 'com=com', '<set>'+Math.floor(dt.getTime()/1000)+'</set>', true);
-			    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+			    if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
 			    setTimeout('pageRefresh()', 500);
 			    val_w.removeChild(this);
 			    val_w.isEdited = false;
@@ -1628,7 +1647,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 				if(this.edFld.parentNode.itComm) this.edFld.parentNode.srcNode.textContent = this.edFld.value;
 				else {
 				    var rez = servSet(this.edFld.parentNode.itPath, 'com=com', '<set>'+this.edFld.value+'</set>', true);
-				    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+				    if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
 				    setTimeout('pageRefresh()', 500);
 				}
 				return false;
@@ -1680,7 +1699,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 			    if(this.parentNode.srcNode.getAttribute('tp') == 'hex') curVal = parseInt(curVal, 16);
 			    else if(this.parentNode.srcNode.getAttribute('tp') == 'oct') curVal = parseInt(curVal, 8);
 			    var rez = servSet(this.parentNode.itPath, 'com=com', '<set>'+curVal+'</set>', true);
-			    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+			    if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
 			    setTimeout('pageRefresh()', 500);
 			    this.parentNode.isEdited = false;
 			    this.parentNode.removeChild(this);
@@ -1922,7 +1941,7 @@ function pageCyclRefrStop( )
 function itDBLoad( )
 {
     var rez = servSet(selPath+'/%2fobj', 'com=com', '<load/>', true);
-    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+    if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
     else setTimeout('pageRefresh()', 500);
 }
 /**************************************************
@@ -1931,7 +1950,7 @@ function itDBLoad( )
 function itDBSave( )
 {
     var rez = servSet(selPath+'/%2fobj', 'com=com', '<save/>', true);
-    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+    if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
     else setTimeout('pageRefresh()', 500);
 }
 /**************************************************
@@ -2011,15 +2030,19 @@ function itAdd( )
 
 	// Check for already present node
 	var req = servSet(selPath+'/%2fbr%2f'+gbrId,'com=com','<get/>',true);
-	if(!req || parseInt(req.getAttribute('rez')) != 0) { if(req) alert(req.textContent); document.body.dlgWin.close(); return false; }
+	if(!req || parseInt(req.getAttribute('rez')) != Er_NoError) { alertCntr(req); document.body.dlgWin.close(); return false; }
 	for(var iLel = 0; iLel < req.childNodes.length; iLel++)
 	    if((req.childNodes[iLel].getAttribute('id') && req.childNodes[iLel].getAttribute('id') == inpId) ||
 		(!req.childNodes[iLel].getAttribute('id') && req.childNodes[iLel].textContent == inpId))
-	    { alert(("###Item '%1' already exists.###").replace('%1',inpId)); document.body.dlgWin.close(); return; }
+	    {
+		alert(("###Item '%1' already exists.###").replace('%1',inpId));
+		document.body.dlgWin.close();
+		return;
+	    }
 
 	// Send command
 	var rez = servSet(selPath+'/%2fbr%2f'+gbrId,'com=com',"<add "+(idm?("id='"+inpId+"'"):"")+">"+inpName+"</add>",true);
-	if(!rez || parseInt(rez.getAttribute('rez')) != 0) { if(rez) alert(rez.textContent); document.body.dlgWin.close(); return false; }
+	if(!rez || parseInt(rez.getAttribute('rez')) != Er_NoError) { alertCntr(rez); document.body.dlgWin.close(); return false; }
 	document.body.dlgWin.close();
 	treeUpdate(); pageRefresh();
 	return false;
@@ -2041,7 +2064,7 @@ function itDel( iit )
     { if(n_obj) sel_own += ('/'+sel_el); sel_el = tEl; }
     if(n_obj > 2) {
 	var req = servGet(sel_own+'/%2fbr','com=info');
-	if(parseInt(req.getAttribute('rez')) != 0) { alert(req.textContent); return; }
+	if(parseInt(req.getAttribute('rez')) != Er_NoError) { alertCntr(req); return; }
 	if(!req.childNodes[0]) return;
 
 	var branch = req.childNodes[0];
@@ -2052,7 +2075,7 @@ function itDel( iit )
 		var com = idm ? ("<del id='"+sel_el.substr(bId.length)+"'/>") :
 				("<del>"+sel_el.substr(bId.length)+"</del>");
 		var rez = servSet(sel_own+'/%2fbr%2f'+bId,'com=com',com,true);
-		if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+		if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
 		else { treeUpdate(); if(!iit) { selPath = sel_own; pageDisplay(selPath); } }
 		break;
 	    }
@@ -2154,7 +2177,7 @@ function itPaste( )
 	    dstNm += '/'+gbrId+inpId;
 	    // Check for already present node
 	    var req = servSet(toPath+'/%2fbr%2f'+gbrId,'com=com','<get/>', true);
-	    if(!req || parseInt(req.getAttribute('rez')) != 0) { if(req) alert(req.textContent); document.body.dlgWin.close(); return false; }
+	    if(!req || parseInt(req.getAttribute('rez')) != Er_NoError) { alertCntr(req); document.body.dlgWin.close(); return false; }
 	    for(var iLel = 0; iLel < req.childNodes.length; iLel++)
 		if((req.childNodes[iLel].getAttribute('id') && req.childNodes[iLel].getAttribute('id') == inpId) ||
 			(!req.childNodes[iLel].getAttribute('id') && req.childNodes[iLel].textContent == inpId)) {
@@ -2164,7 +2187,7 @@ function itPaste( )
 	}
 	//Copy visual item
 	var rez = servSet('/'+statNm+'/%2fobj','com=copy',"<copy src='"+srcNm+"' dst='"+dstNm+"' statNmSrc='"+statNmSrc+"' statNm='"+statNm+"'/>", true);
-	if(!rez || parseInt(rez.getAttribute('rez')) != 0) { if(rez) alert(rez.textContent); document.body.dlgWin.close(); return false; }
+	if(!rez || parseInt(rez.getAttribute('rez')) != Er_NoError) { alertCntr(rez); document.body.dlgWin.close(); return false; }
 
 	//Remove source widget
 	if(copyBuf.charAt(0) == '1') {

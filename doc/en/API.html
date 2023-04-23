@@ -2465,7 +2465,7 @@ Error values for the different data types (definition):
 <li> <i>path</i> — path, consists directly of the path to the node and the address of a specific element in the information structure of the node, where the address of the specific element is also the path encoded for the "/" character in "%2f" and written by the last element-file of the common path, for example — "/sub_DAQ/mod_ModBus/cntr_testTCP/%2fcntr%2fcfg%2fNAME";</li>
 <li> <i>user</i> — user of the program on behalf of which the request is sent, usually sets automatically;</li>
 <li> <i>text</i> — text or result of the request.</li></ul>
-<p>The result of the request is marked in the response by setting the <i>rez</i> attribute to the value: 0-successful, 1-warning, 2-error. In the event of an error or a warning, the message is written to the "text" of the tag and the attribute "mcat" (the message category): <i>&lt;{req} path="{path}" user="{user}" rez="<b>2</b>" mcat="<b>/sub_DAQ/mod_BlockCalc</b>"&gt;<b>Impossible to remove the node</b>&lt;/{req}&gt;</i>
+<p>The result of the request is marked in the response by setting the <i>rez</i> attribute to the value: 0-successful, 1-warning, 2-error. In the event of an error the message is written to the "text" of the tag and the attribute "mcat" (the message category) — <i>&lt;{req} path="{path}" user="{user}" rez="<b>2</b>" mcat="<b>/sub_DAQ/mod_BlockCalc</b>"&gt;<b>Impossible to remove the node</b>&lt;/{req}&gt;</i>. In the event of a warning the message is written to the attribute "mtxt" and the attribute "mcat" (the message category) with storing the main tag's data — <i>&lt;{req} path="{path}" user="{user}" rez="<b>1</b>" mcat="<b>/sub_DAQ/mod_BlockCalc</b>" mtxt="<b>Restart after the operation!</b>"&gt;{main data}&lt;/{req}&gt;</i>.
 </p><p>The grouping request "CntrReqs" is processed at the API level of the node and does not require separate processing in the user code. In fact, into the tag "CntrReqs" may be placed any other requests with the possibility of hierarchical grouping by including of the internal tags "CntrReqs". The only attribute of this tag is the attribute <i>path</i>, which indicates the path to the node and is the basis for internal requests.
 </p>
 <div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;CntrReqs</span> <span class="na">path=</span><span class="s">"/sub_DAQ/cntr_gate"</span><span class="nt">&gt;</span>
@@ -4262,8 +4262,8 @@ Error codes (enum — TError::Codes):
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>TError( );</i> — Default-empty constructor.</li>
-<li> <i>TError( const char *cat, const char *mess, ... );</i> — Initialization of the error with the category <i>cat</i> and the message <i>mess</i> + arguments.</li>
-<li> <i>TError( int cod, const char *cat, const char *mess, ... );</i> — Initialization of the error with the <i>code</i>, the category <i>cat</i> and the message <i>mess</i> + arguments.</li></ul>
+<li> <i>TError( const char *cat, const char *mess, ... ); TError( const string &amp;icat, const string &amp;imess );</i> — Initialization of the error with the category <i>cat</i> and the message <i>mess</i> + arguments.</li>
+<li> <i>TError( int cod, const char *cat, const char *mess, ... ); TError( int icod, const string &amp;icat, const string &amp;imess );</i> — Initialization of the error with the <i>code</i>, the category <i>cat</i> and the message <i>mess</i> + arguments.</li></ul>
 <p><b>Public attributes:</b>
 </p>
 <ul><li> <i>int cod;</i> — The error code.</li>

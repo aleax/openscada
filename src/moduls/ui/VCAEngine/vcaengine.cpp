@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.11.3"
+#define MOD_VER		"7.11.5"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -270,7 +270,8 @@ void Engine::load_( )
 	    for(int libCnt = 0; TBDS::dataSeek(itLs[iDB]+"."+wlbTable(),nodePath()+"LIB",libCnt++,cEl,TBDS::UseCache); ) {
 		string lId = cEl.cfg("ID").getS();
 		if(!wlbPresent(lId)) wlbAdd(lId,"", itLs[iDB]);
-		if(wlbAt(lId).at().DB() == itLs[iDB]) wlbAt(lId).at().load(&cEl);
+		if(wlbAt(lId).at().DB() == itLs[iDB] || wlbAt(lId).at().DB().empty())
+		    wlbAt(lId).at().load(&cEl);
 		wlbAt(lId).at().setDB(itLs[iDB], true);
 		itReg[lId] = true;
 		if(mess_lev() == TMess::Debug) {
@@ -683,7 +684,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    // Connect to present session
 	    if(!sess.empty()) {
 		if(s2i(opt->attr("onlyMy")) && opt->attr("user") != sesAt(sess).at().user())
-		    throw TError(nodePath().c_str(), _("That is not my session."));
+		    throw TError(nodePath(), _("That is not my session."));
 
 		opt->setAttr("conId", i2s(sesAt(sess).at().connect(s2i(opt->attr("userChange")))));
 		opt->setAttr("prj", sesAt(sess).at().projNm());
@@ -709,7 +710,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		opt->setAttr("sess", sess);
 		sesAt(sess).at().mess_sys(TMess::Notice, _("User '%s' has been connected on '%s'."),
 		    opt->attr("user").c_str(), opt->attr("remoteSrcAddr").size()?opt->attr("remoteSrcAddr").c_str():"LocalHost");
-	    } else throw TError(nodePath().c_str(),_("Error arguments of the session connecting/creating."));
+	    } else throw TError(nodePath(), _("Error arguments of the session connecting/creating."));
 	    opt->setAttr("userIsRoot", SYS->security().at().access(opt->attr("user"),SEC_WR,"root","root",RWRWR_)?"1":"0");
 	}
 	else if(ctrChkNode(opt,"disconnect",RWRWRW,"root",SUI_ID,SEC_WR)) {
