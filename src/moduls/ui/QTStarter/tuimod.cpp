@@ -59,7 +59,7 @@
 #define MOD_NAME	trS("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.14.5"
+#define MOD_VER		"5.14.6"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -799,7 +799,7 @@ void StApp::timerEvent( QTimerEvent *event )
 		{
 		    AutoHD<TModule> QtMod = mod->owner().modAt(list[iL]);
 
-		    // Search module into the start list
+		    // Search module in the start list
 		    int iOff = 0;
 		    string sEl;
 		    while((sEl=TSYS::strSepParse(mod->startMod(),0,';',&iOff)).size() && sEl != list[iL]) ;

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-22 21:54+0300\n"
+"POT-Creation-Date: 2023-04-29 15:28+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -106,7 +106,7 @@ msgstr "Высокое разрешение времени буфера"
 msgid "Filling the passage points with the last value"
 msgstr "Заполнение проходных точек последним значением"
 
-msgid "Process into archivers"
+msgid "Process by the archivers"
 msgstr "Обработка архиваторами"
 
 msgid "Error loading the message archivers."
@@ -118,13 +118,14 @@ msgstr "Ошибка загрузки архиваторов значений."
 msgid "Value archives load error."
 msgstr "Ошибка загрузки архивов значений."
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "======================== Subsystem \"Archives-History\" options "
 "===================\n"
 "------ Parameters of the section '%s' of the configuration file ------\n"
 "MessBufSize  <items>    Size of the messages buffer.\n"
 "MessPeriod   <seconds>  Period of the messages archiving.\n"
+"ClrAlrmDays  <days>     Days of the alarms automatic clearing.\n"
 "ValPeriod    <mseconds> Period of active archiving of values.\n"
 "ValPriority  <level>    Level of priority of the task of active archiving of "
 "values.\n"
@@ -209,11 +210,22 @@ msgstr "Удалённый"
 msgid "Messages"
 msgstr "Сообщения"
 
-msgid "Buffer size"
-msgstr "Размер буфера"
+#, fuzzy
+msgid "Buffer size, archiving period"
+msgstr "Размер буфера, единиц"
 
-msgid "Archiving period, seconds"
-msgstr "Период архивирования, секунд"
+#, fuzzy
+msgid "In seconds."
+msgstr "Размер, секунд"
+
+msgid "Days of the alarms automatic clearing"
+msgstr ""
+
+msgid ""
+"After that term the alarms are meant as forgotten and inactual,\n"
+"so removed from the table of the active alarms.\n"
+"Zero disables the automatic clearing."
+msgstr ""
 
 msgid "View"
 msgstr "Просмотр"
@@ -515,6 +527,9 @@ msgstr ""
 msgid "Archives"
 msgstr "Архивы"
 
+msgid "Buffer size"
+msgstr "Размер буфера"
+
 msgid "Last read buffer"
 msgstr "Последнее чтение буфера"
 
@@ -612,7 +627,7 @@ msgid "Load the program from this DB"
 msgstr "Загрузить программу из этой БД"
 
 msgid ""
-"Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
+"Codepage of data in the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr "Кодировка данных в БД. Для примера: UTF-8, KOI8-R, KOI8-U ... ."
 
 msgid ""
@@ -1742,7 +1757,7 @@ msgstr "КиБ"
 msgid "B"
 msgstr "Б"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"
@@ -1759,7 +1774,7 @@ msgid ""
 "    --projUserDir={dir} Directory of user projects (writeable) of OpenSCADA, "
 "\"~/.openscada\" by default.\n"
 "    --projLock={per}\tUses the projects locking by creation the \"lock\" "
-"file into the project folder and update it in the period <per>,\n"
+"file in the project folder and update it in the period <per>,\n"
 "\t\t\tby default it is enabled and the updating period <per> is 60 seconds. "
 "To disable set the updating period <per> to zero.\n"
 "    --lang=<LANG>\tStation language, in the view \"en_US.UTF-8\".\n"
@@ -2490,8 +2505,8 @@ msgstr "Сообщений индексировано %d, кешировано %
 msgid "Translation contexts %d."
 msgstr "Контекстов перевода %d."
 
-msgid "<<<Unmatched sources>>>\n"
-msgstr "<<<Несовпадение источников!!!>>>\n"
+msgid "<<<SEVERAL VARIANTS>>>\n"
+msgstr ""
 
 #, c-format
 msgid "Clearing the equel to base translation '%s' for '%s'."
@@ -3013,6 +3028,12 @@ msgstr "Имя проекта установлено в:"
 
 msgid "already started."
 msgstr "уже запущен."
+
+#~ msgid "Archiving period, seconds"
+#~ msgstr "Период архивирования, секунд"
+
+#~ msgid "<<<Unmatched sources>>>\n"
+#~ msgstr "<<<Несовпадение источников!!!>>>\n"
 
 #~ msgid "Table is empty."
 #~ msgstr "Таблица пуста."

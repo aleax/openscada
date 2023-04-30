@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchives.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,7 +41,7 @@ using namespace OSCADA;
 //************************************************
 TArchiveS::TArchiveS( ) :
     TSubSYS(SARH_ID, true), elMess(""), elVal(""), elAval(""), mMessPer(10), prcStMess(false), mRes(true),
-    headBuf(0), vRes(true), mValPer(1000), mValPrior(10), mAutoIdMode(BothPrmAttrId),
+    headBuf(0), mAlarmsClrDays(0), vRes(true), mValPer(1000), mValPrior(10), mAutoIdMode(BothPrmAttrId),
     mValForceCurTm(false), prcStVal(false), endrunReqVal(false), toUpdate(false), mRdRestDtOverTm(0), mRdAlarms(0)
 {
     mAval = grpAdd("va_");
@@ -90,7 +90,7 @@ TArchiveS::TArchiveS( ) :
     elAval.fldAdd(new TFld("BHGRD",trS("Buffer in the hard time grid"),TFld::Boolean,0,"1","1"));
     elAval.fldAdd(new TFld("BHRES",trS("Buffer in the high time resolution"),TFld::Boolean,0,"1","0"));
     elAval.fldAdd(new TFld("FillLast",trS("Filling the passage points with the last value"),TFld::Boolean,0,"1","0"));
-    elAval.fldAdd(new TFld("ArchS",trS("Process into archivers"),TFld::String,0,"1000"));
+    elAval.fldAdd(new TFld("ArchS",trS("Process by the archivers"),TFld::String,0,"1000"));
 
     setMessBufLen(BUF_SIZE_DEF);
 }
@@ -111,6 +111,7 @@ void TArchiveS::load_( )
     //Load parameters
     setMessBufLen(s2i(TBDS::genPrmGet(nodePath()+"MessBufSize",i2s(messBufLen()))));
     setMessPeriod(s2i(TBDS::genPrmGet(nodePath()+"MessPeriod",i2s(messPeriod()))));
+    setAlarmsClrDays(s2i(TBDS::genPrmGet(nodePath()+"AlarmsClrDays",i2s(alarmsClrDays()))));
     setValPeriod(s2i(TBDS::genPrmGet(nodePath()+"ValPeriod",i2s(valPeriod()))));
     setValPrior(s2i(TBDS::genPrmGet(nodePath()+"ValPriority",i2s(valPrior()))));
     setValForceCurTm(s2i(TBDS::genPrmGet(nodePath()+"ValForceCurTm",i2s(valForceCurTm()))));
@@ -162,7 +163,7 @@ void TArchiveS::load_( )
 	vector<string> dbLs;
 	itReg.clear();
 
-	//  Search into DB and create new archivers
+	//  Search in th DB and create new archivers
 	TBDS::dbList(dbLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
 	    for(int fldCnt = 0; TBDS::dataSeek(dbLs[iIt]+"."+subId()+"_val_proc",nodePath()+subId()+"_val_proc",fldCnt++,cEl,TBDS::UseCache); ) {
@@ -198,7 +199,7 @@ void TArchiveS::load_( )
 	vector<string> dbLs;
 	itReg.clear();
 
-	//  Search into DB and create new archives
+	//  Search in DB and create new archives
 	TBDS::dbList(dbLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
 	    for(int fldCnt = 0; TBDS::dataSeek(dbLs[iIt]+"."+subId()+"_val",nodePath()+subId()+"_val",fldCnt++,cEl,TBDS::UseCache); ) {
@@ -229,6 +230,7 @@ void TArchiveS::save_( )
     //Save parameters
     TBDS::genPrmSet(nodePath()+"MessBufSize", i2s(messBufLen()));
     TBDS::genPrmSet(nodePath()+"MessPeriod", i2s(messPeriod()));
+    TBDS::genPrmSet(nodePath()+"AlarmsClrDays",i2s(alarmsClrDays()));
     TBDS::genPrmSet(nodePath()+"ValPeriod", i2s(valPeriod()));
     TBDS::genPrmSet(nodePath()+"ValPriority", i2s(valPrior()));
     TBDS::genPrmSet(nodePath()+"ValForceCurTm",i2s(valForceCurTm()));
@@ -265,6 +267,7 @@ string TArchiveS::optDescr( )
 	"------ Parameters of the section '%s' of the configuration file ------\n"
 	"MessBufSize  <items>    Size of the messages buffer.\n"
 	"MessPeriod   <seconds>  Period of the messages archiving.\n"
+	"ClrAlrmDays  <days>     Days of the alarms automatic clearing.\n"
 	"ValPeriod    <mseconds> Period of active archiving of values.\n"
 	"ValPriority  <level>    Level of priority of the task of active archiving of values.\n"
 	"RdRestDtOverTm <days>   Depth of the forced overloading of the reserve history at startup, in days.\n\n"
@@ -285,7 +288,7 @@ void TArchiveS::unload( )
     mRes.unlock();
     setMessBufLen(BUF_SIZE_DEF);
 
-    mMessPer = 10, mValPer = 1000, mValPrior = 10, mValForceCurTm = false, mAutoIdMode = BothPrmAttrId;
+    mMessPer = 10, mAlarmsClrDays = 0, mValPer = 1000, mValPrior = 10, mValForceCurTm = false, mAutoIdMode = BothPrmAttrId;
 }
 
 void TArchiveS::subStart( )
@@ -430,6 +433,15 @@ void TArchiveS::subStop( )
 void TArchiveS::perSYSCall( unsigned int cnt )
 {
     if(subStartStat() && toUpdate && !subStarting) subStart();
+
+    if(alarmsClrDays() && (cnt*prmServTask_PER)%(24*60*60) == 0) {
+	mRes.lock();
+	for(map<string,TMess::SRec>::iterator iRec = mAlarms.begin(); iRec != mAlarms.end(); )
+	    if((SYS->sysTm()-iRec->second.time) > (alarmsClrDays()*24*60*60))
+		mAlarms.erase(iRec++);
+	    else ++iRec;
+	mRes.unlock();
+    }
 
     TSubSYS::perSYSCall(cnt);
 }
@@ -1016,9 +1028,10 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(ctrMkNode("area",opt,1,"/m_arch",_("Messages"),R_R_R_,"root",SARH_ID)) {
-	    ctrMkNode("fld",opt,-1,"/m_arch/size",_("Buffer size"),RWRWR_,"root",SARH_ID,2,
-		"tp","dec","min",i2s(BUF_SIZE_DEF).c_str());
-	    ctrMkNode("fld",opt,-1,"/m_arch/per",_("Archiving period, seconds"),RWRWR_,"root",SARH_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/m_arch/size",_("Buffer size, archiving period"),RWRWR_,"root",SARH_ID,2,"tp","dec", "min",i2s(BUF_SIZE_DEF).c_str());
+	    ctrMkNode("fld",opt,-1,"/m_arch/per","",RWRWR_,"root",SARH_ID,2,"tp","dec","help",_("In seconds."));
+	    ctrMkNode("fld",opt,-1,"/m_arch/clrAlrmDays",_("Days of the alarms automatic clearing"),RWRWR_,"root",SARH_ID,3,"tp","dec", "min","0",
+		"help",_("After that term the alarms are meant as forgotten and inactual,\nso removed from the table of the active alarms.\nZero disables the automatic clearing."));
 	    if(ctrMkNode("area",opt,-1,"/m_arch/view",_("View"),R_R___,"root",SARH_ID)) {
 		ctrMkNode("fld",opt,-1,"/m_arch/view/tm",_("Time, size (seconds) and level"),RWRW__,"root",SARH_ID,1,"tp","time");
 		ctrMkNode("fld",opt,-1,"/m_arch/view/size","",RWRW__,"root",SARH_ID,1,"tp","dec");
@@ -1059,13 +1072,17 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     }
 
     //Process command to page
-    if(a_path == "/m_arch/per") {
+    if(a_path == "/m_arch/size") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(i2s(messBufLen()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setMessBufLen(s2i(opt->text()));
+    }
+    else if(a_path == "/m_arch/per") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(i2s(messPeriod()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setMessPeriod(s2i(opt->text()));
     }
-    else if(a_path == "/m_arch/size") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(i2s(messBufLen()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setMessBufLen(s2i(opt->text()));
+    else if(a_path == "/m_arch/clrAlrmDays") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(i2s(alarmsClrDays()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setAlarmsClrDays(s2i(opt->text()));
     }
     else if(a_path == "/m_arch/view/tm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD)) {

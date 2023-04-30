@@ -1909,7 +1909,7 @@ void Client::protIO( XML_N &io )
 			// * Lost intermediate 'F' ('C' both after and before): clean the chunks buffer and start it's filling from begin.
 			// * Lost first 'C': clean the chunks buffer and start it's filling from next 'C' but there is possible this is first 'C' after
 			//	single 'F' lost before, it will be checked by correct request type.
-			// * Lost intermediate 'C': clean and mark the chunks buffer as some chunk into sequence lost and pass all next chunks up to 'F'.
+			// * Lost intermediate 'C': clean and mark the chunks buffer as some chunk in sequence lost and pass all next chunks up to 'F'.
 			// * Lost intermediate 'C' just before 'F': clean the chunks buffer and 'F'.
 			// * Lost 'F' after 'C' before 'F': clean the chunks buffer and pass current 'F' to process but there is possible that is single 'F'
 			//	next, it will be checked by correct request type.
@@ -2909,7 +2909,7 @@ nextReq:
 		    // * Lost intermediate 'F' ('C' both after and before): clean the chunks buffer and start it's filling from begin.
 		    // * Lost first 'C': clean the chunks buffer and start it's filling from next 'C' but there is possible this is first 'C' after
 		    //		single 'F' lost before, it will be checked by correct request type.
-		    // * Lost intermediate 'C': clean and mark the chunks buffer as some chunk into sequence lost and pass all next chunks up to 'F'.
+		    // * Lost intermediate 'C': clean and mark the chunks buffer as some chunk to sequence lost and pass all next chunks up to 'F'.
 		    // * Lost intermediate 'C' just before 'F': clean the chunks buffer and 'F'.
 		    // * Lost 'F' after 'C' before 'F': clean the chunks buffer and pass current 'F' to process but there is possible that is single 'F'
 		    //		next, it will be checked by correct request type.
@@ -3896,9 +3896,9 @@ nextReq:
 
 				    ss.retrQueue.push_back(respEp.substr(ntfMsgOff));	//Queue to retranslation
 				    ss.seqN++;
-				    if(maxNtfPerPublLim) ss.setState(SS_LATE);	//Restore state to process into the next Publish request,
+				    if(maxNtfPerPublLim) ss.setState(SS_LATE);	//Restore state to process in the next Publish request,
 										// ?!?! Maybe store the previous monitored item's position
-										//      and early call it into the subScrCycle()
+										//      and early call it in the subScrCycle()
 				}
 				s->publishReqs.erase(s->publishReqs.begin()+iP);//Remove the publish request from the queue
 				ss.pubCntr++;

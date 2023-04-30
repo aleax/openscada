@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"6.8.4"
+#define MOD_VER		"6.8.5"
 #define AUTHORS		trS("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	trS("Visual operation user interface, based on the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -500,7 +500,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 	    }
 	    //Main session page data prepare
 	    else if(zero_lev.find("ses_") == 0) {
-		ses.url = Mess->codeConvIn("UTF-8", ses.url);	//Internal data into UTF-8
+		ses.url = Mess->codeConvIn("UTF-8", ses.url);	//Internal data in UTF-8
 		string sesnm = zero_lev.substr(4);
 
 		AutoHD<VCASess> vs;
@@ -586,7 +586,7 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
     if(Mess->translDyn()) trCtx.hold(ses.user+"\n"+ses.lang);
 
     try {
-	ses.url = Mess->codeConvIn("UTF-8", ses.url);	//Internal data into UTF-8
+	ses.url = Mess->codeConvIn("UTF-8", ses.url);	//Internal data in UTF-8
 	//To control interface request
 	if((cntEl=ses.prm.find("com"))!=ses.prm.end() && cntEl->second == "com") {
 	    XMLNode req(""); req.load(ses.content); req.setAttr("path", ses.url);

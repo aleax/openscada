@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/Program manual</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Program_manual.html" title="Документы/Руководство по программе (98% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Program_manual.html" title="Документы/Руководство по программе (97% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
@@ -535,7 +535,7 @@
 <li> <i>Enable the manager</i> — enables the generic translation manager which cause full reloading for all built messages obtain, however this does not form the full messages index by deny to reload some objects into their execution. For the full messages index loading you ought to save the manager into the enabled mode and to restart OpenSCADA. Ongoing next start the program will form the full messages index.</li>
 <li> <i>Languages of managing</i> — list of the processing languages, in the two-character representation and separated by the character ';'. If the translations for the specified language in the source are presented then the language column will contain them otherwise it will be empty.</li>
 <li> <i>Source filter</i> — source filter of limiting the manager work in some DBs, the source just must contain such substring.</li>
-<li> <i>, check/fix</i> — enable for checking the base messages translation equality in different sources and fixing by: propagation the translations to empty sources, clearing the double to base translations and merging the base messages as the translations.</li>
+<li> <i>, check/fix</i> — enable for checking the base messages translation equality in different sources and fixing by: propagation the translations to empty sources, clearing the double to base translations. And the separated-second check for fixing by merging the base messages as the translations, since this operation can be some wrong in complex environments.</li>
 <li> <i>, pass</i> — pass the specified number of the table items from the top, useful for very big projects which are limited in time of the table complete processing.</li>
 <li> <i>Messages</i> — same the messages table with columns: the base language, managing translation languages, the message sources. To modify there are allowed the languages columns and at result the changes will be set to the message sources.</li></ul></dd></dl>
 <ul><li> The tab "Tasks" contains a table with opened tasks of OpenSCADA components (Fig.4d). From the table you can get several information about the tasks, and also assign CPUs used by the tasks of multiprocessing systems and set the task invoking phase.</li>
@@ -560,7 +560,7 @@
 <p>For debug of specific of OpenSCADA different working you may be necessary to enable addition-debugging messages generation, which you can set by select minimal messages level, into the tab "Station", to "Debug (0)". As a result of this there will emerge the tab "Debug" (Fig.4e) where available the objects counters for control to leaks, and also the table with categories list of incoming debug messages. Into the table you can select only needed sources of the debug messages and omit to overload the archiving messages subsystem and to decrease significantly for overall performance of the program. You can also to select higher categories, up to root subsystems categories, that will disable the detailed selection and enable all messages generation by the level or by the overall subsystem. For the debug messages observing you need to go subsystem "Archives" (Fig.4.6c), and for this there provided the button "See to messages". The selected debug mode and list of debug categories can be standard stored to the configuration file and on the next boot the debug mode will be activated, this important primarily for the objects counters.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:807px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_debug.png"><img class="thumbimage" height="698" src="files/QTCfg_sys_debug.png" width="805" /></a>  <div class="thumbcaption">Fig. 4e. The tab "Debug" of the main page of the station configuration.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1282px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_transl.png"><img class="thumbimage" height="973" src="files/QTCfg_sys_transl.png" width="1280" /></a>  <div class="thumbcaption">Fig. 4f. The tab "Translations" of the main page of the station configuration.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1282px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_transl.png"><img class="thumbimage" height="834" src="files/QTCfg_sys_transl.png" width="1280" /></a>  <div class="thumbcaption">Fig. 4f. The tab "Translations" of the main page of the station configuration.</div></div></div></div>
 <p>While examining configuration pages of the modular subsystems there will be described general properties of all the modules. However, it should be noted that each module can provide both additional tabs and separate fields for the configuration of its own operation features for pages whose objects are inherited by the modules. Information on the features and additions of the modules can be found in <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules" title="Special:MyLanguage/Modules">separate documentation</a> for each of them.
 </p>
 <h3><span class="mw-headline" id="Subsystem_.22DB.22"><span class="mw-headline-number">4.1</span> <span id="CfgDB" title="#CfgDB">Subsystem "DB"</span></span></h3>
@@ -870,8 +870,8 @@
 <p>The tab "Messages" (Fig.4.6b) contains the configuration of the messages archive and the request form of messages from it.
 </p><p>Configuration of the messages archive is represented by the fields:
 </p>
-<ul><li> <i>Buffer size</i> — indicates the size of the memory area reserved for the interim buffer of messages. Messages from the buffer are requested for viewing and archived with the messages archivers.</li>
-<li> <i>Archiving period</i> — the periodicity in seconds with which the archivers get messages from the buffer for their archiving.</li></ul>
+<ul><li> <i>Buffer size, archiving period</i> — indicates the size of the memory area reserved for the interim buffer of messages. Messages from the buffer are requested for viewing and archived with the messages archivers by the specified periodicity in seconds.</li>
+<li> <i>Days of the alarms automatic clearing</i> — after that term the alarms are meant as forgotten and inactual, so removed from the table of the active alarms. Zero disables the automatic clearing.</li></ul>
 <p>The messages request form contains the configuration fields of the request and the table of results. Configuration fields of the request are:
 </p>
 <ul><li> <i>Time, size (seconds) and level</i> — specifies the request time, size or depth (in seconds) and minimum level of messages (more than or equal).</li>
@@ -885,7 +885,7 @@
 <li> <i>Message</i> — text of the message.</li></ul>
 <p>For alarm messages, after the table appears a button for clean up this table for the visible alarms, that is useful for service functions. The table also appended for the "Delete" command to remove single alarm.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1043px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mess.png"><img class="thumbimage" height="621" src="files/QTCfg_subsys_arch_mess.png" width="1041" /></a>  <div class="thumbcaption">Fig. 4.6b. The tab "Messages" of the subsystem "Archives-History".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1025px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mess.png"><img class="thumbimage" height="834" src="files/QTCfg_subsys_arch_mess.png" width="1023" /></a>  <div class="thumbcaption">Fig. 4.6b. The tab "Messages" of the subsystem "Archives-History".</div></div></div></div>
 <p>The tab "Values" (Fig.4.6c) contains the general configuration of the values archiving and the list of archives of values. In the context menu of the list of values the user has the opportunity to add, delete and go to the desired archive. The general configuration of the archiving is represented by the fields:
 </p>
 <ul><li> <i>Period of the data receiving</i> — indicates the periodicity of the task of the active archiving, in milliseconds. Highest level of detail or minimum period of the active archives is in fact determined by this value.</li>
@@ -1513,7 +1513,7 @@
     --projName=&lt;name&gt;   OpenSCADA project name to switch it.
                         For this feature there also uses an environment variable "OSCADA_ProjName" and the program binary name "openscada_{ProjName}".
     --projUserDir={dir} Directory of user projects (writeable) of OpenSCADA, "~/.openscada" by default.
-    --projLock={per}    Uses the projects locking by creation the "lock" file into the project folder and update it in the period &lt;per&gt;,
+    --projLock={per}    Uses the projects locking by creation the \"lock\" file in the project folder and update it in the period &lt;per&gt;,
                         by default it is enabled and the updating period &lt;per&gt; is 60 seconds. To disable set the updating period &lt;per&gt; to zero.
     --lang=&lt;LANG&gt;       Station language, in the view "en_US.UTF-8".
     --config=&lt;file&gt;     Station configuration file.
@@ -1613,6 +1613,7 @@ RdRestDtTm &lt;hour&gt;       Depth of recovery time of archive data from the re
 ------ Parameters of the section '/sub_Archive/' of the configuration file ------
 MessBufSize  &lt;items&gt;    Size of the messages buffer.
 MessPeriod   &lt;seconds&gt;  Period of the messages archiving.
+ClrAlrmDays  &lt;days&gt;     Days of the alarms automatic clearing.
 ValPeriod    &lt;mseconds&gt; Period of active archiving of values.
 ValPriority  &lt;level&gt;    Level of priority of the task of active archiving of values.
 RdRestDtOverTm &lt;days&gt;   Depth of the forced overloading of the reserve history at startup, in days.

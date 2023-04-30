@@ -97,7 +97,7 @@ void TProt::load_( )
 	vector<string> itLs;
 	map<string, bool> itReg;
 
-	//  Search into DB
+	//  Search in DB
 	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
 	    for(int fldCnt = 0; TBDS::dataSeek(itLs[iDB]+"."+modId()+"_node",nodePath()+modId()+"_node",fldCnt++,gCfg,TBDS::UseCache); ) {

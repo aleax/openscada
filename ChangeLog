@@ -1,3 +1,19 @@
+2023-04-30 Roman (stable)
+- FIX:LibsDB.{OscadaLibs,vcaBase}: Some automatic fixed for the translations.
+- FIX:SYS,Archive.FSArch,DB.LDAP,DAQ.FT3: Some fixes of building with the "musl" C Library and closedir() call for NULL,
+    from Sergey Dudanov.
+- FIX:SYS: Fixed in many places of the "into" word using.
+- SYS: The translation configuration fields TrPassN, TrChkAndFix, TrChkAndFixMB moved to the dynamic variables due to
+	there is no need of their store.
+    The translation mark "<<<Unmatched sources>>>" renamed to "<<<SEVERAL VARIANTS>>>".
+- Archives.{FSArch,DBArch}: The automatic creation value archives are setting now with the empty storage.
+- !!:Archives: The "Messages" tab of the "Archive-History" subsystem appended of a function of automatic clearing old Alarms
+    from the Active Alarms Table at the specified days depth.
+- Protocol.SelfSystem: Was set to response by compressed (with level -1) packages at the compressed requests.
+- !!:Protocol.UserProtocol: The input part expanded by a possibility of schedule the user procedures call in the service cycle,
+    for the background processing of some data; the This Object (this) attribute was appended here also.
+
+
 2023-04-22 Roman (stable)
 - !!:LibsDB.OscadaLibs: The templates library DevLib appended by initial implementation of
 	the counters "FF LE-03MB CT (FF_LE)" and Ergomera 625(ergomera625).

@@ -1263,7 +1263,7 @@ void Page::loadIO( )
 	    if(wdgPresent(sid)) wdgDel(sid);
 	    continue;
 	}
-	// Lost inherited widget due to it removing into the parent
+	// Lost inherited widget due to it removing from the parent
 	else if((mParentAddrPrev.empty() || spar.find(mParentAddrPrev) != 0) &&	//!!!! Do not remove at presence in the previous parent
 		mod->nodeAt(spar,0,0,0,true).freeStat() &&
 		sid.size() < spar.size() && spar.compare(spar.size()-sid.size(),sid.size(),sid) == 0)

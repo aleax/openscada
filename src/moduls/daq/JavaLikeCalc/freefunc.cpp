@@ -1509,9 +1509,9 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    sp = vl.getS().rfind(prms[0].getS(),sp);
 		    return (sp==string::npos) ? -1 : (int)sp;
 		}
-		// int search( string pat, string flg = "" ); - search into the string by pattern 'pat' and flags 'flg'.
+		// int search( string pat, string flg = "" ); - search in the string by pattern 'pat' and flags 'flg'.
 		//       Return found substring position or -1 for else.
-		// int search( RegExp pat ); - search into the string by RegExp 'pat'.
+		// int search( RegExp pat ); - search in the string by RegExp 'pat'.
 		//       Return found substring position or -1 for else.
 		//  pat - regular expression pattern;
 		//  flg - regular expression flags.
@@ -1576,12 +1576,12 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		//  substr - substring for insert
 		if(prop == "insert" && prms.size() >= 2)
 		    return vl.getS().insert(vmax(0,vmin(vl.getS().size(),(unsigned)prms[0].getI())), prms[1].getS() );
-		// string replace( int pos, int n, string str ) - replace substring into position <pos> and length <n> to string <str>.
+		// string replace( int pos, int n, string str ) - replace substring in position <pos> and length <n> to string <str>.
 		//  pos - position for start replace
 		//  n - number symbols for replace
 		//  str - string for replace
 		// string replace( string substr, string str ) - replace all substrings <substr> to string <str>.
-		//  substr - substring into all string
+		//  substr - substring in the whole string
 		// string replace( RegExp pat, string str ) - replace substrings by pattern <pat> to string <str>.
 		//  pat - regular expression pattern
 		if(prop == "replace" && prms.size() >= 2) {
@@ -1664,7 +1664,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    if(prms.size() >= 2) { prms[1].setI(off); prms[1].setModify(); }
 		    return rez;
 		}
-		// string path2sep( string sep = "." ) - convert path into this string to separated by <sep> string.
+		// string path2sep( string sep = "." ) - convert path in this string to separated by <sep> string.
 		//  sep - item separator
 		if(prop == "path2sep")
 		    return TSYS::path2sepstr(vl.getS(), (prms.size() && prms[0].getS().size()) ? prms[0].getS()[0] : '.');

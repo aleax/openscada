@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.FSArch file: val.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -120,7 +120,7 @@ void ModVArch::start( )
 	DIR *IdDir = opendir(addr().c_str());
 	if(IdDir == NULL && mkdir(addr().c_str(),SYS->permCrtFiles(true)))
 	    throw err_sys(_("Cannot create the archive directory '%s'."), addr().c_str());
-	closedir(IdDir);
+	if(IdDir) closedir(IdDir);
 
 	//Checking the archiver folders for duplicates
 	string dbl = "";
@@ -355,7 +355,7 @@ void ModVArch::checkArchivator( bool now, bool toLimits )
 	    if(owner().owner().valPresent(ArhNm)) varch = owner().owner().valAt(ArhNm);
 	    else {
 		//   Add no present archive
-		owner().owner().valAdd(ArhNm);
+		owner().owner().valAdd(ArhNm, "");
 		varch = owner().owner().valAt(ArhNm);
 		varch.at().setToStart(true);
 		varch.at().setValType(ArhTp);
@@ -376,7 +376,7 @@ void ModVArch::checkArchivator( bool now, bool toLimits )
 	closedir(IdDir);
 	now = true;
 
-	//Check for not presented files into the info table
+	//Check for not presented files in the info table
 	if(infoTbl.size() && isTm) {
 	    TConfig cEl(&mod->packFE());
 	    cEl.cfgViewAll(false);
@@ -575,7 +575,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 		_("Sets the time after which, in the absence of requests, the archive file will be packaged in a gzip archive.\n"
 		  "Set to zero for disabling the packing by gzip."));
 	    ctrMkNode("fld",opt,-1,"/prm/add/tmout",_("Period of the archives checking, minutes"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
-		_("Sets the periodicity of checking the archives for the appearance or deletion files into the archive folder, "
+		_("Sets the periodicity of checking the archives for the appearance or deletion files in the archive folder, "
 		  "as well as exceeding the limits and removing old archives files."));
 	    ctrMkNode("fld",opt,-1,"/prm/add/pack_info_fl",_("Use info file for packaged archives"),RWRWR_,"root",SARH_ID,2,"tp","bool","help",
 		_("Specifies whether to create a file with information about the packed archive files by gzip-archiver.\n"
@@ -583,7 +583,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 		  "process of first run by eliminating the need to decompress by gzip-archiver in order to obtain the information."));
 	    ctrMkNode("comm",opt,-1,"/prm/add/chk_nw",_("Check now for the directory of the archiver"),RWRW__,"root",SARH_ID,1,"help",
 		_("The command, which allows you to immediately start for checking the archives, "
-		  "for example, after some manual changes into the directory of the archiver."));
+		  "for example, after some manual changes in the directory of the archiver."));
 	}
 	ctrMkNode("list",opt,-1,"/arch/arch/4",_("Files size"),R_R_R_,"root",SARH_ID,1,"tp","str");
 	if(ctrMkNode("comm",opt,-1,"/arch/exp",_("Export"),RWRW__,"root",SARH_ID)) {

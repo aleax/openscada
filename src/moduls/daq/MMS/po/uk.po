@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.MMS translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.MMS module.
 #
-# Roman Savochenko <roman@oscada.org>, 2013-2014, 2017-2022.
+# Roman Savochenko <roman@oscada.org>, 2013-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.MMS 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 17:40+0300\n"
+"POT-Creation-Date: 2023-04-29 15:57+0300\n"
 "PO-Revision-Date: 2013-10-20 11:50+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -42,7 +42,7 @@ msgstr "Період синхронізації з віддаленою стан
 msgid "Server address"
 msgstr "Адреса серверу"
 
-msgid "Variables into read request"
+msgid "Variables in the read request"
 msgstr "Змінних у запиті читання"
 
 msgid "Destination TSAP"
@@ -57,12 +57,14 @@ msgstr "Перелік змінних (поділено наступним ря�
 msgid "No activity data."
 msgstr "Немає активності даних."
 
+#, c-format
 msgid "Connection error, restoring at %.6g s."
 msgstr "Помилка з'єднання, відновлення за %.6g с."
 
 msgid "Acquisition. "
 msgstr "Збір. "
 
+#, c-format
 msgid "Acquisition with the period %s. "
 msgstr "Збір з періодом %s. "
 
@@ -70,6 +72,7 @@ msgstr "Збір з періодом %s. "
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Наступний збір за cron '%s'. "
 
+#, c-format
 msgid "Spent time %s[%s], requests %.6g."
 msgstr "Витрачено часу %s[%s], запитів %.6g."
 
@@ -109,7 +112,7 @@ msgid ""
 "\"{MMS_domain}/{MMS_var}[:{opt}[:{tp}[:{id}[:{name}]]]]\".\n"
 "Where:\n"
 "  {MMS_domain} - MMS domain or '*' for global.\n"
-"  {MMS_var} - MMS variable name into domain or global.\n"
+"  {MMS_var} - MMS variable name in domain or global.\n"
 "  {opt} - Options:\n"
 "    w - writable;\n"
 "    s - single request;\n"

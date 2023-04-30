@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/Протокол пользователя</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FUserProtocol&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/UserProtocol" title="Modules/UserProtocol">Modules/UserProtocol</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/UserProtocol.html" title="Modules/UserProtocol (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/UserProtocol.html" title="Модулі/Протокол користувача (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FUserProtocol&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/UserProtocol" title="Modules/UserProtocol">Modules/UserProtocol</a> and the translation is 96% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/UserProtocol.html" title="Modules/UserProtocol (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/UserProtocol.html" title="Модулі/Протокол користувача (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
 <td> Пользовательский протокол
 </td>
-<td> 1.5 </td>
+<td> 1.6 </td>
 <td> GPL2 </td>
 <td> prot_UserProtocol.so </td>
 <td> en,uk,ru,de </td>
@@ -73,13 +73,15 @@
 <li> Таблицу контекста данных процедуры входного запроса. В основном имеет смысл только при работе по шаблону и где можно контролировать этот процесс обработки, включая возможность вмешательства через изменение значений данных.</li>
 <li> Текст прямой процедуры протокола, отсутствует в режиме работы по шаблону.</li>
 <li> Связи на данные подсистемы "Сбор Данных", которые видимы и доступны для определения в режиме работы по шаблону и во включенном состоянии объекта протокола.</li></ul>
-<p>Для прямой процедуры обработки предопределены, и обязательны или опциональны для создания в шаблоне, следующие атрибуты обмена с входящим транспортом:
+<p>For the direct processing procedure, and the required or optional ones to create in the template, the following exchange attributes with the input transport are predetermined:
 </p>
-<ul><li> <i><b>Входной результат (rez)</b></i> &lt;Логический&gt; — результат обработки (false — полный запрос; true — неполный, удерживать подключение); в режиме DAQ-шаблона Вы должны писать сюда прямо, не оператором "return";</li>
-<li> <i><b>Входной запрос (request)</b></i> &lt;Строка&gt; — полное-аккумулированное сообщение запроса, которое протокол должен очищать на предмет обработанных данных;</li>
-<li> <i><b>Входной ответ (answer)</b></i> &lt;Строка&gt; — сообщение ответа;</li>
-<li> <i>Входной отправитель (sender)</i> &lt;Строка&gt; — отправитель запроса;</li>
-<li> <i>Транспорт (tr)</i> &lt;Объект&gt; — объект входного транспорта.</li></ul>
+<ul><li> <i><b>Input result (rez)</b></i> &lt;Boolean&gt; — processing result (false — full request; true — not full one, holding the connection); in the DAQ-template mode you must write thither directly, not by the operator "return";</li>
+<li> <i><b>Input request (request)</b></i> &lt;String&gt; — full-accumulated request message, what protocol should clear about processed data;</li>
+<li> <i><b>Input answer (answer)</b></i> &lt;String&gt; — answer message;</li>
+<li> <i>Input sender (sender)</i> &lt;String&gt; — request sender;</li>
+<li> <i>Transport (tr)</i> &lt;Object&gt; — input transport object;</li>
+<li> <i>This object (this)</i> &lt;Object&gt; — pointer to this protocol's object;</li>
+<li> <i>Scheduling the next service call (schedCall)</i> &lt;Integer&gt; — write here the time value in seconds for scheduling the procedure context execution in a service call; <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> the service calls are performed in the periodicity 10 seconds usually, so you can schedule the calls not often than at 10 seconds.</li></ul>
 <p>Общий сценарий обработки входящих запросов:
 </p>
 <ul><li> Запрос формируется удалённой станцией и через сеть попадает на <a href="../Program_manual.html#Communication" title="Special:MyLanguage/Documents/Program manual">транспорт OpenSCADA</a>.</li>

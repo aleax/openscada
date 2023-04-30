@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.DBF file: dbf_mod.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@
 #define MOD_NAME	trS("DB DBF")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.4.8"
+#define MOD_VER		"2.4.9"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("DB module. Provides support of the DBF files version 3.0.")
 #define LICENSE		"GPL2"
@@ -414,7 +414,7 @@ int MTable::findKeyLine( TConfig &cfg, int cnt, bool useKey, int off )
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
-    //Left only keys into list
+    //Leave only keys in the list
     for(unsigned i_cf = 0; i_cf < cf_el.size(); )
 	if(cfg.cfg(cf_el[i_cf]).isKey()) i_cf++;
 	else cf_el.erase(cf_el.begin()+i_cf);

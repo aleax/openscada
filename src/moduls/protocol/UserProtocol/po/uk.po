@@ -1,13 +1,13 @@
 # OpenSCADA.Protocol.UserProtocol translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.Protocol.UserProtocol package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2010-2018.
+# Roman Savochenko <roman@oscada.org>, 2010-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-25 17:21+0200\n"
+"POT-Creation-Date: 2023-04-29 16:03+0300\n"
 "PO-Revision-Date: 2010-03-04 21:58+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -113,6 +113,12 @@ msgstr "Вхідний відправник"
 msgid "Transport"
 msgstr "Транспорт"
 
+msgid "This object"
+msgstr "Цей об'єкт"
+
+msgid "Scheduling the next service call"
+msgstr "Планування сервісного виклику"
+
 msgid "Output IO"
 msgstr "Вихідний ВВ"
 
@@ -141,6 +147,10 @@ msgstr "Увімкнений"
 msgid "DB"
 msgstr "БД"
 
+#, c-format
+msgid "Remove from '%s'"
+msgstr "Видалити із '%s'"
+
 msgid "Configuration"
 msgstr "Конфігурація"
 
@@ -157,13 +167,13 @@ msgid "Input"
 msgstr "Вхід"
 
 msgid ""
-"Use this for the poolling mode enabling through setting this timeout to a "
+"Use this for the polling mode enabling through setting this timeout to a "
 "nonzero value.\n"
-"Into the poolling mode an input transport will call this protocol with the "
+"In the polling mode an input transport will call this protocol with the "
 "empty message at no request during this timeout."
 msgstr ""
-"Використовуйте це поле для включення режиму пулінгу, встановленням у "
-"ненульове значення.\n"
+"Використовуйте для включення режиму пулінгу, встановленням у ненульове "
+"значення.\n"
 "У режимі пулінгу вхідний транспорт буде викликати протокол із порожнім "
 "запитом, у випадку відсутності запиту протягом визначеного часу."
 
@@ -183,14 +193,20 @@ msgid ""
 "   'request' - request message;\n"
 "   'answer' - answer message;\n"
 "   'sender' - request sender;\n"
-"   'tr' - sender transport."
+"   'tr' - sender transport;\n"
+"   'this' - pointer to object of this protocol;\n"
+"   'schedCall' - scheduling the next service call in the Integer type for "
+"seconds."
 msgstr ""
 "Наступні атрибути визначені для обробки вхідних запитів:\n"
 "   'rez' - результат обробки (false - повний запит; true - неповний запит);\n"
 "   'request' - повідомлення запиту;\n"
 "   'answer' - повідомлення відповіді;\n"
 "   'sender' - відправник запиту;\n"
-"   'tr' - транспорт відправника."
+"   'tr' - транспорт відправника;\n"
+"   'this' - вказівник на об'єкт цього протоколу;\n"
+"   'schedCall' - планування наступного сервісного виклику у типі Ціле для "
+"секунд."
 
 msgid "Output"
 msgstr "Вихід"

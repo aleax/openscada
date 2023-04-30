@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.11.5"
+#define MOD_VER		"7.11.6"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -264,7 +264,7 @@ void Engine::load_( )
 	//cEl.cfgViewAll(false);
 	vector<string> itLs;
 
-	// Search into DB
+	// Search in DB
 	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
 	    for(int libCnt = 0; TBDS::dataSeek(itLs[iDB]+"."+wlbTable(),nodePath()+"LIB",libCnt++,cEl,TBDS::UseCache); ) {
@@ -301,7 +301,7 @@ void Engine::load_( )
 	vector<string> itLs;
 	itReg.clear();
 
-	// Search into DB
+	// Search in DB
 	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
 	    for(int lib_cnt = 0; TBDS::dataSeek(itLs[iDB]+"."+prjTable(),nodePath()+"PRJ",lib_cnt++,cEl,TBDS::UseCache); ) {

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tuis.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -138,7 +138,7 @@ string TUIS::docGet( const string &iinm, string *tp, unsigned opt )
 	}
     }
 
-    //Use the online document into the network
+    //Use the online document in the network
     if(rez.empty() && (nm=TSYS::strParse(inm,1,"|")).size()) {
 	const char  *docHost = "oscada.org/wiki/Special:MyLanguage";
 

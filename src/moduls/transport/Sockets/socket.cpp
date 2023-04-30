@@ -162,13 +162,13 @@ string TTransSock::outTimingsHelp( )
 	"    conn - maximum time of waiting the connection, in seconds;\n"
 	"    next - maximum time of waiting for continue the response, in seconds;\n"
 	"    rep  - minimum time of waiting the request repeating, in seconds.\n"
-	"Can be prioritatile specified into the address field as the second global argument, as such \"localhost:123||5:1\".");
+	"Can be prioritatile specified in the address field as the second global argument, as such \"localhost:123||5:1\".");
 }
 
 string TTransSock::outAttemptsHelp( )
 {
     return _("Attempts of the requesting both for this transport and protocol, for full requests.\n"
-	"Can be prioritatile specified into the address field as the third global argument, as such \"localhost:123||5:1||3\".");
+	"Can be prioritatile specified in the address field as the third global argument, as such \"localhost:123||5:1||3\".");
 }
 
 //************************************************
@@ -1519,7 +1519,7 @@ repeate:
 		if(stZero && iB > 0)	printf("TEST 00: Have waited after zero for %d.\n", iB);*/
 
 		// * Force errors
-		// * Retry if any data was wrote but no a reply there into the request mode
+		// * Retry if any data was wrote but no a reply there in the request mode
 		// * !!: Zero can be also after disconection by peer and possible undetected here for the not request mode,
 		//	what can be easily tested on stopping the ModBus input service
 		if(iB < 0 || (iB == 0 && writeReq && !notReq)) {
@@ -1527,7 +1527,7 @@ repeate:
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error reading: %s"), err.c_str());
 		    if(logLen()) pushLogMess(TSYS::strMess(_("Error reading: %s"), err.c_str()));
 		    stop();
-		    // * Pass to retry into the request mode and on the successful writing
+		    // * Pass to retry in the request mode and on the successful writing
 		    if(!writeReq || notReq) throw TError(nodePath().c_str(),_("Error reading: %s"), err.c_str());
 		    start();
 		    if(iB == 0 && wAttempts == 1) wAttempts = 2;	//!!!! To restore the lost connections

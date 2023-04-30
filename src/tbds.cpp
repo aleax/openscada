@@ -742,7 +742,7 @@ void TBDS::load_( )
 	}
     }
 
-    // Open other DB stored into the table 'DB' and the config-file
+    // Open other DB stored in the table 'DB' and the config-file
     try {
 	string id, type;
 	map<string, bool> itReg;
@@ -1122,7 +1122,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID);
 		ctrMkNode2("fld",opt,-1,"/prm/cfg/CODEPAGE",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDB_ID,
 		    "dest","sel_ed","sel_list",(Mess->charset()+";UTF-8;KOI8-R;KOI8-U;CP1251;CP866").c_str(),
-		    "help",_("Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."),NULL);
+		    "help",_("Codepage of data in the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."),NULL);
 		ctrMkNode2("fld",opt,-1,"/prm/cfg/LS_PR",EVAL_STR,RWRWR_,"root",SDB_ID,
 		    "help",_("Priority in the range [0...99]. Useful for libraries placed in several databases for specifying the priority of the project - used ones."),NULL);
 		if(mTrTm_ClsOnReq < prmServTask_PER)
@@ -1474,7 +1474,7 @@ bool TTable::fieldSQLSeek( int row, TConfig &cfg, const string &cacheKey, int fl
 	}
 
 	tbl->clear();
-	owner().sqlReq(req, tbl/*, false*/);	//To seek for deletion into the save context do not set to "false"
+	owner().sqlReq(req, tbl/*, false*/);	//To seek for deletion in the save context do not set to "false"
     }
 
     row = cacheKey.size() ? (row%SEEK_PRELOAD_LIM)+1 : 1;

@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/UserProtocol</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/UserProtocol.html" title="Модули/Протокол пользователя (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/UserProtocol.html" title="Модулі/Протокол користувача (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/UserProtocol.html" title="Модули/Протокол пользователя (96% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/UserProtocol.html" title="Модулі/Протокол користувача (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
 <td> User protocol
 </td>
-<td> 1.5 </td>
+<td> 1.6 </td>
 <td> GPL2 </td>
 <td> prot_UserProtocol.so </td>
 <td> en,uk,ru,de </td>
@@ -77,7 +77,9 @@
 <li> <i><b>Input request (request)</b></i> &lt;String&gt; — full-accumulated request message, what protocol should clear about processed data;</li>
 <li> <i><b>Input answer (answer)</b></i> &lt;String&gt; — answer message;</li>
 <li> <i>Input sender (sender)</i> &lt;String&gt; — request sender;</li>
-<li> <i>Transport (tr)</i> &lt;Object&gt; — input transport object.</li></ul>
+<li> <i>Transport (tr)</i> &lt;Object&gt; — input transport object;</li>
+<li> <i>This object (this)</i> &lt;Object&gt; — pointer to this protocol's object;</li>
+<li> <i>Scheduling the next service call (schedCall)</i> &lt;Integer&gt; — write here the time value in seconds for scheduling the procedure context execution in a service call; <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> the service calls are performed in the periodicity 10 seconds usually, so you can schedule the calls not often than at 10 seconds.</li></ul>
 <p>The overall scenario of the input requests processing:
 </p>
 <ul><li> Request is formed by the remote station and through the network it gets on <a href="../Program_manual.html#Communication" title="Special:MyLanguage/Documents/Program manual">the transport of OpenSCADA</a>.</li>

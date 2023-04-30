@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/SelfSystem</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/SelfSystem.html" title="Модули/Собственный Системный Протокол (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/SelfSystem.html" title="Модулі/Власний Системний Протокол (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/SelfSystem.html" title="Модули/Собственный Системный Протокол (92% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/SelfSystem.html" title="Модулі/Власний Системний Протокол (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -77,12 +77,12 @@ Closure of the session. The result is always successful.
 </td></tr>
 <tr>
 <td>
-<p><b>REQ 1:</b> "REQ {ses_id} {req_size}\n{command of the control interface}"<br />
-<b>REQ 2:</b> "REQDIR {user} {password} {req_size}\n{command of the control interface}"<br />
+<p><b>REQ:</b> "REQ {ses_id} {req_size}\n{command of the control interface}"<br />
+<b>REQ:</b> "REQDIR {user} {password} {req_size}\n{command of the control interface}"<br />
 <b>REZ OK:</b> "REZ 0 {rez_size}\n{result of the command of the control interface}"<br />
-<b>REZ ERR:</b> "REZ 1 Error authentication: session not valid.\n"<br />
+<b>REZ ERR:</b> "REZ 1 Error authentication: session is not valid.\n"<br />
 <b>REZ ERR:</b> "REZ 2 {error of the control interface}"<br />
-Basic queries: session and direct. Realized by sending a standard command of <a class="external" href="http://oscada.org/wiki/Documents/API#CntrNode" title="Documents/API">the OpenSCADA control interface</a> in the <i>command of the control interface</i> field. The result will be the response of the control interface <i>result of the command of the control interface</i> or one of the errors.
+Basic queries — session and direct ones. Implemented by sending a standard command of the <a href="../API.html#CntrNode" title="Special:MyLanguage/Documents/API">OpenSCADA Control Interface</a> in the <i>command of the control interface</i> field. The result will be the response of the Control Interface <i>result of the command of the control interface</i> or one of the errors.
 </p>
 </td></tr>
 <tr>
@@ -92,7 +92,7 @@ Basic queries: session and direct. Realized by sending a standard command of <a 
 Any invalid request.
 </p>
 </td></tr></table>
-<p>The protocol supports the ability to pack traffic. Only the control interface data <i>command of the control interface</i> and <i>result of the command of the control interface</i> are packaged. The fact of receipt of a packed request or response is determined by the negative value of the <i>req_size</i> or the <i>rez_size</i> response. You can define the compression options on the configuration page of the module (Fig. 1).
+<p>The protocol supports the ability of the traffic compression. Only the Control Interface data <i>command of the control interface</i> and <i>result of the command of the control interface</i> are compressed. The fact of receipt of a compressed request or response is determined by the negative value of the <i>req_size</i> or the <i>rez_size</i> response. You can define the compression options on the configuration page of the module (Fig. 1). Response of the protocol input part is forced to the compression with level -1 (that is optimal) at the compressed requests.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:782px;"><a class="image" href="http://oscada.org/wiki/File:SelfSystem_compr.png"><img class="thumbimage" height="459" src="../files/SelfSystem_compr.png" width="780" /></a>  <div class="thumbcaption">Fig.1. Main tab of the configuration page of the module parameters.</div></div></div></div>
 <p>On this tab, you can:

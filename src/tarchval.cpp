@@ -916,7 +916,8 @@ void TVArchive::preDisable( int flag )
 void TVArchive::postDisable( int flag )
 {
     if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
-	TBDS::dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+	if(mDB.size())
+	    TBDS::dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
 
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
@@ -1862,7 +1863,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		for(vector<pair<float,TVArchEl*> >::reverse_iterator iA = propArchs.rbegin(); iA != propArchs.rend(); ++iA) {
 		    buf.setPeriod(vmax((int64_t)(1e6*iA->second->archivator().valPeriod()),period));
 		    iA->second->getVals(buf, vmax(tm_grnd,iA->second->begin()), tm, local);		//vmax for allow access to next level archive
-													//into single request, like from 1m to 10m
+													//in single request, like from 1m to 10m
 		    if(!buf.realSize()) continue;	//Try next
 		    opt->setAttr("arch", iA->second->archivator().workId());
 		    break;

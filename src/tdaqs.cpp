@@ -162,7 +162,7 @@ void TDAQS::load_( )
 	//cEl.cfgViewAll(false);
 	vector<string> dbLs;
 
-	// Search into DB
+	// Search in DB
 	TBDS::dbList(dbLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
 	    for(int libCnt = 0; TBDS::dataSeek(dbLs[iIt]+"."+tmplLibTable(),nodePath()+"tmplib",libCnt++,cEl,TBDS::UseCache); ) {
@@ -197,7 +197,7 @@ void TDAQS::load_( )
 	    //gCfg.cfgViewAll(false);
 	    itReg.clear();
 
-	    // Search into the storage and create new controller objects
+	    // Search in the storage and create new controller objects
 	    TBDS::dbList(dbLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	    for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
 		for(int fldCnt = 0; TBDS::dataSeek(dbLs[iIt]+"."+subId()+"_"+wmod.at().modId(),wmod.at().nodePath()+"DAQ",fldCnt++,gCfg,TBDS::UseCache); ) {

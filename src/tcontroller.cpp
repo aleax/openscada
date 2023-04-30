@@ -282,7 +282,7 @@ void TController::LoadParmCfg( )
 	    //cEl.cfgViewAll(false);
 	    cEl.cfg("OWNER").setS("", TCfg::ForceUse);
 
-	    // Search new into DB and Config-file
+	    // Search new one in DB and Config-file
 	    for(int fldCnt = 0; TBDS::dataSeek(DB()+"."+owner().tpPrmAt(iTp).DB(this),
 					owner().nodePath()+owner().tpPrmAt(iTp).DB(this),fldCnt++,cEl,TBDS::UseCache); )
 	    {
@@ -354,7 +354,7 @@ void TController::redntDataUpdate( )
 	    // Prepare individual attributes list
 	    prmNd->setAttr("sepReq", "1")->setAttr("prcTm", i2s(prmC.at().mRdPrcTm));
 
-	    // Check attributes last present data time into archives
+	    // Check attributes last presence data time in archives
 	    vector<string> listV;
 	    prmC.at().vlList(listV);
 	    unsigned rC = 0;

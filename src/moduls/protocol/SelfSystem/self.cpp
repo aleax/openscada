@@ -32,7 +32,7 @@
 #define MOD_NAME	trS("Own protocol of OpenSCADA")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.9.7"
+#define MOD_VER		"1.9.8"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -406,7 +406,7 @@ bool TProtIn::mess( const string &request, string &answer )
 	    if(SYS->security().at().usrPresent(user_) && SYS->security().at().usrAt(user_).at().auth(pass_,&auth.pHash))
 	    { auth.tAuth = 1; auth.name = user_; }
 	}
-	if(!auth.tAuth) { answer = "REZ " ERR_AUTH " Error authentication: session not valid.\x0A"; reqBuf.clear(); return false; }
+	if(!auth.tAuth) { answer = "REZ " ERR_AUTH " Error authentication: session is not valid.\x0A"; reqBuf.clear(); return false; }
 
 	try {
 	    //Decompressing the request
@@ -457,8 +457,8 @@ bool TProtIn::mess( const string &request, string &answer )
 	    string resp = req_node.save(XMLNode::MissTagEnc|XMLNode::MissAttrEnc)+"\n";
 
 	    //Compress respond
-	    bool respCompr = (((TProt&)owner()).comprLev() && (int)resp.size() > ((TProt&)owner()).comprBrd());
-	    if(respCompr) resp = TSYS::strCompr(resp,((TProt&)owner()).comprLev());
+	    bool respCompr = ((req_sz < 0 || ((TProt&)owner()).comprLev()) && (int)resp.size() > ((TProt&)owner()).comprBrd());
+	    if(respCompr) resp = TSYS::strCompr(resp, ((TProt&)owner()).comprLev()?((TProt&)owner()).comprLev():-1);
 
 	    if(mess_lev() == TMess::Debug)
 		mess_debug(nodePath().c_str(), _("Response saved to a stream and packed: '%s': %d, time: %g ms."),

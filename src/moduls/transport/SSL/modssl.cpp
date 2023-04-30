@@ -42,7 +42,7 @@
 #define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.4.9"
+#define MOD_VER		"3.4.10"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.")
@@ -194,13 +194,13 @@ string TTransSock::outTimingsHelp( )
     return _("Connection timings in the format \"{conn}:{next}\", where:\n"
 	"    conn - maximum time of waiting the connection, in seconds;\n"
 	"    next - maximum time of waiting for continue the response, in seconds.\n"
-	"Can be prioritatile specified into the address field as the second global argument, as such \"localhost:123||5:1\".");
+	"Can be prioritatile specified in the address field as the second global argument, as such \"localhost:123||5:1\".");
 }
 
 string TTransSock::outAttemptsHelp( )
 {
     return _("Attempts of the requesting both for this transport and protocol, for full requests.\n"
-	"Can be prioritatile specified into the address field as the third global argument, as such \"localhost:123||5:1||3\".");
+	"Can be prioritatile specified in the address field as the third global argument, as such \"localhost:123||5:1||3\".");
 }
 
 string TTransSock::MD5( const string &file )
@@ -1321,7 +1321,7 @@ repeate:
 		    stop();
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error reading: %s"), err.c_str());
 		    if(logLen()) pushLogMess(TSYS::strMess(_("Error reading: %s"),err.c_str()));
-		    // * Pass to retry into the request mode and on the successful writing
+		    // * Pass to retry in the request mode and on the successful writing
 		    if(!writeReq || notReq) throw TError(nodePath().c_str(),_("Error reading: %s"), err.c_str());
 		    start();
 		    goto repeate;

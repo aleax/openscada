@@ -20,7 +20,6 @@
 
 #include <features.h>
 #include <byteswap.h>
-#include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <sys/time.h>
@@ -77,7 +76,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     mName(dataRes()), mNameB(dataRes()), mWorkDB(dataRes()), mSelDB(dataRes()), mMainCPUs(dataRes()),
     mTaskInvPhs(10), mSaveAtExit(false), mSavePeriod(0), mModifCalc(false), rootModifCnt(0), sysModifFlgs(MDF_NONE), mStopSignal(0), mN_CPU(1),
     mainPthr(0), mSysTm(0), mClockRT(false), mPrjCustMode(true), mPrjNm(dataRes()), mCfgCtx(NULL), mCfgCtxLast(NULL),
-    mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrimCmdTr(false)
+    mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrimCmdTr(false), trPassN(0), trChkAndFix(false), trChkAndFixMB(false)
 {
     srand(TSYS::curTime()%1000000);
     mWorkDB = DB_CFG;
@@ -496,7 +495,7 @@ string TSYS::optDescr( )
 	"    --projName=<name>	OpenSCADA project name to switch it.\n"
 	"			For this feature there also uses an environment variable \"OSCADA_ProjName\" and the program binary name \"openscada_{ProjName}\".\n"
 	"    --projUserDir={dir} Directory of user projects (writeable) of OpenSCADA, \"~/.openscada\" by default.\n"
-	"    --projLock={per}	Uses the projects locking by creation the \"lock\" file into the project folder and update it in the period <per>,\n"
+	"    --projLock={per}	Uses the projects locking by creation the \"lock\" file in the project folder and update it in the period <per>,\n"
 	"			by default it is enabled and the updating period <per> is 60 seconds. To disable set the updating period <per> to zero.\n"
 	"    --lang=<LANG>	Station language, in the view \"en_US.UTF-8\".\n"
 	"    --config=<file>	Station configuration file.\n"
@@ -917,7 +916,7 @@ int TSYS::start( )
 
     cfgFileScan(true);
 
-    //Register user API translations into config
+    //Register the user API translations in config
     Mess->translReg("", "uapi:" DB_CFG);
 
     mStopSignal = 0;
@@ -2112,7 +2111,7 @@ string TSYS::prjUserDir( )
 
 bool TSYS::prjSwitch( const string &prj, bool toCreate )
 {
-    //Check for the project availability into folder of preistalled ones for writibility and next into the user folder
+    //Check for the project availability in folder of preinstalled ones for writibility and next in the user folder
     struct stat file_stat;
 
     //Call the projects manager procedure
@@ -2150,7 +2149,7 @@ bool TSYS::prjSwitch( const string &prj, bool toCreate )
     }
 
     // Switch to the found project
-    //  Set the project configuration file into "--config", name into "--statName", change the work directory
+    //  Set the project configuration file in "--config", name in "--statName", change the work directory
     cmdOpt("config", prjCfg);
     cmdOpt("statName", prj);
     setWorkDir(prjDir, true);
@@ -2568,7 +2567,7 @@ int TSYS::sysSleep( float tm )
     struct timespec spTm;
     clockid_t clkId = SYS->clockRT() ? CLOCK_REALTIME : CLOCK_MONOTONIC;
 
-    if(tm < 300e-6) {	//Wait into the direct cycle
+    if(tm < 300e-6) {	//Waiting in the direct cycle
 	for(int64_t stTm = 0, cTm, toTm = 1000000000ll*tm; true; ) {
 	    clock_gettime(clkId, &spTm);
 	    cTm = 1000000000ll*spTm.tv_sec + spTm.tv_nsec;
@@ -3272,7 +3271,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/tr/chkAndFix","",RWRW__,"root","root",2,"tp","bool",
 		    "help",_("Enable for checking the base messages translation equality in different sources\n"
 			    "and fixing by: propagation the translations to empty sources, clearing the double to base translations."));
-		ctrMkNode("fld",opt,-1,"/tr/chkAndFixMB","",s2i(TBDS::genPrmGet(nodePath()+"TrChkAndFix","0",opt->attr("user")))?RWRW__:R_R_R_,"root","root",2,"tp","bool",
+		ctrMkNode("fld",opt,-1,"/tr/chkAndFixMB","",trChkAndFix?RWRW__:R_R_R_,"root","root",2,"tp","bool",
 		    "help",_("... and fixing by merging the base messages as the translations."));
 		ctrMkNode("fld",opt,-1,"/tr/pass","",RWRW__,"root","root",3,"tp","dec","min","0",
 		    "help",_("Pass the specified number of the table items from the top, "
@@ -3618,34 +3617,26 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/tr/fltr") {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"TrFltr","",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	{
-	    TBDS::genPrmSet(nodePath()+"TrFltr",opt->text(),opt->attr("user"));
-	    TBDS::genPrmSet(nodePath()+"TrPassN","0",opt->attr("user"));
-	}
+	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	{ TBDS::genPrmSet(nodePath()+"TrFltr",opt->text(),opt->attr("user")); trPassN = 0; }
     }
     else if(a_path == "/tr/chkAndFix") {
-	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"TrChkAndFix","0",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR)) {
-	    TBDS::genPrmSet(nodePath()+"TrChkAndFix",opt->text(),opt->attr("user"));
-	    if(!s2i(opt->text()))
-		TBDS::genPrmSet(nodePath()+"TrChkAndFixMB",opt->text(),opt->attr("user"));
-	}
+	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(i2s(trChkAndFix));
+	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR) && !(trChkAndFix=s2i(opt->text()))) trChkAndFixMB = trChkAndFix;
     }
     else if(a_path == "/tr/chkAndFixMB") {
-	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"TrChkAndFixMB","0",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	TBDS::genPrmSet(nodePath()+"TrChkAndFixMB",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(i2s(trChkAndFixMB));
+	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	trChkAndFixMB = s2i(opt->text());
     }
     else if(a_path == "/tr/pass") {
-	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"TrPassN","0",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	TBDS::genPrmSet(nodePath()+"TrPassN",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(i2s(trPassN));
+	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	trPassN = vmax(0, vmin(10000,s2i(opt->text())));
     }
     else if(a_path == "/tr/mess") {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD)) {
-	    bool chkAndFix = s2i(TBDS::genPrmGet(nodePath()+"TrChkAndFix","0",opt->attr("user")));
-	    bool chkAndFixMB = s2i(TBDS::genPrmGet(nodePath()+"TrChkAndFixMB","0",opt->attr("user")));
+	    bool chkAndFix = trChkAndFix,
+		 chkAndFixMB = trChkAndFixMB;
 	    string tStr, fixes, trFltr = TBDS::genPrmGet(nodePath()+"TrFltr","",opt->attr("user"));
-	    unsigned passN = vmax(0, s2i(TBDS::genPrmGet(nodePath()+"TrPassN","0",opt->attr("user")))),
-		    mess_TrModifMarkLen = strlen(mess_TrModifMark);
+	    unsigned passN = trPassN, mess_TrModifMarkLen = strlen(mess_TrModifMark);
 	    TConfig req;
 	    req.setNoTransl(true);
 	    vector<XMLNode*> ns;
@@ -3726,7 +3717,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 				    else if(recNd->text().empty())	recNd->setText(tMath);
 				    else if(tMath != recNd->text()) {
 					if(recNd->text().empty()) recNd->setText(tMath);
-					recNd->setText(string(_("<<<Unmatched sources>>>\n"))+"1. "+recNd->text()+"\n2. "+tMath);
+					recNd->setText(string(_("<<<SEVERAL VARIANTS>>>\n"))+"1. "+recNd->text()+"\n2. "+tMath);
 					recNd->setAttr("unmatch", "1")->attrDel("toPropagOnSp");
 				    }
 				}

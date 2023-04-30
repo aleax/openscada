@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2016-2021.
+# Roman Savochenko <roman@oscada.org>, 2016-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.DBArch 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-20 22:14+0200\n"
+"POT-Creation-Date: 2023-04-29 15:42+0300\n"
 "PO-Revision-Date: 2009-08-17 10:37+0200\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: de <>\n"
@@ -103,8 +103,8 @@ msgid "Grouping limit of the parameters"
 msgstr "Gruppierungsgrenze der Parameter"
 
 msgid ""
-"Enables for grouping arhivator's parameters into single table. Set to '0' "
-"for one table per parameter."
+"Enables for grouping arhivator's parameters in single table. Set to '0' for "
+"one table per parameter."
 msgstr ""
 "Aktiviert die Gruppierung der Parameter des Arhivators in eine einzelne "
 "Tabelle. Stellen Sie für eine Tabelle pro Parameter '0' ein."

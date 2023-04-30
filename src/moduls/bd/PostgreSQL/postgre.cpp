@@ -1,7 +1,7 @@
 // 
 //OpenSCADA module BD.PostgreSQL file: postgre.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2022 by Roman Savochenko, roman@oscada.org         *
+ *   Copyright (C) 2013-2023 by Roman Savochenko, roman@oscada.org         *
  *                 2010-2011 by Maxim Lysenko, mlisenko@oscada.org         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.1.0"
+#define MOD_VER		"3.1.1"
 #define AUTHORS		trS("Roman Savochenko, Maxim Lysenko (2010-2011)")
 #define DESCRIPTION	trS("DB module. Provides support of the DBMS PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -303,7 +303,7 @@ void MBD::getStructDB( const string &nm, vector<TTable::TStrIt> &tblStrct )
 
 void MBD::transOpen( )
 {
-    //Check for limit into one trinsaction
+    //Check for limit in one trinsaction
     if(reqCnt > 1000) transCommit();
 
 #if 1

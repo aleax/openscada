@@ -55,7 +55,7 @@
 #define MOD_NAME	trS("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.6.8"
+#define MOD_VER		"2.6.9"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	trS("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -159,7 +159,7 @@ string TTr::outTimingsHelp( )
 	"                  use the value < 0 for disconnecting the transport after missing response at each request;\n"
 	"    rtsDelay1 - delay between the transmitter activation with RTS signal and start up of the transmission, in milliseconds;\n"
 	"    rtsDelay2 - delay between the transmitting and disconnecting the transmitter with RTS signal, in milliseconds.\n"
-	"Can be prioritatile specified into the address field as the second global argument, as such \"/dev/rfcomm0:9600||1000:40-20\".");
+	"Can be prioritatile specified in the address field as the second global argument, as such \"/dev/rfcomm0:9600||1000:40-20\".");
 }
 
 bool TTr::devLock( const string &dn, bool check )
@@ -1330,7 +1330,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 	    for(int iRtr = 0; (((blen=read(fd,iBuf,iLen)) == 0 && !notReq) || (blen < 0 && errno == EAGAIN)) && iRtr < time; ++iRtr)
 		TSYS::sysSleep(1e-3);
 	    // * Force errors
-	    // * Retry if any data was wrote but no a reply there into the request mode
+	    // * Retry if any data was wrote but no reply there in the request mode
 	    if(blen < 0 || (blen == 0 && oBuf && oLen > 0 && !notReq)) {
 		err = (blen < 0) ? TSYS::strMess("%s (%d)", strerror(errno), errno) : _("No data");
 		mLstReqTm = TSYS::curTime();

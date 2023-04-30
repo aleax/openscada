@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchives.h
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -204,12 +204,14 @@ class TArchiveS : public TSubSYS
 	int subVer( ) const	{ return SARH_VER; }
 
 	int messPeriod( )	{ return mMessPer; }
+	int alarmsClrDays( )	{ return mAlarmsClrDays; }
 	int valPeriod( )	{ return vmax(1, mValPer); }
 	int valPrior( )		{ return mValPrior; }
 	bool valForceCurTm( )	{ return mValForceCurTm; }
 	AutoIdMode autoIdMode( ){ return (AutoIdMode)mAutoIdMode; }
 
 	void setMessPeriod( int ivl )	{ mMessPer = ivl; modif(); }
+	void setAlarmsClrDays( int ivl ){ mAlarmsClrDays = vmax(0, vmin(1000,ivl)); modif(); }
 	void setValPeriod( int ivl )	{ mValPer = ivl; modif(); }
 	void setValPrior( int ivl )	{ mValPrior = vmax(-1, vmin(199,ivl)); modif(); }
 	void setValForceCurTm( bool vl ){ mValForceCurTm = vl; modif(); }
@@ -290,7 +292,9 @@ class TArchiveS : public TSubSYS
 	ResMtx	mRes;			//Mess access resource
 	unsigned headBuf;		//Head of messages buffer
 	vector<TMess::SRec> mBuf;	//Messages buffer
+
 	map<string,TMess::SRec> mAlarms;//Alarms buffer
+	int	mAlarmsClrDays;		//Days of the alarms automatic clearing
 
 	// Value archiving
 	ResMtx	vRes;			//Value access resource

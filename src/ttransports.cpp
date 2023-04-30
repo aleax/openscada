@@ -144,7 +144,7 @@ void TTransportS::load_( )
 	//c_el.cfgViewAll(false);
 	vector<string> itLs;
 
-	//  Search new into DB and Config-file
+	//  Search new one in DB and Config-file
 	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
 	    for(int fld_cnt = 0; TBDS::dataSeek(itLs[iIt]+"."+subId()+"_in",nodePath()+subId()+"_in",fld_cnt++,c_el,TBDS::UseCache); ) {
@@ -180,7 +180,7 @@ void TTransportS::load_( )
 	vector<string> itLs;
 	itReg.clear();
 
-	//  Search new into DB and Config-file
+	//  Search new one in DB and Config-file
 	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
 	    for(int fld_cnt = 0; TBDS::dataSeek(itLs[iIt]+"."+subId()+"_out",nodePath()+subId()+"_out",fld_cnt++,c_el,TBDS::UseCache); ) {
@@ -1371,7 +1371,7 @@ TVariant TTransportOut::objFuncCall( const string &id, vector<TVariant> &prms, c
     }
     // string messIO( XMLNodeObj req, string prt ) - sending the request <req> to the protocol <prt> for the implementation of a connection
     //      session through the transport by means of protocol.
-    //  req - request into XML-tree
+    //  req - request in XML-tree
     //  prt - protocol name
     if(id == "messIO" && prms.size() >= 2 && !AutoHD<XMLNodeObj>(prms[0].getO()).freeStat()) {
 	try {

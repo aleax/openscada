@@ -1,9 +1,9 @@
 
 //OpenSCADA OPC_UA implementation library file: libOPC_UA.h
 /********************************************************************************
- *   Copyright (C) 2009-2022 by Roman Savochenko, <roman@oscada.org>		*
+ *   Copyright (C) 2009-2023 by Roman Savochenko, <roman@oscada.org>		*
  *										*
- *   Version: 2.1.29								*
+ *   Version: 2.1.30								*
  *	* NodeId appended for the function operator==() of direct comparing.	*
  *	* The default LifeTimeCounter of the subscriptions set to 2400.		*
  *	* The function XML_N::childClear() appended by a result of returning	*

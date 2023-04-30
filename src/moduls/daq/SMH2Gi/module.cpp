@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SMH2Gi file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2012-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,7 +42,7 @@
 #define MOD_NAME	trS("Segnetics SMH2Gi and SMH4")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.1.15"
+#define MOD_VER		"1.1.16"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Data acquisition and control by Segnetics SMH2Gi and SMH4 hardware interfaces and modules.")
 #define LICENSE		"GPL2"
@@ -752,7 +752,7 @@ struct Inquired_t
     unsigned long	Reinit:1;		// МР need reinit
     unsigned long	MCAinsValid:1;		// Values ain0...ain7 valid
     unsigned long	Reserved3:5;		// reserve
-    unsigned long	AlarmsInID:1;		// Alarms into struct Alarms
+    unsigned long	AlarmsInID:1;		// Alarms in the struct Alarms
 }__attribute__((packed));
 
 MRCParam::MRCParam( ) : TTypeParam("MRC", _("MR and MC bus parameters"), "PRM_BD_MRC")

@@ -115,7 +115,7 @@ void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
     //messLevel() = TMess::Debug process for selected category and categories list combining
     if(messLevel() == TMess::Debug && level == TMess::Debug) {
 	MtxAlloc res(dbgRes, true);
-	// Check for present into debugCats and put new
+	// Checking for presence in debugCats and put new
 	if(debugCats.find(categ) == debugCats.end()) {
 	    string curCatLev, tCat;
 	    for(int off = 0; (tCat=TSYS::pathLev(categ,0,true,&off)).size(); ) {
@@ -385,7 +385,7 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
 		    rez = req.cfg(tStrVl).getS();
 		    break;
 		}
-		// Create new record into the translation table of the data source
+		// Create new record in the translation table of the data source
 		else if((iA+1) == addrs.rend() /*&& langCodeBase().size()*/) {
 		    //  Removeing the translation column for the SINGLE translation mode and the base language
 		    if(!langCodeBase().size() || trLang == langCodeBase())

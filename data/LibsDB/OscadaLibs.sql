@@ -13838,7 +13838,7 @@ INSERT INTO tmplib_DevLib_io VALUES('mbBase','tr','Output transport',4,0,'',6,'�
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','this','Object',4,0,'',7,'Объект','','Об''єкт','','');
 INSERT INTO tmplib_DevLib_io VALUES('MTP4D','zeroP','Set zero',3,32,'',4,'Установить ноль','','Встановити нуль','','');
 INSERT INTO tmplib_DevLib_io VALUES('MTP4D','zeroAP','Set atmosphere',3,32,'',5,'Установить атмосферу','','Встановити атмосферу','','');
-INSERT INTO tmplib_DevLib_io VALUES('SLOT','transport','Transport',0,64,'Sockets.SLOT:10.39.77.10:4001',0,'Транспорт','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','transport','Transport',0,64,'Sockets.SLOT:10.39.77.10:4001',0,'Транспорт','','Транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','modem','Modem
 In the format "{TelN}[:{Init1}[:{Init2}[...{InitN}]]]"',0,64,'',1,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','modemTm','Modem times
@@ -13891,14 +13891,14 @@ INSERT INTO tmplib_DevLib_io VALUES('SLOT','T','Temperature, °С [arh]',2,16,''
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','Fstd','Volume standard cond., m3 [arh]',2,16,'',48,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','Fwork','Volume work cond., m3 [arh]',2,16,'',49,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','itSt','Item status [arh]',0,16,'',50,'','','','','');
-INSERT INTO tmplib_DevLib_io VALUES('SLOT','tr','Output transport',4,1,'',51,'Выходной транспорт','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','tr','Output transport',4,1,'',51,'Выходной транспорт','','Вихідний транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','reqCntr','Counter of the requests and the reconnection waiting (negative)',2,0,'0',52,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','arhLastD','Daily archive last item',1,0,'0',53,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','arhLastH','Hourly archive last item',1,0,'0',54,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','this','Object of the parameter',4,0,'',55,'','','','','');
-INSERT INTO tmplib_DevLib_io VALUES('FF_LE','transport','Transport',0,64,'Sockets.LE:10.39.170.2:9761',0,'Транспорт','','Transport','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','transport','Transport',0,64,'Sockets.LE:10.39.170.2:9761',0,'Транспорт','','Транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('FF_LE','addr','Device address [0...255]',1,64,'1',1,'','','','','');
-INSERT INTO tmplib_DevLib_io VALUES('FF_LE','tr','Output transport',4,1,'',2,'Выходной транспорт','','Output transport','','');
+INSERT INTO tmplib_DevLib_io VALUES('FF_LE','tr','Output transport',4,1,'',2,'Выходной транспорт','','Вихідний транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('FF_LE','EnActFull','Energy Active Full, kWh',2,17,'',3,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('FF_LE','EnActImp','Energy Active Import, kWh',2,17,'',4,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('FF_LE','EnActExp','Energy Active Export, kWh',2,17,'',5,'','','','','');
@@ -13945,7 +13945,7 @@ Rows in the form "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".',0,36,'#<Sn
 ',5,'Набор элементов
 Строки в формате "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".','','Набір елементів
 Рядки у форматі "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".','','');
-INSERT INTO tmplib_DevLib_io VALUES('ergomera625','tr','Вихідний транспорт',4,0,'',6,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera625','tr','Output transport',4,0,'',6,'Выходной транспорт','','Вихідний транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('ergomera625','this','Object',4,0,'',7,'Объект','','Об''єкт','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_LowDevLib_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '0' ,"FLAGS" INTEGER DEFAULT '0' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '0' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_LowDevLib_io VALUES('1602A','transport','Transport of the I2C, Serial (i2c) or

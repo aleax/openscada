@@ -1,13 +1,13 @@
 # OpenSCADA.Protocol.UserProtocol translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Protocol.UserProtocol package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2010-2018.
+# Roman Savochenko <roman@oscada.org>, 2010-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.UserProtocol 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-24 20:29+0200\n"
+"POT-Creation-Date: 2023-04-29 16:03+0300\n"
 "PO-Revision-Date: 2010-03-04 21:26+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -92,7 +92,8 @@ msgid ""
 "Input part: rez=%d, request=%d, answer=%d. Output part: tr=%d, io=%d.\n"
 "See to the documentation and append their!"
 msgstr ""
-"Шаблон '%s' не имеет одного или нескольких необходимых атрибутов в нужных типах.\n"
+"Шаблон '%s' не имеет одного или нескольких необходимых атрибутов в нужных "
+"типах.\n"
 "Входная часть: rez=%d, request=%d, answer=%d. Выходная часть: tr=%d, io=%d.\n"
 "Пересмотрите документацию и добавьте их!"
 
@@ -110,6 +111,12 @@ msgstr "Входной отправитель"
 
 msgid "Transport"
 msgstr "Транспорт"
+
+msgid "This object"
+msgstr ""
+
+msgid "Scheduling the next service call"
+msgstr ""
 
 msgid "Output IO"
 msgstr "Выходной ВВ"
@@ -139,6 +146,10 @@ msgstr "Включен"
 msgid "DB"
 msgstr "БД"
 
+#, c-format
+msgid "Remove from '%s'"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Конфигурация"
 
@@ -155,9 +166,9 @@ msgid "Input"
 msgstr "Вход"
 
 msgid ""
-"Use this for the poolling mode enabling through setting this timeout to a "
+"Use this for the polling mode enabling through setting this timeout to a "
 "nonzero value.\n"
-"Into the poolling mode an input transport will call this protocol with the "
+"In the polling mode an input transport will call this protocol with the "
 "empty message at no request during this timeout."
 msgstr ""
 "Используйте это поле для включения режима пулинга, установкой в ненулевое "
@@ -174,6 +185,7 @@ msgstr "Тип"
 msgid "Real;Integer;Boolean;String;Object"
 msgstr "Вещественный;Целый;Логический;Строка;Объект"
 
+#, fuzzy
 msgid ""
 "Next attributes define for the input requests processing:\n"
 "   'rez' - result of the processing (false - full request; true - not full "
@@ -181,7 +193,10 @@ msgid ""
 "   'request' - request message;\n"
 "   'answer' - answer message;\n"
 "   'sender' - request sender;\n"
-"   'tr' - sender transport."
+"   'tr' - sender transport;\n"
+"   'this' - pointer to object of this protocol;\n"
+"   'schedCall' - scheduling the next service call in the Integer type for "
+"seconds."
 msgstr ""
 "Следующие атрибуты определены для обработки входных запросов:\n"
 "   'rez' - результат обработки (false - полный запрос; true - неполный "

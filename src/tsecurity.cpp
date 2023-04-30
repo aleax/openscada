@@ -138,7 +138,7 @@ void TSecurity::load_( )
 	//g_cfg.cfgViewAll(false);
 	vector<string> itLs;
 
-	//  Search new into DB and Config-file
+	//  Search new one in DB and Config-file
 	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
 	    for(int fld_cnt = 0; TBDS::dataSeek(itLs[iIt]+"."+subId()+"_user",nodePath()+subId()+"_user",fld_cnt++,g_cfg,TBDS::UseCache); ) {
@@ -169,7 +169,7 @@ void TSecurity::load_( )
 	vector<string> itLs;
 	itReg.clear();
 
-	//  Search new into DB and Config-file
+	//  Search new one in DB and Config-file
 	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
 	    for(int fld_cnt = 0; TBDS::dataSeek(itLs[iIt]+"."+subId()+"_grp",nodePath()+subId()+"_grp",fld_cnt++,g_cfg,TBDS::UseCache); ) {

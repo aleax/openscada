@@ -1,13 +1,13 @@
 # OpenSCADA.Transport.Serial translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Transport.Serial package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2009-2021.
+# Roman Savochenko <roman@oscada.org>, 2009-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-23 12:51+0200\n"
+"POT-Creation-Date: 2023-04-29 16:06+0300\n"
 "PO-Revision-Date: 2009-03-31 18:28+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -82,7 +82,6 @@ msgstr ""
 "    modTel - телефон модема, присутствие этого поля переключает транспорт на "
 "работу в режиме модема."
 
-#, fuzzy
 msgid ""
 "Connection timings in the format \"{conn}:{symbol}[-{NextReqMult}][:"
 "{KeepAliveTm}[:{rtsDelay1}:{rtsDelay2}]]\", where:\n"
@@ -100,7 +99,7 @@ msgid ""
 "start up of the transmission, in milliseconds;\n"
 "    rtsDelay2 - delay between the transmitting and disconnecting the "
 "transmitter with RTS signal, in milliseconds.\n"
-"Can be prioritatile specified into the address field as the second global "
+"Can be prioritatile specified in the address field as the second global "
 "argument, as such \"/dev/rfcomm0:9600||1000:40-20\"."
 msgstr ""
 "Временные интервалы соединения в формате \"{conn}:{symbol}[-{NextReqMult}][:"

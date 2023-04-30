@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Документы/Руководство по программе</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FProgram+manual&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/Program_manual" title="Documents/Program manual">Documents/Program manual</a> and the translation is 98% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Program_manual.html" title="Documents/Program manual (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FProgram+manual&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/Program_manual" title="Documents/Program manual">Documents/Program manual</a> and the translation is 97% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Program_manual.html" title="Documents/Program manual (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Автор:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a></li>
 <li> <b>Изначально создано:</b> в <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual" rel="nofollow noreferrer noopener" target="_blank">старой Wiki</a> </li></ul>
@@ -537,7 +537,7 @@
 <li> <i>Enable the manager</i> — enables the generic translation manager which cause full reloading for all built messages obtain, however this does not form the full messages index by deny to reload some objects into their execution. For the full messages index loading you ought to save the manager into the enabled mode and to restart OpenSCADA. Ongoing next start the program will form the full messages index.</li>
 <li> <i>Languages of managing</i> — list of the processing languages, in the two-character representation and separated by the character ';'. If the translations for the specified language in the source are presented then the language column will contain them otherwise it will be empty.</li>
 <li> <i>Source filter</i> — source filter of limiting the manager work in some DBs, the source just must contain such substring.</li>
-<li> <i>, check/fix</i> — enable for checking the base messages translation equality in different sources and fixing by: propagation the translations to empty sources, clearing the double to base translations and merging the base messages as the translations.</li>
+<li> <i>, check/fix</i> — enable for checking the base messages translation equality in different sources and fixing by: propagation the translations to empty sources, clearing the double to base translations. And the separated-second check for fixing by merging the base messages as the translations, since this operation can be some wrong in complex environments.</li>
 <li> <i>, pass</i> — pass the specified number of the table items from the top, useful for very big projects which are limited in time of the table complete processing.</li>
 <li> <i>Messages</i> — same the messages table with columns: the base language, managing translation languages, the message sources. To modify there are allowed the languages columns and at result the changes will be set to the message sources.</li></ul></dd></dl>
 <ul><li> The tab "Tasks" contains a table with opened tasks of OpenSCADA components (Fig.4d). From the table you can get several information about the tasks, and also assign CPUs used by the tasks of multiprocessing systems and set the task invoking phase.</li>
@@ -562,7 +562,7 @@
 <p>Для отладки различных особенностей работы OpenSCADA может потребоваться включение генерации дополнительных-отладочных сообщений, что осуществляется установкой минимального уровня сообщений, на вкладке "Станция", в "Отладка (0)". В результате этого появится вкладке "Отладка" (Рис.4e) где доступны счётчики объектов для контроля за утечками, а также таблица с перечнем категорий поступающий отладочных сообщений. В таблице категорий можно выбрать только те источники отладочных сообщений, которые нужны, тем самым не перегружая подсистему вывода и архивирования сообщений, а так-же не понижая сильно производительность программы в целом. Можно выбирать категории высших уровней, вплоть до корневой категории подсистемы, что выключит детальный выбор и включит генерацию всех сообщений по уровню или подсистеме. Для изучения отладочных сообщений нужно перейти в подсистему "Архивы" (Рис.4.6c), для чего предусмотрена кнопка "Просмотр сообщений". Выбранный режим отладки и перечень категорий отладки может быть сохранён в конфигурационном файле стандартным образом и при следующем старте режим отладки активируется сразу, что важно в первую очередь для счётчиков объектов.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:862px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_debug_ru.png"><img class="thumbimage" height="692" src="files/QTCfg_sys_debug_ru.png" width="860" /></a>  <div class="thumbcaption">Рис. 4e. Вкладка "Отладка" корневой страницы конфигурации станции.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1282px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_transl_ru.png"><img class="thumbimage" height="973" src="files/QTCfg_sys_transl_ru.png" width="1280" /></a>  <div class="thumbcaption">Рис. 4f. Вкладка "Переводы" корневой страницы конфигурации станции.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1282px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_transl.png"><img class="thumbimage" height="834" src="../en/files/QTCfg_sys_transl.png" width="1280" /></a>  <div class="thumbcaption">Рис. 4f. Вкладка "Переводы" корневой страницы конфигурации станции.</div></div></div></div>
 <p>При рассмотрении страниц конфигурации модульных подсистем будут описаны общие для всех модулей свойства. Однако нужно отметить, что каждый модуль может предоставлять как дополнительные вкладки, так и отдельные поля для конфигурации собственных особенностей функционирования для страниц, объекты которых наследуются модулями. С особенностями и дополнениями модулей можно ознакомиться в отдельной <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules" title="Special:MyLanguage/Modules">документации на них</a>.
 </p>
 <h3><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.91.D0.94.22"><span class="mw-headline-number">4.1</span> <span id="CfgDB" title="#CfgDB">Подсистема "БД"</span></span></h3>
@@ -869,10 +869,10 @@
 <li> <i>Удалённый</i> — признак, указывающий на исполнение архиватора удалённой станцией и работу локальной станции в режиме синхронизации данных с удалённой.</li></ul></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:947px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_red_ru.png"><img class="thumbimage" height="475" src="files/QTCfg_subsys_arch_red_ru.png" width="945" /></a>  <div class="thumbcaption">Рис. 4.6a. Вкладка "Резервирование" подсистемы "Архивы-История".</div></div></div></div>
 <p>Вкладка "Сообщения" (Рис.4.6b) содержит конфигурацию архива сообщений и форму запроса сообщений из него.
-</p><p>Конфигурация архива сообщений представлена полями:
+</p><p>Configuration of the messages archive is represented by the fields:
 </p>
-<ul><li> <i>Размер буфера</i> — определяет размер области оперативной памяти зарезервированной на промежуточный буфер сообщений. Сообщения из буфера запрашиваются для просмотра и архивируются архиваторами сообщений.</li>
-<li> <i>Период архивирования</i> — периодичность, в секундах, с которой архиваторы выбирают сообщения из буфера для их архивирования.</li></ul>
+<ul><li> <i>Buffer size, archiving period</i> — indicates the size of the memory area reserved for the interim buffer of messages. Messages from the buffer are requested for viewing and archived with the messages archivers by the specified periodicity in seconds.</li>
+<li> <i>Days of the alarms automatic clearing</i> — after that term the alarms are meant as forgotten and inactual, so removed from the table of the active alarms. Zero disables the automatic clearing.</li></ul>
 <p>Форма запроса сообщений содержит конфигурационные поля запроса и таблицу результата. Конфигурационные поля запроса:
 </p>
 <ul><li> <i>Время, размер (секунд) и уровень</i> — указывает время, размер или глубину (в секундах) и минимальный уровень сообщений (более или равный указанному) запроса.</li>
@@ -886,7 +886,7 @@
 <li> <i>Сообщение</i> — непосредственно текст сообщения.</li></ul>
 <p>Для сообщений о нарушениях, после таблицы появляется кнопка очистки этой таблицы на предмет видимых нарушений, что полезно для сервисных функций. Таблица также дополняется командой "Удалить" для удаления отдельных нарушений.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1170px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mess_ru.png"><img class="thumbimage" height="632" src="files/QTCfg_subsys_arch_mess_ru.png" width="1168" /></a>  <div class="thumbcaption">Рис. 4.6b. Вкладка "Сообщения" подсистемы "Архивы-История".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1025px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mess.png"><img class="thumbimage" height="834" src="../en/files/QTCfg_subsys_arch_mess.png" width="1023" /></a>  <div class="thumbcaption">Рис. 4.6b. Вкладка "Сообщения" подсистемы "Архивы-История".</div></div></div></div>
 <p>Вкладка "Значения" (Рис.4.6c) содержит общую конфигурацию архивирования значений и список архивов значений. В контекстном меню списка значений пользователю предоставляется возможность добавления, удаления и перехода к нужному архиву. Общая конфигурация архивирования представлена полями:
 </p>
 <ul><li> <i>Период получения данных</i> — указывает периодичность задачи активного архивирования, в миллисекундах. Максимальная детализация или минимальный период активных архивов фактически определяется этим значением.</li>
@@ -1508,77 +1508,77 @@
 ***************************************************************************
 
 ===========================================================================
-======================= Основные опции ====================================
+==================== Generic options ======================================
 ===========================================================================
--h, --help              Этот текст помощи по опциям командной строки и параметрам конфигурационного файла программы.
-    --projName=&lt;имя&gt;    Имя проекта OpenSCADA для переключения.
-                        Для такой операции также используется переменная окружение "OSCADA_ProjName" и имя бинарной программы "openscada_{ProjName}".
-    --projUserDir={дир.} Директория пользовательских проектов OpenSCADA (доступна для записи), по умолчанию "~/.openscada".
-    --projLock={per}    Использовать блокирование проектов созданием файла "lock" в директории проекта и его обновление с периодом &lt;per&gt;,
-                        по умолчанию включено и период обновления &lt;per&gt; составляет 60 секунд. Для отключения установить период обновления &lt;per&gt; в нуль.
-    --lang=&lt;LANG&gt;       Язык станции, в виде "ru_RU.UTF-8".
-    --config=&lt;файл&gt;     Конфигурационный файл станции.
-    --station=&lt;ид&gt;      Идентификатор станции.
-    --statName=&lt;имя&gt;    Имя станции.
-    --modDir=&lt;path&gt;     Директории модулей, разделённые ';', и в конце могут содержать шаблон файлов.
-    --messLev=&lt;уров&gt;    Уровень обрабатываемых сообщений (0-7).
-    --log=&lt;направл.&gt;    Направление сообщений в, по битовому полю:
-                          0x1 - системный логер (syslogd);
-                          0x2 - стандартный выход (stdout);
-                          0x4 - стандартный выход ошибок (stderr);
-                          0x8 - архив сообщений.
-    --consoleCharSet={CharSet} Принудительно установить кодовый набор символов консоли в &lt;CharSet&gt;, по умолчанию он системный.
-    --demon, --daemon   Запуск в режиме демона.
-    --pidFile=&lt;файл&gt;    файл для помещения ID процесса программы сюда.
-    --noCoreDump        Предотвращать создание предсмертных дампов - не снимать это ограничение.
-    --permCrtFiles={права} Права создаваемых OpenSCADA файлов, по умолчанию это 0755 (RWXRW_RW_).
--------------- Параметры станции 'AGLKS(SimulatorStation)' в конфигурационном файле ------------
-StName     &lt;имя&gt;        Имя станции.
-WorkDB     &lt;Тип.Имя&gt;    Рабочая БД (тип и имя).
-WorkDir    &lt;path&gt;       Рабочая директория.
-ModDir     &lt;path&gt;       Директории модулей, разделённые ';', и в конце могут содержать шаблон файлов.
-IcoDir     &lt;path&gt;       Директория с иконками.
-DocDir     &lt;path&gt;       Директория с документами.
-MessLev    &lt;уровень&gt;    Уровень обрабатываемых сообщений (0-7).
-SelDebCats &lt;список&gt;     Список категорий отладки, разделены ';'.
-LogTarget  &lt;направл.&gt;   Направление сообщений в, по битовому полю:
-                          0x1 - системный логер (syslogd);
-                          0x2 - стандартный выход (stdout);
-                          0x4 - стандартный выход ошибок (stderr);
-                          0x8 - архив сообщений.
-Lang       &lt;язык&gt;       Язык-локаль станции, в виде "ru_RU.UTF-8".
-LangBase   &lt;язык&gt;       Базовый язык и перечень всех локалей (вроде "ru_RU.UTF-8") проекта (опционально) разделённых ';', для многоязычного режима.
-MainCPUs   &lt;список&gt;     Основной перечень используемых процессоров, разделены ':'.
-TaskInvPhs &lt;n&gt;          Количество фаз вызова задач, 1 для отключения фазирования.
-ClockRT    &lt;0|1&gt;        Установить использование источника часов в REALTIME (иначе MONOTONIC), несколько проблематичное при модификации системных часов.
-SaveAtExit &lt;0|1&gt;        Сохранять программу при выходе.
-SavePeriod &lt;секунд&gt;     Период сохранения программы, 0 для отключения.
-ModifCalc  &lt;0|1&gt;        Устанавливать модификацию для вычислительных объектов.
-RdStLevel  &lt;уров&gt;       Уровень резервирования текущей станции.
-RdTaskPer  &lt;секунд&gt;     Период вызова задачи обслуживания резервирования.
-RdRestConnTm &lt;секунд&gt;   Время восстановления соединения с "мёртвой" резервной станцией.
-RdStList   &lt;список&gt;     Список резервных станций, разделённых символом ';' (st1;st2).
-RdPrimCmdTr &lt;0|1&gt;       Включение транзита первичных команд на резервные станции.
-    Глобальные конфигурируемые лимиты:
-limObjID_SZ     [*20..50] Размер ИД объектов OpenSCADA.
-                ВНИМАНИЕ! Большой размер может вызвать ошибку размера ключа на БД похожих на MySQL!
-                        Измените это только один раз перед использованием на БД с фиксированным типом "char({N})"!
-limObjNm_SZ     [*100...200] Размер НАЗВАНИЯ объектов OpenSCADA.
-                ВНИМАНИЕ! Измените это лишь один раз перед использованием на БД с фиксированным типом "char({N})"!
-limArchID_SZ    [*50...90] Размер ИД объектов архива значений.
-                ВНИМАНИЕ! Только увеличивайте его, иначе можете получить проблемы в Archive.FSArch!
-                        Измените это лишь один раз перед использованием на БД с фиксированным типом "char({N})"!
-limUserFile_SZ  [1MB...*10MB...1000MB] Ограничение на размер файлов при загрузке и обработке в пространстве пользователя
-                и размер частей передачи больших файлов.
-limUserIts_N    [1000...*1000000...1000000000] Ограничение на количество создаваемых элементов пользователя, вроде элементов массивов.
-limCacheIts_N   [*100...100000] Ограничение на количество элементов в кеше.
-limCacheIts_TM  [10...*60...1000] Ограничение на время элементов в кеше, секунд.
-    Глобальные конфигурируемые параметры:
-prmStrBuf_SZ    [1000...*10000...1000000] Длина строковых буферов, не строковых классов.
-prmWait_DL      [0.001...*0.1...1] Время кванта циклов ожидания, секунд.
-prmWait_TM      [*5...10] Стандартный размер таймаута ожидания, секунд.
-prmInterf_TM    [*7...15] Время ожидания реакции интерфейса, секунд.
-prmServTask_PER [1...*10...120] Период сервисной задачи, секунд.
+-h, --help              This help text about the program command-line options and configuration file parameters.
+    --projName=&lt;name&gt;   OpenSCADA project name to switch it.
+                        For this feature there also uses an environment variable "OSCADA_ProjName" and the program binary name "openscada_{ProjName}".
+    --projUserDir={dir} Directory of user projects (writeable) of OpenSCADA, "~/.openscada" by default.
+    --projLock={per}    Uses the projects locking by creation the \"lock\" file in the project folder and update it in the period &lt;per&gt;,
+                        by default it is enabled and the updating period &lt;per&gt; is 60 seconds. To disable set the updating period &lt;per&gt; to zero.
+    --lang=&lt;LANG&gt;       Station language, in the view "en_US.UTF-8".
+    --config=&lt;file&gt;     Station configuration file.
+    --station=&lt;id&gt;      Station identifier.
+    --statName=&lt;name&gt;   Station name.
+    --modDir=&lt;path&gt;	Directories with the modules, separated by ';', they can include a files' template at the end.
+    --messLev=&lt;level&gt;   Level of the processing messages (0-7).
+    --log=&lt;direct&gt;      Direct messages to, by the bitfield:
+                          0x1 - syslogd;
+                          0x2 - stdout;
+                          0x4 - stderr;
+                          0x8 - the messages archive.
+    --consoleCharSet={CharSet} Forcing to the console &lt;CharSet&gt; for the console messages, by default it is system one.
+    --demon, --daemon   Run in the daemon mode.
+    --pidFile=&lt;file&gt;    File for the program process ID placing here.
+    --noCoreDump        Prevents from the core dump creation at crashes - don't set the limit to the unlimited value.
+    --permCrtFiles={perm} Permissions of the created OpenSCADA files, by default it is 0755 (RWXRW_RW_).
+----------- Station 'AGLKS(SimulatorStation)' settings in the configuration file -----------
+StName     &lt;nm&gt; Station name.
+WorkDB     &lt;Type.Name&gt; Working DB (&lt;type&gt; and &lt;name&gt;).
+WorkDir    &lt;path&gt;       Working directory.
+ModDir     &lt;path&gt;       Directories with the modules, separated by ';', they can include a files' template at the end.
+IcoDir     &lt;path&gt;       Icons directory.
+DocDir     &lt;path&gt;       Documents directory.
+MessLev    &lt;level&gt;      Level of the processing messages (0-7).
+SelDebCats &lt;list&gt;       Debug categories list, separated by ';'.
+LogTarget  &lt;direction&gt; Direct messages to, by the bitfield:
+                          0x1 - syslogd;
+                          0x2 - stdout;
+                          0x4 - stderr;
+                          0x8 - the messages archive.
+Lang       &lt;lang&gt;       Station language-locale in the view "en_US.UTF-8".
+LangBase   &lt;lang&gt;       Base language and the project whole locales (like to "en_US.UTF-8") list (optional) separated by ';', for the multilanguage mode.
+MainCPUs   &lt;list&gt;       Main list of the using CPUs, separated by ':'.
+TaskInvPhs &lt;n&gt;          Number of phases of the task invoking, 1 to disable the phasing.
+ClockRT    &lt;0|1&gt;        Sets the clock source to use to REALTIME (otherwise MONOTONIC), which is problematic one at the system clock modification.
+SaveAtExit &lt;0|1&gt;        Save the program at exit.
+SavePeriod &lt;seconds&gt;    Period of the program saving, 0 to disable.
+ModifCalc  &lt;0|1&gt;        Set modification for the calculated objects.
+RdStLevel  &lt;lev&gt;        Level of the redundancy of the current station.
+RdTaskPer  &lt;seconds&gt;    Call period of the redundancy task.
+RdRestConnTm &lt;seconds&gt;  Time to restore connection to "dead" reserve station.
+RdStList   &lt;list&gt;       Redundant stations list, separated symbol ';' (st1;st2).
+RdPrimCmdTr &lt;0|1&gt;       Enables the transmission of primary commands to the reserve stations.
+    Global configurable limits:
+limObjID_SZ     [*20..50] ID size of the OpenSCADA objects.
+                WARNING! Big size can cause the key limit error on MySQL like DB!
+                         Change that once before use on DBs with the fixed type "char({N})"!
+limObjNm_SZ     [*100...200] NAME size of the OpenSCADA objects.
+                WARNING! Change that once before use on DBs with the fixed type "char({N})"!
+limArchID_SZ    [*50...90] ID size of the value archive objects.
+                WARNING! Increase it only, else you can get problems on Archive.FSArch!
+                         Change that once before use on DBs with the fixed type "char({N})"!
+limUserFile_SZ  [1MB...*10MB...1000MB] The files size limit at loading and processing in the userspace
+                and the part size of the big files transferring.
+limUserIts_N    [1000...*1000000...1000000000] The limit on count of creating user items, like to array items.
+limCacheIts_N   [*100...100000] The limit on count of the caching items.
+limCacheIts_TM	[10...*60...1000] The limit on the caching items time, seconds.
+    Global configurable parameters:
+prmStrBuf_SZ    [1000...*10000...1000000] Length of string buffers, no string class.
+prmWait_DL      [0.001...*0.1...1] Quantum of the waiting time cycles, seconds.
+prmWait_TM      [*5...10] Standard waiting timeout length, seconds.
+prmInterf_TM    [*7...15] Time of waiting for the interface reaction, seconds.
+prmServTask_PER [1...*10...120] Service task period, seconds.
 
 ========================= Опции подсистемы "БД" =========================
 ---------- Параметры секции '/sub_BD/' конфигурационного файла ----------
@@ -1610,13 +1610,14 @@ AuthTime   &lt;мин&gt;        Время жизни сеанса аутент
 ---------- Параметры секции '/sub_DAQ/' конфигурационного файла ----------
 RdRestDtTm &lt;час&gt;        Глубина восстановления данных архива из резервной станции, при включении, в часах.
 
-==================== Опции подсистемы "Архивы-История" ======================
----------- Параметры секции '/sub_Archive/' конфигурационного файла ----------
-MessBufSize   &lt;ед.&gt;     Размер буфера сообщений.
-MessPeriod    &lt;секунд&gt;  Период архивирования сообщений.
-ValPeriod     &lt;мсекунд&gt; Период активного архивирования значений.
-ValPriority   &lt;уровень&gt; Уровень приоритета задачи активного архивирования значений.
-RdRestDtOverTm &lt;дней&gt;   Глубина принудительной перезагрузки истории резерва при запуске, в днях.
+======================== Subsystem "Archives-History" options ===================
+------ Parameters of the section '/sub_Archive/' of the configuration file ------
+MessBufSize  &lt;items&gt;    Size of the messages buffer.
+MessPeriod   &lt;seconds&gt;  Period of the messages archiving.
+ClrAlrmDays  &lt;days&gt;     Days of the alarms automatic clearing.
+ValPeriod    &lt;mseconds&gt; Period of active archiving of values.
+ValPriority  &lt;level&gt;    Level of priority of the task of active archiving of values.
+RdRestDtOverTm &lt;days&gt;   Depth of the forced overloading of the reserve history at startup, in days.
 
 ======================= Опции модуля &lt;Archive:FSArch&gt; =============================
     --noArchLimit       Отключить лимит на количество файлов.

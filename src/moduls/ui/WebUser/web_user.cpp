@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.6.2"
+#define MOD_VER		"1.6.3"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -119,7 +119,7 @@ void TWEB::load_( )
 	vector<string> itLs;
 	map<string, bool> itReg;
 
-	//  Search into DB
+	//  Search in DB
 	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
 	    for(int fldCnt = 0; TBDS::dataSeek(itLs[iDB]+"."+modId()+"_uPg",nodePath()+modId()+"_uPg",fldCnt++,gCfg,TBDS::UseCache); ) {
@@ -528,7 +528,7 @@ void UserPg::perSYSCall( )
 
 	//Get outputs
 	outputLinks();
-    } catch(TError &err) { }
+    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
     if(ioThis >= 0) setO(ioThis, new TEValObj());
 }

@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.8.6"
+#define MOD_VER		"3.8.7"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -936,7 +936,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		    return mNotFull || KeepAlive;
 		}
 	    }
-	    //Check for module's icon and other images into folder "icons/"
+	    //Check for module's icon and other images in the folder "icons/"
 	    if(method == "GET" && name_mod.rfind(".") != string::npos) {
 		string icoTp, ico = TUIS::icoGet(name_mod.substr(0,name_mod.rfind(".")), &icoTp);
 		if(ico.size()) {

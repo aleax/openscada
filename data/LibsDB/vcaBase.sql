@@ -27763,7 +27763,7 @@ License: GPLv2',32,'','','','Елементи слугують для викор
 Версія: 1.0.0
 Ліцензія: GPLv2','','Элементы служат для использования в составе, или около, трубопроводов.
 
-Автор: Максим Лысенко
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_mnEls_io VALUES('cooler2','dscr','The elements are for use in, or around, pipelines.
@@ -27815,7 +27815,7 @@ License: GPLv2',32,'','','','Елементи слугують для викор
 Версія: 1.0.0
 Ліцензія: GPLv2','','Элементы служат для использования в составе, или около, трубопроводов.
 
-Автор: Максим Лысенко
+Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.0.0
 Лицензия: GPLv2','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_prescr_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '0' ,"IO_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '0' ,"CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));

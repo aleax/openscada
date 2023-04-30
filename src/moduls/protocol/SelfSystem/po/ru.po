@@ -1,13 +1,13 @@
 # OpenSCADA.Protocol.SelfSystem translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Protocol.SelfSystem package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2007-2020.
+# Roman Savochenko <roman@oscada.org>, 2007-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-21 22:55+0300\n"
+"POT-Creation-Date: 2023-04-29 18:00+0300\n"
 "PO-Revision-Date: 2007-10-23 18:19+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -79,10 +79,6 @@ msgid "The response '%s' is not suitable to the request '%s'."
 msgstr "Ответ '%s' не соответствует запросу '%s'."
 
 #, c-format
-msgid "The response sequence %d is not suitable to the request one %d."
-msgstr "Последовательность ответа %d не соответствует запросу %d."
-
-#, c-format
 msgid "Error the request: %s"
 msgstr "Ошибка запроса: %s"
 
@@ -143,3 +139,7 @@ msgstr "Обработан запрос: '%s', время: %g мс."
 #, c-format
 msgid "Response saved to a stream and packed: '%s': %d, time: %g ms."
 msgstr "Сохранён ответ в поток и упакован: '%s': %d, время: %g мс."
+
+#, c-format
+#~ msgid "The response sequence %d is not suitable to the request one %d."
+#~ msgstr "Последовательность ответа %d не соответствует запросу %d."

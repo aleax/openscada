@@ -894,7 +894,7 @@ void ConfApp::itPaste( )
 	//{ mod->postMess(mod->nodePath(), _("Copying is not possible."), TUIMod::Error, this); return; }
 
 	vector<string> brs;
-	if(copyEl == toPath) {	//For copy into the branch and no select direct the parent node
+	if(copyEl == toPath) {	//For copy into the branch and do not select directly the parent node
 	    toPath = sElp;
 	    parNode.setAttr("path", toPath);
 	    if(cntrIfCmd(parNode)) continue;
@@ -1386,7 +1386,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		}
 		else selectChildRecArea(t_s, a_path+t_s.attr("id")+"/");
 
-		// Elements of scalable by vertical get and their grow up to the scroll appear into the container
+		// Elements of scalable by vertical get and their grow up to the scroll appear in the container
 		if(!s2i(genReqs.attr("fillMode"))) {
 		    QScrollArea *scrl = (QScrollArea*)tabs->widget(iArea);
 		    QWidget *lastW = qobject_cast<QWidget*>(scrl->widget()->children().last());
@@ -2740,7 +2740,7 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 	int rez = cntrIfCmdHosts(node);
 	//int rez = SYS->transport().at().cntrIfCmd(node,"UIQtCfg",user());
 
-	// Multiple requests to selected nodes into the tree
+	// Multiple requests to selected nodes in the tree
 	if(rez == TError::NoError && (node.name() == "set" || node.name() == "load" || node.name() == "save") && CtrTree->selectedItems().size() >= 2) {
 	    string reqPath = node.attr("path");
 	    size_t reqElPos = reqPath.rfind("/");
@@ -3621,7 +3621,7 @@ void ConfApp::applyButton( )
 	if(cntrIfCmd(n_el)) mod->postMessCntr(n_el, this);
     } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 
-    //Redraw only for changing into same this widget
+    //Redraw only for changing in same this widget
     pageRefresh(CH_REFR_TM);
 }
 

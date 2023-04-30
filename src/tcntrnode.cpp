@@ -916,7 +916,7 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	if(tprv) return new TCntrNodeObj(AutoHD<TCntrNode>(tprv), user_lang);
 	return false;
     }
-    // string nodePath(string sep = "", bool from_root = true) - get the node path into OpenSCADA objects tree
+    // string nodePath(string sep = "", bool from_root = true) - get the node path in the OpenSCADA objects tree
     //  sep - Separator symbol for separated path;
     //  from_root - path forming from root tree and do not include station ID.
     if(iid == "nodePath")

@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.5.13"
+#define MOD_VER		"1.6.1"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -123,7 +123,7 @@ void TProt::load_( )
 	vector<string> itLs;
 	map<string, bool> itReg;
 
-	//  Search into DB
+	//  Search in DB
 	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
 	    for(unsigned fldCnt = 0; TBDS::dataSeek(itLs[iDB]+"."+modId()+"_uPrt",nodePath()+modId()+"_uPrt",fldCnt++,gCfg,TBDS::UseCache); ) {
@@ -210,6 +210,16 @@ void TProt::cntrCmdProc( XMLNode *opt )
     else TProtocol::cntrCmdProc(opt);
 }
 
+void TProt::perSYSCall( unsigned int cnt )
+{
+    AutoHD<UserPrt> up;
+    vector<string> ls;
+    uPrtList(ls);
+    for(unsigned iN = 0; iN < ls.size(); iN++)
+	if((up=uPrtAt(ls[iN])).at().enableStat())
+	    up.at().perSYSCall();
+}
+
 //*************************************************
 //* TProtIn                                       *
 //*************************************************
@@ -247,7 +257,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 UserPrt::UserPrt( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), TPrmTempl::Impl(this,("InUserProtocol_"+iid).c_str()), cntInReq(0), cntOutReq(0), mId(cfg("ID")), mAEn(cfg("EN").getBd()), mEn(false),
     mWaitReqTm(cfg("WaitReqTm").getId()), mTimeStamp(cfg("TIMESTAMP").getId()), mDB(idb),
-    ioTrIn(-1), ioTrOut(-1), ioRez(-1), ioReq(-1), ioAnsw(-1), ioSend(-1), ioIO(-1), chkLnkNeed(false)
+    ioTrIn(-1), ioTrOut(-1), ioRez(-1), ioReq(-1), ioAnsw(-1), ioSend(-1), ioThis(-1), ioSchedCall(-1), ioIO(-1), chkLnkNeed(false)
 {
     mId = iid;
 }
@@ -362,19 +372,21 @@ bool UserPrt::inMess( const string &reqst, string &answer, TProtIn *prt )
 {
     if(ioRez < 0 || ioReq < 0 || ioAnsw < 0) return true;
 
+    //Try to enable, mostly to allow fo use static functons in the procedures
+    try { if(!enableStat() && toEnable() && inProgLang().size()) setEnable(true); }
+    catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+
+    MtxAlloc res1(inReqRes, true);
+    ResAlloc res2(inCfgRes, false);
+
+    //Malfunction input protocol checking
+    if(!enableStat() || !func()) return false;
+
     try {
-	//Try enable, mostly for allow to use static functons into the procedures
-	if(!enableStat() && toEnable() && inProgLang().size()) setEnable(true);
-
-	MtxAlloc res1(inReqRes, true);
-	ResAlloc res2(inCfgRes, false);
-
-	//Malfunction input protocol checking
-	if(!enableStat() || !func()) return false;
-
 	if(chkLnkNeed) chkLnkNeed = initLnks();
 
 	//The input function's execution context creation
+	if(ioThis >= 0) setO(ioThis, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 	if(ioTrIn >= 0) setO(ioTrIn, new TCntrNodeObj(AutoHD<TCntrNode>(&prt->srcTr().at()),"root"));
 
 	//Load inputs
@@ -404,9 +416,9 @@ bool UserPrt::inMess( const string &reqst, string &answer, TProtIn *prt )
 
 	return rez;
     } catch(TError &err) {
-	MtxAlloc res1(inReqRes, true);
-	ResAlloc res2(inCfgRes, false);
+	if(func() && ioThis >= 0) setO(ioThis, new TEValObj());
 	if(func() && ioTrIn >= 0) setO(ioTrIn, new TEValObj());
+
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
     }
 
@@ -440,6 +452,43 @@ void UserPrt::outMess( XMLNode &io, TTransportOut &tro )
     xnd.at().toXMLNode(io);
 
     cntOutReq++;
+}
+
+void UserPrt::perSYSCall( )
+{
+    MtxAlloc res1(inReqRes, true);
+    ResAlloc res2(inCfgRes, false);
+
+    int schedCall = 0;
+
+    if(!enableStat() || !func() || ioSchedCall < 0 || !(schedCall=getI(ioSchedCall))) return;
+
+    setI(ioSchedCall, (schedCall=vmax(0,schedCall-SERV_TASK_PER)));
+    if(schedCall) return;
+
+    try {
+	if(chkLnkNeed) chkLnkNeed = initLnks();
+
+	//The input function's execution context creation
+	if(ioThis >= 0) setO(ioThis, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
+	if(ioTrIn >= 0) setO(ioTrIn, new TEValObj());
+
+	//Load inputs
+	inputLinks();
+	setB(ioRez, false);
+	setS(ioReq, "");
+	setS(ioAnsw, "");
+	if(ioSend >= 0) setS(ioSend, "<SYS>");
+
+	//Call processing
+	setMdfChk(true);
+	calc();
+
+	//Get outputs
+	outputLinks();
+    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+
+    if(ioThis >= 0) setO(ioThis, new TEValObj());
 }
 
 void UserPrt::load_( TConfig *icfg )
@@ -497,7 +546,7 @@ void UserPrt::saveIO( )
 	TConfig cf(&owner().uPrtIOEl());
 	cf.cfg("UPRT_ID").setS(id(), true);
 	for(int iIO = 0; iIO < func()->ioSize(); iIO++) {
-	    if(iIO == ioRez || iIO == ioReq || iIO == ioAnsw || iIO == ioSend || iIO == ioTrIn || iIO == ioTrOut || iIO == ioIO ||
+	    if(iIO == ioRez || iIO == ioReq || iIO == ioAnsw || iIO == ioSend || iIO == ioTrIn || iIO == ioThis || iIO == ioSchedCall || iIO == ioTrOut || iIO == ioIO ||
 		func()->io(iIO)->flg()&TPrmTempl::LockAttr) continue;
 	    cf.cfg("ID").setS(func()->io(iIO)->id());
 	    cf.cfg("VALUE").setNoTransl(func()->io(iIO)->type() != IO::String || (func()->io(iIO)->flg()&TPrmTempl::CfgLink));
@@ -559,6 +608,8 @@ void UserPrt::setEnable( bool vl )
 		if((ioReq=func()->ioId("request")) >= 0 && func()->io(ioReq)->type() != IO::String)	ioReq = -1;
 		if((ioAnsw=func()->ioId("answer")) >= 0 && func()->io(ioAnsw)->type() != IO::String)	ioAnsw = -1;
 		if((ioSend=func()->ioId("sender")) >= 0 && func()->io(ioSend)->type() != IO::String)	ioSend = -1;
+		if((ioThis=func()->ioId("this")) >= 0 && func()->io(ioThis)->type() != IO::Object)	ioThis = -1;
+		if((ioSchedCall=func()->ioId("schedCall")) >= 0 && func()->io(ioSchedCall)->type() != IO::Integer) ioSchedCall = -1;
 		//Output part
 		if((ioIO=func()->ioId("io")) >= 0 && func()->io(ioIO)->type() != IO::Object)		ioIO = -1;
 
@@ -580,6 +631,8 @@ void UserPrt::setEnable( bool vl )
 		ioAnsw = funcIO.ioAdd(new IO("answer",trS("Input answer"),IO::String,IO::Output));
 		ioSend = funcIO.ioAdd(new IO("sender",trS("Input sender"),IO::String,IO::Default));
 		ioTrIn = funcIO.ioAdd(new IO("tr",trS("Transport"),IO::Object,IO::Default));
+		ioThis = funcIO.ioAdd(new IO("this",trS("This object"),IO::Object,IO::Default));
+		ioSchedCall = funcIO.ioAdd(new IO("schedCall",trS("Scheduling the next service call"),IO::Integer,IO::Output));
 
 		string workInProg = SYS->daq().at().at(TSYS::strSepParse(inProgLang(),0,'.')).at().
 		    compileFunc(TSYS::strSepParse(inProgLang(),1,'.'),funcIO,inProg());
@@ -657,7 +710,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/in",_("Input"),(DAQTmpl().size()||inProgLang().size()?RWRW__:0),"root",SPRT_ID)) {
 		ctrMkNode("fld",opt,-1,"/in/WaitReqTm",_("Timeout of a request waiting, milliseconds"),RWRW__,"root",SPRT_ID,2,
 		    "tp","dec", "help",_("Use this for the polling mode enabling through setting this timeout to a nonzero value.\n"
-					"Into the polling mode an input transport will call this protocol with the empty message at no request during this timeout."));
+					"In the polling mode an input transport will call this protocol with the empty message at no request during this timeout."));
 		ResAlloc res(inCfgRes, false);
 		if(func() && chkLnkNeed) chkLnkNeed = initLnks();
 		if(func() && ctrMkNode("table",opt,-1,"/in/io",_("IO"),RWRW__,"root",SPRT_ID,1,"rows","10")) {
@@ -675,7 +728,9 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 				"   'request' - request message;\n"
 				"   'answer' - answer message;\n"
 				"   'sender' - request sender;\n"
-				"   'tr' - sender transport."));
+				"   'tr' - sender transport;\n"
+				"   'this' - pointer to object of this protocol;\n"
+				"   'schedCall' - scheduling the next service call in the Integer type for seconds."));
 		else if(func()) TPrmTempl::Impl::cntrCmdProc(opt, "/in/cfg");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/out",_("Output"),(outProgLang().size()?RWRW__:0),"root",SPRT_ID)) {

@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.Siemens translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.Siemens package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2006-2022.
+# Roman Savochenko <roman@oscada.org>, 2006-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-15 20:33+0300\n"
+"POT-Creation-Date: 2023-04-29 16:01+0300\n"
 "PO-Revision-Date: 2007-10-28 09:21+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -241,7 +241,8 @@ msgstr "Наступний збір за cron '%s'. "
 
 #, c-format
 msgid "Spent time %s[%s], read %s, wrote %s, connection errors %g. "
-msgstr "Витрачено часу %s[%s], прочитано %s, записано %s, помилок підключення %g. "
+msgstr ""
+"Витрачено часу %s[%s], прочитано %s, записано %s, помилок підключення %g. "
 
 #, c-format
 msgid "Connection to the data source: %s."
@@ -403,7 +404,8 @@ msgid "Unknown data encoding type, %d."
 msgstr "Невідомий тип кодування, %d."
 
 #, c-format
-msgid "Inconsistency in the size of the data block to the response size, %d(%d)."
+msgid ""
+"Inconsistency in the size of the data block to the response size, %d(%d)."
 msgstr "Невідповідність розміру блоку даних до розміру відповіді, %d(%d)."
 
 #, c-format
@@ -449,7 +451,7 @@ msgstr ""
 msgid ""
 "Remote controller address, for the connections:\n"
 "  CIF_PB - controller address in the ProfiBus network, one digit 0-255;\n"
-"  ISO_TCP, ISO_TCP243 - IP-address into the Ethernet network;\n"
+"  ISO_TCP, ISO_TCP243 - IP-address in the Ethernet network;\n"
 "  ADS - network identifier and port for the target and source stations, in "
 "view\n"
 "      \"{Target_AMSNetId}:{Target_AMSPort}|{Source_AMSNetId}:"
@@ -637,4 +639,3 @@ msgstr ""
 "у \"Grp 3\", зсув 20 та розмір 20.\n"
 "\n"
 "Формат загальної адреси:\n"
-

@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("Diamond DAQ boards")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.22"
+#define MOD_VER		"2.1.23"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides an access to \"Diamond Systems\" DAQ boards. Includes main support for all generic boards.")
 #define LICENSE		"GPL2"
@@ -334,7 +334,7 @@ void TMdPrm::vlGet( TVal &val )
     if(val.name() == "err") {
 	if(!acqErr.getVal().empty())	val.setS(acqErr.getVal(), 0, true);
 	else if(dscs.op_type == OP_TYPE_INT)
-	    val.setS(TSYS::strMess(_("0:AI acquisition into interrupt mode; SampleRate=%g; Drift=%gs; Overflows=%u; LostCycles=%u; SRateCor=%u."),
+	    val.setS(TSYS::strMess(_("0:AI acquisition in the interrupt mode; SampleRate=%g; Drift=%gs; Overflows=%u; LostCycles=%u; SRateCor=%u."),
 		dscaioint.conversion_rate,st_drift,st_overflows,st_lostcycles,st_sRateCor), 0, true);
 	else val.setS("0", 0, true);
     }
@@ -665,7 +665,7 @@ void TMdPrm::getVals( const string &atr, bool start, bool stop )
 	    if(dscaioint.sample_values)	{ free(dscaioint.sample_values); dscaioint.sample_values = NULL; }
 	}
 
-	//Samples buffer process into interrup mode
+	//Samples buffer processing in the interrup mode
 	if(!start && !stop && dscs.op_type == OP_TYPE_INT) {
 	    dscGetStatus(dscb, &dscs);
 	    unsigned aiSz = (dscaioint.high_channel+1);

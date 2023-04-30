@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/Протокол користувача</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FUserProtocol&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/UserProtocol" title="Modules/UserProtocol">Modules/UserProtocol</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/UserProtocol.html" title="Modules/UserProtocol (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/UserProtocol.html" title="Модули/Протокол пользователя (100% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FUserProtocol&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/UserProtocol" title="Modules/UserProtocol">Modules/UserProtocol</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/UserProtocol.html" title="Modules/UserProtocol (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/UserProtocol.html" title="Модули/Протокол пользователя (96% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
 <td> Користувацький протокол
 </td>
-<td> 1.5 </td>
+<td> 1.6 </td>
 <td> GPL2 </td>
 <td> prot_UserProtocol.so </td>
 <td> en,uk,ru,de </td>
@@ -77,7 +77,9 @@
 <li> <i><b>Вхідний запит (request)</b></i> &lt;Рядок&gt; — повне-акумульоване повідомлення запиту, яке протокол має очищати щодо оброблених даних;</li>
 <li> <i><b>Вхідна відповідь (answer)</b></i> &lt;Рядок&gt; — повідомлення відповіді;</li>
 <li> <i>Вхідний відправник (sender)</i> &lt;Рядок&gt; — відправник запиту;</li>
-<li> <i>Транспорт (tr)</i> &lt;Об'єкт&gt; — об'єкт вхідного транспорту.</li></ul>
+<li> <i>Транспорт (tr)</i> &lt;Об'єкт&gt; — об'єкт вхідного транспорту;</li>
+<li> <i>Цей об'єкт (this)</i> &lt;Об'єкт&gt; — вказівник на об'єкт цього протоколу;</li>
+<li> <i>Планування наступного сервісного виклику (schedCall)</i> &lt;Ціле&gt; — запишіть тут значення часу у секундах для планування виконання контексту процедури у сервісному виклику; <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> сервісні виклики зазвичай здійснюються із періодичністю 10 секунд, тож ви можете планувати такі виклики не частіше за 10 секунд.</li></ul>
 <p>Загальний сценарій обробки вхідних запитів:
 </p>
 <ul><li> Запит формується віддаленою станцією та через мережу потрапляє на <a href="../Program_manual.html#Communication" title="Special:MyLanguage/Documents/Program manual">транспорт OpenSCADA</a>.</li>

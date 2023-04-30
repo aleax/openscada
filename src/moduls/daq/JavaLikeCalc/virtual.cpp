@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"5.6.1"
+#define MOD_VER		"5.6.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -292,7 +292,7 @@ void TpContr::load_( )
 	vector<string> itLs;
 	map<string, bool> itReg;
 
-	// Search into DB
+	// Search in DB
 	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
 	    for(int libCnt = 0; TBDS::dataSeek(itLs[iDB]+"."+libTable(),nodePath()+"lib",libCnt++,cEl,TBDS::UseCache); ) {
@@ -301,7 +301,7 @@ void TpContr::load_( )
 		if(lbAt(lId).at().DB() == itLs[iDB])
 		    try {
 			lbAt(lId).at().load(&cEl);
-			//lbAt(lId).at().setStart(true);	//!!!! Do not try to start into the loading but possible broblems like to "$ openscada --help"
+			//lbAt(lId).at().setStart(true);	//!!!! Do not try to start in the loading but possible broblems like to "$ openscada --help"
 		    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 		lbAt(lId).at().setDB(itLs[iDB], true);
 		itReg[lId] = true;

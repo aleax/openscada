@@ -42,7 +42,7 @@
 #define MOD_NAME	trS("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.12.12"
+#define MOD_VER		"1.12.13"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides a block based calculator.")
 #define LICENSE		"GPL2"
@@ -106,7 +106,7 @@ void TpContr::postEnable( int flag )
     fldAdd(new TFld("BLOCK_SH",trS("Block's table"),TFld::String,TFld::NoFlag,"30","block"));
     fldAdd(new TFld("SCHEDULE",trS("Schedule of the calculation"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",trS("Calculate task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("ITER",trS("Iteration number into calculate period"),TFld::Integer,TFld::NoFlag,"2","1","0;99"));
+    fldAdd(new TFld("ITER",trS("Iteration number in a calculation period"),TFld::Integer,TFld::NoFlag,"2","1","0;99"));
 
     //Add parameter types
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));

@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/Собственный Системный Протокол</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSelfSystem&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/SelfSystem" title="Modules/SelfSystem">Modules/SelfSystem</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/SelfSystem.html" title="Modules/SelfSystem (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/SelfSystem.html" title="Модулі/Власний Системний Протокол (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSelfSystem&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/SelfSystem" title="Modules/SelfSystem">Modules/SelfSystem</a> and the translation is 92% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/SelfSystem.html" title="Modules/SelfSystem (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/SelfSystem.html" title="Модулі/Власний Системний Протокол (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -77,12 +77,12 @@
 </td></tr>
 <tr>
 <td>
-<p><b>REQ 1:</b> "REQ {ses_id} {req_size}\n{command of the control interface}"<br />
-<b>REQ 2:</b> "REQDIR {user} {password} {req_size}\n{command of the control interface}"<br />
+<p><b>REQ:</b> "REQ {ses_id} {req_size}\n{command of the control interface}"<br />
+<b>REQ:</b> "REQDIR {user} {password} {req_size}\n{command of the control interface}"<br />
 <b>REZ OK:</b> "REZ 0 {rez_size}\n{result of the command of the control interface}"<br />
-<b>REZ ERR:</b> "REZ 1 Error authentication: session not valid.\n"<br />
+<b>REZ ERR:</b> "REZ 1 Error authentication: session is not valid.\n"<br />
 <b>REZ ERR:</b> "REZ 2 {error of the control interface}"<br />
-Основные запросы: сеансовый и прямой. Реализуются путём отправки стандартной команды <a class="external" href="http://oscada.org/wiki/Documents/API#CntrNode" title="Documents/API">интерфейса управления OpenSCADA</a> в поле <i>command of the control interface</i>. В результате будет получен ответ интерфейса управления <i>result of the command of the control interface</i> или одна из ошибок.
+Основные запросы — сеансовый и прямой. Реализуются путём отправки стандартной команды <a href="../../en/API.html#CntrNode" title="Special:MyLanguage/Documents/API">Интерфейса Управления OpenSCADA</a> в поле <i>command of the control interface</i>. В результате будет получен ответ Интерфейса Управления <i>result of the command of the control interface</i> или одна из ошибок.
 </p>
 </td></tr>
 <tr>
@@ -92,7 +92,7 @@
 Любой некорректный запрос.
 </p>
 </td></tr></table>
-<p>Протоколом поддерживается возможность упаковки трафика. Пакуются только данные интерфейса управления <i>command of the control interface</i> и <i>result of the command of the control interface</i>. Факт прихода упакованного запроса или ответа определяется отрицательным значением размера запроса <i>req_size</i> или ответа <i>rez_size</i>. Определить параметры упаковки можно на странице конфигурации модуля (рис.1).
+<p>The protocol supports the ability of the traffic compression. Only the Control Interface data <i>command of the control interface</i> and <i>result of the command of the control interface</i> are compressed. The fact of receipt of a compressed request or response is determined by the negative value of the <i>req_size</i> or the <i>rez_size</i> response. You can define the compression options on the configuration page of the module (Fig. 1). Response of the protocol input part is forced to the compression with level -1 (that is optimal) at the compressed requests.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:888px;"><a class="image" href="http://oscada.org/wiki/File:SelfSystem_compr_ru.png"><img class="thumbimage" height="459" src="../files/SelfSystem_compr_ru.png" width="886" /></a>  <div class="thumbcaption">Рис.1. Главная вкладка страницы конфигурации параметров модуля.</div></div></div></div>
 <p>На этой вкладке можно:

@@ -1458,7 +1458,7 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 			}
 		    }
 
-		    //Find links into the source if no link founded
+		    //Find links in the source if no link founded
 		    if(prmLnk.empty()) {
 			vector<string> sAtrLs;
 			src.at().attrList(sAtrLs);

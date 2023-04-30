@@ -599,7 +599,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		}
 		else selectChildRecArea(node.childNodes[iCf],aPath+node.childNodes[iCf].getAttribute('id')+'/',null);
 
-		// Elements of scalable by vertical get and their grow up to the scroll appear into the container
+		// Elements of scalable by vertical get and their grow up to the scroll appear in the container
 		scrlArea = document.getElementById('gen-pnl-right');
 		sclIts = document.querySelectorAll(".elem textarea, .elem div.table, .elem select.list");
 		sclFitSz = scrlArea.clientHeight-scrlArea.children[0].offsetHeight;
@@ -2118,7 +2118,7 @@ function itPaste( )
     rootW = root;
     toPath = selPath;
 
-    if(copyBuf.substr(1) == toPath) {	//For copy into the branch and no select direct the parent node
+    if(copyBuf.substr(1) == toPath) {	//For copy into the branch and not select directly the parent node
 	toPath = sElp;
 	pgInfo = servGet(toPath, 'com=info');
 	if(parseInt(pgInfo.getAttribute('rez')) != 0) return;

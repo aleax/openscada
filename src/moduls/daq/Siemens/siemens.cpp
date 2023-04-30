@@ -43,7 +43,7 @@
 #define MOD_NAME	trS("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"4.4.14"
+#define MOD_VER		"4.4.15"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -1623,7 +1623,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,
 		"help",_("Remote controller address, for the connections:\n"
 		     "  CIF_PB - controller address in the ProfiBus network, one digit 0-255;\n"
-		     "  ISO_TCP, ISO_TCP243 - IP-address into the Ethernet network;\n"
+		     "  ISO_TCP, ISO_TCP243 - IP-address in the Ethernet network;\n"
 		     "  ADS - network identifier and port for the target and source stations, in view\n"
 		     "      \"{Target_AMSNetId}:{Target_AMSPort}|{Source_AMSNetId}:{Source_AMSPort}\"\n"
 		     "      (for example: \"192.168.0.1.1.1:801|82.207.88.73.1.1:801\"), where:\n"

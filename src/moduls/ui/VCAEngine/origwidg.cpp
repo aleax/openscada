@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: origwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -598,23 +598,23 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			  "  h   - Row of the headers. Possible attributes of the header cell tag for the column as a whole:\n"
 			  "    width - column width, in pixels or percents (10%);\n"
 			  "    edit  - allowing to the cells of the row edition (0 or 1), by default - no (0);\n"
-			  "    color - column color as a whole into the color name or code;\n"
-			  "    colorText - color of the column text as a whole into the color name or code;\n"
+			  "    color - column color as a whole in the color name or code;\n"
+			  "    colorText - color of the column text as a whole in the color name or code;\n"
 			  "    font - font of the column text in the typical OpenSCADA string;\n"
 			  "    prec - value precision of the real type cells in the column;\n"
 			  "    sort - sorting by the column [0 - Descending; 1 - Ascending];\n"
 			  "    align - alignment the column for: \"left\", \"right\" and \"center\".\n"
 			  "  r   - Row of the values. Possible attributes of the row cell tag for the row as a whole:\n"
-			  "    color - row color as a whole into the color name or code;\n"
-			  "    colorText - color of the row text as a whole into the color name or code;\n"
+			  "    color - row color as a whole in the color name or code;\n"
+			  "    colorText - color of the row text as a whole in the color name or code;\n"
 			  "    font - font of the row text in the typical OpenSCADA string;\n"
 			  "    prec - value precision of the real type cells in the row.\n"
 			  "  s, t, i, r, b - cells of the data types \"String\", \"Text\", \"Integer\", \"Real\" and \"Logical\". Possible attributes:\n"
 			  "    color - cell color;\n"
-			  "    colorText - color of the cell text into the color name or code;\n"
+			  "    colorText - color of the cell text in the color name or code;\n"
 			  "    font - font of the cell text in the typical OpenSCADA string;\n"
 			  "    prec - value precision of the real type cell;\n"
-			  "    img - image of the cell into the form \"[{src}:]{name}\";\n"
+			  "    img - image of the cell in the form \"[{src}:]{name}\";\n"
 			  "    edit - allowing the cell edition (0 or 1), by default - no (0);\n"
 			  "    align - alignment the cell for: \"left\", \"right\" and \"center\"."));
 		    if((el=ctrId(root,"/font",true)))	el->setAttr("help",Widget::helpFont());
@@ -1606,8 +1606,8 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     xdoc.childAdd()->load(TSYS::strMess(
 	_("<BODY>\n"
 	"  <H1>The document is forming now ...</H1>\n"
-	"  <P>The document is too big for generating into the standard user interface timeout (%ds). "
-	"And for now the document is into the building. "
+	"  <P>The document is too big for generating in the standard user interface timeout (%ds). "
+	"And for now the document is under the building. "
 	"You can wait the forming finish or terminate the process by select lesser time interval for the document.</P>\n"
 	"  <P>The building progress:\n"
 	"    <ul id='progress' />\n"

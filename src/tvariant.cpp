@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvariant.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1251,7 +1251,7 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
     //  str - source stream string or file name, for <file> = true;
     //  file - load XML-tree from file (true) or stram (false);
     //  flg - node's load flags:
-    //    0x01 - text and comments load into separated nodes "<*>" and "<!>";
+    //    0x01 - text and comments load in separated nodes "<*>" and "<!>";
     //    0x02 - no remove spaces for begin and end tag's text.
     //  cp - source codepage.
     if(id == "load" && prms.size()) {

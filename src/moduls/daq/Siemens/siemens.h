@@ -220,7 +220,7 @@ class TMdContr: public TController
 	void prmEn( TMdPrm *prm, bool val );
 
 	// Service
-	void postDisable( int flag );				//Delete all DB if flag 1
+	void postDisable( int flag );
 
 	void cntrCmdProc( XMLNode *opt );			//Control interface command process
 
