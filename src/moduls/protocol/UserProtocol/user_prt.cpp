@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.6.1"
+#define MOD_VER		"1.6.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -651,7 +651,8 @@ void UserPrt::setEnable( bool vl )
 	    } else mWorkOutProg = "";
 	}
 
-	//Load IO
+	res.unlock();
+
 	loadIO();
     }
     else {

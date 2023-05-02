@@ -591,9 +591,9 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 	    modList(list);
 	    // Automatic transports at the module
 	    for(int iA = 0; iA < (int)list.size(); ++iA)
-		if(at(list[iA]).at().isNetwork())
+		//if(at(list[iA]).at().isNetwork())
 		    opt->childAdd("el")->setText(list[iA]);
-		else list.erase(list.begin()+(iA--));
+		//else list.erase(list.begin()+(iA--));
 	    // Output transports directly
 	    for(unsigned iA = 0; iA < list.size(); ++iA) {
 		at(list[iA]).at().outList(listTrs);

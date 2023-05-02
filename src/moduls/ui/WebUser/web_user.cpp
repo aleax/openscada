@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.6.3"
+#define MOD_VER		"1.6.4"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -672,6 +672,8 @@ void UserPg::setEnable( bool vl )
 		compileFunc(TSYS::strSepParse(progLang(),1,'.'),funcIO,prog());
 	    setFunc(&((AutoHD<TFunction>)SYS->nodeAt(workProg)).at());
 	}
+
+	res.unlock();
 
 	//Load IO
 	loadIO();

@@ -516,9 +516,10 @@ string Project::stlPropGet( const string &pid, const string &def, int sid )
 
 bool Project::stlPropSet( const string &pid, const string &vl, int sid )
 {
-    ResAlloc res(mStRes, true);
     if(sid < 0) sid = stlCurent();
     if(pid.empty() || sid < 0 || sid >= stlSize() || pid == STL_PRM_NM) return false;
+
+    ResAlloc res(mStRes, true);
     map<string, vector<string> >::iterator iStPrp = mStProp.find(pid);
     if(iStPrp == mStProp.end()) return false;
     while(sid >= (int)iStPrp->second.size()) iStPrp->second.push_back("");

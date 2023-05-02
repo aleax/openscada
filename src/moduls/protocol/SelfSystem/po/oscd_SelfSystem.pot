@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-29 18:00+0300\n"
+"POT-Creation-Date: 2023-05-02 07:54+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,7 +34,10 @@ msgstr ""
 msgid "SES_OPEN request: %d"
 msgstr ""
 
-msgid "Not full response."
+msgid "no response."
+msgstr ""
+
+msgid "wrong or not completed response."
 msgstr ""
 
 #, c-format
@@ -42,11 +45,10 @@ msgid "SES_OPEN response: %d"
 msgstr ""
 
 #, c-format
-msgid "Error the station '%s': %s."
+msgid "Station %s error: %s."
 msgstr ""
 
-#, c-format
-msgid "Error the station '%s': error the response format."
+msgid "error the header format."
 msgstr ""
 
 #, c-format
@@ -57,11 +59,10 @@ msgstr ""
 msgid "REQ first response %d"
 msgstr ""
 
-#, c-format
-msgid "Error the station '%s' response."
+msgid "error authentication."
 msgstr ""
 
-msgid "Not full respond."
+msgid "not completed response."
 msgstr ""
 
 #, c-format
@@ -69,7 +70,7 @@ msgid "REQ full response %d"
 msgstr ""
 
 #, c-format
-msgid "The response '%s' is not suitable to the request '%s'."
+msgid "the response '%s' is not suitable to the request '%s'."
 msgstr ""
 
 #, c-format

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-29 18:00+0300\n"
+"POT-Creation-Date: 2023-05-02 07:54+0300\n"
 "PO-Revision-Date: 2007-10-23 18:19+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -40,20 +40,23 @@ msgstr ""
 msgid "SES_OPEN request: %d"
 msgstr "SES_OPEN запрос: %d"
 
-msgid "Not full response."
+#, fuzzy
+msgid "no response."
 msgstr "Неполный ответ."
+
+msgid "wrong or not completed response."
+msgstr ""
 
 #, c-format
 msgid "SES_OPEN response: %d"
 msgstr "SES_OPEN ответ: %d"
 
 #, c-format
-msgid "Error the station '%s': %s."
-msgstr "Ошибка станции '%s': %s."
+msgid "Station %s error: %s."
+msgstr ""
 
-#, c-format
-msgid "Error the station '%s': error the response format."
-msgstr "Ошибка станции '%s': ошибка формата ответа."
+msgid "error the header format."
+msgstr ""
 
 #, c-format
 msgid "REQ send: %d"
@@ -63,19 +66,20 @@ msgstr "REQ отправка: %d"
 msgid "REQ first response %d"
 msgstr "REQ первый ответ %d"
 
-#, c-format
-msgid "Error the station '%s' response."
-msgstr "Ошибка ответа станции '%s'."
+#, fuzzy
+msgid "error authentication."
+msgstr "Активные сеансы аутентификации"
 
-msgid "Not full respond."
+#, fuzzy
+msgid "not completed response."
 msgstr "Неполный ответ."
 
 #, c-format
 msgid "REQ full response %d"
 msgstr "REQ весь ответ %d"
 
-#, c-format
-msgid "The response '%s' is not suitable to the request '%s'."
+#, fuzzy, c-format
+msgid "the response '%s' is not suitable to the request '%s'."
 msgstr "Ответ '%s' не соответствует запросу '%s'."
 
 #, c-format
@@ -139,6 +143,21 @@ msgstr "Обработан запрос: '%s', время: %g мс."
 #, c-format
 msgid "Response saved to a stream and packed: '%s': %d, time: %g ms."
 msgstr "Сохранён ответ в поток и упакован: '%s': %d, время: %g мс."
+
+#, c-format
+#~ msgid "Error the station '%s': %s."
+#~ msgstr "Ошибка станции '%s': %s."
+
+#, c-format
+#~ msgid "Error the station '%s': error the response format."
+#~ msgstr "Ошибка станции '%s': ошибка формата ответа."
+
+#, c-format
+#~ msgid "Error the station '%s' response."
+#~ msgstr "Ошибка ответа станции '%s'."
+
+#~ msgid "Not full respond."
+#~ msgstr "Неполный ответ."
 
 #, c-format
 #~ msgid "The response sequence %d is not suitable to the request one %d."

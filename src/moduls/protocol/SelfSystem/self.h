@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.SelfSystem file: self.h
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,6 +34,7 @@
 #define ERR_CMD		"3"
 
 #define EMPTY_PASS	"<EMPTY>"
+#define H_LIM		255
 
 using namespace OSCADA;
 

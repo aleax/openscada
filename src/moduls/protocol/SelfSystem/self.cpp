@@ -32,7 +32,7 @@
 #define MOD_NAME	trS("Own protocol of OpenSCADA")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.9.8"
+#define MOD_VER		"1.10.0"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -192,38 +192,38 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     try {
 	int reqTrs = tro.attempts(), iTr = 0;
 	string errTr;
-	for(iTr = 0; iTr < reqTrs; ) {
+	for(iTr = 0; iTr < reqTrs; ++iTr) {
 	    int64_t authID = tro.conPrm("auth"+user);
-	    //Session open
+	    //Opening the Session
 	    if(!isDir && (authID == EVAL_INT || authForce)) {
 		req = "SES_OPEN " + user + " " + pass + "\x0A";
 
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("SES_OPEN request: %d"), req.size());
 
-		resp_len = tro.messIO(req.c_str(), req.size(), buf, sizeof(buf)-1, conTm);
+		// Requesting
+		resp_len = tro.messIO(req.data(), req.size(), buf, sizeof(buf)-1, conTm);
 		resp.assign(buf, resp_len);
 
-		// Wait tail
-		while((header=TSYS::strLine(resp.c_str(),0)).size() >= resp.size() || resp[header.size()] != '\x0A') {
-		    if(!(resp_len=tro.messIO(NULL,0,buf,sizeof(buf)))) { errTr = _("Not full response."); iTr++; continue; }
+		// Waiting the tail
+		while(resp.size() && resp[resp.size()-1] != '\x0A' && resp.size() < H_LIM && (resp_len=tro.messIO(NULL,0,buf,sizeof(buf))))
 		    resp.append(buf, resp_len);
-		}
+		if(resp.empty()) { errTr = _("no response."); continue; }
+		else if(resp[resp.size()-1] != '\x0A' || resp.size() < 5) { errTr = _("wrong or not completed response."); continue; }
 
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("SES_OPEN response: %d"), resp_len);
 
 		off = 0;
-		if(header.size() >= 5 && TSYS::strParse(header,0," ",&off) == "REZ") {
-		    rez = s2i(TSYS::strParse(header,0," ",&off));
-		    if(rez > 0 || off >= (int)header.size()) {
-			if(rez == atoi(ERR_AUTH)) { io.setAttr("rez",i2s(rez))->setText(header.substr(off)); break; }
-			throw TError(nodePath().c_str(), _("Error the station '%s': %s."), tro.id().c_str(), header.substr(off).c_str());
+		if(TSYS::strParse(resp,0," ",&off) == "REZ") {
+		    if((rez=s2i(TSYS::strParse(resp,0," ",&off))) > 0 || off >= (int)resp.size()) {
+			if(rez == atoi(ERR_AUTH)) { io.setAttr("rez", i2s(rez))->setText(resp.substr(off)); break; }
+			throw TError(nodePath().c_str(), _("Station %s error: %s."), tro.id().c_str(), resp.substr(off).c_str());
 		    }
-		    tro.setConPrm("auth"+user, (authID=s2i(header.substr(off))));
-		} else throw TError(nodePath().c_str(), _("Error the station '%s': error the response format."), tro.id().c_str());
+		    tro.setConPrm("auth"+user, (authID=s2i(resp.substr(off))));
+		} else throw TError(nodePath().c_str(), _("Station %s error: %s."), tro.id().c_str(), _("error the header format."));
 	    }
 
-	    //Request
-	    // Compress data
+	    //The same Request
+	    // Compressing the data
 	    bool reqCompr = (comprLev() && (int)data.size() > comprBrd());
 	    if(reqCompr) data = TSYS::strCompr(data, comprLev());
 
@@ -232,40 +232,38 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ send: %d"), req.size());
 
-	    resp_len = tro.messIO(req.c_str(), req.size(), buf, sizeof(buf), conTm);
+	    // Requesting
+	    resp_len = tro.messIO(req.data(), req.size(), buf, sizeof(buf), conTm);
 	    resp.assign(buf, resp_len);
 
-	    // Wait tail
-	    while((header=TSYS::strLine(resp.c_str(),0)).size() >= resp.size() || resp[header.size()] != '\x0A') {
-		if(!(resp_len=tro.messIO(NULL,0,buf,sizeof(buf)))) { errTr = _("Not full response."); iTr++; continue; }
+	    // Waiting the header
+	    while(resp.size() && ((header=TSYS::strLine(resp,0)).size() >= resp.size() || resp[header.size()] != '\x0A') &&
+		    resp.size() < H_LIM && (resp_len=tro.messIO(NULL,0,buf,sizeof(buf))))
 		resp.append(buf, resp_len);
-	    }
+	    if(resp.empty()) { errTr = _("no response."); continue; }
+	    else if(resp[header.size()] != '\x0A' || header.size() < 5) { errTr = _("wrong or not completed response."); continue; }
 
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ first response %d"), resp.size());
 
-	    // Get the head
+	    // Processing the header
 	    head_end = header.size() + 1;
 	    off = 0;
-	    //header = TSYS::strLine(resp,0,&head_end);
-	    if(header.size() < 5 || TSYS::strParse(header,0," ",&off) != "REZ")
-		throw TError(nodePath().c_str(),_("Error the station '%s' response."),tro.id().c_str());
-	    rez = s2i(TSYS::strParse(header,0," ",&off));
-	    if(rez == atoi(ERR_AUTH)) {
+	    if(TSYS::strParse(header,0," ",&off) != "REZ")
+		throw TError(nodePath().c_str(), _("Station %s error: %s."), tro.id().c_str(), _("error the header format."));
+	    if((rez=s2i(TSYS::strParse(header,0," ",&off))) == atoi(ERR_AUTH)) {
 		tro.setConPrm("auth"+user, (authID=EVAL_INT));
-		if(isDir) { io.setAttr("rez",i2s(rez))->setText(header.substr(off)); break; }
-		else continue;
+		if(isDir) { io.setAttr("rez", i2s(rez))->setText(header.substr(off)); break; }
+		else { errTr = _("error authentication."); if(!iTr) reqTrs++; continue; }	//Reauth and one additional try for reauth
 	    }
-
 	    if(rez > 0 || off >= (int)header.size())
-		throw TError(nodePath().c_str(),_("Error the station '%s': %s."), tro.id().c_str(), buf+off);
+		throw TError(nodePath().c_str(),_("Station %s error: %s."), tro.id().c_str(), header.substr(off).c_str());
+
 	    int resp_size = s2i(header.substr(off));
 
-	    // Wait the tail
-	    while((int)resp.size() < abs(resp_size)+head_end) {
-		resp_len = tro.messIO(NULL, 0, buf, sizeof(buf));
-		if(!resp_len) { errTr = _("Not full respond."); iTr++; continue; }
+	    // Waiting the whole response
+	    while((int)resp.size() < (abs(resp_size)+head_end) && (resp_len=tro.messIO(NULL,0,buf,sizeof(buf))))
 		resp.append(buf, resp_len);
-	    }
+	    if((int)resp.size() < (abs(resp_size)+head_end)) { errTr = _("not completed response."); continue; }
 
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ full response %d"), resp.size());
 
@@ -273,14 +271,14 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    else io.load(resp.substr(head_end), XMLNode::LD_NoTxtSpcRemEnBeg);
 
 	    if(reqNm != io.name())
-	    { errTr = TSYS::strMess(_("The response '%s' is not suitable to the request '%s'."),io.name().c_str(),reqNm.c_str()); iTr++; continue; }
+	    { errTr = TSYS::strMess(_("the response '%s' is not suitable to the request '%s'."), io.name().c_str(), reqNm.c_str()); continue; }
 	    //if(s2i(io.attr("rqSeq")) != seq)
 	    //{ errTr = TSYS::strMess(_("The response sequence %d is not suitable to the request one %d."),s2i(io.attr("rqSeq")),(int)seq); iTr++; continue; }
 
 	    return;
 	}
 
-	if(iTr >= reqTrs) throw TError(nodePath(), errTr);
+	if(iTr >= reqTrs) throw TError(nodePath().c_str(), _("Station %s error: %s."), tro.id().c_str(), errTr.c_str());
 
     } catch(TError &err) {
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error the request: %s"), err.mess.c_str());
@@ -364,12 +362,16 @@ bool TProtIn::mess( const string &request, string &answer )
 
     if(mess_lev() == TMess::Debug) d_tm = TSYS::curTime();
 
-    //Check for completeness header
-    string req = TSYS::strLine(reqBuf, 0);
-    if(req.size() >= reqBuf.size() || reqBuf[req.size()] != '\x0A') return true;
+    //Checking for the header completeness
+    string header = TSYS::strLine(reqBuf, 0);
+    if(header.size() >= reqBuf.size() || reqBuf[header.size()] != '\x0A') {
+	if(header.size() > H_LIM) reqBuf.clear();	//Similar to flooding - clearing the buffer
+	return true;
+    }
 
-    if(req.find("SES_OPEN") == 0) {
-	sscanf(req.c_str(), "SES_OPEN %255s %255s", user, pass);
+    //Processing the request
+    if(header.find("SES_OPEN") == 0) {
+	sscanf(header.c_str(), "SES_OPEN %255s %255s", user, pass);
 	user_ = TSYS::strDecode(user, TSYS::Custom);
 	pass_ = TSYS::strDecode(pass, TSYS::Custom);
 	if(pass_ == EMPTY_PASS) pass_ = "";
@@ -377,24 +379,24 @@ bool TProtIn::mess( const string &request, string &answer )
 	    answer = "REZ " ERR_AUTH " Error authentication: wrong the user or password.\x0A";
 	else answer = "REZ " ERR_NO " " + i2s(ses_id) + "\x0A";
     }
-    else if(req.find("SES_CLOSE") == 0) {
-	sscanf(req.c_str(), "SES_CLOSE %d", &ses_id);
+    else if(header.find("SES_CLOSE") == 0) {
+	sscanf(header.c_str(), "SES_CLOSE %d", &ses_id);
 	mod->sesClose(ses_id);
 	answer = "REZ 0\x0A";
     }
-    else if(req.find("REQ") == 0) {
+    else if(header.find("REQ") == 0) {
 	if(mess_lev() == TMess::Debug) {
 	    mess_debug(nodePath().c_str(), _("Request received: '%s': %d, time: %g ms."),
-		req.c_str(), reqBuf.size(), 1e-3*(TSYS::curTime()-d_tm));
+		header.c_str(), reqBuf.size(), 1e-3*(TSYS::curTime()-d_tm));
 	    d_tm = TSYS::curTime();
 	}
 
 	int rez = 0;
-	if((rez=sscanf(req.c_str(),"REQ %d %d",&ses_id,&req_sz)) != 2 && (rez=sscanf(req.c_str(),"REQDIR %255s %255s %d",user,pass,&req_sz)) != 3)
+	if((rez=sscanf(header.c_str(),"REQ %d %d",&ses_id,&req_sz)) != 2 && (rez=sscanf(header.c_str(),"REQDIR %255s %255s %d",user,pass,&req_sz)) != 3)
 	{ answer = "REZ " ERR_CMD " Command format error.\x0A"; reqBuf.clear(); return false; }
 
 	// Waiting the tail before any other checkings
-	if(reqBuf.size() < (req.size()+1+abs(req_sz))) return true;
+	if(reqBuf.size() < (header.size()+1+abs(req_sz))) return true;
 
 	// Checking the authentication
 	TProt::SAuth auth;
@@ -410,18 +412,18 @@ bool TProtIn::mess( const string &request, string &answer )
 
 	try {
 	    //Decompressing the request
-	    if(req_sz < 0) reqBuf.replace(req.size()+1, abs(req_sz), TSYS::strUncompr(reqBuf.substr(req.size()+1)));
+	    if(req_sz < 0) reqBuf.replace(header.size()+1, abs(req_sz), TSYS::strUncompr(reqBuf.substr(header.size()+1)));
 
 	    //Processing the request
 	    XMLNode req_node;
-	    req_node.load(reqBuf.substr(req.size()+1), XMLNode::LD_NoTxtSpcRemEnBeg);
+	    req_node.load(reqBuf.substr(header.size()+1), XMLNode::LD_NoTxtSpcRemEnBeg);
 
 	    // Check for reforward requests
 	    string host = req_node.attr("reforwardHost");
 	    if(host.size()) {
 		if(mess_lev() == TMess::Debug) {
 		    mess_debug(nodePath().c_str(), _("Request checked and redirected: '%s': %d, time: %g ms."),
-			req.c_str(), reqBuf.size(), 1e-3*(TSYS::curTime()-d_tm));
+			header.c_str(), reqBuf.size(), 1e-3*(TSYS::curTime()-d_tm));
 		    d_tm = TSYS::curTime();
 		}
 		req_node.setAttr("path", "/"+host+req_node.attr("path"))->setAttr("reforwardHost", "");
@@ -436,7 +438,7 @@ bool TProtIn::mess( const string &request, string &answer )
 
 		if(mess_lev() == TMess::Debug) {
 		    mess_debug(nodePath().c_str(), _("Request unpacked and loaded: '%s': %d, time: %g ms."),
-			req.c_str(), reqBuf.size(), 1e-3*(TSYS::curTime()-d_tm));
+			header.c_str(), reqBuf.size(), 1e-3*(TSYS::curTime()-d_tm));
 		    d_tm = TSYS::curTime();
 		}
 
@@ -449,7 +451,7 @@ bool TProtIn::mess( const string &request, string &answer )
 		}
 
 		if(mess_lev() == TMess::Debug) {
-		    mess_debug(nodePath().c_str(), _("Request processed: '%s', time: %g ms."), req.c_str(), 1e-3*(TSYS::curTime()-d_tm));
+		    mess_debug(nodePath().c_str(), _("Request processed: '%s', time: %g ms."), header.c_str(), 1e-3*(TSYS::curTime()-d_tm));
 		    d_tm = TSYS::curTime();
 		}
 	    }
@@ -462,7 +464,7 @@ bool TProtIn::mess( const string &request, string &answer )
 
 	    if(mess_lev() == TMess::Debug)
 		mess_debug(nodePath().c_str(), _("Response saved to a stream and packed: '%s': %d, time: %g ms."),
-		    req.c_str(), resp.size(), 1e-3*(TSYS::curTime()-d_tm));
+		    header.c_str(), resp.size(), 1e-3*(TSYS::curTime()-d_tm));
 
 	    answer = "REZ " ERR_NO " " + i2s(resp.size()*(respCompr?-1:1)) + "\x0A" + resp;
 	} catch(TError &err) { answer = "REZ " ERR_PRC " " + err.cat + ":" + err.mess + "\x0A"; }

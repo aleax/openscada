@@ -1,3 +1,11 @@
+2023-05-02 Roman (stable)
+- Transports: Table of the OpenSCADA external hosts returned back for the Transport.Serial selection here.
+- !!!!:Protocol.SelfSystem: Significantly reviewed and fixed in the external connections implementation,
+    appended of checking the header limit.
+- Protocol.UserProtocol,UI.{VCAEngine,WebUser}: Prevented the RWLock potencial recursion and deadlocks
+    at using pure pthread_rwlock.
+
+
 2023-04-30 Roman (stable)
 - FIX:LibsDB.{OscadaLibs,vcaBase}: Some automatic fixed for the translations.
 - FIX:SYS,Archive.FSArch,DB.LDAP,DAQ.FT3: Some fixes of building with the "musl" C Library and closedir() call for NULL,

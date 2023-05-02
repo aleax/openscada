@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-29 18:00+0300\n"
+"POT-Creation-Date: 2023-05-02 07:54+0300\n"
 "PO-Revision-Date: 2009-08-19 09:06+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -45,20 +45,22 @@ msgstr ""
 msgid "SES_OPEN request: %d"
 msgstr "SES_OPEN Antrag: %d"
 
-msgid "Not full response."
-msgstr "Nicht vollständige Antwort."
+msgid "no response."
+msgstr "keine Antwort."
+
+msgid "wrong or not completed response."
+msgstr "falsche oder nicht abgeschlossene Antwort."
 
 #, c-format
 msgid "SES_OPEN response: %d"
 msgstr "SES_OPEN Antwort: %d"
 
 #, c-format
-msgid "Error the station '%s': %s."
-msgstr "Fehler der Station '%s': %s."
+msgid "Station %s error: %s."
+msgstr "Station %s Fehler: %s."
 
-#, c-format
-msgid "Error the station '%s': error the response format."
-msgstr "Fehler bei der Station '%s': Fehler beim Antwortformat."
+msgid "error the header format."
+msgstr "Fehler im Header-Format."
 
 #, c-format
 msgid "REQ send: %d"
@@ -68,20 +70,19 @@ msgstr "REQ senden: %d"
 msgid "REQ first response %d"
 msgstr "REQ Erste Antwort %d"
 
-#, c-format
-msgid "Error the station '%s' response."
-msgstr "Fehler der Station '%s' Antwort."
+msgid "error authentication."
+msgstr "Fehlerauthentifizierung."
 
-msgid "Not full respond."
-msgstr "Partielles Ansprechen."
+msgid "not completed response."
+msgstr "nicht vollständige Antwort."
 
 #, c-format
 msgid "REQ full response %d"
 msgstr "REQ volle Antwort %d"
 
 #, c-format
-msgid "The response '%s' is not suitable to the request '%s'."
-msgstr "Die Antwort '%s' ist nicht für die Anfrage '%s' geeignet."
+msgid "the response '%s' is not suitable to the request '%s'."
+msgstr "die Antwort '%s' ist nicht für die Anfrage '%s' geeignet."
 
 #, c-format
 msgid "Error the request: %s"
@@ -143,9 +144,5 @@ msgstr "Anfrage bearbeitet: '%s', Zeit: %g ms."
 
 #, c-format
 msgid "Response saved to a stream and packed: '%s': %d, time: %g ms."
-msgstr ""
-"Antwort in einem Stream gespeichert und gepackt: '%s': %d, Zeit: %g ms."
+msgstr "Antwort in einem Stream gespeichert und gepackt: '%s': %d, Zeit: %g ms."
 
-#, c-format
-#~ msgid "The response sequence %d is not suitable to the request one %d."
-#~ msgstr "Die Antwortsequenz %d ist nicht für die Anforderung %d geeignet."
