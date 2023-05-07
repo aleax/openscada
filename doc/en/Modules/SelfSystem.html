@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/SelfSystem</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/SelfSystem.html" title="Модули/Собственный Системный Протокол (92% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/SelfSystem.html" title="Модулі/Власний Системний Протокол (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/SelfSystem.html" title="Модули/Собственный Системный Протокол (83% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/SelfSystem.html" title="Модулі/Власний Системний Протокол (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a> </td>
 <td> Own protocol of OpenSCADA
 </td>
-<td> 1.9 </td>
+<td> 1.10 </td>
 <td> GPL2 </td>
 <td> prot_SelfSystem.so </td>
 <td> en,uk,ru,de </td>
@@ -64,7 +64,7 @@
 <td>
 <p><b>REQ:</b> "SES_OPEN {user} {password}\n"<br />
 <b>REZ OK:</b> "REZ 0 {ses_id}\n"<br />
-<b>REZ ERR:</b> "REZ 1 Error authentication: wrong the user or password.\n"<br />
+<b>REZ ERR:</b> "REZ 1 Error authentication: wrong user or password.\n"<br />
 Request to open a session from the username <i>user</i> with the <i>password</i>. In case of success, the session ID will be received, otherwise, the code and the error message.
 </p>
 </td></tr>
@@ -94,14 +94,13 @@ Any invalid request.
 </td></tr></table>
 <p>The protocol supports the ability of the traffic compression. Only the Control Interface data <i>command of the control interface</i> and <i>result of the command of the control interface</i> are compressed. The fact of receipt of a compressed request or response is determined by the negative value of the <i>req_size</i> or the <i>rez_size</i> response. You can define the compression options on the configuration page of the module (Fig. 1). Response of the protocol input part is forced to the compression with level -1 (that is optimal) at the compressed requests.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:782px;"><a class="image" href="http://oscada.org/wiki/File:SelfSystem_compr.png"><img class="thumbimage" height="459" src="../files/SelfSystem_compr.png" width="780" /></a>  <div class="thumbcaption">Fig.1. Main tab of the configuration page of the module parameters.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:783px;"><a class="image" href="http://oscada.org/wiki/File:SelfSystem_compr.png"><img class="thumbimage" height="491" src="../files/SelfSystem_compr.png" width="781" /></a>  <div class="thumbcaption">Fig.1. Main tab of the configuration page of the module parameters.</div></div></div></div>
 <p>On this tab, you can:
 </p>
 <ul><li> Familiarize the active authentication sessions.</li>
 <li> Specify life time of the authentication sessions, in minutes.</li>
 <li> Specify a connection limit for one user from one host.</li>
-<li> Specify a compression level of the protocol, ranging from 0 to 9 (0-disable the compression, -1-optimal compression level in performance and quality);</li>
-<li> Specify a lower compression border — threshold for the compression using, turns off the compression of small requests.</li></ul>
+<li> Specify the compression level and lower limit. Where range of the compression level is from 0 to 9 (0 - disable the compression, -1 - optimal compression level in performance and quality) and the lower limit is a threshold for the compression using and turning its off at small requests.</li></ul>
 <h2><span class="mw-headline" id="Internal_structure_of_the_output_protocol"><span class="mw-headline-number">2</span> Internal structure of the output protocol</span></h2>
 <p>The internal structure is formed by the XML tree of the requests of the language <a class="external" href="http://oscada.org/wiki/Documents/API#CntrNode" title="Documents/API">OpenSCADA control interface</a> with the reservation of the additional service attributes of the protocol in the root tag:
 </p>
@@ -118,5 +117,5 @@ Any invalid request.
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SelfSystem/en">Modules/SelfSystem/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2880</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SelfSystem/en">Modules/SelfSystem/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2887</td></tr></table></body>
 </html>

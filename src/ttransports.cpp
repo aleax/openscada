@@ -29,6 +29,14 @@
 #include "tprotocols.h"
 #include "ttransports.h"
 
+
+#define DEF_OutLifeTime	0
+#define DEF_ReqTm	"0"
+#define DEF_ReqMode	"0"
+#define DEF_ToTmOut	"0"
+#define DEF_InBufSz	prmStrBuf_SZ
+
+
 using namespace OSCADA;
 
 //************************************************
@@ -683,7 +691,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TTypeTransport                               *
 //************************************************
-TTypeTransport::TTypeTransport( const string &id ) : TModule(id), mOutLifeTime(0)
+TTypeTransport::TTypeTransport( const string &id ) : TModule(id), mOutLifeTime(DEF_OutLifeTime)
 {
     mIn = grpAdd(STR_IN_PREF);
     mOut = grpAdd(STR_OUT_PREF);
@@ -765,7 +773,7 @@ void TTypeTransport::cntrCmdProc( XMLNode *opt )
 void TTypeTransport::load_( )
 {
     //Load parameters
-    setOutLifeTime(s2i(TBDS::genPrmGet(nodePath()+"OutLifeTime",i2s(outLifeTime()))));
+    setOutLifeTime(s2i(TBDS::genPrmGet(nodePath()+"OutLifeTime",i2s(DEF_OutLifeTime))));
 }
 
 void TTypeTransport::save_( )
@@ -1501,25 +1509,25 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	postDisable(NodeRemoveOnlyStor);
     else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",STR_ID,RWRWR_);
     else if(a_path == "/req/tm" && ctrChkNode(opt,"get",R_R___,"root",STR_ID,SEC_RD))
-	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ReqTm","0",opt->attr("user")));
+	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ReqTm",DEF_ReqTm,opt->attr("user")));
     else if(a_path == "/req/mode") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ReqMode","0",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ReqMode",DEF_ReqMode,opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"ReqMode",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/req/toTmOut") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ToTmOut",DEF_ToTmOut,opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"ToTmOut",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/req/inBufSz") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))
-	    opt->setText(TBDS::genPrmGet(owner().nodePath()+"InBufSz",i2s(prmStrBuf_SZ),opt->attr("user")));
+	    opt->setText(TBDS::genPrmGet(owner().nodePath()+"InBufSz",i2s(DEF_InBufSz),opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))
 	    TBDS::genPrmSet(owner().nodePath()+"InBufSz", i2s(vmax(0,vmin(prmStrBuf_SZ,s2i(opt->text())))), opt->attr("user"));
     }
     else if(a_path == "/req/req") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ReqReq","",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR)) {
-	    int mode = s2i(TBDS::genPrmGet(owner().nodePath()+"ReqMode","0",opt->attr("user")));
+	    int mode = s2i(TBDS::genPrmGet(owner().nodePath()+"ReqMode",DEF_ReqMode,opt->attr("user")));
 	    switch(mode) {
 		case 0:
 		    TBDS::genPrmSet(owner().nodePath()+"ReqReq",
@@ -1543,7 +1551,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/req/send" && ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR)) {
 	string answ;
-	int mode = s2i(TBDS::genPrmGet(owner().nodePath()+"ReqMode","0",opt->attr("user")));
+	int mode = s2i(TBDS::genPrmGet(owner().nodePath()+"ReqMode",DEF_ReqMode,opt->attr("user")));
 	string req = TBDS::genPrmGet(owner().nodePath()+"ReqReq","",opt->attr("user"));
 
 	switch(mode) {
@@ -1567,7 +1575,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 
 	int64_t stm = TSYS::curTime();
 	try {
-	    int inBufSz = s2i(TBDS::genPrmGet(owner().nodePath()+"InBufSz",i2s(prmStrBuf_SZ),opt->attr("user")));
+	    int inBufSz = s2i(TBDS::genPrmGet(owner().nodePath()+"InBufSz",i2s(DEF_InBufSz),opt->attr("user")));
 	    char buf[inBufSz];
 	    if(!startStat()) start();
 	    MtxAlloc resN(reqRes(), true);
@@ -1576,7 +1584,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 		if(req.size()) answ.assign(buf, resp_len);
 		else answ.append(buf, resp_len);
 
-		bool ToTmOut = (bool)s2i(TBDS::genPrmGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")));
+		bool ToTmOut = (bool)s2i(TBDS::genPrmGet(owner().nodePath()+"ToTmOut",DEF_ToTmOut,opt->attr("user")));
 		while(ToTmOut && resp_len > 0 && ((TSYS::curTime()-stm)/1000000) < prmInterf_TM) {
 		    try { resp_len = messIO(NULL, 0, buf, inBufSz); } catch(TError &err) { break; }
 		    answ.append(buf, resp_len);

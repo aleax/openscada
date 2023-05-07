@@ -31,6 +31,10 @@
 # include <gd.h>
 #endif
 
+
+#define DEF_FontSnthHglCode	"monospace"
+
+
 using namespace OSCADA;
 
 //*************************************************
@@ -38,7 +42,7 @@ using namespace OSCADA;
 //*************************************************
 TUIS::TUIS( ) : TSubSYS(SUI_ID, true), mFontSnthHglCode(dataRes())
 {
-    mFontSnthHglCode = "monospace";
+    mFontSnthHglCode = DEF_FontSnthHglCode;
 
 #if HAVE_GD_FORCE
     gdFTUseFontConfig(1);
@@ -59,7 +63,7 @@ void TUIS::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file
-    setFontSnthHglCode(TBDS::genPrmGet(nodePath()+"FontSnthHglCode",fontSnthHglCode()));
+    setFontSnthHglCode(TBDS::genPrmGet(nodePath()+"FontSnthHglCode",DEF_FontSnthHglCode));
 }
 
 void TUIS::save_( )

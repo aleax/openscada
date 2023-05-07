@@ -1,3 +1,10 @@
+2023-05-07 Roman (stable)
+- !!!!:SYS: All system (SYS) configuration parameters adapted for true handling the default value.
+- Protocol.SelfSystem: Code of the external connections implementation cleaned additionally.
+    Configuration fields of the compression merged to one row.
+    Error messages about limiting the authentications moved to the Debug level.
+
+
 2023-05-02 Roman (stable)
 - Transports: Table of the OpenSCADA external hosts returned back for the Transport.Serial selection here.
 - !!!!:Protocol.SelfSystem: Significantly reviewed and fixed in the external connections implementation,

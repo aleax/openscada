@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VISION file: tvision.h
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Roman Savochenko (roman@oscada.org)
+ *   Copyright (C) 2006-2023 by Roman Savochenko (roman@oscada.org)
  *                 2005-2006 by Evgen Zaichuk
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -37,6 +37,14 @@
 
 #define POS_PREC_DIG	3
 #define TM_ALRM_UPD	0.5
+
+#define DEF_ExitLstRunPrjCls	true
+#define DEF_DropCommonWdgStls	true
+#define DEF_CachePgLife		1
+#define DEF_CachePgSz		10
+#define DEF_VCAstation		"."
+#define DEF_RestoreTime		30
+
 
 using namespace OSCADA;
 using namespace VCA;

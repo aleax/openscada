@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"6.8.5"
+#define MOD_VER		"6.8.6"
 #define AUTHORS		trS("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	trS("Visual operation user interface, based on the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -73,7 +73,9 @@ using namespace WebVision;
 //************************************************
 //* TWEB                                         *
 //************************************************
-TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mCachePgLife(1), mCachePgSz(10), mPNGCompLev(1), mImgResize(false), mCustCSS(dataRes())
+TWEB::TWEB( string name ) : TUI(MOD_ID),
+    mTSess(DEF_SessTimeLife), mSessLimit(DEF_SessLimit), mCachePgLife(DEF_CachePgLife), mCachePgSz(DEF_CachePgSz),
+    mPNGCompLev(DEF_PNGCompLev), mImgResize(DEF_ImgResize), mCustCSS(dataRes())
 {
     mod = this;
 
@@ -281,13 +283,13 @@ void TWEB::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file
-    setSessTime(s2i(TBDS::genPrmGet(nodePath()+"SessTimeLife",i2s(sessTime()))));
-    setSessLimit(s2i(TBDS::genPrmGet(nodePath()+"SessLimit",i2s(sessLimit()))));
-    setCachePgLife(s2r(TBDS::genPrmGet(nodePath()+"CachePgLife",r2s(cachePgLife()))));
-    setCachePgSz(s2i(TBDS::genPrmGet(nodePath()+"CachePgSz",i2s(cachePgSz()))));
-    setPNGCompLev(s2i(TBDS::genPrmGet(nodePath()+"PNGCompLev",i2s(PNGCompLev()))));
-    setImgResize(s2i(TBDS::genPrmGet(nodePath()+"ImgResize",i2s(imgResize()))));
-    setCustCSS(TBDS::genPrmGet(nodePath()+"CustCSS",custCSS()));
+    setSessTime(s2i(TBDS::genPrmGet(nodePath()+"SessTimeLife",i2s(DEF_SessTimeLife))));
+    setSessLimit(s2i(TBDS::genPrmGet(nodePath()+"SessLimit",i2s(DEF_SessLimit))));
+    setCachePgLife(s2r(TBDS::genPrmGet(nodePath()+"CachePgLife",r2s(DEF_CachePgLife))));
+    setCachePgSz(s2i(TBDS::genPrmGet(nodePath()+"CachePgSz",i2s(DEF_CachePgSz))));
+    setPNGCompLev(s2i(TBDS::genPrmGet(nodePath()+"PNGCompLev",i2s(DEF_PNGCompLev))));
+    setImgResize(s2i(TBDS::genPrmGet(nodePath()+"ImgResize",i2s(DEF_ImgResize))));
+    setCustCSS(TBDS::genPrmGet(nodePath()+"CustCSS"));
 }
 
 void TWEB::save_( )

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SMH2Gi file: module.h
 /***************************************************************************
- *   Copyright (C) 2012-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2012-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,6 +32,9 @@
 #define _(mess) mod->I18N(mess).c_str()
 #undef trS
 #define trS(mess) mod->I18N(mess,mess_PreSave)
+
+#define DEF_MRCDirDevs	oscd_datadir_full"/SegneticsMRC"
+
 
 using std::string;
 using std::vector;

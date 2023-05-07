@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"5.6.2"
+#define MOD_VER		"5.6.3"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -73,7 +73,7 @@ using namespace JavaLikeCalc;
 //*************************************************
 //* TpContr                                      *
 //*************************************************
-TpContr::TpContr( string src ) : TTypeDAQ(MOD_ID), mSafeTm(10)
+TpContr::TpContr( string src ) : TTypeDAQ(MOD_ID), mSafeTm(DEF_SafeTm)
 {
     mod = this;
 
@@ -282,7 +282,7 @@ void TpContr::load_( )
     //Load parameters from command line
 
     //Load parameters
-    setSafeTm(s2i(TBDS::genPrmGet(nodePath()+"SafeTm",i2s(safeTm()))));
+    setSafeTm(s2i(TBDS::genPrmGet(nodePath()+"SafeTm",i2s(DEF_SafeTm))));
 
     //Load function's libraries
     try {

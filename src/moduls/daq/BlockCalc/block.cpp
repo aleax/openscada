@@ -434,7 +434,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 		    ioList(list);
 		    for(unsigned i_io = 0; i_io < list.size(); i_io++) {
 			int id = ioId(list[i_io]);
-			if(ioHide(id) && !s2i(TBDS::genPrmGet(owner().nodePath()+"showHide","0",opt->attr("user")))) continue;
+			if(ioHide(id) && !s2i(TBDS::genPrmGet(owner().nodePath()+"showHide",DEF_showHide,opt->attr("user")))) continue;
 			const char *tip = "str";
 			switch(ioType(id)) {
 			    case IO::String:	tip = "str";	break;
@@ -458,7 +458,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 		    for(unsigned i_io = 0; i_io < list.size(); i_io++) {
 			int id = ioId(list[i_io]);
 
-			if(ioHide(id) && !s2i(TBDS::genPrmGet(owner().nodePath()+"showHide","0",opt->attr("user")))) continue;
+			if(ioHide(id) && !s2i(TBDS::genPrmGet(owner().nodePath()+"showHide",DEF_showHide,opt->attr("user")))) continue;
 
 			// Add link's type
 			ctrMkNode("fld",opt,-1,(string("/lnk/io/1|")+list[i_io]).c_str(),
@@ -514,7 +514,7 @@ void Block::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path.compare(0,9,"/blck/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SDAQ_ID, RWRWR_);
     else if((a_path == "/lio/show/hide" || a_path == "/lnk/show/hide") && enable()) {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"showHide","0",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"showHide",DEF_showHide,opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"showHide",opt->text(),opt->attr("user"));
     }
     else if(a_path.substr(0,7) == "/lio/io" && enable()) {

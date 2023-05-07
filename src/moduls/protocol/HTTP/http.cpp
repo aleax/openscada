@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.8.7"
+#define MOD_VER		"3.8.8"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -74,14 +74,14 @@ using namespace PrHTTP;
 //*************************************************
 TProt::TProt( string name ) : TProtocol(MOD_ID), cookieLab(dataRes()),
     mDeny(dataRes()), mAllow(dataRes()), mTmpl(dataRes()), mTmplMainPage(dataRes()), mAllowUsersAuth(dataRes()), mAuthSessDB(dataRes()),
-    mTAuth(10), mSpaceUID(0), lstSesChk(0)
+    mTAuth(DEF_AuthTime), mSpaceUID(DEF_SpaceUID), lstSesChk(0)
 {
     mod = this;
 
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 
     cookieLab = "oscd_UID";
-    mAllow = "*";
+    mAllow = DEF_Allow;
 
     //Structure of a table of the external authentication sessions
     elAuth.fldAdd(new TFld("ID","Identificator",TFld::Integer,TCfg::Key));
@@ -110,14 +110,14 @@ void TProt::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file
-    setDeny(TBDS::genPrmGet(nodePath()+"Deny",deny()));
-    setAllow(TBDS::genPrmGet(nodePath()+"Allow",allow()));
-    setTmpl(TBDS::genPrmGet(nodePath()+"Tmpl",tmpl()));
-    setTmplMainPage(TBDS::genPrmGet(nodePath()+"TmplMainPage",tmplMainPage()));
-    setAuthSessDB(TBDS::genPrmGet(nodePath()+"AuthSessDB",authSessDB()));
-    setSpaceUID(s2i(TBDS::genPrmGet(nodePath()+"SpaceUID",i2s(spaceUID()))));
-    setAllowUsersAuth(TBDS::genPrmGet(nodePath()+"AllowUsersAuth",allowUsersAuth()));
-    setAuthTime(s2i(TBDS::genPrmGet(nodePath()+"AuthTime",i2s(authTime()))));
+    setDeny(TBDS::genPrmGet(nodePath()+"Deny",DEF_Deny));
+    setAllow(TBDS::genPrmGet(nodePath()+"Allow",DEF_Allow));
+    setTmpl(TBDS::genPrmGet(nodePath()+"Tmpl"));
+    setTmplMainPage(TBDS::genPrmGet(nodePath()+"TmplMainPage"));
+    setAuthSessDB(TBDS::genPrmGet(nodePath()+"AuthSessDB"));
+    setSpaceUID(s2i(TBDS::genPrmGet(nodePath()+"SpaceUID",i2s(DEF_SpaceUID))));
+    setAllowUsersAuth(TBDS::genPrmGet(nodePath()+"AllowUsersAuth"));
+    setAuthTime(s2i(TBDS::genPrmGet(nodePath()+"AuthTime",i2s(DEF_AuthTime))));
     // Load auto-login config
     MtxAlloc res(authM, true);
     XMLNode aLogNd("aLog");

@@ -43,7 +43,7 @@
 #define MOD_NAME	trS("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"4.4.15"
+#define MOD_VER		"4.4.16"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -428,12 +428,12 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/PB/dev") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
-	    opt->setText(TBDS::genPrmGet(mod->nodePath()+"lifeLsDev","0",opt->attr("user")));
+	    opt->setText(TBDS::genPrmGet(mod->nodePath()+"lifeLsDev",DEF_lifeLsDev,opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	    TBDS::genPrmSet(mod->nodePath()+"lifeLsDev",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/PB/lifels" && ctrChkNode(opt)) {
-	int board = s2i(TBDS::genPrmGet(mod->nodePath()+"lifeLsDev","0",opt->attr("user")));
+	int board = s2i(TBDS::genPrmGet(mod->nodePath()+"lifeLsDev",DEF_lifeLsDev,opt->attr("user")));
 	string lifeLst;
 	try {
 	    getLifeListPB(board, lifeLst);

@@ -26,6 +26,9 @@
 #include "tmodule.h"
 #include "tbds.h"
 
+#define DEF_TblLifeTime	600
+#define DEF_ReqTm	"0"
+
 using namespace OSCADA;
 
 //************************************************
@@ -33,7 +36,7 @@ using namespace OSCADA;
 //************************************************
 TElem TBDS::elSYS;
 
-TBDS::TBDS( ) : TSubSYS(SDB_ID, true), mTblLifeTime(600)
+TBDS::TBDS( ) : TSubSYS(SDB_ID, true), mTblLifeTime(DEF_TblLifeTime)
 {
     //Open data bases DB structure
     elDB.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
@@ -763,7 +766,7 @@ void TBDS::load_( )
     }
 
     //Load parameters from the table "SYS" or the config-file
-    setTblLifeTime(s2i(genPrmGet(nodePath()+"TblLifeTime",i2s(tblLifeTime()))));
+    setTblLifeTime(s2i(genPrmGet(nodePath()+"TblLifeTime",i2s(DEF_TblLifeTime))));
 }
 
 void TBDS::save_( )
@@ -1186,7 +1189,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"del",RWRW__,"root",SDB_ID,SEC_WR))	close(opt->text(), s2i(opt->attr("del")));
     }
     else if(a_path == "/sql/tm" && ctrChkNode(opt,"get",R_R___,"root",SDB_ID,SEC_RD))
-	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ReqTm","0",opt->attr("user")));
+	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ReqTm",DEF_ReqTm,opt->attr("user")));
     else if(a_path == "/sql/req") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID))	opt->setText(userSQLReq);
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID))	userSQLReq = opt->text();

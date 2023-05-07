@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.6.4"
+#define MOD_VER		"1.6.5"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -71,7 +71,7 @@ using namespace WebUser;
 //*************************************************
 //* TWEB                                          *
 //*************************************************
-TWEB::TWEB( string name ) : TUI(MOD_ID), mDefPg("*")
+TWEB::TWEB( string name ) : TUI(MOD_ID), mDefPg(DEF_DefPg)
 {
     mod = this;
 
@@ -142,7 +142,7 @@ void TWEB::load_( )
 	mess_err(nodePath().c_str(),_("Error searching and creating a new user page."));
     }
 
-    setDefPg(TBDS::genPrmGet(nodePath()+"DefPg",defPg()));
+    setDefPg(TBDS::genPrmGet(nodePath()+"DefPg",DEF_DefPg));
 }
 
 void TWEB::save_( )

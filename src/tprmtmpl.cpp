@@ -21,6 +21,10 @@
 #include "tsys.h"
 #include "tprmtmpl.h"
 
+
+#define DEF_onlAttr	"0"
+
+
 using namespace OSCADA;
 
 //*************************************************
@@ -691,7 +695,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 		// Check the selected param
 		bool is_lnk = func()->io(iIO)->flg()&TPrmTempl::CfgLink;
 		if(is_lnk && TSYS::strLine(func()->io(iIO)->def(),0).size() &&
-		    !s2i(TBDS::genPrmGet(obj->nodePath()+"onlAttr","0",opt->attr("user"))))
+		    !s2i(TBDS::genPrmGet(obj->nodePath()+"onlAttr",DEF_onlAttr,opt->attr("user"))))
 		{
 		    string nprm = TSYS::strLine(TSYS::strSepParse(TSYS::strLine(func()->io(iIO)->def(),0),0,'|'), 0);
 
@@ -736,8 +740,10 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
     if(a_path.find(pref) != 0)	return false;
     a_path = a_path.substr(pref.size());
     if(a_path == "/attr_only") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(obj->nodePath()+"onlAttr","0",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	TBDS::genPrmSet(obj->nodePath()+"onlAttr",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
+	    opt->setText(TBDS::genPrmGet(obj->nodePath()+"onlAttr",DEF_onlAttr,opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+	    TBDS::genPrmSet(obj->nodePath()+"onlAttr",opt->text(),opt->attr("user"));
     }
     else if(a_path.find("/prm/pr_") == 0) {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {

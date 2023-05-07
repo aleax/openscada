@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.HTTP file: http.h
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,6 +33,11 @@
 
 #define cntBnd "----OpenSCADAFormBoundary4q2fsdFWEra345tf"
 #define CtxTmplMark	"#####CONTEXT#####"
+
+#define DEF_Deny	""
+#define DEF_Allow	"*"
+#define DEF_SpaceUID	0
+#define DEF_AuthTime	10
 
 using std::string;
 using std::map;

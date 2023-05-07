@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-02 07:54+0300\n"
+"POT-Creation-Date: 2023-05-06 07:28+0300\n"
 "PO-Revision-Date: 2009-08-19 09:06+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -106,8 +106,8 @@ msgstr "Lebenszeit der Authentifizierungssitzung, Minuten"
 msgid "Limit of the connections for one user and host"
 msgstr "Limit der Verbindungen für einen Benutzer und Host"
 
-msgid "Compression level"
-msgstr "Kompressionsstufe"
+msgid "Compression level and lower limit"
+msgstr "Kompressionsstufe und untere Grenze"
 
 msgid ""
 "ZLib compression level:\n"
@@ -120,11 +120,8 @@ msgstr ""
 "  0   - abgeschaltet;\n"
 "  1-9 - direkte Stufe."
 
-msgid "Lower limit of compression"
-msgstr "Untergrenze der Komprimierung"
-
-msgid "Value in bytes."
-msgstr "Wert in Bytes."
+msgid "Limit in bytes."
+msgstr "Begrenzung in Byte."
 
 #, c-format
 msgid "Request received: '%s': %d, time: %g ms."
@@ -144,5 +141,8 @@ msgstr "Anfrage bearbeitet: '%s', Zeit: %g ms."
 
 #, c-format
 msgid "Response saved to a stream and packed: '%s': %d, time: %g ms."
-msgstr "Antwort in einem Stream gespeichert und gepackt: '%s': %d, Zeit: %g ms."
+msgstr ""
+"Antwort in einem Stream gespeichert und gepackt: '%s': %d, Zeit: %g ms."
 
+#~ msgid "Lower limit of compression"
+#~ msgstr "Untergrenze der Komprimierung"

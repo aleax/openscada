@@ -45,7 +45,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"8.6.17"
+#define MOD_VER		"8.6.18"
 #define AUTHORS		trS("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	trS("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -83,7 +83,8 @@ using namespace VISION;
 //* QTCFG::TVision                                *
 //*************************************************
 TVision::TVision( string name ) : TUI(MOD_ID), mVCAStation(dataRes()), mUserStart(dataRes()), mUserPass(dataRes()),
-    mExitLstRunPrjCls(true), mDropCommonWdgStls(true), mEndRun(false), mRestTime(30), mCachePgLife(1), mCachePgSz(10), mScrnCnt(0)
+    mExitLstRunPrjCls(DEF_ExitLstRunPrjCls), mDropCommonWdgStls(DEF_DropCommonWdgStls), mEndRun(false),
+    mRestTime(DEF_RestoreTime), mCachePgLife(DEF_CachePgLife), mCachePgSz(DEF_CachePgSz), mScrnCnt(0)
 {
     mVCAStation = ".";
     mod = this;
@@ -130,15 +131,15 @@ void TVision::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file and DB
-    setUserStart(TBDS::genPrmGet(nodePath()+"StartUser",""));
-    setUserPass(TBDS::genPrmGet(nodePath()+"UserPass",""));
-    setRunPrjs(TBDS::genPrmGet(nodePath()+"RunPrjs",""));
-    setExitLstRunPrjCls(s2i(TBDS::genPrmGet(nodePath()+"ExitLstRunPrjCls",i2s(exitLstRunPrjCls()))));
-    setDropCommonWdgStls(s2i(TBDS::genPrmGet(nodePath()+"DropCommonWdgStls",i2s(dropCommonWdgStls()))));
-    setCachePgLife(s2r(TBDS::genPrmGet(nodePath()+"CachePgLife",r2s(cachePgLife()))));
-    setCachePgSz(s2i(TBDS::genPrmGet(nodePath()+"CachePgSz",i2s(cachePgSz()))));
-    setVCAStation(TBDS::genPrmGet(nodePath()+"VCAstation","."));
-    setRestoreTime(s2i(TBDS::genPrmGet(nodePath()+"RestoreTime",i2s(restoreTime()))));
+    setUserStart(TBDS::genPrmGet(nodePath()+"StartUser"));
+    setUserPass(TBDS::genPrmGet(nodePath()+"UserPass"));
+    setRunPrjs(TBDS::genPrmGet(nodePath()+"RunPrjs"));
+    setExitLstRunPrjCls(s2i(TBDS::genPrmGet(nodePath()+"ExitLstRunPrjCls",i2s(DEF_ExitLstRunPrjCls))));
+    setDropCommonWdgStls(s2i(TBDS::genPrmGet(nodePath()+"DropCommonWdgStls",i2s(DEF_DropCommonWdgStls))));
+    setCachePgLife(s2r(TBDS::genPrmGet(nodePath()+"CachePgLife",r2s(DEF_CachePgLife))));
+    setCachePgSz(s2i(TBDS::genPrmGet(nodePath()+"CachePgSz",i2s(DEF_CachePgSz))));
+    setVCAStation(TBDS::genPrmGet(nodePath()+"VCAstation",DEF_VCAstation));
+    setRestoreTime(s2i(TBDS::genPrmGet(nodePath()+"RestoreTime",i2s(DEF_RestoreTime))));
 }
 
 void TVision::save_( )

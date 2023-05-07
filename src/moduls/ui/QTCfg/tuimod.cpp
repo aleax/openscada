@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"5.13.3"
+#define MOD_VER		"5.13.4"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the Qt-based configurator of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -73,13 +73,14 @@ using namespace QTCFG;
 //*************************************************
 //* TUIMod                                        *
 //*************************************************
-TUIMod::TUIMod( string name ) : TUI(MOD_ID), mTmConChk(dataRes()), mStartUser(dataRes()), mStartPath(dataRes()), mToolTipLim(150), mEndRun(false)
+TUIMod::TUIMod( string name ) : TUI(MOD_ID),
+    mTmConChk(dataRes()), mStartUser(dataRes()), mStartPath(dataRes()), mToolTipLim(DEF_ToolTipLim), mEndRun(false)
 {
     mod = this;
 
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 
-    setTmConChk("10:600");
+    setTmConChk(DEF_TmConChk);
 
     //Public export functions
     modFuncReg(new ExpFunc("QIcon icon();","Module Qt-icon",(void(TModule::*)( )) &TUIMod::icon));
@@ -124,10 +125,10 @@ void TUIMod::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file and DB
-    setTmConChk(TBDS::genPrmGet(nodePath()+"TmConChk",tmConChk()));
-    setStartPath(TBDS::genPrmGet(nodePath()+"StartPath",startPath()));
-    setStartUser(TBDS::genPrmGet(nodePath()+"StartUser",startUser()));
-    setToolTipLim(s2i(TBDS::genPrmGet(nodePath()+"ToolTipLim",i2s(toolTipLim()))));
+    setTmConChk(TBDS::genPrmGet(nodePath()+"TmConChk",DEF_TmConChk));
+    setStartPath(TBDS::genPrmGet(nodePath()+"StartPath"));
+    setStartUser(TBDS::genPrmGet(nodePath()+"StartUser"));
+    setToolTipLim(s2i(TBDS::genPrmGet(nodePath()+"ToolTipLim",i2s(DEF_ToolTipLim))));
 }
 
 void TUIMod::save_( )

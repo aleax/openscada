@@ -36,6 +36,9 @@
 #undef trS
 #define trS(mess) mod->I18N(mess,mess_PreSave)
 
+#define DEF_lifeLsDev	"0"
+
+
 using std::string;
 using std::vector;
 using namespace OSCADA;

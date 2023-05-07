@@ -53,35 +53,34 @@
 <p>Кроме основных атрибутов осуществляется отражение входных параметров функций тестов на одноимённые атрибуты тега "prm". Например, атрибут "name" функции "Param" можно указать в теге "prm".
 </p><p>Допускается указание множества тегов "prm" для одного или разных тестов с одинаковыми или различными параметрами, указывая тем самым на отдельный запуск теста с указанными параметрами. Приведём пример описания всех доступных тестов:
 </p>
-<pre style="white-space: pre-wrap;">
-&lt;?xml version="1.0" encoding="UTF-8"&nbsp;?&gt;
-&lt;OpenSCADA&gt;
-    &lt;station id="DemoStation"&gt;
-        &lt;node id="sub_Special"&gt;
-            &lt;node id="mod_SystemTests"&gt;
-                &lt;prm id="Param" on="0" per="5" name="LogicLev.experiment.F3"/&gt;
-                &lt;prm id="XML" on="0" per="10" file="/etc/oscada.xml"/&gt;
-                &lt;prm id="Mess" on="0" per="10" categ="" arhtor="DBArch.test3" depth="10"/&gt;
-                &lt;prm id="SOAttach" on="0" per="20" name="../../lib/openscada/daq_LogicLev.so" mode="0" full="1"/&gt;
-                &lt;prm id="Val" on="0" per="1" name="LogicLev.experiment.F3.var" arch_len="5" arch_per="1000000"/&gt;
-                &lt;prm id="Val" on="0" per="1" name="System.AutoDA.CPULoad.load" arch_len="10" arch_per="1000000"/&gt;
-                &lt;prm id="DB" on="0" per="10" type="MySQL" addr="server.diya.org;roman;123456;oscadaTest" table="test" size="1000"/&gt;
-                &lt;prm id="DB" on="0" per="10" type="DBF" addr="./DATA/DBF" table="test.dbf" size="1000"/&gt;
-                &lt;prm id="DB" on="0" per="10" type="SQLite" addr="./DATA/test.db" table="test" size="1000"/&gt;
-                &lt;prm id="DB" on="0" per="10" type="FireBird" addr="server.diya.org:/var/tmp/test.fdb;roman;123456" table="test" size="1000"/&gt;
-                &lt;prm id="TrOut" on="0" per="1" addr="TCP:127.0.0.1:10001" type="Sockets" req="time"/&gt;
-                &lt;prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:10001" type="Sockets" req="time"/&gt;
-                &lt;prm id="TrOut" on="0" per="1" addr="UNIX:./oscada" type="Sockets" req="time"/&gt;
-                &lt;prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:daytime" type="Sockets" req="time"/&gt;
-                &lt;prm id="SysContrLang" on="0" per="10" path="/Archive/FSArch/mess_StatErrors/%2fprm%2fst"/&gt;
-                &lt;prm id="ValBuf" on="0" per="5"/&gt;
-                &lt;prm id="Archive" on="0" per="30" arch="test1" period="1000000"/&gt;
-                &lt;prm id="Base64Code" on="0" per="10"/&gt;
-            &lt;/node&gt;
-        &lt;/node&gt;
-  &lt;/station&gt;
-&lt;/OpenSCADA&gt;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
+<span class="nt">&lt;OpenSCADA&gt;</span>
+    <span class="nt">&lt;station</span> <span class="na">id=</span><span class="s">"DemoStation"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"sub_Special"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_SystemTests"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Param"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"5"</span> <span class="na">name=</span><span class="s">"LogicLev.experiment.F3"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"XML"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="na">file=</span><span class="s">"/etc/oscada.xml"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Mess"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="na">categ=</span><span class="s">""</span> <span class="na">arhtor=</span><span class="s">"DBArch.test3"</span> <span class="na">depth=</span><span class="s">"10"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"SOAttach"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"20"</span> <span class="na">name=</span><span class="s">"../../lib/openscada/daq_LogicLev.so"</span> <span class="na">mode=</span><span class="s">"0"</span> <span class="na">full=</span><span class="s">"1"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Val"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"1"</span> <span class="na">name=</span><span class="s">"LogicLev.experiment.F3.var"</span> <span class="na">arch_len=</span><span class="s">"5"</span> <span class="na">arch_per=</span><span class="s">"1000000"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Val"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"1"</span> <span class="na">name=</span><span class="s">"System.AutoDA.CPULoad.load"</span> <span class="na">arch_len=</span><span class="s">"10"</span> <span class="na">arch_per=</span><span class="s">"1000000"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"DB"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="na">type=</span><span class="s">"MySQL"</span> <span class="na">addr=</span><span class="s">"server.diya.org;roman;123456;oscadaTest"</span> <span class="na">table=</span><span class="s">"test"</span> <span class="na">size=</span><span class="s">"1000"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"DB"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="na">type=</span><span class="s">"DBF"</span> <span class="na">addr=</span><span class="s">"./DATA/DBF"</span> <span class="na">table=</span><span class="s">"test.dbf"</span> <span class="na">size=</span><span class="s">"1000"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"DB"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="na">type=</span><span class="s">"SQLite"</span> <span class="na">addr=</span><span class="s">"./DATA/test.db"</span> <span class="na">table=</span><span class="s">"test"</span> <span class="na">size=</span><span class="s">"1000"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"DB"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="na">type=</span><span class="s">"FireBird"</span> <span class="na">addr=</span><span class="s">"server.diya.org:/var/tmp/test.fdb;roman;123456"</span> <span class="na">table=</span><span class="s">"test"</span> <span class="na">size=</span><span class="s">"1000"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"TrOut"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"1"</span> <span class="na">addr=</span><span class="s">"TCP:127.0.0.1:10001"</span> <span class="na">type=</span><span class="s">"Sockets"</span> <span class="na">req=</span><span class="s">"time"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"TrOut"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"1"</span> <span class="na">addr=</span><span class="s">"UDP:127.0.0.1:10001"</span> <span class="na">type=</span><span class="s">"Sockets"</span> <span class="na">req=</span><span class="s">"time"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"TrOut"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"1"</span> <span class="na">addr=</span><span class="s">"UNIX:./oscada"</span> <span class="na">type=</span><span class="s">"Sockets"</span> <span class="na">req=</span><span class="s">"time"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"TrOut"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"1"</span> <span class="na">addr=</span><span class="s">"UDP:127.0.0.1:daytime"</span> <span class="na">type=</span><span class="s">"Sockets"</span> <span class="na">req=</span><span class="s">"time"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"SysContrLang"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="na">path=</span><span class="s">"/Archive/FSArch/mess_StatErrors/%2fprm%2fst"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"ValBuf"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"5"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Archive"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"30"</span> <span class="na">arch=</span><span class="s">"test1"</span> <span class="na">period=</span><span class="s">"1000000"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Base64Code"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
+        <span class="nt">&lt;/node&gt;</span>
+  <span class="nt">&lt;/station&gt;</span>
+<span class="nt">&lt;/OpenSCADA&gt;</span>
+</pre></div>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80_.28Param.29"><span class="tocnumber">1</span> <span class="toctext">Параметр (Param)</span></a></li>
@@ -491,5 +490,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SystemTests/ru">Modules/SystemTests/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2880</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SystemTests/ru">Modules/SystemTests/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2887</td></tr></table></body>
 </html>

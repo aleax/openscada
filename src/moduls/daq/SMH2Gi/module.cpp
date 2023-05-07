@@ -42,7 +42,7 @@
 #define MOD_NAME	trS("Segnetics SMH2Gi and SMH4")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.1.16"
+#define MOD_VER		"1.1.17"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Data acquisition and control by Segnetics SMH2Gi and SMH4 hardware interfaces and modules.")
 #define LICENSE		"GPL2"
@@ -78,7 +78,7 @@ using namespace SMH2Gi;
 //*************************************************
 //* SMH2Gi::TTpContr                              *
 //*************************************************
-TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID), mMRCDirDevs(oscd_datadir_full"/SegneticsMRC")
+TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID), mMRCDirDevs(DEF_MRCDirDevs)
 {
     mod = this;
 
@@ -164,7 +164,7 @@ void TTpContr::perSYSCall( unsigned int cnt )
 void TTpContr::load_( )
 {
     //Load parameters from config-file
-    setMRCDirDevs(TBDS::genPrmGet(nodePath()+"MRCDirDevs",MRCDirDevs()));
+    setMRCDirDevs(TBDS::genPrmGet(nodePath()+"MRCDirDevs",DEF_MRCDirDevs));
 }
 
 void TTpContr::save_( )

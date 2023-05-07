@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-02 07:54+0300\n"
+"POT-Creation-Date: 2023-05-06 07:28+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -95,7 +95,7 @@ msgstr ""
 msgid "Limit of the connections for one user and host"
 msgstr ""
 
-msgid "Compression level"
+msgid "Compression level and lower limit"
 msgstr ""
 
 msgid ""
@@ -105,10 +105,7 @@ msgid ""
 "  1-9 - direct level."
 msgstr ""
 
-msgid "Lower limit of compression"
-msgstr ""
-
-msgid "Value in bytes."
+msgid "Limit in bytes."
 msgstr ""
 
 #, c-format

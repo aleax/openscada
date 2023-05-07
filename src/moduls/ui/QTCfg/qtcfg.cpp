@@ -389,7 +389,7 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     statusBar()->showMessage(_("Ready"), 2000);
 
     //Generic state restore
-    string rst = TBDS::genPrmGet(mod->nodePath()+"st", "800:600", user());
+    string rst = TBDS::genPrmGet(mod->nodePath()+"st", DEF_st, user());
     int off = 0,
 	wH = s2i(TSYS::strParse(rst,0,":",&off)),
 	wW = s2i(TSYS::strParse(rst,0,":",&off));

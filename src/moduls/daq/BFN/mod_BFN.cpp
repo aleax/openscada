@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.28"
+#define MOD_VER		"0.6.29"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Support Big Farm Net (BFN) modules for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -107,7 +107,7 @@ void TTpContr::postEnable( int flag )
     symbAlrm_el.fldAdd(new TFld("TEXT","Text",TFld::String,TFld::TransltText,"100"));
 }
 
-string TTpContr::symbDB( )	{ return TBDS::genPrmGet(nodePath()+"symbDB","*.*"); }
+string TTpContr::symbDB( )	{ return TBDS::genPrmGet(nodePath()+"symbDB",DEF_symbDB); }
 
 void TTpContr::setSymbDB( const string &idb )
 {

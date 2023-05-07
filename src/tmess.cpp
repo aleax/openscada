@@ -51,13 +51,19 @@
 extern int _nl_msg_cat_cntr;	//Detection counter of an environment of language changes of gettext
 #endif
 
+#define DEF_MessLev	Info
+#define DEF_LogTarget	DIR_STDOUT|DIR_ARCHIVE
+#define DEF_TranslDyn	false
+#define DEF_TranslEnMan	false
+#define DEF_IOCharSet	"UTF-8"
+
 using namespace OSCADA;
 
 //*************************************************
 //* TMess                                         *
 //*************************************************
-TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_ARCHIVE),
-    mConvCode(true), mIsUTF8(true), mTranslDyn(false), mTranslDynPlan(false), mTranslEnMan(false), mTranslSet(false),
+TMess::TMess( ) : IOCharSet(DEF_IOCharSet), mMessLevel(DEF_MessLev), mLogDir(DEF_LogTarget),
+    mConvCode(true), mIsUTF8(true), mTranslDyn(DEF_TranslDyn), mTranslDynPlan(false), mTranslEnMan(DEF_TranslEnMan), mTranslSet(false),
     mLangBase(dtRes), mLangCode(dtRes), mTranslLangs(dtRes), getMessRes(true)
 {
     openlog(PACKAGE, 0, LOG_USER);
@@ -203,7 +209,7 @@ void TMess::putArg( const char *categ, int8_t level, const char *fmt, va_list ap
 
 void TMess::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const string &category, int8_t level )
 {
-    if(mLogDir & DIR_ARCHIVE)	SYS->archive().at().messGet(b_tm, e_tm, recs, category, level);
+    if(mLogDir&DIR_ARCHIVE)	SYS->archive().at().messGet(b_tm, e_tm, recs, category, level);
 }
 
 string TMess::translFld( const string &lng, const string &fld, bool isCfg )	{ return isCfg ? fld+"_"+lng : lng+"#"+fld; }
@@ -942,15 +948,15 @@ void TMess::load( )
     if((argVl=SYS->cmdOpt("log")).size()) setLogDirect(s2i(argVl));
 
     //Load params config-file
-    setMessLevel(s2i(TBDS::genPrmGet(SYS->nodePath()+"MessLev",i2s(messLevel()))));
-    setSelDebCats(TBDS::genPrmGet(SYS->nodePath()+"SelDebCats",selDebCats()));
-    setLogDirect(s2i(TBDS::genPrmGet(SYS->nodePath()+"LogTarget",i2s(logDirect()))));
+    setMessLevel(s2i(TBDS::genPrmGet(SYS->nodePath()+"MessLev",i2s(DEF_MessLev))));
+    setSelDebCats(TBDS::genPrmGet(SYS->nodePath()+"SelDebCats"));
+    setLogDirect(s2i(TBDS::genPrmGet(SYS->nodePath()+"LogTarget",i2s(DEF_LogTarget))));
     setLang(TBDS::genPrmGet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg));
     if((argVl=TBDS::genPrmGet(SYS->nodePath()+"LangBase")).size() ||
 	    (argVl=TBDS::genPrmGet(SYS->nodePath()+"Lang2CodeBase")).size())	//????[v1.0] Remove, loading the deprecated parameter
 	setLangBase(argVl);
-    setTranslDyn(s2i(TBDS::genPrmGet(SYS->nodePath()+"TranslDyn",i2s(translDyn()))), false);
-    setTranslEnMan(translDyn() || s2i(TBDS::genPrmGet(SYS->nodePath()+"TranslEnMan",i2s(translEnMan()))), true);
+    setTranslDyn(s2i(TBDS::genPrmGet(SYS->nodePath()+"TranslDyn",i2s(DEF_TranslDyn))), false);
+    setTranslEnMan(translDyn() || s2i(TBDS::genPrmGet(SYS->nodePath()+"TranslEnMan",i2s(DEF_TranslEnMan))), true);
 
     SYS->sysModifFlgs = TSYS::MDF_NONE;
 }
@@ -963,8 +969,8 @@ void TMess::unload( )
     trMessIdxRes.lock(); trMessIdx.clear(); trMessIdxRes.unlock();
     trMessCacheRes.lock(); trMessCache.clear(); trMessCacheRes.unlock();
 
-    IOCharSet = "UTF-8", mMessLevel = Info, mLogDir = DIR_STDOUT|DIR_ARCHIVE;
-    mConvCode = mIsUTF8 = true, mTranslDyn = mTranslDynPlan = mTranslEnMan = mTranslSet = false;
+    IOCharSet = DEF_IOCharSet, mMessLevel = DEF_MessLev, mLogDir = DEF_LogTarget, mTranslDyn = DEF_TranslDyn, mTranslEnMan = DEF_TranslEnMan;
+    mConvCode = mIsUTF8 = true, mTranslDynPlan = mTranslSet = false;
 }
 
 void TMess::save( )

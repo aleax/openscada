@@ -36,6 +36,11 @@
 #define EMPTY_PASS	"<EMPTY>"
 #define H_LIM		255
 
+#define DEF_SessTimeLife	60
+#define DEF_ComprLev		0
+#define DEF_ComprBrd		80
+#define DEF_SingleUserHostLimit	100
+
 using namespace OSCADA;
 
 namespace SelfPr

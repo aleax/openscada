@@ -32,7 +32,7 @@
 #define MOD_NAME	trS("Own protocol of OpenSCADA")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.10.0"
+#define MOD_VER		"1.10.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -68,7 +68,8 @@ using namespace SelfPr;
 //*************************************************
 //* TProt                                         *
 //*************************************************
-TProt::TProt( string name ) : TProtocol(MOD_ID), mTAuth(60), mComprLev(0), mComprBrd(80), mSingleUserHostLimit(100)
+TProt::TProt( string name ) : TProtocol(MOD_ID),
+    mTAuth(DEF_SessTimeLife), mComprLev(DEF_ComprLev), mComprBrd(DEF_ComprBrd), mSingleUserHostLimit(DEF_SingleUserHostLimit)
 {
     mod = this;
 
@@ -93,15 +94,17 @@ int TProt::sesOpen( const string &user, const string &pass, const string &src )
     for(map<int, SAuth>::iterator aI = mAuth.begin(); aI != mAuth.end(); )
 	if(time(NULL) > (aI->second.tAuth+authTime()*60)) mAuth.erase(aI++);	//Long unused
 	else {
-	    if(aI->second.name == user && aI->second.src == src) {	//More opened
+	    if(aI->second.name == user && aI->second.src == src) {		//Many opened
 		if(aOldI == mAuth.end() || aI->second.tAuth < aOldI->second.tAuth) aOldI = aI;
 		++i_oCnt;
 	    }
 	    ++aI;
 	}
+
     if((int)i_oCnt > singleUserHostLimit() && aOldI != mAuth.end()) {
-	mess_err(nodePath().c_str(), _("Connections from the user '%s' and the source '%s' reached to the limit %d. Erasing spare!"),
-	    user.c_str(), TSYS::strLine(src,0).c_str(), singleUserHostLimit());
+	if(mess_lev() == TMess::Debug)
+	    mess_debug(nodePath().c_str(), _("Connections from the user '%s' and the source '%s' reached to the limit %d. Erasing spare!"),
+		user.c_str(), TSYS::strLine(src,0).c_str(), singleUserHostLimit());
 	mAuth.erase(aOldI);
     }
 
@@ -149,10 +152,10 @@ void TProt::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file
-    setAuthTime(s2i(TBDS::genPrmGet(nodePath()+"SessTimeLife",i2s(authTime()))));
-    setComprLev(s2i(TBDS::genPrmGet(nodePath()+"ComprLev",i2s(comprLev()))));
-    setComprBrd(s2i(TBDS::genPrmGet(nodePath()+"ComprBrd",i2s(comprBrd()))));
-    setSingleUserHostLimit(s2i(TBDS::genPrmGet(nodePath()+"SingleUserHostLimit",i2s(singleUserHostLimit()))));
+    setAuthTime(s2i(TBDS::genPrmGet(nodePath()+"SessTimeLife",i2s(DEF_SessTimeLife))));
+    setComprLev(s2i(TBDS::genPrmGet(nodePath()+"ComprLev",i2s(DEF_ComprLev))));
+    setComprBrd(s2i(TBDS::genPrmGet(nodePath()+"ComprBrd",i2s(DEF_ComprBrd))));
+    setSingleUserHostLimit(s2i(TBDS::genPrmGet(nodePath()+"SingleUserHostLimit",i2s(DEF_SingleUserHostLimit))));
 }
 
 void TProt::save_( )
@@ -169,7 +172,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 {
     char buf[1000];
     string req, resp, header;
-    int rez, resp_len, off, head_end;
+    int rez, resp_len, off;
     string reqNm = io.name();
 
     MtxAlloc res(tro.reqRes(), true);
@@ -201,7 +204,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("SES_OPEN request: %d"), req.size());
 
 		// Requesting
-		resp_len = tro.messIO(req.data(), req.size(), buf, sizeof(buf)-1, conTm);
+		resp_len = tro.messIO(req.data(), req.size(), buf, sizeof(buf), conTm);
 		resp.assign(buf, resp_len);
 
 		// Waiting the tail
@@ -246,7 +249,6 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ first response %d"), resp.size());
 
 	    // Processing the header
-	    head_end = header.size() + 1;
 	    off = 0;
 	    if(TSYS::strParse(header,0," ",&off) != "REZ")
 		throw TError(nodePath().c_str(), _("Station %s error: %s."), tro.id().c_str(), _("error the header format."));
@@ -258,7 +260,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    if(rez > 0 || off >= (int)header.size())
 		throw TError(nodePath().c_str(),_("Station %s error: %s."), tro.id().c_str(), header.substr(off).c_str());
 
-	    int resp_size = s2i(header.substr(off));
+	    int head_end = header.size() + 1,
+		resp_size = s2i(header.substr(off));
 
 	    // Waiting the whole response
 	    while((int)resp.size() < (abs(resp_size)+head_end) && (resp_len=tro.messIO(NULL,0,buf,sizeof(buf))))
@@ -298,13 +301,12 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"))) {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of the authentication session, minutes"),RWRWR_,"root",SPRT_ID,2,"tp","dec","min","1");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/sUserHostLim",_("Limit of the connections for one user and host"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/compr",_("Compression level"),RWRWR_,"root",SPRT_ID,4,"tp","dec","min","-1","max","9",
+		ctrMkNode("fld",opt,-1,"/prm/cfg/compr",_("Compression level and lower limit"),RWRWR_,"root",SPRT_ID,4,"tp","dec","min","-1","max","9",
 		    "help",_("ZLib compression level:\n"
 			     "  -1  - optimal speed-size;\n"
 			     "  0   - disable;\n"
 			     "  1-9 - direct level."));
-		ctrMkNode("fld",opt,-1,"/prm/cfg/comprBrd",_("Lower limit of compression"),RWRWR_,"root",SPRT_ID,3,"tp","dec","min","10",
-		    "help",_("Value in bytes."));
+		ctrMkNode("fld",opt,-1,"/prm/cfg/comprBrd","",RWRWR_,"root",SPRT_ID,3,"tp","dec","min","10","help",_("Limit in bytes."));
 	    }
 	}
 	return;
@@ -376,7 +378,7 @@ bool TProtIn::mess( const string &request, string &answer )
 	pass_ = TSYS::strDecode(pass, TSYS::Custom);
 	if(pass_ == EMPTY_PASS) pass_ = "";
 	if((ses_id=mod->sesOpen(user_,pass_,TSYS::strLine(srcAddr(),0))) < 0)
-	    answer = "REZ " ERR_AUTH " Error authentication: wrong the user or password.\x0A";
+	    answer = "REZ " ERR_AUTH " Error authentication: wrong user or password.\x0A";
 	else answer = "REZ " ERR_NO " " + i2s(ses_id) + "\x0A";
     }
     else if(header.find("SES_CLOSE") == 0) {

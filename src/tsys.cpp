@@ -47,22 +47,78 @@
 # include <syscall.h>
 #endif
 
+#define DEF_Id		"InitSt"
+#define DEF_StName	_("Initial Station")
+#define DEF_ClockRT	false
+#define DEF_User	"root"
+#define DEF_ConfFile	sysconfdir_full "/oscada.xml"
+#define DEF_WorkDB	DB_CFG
+#define DEF_IcoDir	"icons;" oscd_datadir_full "/icons"
+#define DEF_DocDir	"docs;" oscd_datadir_full "/docs"
+#define DEF_MainCPUs	""
+#define DEF_TaskInvPhs	10
+#define DEF_SaveAtExit	false
+#define DEF_SavePeriod	0
+#define DEF_ModifCalc	false
+#define DEF_RdStLevel	0
+#define DEF_RdTaskPer	1
+#define DEF_RdRestConnTm 10
+#define DEF_RdPrimCmdTr	false
+
+#define DEF_limObjID_SZ		20
+#define MIN_limObjID_SZ		20
+#define MAX_limObjID_SZ		50
+#define DEF_limObjNm_SZ		100
+#define MIN_limObjNm_SZ		100
+#define MAX_limObjNm_SZ		200
+#define DEF_limArchID_SZ	50
+#define MIN_limArchID_SZ	50
+#define MAX_limArchID_SZ	90
+#define DEF_limUserFile_SZ	10048576
+#define MIN_limUserFile_SZ	1048576
+#define MAX_limUserFile_SZ	100048576
+#define DEF_limUserIts_N	1000000
+#define MIN_limUserIts_N	1000
+#define MAX_limUserIts_N	1000000000
+#define DEF_limCacheIts_N	100
+#define MIN_limCacheIts_N	100
+#define MAX_limCacheIts_N	100000
+#define DEF_limCacheIts_TM	60
+#define MIN_limCacheIts_TM	10
+#define MAX_limCacheIts_TM	1000
+#define DEF_prmStrBuf_SZ	10000
+#define MIN_prmStrBuf_SZ	1000
+#define MAX_prmStrBuf_SZ	1000000
+#define DEF_prmWait_DL		0.1
+#define MIN_prmWait_DL		0.001
+#define MAX_prmWait_DL		1
+#define DEF_prmWait_TM		5
+#define MIN_prmWait_TM		5
+#define MAX_prmWait_TM		10
+#define DEF_prmInterf_TM	7
+#define MIN_prmInterf_TM	7
+#define MAX_prmInterf_TM	15
+#define DEF_prmServTask_PER	10
+#define MIN_prmServTask_PER	1
+#define MAX_prmServTask_PER	120
+
+
 using namespace OSCADA;
 
 //Default values of the global limits
-uint8_t	OSCADA::limObjID_SZ = 20;
-uint8_t	OSCADA::limObjNm_SZ = 100;
-uint8_t	OSCADA::limArchID_SZ = 50;
-int	OSCADA::limUserFile_SZ = 10048576;
-int	OSCADA::limUserIts_N = 1000000;
-unsigned OSCADA::limCacheIts_N = 100;
-unsigned OSCADA::limCacheIts_TM = 60;
+uint8_t	OSCADA::limObjID_SZ = DEF_limObjID_SZ;
+uint8_t	OSCADA::limObjNm_SZ = DEF_limObjNm_SZ;
+uint8_t	OSCADA::limArchID_SZ = DEF_limArchID_SZ;
+int	OSCADA::limUserFile_SZ = DEF_limUserFile_SZ;
+int	OSCADA::limUserIts_N = DEF_limUserIts_N;
+unsigned OSCADA::limCacheIts_N = DEF_limCacheIts_N;
+unsigned OSCADA::limCacheIts_TM = DEF_limCacheIts_TM;
 
-int	OSCADA::prmStrBuf_SZ = 10000;
-float	OSCADA::prmWait_DL = 0.1;
-uint8_t	OSCADA::prmWait_TM = 5;
-uint8_t	OSCADA::prmInterf_TM = 7;
-uint8_t	OSCADA::prmServTask_PER = 10;
+int	OSCADA::prmStrBuf_SZ = DEF_prmStrBuf_SZ;
+float	OSCADA::prmWait_DL = DEF_prmWait_DL;
+uint8_t	OSCADA::prmWait_TM = DEF_prmWait_TM;
+uint8_t	OSCADA::prmInterf_TM = DEF_prmInterf_TM;
+uint8_t	OSCADA::prmServTask_PER = DEF_prmServTask_PER;
 
 //Continuously access variable
 TMess	*OSCADA::Mess = NULL;
@@ -71,19 +127,20 @@ pthread_key_t TSYS::sTaskKey;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
     isLoaded(false), mRunning(false), isServPrc(false), mFinalKill(false),
-    mUser("root"), mConfFile(sysconfdir_full "/oscada.xml"), mId("InitSt"),
-    mModDir(oscd_moddir_full), mIcoDir("icons;" oscd_datadir_full "/icons"), mDocDir("docs;" oscd_datadir_full "/docs"),
+    mUser(DEF_User), mConfFile(DEF_ConfFile), mId(DEF_Id), mModDir(DEF_ModPath), mIcoDir(DEF_IcoDir), mDocDir(DEF_DocDir),
     mName(dataRes()), mNameB(dataRes()), mWorkDB(dataRes()), mSelDB(dataRes()), mMainCPUs(dataRes()),
-    mTaskInvPhs(10), mSaveAtExit(false), mSavePeriod(0), mModifCalc(false), rootModifCnt(0), sysModifFlgs(MDF_NONE), mStopSignal(0), mN_CPU(1),
-    mainPthr(0), mSysTm(0), mClockRT(false), mPrjCustMode(true), mPrjNm(dataRes()), mCfgCtx(NULL), mCfgCtxLast(NULL),
-    mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrimCmdTr(false), trPassN(0), trChkAndFix(false), trChkAndFixMB(false)
+    mTaskInvPhs(DEF_TaskInvPhs), mSaveAtExit(DEF_SaveAtExit), mSavePeriod(DEF_SavePeriod), mModifCalc(DEF_ModifCalc),
+    rootModifCnt(0), sysModifFlgs(MDF_NONE), mStopSignal(0), mN_CPU(1),
+    mainPthr(0), mSysTm(0), mClockRT(DEF_ClockRT), mPrjCustMode(true), mPrjNm(dataRes()), mCfgCtx(NULL), mCfgCtxLast(NULL),
+    mRdStLevel(DEF_RdStLevel), mRdRestConnTm(DEF_RdRestConnTm), mRdTaskPer(DEF_RdTaskPer), mRdPrimCmdTr(DEF_RdPrimCmdTr),
+    trPassN(0), trChkAndFix(false), trChkAndFixMB(false)
 {
     srand(TSYS::curTime()%1000000);
-    mWorkDB = DB_CFG;
+    mWorkDB = DEF_WorkDB;
 
     Mess = new TMess();
 
-    mName = _("Initial Station");
+    mName = DEF_StName;
 
     mFinalKill = false;
     SYS = this;		//Init global access value
@@ -683,7 +740,7 @@ void TSYS::cfgFileLoad( )
 			if(stat_n->attr("id") == mId) break;
 		    }
 		if(stat_n && stat_n->attr("id") != mId) {
-		    if(mId != "InitSt")
+		    if(mId != DEF_Id)
 			mess_sys(TMess::Warning, _("Station '%s' is not in the configuration file. The configuration of the station '%s' has been used!"),
 			    mId.c_str(), stat_n->attr("id").c_str());
 		    mId	= stat_n->attr("id");
@@ -718,40 +775,40 @@ void TSYS::cfgFileSave( )
 void TSYS::cfgPrmLoad( )
 {
     //Global limits
-    limObjID_SZ = vmax(20, vmin(50,s2i(TBDS::genPrmGet(nodePath()+"limObjID_SZ",i2s(limObjID_SZ)))));
-    limObjNm_SZ = vmax(100, vmin(200,s2i(TBDS::genPrmGet(nodePath()+"limObjNm_SZ",i2s(limObjNm_SZ)))));
-    limArchID_SZ = vmax(50, vmin(90,s2i(TBDS::genPrmGet(nodePath()+"limArchID_SZ",i2s(limArchID_SZ)))));
-    limUserFile_SZ = vmax(1048576, vmin(100048576,s2i(TBDS::genPrmGet(nodePath()+"limUserFile_SZ",i2s(limUserFile_SZ)))));
-    limUserIts_N = vmax(1000, vmin(1000000000,s2i(TBDS::genPrmGet(nodePath()+"limUserIts_N",i2s(limUserIts_N)))));
-    limCacheIts_N = vmax(100, vmin(100000,s2i(TBDS::genPrmGet(nodePath()+"limCacheIts_N",i2s(limCacheIts_N)))));
-    limCacheIts_TM = vmax(10, vmin(1000,s2i(TBDS::genPrmGet(nodePath()+"limCacheIts_TM",i2s(limCacheIts_TM)))));
+    limObjID_SZ = vmax(MIN_limObjID_SZ, vmin(MAX_limObjID_SZ,s2i(TBDS::genPrmGet(nodePath()+"limObjID_SZ",i2s(DEF_limObjID_SZ)))));
+    limObjNm_SZ = vmax(MIN_limObjNm_SZ, vmin(MAX_limObjNm_SZ,s2i(TBDS::genPrmGet(nodePath()+"limObjNm_SZ",i2s(DEF_limObjNm_SZ)))));
+    limArchID_SZ = vmax(MIN_limArchID_SZ, vmin(MAX_limArchID_SZ,s2i(TBDS::genPrmGet(nodePath()+"limArchID_SZ",i2s(DEF_limArchID_SZ)))));
+    limUserFile_SZ = vmax(MIN_limUserFile_SZ, vmin(MAX_limUserFile_SZ,s2i(TBDS::genPrmGet(nodePath()+"limUserFile_SZ",i2s(DEF_limUserFile_SZ)))));
+    limUserIts_N = vmax(MIN_limUserIts_N, vmin(MAX_limUserIts_N,s2i(TBDS::genPrmGet(nodePath()+"limUserIts_N",i2s(DEF_limUserIts_N)))));
+    limCacheIts_N = vmax(MIN_limCacheIts_N, vmin(MAX_limCacheIts_N,s2i(TBDS::genPrmGet(nodePath()+"limCacheIts_N",i2s(DEF_limCacheIts_N)))));
+    limCacheIts_TM = vmax(MIN_limCacheIts_TM, vmin(MAX_limCacheIts_TM,s2i(TBDS::genPrmGet(nodePath()+"limCacheIts_TM",i2s(DEF_limCacheIts_TM)))));
 
     //Global parameters
-    prmStrBuf_SZ = vmax(1000, vmin(1000000,s2i(TBDS::genPrmGet(nodePath()+"prmStrBuf_SZ",i2s(prmStrBuf_SZ)))));
-    prmWait_DL = vmax(0.001, vmin(1,s2r(TBDS::genPrmGet(nodePath()+"prmWait_DL",r2s(prmWait_DL)))));
-    prmWait_TM = vmax(5, vmin(10,s2i(TBDS::genPrmGet(nodePath()+"prmWait_TM",i2s(prmWait_TM)))));
-    prmInterf_TM = vmax(7, vmin(15,s2i(TBDS::genPrmGet(nodePath()+"prmInterf_TM",i2s(prmInterf_TM)))));
-    prmServTask_PER = vmax(1, vmin(120,s2i(TBDS::genPrmGet(nodePath()+"prmServTask_PER",i2s(prmServTask_PER)))));
+    prmStrBuf_SZ = vmax(MIN_prmStrBuf_SZ, vmin(MAX_prmStrBuf_SZ,s2i(TBDS::genPrmGet(nodePath()+"prmStrBuf_SZ",i2s(DEF_prmStrBuf_SZ)))));
+    prmWait_DL = vmax(MIN_prmWait_DL, vmin(MAX_prmWait_DL,s2r(TBDS::genPrmGet(nodePath()+"prmWait_DL",r2s(DEF_prmWait_DL)))));
+    prmWait_TM = vmax(MIN_prmWait_TM, vmin(MAX_prmWait_TM,s2i(TBDS::genPrmGet(nodePath()+"prmWait_TM",i2s(DEF_prmWait_TM)))));
+    prmInterf_TM = vmax(MIN_prmInterf_TM, vmin(MAX_prmInterf_TM,s2i(TBDS::genPrmGet(nodePath()+"prmInterf_TM",i2s(DEF_prmInterf_TM)))));
+    prmServTask_PER = vmax(MIN_prmServTask_PER, vmin(MAX_prmServTask_PER,s2i(TBDS::genPrmGet(nodePath()+"prmServTask_PER",i2s(DEF_prmServTask_PER)))));
 
     //System parameters
-    setClockRT(s2i(TBDS::genPrmGet(nodePath()+"ClockRT",i2s(clockRT()))));
-    setName(TBDS::genPrmGet(nodePath()+"StName",name(),"root",TBDS::UseTranslation));
-    mWorkDB = TBDS::genPrmGet(nodePath()+"WorkDB",workDB());
+    setClockRT(s2i(TBDS::genPrmGet(nodePath()+"ClockRT",i2s(DEF_ClockRT))));
+    setName(TBDS::genPrmGet(nodePath()+"StName",DEF_StName,"root",TBDS::UseTranslation));
+    mWorkDB = TBDS::genPrmGet(nodePath()+"WorkDB", DEF_WorkDB);
     setWorkDir(TBDS::genPrmGet(nodePath()+"Workdir","").c_str(), true);
-    setModDir(TBDS::genPrmGet(nodePath()+"ModDir",modDir()), true);
-    setIcoDir(TBDS::genPrmGet(nodePath()+"IcoDir",icoDir()));
-    setDocDir(TBDS::genPrmGet(nodePath()+"DocDir",docDir()));
-    setMainCPUs(TBDS::genPrmGet(nodePath()+"MainCPUs",mainCPUs()));
-    setTaskInvPhs(s2i(TBDS::genPrmGet(nodePath()+"TaskInvPhs",i2s(taskInvPhs()))));
-    setSaveAtExit(s2i(TBDS::genPrmGet(nodePath()+"SaveAtExit",i2s(saveAtExit()))));
-    setSavePeriod(s2i(TBDS::genPrmGet(nodePath()+"SavePeriod",i2s(savePeriod()))));
-    setModifCalc(s2i(TBDS::genPrmGet(nodePath()+"ModifCalc",i2s(modifCalc()))));
+    setModDir(TBDS::genPrmGet(nodePath()+"ModDir",DEF_ModPath), true);
+    setIcoDir(TBDS::genPrmGet(nodePath()+"IcoDir",DEF_IcoDir));
+    setDocDir(TBDS::genPrmGet(nodePath()+"DocDir",DEF_DocDir));
+    setMainCPUs(TBDS::genPrmGet(nodePath()+"MainCPUs",DEF_MainCPUs));
+    setTaskInvPhs(s2i(TBDS::genPrmGet(nodePath()+"TaskInvPhs",i2s(DEF_TaskInvPhs))));
+    setSaveAtExit(s2i(TBDS::genPrmGet(nodePath()+"SaveAtExit",i2s(DEF_SaveAtExit))));
+    setSavePeriod(s2i(TBDS::genPrmGet(nodePath()+"SavePeriod",i2s(DEF_SavePeriod))));
+    setModifCalc(s2i(TBDS::genPrmGet(nodePath()+"ModifCalc",i2s(DEF_ModifCalc))));
 
     //Redundancy parameters
-    setRdStLevel(s2i(TBDS::genPrmGet(nodePath()+"RdStLevel",i2s(rdStLevel()))));
-    setRdTaskPer(s2r(TBDS::genPrmGet(nodePath()+"RdTaskPer",r2s(rdTaskPer()))));
-    setRdRestConnTm(s2i(TBDS::genPrmGet(nodePath()+"RdRestConnTm",i2s(rdRestConnTm()))));
-    setRdPrimCmdTr(s2i(TBDS::genPrmGet(nodePath()+"RdPrimCmdTr",i2s(rdPrimCmdTr()))));
+    setRdStLevel(s2i(TBDS::genPrmGet(nodePath()+"RdStLevel",i2s(DEF_RdStLevel))));
+    setRdTaskPer(s2r(TBDS::genPrmGet(nodePath()+"RdTaskPer",r2s(DEF_RdTaskPer))));
+    setRdRestConnTm(s2i(TBDS::genPrmGet(nodePath()+"RdRestConnTm",i2s(DEF_RdRestConnTm))));
+    setRdPrimCmdTr(s2i(TBDS::genPrmGet(nodePath()+"RdPrimCmdTr",i2s(DEF_RdPrimCmdTr))));
     string stLs = TBDS::genPrmGet(nodePath()+"RdStList"), stId;
     mRdRes.lock(true);
     for(int off = 0; (stId=TSYS::strSepParse(stLs,0,';',&off)).size(); )
@@ -992,16 +1049,12 @@ void TSYS::unload( )
 
     mRdRes.lock(true);
     mSt.clear();
-    mRdStLevel = 0, mRdRestConnTm = 10, mRdTaskPer = 1, mRdPrimCmdTr = false;
+    mRdStLevel = DEF_RdStLevel, mRdRestConnTm = DEF_RdRestConnTm, mRdTaskPer = DEF_RdTaskPer, mRdPrimCmdTr = DEF_RdPrimCmdTr;
     mRdRes.unlock();
 
-    mId = "InitSt", mName = _("Initial Station"), mUser = "root", mMainCPUs = "";
-    mConfFile = sysconfdir_full "/oscada.xml";
-    mModDir = oscd_moddir_full;
-    mIcoDir = "icons;" oscd_datadir_full "/icons";
-    mDocDir = "docs;" oscd_datadir_full "/docs";
-    mWorkDB = DB_CFG;
-    mSaveAtExit = false, mSavePeriod = 0, isLoaded = false, rootModifCnt = 0, sysModifFlgs = MDF_NONE, mPrjCustMode = true;
+    mId = DEF_Id, mName = DEF_StName, mUser = DEF_User, mMainCPUs = DEF_MainCPUs;
+    mConfFile = DEF_ConfFile, mWorkDB = DEF_WorkDB, mModDir = DEF_ModPath, mIcoDir = DEF_IcoDir, mDocDir = DEF_DocDir;
+    mSaveAtExit = DEF_SaveAtExit, mSavePeriod = DEF_SavePeriod, isLoaded = false, rootModifCnt = 0, sysModifFlgs = MDF_NONE, mPrjCustMode = true;
 
     modifG();
 }

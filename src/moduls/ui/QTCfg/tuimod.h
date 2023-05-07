@@ -33,6 +33,11 @@
 
 #define NAV_BACK_DEPTH	10
 
+#define DEF_TmConChk	"10:600"
+#define DEF_ToolTipLim	150
+#define DEF_st		"800:600"
+
+
 using namespace OSCADA;
 
 namespace QTCFG

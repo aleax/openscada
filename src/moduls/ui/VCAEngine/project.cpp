@@ -889,7 +889,7 @@ void Project::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/mess/tm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SUI_ID,SEC_RD)) {
-	    opt->setText(TBDS::genPrmGet(mod->nodePath()+"messTm","0",opt->attr("user")));
+	    opt->setText(TBDS::genPrmGet(mod->nodePath()+"messTm",DEF_messTm,opt->attr("user")));
 	    if(!s2i(opt->text())) opt->setText(i2s(time(NULL)));
 	}
 	if(ctrChkNode(opt,"set",RWRW__,"root",SUI_ID,SEC_WR))
@@ -897,15 +897,15 @@ void Project::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/mess/size") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
-	    opt->setText(TBDS::genPrmGet(mod->nodePath()+"messSize","600",opt->attr("user")));
+	    opt->setText(TBDS::genPrmGet(mod->nodePath()+"messSize",DEF_messSize,opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
 	    TBDS::genPrmSet(mod->nodePath()+"messSize",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/mess/mess" && ctrChkNode(opt,"get",R_R___,"root",SUI_ID)) {
 	vector<TMess::SRec> rec;
-	time_t gtm = s2i(TBDS::genPrmGet(mod->nodePath()+"messTm","0",opt->attr("user")));
+	time_t gtm = s2i(TBDS::genPrmGet(mod->nodePath()+"messTm",DEF_messTm,opt->attr("user")));
 	if(!gtm) gtm = time(NULL);
-	int gsz = s2i(TBDS::genPrmGet(mod->nodePath()+"messSize","600",opt->attr("user")));
+	int gsz = s2i(TBDS::genPrmGet(mod->nodePath()+"messSize",DEF_messSize,opt->attr("user")));
 	SYS->archive().at().messGet(gtm-gsz, gtm, rec, "/("+catsPat()+")/", Mess->messLevel(), "");
 
 	XMLNode *n_tm   = ctrMkNode("list",opt,-1,"/mess/mess/0","",R_R___,"root",SUI_ID);

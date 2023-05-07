@@ -23,6 +23,9 @@
 #include "ttypeparam.h"
 #include "tcontroller.h"
 
+#define DEF_messTm	"0"
+#define DEF_messSize	"60"
+
 using namespace OSCADA;
 
 //*************************************************
@@ -654,7 +657,7 @@ void TController::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/mess/tm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD)) {
-	    opt->setText(TBDS::genPrmGet(SYS->daq().at().nodePath()+"messTm","0",opt->attr("user")));
+	    opt->setText(TBDS::genPrmGet(SYS->daq().at().nodePath()+"messTm",DEF_messTm,opt->attr("user")));
 	    if(!s2i(opt->text())) opt->setText(i2s(TSYS::curTime()/1000000));
 	}
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
@@ -662,7 +665,7 @@ void TController::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/mess/size") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
-	    opt->setText(TBDS::genPrmGet(SYS->daq().at().nodePath()+"messSize","60",opt->attr("user")));
+	    opt->setText(TBDS::genPrmGet(SYS->daq().at().nodePath()+"messSize",DEF_messSize,opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	    TBDS::genPrmSet(SYS->daq().at().nodePath()+"messSize",opt->text(),opt->attr("user"));
     }
@@ -672,9 +675,9 @@ void TController::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/mess/mess" && ctrChkNode(opt,"get",R_R___,"root",SDAQ_ID)) {
 	vector<TMess::SRec> rec;
-	time_t gtm = s2i(TBDS::genPrmGet(SYS->daq().at().nodePath()+"messTm","0",opt->attr("user")));
+	time_t gtm = s2i(TBDS::genPrmGet(SYS->daq().at().nodePath()+"messTm",DEF_messTm,opt->attr("user")));
 	if(!gtm) gtm = (time_t)(TSYS::curTime()/1000000);
-	int gsz = s2i(TBDS::genPrmGet(SYS->daq().at().nodePath()+"messSize","60",opt->attr("user")));
+	int gsz = s2i(TBDS::genPrmGet(SYS->daq().at().nodePath()+"messSize",DEF_messSize,opt->attr("user")));
 	SYS->archive().at().messGet(gtm-gsz, gtm, rec, "/("+catsPat()+")/", messLev(), "");
 
 	XMLNode *n_tm   = ctrMkNode("list",opt,-1,"/mess/mess/0","",R_R___,"root",SDAQ_ID);

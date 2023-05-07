@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-02 07:54+0300\n"
+"POT-Creation-Date: 2023-05-06 07:28+0300\n"
 "PO-Revision-Date: 2007-10-23 18:19+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -104,7 +104,8 @@ msgstr "Время жизни сеанса аутентификации, мин�
 msgid "Limit of the connections for one user and host"
 msgstr "Предел подключений одного пользователя и хоста"
 
-msgid "Compression level"
+#, fuzzy
+msgid "Compression level and lower limit"
 msgstr "Уровень компрессии"
 
 msgid ""
@@ -118,10 +119,8 @@ msgstr ""
 "  0   - отключен;\n"
 "  1-9 - прямой уровень."
 
-msgid "Lower limit of compression"
-msgstr "Нижняя граница компрессии"
-
-msgid "Value in bytes."
+#, fuzzy
+msgid "Limit in bytes."
 msgstr "Значение в байтах."
 
 #, c-format
@@ -143,6 +142,9 @@ msgstr "Обработан запрос: '%s', время: %g мс."
 #, c-format
 msgid "Response saved to a stream and packed: '%s': %d, time: %g ms."
 msgstr "Сохранён ответ в поток и упакован: '%s': %d, время: %g мс."
+
+#~ msgid "Lower limit of compression"
+#~ msgstr "Нижняя граница компрессии"
 
 #, c-format
 #~ msgid "Error the station '%s': %s."

@@ -59,7 +59,7 @@
 #define MOD_NAME	trS("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.14.6"
+#define MOD_VER		"5.14.7"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -96,7 +96,7 @@ using namespace QTStarter;
 //* TUIMod                                        *
 //*************************************************
 TUIMod::TUIMod( string name ) : TUI(MOD_ID),
-    mQtLookMdf(false), QtApp(NULL), hideMode(false), mEndRun(false), mStartCom(false), mCloseToTray(false), mSessCntr(RestartNever),
+    mQtLookMdf(false), QtApp(NULL), hideMode(false), mEndRun(false), mStartCom(false), mCloseToTray(DEF_CloseToTray), mSessCntr(DEF_SessCntr),
     mStartMod(dataRes()), mStyle(dataRes()), mFont(dataRes()), mPalette(dataRes()), mStyleSheets(dataRes()),
     qtArgC(0), qtArgEnd(0), splashTp(SPLSH_NULL), splash(NULL), splashTm(0)
 {
@@ -223,13 +223,13 @@ void TUIMod::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file
-    setStartMod(TBDS::genPrmGet(nodePath()+"StartMod",startMod()));
-    setCloseToTray(s2i(TBDS::genPrmGet(nodePath()+"CloseToTray",i2s(closeToTray()))));
+    setStartMod(TBDS::genPrmGet(nodePath()+"StartMod"));
+    setCloseToTray(s2i(TBDS::genPrmGet(nodePath()+"CloseToTray",i2s(DEF_CloseToTray))));
     sessCntr(true);
-    setStyle(TBDS::genPrmGet(nodePath()+"Style",style()));
-    setFont(TBDS::genPrmGet(nodePath()+"Font",font()));
-    setPalette(TBDS::genPrmGet(nodePath()+"Palette",palette()));
-    setStyleSheets(TBDS::genPrmGet(nodePath()+"StyleSheets",styleSheets()));
+    setStyle(TBDS::genPrmGet(nodePath()+"Style"));
+    setFont(TBDS::genPrmGet(nodePath()+"Font"));
+    setPalette(TBDS::genPrmGet(nodePath()+"Palette"));
+    setStyleSheets(TBDS::genPrmGet(nodePath()+"StyleSheets"));
 }
 
 void TUIMod::save_( )
@@ -249,7 +249,7 @@ void TUIMod::save_( )
 
 int TUIMod::sessCntr( bool reload )
 {
-    if(reload) mSessCntr = s2i(TBDS::genPrmGet(nodePath()+"SessCntr",i2s(mSessCntr)));
+    if(reload) mSessCntr = s2i(TBDS::genPrmGet(nodePath()+"SessCntr",i2s(DEF_SessCntr)));
 
     return mSessCntr;
 }

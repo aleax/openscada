@@ -38,6 +38,16 @@
 
 #define HalfDivMinWin	5
 
+#define DEF_vShowTrnd	"0"
+#define DEF_vaTm	"0"
+#define DEF_vaTm_u	"0"
+#define DEF_vaSize	"1"
+#define DEF_vArch	""
+#define DEF_vPctW	"650"
+#define DEF_vPctH	"230"
+#define DEF_vMax	"0"
+#define DEF_vMin	"0"
+
 using namespace OSCADA;
 
 //*************************************************
@@ -2066,7 +2076,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 			 "If the value is empty, the request will be processed for the buffer and for all archivers.\n"
 			 "If \"<buffer>\" is specified then the request will be processed only for the archive buffer."));
 	    ctrMkNode("fld",opt,-1,"/val/sw_trend",_("Show trend"),RWRW__,"root",SARH_ID,1,"tp","bool");
-	    if(!s2i(TBDS::genPrmGet(owner().nodePath()+"vShowTrnd","0",opt->attr("user")))) {
+	    if(!s2i(TBDS::genPrmGet(owner().nodePath()+"vShowTrnd",DEF_vShowTrnd,opt->attr("user")))) {
 		if(ctrMkNode("table",opt,-1,"/val/val",_("Table of the values"),R_R___,"root",SARH_ID)) {
 		    ctrMkNode("list",opt,-1,"/val/val/0",_("Time"),R_R___,"root",SARH_ID,1,"tp","time");
 		    ctrMkNode("list",opt,-1,"/val/val/0a",_("mcsec"),R_R___,"root",SARH_ID,1,"tp","dec");
@@ -2153,42 +2163,42 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/val/tm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD)) {
-	    opt->setText(TBDS::genPrmGet(owner().nodePath()+"vaTm","0",opt->attr("user")));
+	    opt->setText(TBDS::genPrmGet(owner().nodePath()+"vaTm",DEF_vaTm,opt->attr("user")));
 	    if(!s2i(opt->text())) opt->setText(i2s(TSYS::curTime()/1000000));
 	}
 	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))
 	    TBDS::genPrmSet(owner().nodePath()+"vaTm",(s2i(opt->text())>=TSYS::curTime()/1000000)?"0":opt->text(),opt->attr("user"));
     }
     else if(a_path == "/val/utm") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"vaTm_u",DEF_vaTm_u,opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"vaTm_u",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/val/size") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"vaSize","1",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"vaSize",DEF_vaSize,opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"vaSize",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/val/arch") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"vArch","",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"vArch",DEF_vArch,opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"vArch",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/val/sw_trend") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"vShowTrnd","0",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"vShowTrnd",DEF_vShowTrnd,opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"vShowTrnd",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/val/pct_w") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"vPctW","650",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"vPctW",DEF_vPctW,opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"vPctW",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/val/pct_h") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"vPctH","230",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"vPctH",DEF_vPctH,opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"vPctH",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/val/max") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"vMax","0",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"vMax",DEF_vMax,opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"vMax",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/val/min") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"vMin","0",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"vMin",DEF_vMin,opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"vMin",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/val/lstAVal" && ctrChkNode(opt,"get",R_R___)) {
@@ -2203,13 +2213,13 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path == "/val/val" && ctrChkNode(opt,"get",R_R___,"root",SARH_ID,SEC_RD)) {
-	int64_t end = (int64_t)s2i(TBDS::genPrmGet(owner().nodePath()+"vaTm","0",opt->attr("user")))*1000000;
+	int64_t end = (int64_t)s2i(TBDS::genPrmGet(owner().nodePath()+"vaTm",DEF_vaTm,opt->attr("user")))*1000000;
 	if(!(end/1000000)) end = (TSYS::curTime()/1000000) * 1000000;
-	end += s2i(TBDS::genPrmGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")));
-	int64_t beg = end - (int64_t)(s2r(TBDS::genPrmGet(owner().nodePath()+"vaSize","1",opt->attr("user")))*1e6);
+	end += s2i(TBDS::genPrmGet(owner().nodePath()+"vaTm_u",DEF_vaTm_u,opt->attr("user")));
+	int64_t beg = end - (int64_t)(s2r(TBDS::genPrmGet(owner().nodePath()+"vaSize",DEF_vaSize,opt->attr("user")))*1e6);
 
 	TValBuf buf(TFld::String, 0, 0, false, true);
-	getVals(buf, beg, end, TBDS::genPrmGet(owner().nodePath()+"vArch","",opt->attr("user")), 2000);
+	getVals(buf, beg, end, TBDS::genPrmGet(owner().nodePath()+"vArch",DEF_vArch,opt->attr("user")), 2000);
 
 	XMLNode *n_tm   = ctrMkNode("list",opt,-1,"/val/val/0","",0440);
 	XMLNode *n_utm	= ctrMkNode("list",opt,-1,"/val/val/0a","",0440);
@@ -2226,17 +2236,18 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    }
     }
     else if(a_path == "/val/trend" && ctrChkNode(opt,"get",R_R_R_,"root",SARH_ID,SEC_RD)) {
-	int vPctW = vmin(1024, vmax(100,s2i(TBDS::genPrmGet(owner().nodePath()+"vPctW","650",opt->attr("user")))));
-	int vPctH = vmin(800, vmax(50,s2i(TBDS::genPrmGet(owner().nodePath()+"vPctH","230",opt->attr("user")))));
-	double vMax = s2r(TBDS::genPrmGet(owner().nodePath()+"vMax","0",opt->attr("user")));
-	double vMin = s2r(TBDS::genPrmGet(owner().nodePath()+"vMin","0",opt->attr("user")));
+	int vPctW = vmin(1024, vmax(100,s2i(TBDS::genPrmGet(owner().nodePath()+"vPctW",DEF_vPctW,opt->attr("user")))));
+	int vPctH = vmin(800, vmax(50,s2i(TBDS::genPrmGet(owner().nodePath()+"vPctH",DEF_vPctH,opt->attr("user")))));
+	double vMax = s2r(TBDS::genPrmGet(owner().nodePath()+"vMax",DEF_vMax,opt->attr("user")));
+	double vMin = s2r(TBDS::genPrmGet(owner().nodePath()+"vMin",DEF_vMin,opt->attr("user")));
 	int64_t end = (int64_t) s2i(TBDS::genPrmGet(owner().nodePath()+"vaTm",i2s(TSYS::curTime()/1000000),opt->attr("user")))*1000000+
-				s2i(TBDS::genPrmGet(owner().nodePath()+"vaTm_u","0",opt->attr("user")));
+				s2i(TBDS::genPrmGet(owner().nodePath()+"vaTm_u",DEF_vaTm_u,opt->attr("user")));
 	if(!(end/1000000))	end = (TSYS::curTime()/1000000) * 1000000;
-	int64_t beg = end - (int64_t)(s2r(TBDS::genPrmGet(owner().nodePath()+"vaSize","1",opt->attr("user")))*1e6);
+	int64_t beg = end - (int64_t)(s2r(TBDS::genPrmGet(owner().nodePath()+"vaSize",DEF_vaSize,opt->attr("user")))*1e6);
 
 	string tp = "png";
-	opt->setText(TSYS::strEncode(makeTrendImg(beg,end,TBDS::genPrmGet(owner().nodePath()+"vArch","",opt->attr("user")),vPctW,vPctH,vMax,vMin,&tp),TSYS::base64));
+	opt->setText(TSYS::strEncode(makeTrendImg(beg,end,TBDS::genPrmGet(owner().nodePath()+"vArch",DEF_vArch,opt->attr("user")),
+							vPctW,vPctH,vMax,vMin,&tp),TSYS::base64));
 	opt->setAttr("tp", tp);
     }
     else TCntrNode::cntrCmdProc(opt);

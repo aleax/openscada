@@ -53,6 +53,8 @@
 #define DB_CFG		"<cfg>"
 #define DB_NULL		"<NULL>"
 
+#define DEF_ModPath	oscd_moddir_full
+
 #include <sys/types.h>
 #include <signal.h>
 #include <unistd.h>
