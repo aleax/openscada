@@ -36,7 +36,7 @@
 #define MOD_NAME	_("Fastwel IO")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.22"
+#define MOD_VER		"0.1.23"
 #define AUTHORS		_("Maxim Kochetkov")
 #define DESCRIPTION	_("Fastwel IO FBUS client implementation")
 #define LICENSE		"GPL2"
@@ -103,7 +103,7 @@ void TTpContr::FBUS_Start()
     ResAlloc res(FBUSRes, true);
     if(FBUS_initOK) FBUS_finish();
     if(fbusInitialize() != FBUS_RES_OK) {
-	throw TError(nodePath().c_str(), _("FBUS init failed."));
+	throw TError(nodePath(), _("FBUS init failed."));
     } else {
 	FBUS_initOK = true;
 	for(int i = 0; i < FBUS_MAX_NET; i++) {

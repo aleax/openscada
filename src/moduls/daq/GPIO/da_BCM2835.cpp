@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.GPIO file: da_BCM2835.cpp
 /***************************************************************************
- *   Copyright (C) 2018-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2018-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -92,10 +92,10 @@ void BCM2835::enable( TParamContr *ip )
     TMdPrm *p = (TMdPrm *)ip;
 
     if(!bcm2835_init())
-	throw TError(p->nodePath().c_str(), _("Init bcm2835 library error whether that is not bcm2835 or there is not access."));
+	throw TError(p->nodePath(), _("Init bcm2835 library error whether that is not bcm2835 or there is not access."));
 
     MtxAlloc res(p->owner().enRes(), true);
-    if(use)	throw TError(p->nodePath().c_str(), _("BCM2835 GPIO is already used."));
+    if(use)	throw TError(p->nodePath(), _("BCM2835 GPIO is already used."));
     use = true;
 
     //Init for loading the direction and reversion flag

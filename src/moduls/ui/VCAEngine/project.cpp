@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: project.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -516,9 +516,10 @@ string Project::stlPropGet( const string &pid, const string &def, int sid )
 
 bool Project::stlPropSet( const string &pid, const string &vl, int sid )
 {
-    ResAlloc res(mStRes, true);
     if(sid < 0) sid = stlCurent();
     if(pid.empty() || sid < 0 || sid >= stlSize() || pid == STL_PRM_NM) return false;
+
+    ResAlloc res(mStRes, true);
     map<string, vector<string> >::iterator iStPrp = mStProp.find(pid);
     if(iStPrp == mStProp.end()) return false;
     while(sid >= (int)iStPrp->second.size()) iStPrp->second.push_back("");
@@ -888,7 +889,7 @@ void Project::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/mess/tm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SUI_ID,SEC_RD)) {
-	    opt->setText(TBDS::genPrmGet(mod->nodePath()+"messTm","0",opt->attr("user")));
+	    opt->setText(TBDS::genPrmGet(mod->nodePath()+"messTm",DEF_messTm,opt->attr("user")));
 	    if(!s2i(opt->text())) opt->setText(i2s(time(NULL)));
 	}
 	if(ctrChkNode(opt,"set",RWRW__,"root",SUI_ID,SEC_WR))
@@ -896,15 +897,15 @@ void Project::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/mess/size") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
-	    opt->setText(TBDS::genPrmGet(mod->nodePath()+"messSize","600",opt->attr("user")));
+	    opt->setText(TBDS::genPrmGet(mod->nodePath()+"messSize",DEF_messSize,opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
 	    TBDS::genPrmSet(mod->nodePath()+"messSize",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/mess/mess" && ctrChkNode(opt,"get",R_R___,"root",SUI_ID)) {
 	vector<TMess::SRec> rec;
-	time_t gtm = s2i(TBDS::genPrmGet(mod->nodePath()+"messTm","0",opt->attr("user")));
+	time_t gtm = s2i(TBDS::genPrmGet(mod->nodePath()+"messTm",DEF_messTm,opt->attr("user")));
 	if(!gtm) gtm = time(NULL);
-	int gsz = s2i(TBDS::genPrmGet(mod->nodePath()+"messSize","600",opt->attr("user")));
+	int gsz = s2i(TBDS::genPrmGet(mod->nodePath()+"messSize",DEF_messSize,opt->attr("user")));
 	SYS->archive().at().messGet(gtm-gsz, gtm, rec, "/("+catsPat()+")/", Mess->messLevel(), "");
 
 	XMLNode *n_tm   = ctrMkNode("list",opt,-1,"/mess/mess/0","",R_R___,"root",SUI_ID);
@@ -982,7 +983,7 @@ TCntrNode &Page::operator=( const TCntrNode &node )
 	}
 
 	if(lnkErrEls.size())
-	    throw TError(Engine::NotResLnk, nodePath().c_str(), "The copying operation is terminated by the not resolved links.");
+	    throw TError(Engine::NotResLnk, nodePath(), "The copying operation is terminated by the not resolved links.");
     }
 
     return *this;
@@ -1263,7 +1264,7 @@ void Page::loadIO( )
 	    if(wdgPresent(sid)) wdgDel(sid);
 	    continue;
 	}
-	// Lost inherited widget due to it removing into the parent
+	// Lost inherited widget due to it removing from the parent
 	else if((mParentAddrPrev.empty() || spar.find(mParentAddrPrev) != 0) &&	//!!!! Do not remove at presence in the previous parent
 		mod->nodeAt(spar,0,0,0,true).freeStat() &&
 		sid.size() < spar.size() && spar.compare(spar.size()-sid.size(),sid.size(),sid) == 0)
@@ -1369,7 +1370,7 @@ void Page::setEnable( bool val, bool force )
 
     if(val && !parent().freeStat() && parent().at().rootId() != "Box" && !(prjFlags()&Page::Link)) {
 	Widget::setEnable(false);
-	throw TError(nodePath().c_str(),_("As a page, only a box based widget can be used!"));
+	throw TError(nodePath(), _("As a page, only a box based widget can be used!"));
     }
 
     if(val) {
@@ -1405,7 +1406,7 @@ void Page::setEnable( bool val, bool force )
 
 void Page::wdgAdd( const string &wid, const string &name, const string &ipath, bool force )
 {
-    if(!isContainer())  throw TError(nodePath().c_str(),_("The widget is not a container!"));
+    if(!isContainer())  throw TError(nodePath(), _("The widget is not a container!"));
     if(wdgPresent(wid)) throw err_sys(_("The widget '%s' is already present!"), wid.c_str());
 
     bool toRestoreInher = false;
@@ -1472,7 +1473,7 @@ string Page::pageAdd( const string &iid, const string &name, const string &orig 
 {
     if(pagePresent(iid)) throw err_sys(_("The page '%s' is already present!"), iid.c_str());
     if(!(prjFlags()&(Page::Container|Page::Template)))
-	throw TError(Engine::NoContainer, nodePath().c_str(), _("Page is not a container or a template!"));
+	throw TError(Engine::NoContainer, nodePath(), _("Page is not a container or a template!"));
 
     string id = chldAdd(mPage, new Page(TSYS::strEncode(sTrm(iid),TSYS::oscdID),orig));
     pageAt(id).at().setName(name);
@@ -1485,7 +1486,7 @@ void Page::pageAdd( Page *iwdg )
     if(pagePresent(iwdg->id()))	delete iwdg;
     if(!(prjFlags()&(Page::Container|Page::Template))) {
 	delete iwdg;
-	throw TError(Engine::NoContainer, nodePath().c_str(), _("Page is not a container or a template!"));
+	throw TError(Engine::NoContainer, nodePath(), _("Page is not a container or a template!"));
     } else chldAdd(mPage, iwdg);
 }
 
@@ -1629,9 +1630,9 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	    nodeList(ls, "pg_");
 	    if(ls.size()) {
 		if(difFlgs&Page::Template && !(newFlgs&Page::Template))
-		    throw TError(TError::Core_CntrWarning, nodePath().c_str(), _("Consider to remove included pages linked to this page as a template due to it is not the template more!"));
+		    throw TError(TError::Core_CntrWarning, nodePath(), _("Consider to remove included pages linked to this page as a template due to it is not the template more!"));
 		if(difFlgs&Page::Container && !(newFlgs&Page::Container))
-		    throw TError(TError::Core_CntrWarning, nodePath().c_str(), _("Consider to remove included pages due to this page is not a container more!"));
+		    throw TError(TError::Core_CntrWarning, nodePath(), _("Consider to remove included pages due to this page is not a container more!"));
 	    }
 	}
     }
@@ -1721,7 +1722,7 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 
 	bool is_pl = (a_path.substr(0,14) == "/links/lnk/pl_");
 	if(!(srcwdg.at().attrAt(nattr).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut))) {
-	    if(!is_pl) throw TError(nodePath().c_str(),_("The variable is not a link"));
+	    if(!is_pl) throw TError(nodePath(), _("The variable is not a link"));
 	    vector<string> a_ls;
 	    string p_nm = TSYS::strSepParse(srcwdg.at().attrAt(nattr).at().cfgTempl(),0,'|');
 	    srcwdg.at().attrList(a_ls);
@@ -1730,7 +1731,7 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[iA]).at().cfgTempl(),0,'|') &&
 		    !(srcwdg.at().attrAt(a_ls[iA]).at().flgSelf()&Attr::CfgConst))
 		{ nattr = a_ls[iA]; break; }
-	    if(iA >= a_ls.size()) throw TError(nodePath().c_str(),_("The variable is not a link"));
+	    if(iA >= a_ls.size()) throw TError(nodePath(), _("The variable is not a link"));
 	}
 
 	string m_prm = srcwdg.at().attrAt(nattr).at().cfgVal();

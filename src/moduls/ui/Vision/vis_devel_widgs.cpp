@@ -195,7 +195,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 	    // Process next attribute
 	    if(curit->child(idst[it_lev])->type() == Item::Attr) {
 		string it_id = curit->child(idst[it_lev])->id();
-		//  Find into present attributes list
+		//  Find in the present attributes list
 		unsigned iA;
 		for(iA = 0; iA < root->childSize(); iA++)
 		    if(root->childGet(iA)->attr("id") == it_id)
@@ -1442,7 +1442,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
     string t_el, simg;
     QImage img;
 
-    //Get elements number into VCA item
+    //Get elements number in the VCA item
     int vca_lev = 0;
     for(int off = 0; !(t_el=TSYS::pathLev(vca_it,0,true,&off)).empty(); ) vca_lev++;
 

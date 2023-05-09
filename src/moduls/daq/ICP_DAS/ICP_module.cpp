@@ -39,7 +39,7 @@ extern "C"
 #define MOD_NAME	trS("ICP DAS hardware")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.9.8"
+#define MOD_VER		"1.9.9"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides implementation for 'ICP DAS' hardware support.\
  Includes main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus.")
@@ -193,8 +193,8 @@ void TMdContr::start_( )
 
     if(mBus == 0) {
 	MtxAlloc res(pBusRes, true);
-	if(Open_SlotAll() > 0) throw TError(nodePath().c_str(), _("Open All LP-slots error."));
-	if(Open_Slot(9) > 0) { Close_SlotAll(); throw TError(nodePath().c_str(), _("Open LP-slot 9 error.")); }
+	if(Open_SlotAll() > 0) throw TError(nodePath(), _("Open All LP-slots error."));
+	if(Open_Slot(9) > 0) { Close_SlotAll(); throw TError(nodePath(), _("Open LP-slot 9 error.")); }
     }
 
     try {
@@ -483,7 +483,7 @@ void TMdPrm::enable( )
 {
     if(enableStat())	return;
 
-    if(!da) throw TError(nodePath().c_str(), _("No a device selected."));
+    if(!da) throw TError(nodePath(), _("No a device selected."));
 
     TParamContr::enable();
 

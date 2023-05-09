@@ -1,3 +1,39 @@
+2023-05-09 Roman 0.9.6
+- FIX:LibsDB.{OscadaLibs,vcaBase}: Some automatic fixed for the translations.
+- !!!!:SYS,UI.{QTCfg,WebCfgD}: The Control Requests code TError::Core_CntrWarning expanded
+    for the warning messages pass in the attribute "mtxt" with the main data storing.
+- SYS,Security,UI.VCAEngine.Libs: Adapted to load empty objects (automaticly created) from the first source with such data,
+    when the source can be inaccessible at the main starting time.
+- FIX:SYS,Archive.FSArch,DB.LDAP,DAQ.FT3: Some fixes of building with the "musl" C Library and closedir() call for NULL,
+    from Sergey Dudanov.
+- Protocol.UserProtocol,UI.{VCAEngine,WebUser}: Prevented the RWLock potencial recursion and deadlocks
+    at using pure pthread_rwlock.
+- !!!!:SYS: The translation page moved in the notification about fixes to pass them to the user through
+	    the expanded Control Interface warnings.
+	The flag "chkAndFix" of the translation page split to "chkAndFix" and "chkAndFixMB".
+	The translation configuration fields TrPassN, TrChkAndFix, TrChkAndFixMB moved to the dynamic variables due to
+	    there is no need of their store.
+	The translation mark "<<<Unmatched sources>>>" renamed to "<<<SEVERAL VARIANTS>>>".
+    !!!!: The TError object expanded by new constructors with the "const string &" type arguments
+	for no limiting strings and the convenience.
+    !!!!: All system (SYS) configuration parameters adapted for true handling the default value.
+    !: The function TCntrNode::setStorage() of the storages processing expanded by just replacing of the empty queue.
+    FIX: Fixed in many places of the "into" word using.
+- !!:Archives: The "Messages" tab of the "Archive-History" subsystem appended by a function of automatic clearing old Alarms
+	from the Active Alarms Table at the specified days depth.
+    FSArch,DBArch: The automatic creation value archives are setting now with the empty storage.
+- Transports: Table of the OpenSCADA external hosts returned back for the Transport.Serial selection here.
+- !!!!:FIX:Protocol.SelfSystem: Significantly reviewed and fixed in the external-output connections implementation,
+	appended by checking limit the header size.
+    Was set to response by compressed (with level -1) packages at the compressed requests.
+    Configuration fields of the compression merged to one row.
+    Error messages about limiting the authentications moved to the Debug level.
+- !!:Protocol.UserProtocol: The input part expanded by a possibility of schedule the user procedures call in the service cycle,
+    for the background processing of some data; the Object's attribute "This (this)" was appended here also.
+- !!:UI.{QTCfg.WebCfgD}: Unified in notification the errors of the Control Interface during improvement
+    the code TError::Core_CntrWarning and QMessageBox appended of the detailed text at the message longer for 255.
+
+
 2023-04-18 Roman 0.9.6
 - FIX:LibsDB.vcaBase: Finishing the word "Quittance" fixing to Quietance.
     FIX:wlb_doc.docUsersSet: Appended by encoding the value fields also, due to there can be not just digits now.

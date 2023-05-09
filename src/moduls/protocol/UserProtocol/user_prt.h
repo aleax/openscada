@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.UserProtocol file: user_prt.h
 /***************************************************************************
- *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -116,6 +116,8 @@ class UserPrt : public TCntrNode, public TConfig, public TPrmTempl::Impl
 	bool inMess( const string &reqst, string &answer, TProtIn *prt );
 	void outMess( XMLNode &io, TTransportOut &tro );
 
+	void perSYSCall( );
+
 	TProt &owner( ) const;
 
 	//Attributes
@@ -145,7 +147,7 @@ class UserPrt : public TCntrNode, public TConfig, public TPrmTempl::Impl
 	string	mDB, mWorkOutProg;
 
 	//bool	isDAQTmpl;	// DAQ template used for the input part
-	int	ioTrIn, ioTrOut, ioRez, ioReq, ioAnsw, ioSend, ioIO;
+	int	ioTrIn, ioTrOut, ioRez, ioReq, ioAnsw, ioSend, ioThis, ioSchedCall, ioIO;
 
 	bool	chkLnkNeed;	//Check lnk need flag
 
@@ -190,6 +192,8 @@ class TProt: public TProtocol
 	TProtocolIn *in_open( const string &name );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
+	void perSYSCall( unsigned int cnt );
 
 	//Attributes
 	int	mPrtU;

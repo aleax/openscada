@@ -250,7 +250,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     if(!s2i(SYS->cmdOpt("showWin"))) resize(1024, 768);
 
     //Establish connection to the remote station
-    //?!?! Disabled by default for the requesting into different threads before resolving the mouse release event in the same widget processing the press event
+    //?!?! Disabled by default for the requesting in different threads before resolving the mouse release event in the same widget processing the press event
     if(SYS->cmdOptPresent("ReqInDifThread")) initHost();
 
     initSess(prjSes_it, crSessForce);	//init session
@@ -1647,7 +1647,7 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	if(master_pg) {
 	    XMLNode req("close"); req.setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("pg",master_pg->id());
 	    cntrIfCmd(req);
-	    //!!!! Without the next rows the master page removing performs just into setWidget() of the scroll area
+	    //!!!! Without the next rows the master page removing performs just in setWidget() of the scroll area
 	    ((QScrollArea*)centralWidget())->takeWidget();
 	    master_pg->deleteLater();
 	}

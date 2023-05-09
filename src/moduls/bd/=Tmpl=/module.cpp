@@ -158,7 +158,7 @@ TTable *MBD::openTable( const string &inm, bool create )
 
 void MBD::transOpen( )
 {
-    //Check for limit into one trinsaction
+    //Check for limit in one trinsaction
     if(reqCnt > 1000) transCommit();
 
     connRes.lock();

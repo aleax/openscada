@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.Comedi file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2022 by Roman Savochenko                           *
+ *   Copyright (C) 2012-2023 by Roman Savochenko                           *
  *   roman@oscada.org                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -37,7 +37,7 @@
 #define MOD_NAME	trS("DAQ boards by Comedi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.21"
+#define MOD_VER		"1.0.22"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org).")
 #define LICENSE		"GPL2"
@@ -489,7 +489,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     if(a_path == "/prm/cfg/ADDR" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR) && enableStat())
-	throw TError(nodePath().c_str(),"Parameter is enabled.");
+	throw TError(nodePath(), "Parameter is enabled.");
     else if(a_path == "/prm/cfg/devLst" && ctrChkNode(opt)) {
 	DIR *IdDir = opendir("/dev");
 	if(IdDir) {

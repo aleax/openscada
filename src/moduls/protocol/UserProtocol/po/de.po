@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the OpenSCADA.Protocol.UserProtocol package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2010.
-# Roman Savochenko <roman@oscada.org>, 2015-2018.
+# Roman Savochenko <roman@oscada.org>, 2015-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.UserProtocol 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-24 20:29+0200\n"
+"POT-Creation-Date: 2023-04-29 16:03+0300\n"
 "PO-Revision-Date: 2010-09-07 19:16+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: Russian <de@li.org>\n"
@@ -94,7 +94,8 @@ msgid ""
 "Input part: rez=%d, request=%d, answer=%d. Output part: tr=%d, io=%d.\n"
 "See to the documentation and append their!"
 msgstr ""
-"Die Vorlage '%s' verfügt nicht über ein oder mehrere erforderliche Attribute im erforderlichen Typ: rez=%d, HTTPreq=%d, url=%d, HTTPvars=%d.\n"
+"Die Vorlage '%s' verfügt nicht über ein oder mehrere erforderliche Attribute "
+"im erforderlichen Typ: rez=%d, HTTPreq=%d, url=%d, HTTPvars=%d.\n"
 "Eingabeteil: rez=%d, request=%d, answer=%d. Ausgangsteil: tr=%d, io=%d.\n"
 "Sehen Sie sich die Dokumentation an und hängen Sie deren an!"
 
@@ -112,6 +113,12 @@ msgstr "Absender eingeben"
 
 msgid "Transport"
 msgstr "Transport"
+
+msgid "This object"
+msgstr "Dieses Objekt"
+
+msgid "Scheduling the next service call"
+msgstr "Terminierung des nächsten Serviceeinsatzes"
 
 msgid "Output IO"
 msgstr "Ausgabe IO"
@@ -141,6 +148,10 @@ msgstr "Aktiviert"
 msgid "DB"
 msgstr "DB"
 
+#, c-format
+msgid "Remove from '%s'"
+msgstr "Entfernen von '%s'"
+
 msgid "Configuration"
 msgstr "Konfiguration"
 
@@ -157,15 +168,15 @@ msgid "Input"
 msgstr "Eingang"
 
 msgid ""
-"Use this for the poolling mode enabling through setting this timeout to a "
+"Use this for the polling mode enabling through setting this timeout to a "
 "nonzero value.\n"
-"Into the poolling mode an input transport will call this protocol with the "
+"In the polling mode an input transport will call this protocol with the "
 "empty message at no request during this timeout."
 msgstr ""
-"Verwenden Sie diese Option für den Poolling-Modus, indem Sie das Zeitlimit "
-"auf einen Wert ungleich Null setzen.\n"
-"Im poolling-Modus ruft ein Eingabe-Transport dieses Protokoll ohne leere "
-"Anforderung während dieses Timeouts auf."
+"Verwenden Sie dies für die Aktivierung des Abfragemodus, indem Sie dieses "
+"Timeout auf einen Wert ungleich Null setzen.\n"
+"Im Polling-Modus ruft ein Eingangstransport dieses Protokoll während dieser "
+"Zeitüberschreitung ohne Anforderung mit der leeren Nachricht auf."
 
 msgid "IO"
 msgstr "IO"
@@ -183,7 +194,10 @@ msgid ""
 "   'request' - request message;\n"
 "   'answer' - answer message;\n"
 "   'sender' - request sender;\n"
-"   'tr' - sender transport."
+"   'tr' - sender transport;\n"
+"   'this' - pointer to object of this protocol;\n"
+"   'schedCall' - scheduling the next service call in the Integer type for "
+"seconds."
 msgstr ""
 "Folgende Attribute sind für die Bearbeitung von Inputsanfragen bestimmt:\n"
 "   'rez' - Ergebnis der Bearbeitung (false - volle Anfrage; true - unvolle "
@@ -191,7 +205,10 @@ msgstr ""
 "   'request' - Anfragenachricht;\n"
 "   'answer' - Antwortsnachricht;\n"
 "   'sender' - Absender der Anfrage;\n"
-"   'tr' - Absender Transport."
+"   'tr' - Absender Transport;\n"
+"   'this' - Zeiger auf Objekt dieses Protokolls;\n"
+"   'schedCall' - Planen des nächsten Serviceaufrufs im Integer-Typ für "
+"Sekunden."
 
 msgid "Output"
 msgstr "Output"

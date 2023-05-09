@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tuis.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,6 +31,10 @@
 # include <gd.h>
 #endif
 
+
+#define DEF_FontSnthHglCode	"monospace"
+
+
 using namespace OSCADA;
 
 //*************************************************
@@ -38,7 +42,7 @@ using namespace OSCADA;
 //*************************************************
 TUIS::TUIS( ) : TSubSYS(SUI_ID, true), mFontSnthHglCode(dataRes())
 {
-    mFontSnthHglCode = "monospace";
+    mFontSnthHglCode = DEF_FontSnthHglCode;
 
 #if HAVE_GD_FORCE
     gdFTUseFontConfig(1);
@@ -59,7 +63,7 @@ void TUIS::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file
-    setFontSnthHglCode(TBDS::genPrmGet(nodePath()+"FontSnthHglCode",fontSnthHglCode()));
+    setFontSnthHglCode(TBDS::genPrmGet(nodePath()+"FontSnthHglCode",DEF_FontSnthHglCode));
 }
 
 void TUIS::save_( )
@@ -138,7 +142,7 @@ string TUIS::docGet( const string &iinm, string *tp, unsigned opt )
 	}
     }
 
-    //Use the online document into the network
+    //Use the online document in the network
     if(rez.empty() && (nm=TSYS::strParse(inm,1,"|")).size()) {
 	const char  *docHost = "oscada.org/wiki/Special:MyLanguage";
 

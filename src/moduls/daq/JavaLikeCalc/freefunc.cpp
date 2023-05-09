@@ -363,7 +363,7 @@ void Func::progCompile( )
 	buildClear();
 	workClear();
 	runSt = false;
-	throw TError(nodePath().c_str(), "%s", tErr.c_str());
+	throw TError(nodePath(), tErr);
     }
     cntrInF = mInFncs.size();
 
@@ -624,7 +624,7 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
 	    break;
 	case Reg::String: {
 	    string sval = *rez->val().s;
-	    //if(sval.size() > 255) throw TError(nodePath().c_str(),_("String-constant size is more for 255 symbols."));
+	    //if(sval.size() > 255) throw TError(nodePath(), _("String-constant size is more for 255 symbols."));
 	    prg += (uint8_t)Reg::MviS;
 	    prg.append((char*)&addr, sizeof(uint16_t));
 	    prg += (uint8_t)vmin(255, sval.size());
@@ -670,7 +670,7 @@ Reg *Func::cdMviObject( )
 
 Reg *Func::cdMviArray( int p_cnt )
 {
-    if(p_cnt > 255) throw TError(nodePath().c_str(),_("Array has more than 255 elements."));
+    if(p_cnt > 255) throw TError(nodePath(), _("Array has more than 255 elements."));
     deque<int> p_pos;
 
     //Mvi all parameters
@@ -699,7 +699,7 @@ Reg *Func::cdMviArray( int p_cnt )
 
 Reg *Func::cdMviRegExp( int p_cnt )
 {
-    if(p_cnt < 1 || p_cnt > 2) throw TError(nodePath().c_str(),_("RegExp requires one or two parameters."));
+    if(p_cnt < 1 || p_cnt > 2) throw TError(nodePath(), _("RegExp requires one or two parameters."));
 
     Reg *rg_expr = NULL;
     Reg *rg_arg  = NULL;
@@ -1139,7 +1139,7 @@ Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
 
     //if( (prm1 && !prm1->objEl() && prm1->vType(this) == Reg::String) ||
     //	(prm2 && !prm2->objEl() && prm2->vType(this) == Reg::String) )
-    //	throw TError(nodePath().c_str(),_("Built-in functions don't support the string type"));
+    //	throw TError(nodePath(), _("Built-in functions don't support the string type"));
 
     //Free parameter's registers
     if(prm1)	{ prm1 = cdMvi(prm1); p1_pos = prm1->pos(); }
@@ -1258,8 +1258,8 @@ Reg *Func::cdIntFnc( int fOff, int pCnt, bool proc )
 
 Reg *Func::cdObjFnc( Reg *obj, const string &fNm, int p_cnt )
 {
-    if(fNm.size() > 254)throw TError(nodePath().c_str(), _("Function name is longer than 254."));
-    if(p_cnt > 255)	throw TError(nodePath().c_str(), _("Object function contains more than 255 parameters."));
+    if(fNm.size() > 254)throw TError(nodePath(), _("Function name is longer than 254."));
+    if(p_cnt > 255)	throw TError(nodePath(), _("Object function contains more than 255 parameters."));
 
     Reg *rez = NULL;
     deque<int> p_pos;
@@ -1509,9 +1509,9 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    sp = vl.getS().rfind(prms[0].getS(),sp);
 		    return (sp==string::npos) ? -1 : (int)sp;
 		}
-		// int search( string pat, string flg = "" ); - search into the string by pattern 'pat' and flags 'flg'.
+		// int search( string pat, string flg = "" ); - search in the string by pattern 'pat' and flags 'flg'.
 		//       Return found substring position or -1 for else.
-		// int search( RegExp pat ); - search into the string by RegExp 'pat'.
+		// int search( RegExp pat ); - search in the string by RegExp 'pat'.
 		//       Return found substring position or -1 for else.
 		//  pat - regular expression pattern;
 		//  flg - regular expression flags.
@@ -1576,12 +1576,12 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		//  substr - substring for insert
 		if(prop == "insert" && prms.size() >= 2)
 		    return vl.getS().insert(vmax(0,vmin(vl.getS().size(),(unsigned)prms[0].getI())), prms[1].getS() );
-		// string replace( int pos, int n, string str ) - replace substring into position <pos> and length <n> to string <str>.
+		// string replace( int pos, int n, string str ) - replace substring in position <pos> and length <n> to string <str>.
 		//  pos - position for start replace
 		//  n - number symbols for replace
 		//  str - string for replace
 		// string replace( string substr, string str ) - replace all substrings <substr> to string <str>.
-		//  substr - substring into all string
+		//  substr - substring in the whole string
 		// string replace( RegExp pat, string str ) - replace substrings by pattern <pat> to string <str>.
 		//  pat - regular expression pattern
 		if(prop == "replace" && prms.size() >= 2) {
@@ -1664,7 +1664,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    if(prms.size() >= 2) { prms[1].setI(off); prms[1].setModify(); }
 		    return rez;
 		}
-		// string path2sep( string sep = "." ) - convert path into this string to separated by <sep> string.
+		// string path2sep( string sep = "." ) - convert path in this string to separated by <sep> string.
 		//  sep - item separator
 		if(prop == "path2sep")
 		    return TSYS::path2sepstr(vl.getS(), (prms.size() && prms[0].getS().size()) ? prms[0].getS()[0] : '.');
@@ -1812,7 +1812,7 @@ AutoHD<TVarObj> Func::getValO( TValFunc *io, RegW &rg )
 		if(io->ioType(rg.val().io) == IO::Object) return io->getO(rg.val().io);
 	    default:	break;
 	}
-	throw TError(nodePath().c_str(),_("Obtaining an object from a non-object register"));
+	throw TError(nodePath(), _("Obtaining an object from a non-object register"));
     }
     else return getVal(io,rg).getO();
 }
@@ -1925,7 +1925,7 @@ void Func::calc( TValFunc *val )
     try {
 	ExecData dt = { SYS->sysTm(), 0 };
 	exec(val, (const uint8_t*)prg.c_str(), dt);
-	if(dt.flg&0x08) throw TError(nodePath().c_str(),_("Function is interrupted by an error"));
+	if(dt.flg&0x08) throw TError(nodePath(), _("Function is interrupted by an error"));
     } catch(...) { fRes().resRelease(); throw; }
     fRes().resRelease();
 }
@@ -2957,7 +2957,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 	    }
 	    default:
 		setStart(false);
-		throw TError(nodePath().c_str(),_("Error operation %c(%xh). Function '%s' stopped."),*cprg,*cprg,id().c_str());
+		throw TError(nodePath().c_str(), _("Error operation %c(%xh). Function '%s' stopped."), *cprg, *cprg,id().c_str());
 	}
     }
 }
@@ -3073,7 +3073,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 	    int row = s2i(opt->attr("row"));
 	    int col = s2i(opt->attr("col"));
 	    if((col == 0 || col == 1) && !opt->text().size())
-		throw TError(nodePath().c_str(),_("Empty value is not allowed."));
+		throw TError(nodePath(), _("Empty value is not allowed."));
 	    switch(col) {
 		case 0:	io(row)->setId(opt->text());	break;
 		case 1:	io(row)->setName(trDSet(io(row)->name(),opt->text()));	break;

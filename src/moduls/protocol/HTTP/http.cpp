@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.8.5"
+#define MOD_VER		"3.8.8"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -74,14 +74,14 @@ using namespace PrHTTP;
 //*************************************************
 TProt::TProt( string name ) : TProtocol(MOD_ID), cookieLab(dataRes()),
     mDeny(dataRes()), mAllow(dataRes()), mTmpl(dataRes()), mTmplMainPage(dataRes()), mAllowUsersAuth(dataRes()), mAuthSessDB(dataRes()),
-    mTAuth(10), mSpaceUID(0), lstSesChk(0)
+    mTAuth(DEF_AuthTime), mSpaceUID(DEF_SpaceUID), lstSesChk(0)
 {
     mod = this;
 
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 
     cookieLab = "oscd_UID";
-    mAllow = "*";
+    mAllow = DEF_Allow;
 
     //Structure of a table of the external authentication sessions
     elAuth.fldAdd(new TFld("ID","Identificator",TFld::Integer,TCfg::Key));
@@ -110,14 +110,14 @@ void TProt::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file
-    setDeny(TBDS::genPrmGet(nodePath()+"Deny",deny()));
-    setAllow(TBDS::genPrmGet(nodePath()+"Allow",allow()));
-    setTmpl(TBDS::genPrmGet(nodePath()+"Tmpl",tmpl()));
-    setTmplMainPage(TBDS::genPrmGet(nodePath()+"TmplMainPage",tmplMainPage()));
-    setAuthSessDB(TBDS::genPrmGet(nodePath()+"AuthSessDB",authSessDB()));
-    setSpaceUID(s2i(TBDS::genPrmGet(nodePath()+"SpaceUID",i2s(spaceUID()))));
-    setAllowUsersAuth(TBDS::genPrmGet(nodePath()+"AllowUsersAuth",allowUsersAuth()));
-    setAuthTime(s2i(TBDS::genPrmGet(nodePath()+"AuthTime",i2s(authTime()))));
+    setDeny(TBDS::genPrmGet(nodePath()+"Deny",DEF_Deny));
+    setAllow(TBDS::genPrmGet(nodePath()+"Allow",DEF_Allow));
+    setTmpl(TBDS::genPrmGet(nodePath()+"Tmpl"));
+    setTmplMainPage(TBDS::genPrmGet(nodePath()+"TmplMainPage"));
+    setAuthSessDB(TBDS::genPrmGet(nodePath()+"AuthSessDB"));
+    setSpaceUID(s2i(TBDS::genPrmGet(nodePath()+"SpaceUID",i2s(DEF_SpaceUID))));
+    setAllowUsersAuth(TBDS::genPrmGet(nodePath()+"AllowUsersAuth"));
+    setAuthTime(s2i(TBDS::genPrmGet(nodePath()+"AuthTime",i2s(DEF_AuthTime))));
     // Load auto-login config
     MtxAlloc res(authM, true);
     XMLNode aLogNd("aLog");
@@ -523,7 +523,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	string rcod	= TSYS::strParse(tw, 1, " ");
 	string rstr	= TSYS::strParse(tw, 2, " ");
 	if((protocol != "HTTP/1.0" && protocol != "HTTP/1.1") || rcod.empty() || rstr.empty())
-	    throw TError(nodePath().c_str(),_("Error the HTTP response"));
+	    throw TError(nodePath(), _("Error the HTTP response"));
 	io.setAttr("Protocol",protocol)->setAttr("RezCod",rcod)->setAttr("RezStr",rstr);
 
 	//Parse parameters
@@ -553,7 +553,7 @@ next_ch:
 	    (c_lng == -2 && ((int)(resp.size()-pos) < (ch_ln+5) || resp.find("\x0D\x0A",pos+ch_ln+2) == string::npos))))
 	{
 	    resp_len = tro.messIO(NULL, 0, buf, sizeof(buf));
-	    if(!resp_len) throw TError(nodePath().c_str(), _("Not full response."));
+	    if(!resp_len) throw TError(nodePath(), _("Not full response."));
 	    resp.append(buf, resp_len);
 	}
 
@@ -861,7 +861,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	//Send request to the module
 	try {
 	    AutoHD<TModule> wwwmod = SYS->ui().at().modAt(name_mod);
-	    if(wwwmod.at().modInfo("SubType") != "WWW") throw TError(nodePath().c_str(),_("No WWW subtype module found!"));
+	    if(wwwmod.at().modInfo("SubType") != "WWW") throw TError(nodePath(), _("No WWW subtype module found!"));
 	    if(s2i(wwwmod.at().modInfo("Auth")) && user.empty()) {
 		// Check for auto-login
 		user = mod->autoLogGet(sender);
@@ -936,7 +936,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		    return mNotFull || KeepAlive;
 		}
 	    }
-	    //Check for module's icon and other images into folder "icons/"
+	    //Check for module's icon and other images in the folder "icons/"
 	    if(method == "GET" && name_mod.rfind(".") != string::npos) {
 		string icoTp, ico = TUIS::icoGet(name_mod.substr(0,name_mod.rfind(".")), &icoTp);
 		if(ico.size()) {

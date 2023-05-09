@@ -1,7 +1,7 @@
 
 //OpenSCADA file: terror.h
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -60,6 +60,8 @@ class TError
 	TError( ) : cod(NoCode)	{ }
 	TError( const char *cat, const char *mess, ... );
 	TError( int cod, const char *cat, const char *mess, ... );
+	TError( const string &icat, const string &imess ) : cod(NoCode), cat(icat), mess(imess)	{ }
+	TError( int icod, const string &icat, const string &imess ) : cod(icod), cat(icat), mess(imess)	{ }
 
 	//Attributes
 	int	cod;

@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.12.0"
+#define MOD_VER		"2.12.1"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -234,7 +234,7 @@ void TMdContr::sync( bool onlyPrmLs )
 		if(!prmId.empty() && prmId != "*") prmLs.push_back(daqTp+"/"+cntrId+"/"+prmPath+"prm_"+prmId);	//Concrete parameter to the root
 		else {	//Parameters group to the root
 		    req.clear()->setName("get")->setAttr("path", "/"+st->first+"/DAQ/"+daqTp+"/"+cntrId+"/"+prmPath+"%2fbr%2fprm_");
-		    if(cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(), "%s", req.text().c_str());
+		    if(cntrIfCmd(req)) throw TError(req.attr("mcat"), req.text());
 		    else for(unsigned iCh = 0; iCh < req.childSize(); iCh++)
 			prmLs.push_back(daqTp+"/"+cntrId+"/"+prmPath+"prm_"+req.childGet(iCh)->attr("id"));
 		}
@@ -250,7 +250,7 @@ void TMdContr::sync( bool onlyPrmLs )
 		    nT->childAdd("get")->setAttr("path","%2fprm%2fcfg%2fSHIFR");
 		    nT->childAdd("get")->setAttr("path","%2fprm%2fcfg%2fNAME");
 		    nT->childAdd("get")->setAttr("path","%2fbr%2fprm_")->setAttr("recurs","1");
-		    if(cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(),"%s",req.text().c_str());
+		    if(cntrIfCmd(req)) throw TError(req.attr("mcat"), req.text());
 		    if(s2i(req.attr("rez")) || s2i(req.childGet(0)->attr("rez"))) continue;
 
 		    prmId = req.childGet(0)->text();
@@ -908,7 +908,7 @@ void TMdContr::messSet( const string &mess, int lev, const string &type2Code, co
 		st->second.aWrRes.unlock();
 	    }
 	    else {
-		if(cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(),req.text().c_str());
+		if(cntrIfCmd(req)) throw TError(req.attr("mcat"), req.text());
 		st->second.numWM++;
 	    }
 	} catch(TError &err) { continue; }
@@ -1158,7 +1158,7 @@ void TMdPrm::sync( )
 	    req.childAdd("get")->setAttr("path","%2fprm%2fcfg%2fDESCR");
 	    req.childAdd("list")->setAttr("path","%2fserv%2fattr");
 	    if((rez=owner().cntrIfCmd(req)) == TError::Tr_Connect || rez == TError::Tr_UnknownHost)
-		throw TError(req.attr("mcat").c_str(), req.text().c_str());
+		throw TError(req.attr("mcat"), req.text());
 	    else if(rez || s2i(req.attr("rez")) || s2i(req.childGet(0)->attr("rez"))) {
 		toDisable = true;
 		break; /*continue;*/	//!!!!: No more sense in continue parameters processing which to be disabled
@@ -1234,7 +1234,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 	    XMLNode req("set");
 	    req.clear()->setAttr("path",scntr+"/DAQ/"+prmAddr()+"/%2fserv%2fattr")->
 		childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
-	    if(owner().cntrIfCmd(req))	throw TError(req.attr("mcat").c_str(),req.text().c_str());
+	    if(owner().cntrIfCmd(req))	throw TError(req.attr("mcat"), req.text());
 	    st->second.numW++;
 	} catch(TError &err) { continue; }
     }
@@ -1259,7 +1259,7 @@ bool TMdPrm::cfgChange( TCfg &co, const TVariant &pc )
 		try {
 		    req.clear()->setAttr("path",scntr+"/DAQ/"+prmAddr()+"/%2fserv%2fattr")->
 			childAdd("el")->setAttr("id",co.fld().name())->setText(co.getS());
-		    if(owner().cntrIfCmd(req))	throw TError(req.attr("mcat").c_str(), req.text().c_str());
+		    if(owner().cntrIfCmd(req))	throw TError(req.attr("mcat"), req.text());
 		} catch(TError &err) { continue; }
 	}
     }
@@ -1313,7 +1313,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		for(int cOff = 0; (scntr=TSYS::strParse(stats(),0,";",&cOff)).size(); )
 		    try {
 			req.clear()->setAttr("path", scntr+"/DAQ/"+prmAddr()+"/%2fprm%2fcfg");
-			if(owner().cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(),req.text().c_str());
+			if(owner().cntrIfCmd(req)) throw TError(req.attr("mcat"), req.text());
 			break;
 		    } catch(TError &err) { continue; }
 		if(req.childSize()) {
@@ -1330,7 +1330,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/st/en") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(enableStat()?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
-	    if(!owner().enableStat()) throw TError(nodePath().c_str(),_("Controller is not started!"));
+	    if(!owner().enableStat()) throw TError(nodePath(), _("Controller is not started!"));
 	    else s2i(opt->text())?enable():disable();
 	}
     }

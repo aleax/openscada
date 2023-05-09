@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"5.12.7"
+#define MOD_VER		"5.13.4"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the Qt-based configurator of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -73,13 +73,14 @@ using namespace QTCFG;
 //*************************************************
 //* TUIMod                                        *
 //*************************************************
-TUIMod::TUIMod( string name ) : TUI(MOD_ID), mTmConChk(dataRes()), mStartUser(dataRes()), mStartPath(dataRes()), mToolTipLim(150), mEndRun(false)
+TUIMod::TUIMod( string name ) : TUI(MOD_ID),
+    mTmConChk(dataRes()), mStartUser(dataRes()), mStartPath(dataRes()), mToolTipLim(DEF_ToolTipLim), mEndRun(false)
 {
     mod = this;
 
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 
-    setTmConChk("10:600");
+    setTmConChk(DEF_TmConChk);
 
     //Public export functions
     modFuncReg(new ExpFunc("QIcon icon();","Module Qt-icon",(void(TModule::*)( )) &TUIMod::icon));
@@ -124,10 +125,10 @@ void TUIMod::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file and DB
-    setTmConChk(TBDS::genPrmGet(nodePath()+"TmConChk",tmConChk()));
-    setStartPath(TBDS::genPrmGet(nodePath()+"StartPath",startPath()));
-    setStartUser(TBDS::genPrmGet(nodePath()+"StartUser",startUser()));
-    setToolTipLim(s2i(TBDS::genPrmGet(nodePath()+"ToolTipLim",i2s(toolTipLim()))));
+    setTmConChk(TBDS::genPrmGet(nodePath()+"TmConChk",DEF_TmConChk));
+    setStartPath(TBDS::genPrmGet(nodePath()+"StartPath"));
+    setStartUser(TBDS::genPrmGet(nodePath()+"StartUser"));
+    setToolTipLim(s2i(TBDS::genPrmGet(nodePath()+"ToolTipLim",i2s(DEF_ToolTipLim))));
 }
 
 void TUIMod::save_( )
@@ -274,7 +275,8 @@ void TUIMod::postMess( const string &cat, const string &mess, TUIMod::MessLev ty
     QMessageBox msgBox(parent);
     msgBox.setWindowTitle(MOD_NAME.c_str());
     msgBox.setTextFormat(Qt::PlainText);
-    msgBox.setText(mess.c_str());
+    msgBox.setText(TSYS::strEncode(mess,TSYS::Limit,"255").c_str());
+    if(msgBox.text().toStdString() != mess) msgBox.setDetailedText(mess.c_str());
     switch(type) {
 	case TUIMod::Info:	msgBox.setIcon(QMessageBox::Information);	break;
 	case TUIMod::Warning:	msgBox.setIcon(QMessageBox::Warning);		break;
@@ -282,6 +284,12 @@ void TUIMod::postMess( const string &cat, const string &mess, TUIMod::MessLev ty
 	case TUIMod::Crit:	msgBox.setIcon(QMessageBox::Critical);		break;
     }
     msgBox.exec();
+}
+
+void TUIMod::postMessCntr( const XMLNode &reqO, QWidget *parent )
+{
+    postMess(reqO.attr("mcat"), reqO.attr("mtxt").size()?reqO.attr("mtxt"):reqO.text(),
+	(s2i(reqO.attr("rez")) == TError::Core_CntrWarning)?TUIMod::Warning:TUIMod::Error, parent);
 }
 
 string TUIMod::setHelp( const string &help, const string &addr, QWidget *w )

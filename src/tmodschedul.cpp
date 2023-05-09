@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmodschedul.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,12 +34,18 @@
 #include "tsys.h"
 #include "tmodschedul.h"
 
+
+#define DEF_ChkPer	10
+#define DEF_ModAllow	"*"
+#define DEF_ModDeny	""
+
+
 using namespace OSCADA;
 
 //*************************************************
 //* TModSchedul                                   *
 //*************************************************
-TModSchedul::TModSchedul( ) : TSubSYS(SMSH_ID, false), mAllow("*"), mPer(10), schM(true)
+TModSchedul::TModSchedul( ) : TSubSYS(SMSH_ID, false), mAllow(DEF_ModAllow), mDeny(DEF_ModDeny), mPer(DEF_ChkPer), schM(true)
 {
 
 }
@@ -83,7 +89,7 @@ string TModSchedul::optDescr( )
 	), nodePath().c_str()) + TSubSYS::optDescr();
 }
 
-void TModSchedul::setChkPer( int per )	{ mPer = vmax(0,per); modif(); }
+void TModSchedul::setChkPer( int per )	{ mPer = vmax(0, per); modif(); }
 
 int TModSchedul::loadLibS( )	{ return libLoad(SYS->modDir(), false); }
 
@@ -94,10 +100,10 @@ void TModSchedul::load_( )
     if((argVl=SYS->cmdOpt("modPath")).size()) SYS->setModDir(argVl, true);
 
     //Load parameters from command line
-    setChkPer(s2i(TBDS::genPrmGet(nodePath()+"ChkPer",i2s(chkPer()))));
-    SYS->setModDir(TBDS::genPrmGet(nodePath()+"ModPath",SYS->modDir()), true);
-    setAllowList(TBDS::genPrmGet(nodePath()+"ModAllow",allowList()));
-    setDenyList(TBDS::genPrmGet(nodePath()+"ModDeny",denyList()));
+    setChkPer(s2i(TBDS::genPrmGet(nodePath()+"ChkPer",i2s(DEF_ChkPer))));
+    SYS->setModDir(TBDS::genPrmGet(nodePath()+"ModPath",DEF_ModPath), true);
+    setAllowList(TBDS::genPrmGet(nodePath()+"ModAllow",DEF_ModAllow));
+    setDenyList(TBDS::genPrmGet(nodePath()+"ModDeny",DEF_ModDeny));
 }
 
 void TModSchedul::unload( )
@@ -121,7 +127,7 @@ void TModSchedul::unload( )
 
     TSubSYS::unload();
 
-    mAllow = "*"; mDeny = "";
+    mAllow = DEF_ModAllow, mDeny = DEF_ModDeny;
 }
 
 void TModSchedul::save_( )

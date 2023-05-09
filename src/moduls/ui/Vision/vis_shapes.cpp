@@ -225,8 +225,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	    rel_cfg = true;
 	    break;
 	case A_FormElValue:
-	    //if(shD->value != val)	//For prevent to possibility the value difference into the widget and the model.
-					//Check for equal into setValue()!
+	    //if(shD->value != val)	//To prevent for the possibility the value difference in the widget and the model.
+					//Check for equality in setValue()!
 	    setValue(w, val);
 	    break;
 	case A_FormElName:
@@ -4001,7 +4001,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	    return;
 	}
     }
-    else	//Data direct into address field by searilised XML string or horizontal line
+    else	//Data direct in the address field by searilised XML string or horizontal line
 	try {
 	    if(addr().compare(0,5,"data:") == 0) {
 		req.load(addr().substr(5));
@@ -5065,7 +5065,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
 			shD->inclPg->setProperty("cntPg", TSYS::addr2str(w).c_str());
 			shD->inclScrl->setWidget(shD->inclPg);
 			shD->inclPg->resizeF(shD->inclPg->sizeF());	//To realign
-			//shD->inclPg->load("");			//That does into the constructor
+			//shD->inclPg->load("");			//That does in the constructor
 
 			shD->inclPg->setAttribute(Qt::WA_WindowPropagation, true);
 		    }

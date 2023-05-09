@@ -148,7 +148,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 
     TMArchivator::put(mess, force);	//Allow redundancy
 
-    if(!runSt) throw TError(nodePath().c_str(), _("The archive is not started!"));
+    if(!runSt) throw TError(nodePath(), _("The archive is not started!"));
 
     AutoHD<TTable> tbl = TBDS::tblOpen(addr()+"."+archTbl(), true);
     if(tbl.freeStat()) return false;
@@ -199,7 +199,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 
 time_t ModMArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const string &category, char level, time_t upTo )
 {
-    if(!runSt) throw TError(nodePath().c_str(), _("The archive is not started!"));
+    if(!runSt) throw TError(nodePath(), _("The archive is not started!"));
     if(needMeta && (needMeta=!readMeta())) return eTm;
     if(!upTo) upTo = SYS->sysTm() + prmInterf_TM;
 

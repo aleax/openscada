@@ -791,14 +791,14 @@ void LibProjProp::doIco( QAction *it )
 	    XMLNode req("set");
 	    req.setAttr("path", ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl))->
 		setText(TSYS::strEncode(string(ba.data(),ba.size()),TSYS::base64,"\n"));
-	    if(owner()->cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(), req.text().c_str());
+	    if(owner()->cntrIfCmd(req)) throw TError(req.attr("mcat"), req.text());
 
 	    update = true;
 	}
 	else if(it->objectName() == "clear") {
 	    XMLNode req("set");
 	    req.setAttr("path", ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl))->setText("");
-	    if(owner()->cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(), req.text().c_str());
+	    if(owner()->cntrIfCmd(req)) throw TError(req.attr("mcat"), req.text());
 
 	    update = true;
 	}
@@ -1742,14 +1742,14 @@ void VisItProp::doIco( QAction *it )
 	    XMLNode req("set");
 	    req.setAttr("path", ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl))->
 		setText(TSYS::strEncode(string(ba.data(),ba.size()),TSYS::base64,"\n"));
-	    if(owner()->cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(), req.text().c_str());
+	    if(owner()->cntrIfCmd(req)) throw TError(req.attr("mcat"), req.text());
 
 	    update = true;
 	}
 	else if(it->objectName() == "clear") {
 	    XMLNode req("set");
 	    req.setAttr("path", ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl))->setText("");
-	    if(owner()->cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(), req.text().c_str());
+	    if(owner()->cntrIfCmd(req)) throw TError(req.attr("mcat"), req.text());
 
 	    update = true;
 	}

@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"6.8.3"
+#define MOD_VER		"6.8.6"
 #define AUTHORS		trS("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	trS("Visual operation user interface, based on the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -73,7 +73,9 @@ using namespace WebVision;
 //************************************************
 //* TWEB                                         *
 //************************************************
-TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mCachePgLife(1), mCachePgSz(10), mPNGCompLev(1), mImgResize(false), mCustCSS(dataRes())
+TWEB::TWEB( string name ) : TUI(MOD_ID),
+    mTSess(DEF_SessTimeLife), mSessLimit(DEF_SessLimit), mCachePgLife(DEF_CachePgLife), mCachePgSz(DEF_CachePgSz),
+    mPNGCompLev(DEF_PNGCompLev), mImgResize(DEF_ImgResize), mCustCSS(dataRes())
 {
     mod = this;
 
@@ -281,13 +283,13 @@ void TWEB::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file
-    setSessTime(s2i(TBDS::genPrmGet(nodePath()+"SessTimeLife",i2s(sessTime()))));
-    setSessLimit(s2i(TBDS::genPrmGet(nodePath()+"SessLimit",i2s(sessLimit()))));
-    setCachePgLife(s2r(TBDS::genPrmGet(nodePath()+"CachePgLife",r2s(cachePgLife()))));
-    setCachePgSz(s2i(TBDS::genPrmGet(nodePath()+"CachePgSz",i2s(cachePgSz()))));
-    setPNGCompLev(s2i(TBDS::genPrmGet(nodePath()+"PNGCompLev",i2s(PNGCompLev()))));
-    setImgResize(s2i(TBDS::genPrmGet(nodePath()+"ImgResize",i2s(imgResize()))));
-    setCustCSS(TBDS::genPrmGet(nodePath()+"CustCSS",custCSS()));
+    setSessTime(s2i(TBDS::genPrmGet(nodePath()+"SessTimeLife",i2s(DEF_SessTimeLife))));
+    setSessLimit(s2i(TBDS::genPrmGet(nodePath()+"SessLimit",i2s(DEF_SessLimit))));
+    setCachePgLife(s2r(TBDS::genPrmGet(nodePath()+"CachePgLife",r2s(DEF_CachePgLife))));
+    setCachePgSz(s2i(TBDS::genPrmGet(nodePath()+"CachePgSz",i2s(DEF_CachePgSz))));
+    setPNGCompLev(s2i(TBDS::genPrmGet(nodePath()+"PNGCompLev",i2s(DEF_PNGCompLev))));
+    setImgResize(s2i(TBDS::genPrmGet(nodePath()+"ImgResize",i2s(DEF_ImgResize))));
+    setCustCSS(TBDS::genPrmGet(nodePath()+"CustCSS"));
 }
 
 void TWEB::save_( )
@@ -500,7 +502,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 	    }
 	    //Main session page data prepare
 	    else if(zero_lev.find("ses_") == 0) {
-		ses.url = Mess->codeConvIn("UTF-8", ses.url);	//Internal data into UTF-8
+		ses.url = Mess->codeConvIn("UTF-8", ses.url);	//Internal data in UTF-8
 		string sesnm = zero_lev.substr(4);
 
 		AutoHD<VCASess> vs;
@@ -586,7 +588,7 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
     if(Mess->translDyn()) trCtx.hold(ses.user+"\n"+ses.lang);
 
     try {
-	ses.url = Mess->codeConvIn("UTF-8", ses.url);	//Internal data into UTF-8
+	ses.url = Mess->codeConvIn("UTF-8", ses.url);	//Internal data in UTF-8
 	//To control interface request
 	if((cntEl=ses.prm.find("com"))!=ses.prm.end() && cntEl->second == "com") {
 	    XMLNode req(""); req.load(ses.content); req.setAttr("path", ses.url);
@@ -598,7 +600,7 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 	//Post command to the session
 	string sesnm = TSYS::pathLev(ses.url, 0);
 	if(sesnm.size() <= 4 || sesnm.find("ses_") != 0)
-	    throw TError(nodePath().c_str(), "%s", TSYS::strMess(_("Wrong session '%s'."),sesnm.c_str()).c_str());
+	    throw TError(nodePath(), TSYS::strMess(_("Wrong session '%s'."),sesnm.c_str()));
 	else {
 	    ResAlloc sesRes(mSesRes, false);
 	    vcaSesAt(sesnm.substr(4)).at().postReq(ses);

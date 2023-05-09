@@ -100,8 +100,6 @@ namespace FT3
 
     private:
 	//Methods
-	//!!! Module's comandline options for print help function.
-	string optDescr();
 	//!!! Main subsystem API function for self modules input protocol object creation.
 	TProtocolIn *in_open(const string &name);
 

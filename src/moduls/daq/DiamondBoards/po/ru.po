@@ -136,8 +136,7 @@ msgstr "2:Сбор остановлен."
 
 #, c-format
 msgid ""
-"0:AI acquisition into interrupt mode; SampleRate=%g; Drift=%gs; Overflows="
-"%u; LostCycles=%u; SRateCor=%u."
+"0:AI acquisition in the interrupt mode; SampleRate=%g; Drift=%gs; Overflows=%u; LostCycles=%u; SRateCor=%u."
 msgstr ""
 "0:Опрос AI по прерыванию, SampleRate=%g; Drift=%gc; Overflows=%u; LostCycles="
 "%u; SRateCor=%u."

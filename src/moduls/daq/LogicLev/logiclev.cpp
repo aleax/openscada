@@ -39,7 +39,7 @@
 #define MOD_NAME	trS("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.7.3"
+#define MOD_VER		"2.7.4"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -692,7 +692,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path.find("/serv/") == 0) {
 	if(a_path == "/serv/tmplAttr") {
-	    if(!isStd() || !tmpl->func()) throw TError(nodePath().c_str(),_("Error or non-template parameter."));
+	    if(!isStd() || !tmpl->func()) throw TError(nodePath(), _("Error or non-template parameter."));
 	    if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 		for(int iA = 0; iA < tmpl->ioSize(); iA++)
 		    if(iA != idFreq && iA != idStart && iA != idStop /*&& iA != idErr*/ && iA != idSh && iA != idNm && iA != idDscr &&

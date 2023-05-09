@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.6.1"
+#define MOD_VER		"1.6.5"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -71,7 +71,7 @@ using namespace WebUser;
 //*************************************************
 //* TWEB                                          *
 //*************************************************
-TWEB::TWEB( string name ) : TUI(MOD_ID), mDefPg("*")
+TWEB::TWEB( string name ) : TUI(MOD_ID), mDefPg(DEF_DefPg)
 {
     mod = this;
 
@@ -119,7 +119,7 @@ void TWEB::load_( )
 	vector<string> itLs;
 	map<string, bool> itReg;
 
-	//  Search into DB
+	//  Search in DB
 	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
 	    for(int fldCnt = 0; TBDS::dataSeek(itLs[iDB]+"."+modId()+"_uPg",nodePath()+modId()+"_uPg",fldCnt++,gCfg,TBDS::UseCache); ) {
@@ -142,7 +142,7 @@ void TWEB::load_( )
 	mess_err(nodePath().c_str(),_("Error searching and creating a new user page."));
     }
 
-    setDefPg(TBDS::genPrmGet(nodePath()+"DefPg",defPg()));
+    setDefPg(TBDS::genPrmGet(nodePath()+"DefPg",DEF_DefPg));
 }
 
 void TWEB::save_( )
@@ -262,7 +262,7 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 		return;
 	    }
 	    else if(!(uPg=defPg()).empty() && uPg != "*") up = uPgAt(uPg);
-	    else throw TError(nodePath().c_str(), _("The page is not present"));
+	    else throw TError(nodePath(), _("The page is not present"));
 	}
 
 	up.at().HTTP("GET", ses, iprt);
@@ -298,7 +298,7 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 	}
 	if(up.freeStat()) {
 	    if(!(uPg=defPg()).empty() && uPg != "*") up = uPgAt(uPg);
-	    else throw TError(nodePath().c_str(), _("The page is not present"));
+	    else throw TError(nodePath(), _("The page is not present"));
 	}
 
 	up.at().HTTP("POST", ses, iprt);
@@ -528,7 +528,7 @@ void UserPg::perSYSCall( )
 
 	//Get outputs
 	outputLinks();
-    } catch(TError &err) { }
+    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
     if(ioThis >= 0) setO(ioThis, new TEValObj());
 }
@@ -672,6 +672,8 @@ void UserPg::setEnable( bool vl )
 		compileFunc(TSYS::strSepParse(progLang(),1,'.'),funcIO,prog());
 	    setFunc(&((AutoHD<TFunction>)SYS->nodeAt(workProg)).at());
 	}
+
+	res.unlock();
 
 	//Load IO
 	loadIO();

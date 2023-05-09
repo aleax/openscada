@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.DBArch file: val.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -163,7 +163,7 @@ void ModVArch::checkArchivator( unsigned int cnt )
 	    if(owner().owner().valPresent(aNm)) varch = owner().owner().valAt(aNm);
 	    else {
 		// Add no present archive
-		owner().owner().valAdd(aNm);
+		owner().owner().valAdd(aNm, "");
 		varch = owner().owner().valAt(aNm);
 		varch.at().setToStart(true);
 		varch.at().setValType((TFld::Type)cfg.cfg("PRM2").getI());
@@ -206,7 +206,7 @@ void ModVArch::checkArchivator( unsigned int cnt )
 		if(owner().owner().valPresent(aNm)) varch = owner().owner().valAt(aNm);
 		else {
 		    // Add no present archive
-		    owner().owner().valAdd(aNm);
+		    owner().owner().valAdd(aNm, "");
 		    varch = owner().owner().valAt(aNm);
 		    varch.at().setToStart(true);
 		    varch.at().setValType((TFld::Type)aTp);
@@ -249,7 +249,7 @@ TValBuf &ModVArch::accmGetReg( const string &aNm, SGrp **grp, TFld::Type tp, int
 {
     MtxAlloc res(reqRes, true);
 
-    //Find the parameter into a group
+    //Find up the parameter in group
     for(unsigned iG = 0; iG < accm.size(); iG++) {
 	map<string,TValBuf>::iterator iP = accm[iG].els.find(aNm);
 	if(iP != accm[iG].els.end()) {
@@ -289,7 +289,7 @@ void ModVArch::accmUnreg( const string &aNm )
 {
     MtxAlloc res(reqRes, true);
 
-    //Find the parameter into a group
+    //Find up the parameter in group
     for(unsigned iG = 0; iG < accm.size(); iG++) {
 	SGrp &oG = accm[iG];
 	map<string,TValBuf>::iterator iP = oG.els.find(aNm);
@@ -451,7 +451,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 		"tp","bool", "help",_("Only for databases that support such by means of specific data types like \"datetime\" in MySQL."));
 	    ctrMkNode("fld",opt,-1,"/prm/add/groupPrms",_("Grouping limit of the parameters"),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,4,
 		"tp","dec", "min","0", "max","10000",
-		"help",_("Enables for grouping arhivator's parameters into single table. Set to '0' for one table per parameter."));
+		"help",_("Enables for grouping arhivator's parameters in single table. Set to '0' for one table per parameter."));
 	}
 	return;
     }

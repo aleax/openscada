@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SNMP file: snmp.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,7 +47,7 @@
 #define MOD_NAME	trS("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.9.13"
+#define MOD_VER		"0.9.14"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides an implementation of the client of SNMP-service.")
 #define LICENSE		"GPL2"
@@ -189,7 +189,7 @@ struct snmp_session *TMdContr::getSess( )
 	    string w_sauth = secAuthPass();
 	    if(generate_Ku(session.securityAuthProto, session.securityAuthProtoLen, (u_char*)w_sauth.data(), w_sauth.size(),
 		    session.securityAuthKey, &session.securityAuthKeyLen) != SNMPERR_SUCCESS)
-		throw TError(nodePath().c_str(),_("Error generating Ku from authentication pass phrase."));
+		throw TError(nodePath(), _("Error generating Ku from authentication pass phrase."));
 	}
 
 	if(session.securityLevel == SNMP_SEC_LEVEL_AUTHPRIV) {
@@ -209,7 +209,7 @@ struct snmp_session *TMdContr::getSess( )
 	    string w_spriv = secPrivPass();
 	    if(generate_Ku(session.securityPrivProto, session.securityPrivProtoLen, (u_char*)w_spriv.data(), w_spriv.size(),
 		    session.securityPrivKey, &session.securityPrivKeyLen) != SNMPERR_SUCCESS)
-		throw TError(nodePath().c_str(),_("Error generating Ku from privacy pass phrase."));
+		throw TError(nodePath(), _("Error generating Ku from privacy pass phrase."));
 	}
     }
 
@@ -638,7 +638,7 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 	for(int iP = 0; iP < (int)elem().fldSize(); iP++)
 	    vlAt(elem().fldAt(iP).name()).at().setS(EVAL_STR, 0, true);
 
-    if(acqErr.getVal().size())	throw TError(owner().nodePath().c_str(), "%s", acqErr.getVal().c_str());
+    if(acqErr.getVal().size())	throw TError(owner().nodePath(), acqErr.getVal());
 }
 
 void TMdPrm::parseOIDList( const string &ioid )

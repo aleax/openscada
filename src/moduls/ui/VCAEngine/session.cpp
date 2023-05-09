@@ -1458,7 +1458,7 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 			}
 		    }
 
-		    //Find links into the source if no link founded
+		    //Find links in the source if no link founded
 		    if(prmLnk.empty()) {
 			vector<string> sAtrLs;
 			src.at().attrList(sAtrLs);
@@ -1908,7 +1908,7 @@ void SessWdg::resourceSet( const string &id, const string &data, const string &m
 
 void SessWdg::wdgAdd( const string &iid, const string &name, const string &iparent, bool force )
 {
-    if(!isContainer())	throw TError(nodePath().c_str(), _("The widget is not a container!"));
+    if(!isContainer())	throw TError(nodePath(), _("The widget is not a container!"));
     if(wdgPresent(iid))	return;
 
     //Limit for the deep

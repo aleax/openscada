@@ -53,6 +53,9 @@
 #define DB_CFG		"<cfg>"
 #define DB_NULL		"<NULL>"
 
+#define DEF_ModPath	oscd_moddir_full
+
+#include <sys/types.h>
 #include <signal.h>
 #include <unistd.h>
 #include <stdint.h>
@@ -510,10 +513,14 @@ class TSYS : public TCntrNode
 	ResMtx	mCfgLoadSaveM;
 	XMLNode	*mCfgCtx, *mCfgCtxLast;
 
-	unsigned char	mRdStLevel,	//Current station level
-			mRdRestConnTm;	//Redundant restore connection to reserve stations timeout in seconds
-	float		mRdTaskPer;	//Redundant task period in seconds
-	bool		mRdPrimCmdTr;	//Allow transfer local primary commands to redundant ones
+	unsigned char	mRdStLevel,		//Current station level
+			mRdRestConnTm;		//Redundant restore connection to reserve stations timeout in seconds
+	float		mRdTaskPer;		//Redundant task period in seconds
+	bool		mRdPrimCmdTr;		//Allow transfer local primary commands to redundant ones
+
+	unsigned	trPassN		: 14;	//Pass the number of the specified translation messages
+	unsigned	trChkAndFix	: 1;	//Main checking and fixing the translation messages
+	unsigned	trChkAndFixMB	: 1;	//... for merging need the base messages
 
 	map<string, ResMtx*>	mCommonLocks;
 

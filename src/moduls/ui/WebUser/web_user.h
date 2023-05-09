@@ -28,6 +28,10 @@
 #undef trS
 #define trS(mess) mod->I18N(mess,mess_PreSave)
 
+
+#define DEF_DefPg	"*"
+
+
 using namespace OSCADA;
 
 namespace WebUser

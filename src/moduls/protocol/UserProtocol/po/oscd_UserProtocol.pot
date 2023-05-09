@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-06 08:51+0300\n"
+"POT-Creation-Date: 2023-04-29 16:03+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -101,6 +101,12 @@ msgstr ""
 msgid "Transport"
 msgstr ""
 
+msgid "This object"
+msgstr ""
+
+msgid "Scheduling the next service call"
+msgstr ""
+
 msgid "Output IO"
 msgstr ""
 
@@ -129,6 +135,10 @@ msgstr ""
 msgid "DB"
 msgstr ""
 
+#, c-format
+msgid "Remove from '%s'"
+msgstr ""
+
 msgid "Configuration"
 msgstr ""
 
@@ -145,8 +155,8 @@ msgid "Input"
 msgstr ""
 
 msgid ""
-"Use this for the poolling mode enabling through setting this timeout to a nonzero value.\n"
-"Into the poolling mode an input transport will call this protocol with the empty message at no request during this timeout."
+"Use this for the polling mode enabling through setting this timeout to a nonzero value.\n"
+"In the polling mode an input transport will call this protocol with the empty message at no request during this timeout."
 msgstr ""
 
 msgid "IO"
@@ -164,7 +174,9 @@ msgid ""
 "   'request' - request message;\n"
 "   'answer' - answer message;\n"
 "   'sender' - request sender;\n"
-"   'tr' - sender transport."
+"   'tr' - sender transport;\n"
+"   'this' - pointer to object of this protocol;\n"
+"   'schedCall' - scheduling the next service call in the Integer type for seconds."
 msgstr ""
 
 msgid "Output"

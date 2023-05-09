@@ -823,7 +823,7 @@ void LWidget::wClear( )
 
 void LWidget::wdgAdd( const string &wid, const string &name, const string &path, bool force )
 {
-    if(!isContainer())	throw TError(nodePath().c_str(),_("Widget is not container!"));
+    if(!isContainer())	throw TError(nodePath(), _("Widget is not container!"));
     if(wdgPresent(wid))	throw err_sys(_("The widget '%s' is already present!"), wid.c_str());
 	//return;
 

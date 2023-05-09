@@ -13542,7 +13542,7 @@ INSERT INTO tmplib_DevLib_io VALUES('mbBase','tr','Output transport',4,0,'',6,'�
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','this','Object',4,0,'',7,'Объект','','Об''єкт','','');
 INSERT INTO tmplib_DevLib_io VALUES('MTP4D','zeroP','Set zero',3,32,'',4,'Установить ноль','','Встановити нуль','','');
 INSERT INTO tmplib_DevLib_io VALUES('MTP4D','zeroAP','Set atmosphere',3,32,'',5,'Установить атмосферу','','Встановити атмосферу','','');
-INSERT INTO tmplib_DevLib_io VALUES('SLOT','transport','Transport',0,64,'Sockets.SLOT:10.39.77.10:4001',0,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','transport','Transport',0,64,'Sockets.SLOT:10.39.77.10:4001',0,'Транспорт','','Транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','modem','Modem
 In the format "{TelN}[:{Init1}[:{Init2}[...{InitN}]]]"',0,64,'',1,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','modemTm','Modem times
@@ -13595,7 +13595,7 @@ INSERT INTO tmplib_DevLib_io VALUES('SLOT','T','Temperature, °С [arh]',2,16,''
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','Fstd','Volume standard cond., m3 [arh]',2,16,'',48,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','Fwork','Volume work cond., m3 [arh]',2,16,'',49,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','itSt','Item status [arh]',0,16,'',50,'','','','','');
-INSERT INTO tmplib_DevLib_io VALUES('SLOT','tr','Output transport',4,1,'',51,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','tr','Output transport',4,1,'',51,'Выходной транспорт','','Вихідний транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','reqCntr','Counter of the requests and the reconnection waiting (negative)',2,0,'0',52,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','arhLastD','Daily archive last item',1,0,'0',53,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','arhLastH','Hourly archive last item',1,0,'0',54,'','','','','');

@@ -37,7 +37,7 @@
 #define MOD_NAME	trS("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.4.11"
+#define MOD_VER		"1.4.12"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
@@ -85,7 +85,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("TM_REST",trS("Restore timeout, seconds"),TFld::Integer,TFld::NoFlag,"4","10","1;3600"));
     fldAdd(new TFld("SYNCPER",trS("Sync inter remote station period, seconds"),TFld::Integer,TFld::NoFlag,"4","0","0;1000"));
     fldAdd(new TFld("ADDR",trS("Server address"),TFld::String,TFld::NoFlag,"50","localhost:102"));
-    fldAdd(new TFld("VARS_RD_REQ",trS("Variables into read request"),TFld::Integer,TFld::NoFlag,"3","100","1;9999"));
+    fldAdd(new TFld("VARS_RD_REQ",trS("Variables in the read request"),TFld::Integer,TFld::NoFlag,"3","100","1;9999"));
     fldAdd(new TFld("COTP_DestTSAP",trS("Destination TSAP"),TFld::Integer,TFld::NoFlag,"3","512","0;65535"));
 
     //Parameter type bd structure
@@ -657,7 +657,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    _("Attributes configuration list. List must be written by lines in format: \"{MMS_domain}/{MMS_var}[:{opt}[:{tp}[:{id}[:{name}]]]]\".\n"
 	      "Where:\n"
 	      "  {MMS_domain} - MMS domain or '*' for global.\n"
-	      "  {MMS_var} - MMS variable name into domain or global.\n"
+	      "  {MMS_var} - MMS variable name in domain or global.\n"
 	      "  {opt} - Options:\n"
 	      "    w - writable;\n"
 	      "    s - single request;\n"

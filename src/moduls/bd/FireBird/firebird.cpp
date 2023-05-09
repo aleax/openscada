@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.FireBird file: firebird.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.0.6"
+#define MOD_VER		"3.0.7"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("DB module. Provides support of the DBMS FireBird.")
 #define LICENSE		"GPL2"
@@ -227,7 +227,7 @@ void MBD::transOpen( )
 {
     ISC_STATUS_ARRAY status;
 
-    //Check for limit into one trinsaction
+    //Check for limit in one trinsaction
     if(reqCnt > 1000) transCommit();
 
     MtxAlloc res(connRes, true);

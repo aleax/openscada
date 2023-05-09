@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebVision file: web_vision.h
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,6 +37,14 @@
 #define rgb(r,g,b) (((r)<<16)+((g)<<8)+(b))
 
 #define POS_PREC_DIG	3
+
+#define DEF_SessTimeLife 10
+#define DEF_SessLimit	5
+#define DEF_CachePgLife	1
+#define DEF_CachePgSz	10
+#define DEF_PNGCompLev	1
+#define DEF_ImgResize	false
+
 
 using std::string;
 using std::vector;

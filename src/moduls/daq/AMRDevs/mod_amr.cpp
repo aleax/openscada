@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.AMRDevs file: mod_amr.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@
 #define MOD_NAME	trS("AMR devices")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.7.9"
+#define MOD_VER		"0.7.10"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides access to automatic meter reading devices. Supported devices: Kontar (http://www.mzta.ru).")
 #define LICENSE		"GPL2"

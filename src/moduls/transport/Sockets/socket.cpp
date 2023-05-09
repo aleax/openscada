@@ -61,7 +61,7 @@
 #define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.5.4"
+#define MOD_VER		"4.5.5"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov(2014)")
 #define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -162,13 +162,13 @@ string TTransSock::outTimingsHelp( )
 	"    conn - maximum time of waiting the connection, in seconds;\n"
 	"    next - maximum time of waiting for continue the response, in seconds;\n"
 	"    rep  - minimum time of waiting the request repeating, in seconds.\n"
-	"Can be prioritatile specified into the address field as the second global argument, as such \"localhost:123||5:1\".");
+	"Can be prioritatile specified in the address field as the second global argument, as such \"localhost:123||5:1\".");
 }
 
 string TTransSock::outAttemptsHelp( )
 {
     return _("Attempts of the requesting both for this transport and protocol, for full requests.\n"
-	"Can be prioritatile specified into the address field as the third global argument, as such \"localhost:123||5:1||3\".");
+	"Can be prioritatile specified in the address field as the third global argument, as such \"localhost:123||5:1||3\".");
 }
 
 //************************************************
@@ -357,7 +357,7 @@ void TSocketIn::start( )
 	    break;	//OK
 	}
 
-	if(sockFd < 0) throw TError(nodePath().c_str(), "%s", aErr.c_str());
+	if(sockFd < 0) throw TError(nodePath(), aErr);
     }
     else if(type == S_UNIX) {
 	if((sockFd=socket(PF_UNIX,SOCK_STREAM,0)) == -1)
@@ -1184,7 +1184,7 @@ void TSocketOut::start( int itmCon )
     MtxAlloc res(reqRes(), true);
 
     if(runSt) return;
-    if(SYS->stopSignal()) throw TError(nodePath().c_str(), _("We are stopping!"));
+    if(SYS->stopSignal()) throw TError(nodePath(), _("We are stopping!"));
 
     //Status clear
     trIn = trOut = respTm = respTmMax = 0;
@@ -1218,7 +1218,7 @@ void TSocketOut::start( int itmCon )
     if(type == S_FORCE) {
 	sockFd = s2i(TSYS::strParse(addr_,0,":",&aOff));
 	int rez;
-	if(sockFd < 0)	throw TError(nodePath().c_str(), _("The force socket is deactivated!"));
+	if(sockFd < 0)	throw TError(nodePath(), _("The force socket is deactivated!"));
 	else if((rez=fcntl(sockFd,F_GETFL,0)) < 0 || fcntl(sockFd,F_SETFL,rez|O_NONBLOCK) < 0) {
 	    if(close(sockFd) != 0)
 		mess_warning(nodePath().c_str(), _("Closing the socket %d error '%s (%d)'!"), sockFd, strerror(errno), errno);
@@ -1309,7 +1309,7 @@ void TSocketOut::start( int itmCon )
 	    if(sockFd >= 0) break;
 	}
 
-	if(sockFd < 0) throw TError(nodePath().c_str(), "%s", aErr.c_str());
+	if(sockFd < 0) throw TError(nodePath(), aErr);
     }
     else if(type == S_UNIX) {
 	string path = TSYS::strParse(addr_, 0, ":", &aOff);
@@ -1413,7 +1413,7 @@ int TSocketOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int ti
     if(time) { prevTmOut = tmCon(); setTmCon(time); }
 
     try {
-	if(!runSt) throw TError(nodePath().c_str(), _("Transport is not connected!"));
+	if(!runSt) throw TError(nodePath(), _("Transport is not connected!"));
 
 repeate:
 	if(reqTry++ >= wAttempts) { mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(), _("Error requesting: %s"), err.c_str()); }
@@ -1486,7 +1486,7 @@ repeate:
 		    }
 		}
 		mLstReqTm = TSYS::curTime();
-		throw TError(nodePath().c_str(), err.c_str());
+		throw TError(nodePath(), err);
 	    }
 	    else if(kz < 0) {
 		err = TSYS::strMess("%s (%d)", strerror(errno), errno);
@@ -1519,7 +1519,7 @@ repeate:
 		if(stZero && iB > 0)	printf("TEST 00: Have waited after zero for %d.\n", iB);*/
 
 		// * Force errors
-		// * Retry if any data was wrote but no a reply there into the request mode
+		// * Retry if any data was wrote but no a reply there in the request mode
 		// * !!: Zero can be also after disconection by peer and possible undetected here for the not request mode,
 		//	what can be easily tested on stopping the ModBus input service
 		if(iB < 0 || (iB == 0 && writeReq && !notReq)) {
@@ -1527,7 +1527,7 @@ repeate:
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error reading: %s"), err.c_str());
 		    if(logLen()) pushLogMess(TSYS::strMess(_("Error reading: %s"), err.c_str()));
 		    stop();
-		    // * Pass to retry into the request mode and on the successful writing
+		    // * Pass to retry in the request mode and on the successful writing
 		    if(!writeReq || notReq) throw TError(nodePath().c_str(),_("Error reading: %s"), err.c_str());
 		    start();
 		    if(iB == 0 && wAttempts == 1) wAttempts = 2;	//!!!! To restore the lost connections

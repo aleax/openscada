@@ -26,6 +26,9 @@
 #include "tmodule.h"
 #include "tbds.h"
 
+#define DEF_TblLifeTime	600
+#define DEF_ReqTm	"0"
+
 using namespace OSCADA;
 
 //************************************************
@@ -33,7 +36,7 @@ using namespace OSCADA;
 //************************************************
 TElem TBDS::elSYS;
 
-TBDS::TBDS( ) : TSubSYS(SDB_ID, true), mTblLifeTime(600)
+TBDS::TBDS( ) : TSubSYS(SDB_ID, true), mTblLifeTime(DEF_TblLifeTime)
 {
     //Open data bases DB structure
     elDB.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
@@ -418,7 +421,7 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, char f
 
     if(!db_true && !(flags&NoException)) {
 	if(dbErr.cat.empty()) throw SYS->db().at().err_sys("%s", dbErr.mess.empty() ? _("The requested entry is missing.") : dbErr.mess.c_str());
-	throw TError(dbErr.cat.c_str(), "%s", dbErr.mess.empty() ? _("The requested entry is missing.") : dbErr.mess.c_str());
+	throw TError(dbErr.cat, dbErr.mess.empty() ? _("The requested entry is missing.") : dbErr.mess);
     }
 
     return db_true;
@@ -655,7 +658,7 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, char f
 	}
     }
 
-    if(!db_true && !(flags&NoException) && !dbErr.cat.empty()) throw TError(dbErr.cat.c_str(), "%s", dbErr.mess.c_str());
+    if(!db_true && !(flags&NoException) && !dbErr.cat.empty()) throw TError(dbErr.cat, dbErr.mess);
 
     return db_true;
 }
@@ -742,7 +745,7 @@ void TBDS::load_( )
 	}
     }
 
-    // Open other DB stored into the table 'DB' and the config-file
+    // Open other DB stored in the table 'DB' and the config-file
     try {
 	string id, type;
 	map<string, bool> itReg;
@@ -763,7 +766,7 @@ void TBDS::load_( )
     }
 
     //Load parameters from the table "SYS" or the config-file
-    setTblLifeTime(s2i(genPrmGet(nodePath()+"TblLifeTime",i2s(tblLifeTime()))));
+    setTblLifeTime(s2i(genPrmGet(nodePath()+"TblLifeTime",i2s(DEF_TblLifeTime))));
 }
 
 void TBDS::save_( )
@@ -1122,7 +1125,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID);
 		ctrMkNode2("fld",opt,-1,"/prm/cfg/CODEPAGE",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDB_ID,
 		    "dest","sel_ed","sel_list",(Mess->charset()+";UTF-8;KOI8-R;KOI8-U;CP1251;CP866").c_str(),
-		    "help",_("Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."),NULL);
+		    "help",_("Codepage of data in the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."),NULL);
 		ctrMkNode2("fld",opt,-1,"/prm/cfg/LS_PR",EVAL_STR,RWRWR_,"root",SDB_ID,
 		    "help",_("Priority in the range [0...99]. Useful for libraries placed in several databases for specifying the priority of the project - used ones."),NULL);
 		if(mTrTm_ClsOnReq < prmServTask_PER)
@@ -1186,7 +1189,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"del",RWRW__,"root",SDB_ID,SEC_WR))	close(opt->text(), s2i(opt->attr("del")));
     }
     else if(a_path == "/sql/tm" && ctrChkNode(opt,"get",R_R___,"root",SDB_ID,SEC_RD))
-	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ReqTm","0",opt->attr("user")));
+	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ReqTm",DEF_ReqTm,opt->attr("user")));
     else if(a_path == "/sql/req") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID))	opt->setText(userSQLReq);
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID))	userSQLReq = opt->text();
@@ -1474,7 +1477,7 @@ bool TTable::fieldSQLSeek( int row, TConfig &cfg, const string &cacheKey, int fl
 	}
 
 	tbl->clear();
-	owner().sqlReq(req, tbl/*, false*/);	//To seek for deletion into the save context do not set to "false"
+	owner().sqlReq(req, tbl/*, false*/);	//To seek for deletion in the save context do not set to "false"
     }
 
     row = cacheKey.size() ? (row%SEEK_PRELOAD_LIM)+1 : 1;

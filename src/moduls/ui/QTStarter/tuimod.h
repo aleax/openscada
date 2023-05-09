@@ -44,6 +44,11 @@ using namespace QtMobility;
 #undef trS
 #define trS(mess) mod->I18N(mess,mess_PreSave)
 
+
+#define DEF_CloseToTray	false
+#define DEF_SessCntr	RestartNever
+
+
 class QTimer;
 class QSplashScreen;
 class QListWidget;

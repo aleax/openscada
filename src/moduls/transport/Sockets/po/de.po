@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the OpenSCADA.Transport.Sockets package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2011-2021.
+# Roman Savochenko <roman@oscada.org>, 2011-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 4.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-16 22:01+0300\n"
+"POT-Creation-Date: 2023-04-29 16:08+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -76,7 +76,7 @@ msgid ""
 "    conn - maximum time of waiting the connection, in seconds;\n"
 "    next - maximum time of waiting for continue the response, in seconds;\n"
 "    rep  - minimum time of waiting the request repeating, in seconds.\n"
-"Can be prioritatile specified into the address field as the second global "
+"Can be prioritatile specified in the address field as the second global "
 "argument, as such \"localhost:123||5:1\"."
 msgstr ""
 "Zeitabschnitte der Verbindung im Format: \"{conn}:{next}[:{rep}]\". Wo:\n"
@@ -91,7 +91,7 @@ msgstr ""
 msgid ""
 "Attempts of the requesting both for this transport and protocol, for full "
 "requests.\n"
-"Can be prioritatile specified into the address field as the third global "
+"Can be prioritatile specified in the address field as the third global "
 "argument, as such \"localhost:123||5:1||3\"."
 msgstr ""
 "Versuche des Anforderns sowohl für diesen Transport als auch für das "
