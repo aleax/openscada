@@ -1,14 +1,26 @@
+2023-05-15 Roman (stable)
+- !:Archives: The "Values" tab expanded in the statistic field "Number" by no source (passive), error (missing source)
+    and lost (empty DB) value archives; the tab also appended by the group cleaning-removing operations of the value archives
+    for no source - passive, with error source - missing source, lost archives - empty DB.
+- !!:FIX:SYS: Handling the default values fixed-expanded on taking in the account for the command-line options
+	and especially SYS->modDir() which is the sum of the two configuration and command-line options "ModDir" and ModSchedule::"ModPath",
+	and this problem was detected on Android.
+    !:FIX: Obtaining the project icon fixed at the project switching by clearing the base name mNameB.
+- UI.QTStarter: For the project icon obtaining there is used the unified function SYS->ico().
+- UI.QTCfg: Labels of the Image, List and Table fields appended of the possibility of the label text selection by mouse.
+
+
 2023-05-07 Roman (stable)
 - !!!!:SYS: All system (SYS) configuration parameters adapted for true handling the default value.
-- Protocol.SelfSystem: Code of the external connections implementation cleaned additionally.
+- Protocol.SelfSystem: Code of the external-output connections implementation cleaned additionally.
     Configuration fields of the compression merged to one row.
     Error messages about limiting the authentications moved to the Debug level.
 
 
 2023-05-02 Roman (stable)
 - Transports: Table of the OpenSCADA external hosts returned back for the Transport.Serial selection here.
-- !!!!:Protocol.SelfSystem: Significantly reviewed and fixed in the external connections implementation,
-    appended of checking the header limit.
+- !!!!:FIX:Protocol.SelfSystem: Significantly reviewed and fixed in the external connections implementation,
+    appended by checking limit the header size.
 - Protocol.UserProtocol,UI.{VCAEngine,WebUser}: Prevented the RWLock potencial recursion and deadlocks
     at using pure pthread_rwlock.
 
@@ -22,11 +34,11 @@
 	there is no need of their store.
     The translation mark "<<<Unmatched sources>>>" renamed to "<<<SEVERAL VARIANTS>>>".
 - Archives.{FSArch,DBArch}: The automatic creation value archives are setting now with the empty storage.
-- !!:Archives: The "Messages" tab of the "Archive-History" subsystem appended of a function of automatic clearing old Alarms
+- !!:Archives: The "Messages" tab of the "Archive-History" subsystem appended by a function of automatic clearing old Alarms
     from the Active Alarms Table at the specified days depth.
 - Protocol.SelfSystem: Was set to response by compressed (with level -1) packages at the compressed requests.
 - !!:Protocol.UserProtocol: The input part expanded by a possibility of schedule the user procedures call in the service cycle,
-    for the background processing of some data; the This Object (this) attribute was appended here also.
+    for the background processing of some data; the Object's attribute "This (this)" was appended here also.
 
 
 2023-04-22 Roman (stable)
@@ -37,8 +49,8 @@
     for the warning messages pass in the attribute "mtxt" with the main data storing.
 - SYS,Security,UI.VCAEngine.Libs: Adapted to load empty objects (automaticly created) from the first source with such data,
     when the source can be inaccessible at the main starting time.
-- !!!!:SYS: The translation page moved in the notification about fixes to pass them to the user through
-	the expanded Control Interface warnings. The flag "chkAndFix" of the translation page splitted to "chkAndFix".
+- !!!!:SYS: The translation page moved in the notification about fixes to pass them to the user through the expanded
+	Control Interface warnings. The flag "chkAndFix" of the translation page split to "chkAndFix" and "chkAndFixMB".
     !!!!: The TError object expanded by new constructors with the "const string &" type arguments
 	for no limiting strings and the convenience.
     !: The function TCntrNode::setStorage() of the storages processing expanded by just replacing of the empty queue.

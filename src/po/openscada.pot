@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-29 15:28+0300\n"
+"POT-Creation-Date: 2023-05-15 07:28+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -271,8 +271,17 @@ msgstr ""
 msgid "Value archives"
 msgstr ""
 
+msgid "Remove all with no source - passive"
+msgstr ""
+
+msgid "Remove all with error source - missing source"
+msgstr ""
+
+msgid "Remove all lost archives - empty DB"
+msgstr ""
+
 #, c-format
-msgid "All: %d; Enabled: %d"
+msgid "all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost (empty DB) %d"
 msgstr ""
 
 msgid "<High level>"
@@ -820,6 +829,10 @@ msgstr ""
 msgid ""
 "Display messages for larger or even levels.\n"
 "Also affects to specific-diagnostic messages generation by the data sources."
+msgstr ""
+
+#, c-format
+msgid "All: %d; Enabled: %d"
 msgstr ""
 
 msgid "Maximum calculate time, seconds"

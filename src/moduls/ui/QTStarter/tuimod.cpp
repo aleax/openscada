@@ -59,7 +59,7 @@
 #define MOD_NAME	trS("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.14.7"
+#define MOD_VER		"5.14.8"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -321,10 +321,10 @@ void TUIMod::splashSet( SplashFlag flg )
 	    QColor barColor("ivory"); barColor.setAlpha(170);
 
 	    // Appending the project ico
-	    string icoImg = TUIS::icoGet(SYS->name(), NULL, true);
-	    if(!icoImg.size()) icoImg = TUIS::icoGet(SYS->id(), NULL, true);
+	    string icoImg = TSYS::strDecode(SYS->ico(), TSYS::base64); 
 	    if(sysSplash && icoImg.size()) {
-		QImage prjPm(icoImg.c_str());
+		QImage prjPm;
+		prjPm.loadFromData((const uchar*)icoImg.data(), icoImg.size());
 		prjPm = prjPm.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
 		//  In plain rect

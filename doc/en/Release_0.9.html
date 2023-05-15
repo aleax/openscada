@@ -327,16 +327,18 @@
 <li> Adaptation to work in the environment of the operating systems QNX and MS Windows.</li></ul>
 <h2><span class="mw-headline" id="Updates"><span class="mw-headline-number">7</span> Updates</span></h2>
 <h3><span class="mw-headline" id=".5B01.03.2023.5D_The_SIXTH_update"><span class="mw-headline-number">7.1</span> [01.03.2023] The SIXTH update</span></h3>
-<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 70 bugs and appends MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2883" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
+<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 70 bugs and appends MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2888" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
 </p><p><b><u><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Automation Linux distributive of the project OpenSCADA</a></u></b><br />
 </p>
 <ul><li> updating TDE to 14.0.13;</li>
-<li> initial appending the calendar from the World Creation at which year 2023 is 7531;</li>
+<li> initial appending the Calendar System from the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive#WorldCS" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">World Creation</a> at which year 2023 is 7531;</li>
 <li> fixing KDesktop, TDE HW Manager, noatun, TDESVN, basket, KGpg, KPDF, disabling thumbnails for video, than appending the new patched packages "tdelibs-trinity", "tdebase-trinity", "tdegraphics-trinity", "tdesvn-trinity" and "basket-trinity" to the distributive collection;</li>
 <li> some improving and updating KCalc, holiday_ua, korganizer;</li>
 <li> complete translation to Ukrainian for KDiff3 and showfoto;</li>
+<li> packages building with own patches for Debian 11,10,9,8,7 before adaption the release TDE 14.1.0;</li>
+<li> switching the Debian 9 base to the archive repository, after its official archiving;</li>
 <li> appending the Debian 11,10,9 distributives by packages of RHVoice — Speech synthesizer with many voices for ten languages;</li>
-<li> translation the subproject page to Ukrainian.</li></ul>
+<li> translation the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">subproject page</a> to Ukrainian.</li></ul>
 <p><b><u>Main WWW-resources, documentation of the project and subprojects</u></b><br />
 </p>
 <ul><li> completely revised and translated to Ukrainian the "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Server" title="Special:MyLanguage/Sub-projects/Server">Server and hosting infrastructure of the OpenSCADA project</a>" document;</li>
@@ -360,13 +362,15 @@
 <li> Archive.FSArch: 3.7 =&gt; <b>3.8</b></li>
 <li> Transport.Sockets: 4.3 =&gt; <b>4.5</b></li></ul>
 <dl><dd> (<a href="#AssocOutTrToIn">Unification the associated output transports to the input one AND the generic output transport connection</a>)</dd></dl>
-<ul><li> BD.PostgreSQL: 3.0 =&gt; <b>3.1</b></li>
+<ul><li> Protocol.SelfSystem: 1.9 =&gt; <b>1.10</b></li>
+<li> Protocol.UserProtocol: 1.5 =&gt; <b>1.6</b></li>
+<li> BD.PostgreSQL: 3.0 =&gt; <b>3.1</b></li>
 <li> UI.QTStarter: 5.12 =&gt; <b>5.14</b></li>
-<li> UI.QTCfg: 5.9 =&gt; <b>5.12</b></li>
+<li> UI.QTCfg: 5.9 =&gt; <b>5.13</b></li>
 <li> UI.VCAEngine: 7.8 =&gt; <b>7.11</b></li></ul>
 <dl><dd> (<a href="#VCAProd">Productivity optimisation of the VCA interface</a>)</dd></dl>
 <ul><li> UI.Vision: 8.0 =&gt; <b>8.6</b></li>
-<li> UI.WebCfgD: 2.3 =&gt; <b>2.4</b></li>
+<li> UI.WebCfgD: 2.3 =&gt; <b>2.5</b></li>
 <li> UI.WebVision: 6.6 =&gt; <b>6.8</b></li>
 <li> LibsDB.OscadaLibs.LowDevLib: 1.4 =&gt; <b>1.5</b>
 <ul><li> mbBase: 1.0 =&gt; <b>1.2</b></li></ul></li>
@@ -467,7 +471,6 @@
 <ul><li> FIX:SYS:
 <ul><li> FIX: Prevented from propagating the base language column of the translations table "Tr" in the SINGLE translation mode and the base language.</li>
 <li> FIX: The string EVal value "&lt;EVAL&gt;" appended as not translated one to prevent that translation in VCAEngine for NULL DB values.</li>
-<li> FIX: The translation manager prevented in the marked base changing to a human readable form at all, since that used as a key.</li>
 <li> FIX: The static messages translation function improved in omitting empty messages for the binary strings with only zero symbols.</li>
 <li> TFunction::operator=() finished in adaption to the IO name translation.</li>
 <li> Writing to the configuration in XML prevented in doubling the translated field for the configuration contexts.</li></ul></li>
@@ -478,6 +481,12 @@
 <li> FIX: Prevented in the DBs service termination, as the transactions closing, at some wrong DB presence.</li>
 <li> FIX: The translation setting prevented in setting double messages to the base messages; what completing not translation "&lt;EVAL&gt;".</li>
 <li> FIX: Absence the flag TFld::TransltText means as the translation complete missing for that field.</li></ul></li>
+<li> FIX: The Translation Manager:
+<ul><li> FIX: prevented in the marked base changing to a human readable form at all, since that used as a key;</li>
+<li> the notification about fixes was moved to pass them for the user through the expanded Control Interface warnings;</li>
+<li> the flag "chkAndFix" split to "chkAndFix" and "chkAndFixMB";</li>
+<li> the translation configuration fields TrPassN, TrChkAndFix, TrChkAndFixMB moved to the dynamic variables due to there is no need of their store;</li>
+<li> the translation mark "&lt;&lt;&lt;Unmatched sources&gt;&gt;&gt;" renamed to "&lt;&lt;&lt;SEVERAL VARIANTS&gt;&gt;&gt;".</li></ul></li>
 <li> FIX:DAQ::ParamTmpl:
 <ul><li> FIX: Fixed for the IO name edition in the non basic mode of the dynamic translation.</li>
 <li> FIX: Fixed in the flag IO::TransltText processing for strings.</li>
@@ -500,7 +509,8 @@
 <p><b><u>API</u></b><br />
 <i>!!!!:Changes</i>:
 </p>
-<ul><li> SYS:
+<ul><li> SYS,UI.{QTCfg,WebCfgD}: The Control Requests code TError::Core_CntrWarning expanded for the warning messages pass in the attribute "mtxt" with the main data storing.</li>
+<li> SYS:
 <ul><li> The functions TSYS::id(), TSYS::name() and TSYS::user() were set as constant.</li>
 <li> The definitions SEC_XT, SEC_WR, SEC_RD moved from the file tsecurity.h to tcntrnode.h and used there also.</li>
 <li> ctrChkNode() cleaned for the argument "warn" due to the response attribute "force" is deprecated.</li>
@@ -519,6 +529,7 @@
 <ul><li> SYS:
 <ul><li> The new function TSYS::ico() of the icon obtaining.</li>
 <li> Names of the security standard permissions appended by _W_W_W(0222).</li>
+<li> TError: expanded by new constructors with the "const string &amp;" type arguments for no limiting strings and the convenience.</li>
 <li> TRegExp:
 <ul><li> Appended by a new option 'U' (ungreedy) of the greedy mode toggle, together the User API method "ungreedy".</li>
 <li> Appended by the function mode(), the argument "mode" in setPattern() and the enumeration "Mode" with the items: MD_8, MD_16, MD_32, MD_WCHAR, MD_SAVE.</li>
@@ -543,8 +554,11 @@
 <li> The attribute "alarmSt" change appended by accompaniation by the new event "ws_alarmChange".</li></ul></li></ul>
 <p><b><u>SYS</u></b><br />
 </p>
-<ul><li> FIX:Building: configure.ac: Core library version rose to 3:13:0 and the program version rose to 0.9.6. The module version of the subsystem "Transport" rose to 19.</li>
+<ul><li> FIX:Building:
+<ul><li> FIX:configure.ac: Core library version rose to 3:13:0 and the program version rose to 0.9.6. The module version of the subsystem "Transport" rose to 19.</li>
+<li> FIX:Debian: Improving and fixing the DEB-packages signing for all repositories.</li></ul></li>
 <li> *: Most close(), iconv_close(), dlclose(), pclose() functions appended by checking the result and warning at problems.</li>
+<li> *: All system (SYS) configuration parameters adapted for true handling the default value.</li>
 <li> .,DAQ.JavaLikeCalc: Getting help from the second line for the Control Interface appended in: description of the element fields (TFld) with DAQ-values; name of function IOs (TFunction) with links and attributes builder of the DAQ Logical Level.</li>
 <li> FIX: Rewrote the function TCntrNode::nodeAt() to prevent of call the virtual chldAt() under the lock mChM, so preventing some dead locks in the virtual definitions of chldAt().</li>
 <li> Revised for all templates in the folders =Tmpl=.</li>
@@ -582,6 +596,7 @@
 <ul><li> the object TPrmTempl::Impl appended by the new function archAttrs() of updating-archiving attributes of the LogicalLevel;</li>
 <li> the value archive link type "Passive param. attribute (TVArchive::PassiveAttr)" renamed to "DAQ attribute (TVArchive::DAQAttr)";</li>
 <li> the value archive link type "Active param. attribute" renamed to "Active DAQ attribute" with that mark as DEPRECATED.</li></ul></li>
+<li> The "Messages" tab appended by a function of automatic clearing old Alarms from the Active Alarms Table at the specified days depth.</li>
 <li> FIX:FSArch:
 <ul><li> FIX: Prevented for access to files[iA] in ModVArchEl::setValsProc() outside the lock using the read-lock switching.</li>
 <li> FIX: Prevented for access to "files" in ModMArch::checkArchivator() outside the lock.</li>
@@ -593,11 +608,14 @@
 <li> FIX:Sockets: Fixed in processing the not complete writing for the Input part, when the message cuts on the TCP transmitter buffer size. The input buffer size of the Input part bound to the hardware receiver buffer size control and the internal one just frozen to the standard string buffer length since that is not critical and need no control.</li></ul>
 <p><b><u>Transport Protocols</u></b><br />
 </p>
-<ul><li> ModBus: Appended by the option "e" for the register endian switch to LE for generic and BE for strings.</li>
-<li> HTTP: Appended by the HTTP Attributes of disabling the WEBBrowser Cache in whole: "Cache-Control: no-cache, no-store, must-revalidate", "Pragma: no-cache", "Expires: 0".</li></ul>
+<ul><li> FIX:SelfSystem: Significantly reviewed and fixed in the external-output connections implementation, appended by checking limit the header size.</li>
+<li> ModBus: Appended by the option "e" for the register endian switch to LE for generic and BE for strings.</li>
+<li> HTTP: Appended by the HTTP Attributes of disabling the WEBBrowser Cache in whole: "Cache-Control: no-cache, no-store, must-revalidate", "Pragma: no-cache", "Expires: 0".</li>
+<li> UserProtocol: The input part expanded by a possibility of schedule the user procedures call in the service cycle, for the background processing of some data; the Object's attribute "This (this)" was appended here also.</li></ul>
 <p><b><u>User Interface</u></b><br />
 </p>
 <ul><li> QTStarter,QTCfg,Vision: The common Syntax Highlighter in SnthHgl::rule() switched to the main work using PCRE in TRegExp, since that is 5 TIMES FASTER and very richer comparing to QRegExp; and QRegExp left to be automatically enabled at missing the PCRE 32/16 libraries. The Qt-generic library (lib_qtgen) appended by the static-external functions getFont() and getColor() from UI.Vision and by the object SnthHgl from UI.Vision and UI.QTCfg.</li>
+<li> QTCfg,WebCfgD: Unified in notification the errors of the Control Interface during improvement the code TError::Core_CntrWarning and QMessageBox appended of the detailed text at the message longer for 255.</li>
 <li> QTStarter: Appended by the display sessions control, that is the sessions restore.</li>
 <li> QTCfg: Appended by the Favorite pages implementation. The image element appended by a function of clearing the image completely.</li>
 <li> FIX:Vision:

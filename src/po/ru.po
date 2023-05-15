@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-29 15:28+0300\n"
+"POT-Creation-Date: 2023-05-15 07:28+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -311,9 +311,20 @@ msgstr "Количество"
 msgid "Value archives"
 msgstr "Архивы значений"
 
+msgid "Remove all with no source - passive"
+msgstr ""
+
+msgid "Remove all with error source - missing source"
+msgstr ""
+
+msgid "Remove all lost archives - empty DB"
+msgstr ""
+
 #, c-format
-msgid "All: %d; Enabled: %d"
-msgstr "Всего: %d; Включено: %d"
+msgid ""
+"all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost "
+"(empty DB) %d"
+msgstr ""
 
 msgid "<High level>"
 msgstr "<Высокий уровень>"
@@ -926,6 +937,10 @@ msgstr ""
 "Отображать сообщения с уровнем больше или равно указанному.\n"
 "Также сказывается на генерации источником данных специфических-"
 "диагностических сообщений."
+
+#, c-format
+msgid "All: %d; Enabled: %d"
+msgstr "Всего: %d; Включено: %d"
 
 msgid "Maximum calculate time, seconds"
 msgstr "Максимальное время вычисления, секунд"

@@ -1080,6 +1080,9 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/v_arch/nmb",_("Number"),R_R_R_,"root",SARH_ID,1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/v_arch/archs",_("Value archives"),RWRWR_,"root",SARH_ID,5,
 		"tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","va_","idSz",i2s(limArchID_SZ).c_str());
+	    ctrMkNode("comm",opt,-1,"/v_arch/delSrcNo",_("Remove all with no source - passive"),RWRW__,"root",SARH_ID);
+	    ctrMkNode("comm",opt,-1,"/v_arch/delSrcErr",_("Remove all with error source - missing source"),RWRW__,"root",SARH_ID);
+	    ctrMkNode("comm",opt,-1,"/v_arch/delLost",_("Remove all lost archives - empty DB"),RWRW__,"root",SARH_ID);
 	}
 	return;
     }
@@ -1202,10 +1205,35 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/v_arch/nmb" && ctrChkNode(opt)) {
 	vector<string> list;
 	valList(list);
-	unsigned e_c = 0;
-	for(unsigned iA = 0; iA < list.size(); iA++)
-	    if(valAt(list[iA]).at().startStat()) e_c++;
-	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),list.size(),e_c));
+	unsigned eCnt = 0, srcErrCnt = 0, srcNoCnt = 0, lostCnt = 0;
+	for(unsigned iA = 0; iA < list.size(); iA++) {
+	    AutoHD<TVArchive> vo = valAt(list[iA]);
+	    if(vo.at().startStat()) eCnt++;
+	    else if(vo.at().srcMode() != TVArchive::Passive && SYS->daq().at().attrAt(vo.at().srcData(),'.',true).freeStat())
+		srcErrCnt++;
+	    if(vo.at().srcMode() == TVArchive::Passive)	srcNoCnt++;
+	    if(vo.at().DB().empty())	lostCnt++;
+	}
+	opt->setText(TSYS::strMess(_("all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost (empty DB) %d"),list.size(),eCnt,srcNoCnt,srcErrCnt,lostCnt));
+    }
+    else if(a_path.find("/v_arch/del") == 0 && ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR)) {
+	bool SrcNo = (a_path.find("delSrcNo") != string::npos);
+	bool SrcErr = (a_path.find("delSrcErr") != string::npos);
+	bool Lost = (a_path.find("delLost") != string::npos);
+
+	vector<string> list;
+	valList(list);
+	for(unsigned iA = 0; iA < list.size(); iA++) {
+	    AutoHD<TVArchive> vo = valAt(list[iA]);
+	    if(!((SrcNo && vo.at().srcMode() == TVArchive::Passive) ||
+		    (SrcErr && vo.at().srcMode() != TVArchive::Passive && SYS->daq().at().attrAt(vo.at().srcData(),'.',true).freeStat()) ||
+		    (Lost && vo.at().DB().empty())))
+		continue;
+
+	    vo.free();
+
+	    valDel(list[iA], true);
+	}
     }
     else if(a_path == "/br/va_" || a_path == "/v_arch/archs") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD)) {

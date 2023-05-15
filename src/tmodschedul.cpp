@@ -96,12 +96,12 @@ int TModSchedul::loadLibS( )	{ return libLoad(SYS->modDir(), false); }
 void TModSchedul::load_( )
 {
     //Load parameters from command line
-    string argVl;
-    if((argVl=SYS->cmdOpt("modPath")).size()) SYS->setModDir(argVl, true);
+    string tVl;
+    SYS->setModDir(((tVl=SYS->cmdOpt("modDir")).size() || (tVl=SYS->cmdOpt("modPath")).size()) ? tVl : DEF_ModPath, true);
 
     //Load parameters from command line
     setChkPer(s2i(TBDS::genPrmGet(nodePath()+"ChkPer",i2s(DEF_ChkPer))));
-    SYS->setModDir(TBDS::genPrmGet(nodePath()+"ModPath",DEF_ModPath), true);
+    SYS->setModDir(TBDS::genPrmGet(nodePath()+"ModPath",SYS->modDir()), true);
     setAllowList(TBDS::genPrmGet(nodePath()+"ModAllow",DEF_ModAllow));
     setDenyList(TBDS::genPrmGet(nodePath()+"ModDeny",DEF_ModDeny));
 }
