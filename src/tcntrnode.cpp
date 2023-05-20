@@ -1077,7 +1077,8 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	    string errs;
 	    load(NULL, &errs);
 	    if(selDB.size() && !isdigit(selDB[0]))	SYS->setSelDB("");
-	    if(SYS->cfgCtx())	{ SYS->setCfgCtx(NULL); opt->childClear(); modifG(); }
+	    if(SYS->cfgCtx())	{ SYS->setCfgCtx(NULL); /*opt->childClear();*/ modifG(); }	//!!!! Do not clear up the content here due
+												//     to its can be used hierarchically or in the redundancy
 	    if(errs.size()) throw err_sys(_("Error loading:\n%s"), errs.c_str());
 	}
 	// Save the node

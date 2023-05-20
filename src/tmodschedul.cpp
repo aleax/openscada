@@ -35,7 +35,7 @@
 #include "tmodschedul.h"
 
 
-#define DEF_ChkPer	10
+#define DEF_ChkPer	0
 #define DEF_ModAllow	"*"
 #define DEF_ModDeny	""
 

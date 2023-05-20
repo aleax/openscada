@@ -1449,7 +1449,8 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 	else if(hLen/1000000 >= 2)	{ hvLev = 2; h_div =     1000000; }	//Seconds
 	else if(hLen/1000 >= 2)		{ hvLev = 1; h_div =        1000; }	//Milliseconds
 	while(hLen/h_div > hmax_ln)	h_div *= 10;
-	while(hLen/h_div < hmax_ln/2)	h_div /= 2;
+	while(h_div && hLen/h_div < hmax_ln/2)	h_div /= 2;
+	if(!h_div) h_div = 1;
 
 	// Select most like archiver
 	string rarch = iarch;

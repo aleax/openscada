@@ -1,3 +1,10 @@
+2023-05-20 Roman (stable)
+- FIX:Archives: The diagram building of the value archive fixed for crash at some very short data when h_div can become zero.
+- SYS: Reverted back the changes at 2023-02-16 about "The service request "load:/{Node}/%2fobj" appended by clearing the
+    configuration context after the loading." since that context can be used hierarchically or in the redundancy.
+- ModSchedul: The modules checking period was set in 0 by default for disable the modules checking at empty configurations.
+
+
 2023-05-15 Roman (stable)
 - !:Archives: The "Values" tab expanded in the statistic field "Number" by no source (passive), error (missing source)
     and lost (empty DB) value archives; the tab also appended by the group cleaning-removing operations of the value archives
