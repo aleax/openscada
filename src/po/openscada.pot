@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-15 07:28+0300\n"
+"POT-Creation-Date: 2023-05-23 18:33+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -496,6 +496,9 @@ msgstr ""
 
 #, c-format
 msgid "Error closing database '%s'!"
+msgstr ""
+
+msgid "The node is not stored."
 msgstr ""
 
 msgid "The requested entry is missing."

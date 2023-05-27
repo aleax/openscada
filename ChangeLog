@@ -1,3 +1,16 @@
+2023-05-27 Roman (stable)
+- LibsDB.OscadaLibs: flb_Controller.test: Appended by extra tests for string::{parse,parseEnd,parsePath,parsePathEnd}()
+    after fixing the End variants in the last item processing at direct accessing and if the item is empty.
+- FIX:LibsDB.vcaBase: wlb_Main.userManager: Fixed in saving the groups' changing by saving the changed groups and not the user.
+- !!:FIX:SYS: The function TSYS::strParseEnd() and TSYS::pathLevEnd() fixed in the last item processing at direct accessing
+	and if the item is empty.
+    Sending the Control Interface commands to the redundant stations is allowed for warnings and errors of the "save" command
+	on the source-initial station.
+- DB: TBDS::dataGet() and TBDS::dataSet() appended of checking the DB emptiness and generation the "The node is not stored." messages.
+- DAQ.DAQGate,Transports.*: Prevented in holding content of the transitive attribute "ATTRS" and "A_PRMS" in the memory
+    for decreasing the memory consumption at 10-20%.
+
+
 2023-05-20 Roman (stable)
 - FIX:Archives: The diagram building of the value archive fixed for crash at some very short data when h_div can become zero.
 - SYS: Reverted back the changes at 2023-02-16 about "The service request "load:/{Node}/%2fobj" appended by clearing the

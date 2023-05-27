@@ -42,7 +42,7 @@
 #define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.4.10"
+#define MOD_VER		"3.4.11"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.")
@@ -267,6 +267,8 @@ void TSocketIn::load_( )
 	if(prmNd.childGet("CertKey",0,true)) mCertKey = prmNd.childGet("CertKey")->text();
 	mKeyPass = prmNd.attr("PKeyPass");
     } catch(...) { }
+
+    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
 }
 
 void TSocketIn::save_( )
@@ -285,6 +287,8 @@ void TSocketIn::save_( )
     cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TTransportIn::save_();
+
+    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
 }
 
 void TSocketIn::start( )
@@ -943,6 +947,8 @@ void TSocketOut::load_( )
 	vl = prmNd.attr("PKeyPass");	if(!vl.empty()) setPKeyPass(vl);
 	vl = prmNd.attr("TMS");		if(!vl.empty()) setTimings(vl);
     } catch(...) { }
+
+    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
 }
 
 void TSocketOut::save_( )
@@ -956,6 +962,8 @@ void TSocketOut::save_( )
     cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TTransportOut::save_();
+
+    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
 }
 
 void TSocketOut::start( int tmCon )

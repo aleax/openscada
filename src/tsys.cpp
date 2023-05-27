@@ -1290,10 +1290,10 @@ string TSYS::strParseEnd( const string &path, int level, const string &sep, int 
     string rezTk;
     bool isFound = false;
     while(true) {
-	size_t t_dir = path.rfind(sep, an_dir);
+	size_t t_dir = (an_dir < 0) ? string::npos : path.rfind(sep, an_dir);
 	if(t_dir == string::npos) {
 	    if(off) *off = -1;
-	    return (t_lev == level) ? path.substr(0,an_dir+1) : "";
+	    return (an_dir >= 0 && t_lev == level) ? path.substr(0,an_dir+1) : "";
 	}
 	else if(t_lev == level) {
 	    rezTk = path.substr(t_dir+sep.size(), an_dir-(t_dir+sep.size()-1));
@@ -1391,10 +1391,10 @@ string TSYS::pathLevEnd( const string &path, int level, bool decode, int *off )
     string rezTk;
     bool isFound = false;
     while(true) {
-	size_t t_dir = path.rfind("/", an_dir);
+	size_t t_dir = (an_dir < 0) ? string::npos : path.rfind("/", an_dir);
 	if(t_dir == string::npos) {
 	    if(off) *off = -1;
-	    return (t_lev == level) ? (decode ? TSYS::strDecode(path.substr(0,an_dir),TSYS::PathEl) : path.substr(0,an_dir)) : "";
+	    return (an_dir >= 0 && t_lev == level) ? (decode ? TSYS::strDecode(path.substr(0,an_dir+1),TSYS::PathEl) : path.substr(0,an_dir+1)) : "";
 	}
 	else if(t_lev == level) {
 	    rezTk = decode ? TSYS::strDecode(path.substr(t_dir+1,an_dir-t_dir),TSYS::PathEl) : path.substr(t_dir+1,an_dir-t_dir);

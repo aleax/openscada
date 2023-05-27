@@ -94,7 +94,6 @@ class TMdPrm : public TParamContr
     protected:
 	//Methods
 	void load_( );				//Load the parameter
-	void loadIO( );
 	void save_( );				//Save the parameter
 	void sync( );				//Synchronize parameter
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process

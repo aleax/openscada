@@ -8139,31 +8139,47 @@ curMode = mode;
 INSERT INTO flb_Controller VALUES('test','test','','','Different tests of the JavaLikeCalc language for execution into the controller mode.
 
 Author: Roman Savochenko
-Version: 1.2.0
+Version: 1.2.1
 ','','',1,10,0,'// Testing the string parsing functions
 // Testing of the string parsing at a separator
 /*str = "1;;2;;3;;4;5;;6;";
 for(off = 0; (sIt=str.parse(0,";",off,true)).length || off < str.length; )
 	SYS.messInfo("TEST string", "Item ("+off+") = "+sIt);
-SYS.messInfo("TEST string (direct)", "Item "+str.parse(4,";",0,true));*/
+SYS.messInfo("TEST string (direct)", "Item "+str.parse(4,";",0,true));
+SYS.messInfo("TEST string (direct last)", "Item "+"1;2".parse(1,";"));
+SYS.messInfo("TEST string (direct after last)", "Item "+"1;2".parse(2,";"));
+SYS.messInfo("TEST string (direct last closed)", "Item "+"1;2;".parse(1,";"));
+SYS.messInfo("TEST string (direct after last closed)", "Item "+"1;2;".parse(2,";"));*/
 
 // Testing of the string parsing at a separator from the end
 /*str = "1;;2;;3;;4;5;;6;";
 for(off = str.length; (sIt=str.parseEnd(0,";",off,true)).length || off >= 0; )
 	SYS.messInfo("TEST string", "Item ("+off+") = "+sIt);
-SYS.messInfo("TEST string (direct)", "Item "+str.parseEnd(4,";",str.length,true));*/
+SYS.messInfo("TEST string (direct)", "Item "+str.parseEnd(4,";",str.length,true));
+SYS.messInfo("TEST string (direct first)", "Item "+"1;2".parseEnd(1,";"));
+SYS.messInfo("TEST string (direct before first)", "Item "+"1;2".parseEnd(2,";"));
+SYS.messInfo("TEST string (direct first closed)", "Item "+";1;2".parseEnd(1,";"));
+SYS.messInfo("TEST string (direct before first closed)", "Item "+";1;2".parseEnd(2,";"));*/
 
 // Testing of the string parsing as the path
 /*str = "/1//2//3//4/5/6/";
 for(off = 0; (sIt=str.parsePath(0,0,off)).length; )
 	SYS.messInfo("TEST string", "Item ("+off+") = "+sIt);
-SYS.messInfo("TEST string (direct)", "Item "+str.parsePath(4));*/
+SYS.messInfo("TEST string (direct)", "Item "+str.parsePath(4));
+SYS.messInfo("TEST string (direct last)", "Item "+"1/2".parsePath(1));
+SYS.messInfo("TEST string (direct after last)", "Item "+"1/2".parsePath(2));
+SYS.messInfo("TEST string (direct last closed)", "Item "+"1/2/".parsePath(1));
+SYS.messInfo("TEST string (direct after last closed)", "Item "+"1/2/".parsePath(2));*/
 
 // Testing of the string parsing as the path from the end
 /*str = "/1//2//3//4/5/6/";
 for(off = str.length; (sIt=str.parsePathEnd(0,off)).length || off >= 0; )
 	SYS.messInfo("TEST string", "Item ("+off+") = "+sIt);
-SYS.messInfo("TEST string (direct)", "Item "+str.parsePathEnd(4));*/
+SYS.messInfo("TEST string (direct)", "Item "+str.parsePathEnd(4));
+SYS.messInfo("TEST string (direct first)", "Item "+"1/2".parsePathEnd(1));
+SYS.messInfo("TEST string (direct before first)", "Item "+"1/2".parsePathEnd(2));
+SYS.messInfo("TEST string (direct first closed)", "Item "+"/1/2".parsePathEnd(1));
+SYS.messInfo("TEST string (direct before first closed)", "Item "+"/1/2".parsePathEnd(2));*/
 
 // Testing of the string-text parsing as the lines
 /*str = "1\n2\n\n3\x0A4\x0D5\x0D\x0A6";

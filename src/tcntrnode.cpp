@@ -209,16 +209,21 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	else {
 	    opt->setAttr("path", s_br);
 
-	    cntrCmdProc(opt);
+	    TError terr;
+	    try{ cntrCmdProc(opt); } catch(TError &ierr) { terr = ierr; }
+
 	    if(s2i(opt->attr("rez")) != TError::NoError)
 		throw TError("ContrItfc", _("%s:%s:> Error in the control item '%s'!"), opt->name().c_str(), (nodePath()+path).c_str(), s_br.c_str());
 
 	    // Check and put the command to the redundant stations
 	    string aNm = opt->name();
 	    if(SYS->rdPrimCmdTr() && SYS->rdEnable() && SYS->rdActive() && !s2i(opt->attr("reforwardRedundReq")) && !s2i(opt->attr("reforwardRedundOff")) &&
+		    (terr.cat.empty() || terr.cod == TError::Core_CntrWarning || aNm == "save") &&	//!!!! Warnings and the "save" commands can be processed on redundant
+													//     station even at errors on the initiate one
 		    (s2i(opt->attr("primaryCmd")) ||
 			aNm == "set" || aNm == "add" || aNm == "ins" || aNm == "del" || aNm == "move" ||
-			aNm == "load" || (aNm == "save" && !s2i(opt->attr("ctx"))) || aNm == "copy")) {
+			aNm == "load" || (aNm == "save" && !s2i(opt->attr("ctx"))) || aNm == "copy"))
+	    {
 		string lstStat;
 		opt->setAttr("path", nodePath()+"/"+TSYS::strEncode(s_br,TSYS::PathEl))->setAttr("primaryCmd", "")->setAttr("reforwardRedundReq", "1");
 		try{ while((lstStat=SYS->rdStRequest(*opt,lstStat,true)).size()) ; }
@@ -228,6 +233,12 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 		    opt->setAttr("rez", i2s(TError::Core_CntrWarning));
 	    }
 	    opt->attrDel("reforwardRedundReq");
+
+	    // Adding to the initial errors and warnings
+	    if(terr.cat.size()) {
+		if(terr.cat == opt->attr("mcat")) terr.mess += "\n" + (opt->attr("mtxt").size()?opt->attr("mtxt"):opt->text());
+		throw terr;
+	    }
 	}
     } catch(TError &err) {
 	if(err.cod == TError::Core_CntrWarning) opt->setAttr("rez", i2s(err.cod))->setAttr("mtxt", err.mess);

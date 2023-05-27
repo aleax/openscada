@@ -420,8 +420,10 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, char f
     }
 
     if(!db_true && !(flags&NoException)) {
-	if(dbErr.cat.empty()) throw SYS->db().at().err_sys("%s", dbErr.mess.empty() ? _("The requested entry is missing.") : dbErr.mess.c_str());
-	throw TError(dbErr.cat, dbErr.mess.empty() ? _("The requested entry is missing.") : dbErr.mess);
+	if(dbErr.cat.empty()) throw SYS->db().at().err_sys("%s", dbErr.mess.size() ? dbErr.mess.c_str() :
+	    ((ibdn.size()&&TSYS::strParse(ibdn,0,".").empty())?_("The node is not stored."):_("The requested entry is missing.")));
+	throw TError(dbErr.cat, dbErr.mess.size() ? dbErr.mess :
+	    ((ibdn.size()&&TSYS::strParse(ibdn,0,".").empty())?_("The node is not stored."):_("The requested entry is missing.")));
     }
 
     return db_true;
@@ -586,7 +588,10 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char f
 	}
     }
 
-    if(!(flags&NoException)) throw SYS->db().at().err_sys(_("Error writing to DB or configuration file."));
+    if(!(flags&NoException))
+	throw SYS->db().at().err_sys((ibdn.size()&&TSYS::strParse(ibdn,0,".").empty())
+					? _("The node is not stored.")
+					: _("Error writing to DB or configuration file."));
 
     return false;
 }

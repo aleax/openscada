@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Tmpl file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
+ *   Copyright (C) 2023 by MyName MyFamily, <my@email.org>                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -146,6 +146,8 @@ void TTrIn::load_( )
 	vl = prmNd.attr("TaskPrior");	if(!vl.empty()) setTaskPrior(s2i(vl));
 	//???? Append loading the additional configuration attributes
     } catch(...) { }
+
+    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
 }
 
 void TTrIn::save_( )
@@ -158,6 +160,8 @@ void TTrIn::save_( )
     cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TTransportIn::save_();
+
+    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
 }
 
 void TTrIn::start( )
@@ -303,6 +307,8 @@ void TTrOut::load_( )
 	vl = prmNd.attr("attempts"); if(!vl.empty()) setAttempts(s2i(vl));
 	//???? Append loading the additional configuration attributes
     } catch(...) { }
+
+    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
 }
 
 void TTrOut::save_( )
@@ -314,6 +320,8 @@ void TTrOut::save_( )
     cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TTransportOut::save_();
+
+    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
 }
 
 bool TTrOut::cfgChange( TCfg &co, const TVariant &pc )
