@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.12.1"
+#define MOD_VER		"2.12.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -1052,8 +1052,6 @@ void TMdPrm::enable( )
 {
     if(enableStat())	return;
 
-    loadIO();
-
     TParamContr::enable();
 
     owner().prmEn(this, true);	//Put to process
@@ -1100,11 +1098,6 @@ void TMdPrm::load_( )
 {
     //TParamContr::load_();
 
-    loadIO();
-}
-
-void TMdPrm::loadIO( )
-{
     //Restoring the attributes from the cache
     try {
 	XMLNode attrsNd;
@@ -1114,11 +1107,13 @@ void TMdPrm::loadIO( )
 	    if(vlPresent(aEl->attr("id"))) continue;
 	    pEl.fldAdd(new TFld(aEl->attr("id").c_str(),aEl->attr("nm").c_str(),(TFld::Type)s2i(aEl->attr("tp")),
 		s2i(aEl->attr("flg")),"","",aEl->attr("vals").c_str(),aEl->attr("names").c_str()));
-	    vlAt("err").at().setS(_("10:Data not available."), 0, true);
 	    //vlAt(aEl->attr("id")).at().setS(aEl->text());
 	}
+	vlAt("err").at().setS(_("10:Data not available."), 0, true);
 	if(attrsNd.childSize())	isSynced = true;
     } catch(TError &err) { }
+
+    cfg("ATTRS").setS("");	//!!!! Don't hold the cache data in the memory
 }
 
 void TMdPrm::save_( )
@@ -1141,6 +1136,8 @@ void TMdPrm::save_( )
 
     //Save to the cache
     TParamContr::save_();
+
+    cfg("ATTRS").setS("");	//!!!! Don't hold the cache data in the memory
 }
 
 void TMdPrm::sync( )

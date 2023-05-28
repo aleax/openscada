@@ -55,38 +55,36 @@
 <h2><span class="mw-headline" id="Obtaining_the_file_of_the_pre-mortem_dump_and_its_processing"><span class="mw-headline-number">3</span> Obtaining the file of the pre-mortem dump and its processing</span></h2>
 <p>In the case of an emergency exit of a program, the kernel of the Linux operating system can form a pre-mortem memory dump of the program. With this dump, you can often find a place in the program that caused the emergency stop. To enable the possibility of generating the pre-mortem memory dump of program by the Linux kernel, you need to execute the commands:
 </p>
-<pre style="white-space: pre-wrap;">
-# Check the possibility of generation of memory dumps
-# Specifies the "core" if it is enabled
-$ cat /proc/sys/kernel/core_pattern
-# Enabling the generation of memory dumps
-$ echo "core" &gt; /proc/sys/kernel/core_pattern
-</pre>
-<p>After that, you need to remove the limit on the size of the generated dump file. This limit is currently, by default, removed into OpenSCADA and is enabled with the command line argument <b>--noCoreDump</b>. To remove this limitation, at the operating system level, you can execute, before calling OpenSCADA, a special command — <b>$ ulimit -c unlimited</b>.
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c"># Check the possibility of generation of memory dumps</span>
+<span class="c"># Specifies the "core" if it is enabled</span>
+cat /proc/sys/kernel/core_pattern
+<span class="c"># Enabling the generation of memory dumps</span>
+<span class="nb">echo</span> <span class="s2">"core"</span> &gt; /proc/sys/kernel/core_pattern
+</pre></div>
+<p>After that, you need to remove the limit on the size of the generated dump file. This limit is currently, by default, removed into OpenSCADA and is enabled with the command line argument <b>--noCoreDump</b>. To remove this limitation, at the operating system level, you can execute, before calling OpenSCADA, a special command <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">ulimit -c unlimited</span>.
 </p><p>Then, you must make sure that the user launching OpenSCADA has the rights to write to the OpenSCADA working directory, which is required in the latest versions of OpenSCADA and provided by <a href="Program_manual.html#Projects" title="Special:MyLanguage/Documents/Program manual">the OpenSCADA Project Manager</a>.
 </p><p>Then start OpenSCADA and reproduce the crash, which resulted in the working directory OpenSCADA, creates a file "core".
 </p><p>The latest versions of OpenSCADA provide the automatic generation of the crash report, in the presence of the "core" dump file and the <b>gdb</b> debugger, and this is done at the start of OpenSCADA. Crash report files are named "AGLKS_core_2018-02-16_22.06.crash" and accumulate in the work folder of the OpenSCADA project.
 </p><p>If the "core" memory dump file is generated and the crash report is not automatically generated, then the <b>gdb</b> debugger is probably not installed. In this case, you must install it and call:
 </p>
 <ul><li> service procedure of the OpenSCADA projects manager:</li></ul>
-<dl><dd>$ openscada-proj proc {ProjName}</dd></dl>
+<dl><dd><span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">openscada-proj proc {ProjName}</span></dd></dl>
 <ul><li> or a direct debugger command from the project's working directory:</li></ul>
-<dl><dd>$ gdb openscada --core core --batch --quiet -ex "thread apply all bt full" -ex "quit" &gt; {ProjName}_core_$(date +%F_%H:%M).crash</dd></dl>
+<dl><dd><span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">gdb openscada --core core --batch --quiet -ex "thread apply all bt full" -ex "quit" &gt; {ProjName}_core_$(date +%F_%H:%M).crash</span></dd></dl>
 <ul><li> or a direct debugger procedure in the interactive mode, by calling <b>gdb</b> without arguments:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-# Go to working folder of the OpenSCADA project
-(gdb) cd /var/spool/openscada/{ProjName}
-(gdb) cd ~/.openscada/{ProjName}
-# Specifying an executable file
-(gdb) file /usr/bin/openscada
-# Specifying the dump file of the program
-(gdb) core-file ./core.26658
-# Getting the reversal of the stack execution — the crash report
-(gdb) thread apply all bt full
-#0  0xb7d104c0 in pthread_cancel () from /lib/librt.so.1
-#1  0xb7d1edaa in start_thread () from /lib/libpthread.so.0
-#2  0xb7dfcf5e in clone () from /lib/libc.so.6
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre><span class="c"># Go to working folder of the OpenSCADA project</span>
+<span class="o">(</span>gdb<span class="o">)</span> <span class="nb">cd</span> /var/spool/openscada/<span class="o">{</span>ProjName<span class="o">}</span>
+<span class="o">(</span>gdb<span class="o">)</span> <span class="nb">cd</span> ~/.openscada/<span class="o">{</span>ProjName<span class="o">}</span>
+<span class="c"># Specifying an executable file</span>
+<span class="o">(</span>gdb<span class="o">)</span> file /usr/bin/openscada
+<span class="c"># Specifying the dump file of the program</span>
+<span class="o">(</span>gdb<span class="o">)</span> core-file ./core.26658
+<span class="c"># Getting the reversal of the stack execution — the crash report</span>
+<span class="o">(</span>gdb<span class="o">)</span> thread apply all bt full
+<span class="c">#0  0xb7d104c0 in pthread_cancel () from /lib/librt.so.1</span>
+<span class="c">#1  0xb7d1edaa in start_thread () from /lib/libpthread.so.0</span>
+<span class="c">#2  0xb7dfcf5e in clone () from /lib/libc.so.6</span>
+</pre></div>
 
 
 

@@ -944,13 +944,13 @@ void TMess::load( )
     if((argVl=SYS->cmdOpt("messLev")).size()) {
 	int i = s2i(argVl);
 	if(i >= Debug && i <= Emerg) setMessLevel(i);
-    }
-    if((argVl=SYS->cmdOpt("log")).size()) setLogDirect(s2i(argVl));
+    } else setMessLevel(DEF_MessLev);
+    setLogDirect((argVl=SYS->cmdOpt("log")).size()?s2i(argVl):DEF_LogTarget);
 
     //Load params config-file
-    setMessLevel(s2i(TBDS::genPrmGet(SYS->nodePath()+"MessLev",i2s(DEF_MessLev))));
+    setMessLevel(s2i(TBDS::genPrmGet(SYS->nodePath()+"MessLev",i2s(messLevel()))));
     setSelDebCats(TBDS::genPrmGet(SYS->nodePath()+"SelDebCats"));
-    setLogDirect(s2i(TBDS::genPrmGet(SYS->nodePath()+"LogTarget",i2s(DEF_LogTarget))));
+    setLogDirect(s2i(TBDS::genPrmGet(SYS->nodePath()+"LogTarget",i2s(logDirect()))));
     setLang(TBDS::genPrmGet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg));
     if((argVl=TBDS::genPrmGet(SYS->nodePath()+"LangBase")).size() ||
 	    (argVl=TBDS::genPrmGet(SYS->nodePath()+"Lang2CodeBase")).size())	//????[v1.0] Remove, loading the deprecated parameter

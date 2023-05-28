@@ -1470,6 +1470,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 
 	    if(widget) {
 		lab = new QLabel(widget);
+		lab->setTextInteractionFlags(Qt::TextSelectableByMouse);
 		lstbox = new ListView(widget);
 		lstbox->setObjectName(br_path.c_str());
 		lstbox->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -1517,7 +1518,10 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    CfgTable *tbl;
 
 	    if(widget) {
-		widget->layout()->addWidget(new QLabel((t_s.attr("dscr")+":").c_str(),widget));
+		QLabel *lab = new QLabel(widget);
+		lab->setTextInteractionFlags(Qt::TextSelectableByMouse);
+		lab->setText((t_s.attr("dscr")+":").c_str());
+		widget->layout()->addWidget(lab);
 		tbl = new CfgTable(widget);
 		tbl->setItemDelegate(new TableDelegate);
 		tbl->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
@@ -1732,6 +1736,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 
 	    if(widget) {
 		lab = new QLabel(widget);
+		lab->setTextInteractionFlags(Qt::TextSelectableByMouse);
 		img = new ImgView(widget, Qt::Widget, s2i(t_s.attr("h_sz")), s2i(t_s.attr("v_sz")));
 		img->setObjectName(br_path.c_str());
 		img->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: selfwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2004-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -78,7 +78,7 @@ ImgView::~ImgView( )	{ }
 
 bool ImgView::setImage( const string &imgdata )
 {
-    bool rez = imgdata.size() && mImg.loadFromData((const uchar*)imgdata.c_str(), imgdata.size());
+    bool rez = imgdata.size() && mImg.loadFromData((const uchar*)imgdata.data(), imgdata.size());
 
     if(rez) {
 	mImg = mImg.scaled(QSize(hSz?vmin(hSz,mImg.width()):mImg.width(),

@@ -1,3 +1,29 @@
+2023-05-28 Roman 0.9.6
+- LibsDB.OscadaLibs: flb_Controller.test: Appended by extra tests for string::{parse,parseEnd,parsePath,parsePathEnd}()
+    after fixing the End variants in the last item processing at direct accessing and if the item is empty.
+- FIX:LibsDB.vcaBase: wlb_Main.userManager: Fixed in saving the groups' changing by saving the changed groups and not the user.
+- !!:FIX:SYS: The function TSYS::strParseEnd() and TSYS::pathLevEnd() fixed in the last item processing at direct accessing
+	and if the item is empty.
+    !!:FIX: Handling the default values fixed-expanded on taking in the account for the command-line options
+	and especially SYS->modDir() which is the sum of the two configuration and command-line options "ModDir" and ModSchedule::"ModPath",
+	and this problem was detected on Android.
+    !:FIX: Obtaining the project icon fixed at the project switching by clearing the base name mNameB.
+    FIX: Reverted back the changes at 2023-02-16 about "The service request "load:/{Node}/%2fobj" appended by clearing the
+	configuration context after the loading." since that context can be used hierarchically or in the redundancy.
+    Sending the Control Interface commands to the redundant stations is allowed for warnings and errors of the "save" command
+	on the source-initial station.
+- DAQ.DAQGate,Transports.*: Prevented in holding content of the transitive attribute "ATTRS" and "A_PRMS" in the memory
+    for decreasing the memory consumption at 10-20%.
+- DB: TBDS::dataGet() and TBDS::dataSet() appended of checking the DB emptiness and generation the "The node is not stored." messages.
+- !:FIX:Archives: The "Values" tab expanded in the statistic field "Number" by no source (passive), error (missing source)
+	and lost (empty DB) value archives; the tab also appended by the group cleaning-removing operations of the value archives
+	for no source - passive, with error source - missing source, lost archives - empty DB.
+    FIX: The diagram building of the value archive fixed for crash at some very short data when h_div can become zero.
+- UI.QTStarter: For the project icon obtaining there is used the unified function SYS->ico().
+- UI.QTCfg: Labels of the Image, List and Table fields appended of the possibility of the label text selection by mouse.
+- ModSchedul: The modules checking period was set in 0 by default for disable the modules checking at empty configurations.
+
+
 2023-05-09 Roman 0.9.6
 - FIX:LibsDB.{OscadaLibs,vcaBase}: Some automatic fixed for the translations.
 - !!!!:SYS,UI.{QTCfg,WebCfgD}: The Control Requests code TError::Core_CntrWarning expanded

@@ -55,38 +55,36 @@
 <h2><span class="mw-headline" id=".D0.9F.D0.BE.D0.BB.D1.83.D1.87.D0.B5.D0.BD.D0.B8.D0.B5_.D1.84.D0.B0.D0.B9.D0.BB.D0.B0_.D0.BF.D1.80.D0.B5.D0.B4.D1.81.D0.BC.D0.B5.D1.80.D1.82.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B4.D0.B0.D0.BC.D0.BF.D0.B0_.D0.B8_.D0.B5.D0.B3.D0.BE_.D0.BE.D0.B1.D1.80.D0.B0.D0.B1.D0.BE.D1.82.D0.BA.D0.B0"><span class="mw-headline-number">3</span> Получение файла предсмертного дампа и его обработка</span></h2>
 <p>Во время аварийного завершения программы ядро ОС Linux может формировать предсмертный дамп памяти программы. С помощью этого дампа часто можно выявить место в программе, которое вызвало аварийную остановку. Для включения возможности генерации ядром Linux предсмертного дампа памяти программы нужно выполнить команды:
 </p>
-<pre style="white-space: pre-wrap;">
-# Проверка возможности генерации дампов памяти
-# Указывает "core", если включена
-$ cat /proc/sys/kernel/core_pattern
-# Включение генерации дампов памяти
-$ echo "core" &gt; /proc/sys/kernel/core_pattern
-</pre>
-<p>После этого нужно снять ограничение на размер генерируемого файла дампа. Это ограничение, по умолчанию, в OpenSCADA снято и устанавливается оно аргументом командной строки <b>--noCoreDump</b>. Снять это ограничение, на уровне операционной системы, можно исполнив, перед вызовом OpenSCADA, специальную команду — <b>$ ulimit -c unlimited</b>.
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c"># Проверка возможности генерации дампов памяти</span>
+<span class="c"># Указывает "core", если включена</span>
+cat /proc/sys/kernel/core_pattern
+<span class="c"># Включение генерации дампов памяти</span>
+<span class="nb">echo</span> <span class="s2">"core"</span> &gt; /proc/sys/kernel/core_pattern
+</pre></div>
+<p>После этого нужно снять ограничение на размер генерируемого файла дампа. Это ограничение, по умолчанию, в OpenSCADA снято и устанавливается оно аргументом командной строки <b>--noCoreDump</b>. Снять это ограничение, на уровне операционной системы, можно исполнив, перед вызовом OpenSCADA, специальную команду <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">ulimit -c unlimited</span>.
 </p><p>Затем нужно убедиться в том, что пользователь, который запускает OpenSCADA, имеет право записи в рабочую директорию OpenSCADA, что в последних версиях OpenSCADA является обязательным и обеспечивается <a href="Program_manual.html#Projects" title="Special:MyLanguage/Documents/Program manual">менеджером проектов OpenSCADA</a>.
 </p><p>Далее запускается OpenSCADA и воспроизводится аварийное завершение, в результате которого, в рабочей директории OpenSCADA, создаётся файл "core".
 </p><p>Последние версии OpenSCADA обеспечивают автоматическую генерацию отчёта про аварийное завершения, при наличии файла предсмертного дампу "core" и отладчика <b>gdb</b>, и это осуществляется в начале запуска OpenSCADA. Файлы отчётов про аварийное завершение получают название вида "AGLKS_core_2018-02-16_22.06.crash" и накапливаются в рабочей директории соответствующего проекта OpenSCADA.
 </p><p>Если файл дампа памяти "core" сформировался, а отчёт про аварийное завершение автоматически не генерируется, то вероятно не установлен отладчик <b>gdb</b>. В таком случае Вы должны его установить и вызвать:
 </p>
 <ul><li> сервисную процедуру менеджера проектов OpenSCADA:</li></ul>
-<dl><dd>$ openscada-proj proc {ProjName}</dd></dl>
+<dl><dd><span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">openscada-proj proc {ProjName}</span></dd></dl>
 <ul><li> или команду прямого вызова отладчика, из рабочей папки проекта:</li></ul>
-<dl><dd>$ gdb openscada --core core --batch --quiet -ex "thread apply all bt full" -ex "quit" &gt; {ProjName}_core_$(date +%F_%H:%M).crash</dd></dl>
+<dl><dd><span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">gdb openscada --core core --batch --quiet -ex "thread apply all bt full" -ex "quit" &gt; {ProjName}_core_$(date +%F_%H:%M).crash</span></dd></dl>
 <ul><li> или прямую процедуру отладчика в интерактивном режиме, через вызов <b>gdb</b> без аргументов:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-# Переход в рабочий каталог проекта OpenSCADA
-(gdb) cd /var/spool/openscada/{ProjName}
-(gdb) cd ~/.openscada/{ProjName}
-# Указание исполняемого файла
-(gdb) file /usr/bin/openscada
-# Указание файла дампа памяти программы
-(gdb) core-file ./core.26658
-# Получение разворота стека исполнения — отчёта об аварийном завершении
-(gdb) thread apply all bt full
-#0  0xb7d104c0 in pthread_cancel () from /lib/librt.so.1
-#1  0xb7d1edaa in start_thread () from /lib/libpthread.so.0
-#2  0xb7dfcf5e in clone () from /lib/libc.so.6
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre><span class="c"># Переход в рабочий каталог проекта OpenSCADA</span>
+<span class="o">(</span>gdb<span class="o">)</span> <span class="nb">cd</span> /var/spool/openscada/<span class="o">{</span>ProjName<span class="o">}</span>
+<span class="o">(</span>gdb<span class="o">)</span> <span class="nb">cd</span> ~/.openscada/<span class="o">{</span>ProjName<span class="o">}</span>
+<span class="c"># Указание исполняемого файла</span>
+<span class="o">(</span>gdb<span class="o">)</span> file /usr/bin/openscada
+<span class="c"># Указание файла дампа памяти программы</span>
+<span class="o">(</span>gdb<span class="o">)</span> core-file ./core.26658
+<span class="c"># Получение разворота стека исполнения — отчёта об аварийном завершении</span>
+<span class="o">(</span>gdb<span class="o">)</span> thread apply all bt full
+<span class="c">#0  0xb7d104c0 in pthread_cancel () from /lib/librt.so.1</span>
+<span class="c">#1  0xb7d1edaa in start_thread () from /lib/libpthread.so.0</span>
+<span class="c">#2  0xb7dfcf5e in clone () from /lib/libc.so.6</span>
+</pre></div>
 
 
 

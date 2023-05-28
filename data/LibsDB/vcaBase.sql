@@ -13331,7 +13331,8 @@ for(ev_rez = "", offEv = 0; (ev_cur=event.parse(0,"\n",offEv)).length; ) {
 		users = oIt1.cfg("USERS");
 		//this.messInfo("grp_value="+grp_value+"; users="+users);
 		oIt1.cfgSet("USERS", oIt1.user(userSelVl) ? users.replace(userSelVl+";","") : users+userSelVl+";");
-		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/usr_"+userSelVl+"/%2fobj")); 
+		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/grp_"+grp_value+"/%2fobj"));
+		//SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/usr_"+userSelVl+"/%2fobj")); 
 		userSel = SYS.mtime()+500;
 	}
 	else ev_rez += (ev_cur+"\n");
@@ -13385,7 +13386,7 @@ if(userSel && SYS.mtime() >= userSel) {
 		grp_items += "</tbl>";
 		grp_value = "";
 	}
-}','','',-2,'id;owner;perm;name;dscr;geomH;evProc;backColor;',1587891375);
+}','','',-1,'id;owner;perm;name;dscr;geomH;evProc;backColor;',1587891375);
 INSERT INTO wlb_Main VALUES('graphCalc','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgCAIAAAAt/+nTAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD
 X0lEQVRYhe2YzU7jRgCAZ8YziWPPjBNTwoJQoBKicEBqJLgguPMkPEDeaXvgxEOgPAGI21aiIK2d
 LPHP+Hc8nh6yaqtNWJVSyaXKd7DkGXv8fRrJkg0vLy8ppZ7nIYSUUlmWua4rhKjruigK27aVUhjj
@@ -23063,7 +23064,7 @@ but sometimes there is a need to provide this capability from the user interface
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Vinnica Poultry Farm
-Version: 1.6.2
+Version: 1.6.3
 License: GPLv2',32,'','','','Елемент-кадр слугує для надання можливості контролю користувачів з інтерфейсу самого користувача.
 Тобто, типово ця функція надається програмісту SCADA на рівні конфігурації підсистеми "Безпека",
 але інколи виникає потреба надання такої можливості з інтерфейсу користувача та із низкою обмежень на контрольованих користувачів та їх групи, що цей кадр здійснює та загалом надає функції:
@@ -23073,7 +23074,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для над�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Вінницька Птахофабрика
-Версія: 1.6.2
+Версія: 1.6.3
 Ліцензія: GPLv2','','Элемент-кадр служит для предоставления возможности контроля пользователей из интерфейса самого пользователя.
 Т.е., типично эта функция предоставляется программисту SCADA на уровне конфигурации подсистемы "Безопасность",
 но иногда возникает необходимость предоставления такой возможности из интерфейса пользователя и с рядом ограничений на контролируемых пользователей и их группы, что этот кадр осуществляет и в целом предоставляет функции:
@@ -23083,7 +23084,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для над�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Винницкая Птицефабрика
-Версия: 1.6.2
+Версия: 1.6.3
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsAct','dscr','The element serves to dynamically display the active violations in a tabular form and to highlight them in color and text. The violations are obtained from the buffer of current-active violations of OpenSCADA. In fact, the element implements the primitive "Protocol" functions for violations and extension opportunities.
 

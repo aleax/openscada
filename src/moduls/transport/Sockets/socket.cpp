@@ -61,7 +61,7 @@
 #define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.5.5"
+#define MOD_VER		"4.5.6"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov(2014)")
 #define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -231,6 +231,8 @@ void TSocketIn::load_( )
 	vl = prmNd.attr("KeepAliveTm");	if(!vl.empty()) setKeepAliveTm(s2i(vl));
 	vl = prmNd.attr("TaskPrior");	if(!vl.empty()) setTaskPrior(s2i(vl));
     } catch(...) { }
+
+    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
 }
 
 void TSocketIn::save_( )
@@ -247,6 +249,8 @@ void TSocketIn::save_( )
     cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TTransportIn::save_();
+
+    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
 }
 
 void TSocketIn::start( )
@@ -1150,6 +1154,8 @@ void TSocketOut::load_( )
 	vl = prmNd.attr("attempts"); if(!vl.empty()) setAttempts(s2i(vl));
 	vl = prmNd.attr("MSS"); if(!vl.empty()) setMSS(s2i(vl));
     } catch(...) { }
+
+    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
 }
 
 void TSocketOut::save_( )
@@ -1163,6 +1169,8 @@ void TSocketOut::save_( )
     cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TTransportOut::save_();
+
+    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
 }
 
 bool TSocketOut::cfgChange( TCfg &co, const TVariant &pc )

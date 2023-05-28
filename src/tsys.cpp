@@ -249,12 +249,12 @@ string TSYS::ico( string *tp )
     //At the localised name
     rez = TSYS::strEncode(TUIS::icoGet(trD(name()),&itp), TSYS::base64);
     //... or the base name
-    if(!itp.size()) {
+    if(itp.empty()) {
 	if(mNameB.empty()) mNameB = TBDS::genPrmGet(nodePath()+"StName", "", "root");
 	rez = TSYS::strEncode(TUIS::icoGet(mNameB,&itp), TSYS::base64);
     }
     //... or ID
-    if(!itp.size())
+    if(itp.empty())
 	rez = TSYS::strEncode(TUIS::icoGet(id(),&itp), TSYS::base64);
 
     if(tp) *tp = itp;
@@ -704,10 +704,10 @@ void TSYS::cfgFileLoad( )
 {
     //================ Load parameters from the commandline =========================
     string tVl;
-    if((tVl=cmdOpt("config")).size())	mConfFile = tVl;
-    if((tVl=cmdOpt("station")).size())	mId = tVl;
-    if((tVl=cmdOpt("statName")).size())	mName = tVl;
-    if((tVl=cmdOpt("modDir")).size())	setModDir(tVl, true);
+    mConfFile = (tVl=cmdOpt("config")).size() ? tVl : DEF_ConfFile;
+    mId = (tVl=cmdOpt("station")).size() ? tVl : DEF_Id;
+    mName = (tVl=cmdOpt("statName")).size() ? tVl : DEF_StName;
+    setModDir(((tVl=cmdOpt("modDir")).size() || (tVl=SYS->cmdOpt("modPath")).size()) ? tVl : DEF_ModPath, true);
 
     //Save changes before
     cfgFileSave();
@@ -792,10 +792,10 @@ void TSYS::cfgPrmLoad( )
 
     //System parameters
     setClockRT(s2i(TBDS::genPrmGet(nodePath()+"ClockRT",i2s(DEF_ClockRT))));
-    setName(TBDS::genPrmGet(nodePath()+"StName",DEF_StName,"root",TBDS::UseTranslation));
+    setName(TBDS::genPrmGet(nodePath()+"StName",name(),"root",TBDS::UseTranslation));
     mWorkDB = TBDS::genPrmGet(nodePath()+"WorkDB", DEF_WorkDB);
     setWorkDir(TBDS::genPrmGet(nodePath()+"Workdir","").c_str(), true);
-    setModDir(TBDS::genPrmGet(nodePath()+"ModDir",DEF_ModPath), true);
+    setModDir(TBDS::genPrmGet(nodePath()+"ModDir",modDir()), true);
     setIcoDir(TBDS::genPrmGet(nodePath()+"IcoDir",DEF_IcoDir));
     setDocDir(TBDS::genPrmGet(nodePath()+"DocDir",DEF_DocDir));
     setMainCPUs(TBDS::genPrmGet(nodePath()+"MainCPUs",DEF_MainCPUs));
@@ -1052,7 +1052,7 @@ void TSYS::unload( )
     mRdStLevel = DEF_RdStLevel, mRdRestConnTm = DEF_RdRestConnTm, mRdTaskPer = DEF_RdTaskPer, mRdPrimCmdTr = DEF_RdPrimCmdTr;
     mRdRes.unlock();
 
-    mId = DEF_Id, mName = DEF_StName, mUser = DEF_User, mMainCPUs = DEF_MainCPUs;
+    mId = DEF_Id, mName = DEF_StName, mNameB = "", mUser = DEF_User, mMainCPUs = DEF_MainCPUs;
     mConfFile = DEF_ConfFile, mWorkDB = DEF_WorkDB, mModDir = DEF_ModPath, mIcoDir = DEF_IcoDir, mDocDir = DEF_DocDir;
     mSaveAtExit = DEF_SaveAtExit, mSavePeriod = DEF_SavePeriod, isLoaded = false, rootModifCnt = 0, sysModifFlgs = MDF_NONE, mPrjCustMode = true;
 
@@ -1290,10 +1290,10 @@ string TSYS::strParseEnd( const string &path, int level, const string &sep, int 
     string rezTk;
     bool isFound = false;
     while(true) {
-	size_t t_dir = path.rfind(sep, an_dir);
+	size_t t_dir = (an_dir < 0) ? string::npos : path.rfind(sep, an_dir);
 	if(t_dir == string::npos) {
 	    if(off) *off = -1;
-	    return (t_lev == level) ? path.substr(0,an_dir+1) : "";
+	    return (an_dir >= 0 && t_lev == level) ? path.substr(0,an_dir+1) : "";
 	}
 	else if(t_lev == level) {
 	    rezTk = path.substr(t_dir+sep.size(), an_dir-(t_dir+sep.size()-1));
@@ -1391,10 +1391,10 @@ string TSYS::pathLevEnd( const string &path, int level, bool decode, int *off )
     string rezTk;
     bool isFound = false;
     while(true) {
-	size_t t_dir = path.rfind("/", an_dir);
+	size_t t_dir = (an_dir < 0) ? string::npos : path.rfind("/", an_dir);
 	if(t_dir == string::npos) {
 	    if(off) *off = -1;
-	    return (t_lev == level) ? (decode ? TSYS::strDecode(path.substr(0,an_dir),TSYS::PathEl) : path.substr(0,an_dir)) : "";
+	    return (an_dir >= 0 && t_lev == level) ? (decode ? TSYS::strDecode(path.substr(0,an_dir+1),TSYS::PathEl) : path.substr(0,an_dir+1)) : "";
 	}
 	else if(t_lev == level) {
 	    rezTk = decode ? TSYS::strDecode(path.substr(t_dir+1,an_dir-t_dir),TSYS::PathEl) : path.substr(t_dir+1,an_dir-t_dir);
