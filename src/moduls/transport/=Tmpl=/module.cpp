@@ -147,7 +147,7 @@ void TTrIn::load_( )
 	//???? Append loading the additional configuration attributes
     } catch(...) { }
 
-    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
+    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
 }
 
 void TTrIn::save_( )
@@ -161,7 +161,7 @@ void TTrIn::save_( )
 
     TTransportIn::save_();
 
-    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
+    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
 }
 
 void TTrIn::start( )
@@ -308,7 +308,7 @@ void TTrOut::load_( )
 	//???? Append loading the additional configuration attributes
     } catch(...) { }
 
-    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
+    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
 }
 
 void TTrOut::save_( )
@@ -321,7 +321,7 @@ void TTrOut::save_( )
 
     TTransportOut::save_();
 
-    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
+    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
 }
 
 bool TTrOut::cfgChange( TCfg &co, const TVariant &pc )

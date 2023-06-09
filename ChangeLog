@@ -1,3 +1,13 @@
+2023-06-09 Roman (stable)
+- SYS: TElem::fldList() set to const.
+- Archives: Copying the value archives appended by copying the data source if it is empty one in the target object.
+- DAQ.DAQGate: Appended by the cached attributes direct copy at the parameter objects copy, after preventing of storing "ATTRS".
+- Transports.*: Restored in storing "A_PRMS" for allowing the specific attributes copy and those objects are not big
+    for such sort memory optimisation.
+- UI.{QTCfg,WebCfgD}: The messages "On", "Off" renamed in "Yes", "No" correspondingly, for the boolean screen items.
+- FIX:UI.WebCfgD: Fixed in processing the empty comboboxes.
+
+
 2023-05-27 Roman (stable)
 - LibsDB.OscadaLibs: flb_Controller.test: Appended by extra tests for string::{parse,parseEnd,parsePath,parsePathEnd}()
     after fixing the End variants in the last item processing at direct accessing and if the item is empty.

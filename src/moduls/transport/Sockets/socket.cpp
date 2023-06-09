@@ -61,7 +61,7 @@
 #define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.5.6"
+#define MOD_VER		"4.5.7"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov(2014)")
 #define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -232,7 +232,7 @@ void TSocketIn::load_( )
 	vl = prmNd.attr("TaskPrior");	if(!vl.empty()) setTaskPrior(s2i(vl));
     } catch(...) { }
 
-    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
+    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
 }
 
 void TSocketIn::save_( )
@@ -250,7 +250,7 @@ void TSocketIn::save_( )
 
     TTransportIn::save_();
 
-    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
+    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
 }
 
 void TSocketIn::start( )
@@ -1155,7 +1155,7 @@ void TSocketOut::load_( )
 	vl = prmNd.attr("MSS"); if(!vl.empty()) setMSS(s2i(vl));
     } catch(...) { }
 
-    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
+    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
 }
 
 void TSocketOut::save_( )
@@ -1170,7 +1170,7 @@ void TSocketOut::save_( )
 
     TTransportOut::save_();
 
-    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
+    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
 }
 
 bool TSocketOut::cfgChange( TCfg &co, const TVariant &pc )

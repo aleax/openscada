@@ -55,7 +55,7 @@
 #define MOD_NAME	trS("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.6.10"
+#define MOD_VER		"2.6.11"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	trS("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -270,7 +270,7 @@ void TTrIn::load_( )
 	vl = prmNd.attr("MdmRingAnswerResp");	if(!vl.empty()) setMdmRingAnswerResp(vl);
     } catch(...) { }
 
-    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
+    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
 }
 
 void TTrIn::save_( )
@@ -291,7 +291,7 @@ void TTrIn::save_( )
 
     TTransportIn::save_();
 
-    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
+    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
 }
 
 bool TTrIn::cfgChange( TCfg &co, const TVariant &pc )
@@ -855,7 +855,7 @@ void TTrOut::load_( )
 	vl = prmNd.attr("MdmHangUpResp");if(!vl.empty()) setMdmHangUpResp(vl);
     } catch(...) { }
 
-    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
+    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
 }
 
 void TTrOut::save_( )
@@ -882,7 +882,7 @@ void TTrOut::save_( )
 
     TTransportOut::save_();
 
-    cfg("A_PRMS").setS("");	//!!!! Don't hold the parameters source in the memory
+    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
 }
 
 string TTrOut::getStatus( )
