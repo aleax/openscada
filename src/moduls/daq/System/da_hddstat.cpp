@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_hddstat.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -45,48 +45,7 @@ HddStat::HddStat( )
     fldAdd(new TFld("wrSp",trS("Write speed (B/s)"),TFld::Real,TFld::NoWrite));
 }
 
-HddStat::~HddStat( )
-{
-
-}
-
-void HddStat::init( TMdPrm *prm, bool update )
-{
-    TCfg &c_subt = prm->cfg("SUBT");
-
-    //Create Configuration
-    if(!update) c_subt.fld().setDescr(trS("Disk(part)"));
-
-    vector<string> list;
-    dList(prm, list, true);
-    string dls;
-    for(unsigned i_l = 0; i_l < list.size(); i_l++)
-	dls += list[i_l]+";";
-    MtxAlloc res(prm->dataRes(), true);
-    c_subt.fld().setValues(dls);
-    c_subt.fld().setSelNames(dls);
-    res.unlock();
-
-    if(!update && list.size() && !TRegExp("(^|;)"+c_subt.getS()+";").test(dls))
-	c_subt.setS(list[0]);
-}
-
-void HddStat::dList( TCntrNode *obj, vector<string> &list, bool part )
-{
-    int major, minor;
-    char name[11];
-    char buf[256];
-
-    FILE *f = fopen("/proc/partitions","r");
-    while(f && fgets(buf,sizeof(buf),f) != NULL) {
-	if(sscanf(buf,"%d %d %*d %10s",&major,&minor,name) != 3) continue;
-	if(!part && ((major != SCSI_MAJOR && minor != 0) || (major == SCSI_MAJOR && (minor%16)) || !strncmp(name,"md",2)))
-	    continue;
-	list.push_back(name);
-    }
-    if(f && fclose(f) != 0)
-	mess_warning(obj->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
-}
+HddStat::~HddStat( )	{ }
 
 void HddStat::getVal( TMdPrm *prm )
 {
@@ -145,33 +104,18 @@ void HddStat::getVal( TMdPrm *prm )
     }
 }
 
-void HddStat::makeActiveDA( TMdContr *aCntr )
+void HddStat::dList( vector<string> &list, TMdPrm *prm )
 {
-    string ap_nm = "Statistic_";
+    int major, minor;
+    char name[11];
+    char buf[256];
 
-    vector<string> list;
-    dList(aCntr, list, true);
-    for(unsigned iHd = 0; iHd < list.size(); iHd++) {
-	vector<string> pLs;
-	//Find propper parameter's object
-	aCntr->list(pLs);
-
-	unsigned iP;
-	for(iP = 0; iP < pLs.size(); iP++) {
-	    AutoHD<TMdPrm> p = aCntr->at(pLs[iP]);
-	    if(p.at().cfg("TYPE").getS() == id() && p.at().cfg("SUBT").getS() == list[iHd])	break;
-	}
-	if(iP < pLs.size()) continue;
-
-	string hddprm = ap_nm+list[iHd];
-	while(aCntr->present(hddprm)) hddprm = TSYS::strLabEnum(hddprm);
-	aCntr->add(hddprm, 0);
-	AutoHD<TMdPrm> dprm = aCntr->at(hddprm);
-	dprm.at().setName(_("HD statistic: ")+list[iHd]);
-	dprm.at().autoC(true);
-	dprm.at().cfg("TYPE").setS(id());
-	dprm.at().cfg("SUBT").setS(list[iHd]);
-	dprm.at().cfg("EN").setB(true);
-	if(aCntr->enableStat()) dprm.at().enable();
+    FILE *f = fopen("/proc/partitions","r");
+    while(f && fgets(buf,sizeof(buf),f) != NULL) {
+	if(sscanf(buf,"%d %d %*d %10s",&major,&minor,name) != 3) continue;
+	//if(!part && ((major != SCSI_MAJOR && minor != 0) || (major == SCSI_MAJOR && (minor%16)) || !strncmp(name,"md",2)))
+	//    continue;
+	list.push_back(name);
     }
+    if(f && fclose(f) != 0) mess_warning(mod->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
 }

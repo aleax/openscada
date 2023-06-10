@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/Система</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSystem&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/System" title="Modules/System">Modules/System</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/System.html" title="Modules/System (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/System.html" title="Модулі/Система (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSystem&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/System" title="Modules/System">Modules/System</a> and the translation is 13% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/System.html" title="Modules/System (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--stub">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/System.html" title="Модулі/Система (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,166 +31,204 @@
 <td> <a href="../Modules/System.html" title="Special:MyLanguage/Modules/System">System</a> </td>
 <td> Сбор данных ОС
 </td>
-<td> 2.4 </td>
+<td> 3.0 </td>
 <td> GPL2 </td>
 <td> daq_System.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> DAQ </td>
-<td> Роман Савоченко </td>
-<td> Предоставляет сбор данных из ОС. Поддерживаются источники данных ОС Linux: HDDTemp, Sensors, Uptime, Memory, CPU, ИБП и т.д.
-<ul><li> <b><a href="../../en/To_do.html" title="Special:MyLanguage/Works/To do">Задачи (To Do)</a>:</b></li></ul>
-<dl><dd> - добавить измерение потребления памяти по процессам или группам процессов.</dd></dl>
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — the page translation</i></font> </td>
+<td> Provides data acquisition from Operation System. Supported OS Linux data sources: CPU, Memory, Sensors, Disk SMART, Disk Statistic, File System, Network, Power, UPS, Up Time etc.
+<ul><li> <b><a href="../../en/To_do.html" title="Special:MyLanguage/Works/To do">To Do</a>:</b></li></ul>
+<dl><dd> - append measuring of the system memory consumption per process or group of the processes.</dd></dl>
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
-<li class="toclevel-1 tocsection-1"><a href="#.D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85"><span class="tocnumber">1</span> <span class="toctext">Объект контроллера данных</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B"><span class="tocnumber">2</span> <span class="toctext">Параметры</span></a></li>
+<li class="toclevel-1 tocsection-1"><a href="#Controller_object"><span class="tocnumber">1</span> <span class="toctext">Controller object</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Parameters"><span class="tocnumber">2</span> <span class="toctext">Parameters</span></a></li>
 </ul>
 </div>
 
-<p>Модуль является своего рода шлюзом между OpenSCADA и ОС(операционной системой). Модуль получает данные из различных источников данных ОС и позволяет управлять компонентами ОС.
-</p><p>Модуль предоставляет возможность автоматического поиска поддерживаемых и активных источников данных с созданием параметров для доступа к ним, а также реализацию функции горизонтального резервирования, а именно совместной работы с удалённой станцией этого-же уровня.
+<p>The module is a kind of gateway between OpenSCADA and Operation System (OS) which receives data from various data sources and allows to manage some components of the OS.
+</p><p>The module provides an ability of automatic searching for supported active data sources with establishing the parameters for accessing to them as well as the implementation of the horizontal reservation function, that is working in conjunction with the remote station of the same level.
 </p>
-<h2><span class="mw-headline" id=".D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85"><span class="mw-headline-number">1</span> Объект контроллера данных</span></h2>
-<p>Для добавления источника данных ОС создаётся и конфигурируется объект контроллера в OpenSCADA. Пример вкладки конфигурации объекта контроллера данного типа изображен на рис.1.
+<h2><span class="mw-headline" id="Controller_object"><span class="mw-headline-number">1</span> Controller object</span></h2>
+<p>To add a data source of OS there is created and configured a controller object in OpenSCADA. An example of the configuration tab of the controller object of the given type shown in Figure 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:828px;"><a class="image" href="http://oscada.org/wiki/File:System_cntr_ru.png"><img class="thumbimage" height="629" src="../files/System_cntr_ru.png" width="826" /></a>  <div class="thumbcaption">Рис.1. Вкладка конфигурации объекта контроллера.</div></div></div></div>
-<p>С помощью этой вкладки можно установить:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:766px;"><a class="image" href="http://oscada.org/wiki/File:System_cntr.png"><img class="thumbimage" height="679" src="../../en/files/System_cntr.png" width="764" /></a>  <div class="thumbcaption">Рис.1. Вкладка конфигурации объекта контроллера.</div></div></div></div>
+<p>From this tab you can set:
 </p>
-<ul><li> Состояние объекта контроллера, а именно: Статус, "Включен", Запущен" и имя БД, содержащей конфигурацию.</li>
-<li> Идентификатор, имя и описание контроллера.</li>
-<li> Состояние, в которое переводить объект контроллера при загрузке: "Включен" и "Запущен".</li>
-<li> Автоматический поиск активных источников данных и создание параметров для них, для режимов: "Ручной", "Быстрые источники", "Медленные источники", "Все источники".</li>
-<li> Имя таблицы для хранения конфигурации параметров объектов контроллера.</li>
-<li> Политика планирования и приоритет задачи сбора данных.</li></ul>
-<h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B"><span class="mw-headline-number">2</span> Параметры</span></h2>
-<p>Модуль <i>System</i> предоставляет только один тип параметров — "Все параметры". Дополнительными конфигурационными полями параметров данного модуля (рис.2) являются:
+<ul><li> The state of the controller object, as follows: Status, "Enabled","Running" and the database name containing the configuration.</li>
+<li> Identifier, name and description of the controller.</li>
+<li> The state in which the parameter object to be switched at boot time: "Enabled", "Running".</li>
+<li> Automatic searching the active data sources and creation of the parameters for them for modes: "Manual", "Fast sources", "Slow sources", "All sources".</li>
+<li> Name of the table of storing the configuration of the parameters of the controller object.</li>
+<li> Policy of scheduling and priority of the data acquisition task.</li></ul>
+<h2><span class="mw-headline" id="Parameters"><span class="mw-headline-number">2</span> Parameters</span></h2>
+<p>The module provides only one type of the parameters — "Standard". Additional configuration fields of the parameters of the module (Fig. 2) are:
 </p>
-<ul><li> часть системы;</li>
-<li> дополнительный (зависит от источника данных).</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:855px;"><a class="image" href="http://oscada.org/wiki/File:System_prm_ru.png"><img class="thumbimage" height="492" src="../files/System_prm_ru.png" width="853" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфигурации параметра.</div></div></div></div>
-<p>В таблице ниже приведен список поддерживаемых источников данных ОС, значение дополнительного конфигурационного поля и атрибуты параметров.
-</p>
+<ul><li> part of the system; </li>
+<li> subtype, dependent from the data source and can be missing in whole.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:787px;"><a class="image" href="http://oscada.org/wiki/File:System_prm.png"><img class="thumbimage" height="530" src="../../en/files/System_prm.png" width="785" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of the DAQ parameter.</div></div></div></div>
 <table class="wikitable">
-
+<caption> Supported data sources of OS
+</caption>
 <tr>
-<th> Источник данных </th>
-<th> Значение дополнительного конфигурационного поля </th>
-<th> Атрибуты параметра </th>
-<th> Требования
+<th> Data Source (ID)<br />"AutoCreateID" </th>
+<th> Subtype values </th>
+<th> Parameter attributes (identifier[properties]) </th>
+<th> Notes
 </th></tr>
 <tr>
-<td> Процессор (CPU) </td>
-<td> Имя/номер процессора. Может иметь значение номера процессора или быть "в общем" по всем процессорам &lt;gen&gt;. </td>
+<td> CPU (CPU)<br />"<b>CPU[{N}]</b>" </td>
+<td> "General (gen)" or CPU number <i>N</i>. </td>
 <td>
-<ul><li> [real] load: Нагрузка (%)</li>
-<li> [real] sys: Система (%)</li>
-<li> [real] user: Пользователь (%)</li>
-<li> [real] idle: Простой (%)</li></ul>
+<ul><li> "Load whole, system, user, idle\nIn&nbsp;%" (<b>load</b>[real], <b>sys</b>[real], <b>user</b>[real], <b>idle</b>[real])</li>
+<li> "Frequency: driver" (<b>frqDrv</b>[string])</li>
+<li> "Frequency: governor" (<b>frqGov</b>[string|wr])</li>
+<li> "Frequency: current\nIn MHz" (<b>frqCur</b>[real|wr])</li>
+<li> "Frequency: minimum, set\nIn MHz" (<b>frqMin</b>[real], <b>frqMinCur</b>[real|wr])</li>
+<li> "Frequency: maximum, set\nIn MHz" (<b>frqMax</b>[real], <b>frqMaxCur</b>[real|wr])</li>
+<li> "Model name" (<b>model</b>[string])</li>
+<li> "MHz" (<b>MHz</b>[real])</li>
+<li> "BogoMIPS" (<b>BogoMIPS</b>[real])</li>
+<li> "MHz at rdtsc" (<b>rdtsc</b>[real])</li></ul>
 </td>
-<td>
+<td> Updated in the generic cycles for all attribute values and prepares the most actual CPU generic-average frequency for the <a class="external" href="http://oscada.org/wiki/File:QTCfg_sys_st.png" title="File:QTCfg sys st.png">root page</a>. All CPU specific frequency values are averaged for "General (gen)" and changes there are propagated to all cores. As the sources there used:
+<ul><li> "/proc/stat" — for the CPU load;</li>
+<li> "/sys/devices/system/cpu/cpu{N}/cpufreq/" — for CPUFreq;</li>
+<li> "/proc/cpuinfo" — for generic CPU information.</li></ul>
 </td></tr>
 <tr>
-<td> Память (MEM) </td>
-<td> Не используется </td>
+<td> Memory (MEM)<br />"<b>MEM</b>" </td>
+<td> Not used. </td>
 <td>
-<ul><li> [dec] free: Свободно (кБ);</li>
-<li> [dec] total: Всего (кБ);</li>
-<li> [dec] use: Использовано (кБ);</li>
-<li> [dec] buff: Буфера (кБ);</li>
-<li> [dec] cache: Кеш (кБ);</li>
-<li> [dec] sw_free: Своп, свободно (кБ);</li>
-<li> [dec] sw_total: Своп, всего (кБ);</li>
-<li> [dec] sw_use: Своп, использовано (кБ).</li></ul>
+<ul><li> "Free (KiB)" (<b>free</b>[integer])</li>
+<li> "Total (KiB)" (<b>total</b>[integer])</li>
+<li> "Used (KiB)" (<b>use</b>[integer])</li>
+<li> "Buffers (KiB)" (<b>buff</b>[integer])</li>
+<li> "Cached (KiB)" (<b>cache</b>[integer])</li>
+<li> "Swap free (KiB)" (<b>sw_free</b>[integer])</li>
+<li> "Swap total (KiB)" (<b>sw_total</b>[integer])</li>
+<li> "Swap used (KiB)" (<b>sw_use</b>[integer])</li></ul>
 </td>
-<td>
+<td> As the source there used "/proc/meminfo".
 </td></tr>
 <tr>
-<td> Сенсоры (sensors) </td>
-<td> Не используется </td>
-<td> Атрибуты определяются сенсорами, доступными на материнской плате. Для каждого сенсора создаётся отдельный атрибут. </td>
-<td> Для работы используется библиотека libsensors или программа mbmon. Более приоритетной в использовании является библиотека libsensors, поскольку mbmon имеет проблемы на многоядерных архитектурах.
+<td> Sensors (sensors)<br />"<b>Sensors</b>" </td>
+<td> Not used. </td>
+<td> Defined by sensors those are available on the hardware. For each sensor the unique attribute is created. </td>
+<td> The library <b>libsensors</b> or the program <b>mbmon</b> is used. Higher priority in use is given to the library <b>libsensors</b> since <b>mbmon</b> has problems on multicore architectures and deprecated mostly.
 </td></tr>
 <tr>
-<td> Температура HDD (hddtemp) </td>
-<td> Диск. Доступные в системе диски. </td>
+<td> Qt sensor (QSensor)<br />"<b>{OrigName}</b>" </td>
+<td> List of the Qt-sensors in their original name <i>OrigName</i> </td>
 <td>
-<ul><li> [string] disk: Имя;</li>
-<li> [string] ed: Единица измерения;</li>
-<li> [real] t: Температура.</li></ul>
+<ul><li> "State" (<b>st</b>[string])</li>
+<li> "Property {N}" (<b>pr{N}</b>[boolean|integer|real|string])</li></ul>
 </td>
-<td> Должна быть установлена, сконфигурирована и запущена как сервис программа hddtemp.
+<td> The source is dynamic, so the available attributes dependent from the QSensor type. Typical sensor types are: QAccelerometer, QAmbientLightSensor, QCompass, QIRProximitySensor, QLightSensor, QMagnetometer, QOrientationSensor, QProximitySensor, QRotationSensor, QTapSensor.
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> The sensors accessible mostly on <a class="extiw" href="https://en.wikipedia.org/wiki/Android_(operating_system)" title="wikipedia:Android (operating system)">Android</a> and <a class="extiw" href="https://en.wikipedia.org/wiki/MeeGo" title="wikipedia:MeeGo">MeeGo</a>.
+</p>
 </td></tr>
 <tr>
-<td> Время работы (uptime) </td>
-<td> Время работы:
-<ul><li> Система;</li>
-<li> Станция.</li></ul>
+<td> Disk SMART (hddsmart)<br />"<b>DiskSMART{DEV}</b>" </td>
+<td> Devices <i>DEV</i> of disks, available in the system. </td>
+<td> Defined by SMART-fields, available for this disk. For each field the unique attribute is created. </td>
+<td> That is the slow source. The source is dynamic, so the available attributes dependent from the disk type. The <b>smartctl</b> program must be installed and available.
+</td></tr>
+<tr>
+<td> HDD temperature (hddtemp)<br />"<b>Temperature_hd{DEV}</b>" </td>
+<td> Devices <i>DEV</i> of the HDD Disks, available in the system. </td>
+<td>
+<ul><li> "Name" (<b>disk</b>[string])</li>
+<li> "Measure unit" (<b>ed</b>[string])</li>
+<li> "Temperature" (<b>t</b>[integer])</li></ul>
 </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Deprecated mostly and replaced by "Disk SMART (hddsmart)". The <b>hddtemp</b> program must be installed, configured and running as the service.
+</td></tr>
+<tr>
+<td> Disk Statistic (hddstat)<br />"<b>DiskSt_{DEV}</b>" </td>
+<td> Devices <i>DEV</i> of disks or their partitions, available in the system. </td>
 <td>
-<ul><li> [dec] full: Секунды полностью;</li>
-<li> [dec] sec: Секунды;</li>
-<li> [dec] min: Минуты;</li>
-<li> [dec] hour: Часы;</li>
-<li> [dec] day: Дни.</li></ul>
+<ul><li> "Read (B)" (<b>rd</b>[real])</li>
+<li> "Read speed (B/s)" (<b>rdSp</b>[real])</li>
+<li> "Write (B)" (<b>wr</b>[real])</li>
+<li> "Write speed (B/s)" (<b>wrSp</b>[real])</li></ul>
 </td>
-<td>
+<td> As the sources there used:
+<ul><li> "/proc/diskstats" — for disks;</li>
+<li> "/proc/partitions" — for partitions.</li></ul>
 </td></tr>
 <tr>
-<td> HDD Smart (hddsmart), медленный </td>
-<td> Диск. Доступные в системе диски. </td>
-<td> Атрибуты определяются SMART-полями доступными для указанного диска. Для каждого поля создаётся отдельный атрибут. </td>
-<td> Должна быть установлена и доступна утилита smartctl.
-</td></tr>
-<tr>
-<td> Статистика HDD (hddstat) </td>
-<td> Диск или раздел. Доступные в системе диски и разделы. </td>
+<td> File System (fs)<br />"<b>FS{MP}</b>" </td>
+<td> Mounted file systems <i>MP</i>. </td>
 <td>
-<ul><li> [real] rd: Прочитано (Б), сброс на значении 2.2<sup>12</sup>;</li>
-<li> [real] rdSp: Скорость чтения (Б/с);</li>
-<li> [real] wr: Записано (Б), сброс на значении 2.2<sup>12</sup>;</li>
-<li> [real] wrSp: Скорость записи (Б/с).</li></ul>
+<ul><li> "Total (GB)" (<b>total</b>[real])</li>
+<li> "Used (GB)" (<b>used</b>[real])</li>
+<li> "Free (GB)" (<b>free</b>[real])</li>
+<li> "Total file nodes" (<b>totalN</b>[integer])</li>
+<li> "Used file nodes" (<b>usedN</b>[integer])</li>
+<li> "Free file nodes" (<b>freeN</b>[integer])</li></ul>
 </td>
-<td>
+<td> As the source there used "/etc/fstab" for the file systems.
 </td></tr>
 <tr>
-<td> Статистика сети (netstat) </td>
-<td> Сетевой интерфейс. Сетевые интерфейсы доступные в системе. </td>
+<td> Network (netstat)<br />"<b>Net_{IF}</b>" </td>
+<td> Network interfaces <i>IF</i>, available in the system. </td>
 <td>
-<ul><li> [real] rcv: Принято (Б), сброс на значении 4.3<sup>9</sup>;</li>
-<li> [real] rcvSp: Скорость получения (Б/c);</li>
-<li> [real] trns: Передано (Б), сброс на значении 4.3<sup>9</sup>;</li>
-<li> [real] trnsSp: Скорость передачи (Б/c).</li></ul>
+<ul><li> "Received (B)" (<b>rcv</b>[real])</li>
+<li> "Receive speed (B/s)" (<b>rcvSp</b>[real])</li>
+<li> "Transmitted (B)" (<b>trns</b>[real])</li>
+<li> "Transmit speed (B/s)" (<b>trnsSp</b>[real])</li></ul>
 </td>
-<td>
+<td> As the source there used "/proc/net/dev" for the network devices-interfaces.
 </td></tr>
 <tr>
-<td> ИБП (NUT) (ups), медленный </td>
-<td> ИБП. Доступные в системе и сети ИБП. </td>
-<td> Атрибуты определяются доступными у ИБП свойствами. Для каждого свойства создаётся отдельный атрибут. </td>
-<td> В системе или сети (не обнаруживается автоматически и адрес нужно указать прямо) должен быть доступен демон NUT "upsd".
-</td></tr>
-<tr>
-<td> Файловая система (FS) </td>
-<td> Файловые Системы. Подключенные файловые системы. </td>
-<td>
-<ul><li> [real] total: Всего (ГБ);</li>
-<li> [real] used: Использовано (ГБ);</li>
-<li> [real] free: Свободно (ГБ);</li>
-<li> [dec] totalN: Всего файловых узлов;</li>
-<li> [dec] usedN: Использовано файловых узлов;</li>
-<li> [dec] freeN: Свободно файловых узлов.</li></ul>
+<td> Power (Power)<br />"<b>Power{DEV}</b>" </td>
+<td> Power devices <i>DEV</i>, available in the hardware. </td>
+<td> Read and written all properties accessible in the device folder with specific processing of the most known ones:
+<ul><li> "Type" (<b>type</b>[string])</li>
+<li> "Technology" (<b>technology</b>[string])</li>
+<li> "Scope" (<b>scope</b>[string])</li>
+<li> "Present" (<b>present</b>[boolean])</li>
+<li> "Manufacturer, model, SN" (<b>manufacturer</b>[string], <b>model_name</b>[string], <b>serial_number</b>[string])</li>
+<li> "Status" (<b>status</b>[string])</li>
+<li> "Online" (<b>online</b>[boolean])</li>
+<li> "Health" (<b>health</b>[string])</li>
+<li> "Capacity" (<b>capacity</b>[integer])</li>
+<li> "Capacity level" (<b>capacity_level</b>[string])</li>
+<li> "Charge now, full, design\nIn Ah" (<b>charge_now</b>[real], <b>charge_full</b>[real], <b>charge_full_design</b>[real])</li>
+<li> "Energy now, full, design\nIn Ah" (<b>energy_now</b>[real], <b>energy_full</b>[real], <b>energy_full_design</b>[real])</li>
+<li> "Voltage" (<b>voltage_now</b>[real])</li>
+<li> "Voltage minimum" (<b>voltage_min_design</b>[real])</li>
+<li> "Cycle count" (<b>cycle_count</b>[integer])</li>
+<li> "Power\nIn Watts" (<b>power_now</b>[real])</li>
+<li> "Current\nIn mAmpers" (<b>current_now</b>[real])</li>
+<li> "Temperature\nIn degC" (<b>temp</b>[real])</li>
+<li> "Time to empty now, average" (<b>time_to_empty_now</b>[real], <b>time_to_empty_avg</b>[real])</li>
+<li> "Time to full" (<b>time_to_full_now</b>[real])</li>
+<li> "Charge threshold start, stop" (<b>charge_start_threshold</b>[integer|wr], <b>charge_stop_threshold</b>[integer|wr])</li>
+<li> "Charge control threshold start, end" (<b>charge_control_start_threshold</b>[integer|wr], <b>charge_control_end_threshold</b>[integer|wr])</li></ul>
 </td>
-<td>
+<td> The source is dynamic, so the available attributes dependent from the source type. As the source there used the Linux Power interface in "/sys/class/power_supply/".
 </td></tr>
 <tr>
-<td> Сенсоры Qt (QSensor) </td>
-<td> Тип сенсора из перечня, который определяется источником и в котором может быті: QAccelerometer, QAmbientLightSensor, QCompass, QIRProximitySensor, QLightSensor, QMagnetometer, QOrientationSensor, QProximitySensor, QRotationSensor, QTapSensor. </td>
+<td> UPS (ups) </td>
+<td> UPS Address. </td>
+<td> Defined by fields, provided by corresponded UPS. For each field the unique attribute is created. </td>
+<td> That is the slow source. The source is dynamic, so the available attributes dependent from the UPS type. The <b>upsd</b> demon from the project NUT must be accessible in the system or network, that is not detected automatically and its address you must set directly.
+</td></tr>
+<tr>
+<td> Up Time (uptime)<br />"<b>UpTm_[sys|stat]</b>" </td>
+<td> System (sys) or Station (stat) uptime. </td>
 <td>
-<ul><li> [string] st: Состояние;</li>
-<li> [bool|dec|real|string] pr{N}: Свойство {N}.</li></ul>
+<ul><li> "Full seconds" (<b>full</b>[integer])</li>
+<li> "Seconds" (<b>sec</b>[integer])</li>
+<li> "Minutes" (<b>min</b>[integer])</li>
+<li> "Hours" (<b>hour</b>[integer])</li>
+<li> "Days" (<b>day</b>[integer])</li></ul>
 </td>
 <td>
 </td></tr></table>
@@ -200,5 +238,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/System/ru">Modules/System/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2887</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/System/ru">Modules/System/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2894</td></tr></table></body>
 </html>

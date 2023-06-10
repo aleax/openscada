@@ -8139,7 +8139,7 @@ curMode = mode;
 INSERT INTO flb_Controller VALUES('test','test','','','Different tests of the JavaLikeCalc language for execution into the controller mode.
 
 Author: Roman Savochenko
-Version: 1.2.1
+Version: 1.2.2
 ','','',1,10,0,'// Testing the string parsing functions
 // Testing of the string parsing at a separator
 /*str = "1;;2;;3;;4;5;;6;";
@@ -8358,7 +8358,7 @@ SYS.messDebug("test","Props test");*/
 //test = xmlCntrReq(req);
 //test = req.text();
 
-/*test1 = vArh("DAQ.System.AutoDA.CPULoad.load");
+/*test1 = vArh("DAQ.System.AutoDA.CPU.load");
 test2 = test1.FFT(0,60);
 test = "";
 for( i = 0; i < test2.length; i++ ) test += ""+test2[i]+";";*/

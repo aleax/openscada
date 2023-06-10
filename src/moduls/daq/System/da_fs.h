@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_fs.h
 /***************************************************************************
- *   Copyright (C) 2016-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2016-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,16 +37,16 @@ class FS: public DA
 	~FS( );
 
 	string id( )	{ return "fs"; }
-	string name( )	{ return _("File Systems"); }
+	string name( )	{ return _("File System"); }
 
-	void init( TMdPrm *prm, bool update = false );
 	void getVal( TMdPrm *prm );
 
-	void makeActiveDA( TMdContr *a_cntr );
+	void makeActiveDA( TMdContr *aCntr, const string &dIdPref = "", const string &dNmPref = "" )
+	{ DA::makeActiveDA(aCntr, "FS", name()); }
 
     private:
 	//Methods
-	void dList( TCntrNode *obj, vector<string> &list );
+	void dList( vector<string> &list, TMdPrm *prm = NULL );
 };
 
 } //End namespace

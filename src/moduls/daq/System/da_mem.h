@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_mem.h
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,14 +36,15 @@ class Mem: public DA
 	Mem( );
 	~Mem( );
 
+	bool hasSubTypes( )	{ return false; }
+
 	string id( )	{ return "MEM"; }
 	string name( )	{ return _("Memory"); }
 
-	void init( TMdPrm *prm, bool update = false );
-	void deInit( TMdPrm *prm );
 	void getVal( TMdPrm *prm );
 
-	void makeActiveDA( TMdContr *a_cntr );
+	void makeActiveDA( TMdContr *aCntr, const string &dIdPref = "", const string &dNmPref = "" )
+	{ DA::makeActiveDA(aCntr, id(), name()); }
 };
 
 } //End namespace

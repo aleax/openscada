@@ -252,21 +252,9 @@ class TSYS : public TCntrNode
 
 	static void sighandler( int signal, siginfo_t *siginfo, void *context );
 
-	// Short time dimensions
 	int	nCPU( )		{ return mN_CPU; }
-	uint64_t sysClk( )	{ return mSysclc; }
-	void	clkCalc( );
-	uint64_t shrtCnt( ) {
-#if defined (__i386__) || defined (__x86_64__)
-	    unsigned int cntl, cnth;
-	    asm volatile("rdtsc; movl %%eax,%0; movl %%edx,%1;":"=r"(cntl),"=r"(cnth)::"%eax","%edx");
-	    return ((uint64_t)cnth<<32)+cntl;
-#else
-	    return 0;
-#endif
-	}
-	static long HZ( );
-
+	float	sysClk( )	{ return mSysclc; }	//In MHz
+	void	setSysClk( float vl )	{ mSysclc = vl; }
 	time_t	sysTm( ) volatile	{ return mSysTm ? mSysTm : time(NULL); }	//System time fast access, from updated cell
 	static int64_t curTime( clockid_t clc = CLOCK_REALTIME );	//Current system time, microseconds
 	static uint64_t curTimeN( clockid_t clc = CLOCK_REALTIME );	//Current system time, nanoseconds
@@ -499,7 +487,7 @@ class TSYS : public TCntrNode
 
 	int		mN_CPU;
 	pthread_t	mainPthr;
-	uint64_t	mSysclc;
+	float		mSysclc;
 	volatile time_t	mSysTm;
 	bool		mClockRT;	//Used clock REALTIME, else it is MONOTONIC
 

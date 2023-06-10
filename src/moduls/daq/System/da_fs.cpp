@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_fs.cpp
 /***************************************************************************
- *   Copyright (C) 2016-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2016-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,52 +42,7 @@ FS::FS( )
     fldAdd(new TFld("freeN",trS("Free file nodes"),TFld::Integer,TFld::NoWrite));
 }
 
-FS::~FS( )
-{
-
-}
-
-void FS::init( TMdPrm *prm, bool update )
-{
-    TCfg &cSubt = prm->cfg("SUBT");
-
-    //Create Configuration
-    if(!update) cSubt.fld().setDescr(trS("Mount point"));
-
-    vector<string> list;
-    dList(prm, list);
-    string mpls;
-    for(unsigned iL = 0; iL < list.size(); iL++) mpls += list[iL]+";";
-    MtxAlloc res(prm->dataRes(), true);
-    cSubt.fld().setValues(mpls);
-    cSubt.fld().setSelNames(mpls);
-    res.unlock();
-
-    //if(!update && list.size() && !TRegExp("(^|;)"+cSubt.getS()+";").test(mpls))
-    //	cSubt.setS(list[0]);
-}
-
-void FS::dList( TCntrNode *obj, vector<string> &list )
-{
-    char name[512];
-    char buf[1024], *s;
-
-    FILE *f = fopen("/etc/fstab", "r");
-    while(f && fgets(buf,sizeof(buf),f) != NULL) {
-	s = buf;
-	while(isblank(*s)) ++s;	//Walk through blank in begin
-	if(*s == '\0' || *s == '#' || *s == '\n') continue;	//Pass comments and wrong lines
-	name[0] = 0;
-	sscanf(s, "%*s %511s %*s %*s", name);
-	if(name[0] == 0 || !strcmp(name, "devpts") || !strcmp(name, "swap") || !strcmp(name, "proc") ||
-		!strcmp(name, "sysfs") || !strcmp(name, "usbdevfs") || !strcmp(name, "usbfs") || !strcmp(name, "ignore"))
-	    continue;
-	list.push_back(name);
-    }
-
-    if(f && fclose(f) != 0)
-	mess_warning(obj->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
-}
+FS::~FS( )	{ }
 
 void FS::getVal( TMdPrm *prm )
 {
@@ -109,34 +64,23 @@ void FS::getVal( TMdPrm *prm )
     }
 }
 
-void FS::makeActiveDA( TMdContr *aCntr )
+void FS::dList( vector<string> &list, TMdPrm *prm )
 {
-    string ap_nm = "FS";
+    char name[512];
+    char buf[1024], *s;
 
-    vector<string> list;
-    dList(aCntr, list);
-    for(unsigned iHD = 0; iHD < list.size(); iHD++) {
-	vector<string> pLs;
-
-	//Find propper parameter's object
-	aCntr->list(pLs);
-
-	unsigned iP;
-	for(iP = 0; iP < pLs.size(); iP++) {
-	    AutoHD<TMdPrm> p = aCntr->at(pLs[iP]);
-	    if(p.at().cfg("TYPE").getS() == id() && p.at().cfg("SUBT").getS() == list[iHD])	break;
-	}
-	if(iP < pLs.size()) continue;
-
-	string fsprm = ap_nm + TSYS::strEncode(list[iHD], TSYS::oscdID);
-	while(aCntr->present(fsprm)) fsprm = TSYS::strLabEnum(fsprm);
-	aCntr->add(fsprm, 0);
-	AutoHD<TMdPrm> dprm = aCntr->at(fsprm);
-	dprm.at().setName(TSYS::strMess(_("File system: '%s'"),list[iHD].c_str()));
-	dprm.at().autoC(true);
-	dprm.at().cfg("TYPE").setS(id());
-	dprm.at().cfg("SUBT").setS(list[iHD]);
-	dprm.at().cfg("EN").setB(true);
-	if(aCntr->enableStat()) dprm.at().enable();
+    FILE *f = fopen("/etc/fstab", "r");
+    while(f && fgets(buf,sizeof(buf),f) != NULL) {
+	s = buf;
+	while(isblank(*s)) ++s;	//Walk through blank in begin
+	if(*s == '\0' || *s == '#' || *s == '\n') continue;	//Pass comments and wrong lines
+	name[0] = 0;
+	sscanf(s, "%*s %511s %*s %*s", name);
+	if(name[0] == 0 || !strcmp(name, "devpts") || !strcmp(name, "swap") || !strcmp(name, "proc") ||
+		!strcmp(name, "sysfs") || !strcmp(name, "usbdevfs") || !strcmp(name, "usbfs") || !strcmp(name, "ignore"))
+	    continue;
+	list.push_back(name);
     }
+
+    if(f && fclose(f) != 0) mess_warning(mod->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
 }

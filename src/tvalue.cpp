@@ -330,7 +330,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    vl.at().setS((Mess->translDyn() && vl.at().fld().type() == TFld::String && vl.at().fld().flg()&TFld::TransltText) ?
 			    trDSet(vl.at().getS(),opt->text()) :
 			    opt->text());
-	    modif();
+	    if(!(vl.at().fld().flg()&TVal::NoSave)) modif();
 	}
     }
     else if(a_path == "/arch/arch") {

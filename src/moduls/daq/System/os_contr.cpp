@@ -42,6 +42,7 @@
 #include "da_ups.h"
 #include "da_fs.h"
 #include "da_qsensor.h"
+#include "da_power.h"
 #include "os_contr.h"
 
 //*************************************************
@@ -50,9 +51,10 @@
 #define MOD_NAME	trS("System DA")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.4.9"
+#define MOD_VER		"3.0.0"
 #define AUTHORS		trS("Roman Savochenko")
-#define DESCRIPTION	trS("Provides data acquisition from the OS. Supported OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc.")
+#define DESCRIPTION	trS("Provides data acquisition from Operation System. Supported OS Linux data sources: CPU, Memory,\
+ Sensors, Disk SMART, Disk Statistic, File System, Network, Power, UPS, Up Time etc.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -122,6 +124,7 @@ void TTpContr::postEnable( int flag )
     daReg(new UPS());
     daReg(new FS());
     daReg(new QSensor());
+    daReg(new Power());
 
     //Controler's bd structure
     fldAdd(new TFld("AUTO_FILL",trS("Auto create active data sources"),TFld::Integer,TFld::Selectable,"1","0","0;1;2;3",_("Manual;Fast sources;Slow sources;All sources")));
@@ -131,16 +134,15 @@ void TTpContr::postEnable( int flag )
 
     //Parameter type bd structure
     // Make enumerated
-    string el_id,el_name,el_def;
+    string el_id, el_name;
     vector<string> list;
     daList(list);
     for(unsigned iLs = 0; iLs < list.size(); iLs++) {
-	if(iLs == 0)	el_def = list[iLs];
 	el_id += list[iLs]+";";
 	el_name = el_name+_(daGet(list[iLs])->name().c_str())+";";
     }
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"));
-    tpPrmAt(t_prm).fldAdd(new TFld("TYPE",trS("System part"),TFld::String,TFld::Selectable|TCfg::NoVal,"10",el_def.c_str(),el_id.c_str(),el_name.c_str()));
+    tpPrmAt(t_prm).fldAdd(new TFld("TYPE",trS("System part"),TFld::String,TFld::Selectable|TCfg::NoVal,"10","",el_id.c_str(),el_name.c_str()));
     tpPrmAt(t_prm).fldAdd(new TFld("SUBT" ,"",TFld::String,TFld::Selectable|TCfg::NoVal|TFld::SelfFld,"255"));
     tpPrmAt(t_prm).fldAdd(new TFld("ADD_PRMS",trS("Additional parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"100000"));
 }
@@ -171,6 +173,10 @@ void TTpContr::perSYSCall( unsigned int cnt )
     list(clist);
     for(unsigned iC = 0; iC < clist.size(); iC++)
 	at(clist[iC]).at().devUpdate();
+
+    //Generic update the Data Sources
+    for(unsigned iDA = 0; iDA < mDA.size(); iDA++)
+	mDA[iDA]->updGen();
 }
 
 //*************************************************
@@ -259,13 +265,20 @@ void TMdContr::prmEn( const string &id, bool val )
 void *TMdContr::Task( void *icntr )
 {
     TMdContr &cntr = *(TMdContr *)icntr;
+    vector<string> daL;
 
     cntr.endrunReq = false;
     cntr.prcSt = true;
 
+    mod->daList(daL);
+
     while(!cntr.endrunReq) {
 	if(!cntr.redntUse()) {
-	    //Update controller's data
+	    //Generic update the Data Sources
+	    for(unsigned iLs = 0; iLs < daL.size(); iLs++)
+		mod->daGet(daL[iLs])->updGen(true);
+
+	    //Parameters update
 	    cntr.enRes.resRequestR();
 	    cntr.callSt = true;
 	    for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
@@ -320,9 +333,9 @@ void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
 
-    vector<string> list;
-    mod->daList(list);
-    if(list.size())	cfg("TYPE").setS(list[0]);
+    //vector<string> list;
+    //mod->daList(list);
+    //if(list.size())	cfg("TYPE").setS(list[0]);
 }
 
 TMdPrm::~TMdPrm( )
@@ -367,6 +380,16 @@ void TMdPrm::save_( )
 	    vlAt(aLs[iA]).at().arch().at().save();
 }
 
+AutoHD<TVal> TMdPrm::vlAt( const string &name, bool noex ) const
+{
+    if(!TValue::vlPresent(name) && noex) return AutoHD<TVal>();
+
+    try { return TValue::vlAt(name); }
+    catch(TError&) { if(!noex) throw;  }
+
+    return AutoHD<TVal>();
+}
+
 void TMdPrm::vlGet( TVal &val )
 {
     if(val.name() == "err") {
@@ -375,6 +398,8 @@ void TMdPrm::vlGet( TVal &val )
 	else if(daErr.size())	val.setS(daErr, 0, true);
 	else val.setS("0", 0, true);
     }
+    else if(!enableStat() || !owner().startStat()) { val.setR(EVAL_REAL, 0, true); return; }
+    else if(mDA) mDA->vlGet(this, val);
 }
 
 void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
@@ -461,9 +486,9 @@ string TMdPrm::addPrm( const string &prm, const string &def )
 	string sobj = TSYS::strParse(prm,0,":"), sa = TSYS::strParse(prm,1,":");
 	if(!sa.size())	return (rez=prmNd.attr(prm)).empty() ? def : rez;
 	//Internal node
-	for(unsigned i_n = 0; i_n < prmNd.childSize(); i_n++)
-	    if(prmNd.childGet(i_n)->name() == sobj)
-		return (rez=prmNd.childGet(i_n)->attr(sa)).empty() ? def : rez;
+	for(unsigned iN = 0; iN < prmNd.childSize(); iN++)
+	    if(prmNd.childGet(iN)->name() == sobj)
+		return (rez=prmNd.childGet(iN)->attr(sa)).empty() ? def : rez;
     } catch(...) { }
 
     return def;
@@ -480,11 +505,11 @@ void TMdPrm::setAddPrm( const string &prm, const string &val )
 
     //Internal node
     else {
-	unsigned i_n;
-	for(i_n = 0; i_n < prmNd.childSize(); i_n++)
-	    if(prmNd.childGet(i_n)->name() == sobj)
-	    { prmNd.childGet(i_n)->setAttr(sa,val); break; }
-	if(i_n >= prmNd.childSize())
+	unsigned iN;
+	for(iN = 0; iN < prmNd.childSize(); iN++)
+	    if(prmNd.childGet(iN)->name() == sobj)
+	    { prmNd.childGet(iN)->setAttr(sa,val); break; }
+	if(iN >= prmNd.childSize())
 	    prmNd.childAdd(sobj)->setAttr(sa,val);
     }
 

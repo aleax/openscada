@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_mem.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,22 +44,7 @@ Mem::Mem( )
     fldAdd(new TFld("sw_use",trS("Swap used (KiB)"),TFld::Integer,TFld::NoWrite));
 }
 
-Mem::~Mem( )
-{
-
-}
-
-void Mem::init( TMdPrm *prm, bool update )
-{
-    if(update)	return;
-
-    prm->cfg("SUBT").setView(false);
-}
-
-void Mem::deInit( TMdPrm *prm )
-{
-    prm->cfg("SUBT").setView(true);
-}
+Mem::~Mem( )	{ }
 
 void Mem::getVal( TMdPrm *prm )
 {
@@ -94,30 +79,4 @@ void Mem::getVal( TMdPrm *prm )
 	prm->setEval();
 	prm->daErr = _("10:Device is not available.");
     }
-}
-
-void Mem::makeActiveDA( TMdContr *aCntr )
-{
-    FILE *f = fopen("/proc/meminfo", "r");
-    if(f && !aCntr->present("MemInfo")) {
-	vector<string> pLs;
-	// Find propper parameter's object
-	aCntr->list(pLs);
-	unsigned iP;
-	for(iP = 0; iP < pLs.size(); iP++)
-	    if(aCntr->at(pLs[iP]).at().cfg("TYPE").getS() == id()) break;
-	if(iP >= pLs.size()) {
-	    string pId = "MemInfo";
-	    while(aCntr->present(pId)) pId = TSYS::strLabEnum(pId);
-	    aCntr->add(pId, 0);
-	    AutoHD<TMdPrm> dprm = aCntr->at(pId);
-	    dprm.at().setName(_("Memory info"));
-	    dprm.at().autoC(true);
-	    dprm.at().cfg("TYPE").setS(id());
-	    dprm.at().cfg("EN").setB(true);
-	    if(aCntr->enableStat()) dprm.at().enable();
-	}
-    }
-    if(f && fclose(f) != 0)
-	mess_warning(aCntr->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
 }

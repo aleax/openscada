@@ -182,6 +182,8 @@ class TElem
 
 	ResMtx &resEl( )	{ return mResEl; }
 
+	unsigned contN( )	{ return cont.size(); }
+
     private:
 	//Attributes
 	string			mName;

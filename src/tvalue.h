@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvalue.h
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,8 +47,9 @@ class TVal: public TCntrNode
 	enum AttrFlg {
 	    DirRead  = 0x100,
 	    DirWrite = 0x200,
-	    Dynamic  = 0x400	//Created and can be changed in dynamic way by a procedure,
+	    Dynamic  = 0x400,	//Created and can be changed in dynamic way by a procedure,
 				//mostly that is provided by the logical sources like DAQ.{LogicLev,ModBus}
+	    NoSave   = 0x800	//The attribute can be changed but cannot be saved, that is do not mark its modified
 	};
 
 	//Methods

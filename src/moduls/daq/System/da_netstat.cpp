@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_netstat.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,49 +42,7 @@ NetStat::NetStat( )
     fldAdd(new TFld("trnsSp",trS("Transmit speed (B/s)"),TFld::Real,TFld::NoWrite));
 }
 
-NetStat::~NetStat( )
-{
-
-}
-
-void NetStat::init( TMdPrm *prm, bool update )
-{
-    TCfg &c_subt = prm->cfg("SUBT");
-
-    //Create Configuration
-    if(!update) c_subt.fld().setDescr(trS("Interface"));
-
-    vector<string> list;
-    dList(prm, list, true);
-    string ifls;
-    for(unsigned iL = 0; iL < list.size(); iL++)
-	ifls += list[iL]+";";
-
-    MtxAlloc res(prm->dataRes(), true);
-    c_subt.fld().setValues(ifls);
-    c_subt.fld().setSelNames(ifls);
-    res.unlock();
-
-    if(!update && list.size() && !TRegExp("(^|;)"+c_subt.getS()+";").test(ifls))
-	c_subt.setS(list[0]);
-}
-
-void NetStat::dList( TCntrNode *obj, vector<string> &list, bool part )
-{
-    long unsigned int rcv, trns;
-    char name[11] = "",
-	 buf[256] = "";
-
-    FILE *f = fopen("/proc/net/dev","r");
-    while(f && fgets(buf,sizeof(buf),f) != NULL) {
-	for(unsigned i = 0; i < sizeof(buf); i++)
-	    if(buf[i] == ':') buf[i] = ' ';
-	if(sscanf(buf,"%10s %lu %*d %*d %*d %*d %*d %*d %*d %lu",name,&rcv,&trns) != 3) continue;
-	list.push_back(name);
-    }
-    if(f && fclose(f) != 0)
-	mess_warning(obj->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
-}
+NetStat::~NetStat( )	{ }
 
 void NetStat::getVal( TMdPrm *prm )
 {
@@ -129,33 +87,19 @@ void NetStat::getVal( TMdPrm *prm )
     }
 }
 
-void NetStat::makeActiveDA( TMdContr *aCntr )
+void NetStat::dList( vector<string> &list, TMdPrm *prm )
 {
-    string ap_nm = "Interface_";
+    long unsigned int rcv, trns;
+    char name[11] = "",
+	 buf[256] = "";
 
-    vector<string> list;
-    dList(aCntr, list);
-    for(unsigned i_hd = 0; i_hd < list.size(); i_hd++) {
-	vector<string> pLs;
-	// Find propper parameter's object
-	aCntr->list(pLs);
-
-	unsigned iP;
-	for(iP = 0; iP < pLs.size(); iP++) {
-	    AutoHD<TMdPrm> p = aCntr->at(pLs[iP]);
-	    if(p.at().cfg("TYPE").getS() == id() && p.at().cfg("SUBT").getS() == list[i_hd])	break;
-	}
-	if(iP < pLs.size()) continue;
-
-	string intprm = ap_nm+list[i_hd];
-	while(aCntr->present(intprm)) intprm = TSYS::strLabEnum(intprm);
-	aCntr->add(intprm, 0);
-	AutoHD<TMdPrm> dprm = aCntr->at(intprm);
-	dprm.at().setName(_("Interface statistic: ")+list[i_hd]);
-	dprm.at().autoC(true);
-	dprm.at().cfg("TYPE").setS(id());
-	dprm.at().cfg("SUBT").setS(list[i_hd]);
-	dprm.at().cfg("EN").setB(true);
-	if(aCntr->enableStat()) dprm.at().enable();
+    FILE *f = fopen("/proc/net/dev","r");
+    while(f && fgets(buf,sizeof(buf),f) != NULL) {
+	for(unsigned i = 0; i < sizeof(buf); i++)
+	    if(buf[i] == ':') buf[i] = ' ';
+	if(sscanf(buf,"%10s %lu %*d %*d %*d %*d %*d %*d %*d %lu",name,&rcv,&trns) != 3) continue;
+	list.push_back(name);
     }
+    if(f && fclose(f) != 0)
+	mess_warning(mod->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
 }

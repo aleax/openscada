@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_ups.h
 /***************************************************************************
- *   Copyright (C) 2014-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2014-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,10 +47,11 @@ class UPS: public DA
 	UPS( );
 	~UPS( );
 
-	string id( )	{ return "ups"; }
-	string name( )	{ return _("UPS (NUT)"); }
-
+	bool isDynamic( ) { return true; }
 	bool isSlow( )	{ return true; }
+
+	string id( )	{ return "ups"; }
+	string name( )	{ return _("UPS"); }
 
 	void init( TMdPrm *prm, bool update = false );
 	void deInit( TMdPrm *prm );
@@ -61,7 +62,9 @@ class UPS: public DA
 	void getVal( TMdPrm *prm );
 	void vlSet( TMdPrm *prm, TVal &vo, const TVariant &vl, const TVariant &pvl );
 
-	void makeActiveDA( TMdContr *a_cntr );
+	void dList( vector<string> &list, TMdPrm *prm = NULL );
+	void makeActiveDA( TMdContr *aCntr, const string &dIdPref = "", const string &dNmPref = "" )
+	{ DA::makeActiveDA(aCntr, "UPS", name()); }
 
     private:
 	//Methods

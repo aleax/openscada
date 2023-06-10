@@ -346,10 +346,7 @@ Information variables of the program:
 <li> <i>void setCfgCtx( XMLNode *vl, bool last = false );</i> — Set the global configuration context of the interstation copying or the <i>last</i> setting link, for the access lock used <i>cfgLoadSaveM()</i>. At any operation with the global configuration context the last setting link is cleared.</li>
 <li> <i>ResMtx &amp;cfgLoadSaveM( );</i> — Lock of the loading and saving configuration.</li>
 <li> <i>static void sighandler( int signal );</i> — Function of the  default handler of the signals of the system as a whole.</li>
-<li> <i>unsigned long long sysClk( );</i> — The estimated frequency of the processor on which the system works (Hz). </li>
-<li> <i>void clkCalc( );</i> — Calculation of frequency of the processor on which the system works. It is called periodically for the systems with variable CPU  frequency.</li>
-<li> <i>unsigned long long shrtCnt( );</i> — The function of the measurement of small intervals of time by the counter of the CPU cycles. Returns the value of the counter of CPU cycles.</li>
-<li> <i>static long HZ( );</i> — Time of the system teak  of the CPU.</li>
+<li> <i>float sysClk( ); void setSysClk( float vl );</i> — System clock-frequency in MHz and its setting from outside for information on the root page.</li>
 <li> <i>void taskCreate( const string &amp;path, int priority, void *(*start_routine)(void *), void *arg, int wtm = 5, pthread_attr_t *pAttr = NULL, bool *startSt = NULL );</i> — Create task (thread) with id <i>path</i>, <i>priority</i> (-1...99), task's function <i>start_routine</i> and it argument <i>arg</i>, and also wait for user's code start by flag <i>startSt</i>.</li>
 <li> <i>void taskDestroy( const string &amp;path, bool *endrunCntr = NULL, int wtm = 5, bool noSignal = false );</i> — Destroy task with id <i>path</i>, start control flag <i>startCntr</i>. Use <i>noSignal</i> for exclude signal <i>SIGALRM</i> send to the task.</li>
 <li> <i>void taskSendSIGALRM( const string &amp;path );</i> — Sending the termination signal "ALARM" to a task with id <i>path</i>.</li>
@@ -1072,7 +1069,8 @@ Additional flags to the object <a href="#TFld">#TFld</a> (enum TVal::AttrFlag):
 </p>
 <ul><li> <i>TVal::DirRead(0x100)</i> — Flag for the direct reading of the value;</li>
 <li> <i>TVal::DirWrite(0x200)</i> — Flag for the direct writing of the value;</li>
-<li> <i>TVal::Dynamic(0x400)</i> — Flag of the dynamic attribute, creates in typical from user procedures.</li></ul>
+<li> <i>TVal::Dynamic(0x400)</i> — Flag of the dynamic attribute, creates in typical from user procedures.</li>
+<li> <i>TVal::NoSave(0x800)</i> — Flag of the attribute can be changed but cannot be saved, that is do not mark its modified</li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>TVal( );</i> — Default constructor.</li>
@@ -2266,7 +2264,7 @@ Additional flags to <a href="#TFld">#TFld</a> (enum — TCfg::AttrFlg):
 <li> <i>TElem( const TElem &amp;src );</i> — Copying constructor.</li>
 <li> <i>TElem &amp;operator=( const TElem &amp;src );</i> — Copying from <i>src</i>.</li>
 <li> <i>string &amp;elName( );</i> — The name if the structure.</li>
-<li> <i>void fldList( vector&lt;string&gt; &amp;list );</i> — The cell's list in the structure <i>list</i>.</li>
+<li> <i>void fldList( vector&lt;string&gt; &amp;list ) const;</i> — The cell's list in the structure <i>list</i>.</li>
 <li> <i>unsigned fldSize( ) const;</i> — The number of cells in the structure.</li>
 <li> <i>unsigned fldId( const string &amp;name, bool noex = false );</i> — Getting the index of the cell from its identifier <i>name</i>. Set <i>noex</i> on no the cell present caused return overall cells number, without exception generation.</li>
 <li> <i>bool fldPresent( const string &amp;name );</i> — Check for the presence of the specified cell <i>name</i>.</li>
@@ -2276,7 +2274,8 @@ Additional flags to <a href="#TFld">#TFld</a> (enum — TCfg::AttrFlg):
 <li> <i>void fldClear( );</i> — Removing all cells.</li>
 <li> <i>void valAtt( TValElem *cnt );</i> — Is called automatically when the structure is attached to the data storage <i>cnt</i>.</li>
 <li> <i>void valDet( TValElem *cnt );</i> — Is called automatically when the structure is detached from the data storage <i>cnt</i>.</li>
-<li> <i>ResMtx &amp;resEl( );</i> — Mutex for access to containers of the fields.</li></ul>
+<li> <i>ResMtx &amp;resEl( );</i> — Mutex for access to containers of the fields.</li>
+<li> <i>unsigned contN( );</i> — Counter of the connected containers.</li></ul>
 <h3><span class="mw-headline" id="Data_structure_cell_.28TFld.29"><span class="mw-headline-number">13.5</span> <span id="TFld" title="#TFld">Data structure cell (TFld)</span></span></h3>
 <p><b>Data:</b><br />
 Cell's type (enum – TFld::Type):
@@ -4984,5 +4983,5 @@ Error codes (enum — TError::Codes):
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/uk">Documents/API/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2887</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/uk">Documents/API/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2894</td></tr></table></body>
 </html>

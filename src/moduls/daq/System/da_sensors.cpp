@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_sensors.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,8 +47,7 @@ Sensors::Sensors( ) : libsensor_ok(false)
     FILE *f = fopen("/etc/sensors.conf", "r");
     if(f) {
 	if(sensors_init(f) == 0) libsensor_ok = true;
-	if(fclose(f) != 0)
-	    mess_warning(nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
+	if(fclose(f) != 0) mess_warning(nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
     }
 #endif
 #endif
@@ -62,25 +61,7 @@ Sensors::~Sensors( )
 #endif
 }
 
-void Sensors::init( TMdPrm *prm, bool update )
-{
-    if(update)	return;
-
-    prm->cfg("SUBT").setView(false);
-    getSensors(prm, true);
-}
-
-void Sensors::deInit( TMdPrm *prm )
-{
-    prm->cfg("SUBT").setView(true);
-}
-
 void Sensors::getVal( TMdPrm *prm )
-{
-    getSensors(prm);
-}
-
-void Sensors::getSensors( TMdPrm *prm, bool onlyCreate )
 {
     bool devOK = false;
     //Using libsensor
@@ -112,8 +93,7 @@ void Sensors::getSensors( TMdPrm *prm, bool onlyCreate )
 		s_id = string(name->prefix)+"_"+main_feature->name;
 		if(!prm->vlPresent(s_id))
 		    fldAdd(new TFld(s_id.c_str(),(string(name->prefix)+" "+main_feature->name).c_str(),TFld::Real,TFld::NoWrite));
-		if(!onlyCreate && sensors_get_value(name,feature->number,&val) == 0)
-		    prm->vlAt(s_id).at().setR(val, 0, true);
+		if(sensors_get_value(name,feature->number,&val) == 0) prm->vlAt(s_id).at().setR(val, 0, true);
 		devOK = true;
 	    }
 	}
@@ -126,10 +106,8 @@ void Sensors::getSensors( TMdPrm *prm, bool onlyCreate )
 		    s_id = string(name->prefix) + "_" + feature->name;
 		    if(!prm->vlPresent(s_id))
 			fldAdd(new TFld(s_id.c_str(),(string(name->prefix)+" "+feature->name).c_str(), TFld::Real,TFld::NoWrite));
-		    if(!onlyCreate) {
-			sensors_get_feature(*name, feature->number, &val);
-			prm->vlAt(s_id).at().setR(val, 0, true);
-		    }
+		    sensors_get_feature(*name, feature->number, &val);
+		    prm->vlAt(s_id).at().setR(val, 0, true);
 		    devOK = true;
 		}
 	}
@@ -146,7 +124,7 @@ void Sensors::getSensors( TMdPrm *prm, bool onlyCreate )
 	while(fgets(buf,sizeof(buf),fp)) {
 	    if(sscanf(buf,"%31s : %f",name,&val) != 2) continue;
 	    if(!prm->vlPresent(name))	fldAdd(new TFld(name,name,TFld::Real,TFld::NoWrite));
-	    if(!onlyCreate) prm->vlAt(name).at().setR(val, 0, true);
+	    prm->vlAt(name).at().setR(val, 0, true);
 	    devOK = true;
 	}
 	if(pclose(fp) == -1)
@@ -154,30 +132,27 @@ void Sensors::getSensors( TMdPrm *prm, bool onlyCreate )
     }
 
     if(devOK) prm->daErr = "";
-    else if(!onlyCreate && !prm->daErr.getVal().size()) {
+    else if(!prm->daErr.getVal().size()) {
 	prm->setEval();
 	prm->daErr = _("10:Device is not available.");
     }
 }
 
-void Sensors::makeActiveDA( TMdContr *aCntr )
+void Sensors::makeActiveDA( TMdContr *aCntr, const string &dIdPref, const string &dNmPref )
 {
-    char buf[100], name[31];
-    float val;
-    string ap_nm = "SensorsData";
-
+    //Early checking for the corresponded parameter presence
     vector<string> pLs;
-    //Find propper parameter's object
     aCntr->list(pLs);
 
-    unsigned i_p;
-    for(i_p = 0; i_p < pLs.size(); i_p++)
-	if(aCntr->at(pLs[i_p]).at().cfg("TYPE").getS() == id()) break;
-    if(i_p < pLs.size()) return;
-    while(aCntr->present(ap_nm)) ap_nm = TSYS::strLabEnum(ap_nm);
+    unsigned iP;
+    for(iP = 0; iP < pLs.size(); iP++)
+	if(aCntr->at(pLs[iP]).at().cfg("TYPE").getS() == id()) break;
+    if(iP < pLs.size()) return;
 
+    //Checking for the sensors presence
     bool sens_allow = false;
-    //Use libsensor check
+
+    // ... libsensor
     if(libsensor_ok) {
 #if HAVE_SENSORS_SENSORS_H
 	int nr = 0;
@@ -214,8 +189,10 @@ void Sensors::makeActiveDA( TMdContr *aCntr )
 #endif
 #endif
     }
-    //Check monitor present
+    // ... monitor
     else {
+	char buf[100], name[31];
+	float val;
 	FILE *fp = popen(mbmon_cmd, "r");
 	if(fp != NULL) {
 	    while(fgets(buf,sizeof(buf),fp))
@@ -225,14 +202,7 @@ void Sensors::makeActiveDA( TMdContr *aCntr )
 		mess_warning(aCntr->nodePath().c_str(), _("Closing the pipe %p error '%s (%d)'!"), fp, strerror(errno), errno);
 	}
     }
-    //Sensor parameter create
-    if(sens_allow) {
-	aCntr->add(ap_nm, 0);
-	AutoHD<TMdPrm> dprm = aCntr->at(ap_nm);
-	dprm.at().setName(_("Data sensors"));
-	dprm.at().autoC(true);
-	dprm.at().cfg("TYPE").setS(id());
-	dprm.at().cfg("EN").setB(true);
-	if(aCntr->enableStat()) dprm.at().enable();
-    }
+
+    //Sensor parameter creating
+    if(sens_allow) DA::makeActiveDA(aCntr, "Sensors", _("Sensors"));
 }

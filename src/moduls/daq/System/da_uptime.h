@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_uptime.h
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,16 +37,17 @@ class UpTime: public DA
 	~UpTime( );
 
 	string id( )	{ return "uptime"; }
-	string name( )	{ return _("Up time"); }
+	string name( )	{ return _("Up Time"); }
 
-	void init( TMdPrm *prm, bool update = false );
 	void getVal( TMdPrm *prm );
 
-	void makeActiveDA( TMdContr *a_cntr );
+	void dList( vector<string> &list, TMdPrm *prm = NULL );
+	void makeActiveDA( TMdContr *aCntr, const string &dIdPref = "", const string &dNmPref = "" )
+	{ DA::makeActiveDA(aCntr, "UpTm_", name()); }
 
     private:
 	//Attributes
-	time_t	st_tm;
+	time_t	stTm;
 };
 
 } //End namespace

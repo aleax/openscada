@@ -1,3 +1,24 @@
+2023-06-10 Roman (stable)
+- LibsDB.{OscadaLibs.flb_Controller.test,vcaBase.prj_archBrowser.IDW},
+	ModelsDB.AGLKS.St.{OPC_UA.test,Archive.{MemInfo_use,CPULoad_load}},ModelsDB.Boiler.St.Archive.{MemInfo_use,CPULoad_load}:
+    Adapted to renaming DAQ.System.AutoDA.CPULoad and DAQ.System.AutoDA.MemInfo to DAQ.System.AutoDA.CPU and DAQ.System.AutoDA.MEM.
+- SYS: The object TElem appended by a function contN() of obtaining for counter of the connected containers.
+    During of refactoring the module DAQ.System the functions TSYS::{sysClk,clkCalc,shrtCnt,HZ}() were removed
+	and appended by TSYS::{sysClk,setSysClk}() for receiving the CPU frequency from DAQ.System.
+- DAQ: The object TVal appended by a new flag AttrFlg::NoSave for preventing of marking as modified at the attribute change.
+- !!!!:DAQ.System: Completely refactored and expanded for:
+    - expanding the CPU DA by CPU information and frequency from different sources, including CPUFreq with the control;
+    - appending a new DA Power as an interface to Linux Power;
+    - unification the DA interface calls DA::init(), DA::deInit(), DA::makeActiveDA() with moving most DA modules to call the unified code
+	and implementing for them only the unified function dList().
+    - the DA interface class appended by the new signs: isDynamic(), hasSubTypes();
+    - appending a mode of the data generic updating from the Service Cycle and the Controller DA Task, by the new function updGen();
+    - ID of the automaticly generated DA parameters changed to: CPU - "CPU[{N}]", fs - "FS{MP}", hddstat - "DiskSt_{dev}", MEM - "MEM",
+	netstat - "Net_{IF}", sensors - "Sensors", hddsmart - "DiskSMART", ups - "UPS", uptime - "UpTm_{U}".
+    - the hddtemp DA appended of removing the used transport at missing the service.
+- UI.QTCfg: The short RO values appended by setting the fixed width corresponding to the value font metric.
+
+
 2023-06-09 Roman (stable)
 - SYS: TElem::fldList() set to const.
 - Archives: Copying the value archives appended by copying the data source if it is empty one in the target object.

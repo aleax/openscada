@@ -28,7 +28,7 @@ using namespace SystemCntr;
 //*************************************************
 //* HddTemp                                       *
 //*************************************************
-Hddtemp::Hddtemp( ) : t_tr("Sockets"), n_tr("HDDTemp")
+Hddtemp::Hddtemp( ) : tTr("Sockets"), nTr("HDDTemp")
 {
     //HDD value structure
     fldAdd(new TFld("disk",trS("Name"),TFld::String,TFld::NoWrite));
@@ -39,40 +39,23 @@ Hddtemp::Hddtemp( ) : t_tr("Sockets"), n_tr("HDDTemp")
 Hddtemp::~Hddtemp( )
 {
     try {
-	if(((TTypeTransport &)SYS->transport().at().modAt(t_tr).at()).outPresent(n_tr))
-	    ((TTypeTransport &)SYS->transport().at().modAt(t_tr).at()).outDel(n_tr);
+	if(((TTypeTransport &)SYS->transport().at().modAt(tTr).at()).outPresent(nTr))
+	    ((TTypeTransport &)SYS->transport().at().modAt(tTr).at()).outDel(nTr);
     } catch(TError &err) { }
 }
 
-void Hddtemp::init( TMdPrm *prm, bool update )
-{
-    TCfg &c_subt = prm->cfg("SUBT");
-
-    //Create Configuration
-    if(!update) c_subt.fld().setDescr(trS("Disk"));
-
-    vector<string> list;
-    dList(list);
-    string dls;
-    for(unsigned i_l = 0; i_l < list.size(); i_l++)
-	dls += list[i_l]+";";
-    MtxAlloc res(prm->dataRes(), true);
-    c_subt.fld().setValues(dls);
-    c_subt.fld().setSelNames(dls);
-    res.unlock();
-
-    if(!update && list.size() && !TRegExp("(^|;)"+c_subt.getS()+";").test(dls))
-	c_subt.setS(list[0]);
-}
-
-void Hddtemp::dList( vector<string> &list )
+void Hddtemp::dList( vector<string> &list, TMdPrm *prm )
 {
     try {
-	string val = getHDDTemp(), c_el;
+	string val = getHDDTemp(), cEl;
 	list.clear();
-	for(int p_cnt = 0; (c_el=TSYS::strSepParse(val,p_cnt+1,'|')).size(); p_cnt += 5)
-	    list.push_back(c_el);
-    } catch(TError &err) { /*mess_err(err.cat.c_str(),"%s",err.mess.c_str());*/ }
+	for(int pCnt = 0; (cEl=TSYS::strSepParse(val,pCnt+1,'|')).size(); pCnt += 5)
+	    list.push_back(cEl);
+    }
+    catch(TError &err) { 
+	/*mess_err(err.cat.c_str(),"%s",err.mess.c_str());*/
+	if(SYS->transport().at().at(tTr).at().outPresent(nTr)) SYS->transport().at().at(tTr).at().outDel(nTr);
+    }
 }
 
 void Hddtemp::getVal( TMdPrm *prm )
@@ -81,13 +64,13 @@ void Hddtemp::getVal( TMdPrm *prm )
     try {
 	string	dev = prm->cfg("SUBT").getS(),
 		val = getHDDTemp(),
-		c_el, t_vl;
-	for(int p_cnt = 0; (c_el=TSYS::strSepParse(val,p_cnt+1,'|')).size(); p_cnt += 5)
-	    if(c_el == dev) {
-		prm->vlAt("disk").at().setS(parseName(TSYS::strSepParse(val,p_cnt+2,'|')), 0, true);
-		t_vl = TSYS::strSepParse(val,p_cnt+3, '|');
-		prm->vlAt("t").at().setI(((t_vl=="NA")?EVAL_INT:s2i(t_vl)), 0, true);
-		prm->vlAt("ed").at().setS(TSYS::strSepParse(val,p_cnt+4,'|'), 0, true);
+		cEl, tVl;
+	for(int pCnt = 0; (cEl=TSYS::strSepParse(val,pCnt+1,'|')).size(); pCnt += 5)
+	    if(cEl == dev) {
+		prm->vlAt("disk").at().setS(parseName(TSYS::strSepParse(val,pCnt+2,'|')), 0, true);
+		tVl = TSYS::strSepParse(val,pCnt+3, '|');
+		prm->vlAt("t").at().setI(((tVl=="NA")?EVAL_INT:s2i(tVl)), 0, true);
+		prm->vlAt("ed").at().setS(TSYS::strSepParse(val,pCnt+4,'|'), 0, true);
 		devOK = true;
 		break;
 	    }
@@ -105,10 +88,10 @@ string Hddtemp::getHDDTemp( )
     string val;
     char buf[20];
 
-    ResAlloc res(m_res, true);
+    ResAlloc res(mRes, true);
     //Check connect and start
-    if(!SYS->transport().at().at(t_tr).at().outPresent(n_tr)) SYS->transport().at().at(t_tr).at().outAdd(n_tr);
-    AutoHD<TTransportOut> tr = SYS->transport().at().at(t_tr).at().outAt(n_tr);
+    if(!SYS->transport().at().at(tTr).at().outPresent(nTr)) SYS->transport().at().at(tTr).at().outAdd(nTr);
+    AutoHD<TTransportOut> tr = SYS->transport().at().at(tTr).at().outAt(nTr);
 
     MtxAlloc resN(tr.at().reqRes(), true);
     tr.at().setName(_("Parameter Hddtemp"));
@@ -131,49 +114,15 @@ string Hddtemp::getHDDTemp( )
     return val;
 }
 
-void Hddtemp::makeActiveDA( TMdContr *aCntr )
-{
-    string ap_nm = "Temperature_hd";
-
-    vector<string> list;
-    dList(list);
-    try {
-	for(unsigned i_hd = 0; i_hd < list.size(); i_hd++) {
-	    vector<string> pLs;
-	    // Find propper parameter's object
-	    aCntr->list(pLs);
-
-	    unsigned i_p;
-	    for(i_p = 0; i_p < pLs.size(); i_p++)
-	    {
-		AutoHD<TMdPrm> p = aCntr->at(pLs[i_p]);
-		if(p.at().cfg("TYPE").getS() == id() && p.at().cfg("SUBT").getS() == list[i_hd])	break;
-	    }
-	    if(i_p < pLs.size()) continue;
-
-	    string hddprm = ap_nm+i2s(i_hd);
-	    while(aCntr->present(hddprm)) hddprm = TSYS::strLabEnum(hddprm);
-	    aCntr->add(hddprm,0);
-	    AutoHD<TMdPrm> dprm = aCntr->at(hddprm);
-	    dprm.at().setName(_("HD temperature: ")+i2s(i_hd));
-	    dprm.at().autoC(true);
-	    dprm.at().cfg("TYPE").setS(id());
-	    dprm.at().cfg("SUBT").setS(list[i_hd]);
-	    dprm.at().cfg("EN").setB(true);
-	    if(aCntr->enableStat()) dprm.at().enable();
-	}
-    } catch(TError &err) { /*mess_err(err.cat.c_str(),"%s",err.mess.c_str());*/ }
-}
-
 string Hddtemp::parseName( const string &val )
 {
     int beg = -1, end = -1;
 
-    for(unsigned i_s = 0; i_s < val.size(); i_s++)
-	if(val[i_s] != ' ' &&  val[i_s] != '\t' && isalnum(val[i_s])) {
-	    if(beg < 0) beg = i_s;
-	    end = i_s;
+    for(unsigned iS = 0; iS < val.size(); iS++)
+	if(val[iS] != ' ' &&  val[iS] != '\t' && isalnum(val[iS])) {
+	    if(beg < 0) beg = iS;
+	    end = iS;
 	}
 
-    return (beg>=0) ? val.substr(beg,end-beg+1) : "";
+    return (beg >= 0) ? val.substr(beg,end-beg+1) : "";
 }

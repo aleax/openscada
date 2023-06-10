@@ -151,9 +151,6 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
 
     if(getenv("USER")) mUser = getenv("USER");
 
-    //Init system clock
-    clkCalc();
-
 #if !defined(__ANDROID__) && __GLIBC_PREREQ(2,4)
     //Multi CPU allow check
     cpu_set_t cpuset;
@@ -1135,39 +1132,6 @@ void TSYS::sighandler( int signal, siginfo_t *siginfo, void *context )
     }
 }
 
-void TSYS::clkCalc( )
-{
-    uint64_t st_pnt = shrtCnt();
-    sysSleep(0.1);
-    mSysclc = 10*(shrtCnt()-st_pnt);
-
-    if(!mSysclc) {
-	char buf[255];
-	FILE *fp = NULL;
-	//Try read file cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq for current CPU frequency get
-	if(!mSysclc && ((fp=fopen("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq","r")) ||
-			(fp=fopen("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq","r")))) {
-	    size_t rez = fread(buf, 1, sizeof(buf)-1, fp); buf[rez] = 0;
-	    mSysclc = uint64_t(s2r(buf)*1e3);
-	    if(fclose(fp) != 0)
-		mess_warning(nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), fp, strerror(errno), errno);
-	}
-
-	//Try read file cat /proc/cpuinfo for CPU frequency or BogoMIPS get
-	if(!mSysclc && (fp=fopen("/proc/cpuinfo", "r"))) {
-	    float frq;
-	    while(fgets(buf,sizeof(buf),fp) != NULL)
-		if(sscanf(buf,"cpu MHz : %f\n",&frq) || sscanf(buf,"bogomips : %f\n",&frq) || sscanf(buf,"BogoMIPS : %f\n",&frq))
-		{
-		    mSysclc = (uint64_t)(frq*1e6);
-		    break;
-		}
-	    if(fclose(fp) != 0)
-		mess_warning(nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), fp, strerror(errno), errno);
-	}
-    }
-}
-
 void TSYS::cfgFileScan( bool first, bool up )
 {
     struct stat f_stat;
@@ -2058,8 +2022,6 @@ double TSYS::doubleBErev( double in )
     return in;
 }
 
-long TSYS::HZ( )	{ return sysconf(_SC_CLK_TCK); }
-
 bool TSYS::cntrEmpty( )
 {
     MtxAlloc res(dataRes(), true);
@@ -2505,9 +2467,6 @@ void *TSYS::ServTask( void * )
 
 	if(SYS->isRunning())
 	    try {
-		//CPU frequency calculation (per ten seconds)
-		if(!(iCnt%10))	SYS->clkCalc();
-
 		//Config-file checking for changes (per ten seconds)
 		if(!(iCnt%10))	SYS->cfgFileScan();
 
@@ -3454,7 +3413,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLang(opt->text());
     }
     else if(a_path == "/gen/env/host" && ctrChkNode(opt))	opt->setText(host());
-    else if(a_path == "/gen/env/CPU" && ctrChkNode(opt))	opt->setText(strMess(_("%dx%0.3gGHz"),nCPU(),(float)sysClk()/1e9));
+    else if(a_path == "/gen/env/CPU" && ctrChkNode(opt))	opt->setText(sysClk()?strMess(_("%dx%0.3gGHz"),nCPU(),1e-3*sysClk()):i2s(nCPU()));
     else if(a_path == "/gen/env/mainCPUs") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD)) {
 	    string vl = mainCPUs();

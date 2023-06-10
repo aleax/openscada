@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_smart.h
 /***************************************************************************
- *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,20 +47,20 @@ class HddSmart: public DA
 	HddSmart( );
 	~HddSmart( );
 
-	string id( )	{ return "hddsmart"; }
-	string name( )	{ return "HDD Smart"; }
-
+	bool isDynamic( ) { return true; }
 	bool isSlow( )	{ return true; }
 
-	void init( TMdPrm *prm, bool update = false );
-	void deInit( TMdPrm *prm );
+	string id( )	{ return "hddsmart"; }
+	string name( )	{ return _("Disk SMART"); }
+
 	void getVal( TMdPrm *prm );
 
-	void makeActiveDA( TMdContr *a_cntr );
+	void makeActiveDA( TMdContr *aCntr, const string &dIdPref = "", const string &dNmPref = "" )
+	{ DA::makeActiveDA(aCntr, "DiskSMART", name()); }
 
     private:
 	//Methods
-	void dList( TCntrNode *obj, vector<string> &list, bool part = false );
+	void dList( vector<string> &list, TMdPrm *prm = NULL );
 
 	//Attributes
 	static const char *smartval_cmd;

@@ -1156,9 +1156,9 @@ INSERT INTO wlb_originals_io VALUES('Diagram','parNum','1',0,'','','','','','','
 INSERT INTO wlb_originals_io VALUES('Document','time','0',0,'','','','','','','','','');
 INSERT INTO wlb_originals_io VALUES('Document','n','0',0,'','','','','','','','','');
 CREATE TABLE IF NOT EXISTS 'OPC_UA_Prm_test' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"ND_LS" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
-INSERT INTO OPC_UA_Prm_test VALUES('test','','','','','','','',1,'4:"DAQ.System.AutoDA.CPULoad.load"||loadCPU|CPU Load
-4:"DAQ.System.AutoDA.MemInfo.use"
-4:"DAQ.System.AutoDA.MemInfo.free"
+INSERT INTO OPC_UA_Prm_test VALUES('test','','','','','','','',1,'4:"DAQ.System.AutoDA.CPU.load"||loadCPU|CPU Load
+4:"DAQ.System.AutoDA.MEM.use"
+4:"DAQ.System.AutoDA.MEM.free"
 4:"DAQ.LogicLev.gen.F3.var"|fr|F3
 4:"DAQ.LogicLev.gen.F4.ed"|srw|edF4|F4 dimension');
 CREATE TABLE IF NOT EXISTS 'ModBusPrm_testTCP' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"ATTR_LS" TEXT DEFAULT '' ,"ru#ATTR_LS" TEXT DEFAULT '' ,"uk#ATTR_LS" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
@@ -1685,10 +1685,10 @@ INSERT INTO Archive_val VALUES('gN1_dP','','','','','','',1,2,'LogicLev.gen.gN1.
 INSERT INTO Archive_val VALUES('gN1_T','','','','','','',1,2,'LogicLev.gen.gN1.T',0,4,1.0,100,1,1,0,'FSArch.1s;FSArch.1m;FSArch.1h;');
 INSERT INTO Archive_val VALUES('gN1_P','','','','','','',1,2,'LogicLev.gen.gN1.P',0,4,1.0,100,1,1,0,'FSArch.1s;FSArch.1m;FSArch.1h;');
 INSERT INTO Archive_val VALUES('P3_var','','','','','','',1,2,'LogicLev.gen.P3.var',0,4,1.0,100,1,1,0,'FSArch.1s;FSArch.1m;FSArch.1h;');
-INSERT INTO Archive_val VALUES('MemInfo_use','','','','','','',1,1,'System.AutoDA.MemInfo.use',0,1,1.0,100,1,0,0,'DBArch.1s;FSArch.1s;FSArch.1m;');
+INSERT INTO Archive_val VALUES('MemInfo_use','','','','','','',1,1,'System.AutoDA.MEM.use',0,1,1.0,100,1,0,0,'DBArch.1s;FSArch.1s;FSArch.1m;');
 INSERT INTO Archive_val VALUES('F3_var','','','','','','',1,2,'LogicLev.gen.F3.var',0,4,1.0,100,1,1,0,'FSArch.1s;FSArch.1m;FSArch.1h;');
 INSERT INTO Archive_val VALUES('P4_var','','','','','','',1,2,'LogicLev.gen.P4.var',0,4,1.0,100,1,1,0,'FSArch.1s;FSArch.1m;FSArch.1h;');
-INSERT INTO Archive_val VALUES('CPULoad_load','','','','','','',1,1,'System.AutoDA.CPULoad.load',0,4,1.0,100,1,0,0,'DBArch.1s;FSArch.1s;FSArch.1m;');
+INSERT INTO Archive_val VALUES('CPULoad_load','','','','','','',1,1,'System.AutoDA.CPU.load',0,4,1.0,100,1,0,0,'DBArch.1s;FSArch.1s;FSArch.1m;');
 INSERT INTO Archive_val VALUES('gN1_Q','','','','','','',1,2,'LogicLev.gen.gN1.Q',3,4,1.0,100,1,1,0,'FSArch.1s;FSArch.1m;FSArch.1h;');
 INSERT INTO Archive_val VALUES('F4_var','','','','','','',1,2,'LogicLev.gen.F4.var',0,4,1.0,100,1,1,0,'FSArch.1s;FSArch.1m;FSArch.1h;');
 INSERT INTO Archive_val VALUES('gN1_F','','','','','','',1,2,'LogicLev.gen.gN1.F',0,4,1.0,100,1,1,0,'FSArch.1s;FSArch.1m;FSArch.1h;');
