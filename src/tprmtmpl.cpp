@@ -331,7 +331,8 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		if(n_mode)	n_mode->childAdd("el")->setText(i2s(io(id)->flg()&(IO::Output|IO::Return)));
 		if(n_attr)	n_attr->childAdd("el")->setText(i2s(io(id)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)));
 		if(n_accs)	n_accs->childAdd("el")->setText(i2s(io(id)->flg()&(TPrmTempl::CfgConst|TPrmTempl::CfgLink)));
-		if(n_val)	n_val->childAdd("el")->setText(io(id)->def());
+		if(n_val)	n_val->childAdd("el")->setText(((io(id)->type()==IO::String && io(id)->flg()&IO::TransltText) ||
+								    io(id)->flg()&(TPrmTempl::CfgLink|IO::Selectable)) ? trD(io(id)->def()) : io(id)->def());
 	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
@@ -380,7 +381,10 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		case 3:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^s2i(opt->text()))&(IO::Output|IO::Return)));		break;
 		case 4:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^s2i(opt->text()))&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)));		break;
 		case 5:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^s2i(opt->text()))&(TPrmTempl::CfgConst|TPrmTempl::CfgLink)));	break;
-		case 6:	io(row)->setDef(opt->text()); setStart(false); break;
+		case 6: io(row)->setDef(((io(row)->type()==IO::String && io(row)->flg()&IO::TransltText) ||
+					    io(row)->flg()&(TPrmTempl::CfgLink|IO::Selectable)) ? trDSet(io(row)->def(),sTrm(opt->text())) : opt->text());
+		    setStart(false);
+		    break;
 	    }
 	}
     }
@@ -697,7 +701,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 		if(is_lnk && TSYS::strLine(func()->io(iIO)->def(),0).size() &&
 		    !s2i(TBDS::genPrmGet(obj->nodePath()+"onlAttr",DEF_onlAttr,opt->attr("user"))))
 		{
-		    string nprm = TSYS::strLine(TSYS::strSepParse(TSYS::strLine(func()->io(iIO)->def(),0),0,'|'), 0);
+		    string nprm = TSYS::strLine(TSYS::strSepParse(TSYS::strLine(trD(func()->io(iIO)->def()),0),0,'|'), 0);
 
 		    // Check already to present parameters
 		    bool f_ok = false;
@@ -710,7 +714,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 		    }
 		}
 		else {
-		    string nprm = func()->io(iIO)->name();
+		    string nprm = trD(func()->io(iIO)->name());
 		    int nOff = 0; string nprm1 = TSYS::strLine(nprm, 0, &nOff);
 
 		    const char *tip = "str";

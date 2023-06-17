@@ -6108,7 +6108,7 @@ Functions:
   - the field "CustomFlds" — specifying of the custom fields of the alarm messages in the form "CustomFlds: {CustFld0} => {CustFld1} => ... => {CustFldN}".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0
+Version: 1.2.1
 License: GPLv2','Загальний, представницький шаблон обробки окремого дискретного параметру (складного тегу) із формування сигналізації за визначеним критерієм. Шаблон формує структуру дискретного параметру (складного тегу) який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
 
 Шаблон надає окремі поля представницької структури дискретного параметру та додає поле помилки:
@@ -6132,7 +6132,7 @@ License: GPLv2','Загальний, представницький шаблон
   - поле "CustomFlds" — визначення користувацьких полів повідомлень порушень у формі "CustomFlds: {CustFld0} => {CustFld1} => ... => {CustFldN}".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.2.0
+Версія: 1.2.1
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
@@ -6195,7 +6195,7 @@ else {
 	else	this.alarmSet(DESCR.parseLine(0)+((tVl=DESCR.match("^CustomFlds: *(.+?) *$","m")).length?" [["+tVl[1]+"]]":"")+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
-}','','',1649438488);
+}','','',1686917512);
 INSERT INTO tmplib_base VALUES('simleBoard','Analog alarm by borders (obsolete)','Сигнал аналоговий за границями (застаріле)','Сигнал аналоговый по границам (устаревшее)','The template of simple parameter included borders and dimension variable.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -6289,7 +6289,7 @@ Functions:
 ￼ !!!! In the absence of the "Input/Output" connection, the writing is not performed and there is the stand-alone operation.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.1
+Version: 1.2.2
 License: GPLv2','Загальний, представницький та уніфікований шаблон ручного вводу та сигналу аналогового виходу. Шаблон формує структуру параметру (складного тегу) ручного вводу, який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру, контроль переважно можна здійснювати через панель контролю Елемент кадр.
 
 Представницькою структурою параметру (складного тегу) ручного вводу є:
@@ -6325,7 +6325,7 @@ License: GPLv2','Загальний, представницький та уні�
 ￼ !!!! За відсутності підключення "Входу/Виходу" запису не здійснюється та відбувається автономна робота.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.2.1
+Версія: 1.2.2
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	{ f_err = "0"; alDelay_ = 0; }
 
@@ -6392,7 +6392,7 @@ else {
 	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
-}','','',1627832983);
+}','','',1686917547);
 INSERT INTO tmplib_base VALUES('anUnif','Analog signal, unified','Аналоговий сигнал, уніфікований','Аналоговый сигнал, унифицированный','Common, representative and unified template of analog input signals processing. The template forms a structure of complex analog parameter (tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 
 Functions:
@@ -6431,7 +6431,7 @@ Functions:
   - the field "CustomAlarms" — redefinition of the standard alarm levels of the alarm messages in the form "CustomAlarms: {ConErr};{BrdAlarm};{BrdWarn}".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.4.0
+Version: 2.4.1
 License: GPLv2','Загальний, представницький та уніфікований шаблон обробки аналогових вхідних сигналів. Шаблон формує структуру складного аналогового параметру (тегу) який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
 
 Функції:
@@ -6471,7 +6471,7 @@ levErr, tErr [IN|OUT] — рівень аварії [-7...0] та текст п�
   - поле "CustomAlarms" — перевизначення стандартних рівнів порушень для повідомлень порушень у формі "CustomAlarms: {ConErr};{BrdAlarm};{BrdWarn}".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.4.0
+Версія: 2.4.1
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 function custAlarm(lev) {
 	rez = 0;
@@ -6601,7 +6601,7 @@ else {
 	else	this.alarmSet(DESCR.parseLine(0)+((tVl=DESCR.match("^CustomFlds: *(.+?) *$","m")).length?" [["+tVl[1]+"]]":"")+": "+tr("NORM"), 1, firstNorm);
 	f_err = tErr;
 	alDelay_ = 0; firstNorm = false;
-}','','',1649438544);
+}','','',1686917407);
 INSERT INTO tmplib_base VALUES('digitBlockUnif','Discrete block, unified','Блок дискретних, уніфікований','Блок дискретных, унифицированный','Common, representative and unified template of the block for union of Discrete parameters for the common control device. The template forms a structure of discrete parameter-block (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 
 The representative structure of discrete parameters (complex tags) is a latch object with two characteristic states and three commands, which in the final representation may have a different meaning and name:
@@ -6661,7 +6661,7 @@ Mostly the same as the basic template "PID signal, unified, violation statuses" 
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: DIYA LTD
-Version: 1.1.1
+Version: 1.1.2
 License: GPLv2','Загальний, представницький та уніфікований шаблон інтерфейсу до Пропорційного Інтегрального Диференційного (ПІД) регулятору заснованому на аналоговому вхідному сигналі але із ШІМ-виходом, розширеному бінарними станами індикації порушень та переважно схоже на шаблон "ПІД сигнал, уніфікований, стани порушень". Шаблон формує структуру імпульсного ПІД-регулятору, який може бути легко підключений до деяких кадрів та віджетів бібліотеки основних елементів інтерфейсу користувача, просто вказавши об''єкт параметру.
 
 Представницька структура імпульсних ПІД-регуляторів переважно еквівалентна шаблону "ПІД сигнал, уніфікований, стани порушень" та містить низку атрибутів, специфічних до імпульсного виходу та атрибут визначення роботи цього регулятору у аналоговому режимі, тобто цей шаблон є навіть більш узагальнювальним:
@@ -6673,7 +6673,7 @@ License: GPLv2','Загальний, представницький та уні�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: ТОВ "ДІЯ"
-Версія: 1.1.1
+Версія: 1.1.2
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
@@ -6729,7 +6729,7 @@ else {
 	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
-}','','',1627833248);
+}','','',1686917610);
 INSERT INTO tmplib_base VALUES('anUnifSt','Analog signal, unified, violation statuses','Аналоговий сигнал, уніфікований, стани порушень','Аналоговый сигнал, унифицированный, состояния нарушений','Common, representative and unified template of analog input signals processing, extended by binary states of indication the violations. The template grounded on the base template "Analog signal, unified" with its representative structure and some differences characteristic to independent development and expansion.
 
 Binary states were provided for the convenient use of algorithms of operation at the borders of violations of the parameter object, preferably in the block diagrams of general control algorithms.
@@ -6738,7 +6738,7 @@ Functions:
 Mostly the same as the basic "Analog signal, unified" and the borderline signs are additionally provided: "H", "L", "HH", "LL", "EVAL".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.0
+Version: 1.3.1
 License: GPLv2','Загальний, представницький та уніфікований шаблон обробки аналогових вхідних сигналів, розширений бінарними станами індикації порушень. Шаблон засновано на базовому шаблоні "Аналоговий сигнал, уніфікований" з відповідною до нього представницькою структурою та деякими відмінностями, характерними до незалежного розвитку та розширення.
 
 Бінарні стани передбачалося для зручного використання у алгоритмах роботи за границями порушення об''єкту параметру, переважно у блокових схемах загальних алгоритмів керування.
@@ -6747,7 +6747,7 @@ License: GPLv2','Загальний, представницький та уні�
 Переважно відповідають базовому шаблону "Аналоговий сигнал, уніфікований" та додатково надаються ознаки порушень границь: "H", "L", "HH", "LL", "EVAL".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.3.0
+Версія: 1.3.1
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
@@ -6858,7 +6858,7 @@ else {
 	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
-}','','',1627832578);
+}','','',1686917435);
 INSERT INTO tmplib_base VALUES('pidUnif','PID signal, unified, violation statuses','ПІД сигнал, уніфікований, стани порушень','ПИД сигнал, унифицированный, состояния нарушений','Common, representative and unified template of an interface to the Proportional Integral Differential (PID) regulator based on the common analog input signal, extended by binary states of indication the violations. The template forms a structure of the analog PID-regulator which can be easily connected to some cadres and widgets of the main elements library of the user interface just pointing the parameter object.
 
 The representative structure of the analog PID-regulators is:
@@ -6897,7 +6897,7 @@ big motion speed of the end variable — error code 7 and alarm level 2.
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: DIYA LTD
-Version: 1.2.1
+Version: 1.2.2
 License: GPLv2','Загальний, представницький та уніфікований шаблон інтерфейсу до Пропорційного Інтегрального Диференційного (ПІД) регулятору заснованому на аналоговому вхідному сигналі, розширеному бінарними станами індикації порушень. Шаблон формує структуру аналогового ПІД-регулятору, який може бути легко підключений до деяких кадрів та віджетів бібліотеки основних елементів інтерфейсу користувача, просто вказавши об''єкт параметру.
 
 Представницькою структурою аналогового ПІД-регулятору є:
@@ -6937,7 +6937,7 @@ License: GPLv2','Загальний, представницький та уні�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: ТОВ "ДІЯ"
-Версія: 1.2.0
+Версія: 1.2.2
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
@@ -6993,17 +6993,17 @@ else {
 	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
-}','','',1627833164);
+}','','',1686917590);
 INSERT INTO tmplib_base VALUES('SNMP','Network devices by SNMP','Мережеві пристрої за SNMP','Сетевые устройства по SNMP','Data combination of a device, accessible by the protocol SNMP, in a complex object of the attribute "All items". The template designed to use together with the DAQ-module "SNMP" and to represent this data by the frame "Object properties" as a complex object with properties, signalling at single borders and writing. Considering the great specificity and variety of SNMP-accessible devices, this template is actually a billet and an example of creating a template based on it to a corresponding device with a specific to it processing of input properties, forming of violations and write capability.
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: PAC HARTRON
-Version: 1.1.0
+Version: 1.1.1
 License: GPLv2','Об''єднання даних пристрою, доступного за протоколом SNMP, у комплексному об''єкті атрибуту "Всі елементи". Шаблон розроблено для використання із модулем джерела даних "SNMP" та представлення цих даних кадром "Властивості об''єкту" як комплексний об''єкт із властивостями, сигналізацією за окремими границями та записом. Враховуючи велику специфіку та розмаїття пристроїв доступних за протоколом SNMP, цей шаблон фактично є заготовкою та прикладом створення на його основі шаблону до відповідного пристрою із специфічною до нього обробкою вхідних властивостей, формування порушень та можливістю запису.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: ПАС ХАРТРОН
-Версія: 1.1.0
+Версія: 1.1.1
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	{ srcPrm = false; items = new Object(); alDelay_ = 0; }
 
@@ -7097,7 +7097,7 @@ else {
 	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
-}','','',1572284562);
+}','','',1686920823);
 INSERT INTO tmplib_base VALUES('codeState','Code state','Стан за кодом','Состояние по коду','A variant of the common, representative and unified template of the block for union of Discrete parameters, expanded by more than two states and three commands that can be encoded by an integer value. The template forms a structure of parameter (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 
 The representative structure of the parameter (complex tag) of the code state is:
@@ -7124,7 +7124,7 @@ Functions:
 - Formation of the violation and the corresponding setting of the attribute err, provided at setting in the processing procedure or lack of the communication (in = EVAL). What can be delayed on the time alDelay and can be suppressed setting alSup.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.4.0
+Version: 1.4.1
 License: GPLv2','Варіант загального, представницького та уніфікованого шаблону блоку поєднання дискретних параметрів, розширений більш ніж двома станами та трьома командами які можна закодувати цілим значенням. Шаблон формує структуру параметру (складного тегу) стану за кодом який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
 
 Представницькою структурою параметру (складного тегу) стану за кодом є:
@@ -7151,7 +7151,7 @@ License: GPLv2','Варіант загального, представницьк
 - Формування порушення та відповідне встановлення атрибуту err, за умови встановлення у процедурі обробки або відсутності зв''язку (in = EVAL). Що може бути затримано на час alDelay та придушено встановленням alSup.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.4.0
+Версія: 1.4.1
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
@@ -7234,7 +7234,7 @@ else {
 	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
-}','','',1649438553);
+}','','',1686917483);
 INSERT INTO tmplib_base VALUES('ntf','Notificator by SMS, EMail-SMTP','Повідомлювач за SMS, EMail-SMTP','Уведомитель посредством SMS, EMail-SMTP','The complex template of the notification contains of parts of the dispatcher and the output user protocol of notification by EMail(SMTP) and SMS.
 
 THE DISPATCHER can be performed for pointed messages of the message buffer of OpenSCADA and applied on the Logical level or the controller object of the module JavaLikeCalc.
@@ -7573,12 +7573,12 @@ INSERT INTO tmplib_base VALUES('UPS','Uninterruptible Power Supply','Джере�
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: DIYA LTD
-Version: 1.3.0
+Version: 1.3.1
 License: GPLv2','Об''єднання даних Джерела Безперебійного Живлення у комплексному об''єкті атрибуту "Всі елементи". Шаблон розроблено для використання із модулем джерела даних "Система" у частині "ДБЖ" та представлення цих даних кадром "Властивості об''єкту" як комплексний об''єкт із властивостями, сигналізацією за окремими границями та записом.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: ТОВ "ДІЯ"
-Версія: 1.3.0
+Версія: 1.3.1
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	{ srcPrm = false; items = new Object(); alDelay_ = 0; }
 
@@ -7693,7 +7693,7 @@ else {
 	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
-}','','',1572284562);
+}','','',1686920815);
 INSERT INTO tmplib_base VALUES('initConAssociateTrs','Initiative connections processing for the associated output transports','Опрацювання ініціативних підключень щодо асоційованих вихідних транспортів','Обработка инициативных подключений на предмет ассоциированных выходных транспортов','
 The template of processing input initiative connections was created to provide the last link of implementation and support for conception of data acquisition in the passive mode and the initiative connection, that is — the control of associative connections, created by the input transport at each connection.
 
@@ -13172,19 +13172,19 @@ INSERT INTO tmplib_base_io VALUES('manInUnif','varIn','Variable input',2,32,'0',
 INSERT INTO tmplib_base_io VALUES('pidUnif','SHIFR','Code',0,0,'',47,'Шифр','','Шифр','','');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','this','Object',4,1,'',31,'Об''єкт','','Объект','','');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','SHIFR','Code',0,0,'',32,'Шифр','','Шифр','','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','NAME','Name',0,0,'',33,'Ім''я','','Имя','','Име');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','DESCR','Description',0,0,'',34,'Опис','','Описание','','Опис');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','NAME','Name',0,4096,'',33,'Ім''я','','Имя','','Име');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','DESCR','Description',0,4100,'',34,'Опис','','Описание','','Опис');
 INSERT INTO tmplib_base_io VALUES('anUnif','this','Object',4,1,'',28,'Об''єкт','','Объект','','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','NAME','Name',0,0,'',48,'Ім''я','','Имя','','Име');
+INSERT INTO tmplib_base_io VALUES('pidUnif','NAME','Name',0,4096,'',48,'Ім''я','','Имя','','Име');
 INSERT INTO tmplib_base_io VALUES('pidUnif','this','Object',4,1,'',46,'Об''єкт','','Объект','','');
 INSERT INTO tmplib_base_io VALUES('anUnif','SHIFR','Code',0,0,'',29,'Шифр','','Шифр','','');
-INSERT INTO tmplib_base_io VALUES('anUnif','NAME','Name',0,0,'',30,'Ім''я','','Имя','','Име');
-INSERT INTO tmplib_base_io VALUES('anUnif','DESCR','Description',0,0,'',31,'Опис','','Описание','','Опис');
-INSERT INTO tmplib_base_io VALUES('pidUnif','DESCR','Description',0,0,'',49,'Опис','','Описание','','Опис');
+INSERT INTO tmplib_base_io VALUES('anUnif','NAME','Name',0,4096,'',30,'Ім''я','','Имя','','Име');
+INSERT INTO tmplib_base_io VALUES('anUnif','DESCR','Description',0,4100,'',31,'Опис','','Описание','','Опис');
+INSERT INTO tmplib_base_io VALUES('pidUnif','DESCR','Description',0,4100,'',49,'Опис','','Описание','','Опис');
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','this','Object',4,1,'',52,'Об''єкт','','Объект','','');
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','SHIFR','Code',0,0,'',53,'Шифр','','Шифр','','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','NAME','Name',0,0,'',54,'Ім''я','','Имя','','Име');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','DESCR','Description',0,0,'',55,'Опис','','Описание','','Опис');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','NAME','Name',0,4096,'',54,'Ім''я','','Имя','','Име');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','DESCR','Description',0,4100,'',55,'Опис','','Описание','','Опис');
 INSERT INTO tmplib_base_io VALUES('anUnif','HystBnd','Hysteresis of boders violation',2,32,'1',16,'Гистерезис порушення границь','','Гистерезиз нарушения границ','','');
 INSERT INTO tmplib_base_io VALUES('anUnif','inProc','Input processing procedure',0,68,'',1,'Вхідна процедура обробки','','Входная процедура обработки','','');
 INSERT INTO tmplib_base_io VALUES('anUnif','subMode','Substitute: mode',1,40,'0
@@ -13211,19 +13211,19 @@ INSERT INTO tmplib_base_io VALUES('manInUnif','HystBnd','Hysteresis of boders vi
 INSERT INTO tmplib_base_io VALUES('manInUnif','prec','Precision, signs',1,32,'2',15,'Точність, знаків','','Точность, знаков','','');
 INSERT INTO tmplib_base_io VALUES('manInUnif','this','Object',4,1,'',23,'Об''єкт','','Объект','','');
 INSERT INTO tmplib_base_io VALUES('manInUnif','SHIFR','Code',0,0,'',24,'Шифр','','Шифр','','');
-INSERT INTO tmplib_base_io VALUES('manInUnif','NAME','Name',0,0,'',25,'Ім''я','','Имя','','Име');
-INSERT INTO tmplib_base_io VALUES('manInUnif','DESCR','Description',0,0,'',26,'Опис','','Описание','','Опис');
+INSERT INTO tmplib_base_io VALUES('manInUnif','NAME','Name',0,4096,'',25,'Ім''я','','Имя','','Име');
+INSERT INTO tmplib_base_io VALUES('manInUnif','DESCR','Description',0,4100,'',26,'Опис','','Описание','','Опис');
 INSERT INTO tmplib_base_io VALUES('SNMP','srcAddr','Source object''s address',0,64,'',0,'Адреса вихідного об''єкту','','Адрес исходного объекта','','');
 INSERT INTO tmplib_base_io VALUES('SNMP','manTables','Manual tables',0,64,'',1,'Ручні таблиці','','Ручные таблицы','','');
 INSERT INTO tmplib_base_io VALUES('SNMP','items','All items',4,33,'',4,'Всі елементи','','Все элементы','','');
 INSERT INTO tmplib_base_io VALUES('SNMP','this','Object',4,0,'',5,'Об''єкт','','Объект','','');
 INSERT INTO tmplib_base_io VALUES('SNMP','SHIFR','Code',0,0,'',6,'Шифр','','Шифр','','');
-INSERT INTO tmplib_base_io VALUES('SNMP','NAME','Name',0,0,'',7,'Ім''я','','Имя','','Име');
-INSERT INTO tmplib_base_io VALUES('SNMP','DESCR','Description',0,0,'',8,'Опис','','Описание','','Опис');
+INSERT INTO tmplib_base_io VALUES('SNMP','NAME','Name',0,4096,'',7,'Ім''я','','Имя','','Име');
+INSERT INTO tmplib_base_io VALUES('SNMP','DESCR','Description',0,4100,'',8,'Опис','','Описание','','Опис');
 INSERT INTO tmplib_base_io VALUES('digAlarm','alrm','Alarm "{st}:{lev}:{mess}"',0,64,'',0,'Сигнал "{st}:{lev}:{mess}"','','Сигнал "{st}:{lev}:{mess}"','','');
 INSERT INTO tmplib_base_io VALUES('digAlarm','SHIFR','Code',0,0,'',8,'Шифр','','Шифр','','');
-INSERT INTO tmplib_base_io VALUES('digAlarm','NAME','Name',0,0,'',9,'Ім''я','','Имя','','Име');
-INSERT INTO tmplib_base_io VALUES('digAlarm','DESCR','Description',0,0,'',10,'Опис','','Описание','','Опис');
+INSERT INTO tmplib_base_io VALUES('digAlarm','NAME','Name',0,4096,'',9,'Ім''я','','Имя','','Име');
+INSERT INTO tmplib_base_io VALUES('digAlarm','DESCR','Description',0,4100,'',10,'Опис','','Описание','','Опис');
 INSERT INTO tmplib_base_io VALUES('digAlarm','this','Object',4,0,'',11,'Об''єкт','','Объект','','');
 INSERT INTO tmplib_base_io VALUES('anUnif','log','Logarithmic scale',3,32,'0',19,'Логарифмічна шкала','','Логарифмическая шкала','','Логаритамска скала');
 INSERT INTO tmplib_base_io VALUES('manInUnif','log','Logarithmic scale',3,32,'0',16,'Логарифмічна шкала','','Логарифмическая шкала','','Логаритамска скала');
@@ -13239,8 +13239,8 @@ INSERT INTO tmplib_base_io VALUES('codeState','inProc','Input processing procedu
 INSERT INTO tmplib_base_io VALUES('codeState','st_text','State "Text"',0,16,'',5,'Стан "Текст"','','Состояние "Текст"','','');
 INSERT INTO tmplib_base_io VALUES('codeState','stats','States, rows "{code}:{State}"',0,36,'',6,'Стани, рядки "{code}:{State}"','','Состояния, строки "{code}:{State}"','','');
 INSERT INTO tmplib_base_io VALUES('codeState','SHIFR','Code',0,0,'',10,'Шифр','','Шифр','','');
-INSERT INTO tmplib_base_io VALUES('codeState','NAME','Name',0,0,'',11,'Ім''я','','Имя','','Име');
-INSERT INTO tmplib_base_io VALUES('codeState','DESCR','Description',0,0,'',12,'Опис','','Описание','','Опис');
+INSERT INTO tmplib_base_io VALUES('codeState','NAME','Name',0,4096,'',11,'Ім''я','','Имя','','Име');
+INSERT INTO tmplib_base_io VALUES('codeState','DESCR','Description',0,4100,'',12,'Опис','','Описание','','Опис');
 INSERT INTO tmplib_base_io VALUES('codeState','this','Object',4,0,'',13,'Об''єкт','','Объект','','');
 INSERT INTO tmplib_base_io VALUES('ntf','tmOut','Maximum notification timeout, seconds',1,64,'5',2,'Максимальний таймаут повідомлення, секунд','','Максимальный таймаут сообщения, секунд','','');
 INSERT INTO tmplib_base_io VALUES('ntf','messLev','Messages level, negative for alarms',1,64,'1',3,'Рівень повідомлень, негативний для порушень','','Уровень сообщений, негативный для нарушений','','');
@@ -13280,8 +13280,8 @@ INSERT INTO tmplib_base_io VALUES('UPS','tH','Temperature high',2,32,'50',14,'В
 INSERT INTO tmplib_base_io VALUES('UPS','tHH','Temperature too high',2,32,'70',15,'Температура дуже висока','','Температура очень высокая','','');
 INSERT INTO tmplib_base_io VALUES('UPS','this','Object',4,0,'',16,'Об''єкт','','Объект','','');
 INSERT INTO tmplib_base_io VALUES('UPS','SHIFR','Code',0,0,'',17,'Шифр','','Шифр','','');
-INSERT INTO tmplib_base_io VALUES('UPS','NAME','Name',0,0,'',18,'Ім''я','','Имя','','Име');
-INSERT INTO tmplib_base_io VALUES('UPS','DESCR','Description',0,0,'',19,'Опис','','Описание','','Опис');
+INSERT INTO tmplib_base_io VALUES('UPS','NAME','Name',0,4096,'',18,'Ім''я','','Имя','','Име');
+INSERT INTO tmplib_base_io VALUES('UPS','DESCR','Description',0,4100,'',19,'Опис','','Описание','','Опис');
 INSERT INTO tmplib_base_io VALUES('initConAssociateTrs','inTransport','Input transport',0,64,'InitiateCons',0,'Вхідний транспорт','','Входной транспорт','','');
 INSERT INTO tmplib_base_io VALUES('initConAssociateTrs','outTrTm','Output transport timeouts',0,64,'10:0.1',1,'Таймаути вихідних транспортів','','Таймауты выходных транспортов','','');
 INSERT INTO tmplib_base_io VALUES('initConAssociateTrs','prcTr','Processed transports',4,17,'',3,'Опрацьовані транспорти','','Обработанные транспорты','','');

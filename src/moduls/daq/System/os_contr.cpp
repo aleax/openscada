@@ -51,7 +51,7 @@
 #define MOD_NAME	trS("System DA")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"3.0.1"
+#define MOD_VER		"3.0.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides data acquisition from Operation System. Supported OS Linux data sources: CPU, Memory,\
  Sensors, Disk SMART, Disk Statistic, File System, Network, Power, UPS, Up Time etc.")
@@ -133,16 +133,8 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
 
     //Parameter type bd structure
-    // Make enumerated
-    string el_id, el_name;
-    vector<string> list;
-    daList(list);
-    for(unsigned iLs = 0; iLs < list.size(); iLs++) {
-	el_id += list[iLs]+";";
-	el_name = el_name+_(daGet(list[iLs])->name().c_str())+";";
-    }
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"));
-    tpPrmAt(t_prm).fldAdd(new TFld("TYPE",trS("System part"),TFld::String,TFld::Selectable|TCfg::NoVal,"10","",el_id.c_str(),el_name.c_str()));
+    tpPrmAt(t_prm).fldAdd(new TFld("TYPE",trS("System part"),TFld::String,TFld::Selectable|TCfg::NoVal,"10"));
     tpPrmAt(t_prm).fldAdd(new TFld("SUBT" ,"",TFld::String,TFld::Selectable|TCfg::NoVal|TFld::SelfFld,"255"));
     tpPrmAt(t_prm).fldAdd(new TFld("ADD_PRMS",trS("Additional parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"100000"));
 }
@@ -533,6 +525,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if(mDA) mDA->init(this, true);
 	TParamContr::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/prm/cfg/ADD_PRMS");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/TYPE",EVAL_STR,RWRWR_,"root",SDAQ_ID,3,
+	    "tp","str", "dest","select", "select","/prm/cfg/lsTYPE");
 	if(mDA) mDA->cntrCmdProc(this, opt);
 	return;
     }
@@ -540,5 +534,11 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     //Process command to page
     string a_path = opt->attr("path");
     if(mDA && mDA->cntrCmdProc(this,opt)) ;
+    else if(a_path == "/prm/cfg/lsTYPE" && ctrChkNode(opt)) {
+	vector<string> list;
+	mod->daList(list);
+	for(unsigned iLs = 0; iLs < list.size(); iLs++)
+	    opt->childAdd("el")->setAttr("id",list[iLs])->setText(mod->daGet(list[iLs])->name());
+    }
     else TParamContr::cntrCmdProc(opt);
 }

@@ -1,4 +1,16 @@
 2023-06-17 Roman (stable)
+- LibsDB.OscadaLibs: tmplib_base.{digAlarm,manInUnif,anUnif,pidUnifImp,anUnifSt,pidUnif,codeState,SNMP,UPS}: 
+    The NAME IO set to the type "String (translate)" and the DESCR IO to the type "Text (translate)".
+- ModelsDB.AGLKS.St: All parameter objects in LogLevPrm.gen set for "alDelay" in 1,
+    for prevent the alarm messages at the exiting.
+- FIX:DAQ: The DAQ-Templates finished in adapting to translation string type values at their editing
+    and using in the Template Configuration Tab.
+- FIX:DAQ.DAQGate: Fixed in the values sending of the translatable fields not in the internal translation structure.
+- DAQ.System: The DA-Sources list adapted for the true dynamic translation.
+- UI.VCAEngine: The "Last request time, user, language" renamed to "Last request user, language, time".
+
+
+2023-06-17 Roman (stable)
 - LibsDB.OscadaLibs: tmplib_base.ntf: Expanded by a possibility of specifying messages to exclude from the notification.
 - LibsDB.vcaBase: wlb_Main.storeHouse: Expanded by processing ID (index) also as other standard fields "NAME", "DSCR",
     to control the field visibility.

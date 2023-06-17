@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-29 16:11+0300\n"
+"POT-Creation-Date: 2023-06-17 08:20+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1217,6 +1217,7 @@ msgstr "Значение сообщения"
 msgid "Error compiling function for the document: %s"
 msgstr "Ошибка компиляции функции для документа: %s"
 
+#, c-format
 msgid ""
 "<BODY>\n"
 "  <H1>The document is forming now ...</H1>\n"
@@ -1547,7 +1548,8 @@ msgstr "Счётчик, время вычисления"
 msgid "Connections counter"
 msgstr "Счётчик подключений"
 
-msgid "Last request time, user, language"
+#, fuzzy
+msgid "Last request user, language, time"
 msgstr "Время, пользователь, язык последн. запроса"
 
 msgid "Last user action"

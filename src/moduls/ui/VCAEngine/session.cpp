@@ -767,9 +767,9 @@ void Session::cntrCmdProc( XMLNode *opt )
 		if(start()) {
 		    ctrMkNode("fld",opt,-1,"/obj/st/calc_tm",_("Counter, time of calculating"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		    ctrMkNode("fld",opt,-1,"/obj/st/connect",_("Connections counter"),R_R_R_,"root",SUI_ID,1,"tp","int");
-		    ctrMkNode("fld",opt,-1,"/obj/st/reqTime",_("Last request time, user, language"),R_R_R_,"root",SUI_ID,1,"tp","time");
-		    ctrMkNode("fld",opt,-1,"/obj/st/reqUser","",R_R_R_,"root",SUI_ID,1,"tp","str");
+		    ctrMkNode("fld",opt,-1,"/obj/st/reqUser",_("Last request user, language, time"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		    ctrMkNode("fld",opt,-1,"/obj/st/reqLang","",R_R_R_,"root",SUI_ID,1,"tp","str");
+		    ctrMkNode("fld",opt,-1,"/obj/st/reqTime","",R_R_R_,"root",SUI_ID,1,"tp","time");
 		    ctrMkNode("fld",opt,-1,"/obj/st/userActTime",_("Last user action"),R_R_R_,"root",SUI_ID,1,"tp","time");
 		    if(!backgrnd()) ctrMkNode("fld",opt,-1,"/obj/st/leftToClose",_("Remained to the forced closing, seconds"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 		}
