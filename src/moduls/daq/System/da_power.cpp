@@ -212,9 +212,14 @@ string Power::devRead( const string &dev, const string &file )
 {
     char buf[256];
 
+    string rez = EVAL_STR;
     FILE *f = fopen(TSYS::strMess(DIR_PS "%s/%s",dev.c_str(),file.c_str()).c_str(), "r");
-    string rez = (f && fgets(buf,sizeof(buf),f) != NULL) ? TSYS::strLine(buf,0) : EVAL_STR;
-    if(f && fclose(f) != 0) mess_warning(mod->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
+    if(f) {
+	rez = "";
+	while(fgets(buf,sizeof(buf),f) != NULL) rez.append(buf);
+	if(rez.size() && rez[rez.size()-1] == '\n') rez.erase(rez.size()-1, 1);
+	if(fclose(f) != 0) mess_warning(mod->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
+    }
 
     return rez;
 }

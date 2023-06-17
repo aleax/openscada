@@ -1,3 +1,11 @@
+2023-06-17 Roman (stable)
+- LibsDB.OscadaLibs: tmplib_base.ntf: Expanded by a possibility of specifying messages to exclude from the notification.
+- LibsDB.vcaBase: wlb_Main.storeHouse: Expanded by processing ID (index) also as other standard fields "NAME", "DSCR",
+    to control the field visibility.
+- DAQ.System: The DA-source "CPU" expanded by CPU detection without accessing "/proc/stat", which can be inaccessible.
+    The DA-source "Power" expanded by reading the multiline property files.
+
+
 2023-06-10 Roman (stable)
 - LibsDB.{OscadaLibs.flb_Controller.test,vcaBase.prj_archBrowser.IDW},
 	ModelsDB.AGLKS.St.{OPC_UA.test,Archive.{MemInfo_use,CPULoad_load}},ModelsDB.Boiler.St.Archive.{MemInfo_use,CPULoad_load}:

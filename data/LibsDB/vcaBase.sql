@@ -13621,6 +13621,7 @@ if(btClassEdit_value) {
 			if(dataTbl.length == 1) {
 				SYS.BD.nodeAt(db,".").SQLReq("CREATE TABLE IF NOT EXISTS `sh_"+class+"` (`ID` INT AUTO_INCREMENT, `NAME` varchar(200) DEFAULT '''', `DSCR` text, PRIMARY KEY (`ID`));", true);
 				SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `classes` (`CLASS`,`ID`,`NAME`) VALUES (''"+class+"'',''*TITLE'','''');", true);
+				SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `classes` (`CLASS`,`ID`,`NAME`) VALUES (''"+class+"'',''*ID'','''');", true);
 				SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `classes` (`CLASS`,`ID`,`NAME`) VALUES (''"+class+"'',''*NAME'','''');", true);
 				SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `classes` (`CLASS`,`ID`,`NAME`) VALUES (''"+class+"'',''*DSCR'','''');", true);
 			}
@@ -13679,7 +13680,12 @@ if(f_start || toUpdate) {
 		if((tO.fltr=clsLs[iR][4]) == "<NULL>")	tO.fltr = "";
 		if((tO.prc=clsLs[iR][5]) == "<NULL>")	tO.prc = "";
 		if(tO.prc.length) hasProc = true;
-		if(clsLs[iR][0] == "*NAME") {
+		if(clsLs[iR][0] == "*ID") {
+			tO.name = (tO.name==clsLs[iR][0]) ? tr("Identifier") : tO.name;
+			tO.tp = "int";
+			tO.tbl = tO.tbl.length ? tO.tbl : "center:0px";
+		}
+		else if(clsLs[iR][0] == "*NAME") {
 			tO.name = (tO.name==clsLs[iR][0]) ? tr("Name") : tO.name;
 			tO.tp = tO.tp.length ? tO.tp : "varchar(200)";
 			tO.tbl = tO.tbl.length ? tO.tbl : "center:170px";
@@ -13699,7 +13705,8 @@ if(f_start || toUpdate) {
 	clsLsSort.sort();
 	clsLsReq = "";
 	for(iL = 0; iL < clsLsSort.length; iL++)
-		clsLsReq += (clsLsReq.length?",":"") + "`"+(((tVl=clsLs[clsLsSort[iL].parse(1,":").toInt()][0])[0]=="*")?tVl.slice(1):"SP_"+tVl)+"`";
+		if((tVl=clsLs[clsLsSort[iL].parse(1,":").toInt()][0]) != "*ID")
+			clsLsReq += (clsLsReq.length?",":"") + "`"+((tVl[0]=="*")?tVl.slice(1):"SP_"+tVl)+"`";
 
 	//Updation the main table
 	procLng = "JavaLikeCalc.JavaScript";
@@ -13731,15 +13738,15 @@ if(f_start || toUpdate) {
 			for(iC = 0; iC < dataTbl[iR].length; iC++) {
 				itVl = dataTbl[iR][iC];
 				opt = "";
-				if(itVl == "ID")	opt += " width=''0px''";
-				else if((itVl.indexOf("SP_") == 0 && !(tVl=clsLsO[itVl.slice(3)]).isEVal()) || ((itVl == "NAME" || itVl == "DSCR") && !(tVl=clsLsO["*"+itVl]).isEVal()))
+				if(itVl == "ID" && clsLsO["*"+itVl] == null)	opt += " width=''0px''";
+				else if((itVl.indexOf("SP_") == 0 && !(tVl=clsLsO[itVl.slice(3)]).isEVal()) || ((itVl == "ID" || itVl == "NAME" || itVl == "DSCR") && !(tVl=clsLsO["*"+itVl]).isEVal()))
 				{
 					if((tVl.fltr == "index" || tVl.fltr.indexOf("list") == 0) && colVars[itVl].isEVal()) {
 						colVars[itVl] = new Object();
 						colVars[itVl].ls = new Object();
 						colVars[itVl].fltr = tVl.fltr;
 					}
-					opt += (btEdit_value && !tVl.prc.length) ? " edit=''1''" : "";
+					opt += (btEdit_value && !tVl.prc.length && itVl != "ID") ? " edit=''1''" : "";
 					itVl = tVl.name;
 					if(tVl.tp.search("bool","i") >= 0)		colTps[iC] = "b";
 					else if(tVl.tp.search("int","i") >= 0)	colTps[iC] = "i";
@@ -13904,7 +13911,7 @@ if(fClrTo >= 0) {
 if(toCalcCycles > 0.1) {
 	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
 	toCalcCycles = max(0, toCalcCycles-1);
-}','','',-2,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1677093435);
+}','','',-2,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1686898783);
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_mnEls VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB
@@ -23824,7 +23831,7 @@ The frame provides currently and in future for next features:
   - [PLANNED] detailed control panel of the selected item with the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.0
+Version: 1.3.1
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -23838,7 +23845,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - [ЗАПЛАНОВАНО] деталізована панель керування обраним елементом зі специфічними полями.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.3.0
+Версія: 1.3.1
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');

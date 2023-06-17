@@ -7245,7 +7245,7 @@ THE OUTPUT USER PROTOCOL PART "SMTP" provides operations with a SMTP-server for 
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: SVItoVYR LTD
-Version: 1.0.6
+Version: 1.0.7
 License: GPLv2','Комплексний шаблон повідомлення містить частини диспетчеру та вихідний користувацький протокол повідомлення за EMail(SMTP) та SMS.
 
 ДИСПЕТЧЕР може виконуватися для вказаних повідомлень буферу повідомлень OpenSCADA та застосовується на Логічному рівні або об''єкті контролеру модуля JavaLikeCalc.
@@ -7256,7 +7256,7 @@ License: GPLv2','Комплексний шаблон повідомлення м
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: ТОВ "СВІТоВИР АВТоМАТИК"
-Версія: 1.0.6
+Версія: 1.0.7
 Ліцензія: GPLv2','',120,0,'JavaLikeCalc.JavaScript
 if(f_start)	io = tr = EVAL;
 
@@ -7480,7 +7480,8 @@ if(!SMSTr || SMSTr.isEVal() || SMSTrAddr_ != SMSTrAddr)	{
 mess = SYS.Archive.messGet(prTm, SYS.time(), messCat, abs(messLev), "<buffer>");
 for(iM = 0; iM < mess.length; iM++) {
 	oM = mess[iM];
-	if((oM.tm == prTm && oM.utm <= prTmU) || (messLev < 0 && oM.level >= 0))	continue;
+	if((oM.tm == prTm && oM.utm <= prTmU) || (messLev < 0 && oM.level >= 0) ||
+		(messCatExcl.length && (new RegExp(messCatExcl)).test(oM.categ)))	continue;
 
 	if(emailTrAddr.length)	queue[oM.level.toString()+oM.tm.toString()+oM.categ] = oM;
 	if(SMSTr)	queueSMS[oM.level.toString()+oM.tm.toString()+oM.categ] = oM;
@@ -7567,7 +7568,7 @@ if(!SMSTr)	SMSState = "Disabled!";
 else {
 	SMSState = tr("Sent %1. In queue %2.").replace("%1",SMSSentN.toString()).replace("%2",SMSQueueN.toString());
 	if(SMSErr.length) SMSState += " "+tr("Error: %1.").replace("%1",SMSErr);
-}','','',1627833128);
+}','','',1686898650);
 INSERT INTO tmplib_base VALUES('UPS','Uninterruptible Power Supply','Джерело Безперебійного Живлення','Источник Бесперебойного Питания','Data combination of the Uninterruptible Power Supply in a complex object of the attribute "All items". The template designed to use together with the DAQ-module "System" in the part "UPS" and to represent this data by the frame "Object properties" as a complex object with properties, signalling at single borders and writing.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -13244,20 +13245,20 @@ INSERT INTO tmplib_base_io VALUES('codeState','this','Object',4,0,'',13,'Об''�
 INSERT INTO tmplib_base_io VALUES('ntf','tmOut','Maximum notification timeout, seconds',1,64,'5',2,'Максимальний таймаут повідомлення, секунд','','Максимальный таймаут сообщения, секунд','','');
 INSERT INTO tmplib_base_io VALUES('ntf','messLev','Messages level, negative for alarms',1,64,'1',3,'Рівень повідомлень, негативний для порушень','','Уровень сообщений, негативный для нарушений','','');
 INSERT INTO tmplib_base_io VALUES('ntf','messCat','Messages category, template or regular expression',0,64,'al*:*',4,'Категорія повідомлень, шаблон або регулярний вираз','','Категория сообщений, шаблон или регулярное выражение','','');
-INSERT INTO tmplib_base_io VALUES('ntf','emailState','Email notification current state',0,17,'',5,'Поточний стан повідомлення Ел.поштою','','Текущее состояние уведомления Эл.почтой','','');
-INSERT INTO tmplib_base_io VALUES('ntf','emailAuth','Auth, empty for disable',0,64,'user:pass',7,'Автентифікація, порожньо для вимкнення','','Аутентификация, пусто для выключения','','');
-INSERT INTO tmplib_base_io VALUES('ntf','emailSender','Sender',0,64,'noreply@oscada.org',8,'Відправник','','Отправитель','','');
-INSERT INTO tmplib_base_io VALUES('ntf','emailReceiver','Destination receiver address',0,64,'test@oscada.org',9,'Адреса призначення одержувача','','Адрес назначения получателя','','');
-INSERT INTO tmplib_base_io VALUES('ntf','emailTopic','EMail topic',0,4160,'Notification',10,'Тема Ел.пошти','Повідомлення','Тема Эл.почты','Уведомление','');
-INSERT INTO tmplib_base_io VALUES('ntf','emailMess','EMail message',0,4160,'',11,'Повідомлення Ел.пошти','','Сообщение Эл.почты','','');
-INSERT INTO tmplib_base_io VALUES('ntf','SMSState','SMS notification current state',0,17,'',12,'Поточний стан повідомлення SMS','','Текущее состояние уведомления SMS','','');
-INSERT INTO tmplib_base_io VALUES('ntf','SMSPin','SMS-pin, empty for disable',0,64,'1111',14,'Пін-код SMS, порожньо для вимкнення','','Пин-код SMS, пусто для выключения','','');
-INSERT INTO tmplib_base_io VALUES('ntf','SMSTel','SMS destination receiver, tel. number',0,64,'+380XXXXXXXXX',15,'Адреса одержувача SMS, номер телефону','','Адрес получателя SMS, номер телефона','','');
-INSERT INTO tmplib_base_io VALUES('ntf','SMSTextMd','SMS in the text mode, else PDU',3,64,'0',16,'SMS у текстовому режимі, інакше PDU','','SMS в текстовом режиме, иначе PDU','','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailState','Email notification current state',0,17,'',6,'Поточний стан повідомлення Ел.поштою','','Текущее состояние уведомления Эл.почтой','','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailAuth','Auth, empty for disable',0,64,'user:pass',8,'Автентифікація, порожньо для вимкнення','','Аутентификация, пусто для выключения','','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailSender','Sender',0,64,'noreply@oscada.org',9,'Відправник','','Отправитель','','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailReceiver','Destination receiver address',0,64,'test@oscada.org',10,'Адреса призначення одержувача','','Адрес назначения получателя','','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailTopic','EMail topic',0,4160,'Notification',11,'Тема Ел.пошти','Повідомлення','Тема Эл.почты','Уведомление','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailMess','EMail message',0,4160,'',12,'Повідомлення Ел.пошти','','Сообщение Эл.почты','','');
+INSERT INTO tmplib_base_io VALUES('ntf','SMSState','SMS notification current state',0,17,'',13,'Поточний стан повідомлення SMS','','Текущее состояние уведомления SMS','','');
+INSERT INTO tmplib_base_io VALUES('ntf','SMSPin','SMS-pin, empty for disable',0,64,'1111',15,'Пін-код SMS, порожньо для вимкнення','','Пин-код SMS, пусто для выключения','','');
+INSERT INTO tmplib_base_io VALUES('ntf','SMSTel','SMS destination receiver, tel. number',0,64,'+380XXXXXXXXX',16,'Адреса одержувача SMS, номер телефону','','Адрес получателя SMS, номер телефона','','');
+INSERT INTO tmplib_base_io VALUES('ntf','SMSTextMd','SMS in the text mode, else PDU',3,64,'0',17,'SMS у текстовому режимі, інакше PDU','','SMS в текстовом режиме, иначе PDU','','');
 INSERT INTO tmplib_base_io VALUES('ntf','io','UserPrt: Output IO',4,0,'',0,'UserPrt: Вихідний ВВ','','UserPrt: Выходной ВВ','','');
 INSERT INTO tmplib_base_io VALUES('ntf','tr','UserPrt: Transport',4,0,'',1,'UserPrt: Транспорт','','UserPrt: Транспорт','','');
-INSERT INTO tmplib_base_io VALUES('ntf','emailTrAddr','Output transport for SMTP connection, empty for disable',0,64,'Sockets.out_SMTP',6,'Вихідний транспорт SMTP підключень, порожньо для вимкнення','','Выходной транспорт SMTP подключений, пусто для выключения','','');
-INSERT INTO tmplib_base_io VALUES('ntf','SMSTrAddr','SMS serial transport, empty for disable',0,64,'Serial.out_SMS',13,'Послідовний транспорт SMS, порожньо для вимкнення','','Последовательный транспорт SMS, пусто для выключения','','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailTrAddr','Output transport for SMTP connection, empty for disable',0,64,'Sockets.out_SMTP',7,'Вихідний транспорт SMTP підключень, порожньо для вимкнення','','Выходной транспорт SMTP подключений, пусто для выключения','','');
+INSERT INTO tmplib_base_io VALUES('ntf','SMSTrAddr','SMS serial transport, empty for disable',0,64,'Serial.out_SMS',14,'Послідовний транспорт SMS, порожньо для вимкнення','','Последовательный транспорт SMS, пусто для выключения','','');
 INSERT INTO tmplib_base_io VALUES('codeState','out','Output',1,145,'Signal|out',1,'Вихід','','Выход','','');
 INSERT INTO tmplib_base_io VALUES('codeState','com_text','Command "Text"',0,32,'',7,'Команда "Текст"','','Команда "Текст"','','');
 INSERT INTO tmplib_base_io VALUES('codeState','coms','Commands-states, rows "{code}:{State}"',0,36,'',8,'Команди-стани, рядки "{code}:{State}"','','Команды-состояния, строки "{code}:{State}"','','');
@@ -13300,6 +13301,7 @@ INSERT INTO tmplib_base_io VALUES('pidUnifImp','alSup','Violations suppress',3,3
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','alDelay','Violations delay, seconds',2,32,'0',14,'Затримка порушень, секунди','','Задержка нарушений, секунды','','');
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','log','Logarithmic scale',3,32,'0',22,'Логарифмічна шкала','','Логарифмическая шкала','','Логаритамска скала');
 INSERT INTO tmplib_base_io VALUES('anUnif','alNormForceStart','Force NORM violation at the start',3,32,'0',11,'Примусове порушення НОРМА при запуску','','Принудительное нарушение НОРМА при запуске','','');
+INSERT INTO tmplib_base_io VALUES('ntf','messCatExcl','Message exclusion category, in regular expression',0,64,'',5,'Категорія виключення повідомлень, у регулярному виразі','','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_DevLib_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_DevLib_io VALUES('SCU750','transport','Transport',0,64,'SCU750',0,'Транспорт','','Транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('SCU750','addr','Device address (-1...255)',1,64,'1',1,'Адрес устройства (-1...255)','','Адреса пристрою (-1...255)','','');

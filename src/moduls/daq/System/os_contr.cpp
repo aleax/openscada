@@ -51,7 +51,7 @@
 #define MOD_NAME	trS("System DA")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"3.0.0"
+#define MOD_VER		"3.0.1"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides data acquisition from Operation System. Supported OS Linux data sources: CPU, Memory,\
  Sensors, Disk SMART, Disk Statistic, File System, Network, Power, UPS, Up Time etc.")

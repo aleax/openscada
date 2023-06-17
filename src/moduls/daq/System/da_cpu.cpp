@@ -46,16 +46,16 @@ void CPU::updGen( bool cntr )
     ResAlloc res(mRes, true);
 
     //CPU Load
-    // Initialisation
-    if(!fldPresent("load")) {
-	fldAdd(new TFld("load",trS("Load whole, system, user, idle\nIn %"),TFld::Real,TFld::NoWrite));
-	fldAdd(new TFld("sys","",TFld::Real,TFld::NoWrite));
-	fldAdd(new TFld("user","",TFld::Real,TFld::NoWrite));
-	fldAdd(new TFld("idle","",TFld::Real,TFld::NoWrite));
-    }
-
-    // Updating
     if((f=fopen("/proc/stat","r"))) {
+	// Initialisation
+	if(!fldPresent("load")) {
+	    fldAdd(new TFld("load",trS("Load whole, system, user, idle\nIn %"),TFld::Real,TFld::NoWrite));
+	    fldAdd(new TFld("sys","",TFld::Real,TFld::NoWrite));
+	    fldAdd(new TFld("user","",TFld::Real,TFld::NoWrite));
+	    fldAdd(new TFld("idle","",TFld::Real,TFld::NoWrite));
+	}
+
+	// Updating
 	string resLoad, resSys, resUser, resIdle;
 	long unsigned user, nice, sys, idle, iowait;
 	char buf[256];
@@ -333,15 +333,10 @@ void CPU::vlSet( TMdPrm *prm, TVal &vo, const TVariant &vl, const TVariant &pvl 
 
 void CPU::dList( vector<string> &list, TMdPrm *prm )
 {
-    FILE *f = fopen("/proc/stat","r");
-    if(!f) return;
-
-    char buf[256];
-    for(int n_cpu; f && fgets(buf,sizeof(buf),f) != NULL; )
-	if(!sscanf(buf,"cpu%d",&n_cpu))	continue;
-	else list.push_back(isdigit(buf[3]) ? i2s(n_cpu) : string("gen")+SEP_SUBID+";"+_("General"));
-
-    if(fclose(f) != 0) mess_warning(mod->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
+    unsigned cpuCnt = SYS->nCPU();
+    for(unsigned nCPU = 0; cpuCnt > 1 && nCPU < cpuCnt; ++nCPU)
+	list.push_back(i2s(nCPU));
+    list.push_back(string("gen")+SEP_SUBID+";"+_("General"));
 }
 
 bool CPU::devChkAccess( int cpuN, const string &file, const string &acs )
