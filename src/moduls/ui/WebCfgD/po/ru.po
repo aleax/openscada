@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebCfgD 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-15 21:29+0300\n"
+"POT-Creation-Date: 2023-05-29 09:11+0300\n"
 "PO-Revision-Date: 2008-12-15 15:28+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -165,6 +165,12 @@ msgstr "Принять"
 
 msgid "Close"
 msgstr "Закрыть"
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "No"
+msgstr "Нет"
 
 msgid "Page loaded."
 msgstr "Страница загружена."

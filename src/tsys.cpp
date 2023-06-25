@@ -382,14 +382,32 @@ string TSYS::real2str( double val, int prec, char tp )
     return buf;
 }
 
-string TSYS::atime2str( time_t itm, const string &format, bool gmt )
+string TSYS::atime2str( time_t itm, const string &format, bool gmt, const string &user_lang )
 {
     struct tm tm_tm;
     if(gmt) gmtime_r(&itm, &tm_tm);
     else localtime_r(&itm, &tm_tm);
     char buf[100];
-    int ret = strftime(buf, sizeof(buf), format.empty()?"%d-%m-%Y %H:%M:%S":format.c_str(), &tm_tm);
-    return (ret > 0) ? string(buf,ret) : string("");
+
+    int rez = 0;
+    string user = user_lang.size() ? user_lang : Mess->trCtx();
+    if(user.size()) {
+	string lang = TSYS::strLine(user, 1);
+	if(lang.empty() && (user=TSYS::strLine(user,0)).size())
+	    lang = Mess->langCode(user, true);
+
+	lang = Mess->langToLocale(lang);
+	//!?!? Prepare the locales cache to speed up. Use in new locale string functions of conversion real numbers
+	locale_t dLoc = newlocale(LC_TIME_MASK, lang.c_str(), 0);
+	if(dLoc != 0) {
+	    rez = strftime_l(buf, sizeof(buf), format.empty()?"%d-%m-%Y %H:%M:%S":format.c_str(), &tm_tm, dLoc);
+	    freelocale(dLoc);
+	    return (rez > 0) ? string(buf,rez) : "";
+	}
+    }
+
+    rez = strftime(buf, sizeof(buf), format.empty()?"%d-%m-%Y %H:%M:%S":format.c_str(), &tm_tm);
+    return (rez > 0) ? string(buf,rez) : string("");
 }
 
 string TSYS::time2str( double tm )

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebCfgD 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-15 21:29+0300\n"
+"POT-Creation-Date: 2023-05-29 09:11+0300\n"
 "PO-Revision-Date: 2008-12-15 15:28+0200\n"
 "Last-Translator: Irina Popkova <irischkapopkova@yandex.ru>\n"
 "Language-Team: <de@li.org>\n"
@@ -167,6 +167,12 @@ msgstr "Annehmen"
 msgid "Close"
 msgstr "Schliessen"
 
+msgid "Yes"
+msgstr "Ja"
+
+msgid "No"
+msgstr "Nein"
+
 msgid "Page loaded."
 msgstr "Die Seite ist geladet."
 
@@ -224,4 +230,3 @@ msgstr "Optionen des Moduls"
 
 msgid "Go to the configuration of the remote stations list"
 msgstr "Wechseln Sie zur Konfiguration der Liste der entfernten Stationen"
-

@@ -3135,6 +3135,8 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 
 void ShapeDiagram::makeTrendsPicture( WdgView *w )
 {
+    RunWdgView	*runW = qobject_cast<RunWdgView*>(w);
+
     int64_t d_cnt = 0;
     QPen grdPen, mrkPen;
     int  mrkHeight = 0, mrkWidth = 0;
@@ -3460,7 +3462,8 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    lab_dt.clear(), lab_tm.clear();
 		    //Date
 		    if(hvLev == 7)
-			lab_dt = TSYS::atime2str(iH/1000000, (chLev>=6)?"%B %Y":"%B");
+			lab_dt = TSYS::atime2str(iH/1000000, (chLev>=6)?"%B %Y":"%B", false,
+				    runW?((VisRun*)runW->mainWin())->user()+"\n"+((VisRun*)runW->mainWin())->lang():"");
 		    else if(/*hvLev == 5 ||*/ chLev >= 4)
 			lab_dt = TSYS::strMess((chLev>=5?"%d-%02d-%d":"%d"), ttm.tm_mday, ttm.tm_mon+1, ttm.tm_year+1900);
 		    //Hours and minuts

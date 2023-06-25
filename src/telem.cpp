@@ -116,10 +116,10 @@ bool TElem::fldPresent( const string &name )
     return false;
 }
 
-void TElem::fldList( vector<string> &list )
+void TElem::fldList( vector<string> &list ) const
 {
     list.clear();
-    MtxAlloc res(mResEl, true);
+    MtxAlloc res(const_cast<ResMtx&>(mResEl), true);
     for(unsigned i = 0; i < elem.size(); i++)
 	list.push_back(elem[i]->name());
 }

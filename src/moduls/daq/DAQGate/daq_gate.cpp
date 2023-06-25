@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.12.2"
+#define MOD_VER		"2.12.4"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -1033,8 +1033,25 @@ TMdPrm::~TMdPrm( )
 TCntrNode &TMdPrm::operator=( const TCntrNode &node )
 {
     TParamContr::operator=(node);
-
     mPrmAddr = "";
+
+    const TMdPrm *src_n = dynamic_cast<const TMdPrm*>(&node);
+    if(!src_n) return *this;
+
+    //Missing attributes specific copy
+    vector<string> ls;
+    src_n->elem().fldList(ls);
+    for(unsigned iEl = 0; iEl < ls.size(); iEl++)
+	if(!vlPresent(ls[iEl])) {
+	    pEl.fldAdd(new TFld(src_n->vlAt(ls[iEl]).at().fld()));
+
+	    // Archives copy
+	    if(!src_n->vlAt(ls[iEl]).at().arch().freeStat())
+		try {
+		    vlAt(ls[iEl]).at().setArch();
+		    (TCntrNode&)vlAt(ls[iEl]).at().arch().at() = (TCntrNode&)src_n->vlAt(ls[iEl]).at().arch().at();
+		} catch(TError &err) { if(err.cod != TError::Arch_Val_DblVSrc) throw; }
+	}
 
     return *this;
 }
@@ -1230,7 +1247,8 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 	else try {
 	    XMLNode req("set");
 	    req.clear()->setAttr("path",scntr+"/DAQ/"+prmAddr()+"/%2fserv%2fattr")->
-		childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
+		childAdd("el")->setAttr("id",vo.name())->
+				setText((vo.fld().type()==TFld::String && vo.fld().flg()&TFld::TransltText) ? trD(vl.getS()) : vl.getS());
 	    if(owner().cntrIfCmd(req))	throw TError(req.attr("mcat"), req.text());
 	    st->second.numW++;
 	} catch(TError &err) { continue; }

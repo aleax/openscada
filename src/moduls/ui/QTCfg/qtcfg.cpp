@@ -1999,7 +1999,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    if(val_r && rezReq >= 0) {
 		mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, val_r);
 		val_r->setText((string("<b>")+TSYS::strEncode((data_req.text() == "<EVAL>")?_("<EVAL>"):
-		    (s2i(data_req.text())?_("On"):_("Off")),TSYS::Html)+"</b>").c_str());
+		    (s2i(data_req.text())?_("Yes"):_("No")),TSYS::Html)+"</b>").c_str());
 	    }
 	}
 	//View edit fields

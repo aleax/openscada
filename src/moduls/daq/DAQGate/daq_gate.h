@@ -83,7 +83,7 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	TElem &elem( )		{ return pEl; }
+	TElem &elem( ) const	{ return (TElem&)pEl; }
 	TMdContr &owner( ) const;
 
 	//Attributes

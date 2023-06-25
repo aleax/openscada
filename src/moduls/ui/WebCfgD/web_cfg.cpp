@@ -42,7 +42,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.5.2"
+#define MOD_VER		"2.5.4"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript.")
 #define LICENSE		"GPL2"
@@ -112,7 +112,7 @@ TWEB::TWEB( string name ) : TUI(MOD_ID)
 	_("There is no container for editing."), _("Adding an item to the node '%1'."), _("Item '%1' already exists."),
 	_("Are you sure you want to remove the node '%1'?"),
 	_("Copy is impossible."), _("Selected"), _("Move node '%1' to '%2'."), _("Copy node '%1' to '%2'."), _("Node '%1' already present. Continue?"),
-	_("Element type:", "ID:"), _("Name:"), _("Ok"), _("Close"),
+	_("Element type:", "ID:"), _("Name:"), _("Ok"), _("Close"), _("Yes"), _("No"),
 	_("Page loaded."),
 	_("Selecting node id and/or name"),
 	_("Setting item name"),

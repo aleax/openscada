@@ -330,7 +330,7 @@ class TSYS : public TCntrNode
 	    double rez = floor(val*pow(10,dig)+0.5)/pow(10,dig);
 	    return toint ? floor(rez+0.5) : rez;
 	}
-	static string atime2str( time_t tm, const string &format = "", bool gmt = false );
+	static string atime2str( time_t tm, const string &format = "", bool gmt = false, const string &user_lang = "" );
 	static string time2str( double tm );
 	static string cpct2str( double cnt );
 

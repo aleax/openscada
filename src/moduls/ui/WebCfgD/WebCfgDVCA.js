@@ -1367,8 +1367,8 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	    (val_r||val_w).title = (tVl=t_s.getAttribute('help')) ? tVl : "";
 	    var sel_ok = false, c_el = 0;
 	    if(!t_s.getAttribute('select')) {
-		var ind_ls = t_s.getAttribute('sel_id') ? t_s.getAttribute('sel_id').split(';') : new Array();
-		var val_ls = t_s.getAttribute('sel_list').split(';');
+		ind_ls = (ind_ls=t_s.getAttribute('sel_id')) ? ind_ls.split(';') : new Array();
+		val_ls = (val_ls=t_s.getAttribute('sel_list')) ? val_ls.split(';') : new Array();
 		var valWCfg = '';
 		for(var ls_i = 0; ls_i < val_ls.length && val_ls[ls_i].length && (!ind_ls.length || ls_i < ind_ls.length); ls_i++) {
 		    if(val_w) valWCfg += "<option "+
@@ -1453,7 +1453,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	    }
 	    if(val_r) {
 		val_r.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
-		val_r.innerText = (dataReq.textContent=='<EVAL>') ? '<EVAL>' : (parseInt(dataReq.textContent)?'On ':'Off ');
+		val_r.innerText = (dataReq.textContent=='<EVAL>') ? '<EVAL>' : (parseInt(dataReq.textContent)?'###Yes### ':'###No### ');
 	    }
 	}
 	//View edit fields

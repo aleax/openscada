@@ -912,8 +912,12 @@ TCntrNode &TVArchive::operator=( const TCntrNode &node )
     //Configuration copy
     exclCopy(*src_n, "ID;SrcMode;Source;");
     setDB(src_n->DB());
+    if(srcMode() == Passive)
+	setSrcMode(const_cast<TVArchive*>(src_n)->srcMode(), const_cast<TVArchive*>(src_n)->srcData());
 
-    if(src_n->startStat() && toStart() && !startStat())	start();
+    if(src_n->startStat() && toStart() && !startStat())
+	try { start(); }
+	catch(TError &err) { if(err.cod != TError::Arch_Val_DblVSrc) throw; }
 
     return *this;
 }
