@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttypedaq.h
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -54,7 +54,7 @@ class TTypeDAQ : public TModule, public TElem
 	// Controllers
 	void list( vector<string> &list ) const		{ chldList(mCntr,list); }
 	bool present( const string &id ) const	{ return chldPresent(mCntr,id); }
-	string add( const string &id, const string &daq_db = "*.*" );
+	string add( const string &id, const string &daq_db = DB_GEN );
 	void del( const string &id )			{ chldDel(mCntr, id); }
 	AutoHD<TController> at( const string &id, const string &who = "" ) const	{ return chldAt(mCntr,id); }
 

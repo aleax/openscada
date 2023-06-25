@@ -124,7 +124,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     connect(obj_enable, SIGNAL(stateChanged(int)), this, SLOT(isModify()));
     glay->addWidget(obj_enable, 1, 2);
 
-    lab = new QLabel(_("Container DB:"), tab_w);
+    lab = new QLabel(_("Storage:"), tab_w);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
     glay->addWidget(lab, 2, 1);
     obj_db = new LineEdit(tab_w, LineEdit::Combo);
@@ -410,19 +410,31 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	gnd = TCntrNode::ctrId(root, obj_db->objectName().toStdString(), true);
 	obj_db->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 	if(gnd) {
-	    if(dynamic_cast<QComboBox*>(obj_db->workWdg()))
-		((QComboBox*)obj_db->workWdg())->setEditable(gnd->attr("dest")=="sel_ed");
+	    QComboBox *cBox = dynamic_cast<QComboBox*>(obj_db->workWdg());
+	    bool isEd = (cBox && gnd->attr("dest") == "sel_ed");
+	    if(cBox) cBox->setEditable(isEd);
 
 	    req.clear()->setAttr("path", ed_it+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) {
-		string els;
-		for(unsigned iL = 0; iL < req.childSize(); iL++)
-		    els += req.childGet(iL)->text() + "\n";
-		obj_db->setCfg(els.c_str());
+		if(!isEd && cBox) {
+		    cBox->clear();
+		    for(unsigned iEl = 0; iEl < req.childSize(); ++iEl)
+			cBox->addItem(req.childGet(iEl)->text().c_str(),req.childGet(iEl)->attr("id").c_str());
+		}
+		else {
+		    string els;
+		    for(unsigned iL = 0; iL < req.childSize(); iL++)
+			els += req.childGet(iL)->text() + "\n";
+		    obj_db->setCfg(els.c_str());
+		}
 	    }
 
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_db->objectName().toStdString(),TSYS::PathEl));
-	    if(!owner()->cntrIfCmd(req)) obj_db->setValue(req.text().c_str());
+	    if(!owner()->cntrIfCmd(req)) {
+		if(!isEd && cBox)
+		    cBox->setCurrentIndex(cBox->findData(req.text().c_str()));
+		else obj_db->setValue(req.text().c_str());
+	    }
 	}
 	// Remove from DB
 	gnd = TCntrNode::ctrId(root, obj_remFromDB->objectName().toStdString(), true);
@@ -823,7 +835,10 @@ void LibProjProp::isModify( QObject *snd )
 	update = true;
     }
     else if(oname == obj_db->objectName() || oname == obj_name->objectName() || oname == prj_ctm->objectName()) {
-	req.setText(((LineEdit*)snd)->value().toStdString());
+	QComboBox *cBox = dynamic_cast<QComboBox*>(((LineEdit*)snd)->workWdg());
+	req.setText((!cBox || cBox->itemData(cBox->currentIndex()).isNull())
+			? ((LineEdit*)snd)->value().toStdString()
+			: cBox->itemData(cBox->currentIndex()).toString().toStdString());
 	update = (oname==obj_db->objectName());
     }
     else if(oname == obj_remFromDB->objectName()) update = true;
@@ -1479,15 +1494,15 @@ void VisItProp::showDlg( const string &iit, bool reload )
 
 	// Special fields
 	//  Page type
-	gnd = TCntrNode::ctrId(root,pg_tp->objectName().toStdString(),true);
+	gnd = TCntrNode::ctrId(root, pg_tp->objectName().toStdString(), true);
 	pg_tp->setVisible(gnd); ((QLabel*)TSYS::str2addr(pg_tp->windowIconText().toStdString()))->setVisible(gnd);
 	if(gnd) {
 	    pg_tp->setEnabled(s2i(gnd->attr("acs"))&SEC_WR);
 
 	    int sel_val = 0;
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(pg_tp->objectName().toStdString(),TSYS::PathEl));
-	    if( !owner()->cntrIfCmd(req) ) sel_val = s2i(req.text());
-	    //   Get combo list
+	    if(!owner()->cntrIfCmd(req)) sel_val = s2i(req.text());
+	    //   Getting list of the combo
 	    pg_tp->clear();
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req))

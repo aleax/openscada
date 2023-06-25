@@ -689,7 +689,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 		opt->childAdd("el")->setAttr("id",lst[iA])->setText(trD(tmplLibAt(lst[iA]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
-	    tmplLibReg(new TPrmTmplLib(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str(),"*.*"));
+	    tmplLibReg(new TPrmTmplLib(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str(),DB_GEN));
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	    tmplLibUnreg(opt->attr("id"),1);
     }

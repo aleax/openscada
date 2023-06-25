@@ -158,7 +158,7 @@ class TWEB: public TUI
 	// User page's functions
 	void uPgList( vector<string> &ls ) const	{ chldList(mPgU,ls); }
 	bool uPgPresent( const string &id ) const	{ return chldPresent(mPgU,id); }
-	string uPgAdd( const string &id, const string &db = "*.*" );
+	string uPgAdd( const string &id, const string &db = DB_GEN );
 	void uPgDel( const string &id )			{ chldDel(mPgU, id); }
 	AutoHD<UserPg> uPgAt( const string &id ) const	{ return chldAt(mPgU, id); }
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BFN 0.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 18:03+0300\n"
+"POT-Creation-Date: 2023-06-24 16:18+0300\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -57,8 +57,8 @@ msgstr "Код %s"
 msgid "Symbols"
 msgstr "Символы"
 
-msgid "Symbols DB"
-msgstr "БД символов"
+msgid "Storage"
+msgstr ""
 
 msgid "Codes"
 msgstr "Коды"
@@ -88,6 +88,7 @@ msgstr "Ошибка: '%s'. "
 msgid "Acquisition. "
 msgstr "Сбор. "
 
+#, c-format
 msgid "Acquisition with the period %s. "
 msgstr "Сбор с периодом %s. "
 
@@ -95,6 +96,7 @@ msgstr "Сбор с периодом %s. "
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Следующий сбор по cron '%s'. "
 
+#, c-format
 msgid "Spent time %s."
 msgstr "Затрачено времени %s."
 
@@ -139,3 +141,6 @@ msgstr "1:Параметр отключен."
 
 msgid "2:Acquisition stopped."
 msgstr "2:Сбор остановлен."
+
+#~ msgid "Symbols DB"
+#~ msgstr "БД символов"

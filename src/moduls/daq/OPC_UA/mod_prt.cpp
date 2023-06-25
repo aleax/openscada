@@ -783,11 +783,11 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/ep/st/asess",_("Active sessions"),(enableStat()?R_R_R_:0),"root",SPRT_ID);
 		ctrMkNode("list",opt,-1,"/ep/st/asubscr",_("Active subscriptions"),(enableStat()?R_R_R_:0),"root",SPRT_ID);
 		ctrMkNode("fld",opt,-1,"/ep/st/en_st",_("Enabled"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/ep/st/db",_("DB"),RWRWR_,"root",SPRT_ID,4,
+		ctrMkNode("fld",opt,-1,"/ep/st/db",_("Storage"),RWRWR_,"root",SPRT_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 		if(DB(true).size())
-		    ctrMkNode("comm",opt,-1,"/ep/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SPRT_ID,
-			1,"help",(DB(true)=="*.*")?TMess::labStorRemGenStor().c_str():"");
+		    ctrMkNode("comm",opt,-1,"/ep/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),
+			TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",SPRT_ID,1,"help",TMess::labStorRem(mDB).c_str());
 	    }
 	    if(ctrMkNode("area",opt,-1,"/ep/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/ep/cfg",0,"root",SPRT_ID,RWRWR_);

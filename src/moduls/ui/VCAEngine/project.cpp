@@ -607,14 +607,15 @@ void Project::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/obj/st/status",_("Status"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		if(isStdStorAddr())
-		    ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB"),RWRWR_,"root",SUI_ID,4,
+		    ctrMkNode("fld",opt,-1,"/obj/st/db",_("Storage"),RWRWR_,"root",SUI_ID,4,
 			"tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 		else ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB"),RWRWR_,"root",SUI_ID,4,
 			"tp","str","dest","sel_ed","select",("/db/tblList:prj_"+id()).c_str(),
-			"help",_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the Generic Storage, set '*.*.{Table name}'."));
+			"help",TSYS::strMess(_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use %s, set '%s.{Table name}'."),
+					TMess::labStorFromCode(DB_GEN).c_str(),DB_GEN).c_str());
 		if(DB(true).size())
-		    ctrMkNode("comm",opt,-1,"/obj/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SUI_ID,
-			1,"help",(DB(true)=="*.*")?TMess::labStorRemGenStor().c_str():"");
+		    ctrMkNode("comm",opt,-1,"/obj/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),
+			TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",SUI_ID,1,"help",TMess::labStorRem(mDB).c_str());
 		ctrMkNode("fld",opt,-1,"/obj/st/timestamp",_("Date of modification"),R_R_R_,"root",SUI_ID,1,"tp","time");
 		ctrMkNode("fld",opt,-1,"/obj/st/use",_("Used"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 	    }

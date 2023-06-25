@@ -135,7 +135,7 @@ AutoHD<TTransportOut> TTransportS::outAt( const string &addr )
     return rezTr;
 }
 
-string TTransportS::extHostsDB( )	{ return "*.*.CfgExtHosts"; }
+string TTransportS::extHostsDB( )	{ return DB_GEN ".CfgExtHosts"; }
 
 void TTransportS::load_( )
 {
@@ -1085,11 +1085,11 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),R_R_R_,"root",STR_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Connect"),RWRWR_,"root",STR_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),RWRWR_,"root",STR_ID,4,
+		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Storage"),RWRWR_,"root",STR_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 		if(DB(true).size())
-		    ctrMkNode("comm",opt,-1,"/prm/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",STR_ID,
-			1,"help",(DB(true)=="*.*")?TMess::labStorRemGenStor().c_str():"");
+		    ctrMkNode("comm",opt,-1,"/prm/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),
+			TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",STR_ID,1,"help",TMess::labStorRem(mDB).c_str());
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",STR_ID,RWRWR_);
@@ -1455,11 +1455,11 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),R_R_R_,"root",STR_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Connect"),RWRWR_,"root",STR_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),RWRWR_,"root",STR_ID,4,
+		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Storage"),RWRWR_,"root",STR_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 		if(DB(true).size())
-		    ctrMkNode("comm",opt,-1,"/prm/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",STR_ID,
-			1,"help",(DB(true)=="*.*")?TMess::labStorRemGenStor().c_str():"");
+		    ctrMkNode("comm",opt,-1,"/prm/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),
+			TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",STR_ID,1,"help",TMess::labStorRem(mDB).c_str());
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",STR_ID,RWRWR_);

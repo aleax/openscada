@@ -280,6 +280,9 @@ Information variables of the program:
 <li> <i>ARCH_ALRM</i> — Name of requesting the actual alarms table ("&lt;alarms&gt;").</li>
 <li> <i>ARCH_ALRM_CH</i> — Name of requesting for records change of the the actual alarms table ("&lt;alarmsChange&gt;").</li>
 <li> <i>ARCH_NOALRM</i> — Name of requesting for the buffer and archivers and without the actual alarms table ("&lt;noalarms&gt;").</li>
+<li> <i>DB_GEN</i> — Code name of the Generic Storage ("&lt;gen&gt;").</li>
+<li> <i>DB_CFG</i> — Code name of the Configuration File ("&lt;cfg&gt;").</li>
+<li> <i>DB_NULL</i> — Mark of the DB NULL value ("&lt;NULL&gt;").</li>
 <li> <i>__func__</i> — The full name of the calling function.</li>
 <li> <i>vmin (a,b)</i> — Determination of the minimum value.</li>
 <li> <i>vmax (a,b)</i> — Definition of the maximum value.</li></ul>
@@ -553,7 +556,7 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>bool translItSplit( const string &amp;base, const string &amp;srcFltr = "" );</i> — Splitting the BASE message <i>base</i> per it sources and only for matched ones to <i>srcFltr</i>.</li>
 <li> <i>bool translItRemTrs( const string &amp;base, const string &amp;srcFltr = "" );</i> — Removing the BASE message <i>base</i> from the individual messages table "Trs" and only for matched sources to <i>srcFltr</i>.</li>
 <li> <i>string trCtx( const string &amp;user_lang = mess_TrModifMark, bool *hold = NULL );</i> — Getting (by default) and registering(no empty)/clearing(empty) the translation context <i>user_lang</i> bound to the call pthread. <i>hold</i> can be pointed to detect the context already registered and do not clear that.</li>
-<li> <i>static string labStor( bool nogen = false ); static string labStorRemGenStor( ); static string labSecCRON( ); static string labSecCRONsel( ); static string labTaskPrior( ); static string labMessCat( ); static string labStdOutTrs( );</i> — Common help labels.</li>
+<li> <i>static string labStorFromCode( const string &amp;code ); static string labStor( ); static string labStorRem( const string &amp;cnt ); static string labSecCRON( ); static string labSecCRONsel( ); static string labTaskPrior( ); static string labMessCat( ); static string labStdOutTrs( );</i> — Common help labels.</li>
 <li> <i>int getUTF8( const string &amp;str, int off = 0, int32_t *symb = NULL );</i> — Get and parse a UTF-8 symbol.</li>
 <li> <i>static string setUTF8( int32_t symb );</i> — Set, form and return a UTF-8 symbol from their code <i>symb</i>.</li></ul>
 <h3><span class="mw-headline" id="Object_subsystem_.28TSubSYS.29"><span class="mw-headline-number">2.3</span> <span id="TSubSYS" title="#TSubSYS">Object subsystem (TSubSYS)</span></span></h3>
@@ -870,7 +873,7 @@ Flags of the SQL requests (enum – TTable::SQLFeqFlag):
 <li> <i>void modStop( );</i> — Stop of the module.</li>
 <li> <i>void list( vector&lt;string&gt; &amp;list ) const;</i> — The list of the controllers.</li>
 <li> <i>bool present( const string &amp;id ) const;</i> — Check for the availability of the specified controller object.</li>
-<li> <i>string add( const string &amp;id, const string &amp;daq_db = "*.*" );</i> — Add the controller object. Returns the end created identifier.</li>
+<li> <i>string add( const string &amp;id, const string &amp;daq_db = DB_GEN );</i> — Add the controller object. Returns the end created identifier.</li>
 <li> <i>void del( const string &amp;id );</i> — Delete the controller object.</li>
 <li> <i>AutoHD&lt;TController&gt; at( const string &amp;id, const string &amp;who = "" ) const;</i> — Connect to the controller object.</li>
 <li> <i>bool tpPrmPresent( const string &amp;name_t );</i> — Check for the availability of the specified controller type.</li>
@@ -1251,7 +1254,7 @@ Structure of template links (class — TPrmTempl::Impl::SLnk):
 <li> <i>void subStop( );</i> — Stop of the system.</li>
 <li> <i>void valList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the values'archives in the subsystem.</li>
 <li> <i>bool valPresent( const string &amp;id ) const;</i> — Check for the availability of the values' archive <i>id</i>.</li>
-<li> <i>string valAdd( const string &amp;id, const string &amp;idb = "*.*" );</i> — Addition of the new values' archive <i>id</i>. Returns the end created identifier.</li>
+<li> <i>string valAdd( const string &amp;id, const string &amp;idb = DB_GEN );</i> — Addition of the new values' archive <i>id</i>. Returns the end created identifier.</li>
 <li> <i>void valDel( const string &amp;id, bool db = false );</i> — Deleting of the values' archive <i>id</i>.</li>
 <li> <i>AutoHD&lt;TVArchive&gt; valAt( const string &amp;id ) const;</i> — Connection/addressing to the values' archive <i>id</i>.</li>
 <li> <i>void setActMess( TMArchivator *a, bool val );</i> — Setting of the messages archivator <i>a</i> into the active status <i>val</i>. Active archivator will be provided by the subsystem with the flow of messages.</li>
@@ -1404,12 +1407,12 @@ The data acquisition mode/source (enumeration — TVArchive::SrcMode):
 </p>
 <ul><li> <i>void messList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the messages' archivers.</li>
 <li> <i>bool messPresent( const string &amp;id ) const;</i> — Check for the presence of the specified messages' archiver.</li>
-<li> <i>string messAdd( const string &amp;id, const string &amp;idb = "*.*" );</i> — Adding of the messages' archiver. Returns the end created identifier.</li>
+<li> <i>string messAdd( const string &amp;id, const string &amp;idb = DB_GEN );</i> — Adding of the messages' archiver. Returns the end created identifier.</li>
 <li> <i>void messDel( const string &amp;id, bool full = false );</i> — Deleting of the messages' archiver.</li>
 <li> <i>AutoHD&lt;TMArchivator&gt; messAt( const string &amp;id ) const;</i> — Connection to the messages' archiver.</li>
 <li> <i>void valList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the values' archivers.</li>
 <li> <i>bool valPresent( const string &amp;id ) const;</i> — Check for the presence of the specified values' archiver.</li>
-<li> <i>string valAdd( const string &amp;id, const string &amp;idb = "*.*" );</i> — Adding of the values' archiver. Returns the end created identifier.</li>
+<li> <i>string valAdd( const string &amp;id, const string &amp;idb = DB_GEN );</i> — Adding of the values' archiver. Returns the end created identifier.</li>
 <li> <i>void valDel( const string &amp;id, bool full = false );</i> — Deleting of the values' archiver.</li>
 <li> <i>AutoHD&lt;TVArchivator&gt; valAt( const string &amp;id ) const;</i> — Connection to the values' archiver.</li>
 <li> <i>TArchiveS &amp;owner( ) const;</i> — Subsystem "Archives" - the owner of the archiver's type.</li></ul>
@@ -1627,12 +1630,12 @@ External hosts mode (enum — TTransportS::ExtHost::Mode):
 <ul><li> <i>virtual bool isNetwork( );</i> — The sign of network implementation by this module.</li>
 <li> <i>void inList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the input transports.</li>
 <li> <i>bool inPresent( const string &amp;id ) const;</i> — Check for an input transport presence.</li>
-<li> <i>string inAdd( const string &amp;id, const string &amp;db = "*.*" );</i> — Addition of the input transport. Returns the end created identifier.</li>
+<li> <i>string inAdd( const string &amp;id, const string &amp;db = DB_GEN );</i> — Addition of the input transport. Returns the end created identifier.</li>
 <li> <i>void inDel( const string &amp;id, bool complete = false );</i> — Deleting of the input transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
 <li> <i>AutoHD&lt;TTransportIn&gt; inAt( const string &amp;id ) const;</i> — Connection to the input transport.</li>
 <li> <i>void outList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the output transports.</li>
 <li> <i>bool outPresent( const string &amp;id ) const;</i> — Check for an output transport presence.</li>
-<li> <i>string outAdd( const string &amp;id, const string &amp;db = "*.*" );</i> — Addition of the output transport. Returns the end created identifier.</li>
+<li> <i>string outAdd( const string &amp;id, const string &amp;db = DB_GEN );</i> — Addition of the output transport. Returns the end created identifier.</li>
 <li> <i>void outDel( const string &amp;id, bool complete = false );</i> — Deleting of the output transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
 <li> <i>AutoHD&lt;TTransportOut&gt; outAt( const string &amp;id ) const;</i> — Connection to the output transport.</li>
 <li> <i>virtual string outAddrHelp( );</i> — Address format help of the output transports.</li>
@@ -1890,12 +1893,12 @@ Requests parameters (enum — GetOpts):
 <li> <i>void usrList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the users <i>list</i>.</li>
 <li> <i>void usrGrpList( const string &amp;name, vector&lt;string&gt; &amp;list );</i> — The list of the users' groups <i>list</i>, in which the user <i>name</i> is included.</li>
 <li> <i>bool usrPresent( const string &amp;name ) const;</i> — Check fro the presence of the specified user <i>name</i>.</li>
-<li> <i>string usrAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the user <i>name</i> with the saving to the DB <i>db</i>. Returns the end created name of the user.</li>
+<li> <i>string usrAdd( const string &amp;name, const string &amp;db = DB_GEN );</i> — Addition of the user <i>name</i> with the saving to the DB <i>db</i>. Returns the end created name of the user.</li>
 <li> <i>void usrDel( const string &amp;name, bool complete = false );</i> — Deleting of the user <i>name</i> with the possibility of the completely deleting <i>complete</i>.</li>
 <li> <i>AutoHD&lt;TUser&gt; usrAt( const string &amp;name ) const;</i> — Attaching of the user <i>name</i>.</li>
 <li> <i>void grpList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the users' groups <i>list</i>.</li>
 <li> <i>bool grpPresent( const string &amp;name ) const;</i> — Check fro the presence of the specified users' group <i>name</i>.</li>
-<li> <i>string grpAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the users' group <i>name</i> with the saving to the DB <i>db</i>. Returns the end created name of the user group.</li>
+<li> <i>string grpAdd( const string &amp;name, const string &amp;db = DB_GEN );</i> — Addition of the users' group <i>name</i> with the saving to the DB <i>db</i>. Returns the end created name of the user group.</li>
 <li> <i>void grpDel( const string &amp;name, bool complete = false );</i> — Deleting of the users' group <i>name</i> with the possibility of the completely deleting <i>complete</i>.</li>
 <li> <i>AutoHD&lt;TGroup&gt; grpAt( const string &amp;name ) const;</i> — Connection to the users' group <i>name</i>.</li></ul>
 <h3><span class="mw-headline" id="The_user.27s_object_.28TUser.29"><span class="mw-headline-number">10.2</span> <span id="TUser" title="#TUser">The user's object (TUser)</span></span></h3>

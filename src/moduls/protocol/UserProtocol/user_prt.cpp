@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.6.2"
+#define MOD_VER		"1.6.3"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -684,11 +684,11 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/up/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/up/st/status",_("Status"),R_R_R_,"root",SPRT_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/up/st/en_st",_("Enabled"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/up/st/db",_("DB"),RWRWR_,"root",SPRT_ID,4,
+		ctrMkNode("fld",opt,-1,"/up/st/db",_("Storage"),RWRWR_,"root",SPRT_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 		if(DB(true).size())
-		    ctrMkNode("comm",opt,-1,"/up/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SPRT_ID,
-			1,"help",(DB(true)=="*.*")?TMess::labStorRemGenStor().c_str():"");
+		    ctrMkNode("comm",opt,-1,"/up/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),
+			TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",SPRT_ID,1,"help",TMess::labStorRem(mDB).c_str());
 		ctrMkNode("fld",opt,-1,"/up/st/timestamp",_("Date of modification"),R_R_R_,"root",SPRT_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/up/cfg",_("Configuration"))) {

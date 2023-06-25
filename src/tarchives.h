@@ -156,14 +156,14 @@ class TTypeArchivator: public TModule
 	// Messages
 	void messList( vector<string> &list ) const		{ chldList(mMess, list); }
 	bool messPresent( const string &id ) const		{ return chldPresent(mMess, id); }
-	string messAdd( const string &id, const string &idb = "*.*" );
+	string messAdd( const string &id, const string &idb = DB_GEN );
 	void messDel( const string &id, bool full = false )	{ chldDel(mMess, id, -1, full?NodeRemove:NodeNoFlg); }
 	AutoHD<TMArchivator> messAt( const string &id ) const	{ return chldAt(mMess, id); }
 
 	// Values
 	void valList( vector<string> &list ) const		{ chldList(mVal, list); }
 	bool valPresent( const string &id ) const		{ return chldPresent(mVal, id); }
-	string valAdd( const string &id, const string &idb = "*.*" );
+	string valAdd( const string &id, const string &idb = DB_GEN );
 	void valDel( const string &id, bool full = false )	{ chldDel(mVal, id, -1, full?NodeRemove:NodeNoFlg); }
 	AutoHD<TVArchivator> valAt( const string &id ) const	{ return chldAt(mVal, id); }
 
@@ -228,7 +228,7 @@ class TArchiveS : public TSubSYS
 	// Value archives functions
 	void valList( vector<string> &list ) const		{ chldList(mAval, list); }
 	bool valPresent( const string &id ) const		{ return chldPresent(mAval, id); }
-	string valAdd( const string &id, const string &idb = "*.*" );
+	string valAdd( const string &id, const string &idb = DB_GEN );
 	void valDel( const string &id, bool db = false );
 	AutoHD<TVArchive> valAt( const string &id ) const	{ return chldAt(mAval, id); }
 

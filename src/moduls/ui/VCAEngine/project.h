@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: project.h
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -53,7 +53,7 @@ class Project : public TCntrNode, public TConfig
 	};
 
 	//Methods
-	Project( const string &id, const string &name, const string &lib_db = "*.*" );
+	Project( const string &id, const string &name, const string &lib_db = DB_GEN );
 	~Project( );
 
 	TCntrNode &operator=( const TCntrNode &node );

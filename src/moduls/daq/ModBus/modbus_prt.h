@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define PRT_NAME	trS("Server ModBus")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"2.10.7"
+#define PRT_MVER	"2.10.8"
 #define PRT_AUTHORS	trS("Roman Savochenko")
 #define PRT_DESCR	trS("Provides implementation of ModBus protocols. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define PRT_LICENSE	"GPL2"
@@ -220,7 +220,7 @@ class TProt: public TProtocol
 	// Node's functions
 	void nList( vector<string> &ls ) const		{ chldList(mNode, ls); }
 	bool nPresent( const string &id ) const		{ return chldPresent(mNode, id); }
-	string nAdd( const string &id, const string &db = "*.*" );
+	string nAdd( const string &id, const string &db = DB_GEN );
 	void nDel( const string &id )			{ chldDel(mNode, id); }
 	AutoHD<Node> nAt( const string &id ) const	{ return chldAt(mNode, id); }
 

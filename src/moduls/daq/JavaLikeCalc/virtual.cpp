@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"5.6.3"
+#define MOD_VER		"5.6.4"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -379,7 +379,7 @@ void TpContr::cntrCmdProc( XMLNode *opt )
 	    for(unsigned iA = 0; iA < lst.size(); iA++)
 		opt->childAdd("el")->setAttr("id",lst[iA])->setText(trD(lbAt(lst[iA]).at().name()));
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	lbReg(new Lib(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str(),"*.*"));
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	lbReg(new Lib(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str(),DB_GEN));
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	lbUnreg(opt->attr("id"),1);
     }
     else TTypeDAQ::cntrCmdProc(opt);

@@ -442,7 +442,7 @@ no;last;substitute<br />
 <tr>
 <td> NAME </td>
 <td> Name </td>
-<td> String </td>
+<td> String (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -451,7 +451,7 @@ no;last;substitute<br />
 <tr>
 <td> DESCR </td>
 <td> Description </td>
-<td> String </td>
+<td> Text (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -923,7 +923,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <tr>
 <td> NAME </td>
 <td> Name </td>
-<td> String </td>
+<td> String (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -932,7 +932,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <tr>
 <td> DESCR </td>
 <td> Description </td>
-<td> String </td>
+<td> Text (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -1303,7 +1303,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <tr>
 <td> NAME </td>
 <td> Name </td>
-<td> String </td>
+<td> String (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -1312,7 +1312,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <tr>
 <td> DESCR </td>
 <td> Description </td>
-<td> String </td>
+<td> Text (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -1541,7 +1541,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <tr>
 <td> NAME </td>
 <td> Name </td>
-<td> String </td>
+<td> String (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -1550,7 +1550,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <tr>
 <td> DESCR </td>
 <td> Description </td>
-<td> String </td>
+<td> Text (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -2149,7 +2149,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <tr>
 <td> NAME </td>
 <td> Name </td>
-<td> String </td>
+<td> String (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -2158,7 +2158,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <tr>
 <td> DESCR </td>
 <td> Description </td>
-<td> String </td>
+<td> Text (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -2541,7 +2541,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <tr>
 <td> NAME </td>
 <td> Name </td>
-<td> String </td>
+<td> String (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -2550,7 +2550,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <tr>
 <td> DESCR </td>
 <td> Description </td>
-<td> String </td>
+<td> Text (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -2701,7 +2701,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <tr>
 <td> NAME </td>
 <td> Name </td>
-<td> String </td>
+<td> String (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -2710,7 +2710,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <tr>
 <td> DESCR </td>
 <td> Description </td>
-<td> String </td>
+<td> Text (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -2841,6 +2841,15 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <td> Not attribute </td>
 <td> Constant </td>
 <td> al*:*
+</td></tr>
+<tr>
+<td> messCatExcl </td>
+<td> Message exclusion category, in regular expression </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td>
 </td></tr>
 <tr>
 <td> emailState </td>
@@ -2998,6 +3007,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <ul><li> Maximum notification timeout, seconds.</li>
 <li> Messages level, negative for alarms.</li>
 <li> Messages category, template or regular expression.</li>
+<li> Message exclusion category, in regular expression.</li>
 <li> Output transport for SMTP connection, empty for disable.</li>
 <li> Auth, empty for disable.</li>
 <li> Sender.</li>

@@ -551,11 +551,11 @@ void TController::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/cntr/st/status",_("Status"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/cntr/st/enSt",_("Enabled"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/cntr/st/runSt",_("Running"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Controller DB"),RWRWR_,"root",SDAQ_ID,4,
+		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Storage"),RWRWR_,"root",SDAQ_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 		if(DB(true).size())
-		    ctrMkNode("comm",opt,-1,"/cntr/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SDAQ_ID,
-			1,"help",(DB(true)=="*.*")?TMess::labStorRemGenStor().c_str():"");
+		    ctrMkNode("comm",opt,-1,"/cntr/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),
+			TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",SDAQ_ID,1,"help",TMess::labStorRem(mDB).c_str());
 		ctrMkNode("fld",opt,-1,"/cntr/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/cntr/cfg",_("Configuration"))) {

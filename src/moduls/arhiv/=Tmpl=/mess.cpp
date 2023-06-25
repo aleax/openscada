@@ -38,7 +38,7 @@ ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
     TMArchivator(iid,idb,cf_el), mBeg(0), mEnd(0)
 {
     //???? Set here the default message archiver address
-    setAddr("*.*");
+    setAddr(DB_GEN);
 }
 
 ModMArch::~ModMArch( )

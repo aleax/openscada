@@ -989,16 +989,29 @@ void TMess::save( )
     }
 }
 
-string TMess::labStor( bool nogen )
+string TMess::labStorFromCode( const string &code )
 {
-    return string(_("Storage address in the format \"{DB module}.{DB name}\".")) +
-	(nogen?string(""):string("\n")+_("Set '*.*' to use the Generic Storage."));
+    if(code == DB_GEN)		return _("Generic Storage");
+    else if(code == DB_CFG)	return _("Configuration File");
+    else return code;
 }
 
-string TMess::labStorRemGenStor( )
+string TMess::labStor( )
 {
-    return TSYS::strMess(_("Please note that removing from the Generic Storage (*.*) "
-	"will cause the data removing both from the Configuration File (<cfg>) and the Work DB (%s)!"),SYS->workDB().c_str());
+    return _("Storage address in the format \"{DB module}.{DB name}\" or the common ones.");
+}
+
+string TMess::labStorRem( const string &cnt )
+{
+    string cnt_, tVl;
+    for(int off = 0; (tVl=TSYS::strLine(cnt,0,&off)).size(); )
+	cnt_ += (cnt_.size()?", ":"") + labStorFromCode(tVl);
+
+    return TSYS::strMess(_("Whole list of the object storages is: %s."), cnt_.c_str()) +
+	((SYS->storage(cnt,true) == DB_GEN && SYS->workDB() != DB_CFG)
+	    ? "\n" + TSYS::strMess(_("Please note that removing from \"%s (%s)\" will cause the data removing both from \"%s (%s)\" and \"Work DB (%s)\"!"),
+		    labStorFromCode(DB_GEN).c_str(),DB_GEN,labStorFromCode(DB_CFG).c_str(),DB_CFG,SYS->workDB().c_str())
+	    : "");
 }
 
 string TMess::labSecCRON( )

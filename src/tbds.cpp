@@ -59,9 +59,9 @@ string TBDS::realDBName( const string &bdn, bool back )
     if(back) {
 	bool isEqSz = false;
 	if(bdn.find(SYS->workDB()) == 0 && ((isEqSz=(bdn.size()==SYS->workDB().size())) || bdn[SYS->workDB().size()] == '.'))
-	    return string("*.*") + (isEqSz ? "" : bdn.substr(SYS->workDB().size()));
+	    return string(DB_GEN) + (isEqSz ? "" : bdn.substr(SYS->workDB().size()));
 	else if(bdn.find(DB_CFG) == 0 && ((isEqSz=(bdn.size()==strlen(DB_CFG))) || bdn[strlen(DB_CFG)] == '.'))
-	    return string("*.*") + (isEqSz ? "" : bdn.substr(strlen(DB_CFG)));
+	    return string(DB_GEN) + (isEqSz ? "" : bdn.substr(strlen(DB_CFG)));
 	return bdn;
     }
 
@@ -71,9 +71,8 @@ string TBDS::realDBName( const string &bdn, bool back )
     string bd_tbl = TSYS::strParse(bdn, 0, ".", &off);
 
     if(bd_t == DB_CFG)	return bdn;
-    if(SYS->workDB() == DB_CFG && bd_t == "*" && bd_n == "*")	return DB_CFG"."+bd_tbl;
-    return ((bd_t=="*") ? TSYS::strParse(SYS->workDB(),0,".") : bd_t)+"."+
-	   ((bd_n=="*") ? TSYS::strParse(SYS->workDB(),1,".") : bd_n)+(bd_tbl.empty() ? "" : "."+bd_tbl);
+    if(bd_t == DB_GEN && SYS->workDB() == DB_CFG)	return DB_CFG "." + bd_n;
+    return (bd_t == DB_GEN) ? (SYS->workDB()+"."+bd_n) : bdn;
 }
 
 string TBDS::dbPart( const string &bdn, bool tbl )
@@ -83,8 +82,9 @@ string TBDS::dbPart( const string &bdn, bool tbl )
     string p2 = TSYS::strParse(bdn, 0, ".", &off);
     string p3 = TSYS::strParse(bdn, 0, ".", &off);
 
-    return (p1 == DB_CFG) ? (tbl ? p2 : p1) :
-			    (tbl ? p3 : p1+"."+p2);
+    return (p1 == DB_CFG || p1 == DB_GEN)
+			    ? (tbl ? p2 : p1)
+			    : (tbl ? p3 : p1+"."+p2);
 }
 
 void TBDS::dbList( vector<string> &ls, char flg )
@@ -96,7 +96,7 @@ void TBDS::dbList( vector<string> &ls, char flg )
 	return;
     }
 
-    if(flg&LsInclGenFirst) ls.push_back("*.*");
+    if(flg&LsInclGenFirst) ls.push_back(DB_GEN);
 
     AutoHD<TBDS> dbs = SYS->db();
 
@@ -200,7 +200,7 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
 
     cfg.setTrcSet(true);
 
-    if(isCfgCtx || (path.size() && (ibdn.empty() || ibdn.find("*.*") == 0 || TSYS::strParse(bdn,0,".") == DB_CFG))) {
+    if(isCfgCtx || (path.size() && (ibdn.empty() || TSYS::strParse(ibdn,0,".") == DB_GEN || TSYS::strParse(bdn,0,".") == DB_CFG))) {
 	ResAlloc res(SYS->cfgRes());
 	XMLNode *nd = NULL, *fnd = NULL, *el;
 	string vl, vl_tr;
@@ -329,7 +329,7 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, char f
     TError dbErr;
 
     //Load from config
-    if(isCfgCtx || (path.size() && (ibdn.empty() || ibdn.find("*.*") == 0 || TSYS::strParse(bdn,0,".") == DB_CFG))) {
+    if(isCfgCtx || (path.size() && (ibdn.empty() || TSYS::strParse(ibdn,0,".") == DB_GEN || TSYS::strParse(bdn,0,".") == DB_CFG))) {
 	ResAlloc res(SYS->cfgRes(), false);
 	XMLNode *nd = NULL, *fnd = NULL, *el;
 	string vl, vl_tr;
@@ -434,10 +434,10 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char f
     string bdn = realDBName(ibdn);
 
     bool isCfgCtx = (localCfgCtx || ((ibdn.size() || path.size()) && SYS->cfgCtx()));
-    bool toChangeExistsCfg = (!isCfgCtx && ibdn.find("*.*") == 0 && !(flags&OnlyCfg || TSYS::strParse(bdn,0,".") == DB_CFG));
+    bool toChangeExistsCfg = (!isCfgCtx && TSYS::strParse(ibdn,0,".") == DB_GEN && !(flags&OnlyCfg || TSYS::strParse(bdn,0,".") == DB_CFG));
 
     //Save to config
-    if(isCfgCtx || (path.size() && (ibdn.empty() || ibdn.find("*.*") == 0 || toChangeExistsCfg || TSYS::strParse(bdn,0,".") == DB_CFG))) {
+    if(isCfgCtx || (path.size() && (ibdn.empty() || TSYS::strParse(ibdn,0,".") == DB_GEN || toChangeExistsCfg || TSYS::strParse(bdn,0,".") == DB_CFG))) {
 	ResAlloc res(SYS->cfgRes());
 	XMLNode *nd = NULL, *wel = NULL, *fnd;
 	vector<string> cf_el;
@@ -604,7 +604,7 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, char f
     TError dbErr;
 
     //Delete from config
-    if(path.size() && (ibdn.empty() || ibdn.find("*.*") == 0 || TSYS::strParse(bdn,0,".") == DB_CFG)) {
+    if(path.size() && (ibdn.empty() || TSYS::strParse(ibdn,0,".") == DB_GEN || TSYS::strParse(bdn,0,".") == DB_CFG)) {
 	ResAlloc res(SYS->cfgRes(), false);
 	XMLNode *nd = SYS->cfgNode(SYS->id()+"/"+path, true);
 	vector<string> cf_el;
@@ -674,7 +674,7 @@ bool TBDS::dataDelTbl( const string &ibdn, const string &path, char flags )
     bool db_true = false;
 
     //Delete from config
-    if(path.size() && (ibdn.empty() || ibdn.find("*.*") == 0 || TSYS::strParse(bdn,0,".") == DB_CFG)) {
+    if(path.size() && (ibdn.empty() || TSYS::strParse(ibdn,0,".") == DB_GEN || TSYS::strParse(bdn,0,".") == DB_CFG)) {
 	ResAlloc res(SYS->cfgRes(), false);
 	XMLNode *nd = SYS->cfgNode(SYS->id()+"/"+path, true);
 	if(nd) { nd->parent()->childDel(nd); db_true = true; }

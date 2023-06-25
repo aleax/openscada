@@ -2300,11 +2300,11 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Встановлення тут процедури очищуватиме (встановлюватиме у NULL) всі клітинки стовпця!</dd></dl>
 <p>Дані складу відповідного класу зберігаються у окремій таблиці із назвою "sh_{CLASS}" та структурою "<u><b>ID</b></u>, <b>NAME</b>, <b>DSCR</b>, <b>SP_{ID}1</b>, ..., <b>SP_{ID}N</b>", де:
 </p>
-<ul><li> <i>ID</i> [INT] — автоматичний індекс таблиці;</li>
+<ul><li> <i>ID</i> [INT] — автоматичний індекс таблиці, дозволено до зміни видимості;</li>
 <li> <i>NAME</i> [varchar(200)] — назва елементу, дозволено до зміни типу;</li>
 <li> <i>DSCR</i> [text] — опис елементу;</li>
 <li> <i>SP_{ID}X</i> — специфічне поле класу відповідно до <i>ID</i> класу таблиці.</li></ul>
-<p>Зі спеціальним сенсом у таблиці "classes" зарезервовано та примусово створювано поля "*TITLE" для загальної локалізованої назви складу та "*NAME", "*DSCR" із контролем відповідних фіксованих плей.
+<p>Зі спеціальним сенсом у таблиці "classes" зарезервовано та примусово створювано поля "*TITLE" для загальної локалізованої назви складу та "*NAME", "*DSCR" із контролем відповідних фіксованих полей.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseD_uk.png"><img class="thumbimage" height="580" src="files/LibMainEls_storeHouseD_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.8a. Кадр "Склад" у режимі розробки.</div></div></div></div>
 <p><b><u>Використання — розробка</u></b><br />

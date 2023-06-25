@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.6.5"
+#define MOD_VER		"1.6.6"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -704,11 +704,11 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/up/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/up/st/status",_("Status"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/up/st/en_st",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/up/st/db",_("DB"),RWRWR_,"root",SUI_ID,4,
+		ctrMkNode("fld",opt,-1,"/up/st/db",_("Storage"),RWRWR_,"root",SUI_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 		if(DB(true).size())
-		    ctrMkNode("comm",opt,-1,"/up/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SUI_ID,
-			1,"help",(DB(true)=="*.*")?TMess::labStorRemGenStor().c_str():"");
+		    ctrMkNode("comm",opt,-1,"/up/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),
+			TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",SUI_ID,1,"help",TMess::labStorRem(mDB).c_str());
 		ctrMkNode("fld",opt,-1,"/up/st/timestamp",_("Date of modification"),R_R_R_,"root",SUI_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/up/cfg",_("Configuration"))) {

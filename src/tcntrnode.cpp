@@ -613,8 +613,8 @@ string TCntrNode::storage( const string &cnt, bool forQueueOfData ) const
     //The queue
     string work = TSYS::strLine(prcS, 0), tLn;
     for(int pos = 1 /*queue start*/; (tLn=TSYS::strLine(prcS,pos)).size(); ++pos)
-	if((work == "*.*" && (tLn == DB_CFG || tLn == SYS->workDB())) ||
-		(tLn == "*.*" && (work == DB_CFG || work == SYS->workDB())))
+	if((work == DB_GEN && (tLn == DB_CFG || tLn == SYS->workDB())) ||
+		(tLn == DB_GEN && (work == DB_CFG || work == SYS->workDB())))
 	    continue;
 	else if(tLn != work) return tLn;
 
@@ -628,7 +628,7 @@ void TCntrNode::setStorage( string &cnt, const string &vl, bool forQueueOfData )
     string prcS = cnt, prcS_, tLn;
     dataRes().unlock();
 
-    bool freeGenStorParts = (forQueueOfData && vl == "*.*");
+    bool freeGenStorParts = (forQueueOfData && vl == DB_GEN);
     string genStorSplitTo;
     if(!freeGenStorParts && forQueueOfData) {
 	if(vl == DB_CFG) genStorSplitTo = SYS->workDB();
@@ -649,7 +649,7 @@ void TCntrNode::setStorage( string &cnt, const string &vl, bool forQueueOfData )
 	if((forQueueOfData && tLn == vl) || (freeGenStorParts && (tLn == DB_CFG || tLn == SYS->workDB()))) continue;
 	// Pass for removing first not work item
 	if(forQueueOfData && vl.empty() && !isFound && tLn != work) { isFound = true; continue; }
-	prcS_ += ((genStorSplitTo.size() && tLn == "*.*") ? genStorSplitTo : tLn) + "\n";
+	prcS_ += ((genStorSplitTo.size() && tLn == DB_GEN) ? genStorSplitTo : tLn) + "\n";
     }
 
     dataRes().lock();
@@ -1140,16 +1140,23 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
     }
     else if((a_path.find("/db/list") == 0 || a_path.find("/db/tblList") == 0) && ctrChkNode(opt)) {
 	string tblList = "";
-	if(a_path.find("/db/tblList") == 0)
-	    if(!(tblList=TSYS::strParse(a_path,1,":")).size())	tblList = _("[TableName]");
+	if(a_path.find("/db/tblList") == 0 && !(tblList=TSYS::strParse(a_path,1,":")).size())
+	    tblList = _("[TableName]");
 	vector<string> c_list;
 	TBDS::dbList(c_list);
 	if(TSYS::strParse(a_path,1,":").find("onlydb") == string::npos) {
-	    if(nodePath() != "/") opt->childAdd("el")->setText(tblList.size() ? ("*.*."+tblList) : "*.*");
-	    opt->childAdd("el")->setText(tblList.size() ? (DB_CFG"."+tblList) : DB_CFG);
+	    if(tblList.size()) {
+		if(nodePath() != "/") opt->childAdd("el")->setText(DB_GEN "." + tblList);
+		opt->childAdd("el")->setText(DB_CFG "." + tblList);
+	    }
+	    else {
+		if(nodePath() != "/") opt->childAdd("el")->setAttr("id",DB_GEN)->setText(TMess::labStorFromCode(DB_GEN));
+		opt->childAdd("el")->setAttr("id",DB_CFG)->setText(TMess::labStorFromCode(DB_CFG));
+	    }
 	}
 	for(unsigned iDB = 0; iDB < c_list.size(); iDB++)
-	    opt->childAdd("el")->setText(tblList.size() ? c_list[iDB]+"."+tblList : c_list[iDB]);
+	    if(tblList.size()) opt->childAdd("el")->setText(c_list[iDB]+"."+tblList);
+	    else opt->childAdd("el")->setAttr("id",c_list[iDB])->setText(TMess::labStorFromCode(c_list[iDB]));
     }
     else if(a_path == "/plang/list" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setText("");

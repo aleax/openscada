@@ -33,7 +33,7 @@
 #undef trS
 #define trS(mess) mod->I18N(mess,mess_PreSave)
 
-#define DEF_symbDB	"*.*"
+#define DEF_symbDB	DB_GEN
 
 
 using std::string;

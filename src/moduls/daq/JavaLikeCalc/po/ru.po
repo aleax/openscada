@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-22 09:31+0300\n"
+"POT-Creation-Date: 2023-06-24 16:20+0300\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -202,12 +202,16 @@ msgstr "Состояние"
 msgid "Accessible"
 msgstr "Доступен"
 
+msgid "Storage"
+msgstr ""
+
 msgid "Library DB"
 msgstr "БД библиотеки"
 
+#, fuzzy, c-format
 msgid ""
 "Storage address in the format \"{DB module}.{DB name}.{Table name}\".\n"
-"To use the Generic Storage, set '*.*.{Table name}'."
+"To use %s, set '%s.{Table name}'."
 msgstr ""
 "Адрес хранилища в формате \"{Модуль БД}.{Имя БД}.{Имя Таблицы}\".\n"
 "Установить '*.*.{Имя Таблицы}' для использования Общего Хранилища."
@@ -313,6 +317,7 @@ msgstr "Вычисление. "
 msgid "Calculation with the period: %s. "
 msgstr "Вычисление с периодом: %s. "
 
+#, c-format
 msgid "Next calculation by the CRON '%s'. "
 msgstr "Следующее вычисление по CRON '%s'. "
 

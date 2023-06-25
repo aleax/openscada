@@ -243,14 +243,14 @@ class TTypeTransport: public TModule
 	// Input transports
 	void inList( vector<string> &list ) const		{ chldList(mIn, list); }
 	bool inPresent( const string &id ) const		{ return chldPresent(mIn, id); }
-	string inAdd( const string &id, const string &db = "*.*" );
+	string inAdd( const string &id, const string &db = DB_GEN );
 	void inDel( const string &id, bool complete = false )	{ chldDel(mIn, id, -1, complete?NodeRemove:NodeNoFlg); }
 	AutoHD<TTransportIn> inAt( const string &id ) const	{ return chldAt(mIn, id); }
 
 	// Output transports
 	void outList( vector<string> &list ) const		{ chldList(mOut, list); }
 	bool outPresent( const string &id ) const		{ return chldPresent(mOut, id); }
-	string outAdd( const string &id, const string &idb = "*.*" );
+	string outAdd( const string &id, const string &idb = DB_GEN );
 	void outDel( const string &id, bool complete = false )	{ chldDel(mOut, id, -1, complete?NodeRemove:NodeNoFlg); }
 	AutoHD<TTransportOut> outAt( const string &id ) const	{ return chldAt(mOut, id); }
 	virtual	string outAddrHelp( )				{ return ""; }

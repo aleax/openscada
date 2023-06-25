@@ -41,7 +41,7 @@ ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) : TVArc
 {
     //???? Set here the default value archiver address and the default selection priority
     setSelPrior(1);
-    setAddr("*.*");
+    setAddr(DB_GEN);
 }
 
 ModVArch::~ModVArch( )

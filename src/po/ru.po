@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 18:33+0300\n"
+"POT-Creation-Date: 2023-06-24 17:09+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -353,8 +353,8 @@ msgstr "Состояние"
 msgid "Running"
 msgstr "Выполняется"
 
-msgid "Archiver DB"
-msgstr "БД архиватора"
+msgid "Storage"
+msgstr ""
 
 #, c-format
 msgid "Remove from '%s'"
@@ -431,9 +431,6 @@ msgstr "Конец буфера"
 
 msgid "Buffer begin"
 msgstr "Начало буфера"
-
-msgid "Archive DB"
-msgstr "БД архива"
 
 msgid ""
 "The size of the buffer of values should be large enough for the periodicity "
@@ -916,9 +913,6 @@ msgstr "Контроллер"
 msgid "Status"
 msgstr "Статус"
 
-msgid "Controller DB"
-msgstr "БД контроллера"
-
 msgid "Date of modification"
 msgstr "Дата модификации"
 
@@ -1179,16 +1173,26 @@ msgstr "Ошибка получения объекта из не объектн�
 msgid "Closing the iconv handler error '%s (%d)'!"
 msgstr ""
 
-msgid "Storage address in the format \"{DB module}.{DB name}\"."
+msgid "Generic Storage"
+msgstr ""
+
+#, fuzzy
+msgid "Configuration File"
+msgstr "Конфигурационный файл"
+
+#, fuzzy
+msgid ""
+"Storage address in the format \"{DB module}.{DB name}\" or the common ones."
 msgstr "Адрес хранилища в формате \"{Модуль БД}.{Имя БД}\"."
 
-msgid "Set '*.*' to use the Generic Storage."
-msgstr "Установить '*.*' для использования Общего Хранилища."
-
 #, c-format
+msgid "Whole list of the object storages is: %s."
+msgstr ""
+
+#, fuzzy, c-format
 msgid ""
-"Please note that removing from the Generic Storage (*.*) will cause the data "
-"removing both from the Configuration File (<cfg>) and the Work DB (%s)!"
+"Please note that removing from \"%s (%s)\" will cause the data removing both "
+"from \"%s (%s)\" and \"Work DB (%s)\"!"
 msgstr ""
 "Заметьте пожалуйста, что удаление из Общего Хранилища (*.*) приведёт к "
 "удалению данных как из Конфигурационного Файла (<cfg>), так и Рабочей БД "
@@ -1573,9 +1577,10 @@ msgstr "Библиотека"
 msgid "Library DB"
 msgstr "БД библиотеки"
 
+#, fuzzy, c-format
 msgid ""
 "Storage address in the format \"{DB module}.{DB name}.{Table name}\".\n"
-"To use the Generic Storage, set '*.*.{Table name}'."
+"To use %s, set '%s.{Table name}'."
 msgstr ""
 "Адрес хранилища в формате \"{Модуль БД}.{Имя БД}.{Имя Таблицы}\".\n"
 "Установить '*.*.{Имя Таблицы}' для использования Общего Хранилища."
@@ -1665,14 +1670,8 @@ msgstr "Пользователь "
 msgid "Include"
 msgstr "Включен"
 
-msgid "User DB"
-msgstr "БД пользователя"
-
 msgid "Group "
 msgstr "Группа "
-
-msgid "User group DB"
-msgstr "БД группы пользователей"
 
 msgid ""
 "======================= Subsystem \"Specials\" options "
@@ -2071,10 +2070,6 @@ msgstr "Программа прервана!"
 #, c-format
 msgid "Unknown signal %d!"
 msgstr "Неизвестный сигнал %d!"
-
-#, c-format
-msgid "Closing the file %p error '%s (%d)'!"
-msgstr ""
 
 msgid "Timeouted !!!"
 msgstr "Превышение времени ожидания !!!"
@@ -2711,9 +2706,6 @@ msgstr "Входной транспорт: "
 msgid "Connect"
 msgstr "Подключение"
 
-msgid "Transport DB"
-msgstr "БД транспорта"
-
 msgid "IO log"
 msgstr "Лог ВВ"
 
@@ -3047,6 +3039,27 @@ msgstr "Имя проекта установлено в:"
 
 msgid "already started."
 msgstr "уже запущен."
+
+#~ msgid "Archiver DB"
+#~ msgstr "БД архиватора"
+
+#~ msgid "Archive DB"
+#~ msgstr "БД архива"
+
+#~ msgid "Controller DB"
+#~ msgstr "БД контроллера"
+
+#~ msgid "Set '*.*' to use the Generic Storage."
+#~ msgstr "Установить '*.*' для использования Общего Хранилища."
+
+#~ msgid "User DB"
+#~ msgstr "БД пользователя"
+
+#~ msgid "User group DB"
+#~ msgstr "БД группы пользователей"
+
+#~ msgid "Transport DB"
+#~ msgstr "БД транспорта"
 
 #~ msgid "Archiving period, seconds"
 #~ msgstr "Период архивирования, секунд"

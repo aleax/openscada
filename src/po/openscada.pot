@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 18:33+0300\n"
+"POT-Creation-Date: 2023-06-24 17:09+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -311,7 +311,7 @@ msgstr ""
 msgid "Running"
 msgstr ""
 
-msgid "Archiver DB"
+msgid "Storage"
 msgstr ""
 
 #, c-format
@@ -385,9 +385,6 @@ msgid "Buffer end"
 msgstr ""
 
 msgid "Buffer begin"
-msgstr ""
-
-msgid "Archive DB"
 msgstr ""
 
 msgid ""
@@ -811,9 +808,6 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-msgid "Controller DB"
-msgstr ""
-
 msgid "Date of modification"
 msgstr ""
 
@@ -1061,14 +1055,21 @@ msgstr ""
 msgid "Closing the iconv handler error '%s (%d)'!"
 msgstr ""
 
-msgid "Storage address in the format \"{DB module}.{DB name}\"."
+msgid "Generic Storage"
 msgstr ""
 
-msgid "Set '*.*' to use the Generic Storage."
+msgid "Configuration File"
+msgstr ""
+
+msgid "Storage address in the format \"{DB module}.{DB name}\" or the common ones."
 msgstr ""
 
 #, c-format
-msgid "Please note that removing from the Generic Storage (*.*) will cause the data removing both from the Configuration File (<cfg>) and the Work DB (%s)!"
+msgid "Whole list of the object storages is: %s."
+msgstr ""
+
+#, c-format
+msgid "Please note that removing from \"%s (%s)\" will cause the data removing both from \"%s (%s)\" and \"Work DB (%s)\"!"
 msgstr ""
 
 msgid ""
@@ -1353,9 +1354,10 @@ msgstr ""
 msgid "Library DB"
 msgstr ""
 
+#, c-format
 msgid ""
 "Storage address in the format \"{DB module}.{DB name}.{Table name}\".\n"
-"To use the Generic Storage, set '*.*.{Table name}'."
+"To use %s, set '%s.{Table name}'."
 msgstr ""
 
 msgid "Parameter templates"
@@ -1439,13 +1441,7 @@ msgstr ""
 msgid "Include"
 msgstr ""
 
-msgid "User DB"
-msgstr ""
-
 msgid "Group "
-msgstr ""
-
-msgid "User group DB"
 msgstr ""
 
 msgid ""
@@ -1703,10 +1699,6 @@ msgstr ""
 
 #, c-format
 msgid "Unknown signal %d!"
-msgstr ""
-
-#, c-format
-msgid "Closing the file %p error '%s (%d)'!"
 msgstr ""
 
 msgid "Timeouted !!!"
@@ -2249,9 +2241,6 @@ msgid "Input transport: "
 msgstr ""
 
 msgid "Connect"
-msgstr ""
-
-msgid "Transport DB"
 msgstr ""
 
 msgid "IO log"

@@ -218,7 +218,7 @@ void TArchiveS::load_( )
 		id = cEl.cfg("ID").getS();
 		if(!valPresent(id)) valAdd(id, dbLs[iIt]);
 		//!!!! For force loading after creation from the archiver storage
-		//else if(valAt(id).at().DB() == "*.*" && dbLs[iIt] != SYS->workDB()) valAt(id).at().setDB(dbLs[iIt]);
+		//else if(valAt(id).at().DB() == DB_GEN && dbLs[iIt] != SYS->workDB()) valAt(id).at().setDB(dbLs[iIt]);
 		if(valAt(id).at().DB() == dbLs[iIt]) valAt(id).at().load(&cEl);
 		valAt(id).at().setDB(dbLs[iIt], true);
 		itReg[id] = true;
@@ -1608,11 +1608,11 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/prm",_("Archiver"))) {
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Running"),RWRWR_,"root",SARH_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Archiver DB"),RWRWR_,"root","root",4,
+		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Storage"),RWRWR_,"root","root",4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 		if(DB(true).size())
-		    ctrMkNode("comm",opt,-1,"/prm/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SARH_ID,
-			1,"help",(DB(true)=="*.*")?TMess::labStorRemGenStor().c_str():"");
+		    ctrMkNode("comm",opt,-1,"/prm/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),
+			TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",SARH_ID,1,"help",TMess::labStorRem(mDB).c_str());
 		ctrMkNode("fld",opt,-1,"/prm/st/end",_("End"),R_R_R_,"root","root",1,"tp","time");
 		ctrMkNode("fld",opt,-1,"/prm/st/beg",_("Begin"),R_R_R_,"root","root",1,"tp","time");
 	    }

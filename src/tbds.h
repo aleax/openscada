@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tbds.h
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -297,8 +297,8 @@ class TBDS : public TSubSYS
 	};
 
 	//Generic static block
-	static string fullDBSYS( )	{ return "*.*.SYS"; }
-	static string fullDB( )		{ return "*.*.DB"; }
+	static string fullDBSYS( )	{ return DB_GEN ".SYS"; }
+	static string fullDB( )		{ return DB_GEN ".DB"; }
 
 	static string realDBName( const string &bdn, bool back = false );
 	static string dbPart( const string &bdn, bool tbl = false );

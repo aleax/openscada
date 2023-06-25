@@ -50,6 +50,7 @@
 #define ARCH_ALRM	"<alarms>"
 #define ARCH_ALRM_CH	"<alarmsChange>"
 #define ARCH_NOALRM	"<noalarms>"
+#define DB_GEN		"<gen>"
 #define DB_CFG		"<cfg>"
 #define DB_NULL		"<NULL>"
 

@@ -280,6 +280,9 @@ Information variables of the program:
 <li> <i>ARCH_ALRM</i> — Name of requesting the actual alarms table ("&lt;alarms&gt;").</li>
 <li> <i>ARCH_ALRM_CH</i> — Name of requesting for records change of the the actual alarms table ("&lt;alarmsChange&gt;").</li>
 <li> <i>ARCH_NOALRM</i> — Name of requesting for the buffer and archivers and without the actual alarms table ("&lt;noalarms&gt;").</li>
+<li> <i>DB_GEN</i> — Code name of the Generic Storage ("&lt;gen&gt;").</li>
+<li> <i>DB_CFG</i> — Code name of the Configuration File ("&lt;cfg&gt;").</li>
+<li> <i>DB_NULL</i> — Mark of the DB NULL value ("&lt;NULL&gt;").</li>
 <li> <i>__func__</i> — The full name of the calling function.</li>
 <li> <i>vmin (a,b)</i> — Determination of the minimum value.</li>
 <li> <i>vmax (a,b)</i> — Definition of the maximum value.</li></ul>
@@ -346,10 +349,7 @@ Information variables of the program:
 <li> <i>void setCfgCtx( XMLNode *vl, bool last = false );</i> — Set the global configuration context of the interstation copying or the <i>last</i> setting link, for the access lock used <i>cfgLoadSaveM()</i>. At any operation with the global configuration context the last setting link is cleared.</li>
 <li> <i>ResMtx &amp;cfgLoadSaveM( );</i> — Lock of the loading and saving configuration.</li>
 <li> <i>static void sighandler( int signal );</i> — Function of the  default handler of the signals of the system as a whole.</li>
-<li> <i>unsigned long long sysClk( );</i> — The estimated frequency of the processor on which the system works (Hz). </li>
-<li> <i>void clkCalc( );</i> — Calculation of frequency of the processor on which the system works. It is called periodically for the systems with variable CPU  frequency.</li>
-<li> <i>unsigned long long shrtCnt( );</i> — The function of the measurement of small intervals of time by the counter of the CPU cycles. Returns the value of the counter of CPU cycles.</li>
-<li> <i>static long HZ( );</i> — Time of the system teak  of the CPU.</li>
+<li> <i>float sysClk( ); void setSysClk( float vl );</i> — System clock-frequency in MHz and its setting from outside for information on the root page.</li>
 <li> <i>void taskCreate( const string &amp;path, int priority, void *(*start_routine)(void *), void *arg, int wtm = 5, pthread_attr_t *pAttr = NULL, bool *startSt = NULL );</i> — Create task (thread) with id <i>path</i>, <i>priority</i> (-1...99), task's function <i>start_routine</i> and it argument <i>arg</i>, and also wait for user's code start by flag <i>startSt</i>.</li>
 <li> <i>void taskDestroy( const string &amp;path, bool *endrunCntr = NULL, int wtm = 5, bool noSignal = false );</i> — Destroy task with id <i>path</i>, start control flag <i>startCntr</i>. Use <i>noSignal</i> for exclude signal <i>SIGALRM</i> send to the task.</li>
 <li> <i>void taskSendSIGALRM( const string &amp;path );</i> — Sending the termination signal "ALARM" to a task with id <i>path</i>.</li>
@@ -556,7 +556,7 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>bool translItSplit( const string &amp;base, const string &amp;srcFltr = "" );</i> — Splitting the BASE message <i>base</i> per it sources and only for matched ones to <i>srcFltr</i>.</li>
 <li> <i>bool translItRemTrs( const string &amp;base, const string &amp;srcFltr = "" );</i> — Removing the BASE message <i>base</i> from the individual messages table "Trs" and only for matched sources to <i>srcFltr</i>.</li>
 <li> <i>string trCtx( const string &amp;user_lang = mess_TrModifMark, bool *hold = NULL );</i> — Getting (by default) and registering(no empty)/clearing(empty) the translation context <i>user_lang</i> bound to the call pthread. <i>hold</i> can be pointed to detect the context already registered and do not clear that.</li>
-<li> <i>static string labStor( bool nogen = false ); static string labStorRemGenStor( ); static string labSecCRON( ); static string labSecCRONsel( ); static string labTaskPrior( ); static string labMessCat( ); static string labStdOutTrs( );</i> — Common help labels.</li>
+<li> <i>static string labStorFromCode( const string &amp;code ); static string labStor( ); static string labStorRem( const string &amp;cnt ); static string labSecCRON( ); static string labSecCRONsel( ); static string labTaskPrior( ); static string labMessCat( ); static string labStdOutTrs( );</i> — Common help labels.</li>
 <li> <i>int getUTF8( const string &amp;str, int off = 0, int32_t *symb = NULL );</i> — Get and parse a UTF-8 symbol.</li>
 <li> <i>static string setUTF8( int32_t symb );</i> — Set, form and return a UTF-8 symbol from their code <i>symb</i>.</li></ul>
 <h3><span class="mw-headline" id="Object_subsystem_.28TSubSYS.29"><span class="mw-headline-number">2.3</span> <span id="TSubSYS" title="#TSubSYS">Object subsystem (TSubSYS)</span></span></h3>
@@ -873,7 +873,7 @@ Flags of the SQL requests (enum – TTable::SQLFeqFlag):
 <li> <i>void modStop( );</i> — Stop of the module.</li>
 <li> <i>void list( vector&lt;string&gt; &amp;list ) const;</i> — The list of the controllers.</li>
 <li> <i>bool present( const string &amp;id ) const;</i> — Check for the availability of the specified controller object.</li>
-<li> <i>string add( const string &amp;id, const string &amp;daq_db = "*.*" );</i> — Add the controller object. Returns the end created identifier.</li>
+<li> <i>string add( const string &amp;id, const string &amp;daq_db = DB_GEN );</i> — Add the controller object. Returns the end created identifier.</li>
 <li> <i>void del( const string &amp;id );</i> — Delete the controller object.</li>
 <li> <i>AutoHD&lt;TController&gt; at( const string &amp;id, const string &amp;who = "" ) const;</i> — Connect to the controller object.</li>
 <li> <i>bool tpPrmPresent( const string &amp;name_t );</i> — Check for the availability of the specified controller type.</li>
@@ -1072,7 +1072,8 @@ Additional flags to the object <a href="#TFld">#TFld</a> (enum TVal::AttrFlag):
 </p>
 <ul><li> <i>TVal::DirRead(0x100)</i> — Flag for the direct reading of the value;</li>
 <li> <i>TVal::DirWrite(0x200)</i> — Flag for the direct writing of the value;</li>
-<li> <i>TVal::Dynamic(0x400)</i> — Flag of the dynamic attribute, creates in typical from user procedures.</li></ul>
+<li> <i>TVal::Dynamic(0x400)</i> — Flag of the dynamic attribute, creates in typical from user procedures.</li>
+<li> <i>TVal::NoSave(0x800)</i> — Flag of the attribute can be changed but cannot be saved, that is do not mark its modified</li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>TVal( );</i> — Default constructor.</li>
@@ -1253,7 +1254,7 @@ Structure of template links (class — TPrmTempl::Impl::SLnk):
 <li> <i>void subStop( );</i> — Stop of the system.</li>
 <li> <i>void valList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the values'archives in the subsystem.</li>
 <li> <i>bool valPresent( const string &amp;id ) const;</i> — Check for the availability of the values' archive <i>id</i>.</li>
-<li> <i>string valAdd( const string &amp;id, const string &amp;idb = "*.*" );</i> — Addition of the new values' archive <i>id</i>. Returns the end created identifier.</li>
+<li> <i>string valAdd( const string &amp;id, const string &amp;idb = DB_GEN );</i> — Addition of the new values' archive <i>id</i>. Returns the end created identifier.</li>
 <li> <i>void valDel( const string &amp;id, bool db = false );</i> — Deleting of the values' archive <i>id</i>.</li>
 <li> <i>AutoHD&lt;TVArchive&gt; valAt( const string &amp;id ) const;</i> — Connection/addressing to the values' archive <i>id</i>.</li>
 <li> <i>void setActMess( TMArchivator *a, bool val );</i> — Setting of the messages archivator <i>a</i> into the active status <i>val</i>. Active archivator will be provided by the subsystem with the flow of messages.</li>
@@ -1406,12 +1407,12 @@ The data acquisition mode/source (enumeration — TVArchive::SrcMode):
 </p>
 <ul><li> <i>void messList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the messages' archivers.</li>
 <li> <i>bool messPresent( const string &amp;id ) const;</i> — Check for the presence of the specified messages' archiver.</li>
-<li> <i>string messAdd( const string &amp;id, const string &amp;idb = "*.*" );</i> — Adding of the messages' archiver. Returns the end created identifier.</li>
+<li> <i>string messAdd( const string &amp;id, const string &amp;idb = DB_GEN );</i> — Adding of the messages' archiver. Returns the end created identifier.</li>
 <li> <i>void messDel( const string &amp;id, bool full = false );</i> — Deleting of the messages' archiver.</li>
 <li> <i>AutoHD&lt;TMArchivator&gt; messAt( const string &amp;id ) const;</i> — Connection to the messages' archiver.</li>
 <li> <i>void valList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the values' archivers.</li>
 <li> <i>bool valPresent( const string &amp;id ) const;</i> — Check for the presence of the specified values' archiver.</li>
-<li> <i>string valAdd( const string &amp;id, const string &amp;idb = "*.*" );</i> — Adding of the values' archiver. Returns the end created identifier.</li>
+<li> <i>string valAdd( const string &amp;id, const string &amp;idb = DB_GEN );</i> — Adding of the values' archiver. Returns the end created identifier.</li>
 <li> <i>void valDel( const string &amp;id, bool full = false );</i> — Deleting of the values' archiver.</li>
 <li> <i>AutoHD&lt;TVArchivator&gt; valAt( const string &amp;id ) const;</i> — Connection to the values' archiver.</li>
 <li> <i>TArchiveS &amp;owner( ) const;</i> — Subsystem "Archives" - the owner of the archiver's type.</li></ul>
@@ -1629,12 +1630,12 @@ External hosts mode (enum — TTransportS::ExtHost::Mode):
 <ul><li> <i>virtual bool isNetwork( );</i> — The sign of network implementation by this module.</li>
 <li> <i>void inList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the input transports.</li>
 <li> <i>bool inPresent( const string &amp;id ) const;</i> — Check for an input transport presence.</li>
-<li> <i>string inAdd( const string &amp;id, const string &amp;db = "*.*" );</i> — Addition of the input transport. Returns the end created identifier.</li>
+<li> <i>string inAdd( const string &amp;id, const string &amp;db = DB_GEN );</i> — Addition of the input transport. Returns the end created identifier.</li>
 <li> <i>void inDel( const string &amp;id, bool complete = false );</i> — Deleting of the input transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
 <li> <i>AutoHD&lt;TTransportIn&gt; inAt( const string &amp;id ) const;</i> — Connection to the input transport.</li>
 <li> <i>void outList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the output transports.</li>
 <li> <i>bool outPresent( const string &amp;id ) const;</i> — Check for an output transport presence.</li>
-<li> <i>string outAdd( const string &amp;id, const string &amp;db = "*.*" );</i> — Addition of the output transport. Returns the end created identifier.</li>
+<li> <i>string outAdd( const string &amp;id, const string &amp;db = DB_GEN );</i> — Addition of the output transport. Returns the end created identifier.</li>
 <li> <i>void outDel( const string &amp;id, bool complete = false );</i> — Deleting of the output transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
 <li> <i>AutoHD&lt;TTransportOut&gt; outAt( const string &amp;id ) const;</i> — Connection to the output transport.</li>
 <li> <i>virtual string outAddrHelp( );</i> — Address format help of the output transports.</li>
@@ -1892,12 +1893,12 @@ Requests parameters (enum — GetOpts):
 <li> <i>void usrList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the users <i>list</i>.</li>
 <li> <i>void usrGrpList( const string &amp;name, vector&lt;string&gt; &amp;list );</i> — The list of the users' groups <i>list</i>, in which the user <i>name</i> is included.</li>
 <li> <i>bool usrPresent( const string &amp;name ) const;</i> — Check fro the presence of the specified user <i>name</i>.</li>
-<li> <i>string usrAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the user <i>name</i> with the saving to the DB <i>db</i>. Returns the end created name of the user.</li>
+<li> <i>string usrAdd( const string &amp;name, const string &amp;db = DB_GEN );</i> — Addition of the user <i>name</i> with the saving to the DB <i>db</i>. Returns the end created name of the user.</li>
 <li> <i>void usrDel( const string &amp;name, bool complete = false );</i> — Deleting of the user <i>name</i> with the possibility of the completely deleting <i>complete</i>.</li>
 <li> <i>AutoHD&lt;TUser&gt; usrAt( const string &amp;name ) const;</i> — Attaching of the user <i>name</i>.</li>
 <li> <i>void grpList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the users' groups <i>list</i>.</li>
 <li> <i>bool grpPresent( const string &amp;name ) const;</i> — Check fro the presence of the specified users' group <i>name</i>.</li>
-<li> <i>string grpAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the users' group <i>name</i> with the saving to the DB <i>db</i>. Returns the end created name of the user group.</li>
+<li> <i>string grpAdd( const string &amp;name, const string &amp;db = DB_GEN );</i> — Addition of the users' group <i>name</i> with the saving to the DB <i>db</i>. Returns the end created name of the user group.</li>
 <li> <i>void grpDel( const string &amp;name, bool complete = false );</i> — Deleting of the users' group <i>name</i> with the possibility of the completely deleting <i>complete</i>.</li>
 <li> <i>AutoHD&lt;TGroup&gt; grpAt( const string &amp;name ) const;</i> — Connection to the users' group <i>name</i>.</li></ul>
 <h3><span class="mw-headline" id="The_user.27s_object_.28TUser.29"><span class="mw-headline-number">10.2</span> <span id="TUser" title="#TUser">The user's object (TUser)</span></span></h3>
@@ -2266,7 +2267,7 @@ Additional flags to <a href="#TFld">#TFld</a> (enum — TCfg::AttrFlg):
 <li> <i>TElem( const TElem &amp;src );</i> — Copying constructor.</li>
 <li> <i>TElem &amp;operator=( const TElem &amp;src );</i> — Copying from <i>src</i>.</li>
 <li> <i>string &amp;elName( );</i> — The name if the structure.</li>
-<li> <i>void fldList( vector&lt;string&gt; &amp;list );</i> — The cell's list in the structure <i>list</i>.</li>
+<li> <i>void fldList( vector&lt;string&gt; &amp;list ) const;</i> — The cell's list in the structure <i>list</i>.</li>
 <li> <i>unsigned fldSize( ) const;</i> — The number of cells in the structure.</li>
 <li> <i>unsigned fldId( const string &amp;name, bool noex = false );</i> — Getting the index of the cell from its identifier <i>name</i>. Set <i>noex</i> on no the cell present caused return overall cells number, without exception generation.</li>
 <li> <i>bool fldPresent( const string &amp;name );</i> — Check for the presence of the specified cell <i>name</i>.</li>
@@ -2276,7 +2277,8 @@ Additional flags to <a href="#TFld">#TFld</a> (enum — TCfg::AttrFlg):
 <li> <i>void fldClear( );</i> — Removing all cells.</li>
 <li> <i>void valAtt( TValElem *cnt );</i> — Is called automatically when the structure is attached to the data storage <i>cnt</i>.</li>
 <li> <i>void valDet( TValElem *cnt );</i> — Is called automatically when the structure is detached from the data storage <i>cnt</i>.</li>
-<li> <i>ResMtx &amp;resEl( );</i> — Mutex for access to containers of the fields.</li></ul>
+<li> <i>ResMtx &amp;resEl( );</i> — Mutex for access to containers of the fields.</li>
+<li> <i>unsigned contN( );</i> — Counter of the connected containers.</li></ul>
 <h3><span class="mw-headline" id="Data_structure_cell_.28TFld.29"><span class="mw-headline-number">13.5</span> <span id="TFld" title="#TFld">Data structure cell (TFld)</span></span></h3>
 <p><b>Data:</b><br />
 Cell's type (enum – TFld::Type):
@@ -4999,5 +5001,5 @@ Error codes (enum — TError::Codes):
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2887</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2894</td></tr></table></body>
 </html>

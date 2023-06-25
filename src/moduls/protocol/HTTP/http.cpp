@@ -584,7 +584,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 		    "tp","str", "dest","sel_ed", "select","/prm/cfg/tmplMainPageList");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/authSesDB",_("DB of the active authentication sessions"),RWRWR_,"root",SPRT_ID,4,
 		    "tp","str", "dest","select", "select","/db/list:onlydb",
-		    "help",(TMess::labStor(true)+"\n"+
+		    "help",(TMess::labStor()+"\n"+
 			_("Set to empty to disable using the external table of the active authentication sessions.")).c_str());
 		if(authSessTbl().size())
 		    ctrMkNode("fld",opt,-1,"/prm/cfg/spaceUID",_("Authentication UID generation space"),RWRWR_,"root",SPRT_ID,3,"tp","dec", "min","0", "max","100");

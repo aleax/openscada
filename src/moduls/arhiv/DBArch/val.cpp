@@ -38,7 +38,7 @@ ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
     TVArchivator(iid,idb,cf_el), needMeta(true), needRePushGrps(false), reqRes(true), mMaxSize(0), mTmAsStr(false), mGroupPrms(100)
 {
     setSelPrior(1);
-    setAddr("*.*");
+    setAddr(DB_GEN);
 }
 
 ModVArch::~ModVArch( )
@@ -85,7 +85,7 @@ void ModVArch::load_( )
 {
     //TVArchivator::load_();
 
-    if(addr().empty()) setAddr("*.*");
+    if(addr().empty()) setAddr(DB_GEN);
 
     try {
 	XMLNode prmNd;
@@ -443,7 +443,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	TVArchivator::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SARH_ID,3,
-	    "dest","select","select","/db/list:onlydb","help",TMess::labStor(true).c_str());
+	    "dest","select","select","/db/list:onlydb","help",TMess::labStor().c_str());
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID)) {
 	    ctrMkNode("fld",opt,-1,"/prm/add/sz",_("Archive size, days"),RWRWR_,"root",SARH_ID,2,
 		"tp","real", "help",_("Set to 0 to disable this limit and to rise some the performance."));
