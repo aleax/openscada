@@ -1,11 +1,17 @@
 2023-06-25 Roman (stable)
+- SYS,UI.{Vision,WebVision}: The function TSYS::atime2str() appended by the date translation and it is used
+    in building the time scale of the primitive Diagram of VCA.
+
+
+2023-06-25 Roman (stable)
 - data/Android/AndroidManifest.xml: Changed in android:versionName to 1.0.
-- !!!!:SYS,Archive.DBArch,DAQ.{BFN,JavaLikeCalc,ModBus,OPC_UA},Protocol.UserProtocol,UI.{VCAEngine,Vision,WebUser}: The Generic Storage renamed from "*.*" to "<gen>":
-    - with naming the specific storages as "Generic Storage" and "Configuration File" always
-	through the new function TMess::labStorFromCode();
-    - appended by the definition DB_GEN "<gen>", that is used always instead "*.*";
-    - all generic fields like to "Archiver DB" renamed to "Storage";
-    - TMess::labStorRemGenStor() renamed to TMess::labStorRem() and appended by information about all object storages.
+- !!!!:SYS,Archive.DBArch,DAQ.{BFN,JavaLikeCalc,ModBus,OPC_UA},Protocol.UserProtocol,UI.{VCAEngine,Vision,WebUser}:
+    The Generic Storage renamed from "*.*" to "<gen>":
+	- with naming the specific storages as "Generic Storage" and "Configuration File" always
+	    through the new function TMess::labStorFromCode();
+	- appended by the definition DB_GEN "<gen>", that is used always instead "*.*";
+	- all generic fields like to "Archiver DB" renamed to "Storage";
+	- TMess::labStorRemGenStor() renamed to TMess::labStorRem() and appended by information about all object storages.
 - !!!:UI.Vision: Adapted to obtaining named list of the storages.
 
 
