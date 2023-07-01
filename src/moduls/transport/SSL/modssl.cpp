@@ -42,7 +42,7 @@
 #define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.4.12"
+#define MOD_VER		"3.4.13"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.")
@@ -182,10 +182,11 @@ TTransportOut *TTransSock::Out( const string &name, const string &idb )	{ return
 
 string TTransSock::outAddrHelp( )
 {
-    return string(_("SSL output transport has the address format \"{addr}[,{addrN}]:{port}[:{mode}]\", where:\n"
+    return TSYS::strMess(_("SSL output transport has the address format \"{addr}[,{addrN}]:{port}[:{mode}]\", where:\n"
 	"    addr - address with which the connection is made; there may be as the symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
 	"    port - network port with which the connection is made; indication of the character name of the port according to /etc/services is available;\n"
-	"    mode - SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), by default and in error, the safest and most appropriate one is used.")) +
+	"    mode - %s."), (OPENSSL_VERSION_NUMBER >= 0x10100000L) ? _("not used")
+		    : _("SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), by default and in error the safest and most appropriate one is used")) +
 	"\n\n|| " + outTimingsHelp() + "\n\n|| " + outAttemptsHelp();
 }
 
@@ -377,7 +378,6 @@ void *TSocketIn::Task( void *sock_in )
     else { aOff++; ssl_host = "["+TSYS::strParse(s.addr(),0,"]:",&aOff)+"]"; }	//Get IPv6
     if(ssl_host.empty()) ssl_host = "*";
     string ssl_port = TSYS::strParse(s.addr(), 0, ":", &aOff);
-    string ssl_method = TSYS::strParse(s.addr(), 0, ":", &aOff);
 
     // Set SSL method
 #if OPENSSL_VERSION_NUMBER >= 0x10000000L
@@ -386,35 +386,42 @@ void *TSocketIn::Task( void *sock_in )
     SSL_METHOD *meth;
 #endif
 
-#ifndef OPENSSL_NO_SSL3
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+    meth = TLS_server_method();
+
+#else
+    string ssl_method = TSYS::strParse(s.addr(), 0, ":", &aOff);
+
+# ifndef OPENSSL_NO_SSL3
     if(ssl_method == "SSLv3")		meth = SSLv3_server_method();
     else
-#endif
-#ifndef OPENSSL_NO_TLS1_METHOD
+# endif
+# ifndef OPENSSL_NO_TLS1_METHOD
 	if(ssl_method == "TLSv1")	meth = TLSv1_server_method();
     else
+# endif
+# if OPENSSL_VERSION_NUMBER >= 0x1000114fL
+#  ifndef OPENSSL_NO_TLS1_1_METHOD
+	if(ssl_method == "TLSv1_1")	meth = TLSv1_1_server_method();
+    else
+#  endif
+#  ifndef OPENSSL_NO_TLS1_2_METHOD
+	if(ssl_method == "TLSv1_2")	meth = TLSv1_2_server_method();
+    else
+#  endif
+#  ifndef OPENSSL_NO_DTLS1_METHOD
+	if(ssl_method == "DTLSv1")	meth = DTLSv1_server_method();
+    else
+#  endif
+# endif
+# if OPENSSL_VERSION_NUMBER >= 0x1010006fL
+#  ifndef OPENSSL_NO_DTLS1_2_METHOD
+	if(ssl_method == "DTLSv1_2")	meth = DTLSv1_2_server_method();
+    else
+#  endif
+# endif
+	meth = SSLv23_server_method();
 #endif
-#if OPENSSL_VERSION_NUMBER >= 0x1000114fL
-# ifndef OPENSSL_NO_TLS1_1_METHOD
-	 if(ssl_method == "TLSv1_1")	meth = TLSv1_1_server_method();
-    else
-# endif
-# ifndef OPENSSL_NO_TLS1_2_METHOD
-	 if(ssl_method == "TLSv1_2")	meth = TLSv1_2_server_method();
-    else
-# endif
-# ifndef OPENSSL_NO_DTLS1_METHOD
-	 if(ssl_method == "DTLSv1")	meth = DTLSv1_server_method();
-    else
-# endif
-#endif
-#if OPENSSL_VERSION_NUMBER >= 0x1010006fL
-# ifndef OPENSSL_NO_DTLS1_2_METHOD
-	 if(ssl_method == "DTLSv1_2")	meth = DTLSv1_2_server_method();
-    else
-# endif
-#endif
-	 meth = SSLv23_server_method();
 
     try {
 	s.ctx = SSL_CTX_new(meth);
@@ -809,11 +816,12 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list", opt, -1, "/prm/st/conns", _("Active connections"), R_R_R_, "root", STR_ID);
 	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID,1,"help",
-	    _("SSL input transport has the address format \"{addr}:{port}[:{mode}]\", where:\n"
+	    TSYS::strMess(_("SSL input transport has the address format \"{addr}:{port}[:{mode}]\", where:\n"
 	    "    addr - address to open SSL, it must be one of the addresses of the host; empty or \"*\" address opens SSL for all interfaces; "
 	    "there may be as the symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
 	    "    port - network port on which the SSL is opened, indication of the character name of the port, according to /etc/services is available;\n"
-	    "    mode - SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), by default and in error, the safest and most appropriate one is used."));
+	    "    mode - %s."),(OPENSSL_VERSION_NUMBER >= 0x10100000L) ? _("not used")
+				: _("SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), by default and in error the safest and most appropriate one is used")).c_str());
 	ctrMkNode("fld",opt,-1,"/prm/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID);
 	if(!startStat()) {
 	    if(certKey().empty())
@@ -996,7 +1004,7 @@ void TSocketOut::start( int tmCon )
     if(addr_[aOff] != '[') ssl_host = TSYS::strParse(addr_, 0, ":", &aOff);
     else { aOff++; ssl_host = TSYS::strParse(addr_, 0, "]:", &aOff); }	//Get IPv6
     string ssl_port = TSYS::strParse(addr_, 0, ":", &aOff);
-    string ssl_method = TSYS::strParse(addr_, 0, ":", &aOff);
+
     if(!tmCon) tmCon = mTmCon;
 
     //Set SSL method
@@ -1006,35 +1014,42 @@ void TSocketOut::start( int tmCon )
     SSL_METHOD *meth;
 #endif
 
-#ifndef OPENSSL_NO_SSL3
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+    meth = TLS_client_method();
+
+#else
+    string ssl_method = TSYS::strParse(addr_, 0, ":", &aOff);
+
+# ifndef OPENSSL_NO_SSL3
     if(ssl_method == "SSLv3")		meth = SSLv3_client_method();
     else
-#endif
-#ifndef OPENSSL_NO_TLS1_METHOD
+# endif
+# ifndef OPENSSL_NO_TLS1_METHOD
 	if(ssl_method == "TLSv1")	meth = TLSv1_client_method();
     else
-#endif
-#if OPENSSL_VERSION_NUMBER >= 0x1000114fL
-# ifndef OPENSSL_NO_TLS1_1_METHOD
-	 if(ssl_method == "TLSv1_1")	meth = TLSv1_1_client_method();
-    else
 # endif
-# ifndef OPENSSL_NO_TLS1_2_METHOD
-	 if(ssl_method == "TLSv1_2")	meth = TLSv1_2_client_method();
+# if OPENSSL_VERSION_NUMBER >= 0x1000114fL
+#  ifndef OPENSSL_NO_TLS1_1_METHOD
+	if(ssl_method == "TLSv1_1")	meth = TLSv1_1_client_method();
     else
-# endif
-# ifndef OPENSSL_NO_DTLS1_METHOD
+#  endif
+#  ifndef OPENSSL_NO_TLS1_2_METHOD
+	if(ssl_method == "TLSv1_2")	meth = TLSv1_2_client_method();
+    else
+#  endif
+#  ifndef OPENSSL_NO_DTLS1_METHOD
 	if(ssl_method == "DTLSv1")	meth = DTLSv1_client_method();
     else
+#  endif
 # endif
-#endif
-#if OPENSSL_VERSION_NUMBER >= 0x1010006fL
-# ifndef OPENSSL_NO_DTLS1_2_METHOD
+# if OPENSSL_VERSION_NUMBER >= 0x1010006fL
+#  ifndef OPENSSL_NO_DTLS1_2_METHOD
 	if(ssl_method == "DTLSv1_2")	meth = DTLSv1_2_client_method();
     else
+#  endif
 # endif
+	meth = SSLv23_client_method();
 #endif
-	 meth = SSLv23_client_method();
 
     try {
 
@@ -1255,7 +1270,7 @@ repeate:
 	    if(logLen()) pushLogMess(TSYS::strMess(_("Error writing: %s"), err.c_str()));
 	    if(notReq) throw TError(nodePath().c_str(), _("Error writing: %s"), err.c_str());
 	    start();
-	    if(ret == 0 && wAttempts == 1) wAttempts = 2;	//!!!! To restore the loss connections
+	    if(ret == 0 && wAttempts == 1) wAttempts = 2;	//!!!! To restore the lost connections
 	    goto repeate;
 	}
 
@@ -1281,7 +1296,7 @@ repeate:
 	    if(logLen()) pushLogMess(TSYS::strMess(_("Error reading: %s"), err.c_str()));
 	    if(!writeReq || notReq) throw TError(nodePath().c_str(),_("Error reading: %s"), err.c_str());
 	    start();
-	    if(!errno && wAttempts == 1) wAttempts = 2;		//!!!! To restore the loss connections
+	    if(!errno && wAttempts == 1) wAttempts = 2;		//!!!! To restore the lost connections
 	    goto repeate;
 	}
 	else if(ret < 0 && SSL_get_error(ssl,ret) != SSL_ERROR_WANT_READ && SSL_get_error(ssl,ret) != SSL_ERROR_WANT_WRITE) {

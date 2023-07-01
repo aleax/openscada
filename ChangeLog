@@ -1,3 +1,11 @@
+2023-07-01 Roman (stable)
+- SYS,Protocol.HTTP: Project icons obtaining by the function TSYS::ico() appended by obtaining the file path
+    and that used in Protocol.HTTP for obtaining translated icons.
+- Transport.Sockets: The input transports some corrected in the modes describing and using the names.
+- Transport.SSL: Adapted to new functions of OpenSSL 1.1 with treating deprecated ones.
+- !:Protocol.HTTP: Adapted for dynamic translation the station name and processing encoded file names of images.
+
+
 2023-06-25 Roman (stable)
 - SYS,UI.{Vision,WebVision}: The function TSYS::atime2str() appended by the date translation and it is used
     in building the time scale of the primitive Diagram of VCA.

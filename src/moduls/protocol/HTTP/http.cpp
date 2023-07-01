@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.8.8"
+#define MOD_VER		"3.8.10"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -256,21 +256,15 @@ TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 		}
 	    }
 	    if(answer.empty()) {
-		string icoNm;
-		TUIS::icoGet(SYS->name(), &icoNm);
-		if(icoNm.size()) icoNm = SYS->name() + "." + icoNm;
-		else {
-		    TUIS::icoGet(SYS->id(), &icoNm);
-		    if(icoNm.size()) icoNm = SYS->id() + "." + icoNm;
-		}
+		string icoNm = TSYS::pathLevEnd(SYS->ico(NULL,true), 0);
 		answer = "<?xml version='1.0' ?>\n"
 		    "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n"
 		    "<html xmlns='http://www.w3.org/1999/xhtml'>\n"
 		    " <head>\n"
 		    "  <meta http-equiv='Content-Type' content='text/html; charset=" + Mess->charset() + "'/>\n" +
 		    ((prms.size() >= 4) ? prms[3].getS() : "" ) +
-		    "  <title>" PACKAGE_NAME ": " + SYS->name() + " (" + SYS->id() + ")</title>\n" +
-		    (icoNm.size()?"  <link rel='shortcut icon' href='/"+icoNm+"' type='image' />\n":"") +
+		    "  <title>" PACKAGE_NAME ": " + trD(SYS->name()) + " (" + SYS->id() + ")</title>\n" +
+		    (icoNm.size()?"  <link rel='shortcut icon' href='/"+TSYS::strEncode(icoNm,TSYS::HttpURL)+"' type='image' />\n":"") +
 		//    "  <title>" PACKAGE_NAME "!</title>\n"
 		//    "  <link rel='shortcut icon' href='/" SPRT_ID "." MOD_ID ".png' type='image' />\n"
 		    "  <style type='text/css'>\n"
@@ -288,7 +282,7 @@ TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 		    "  </style>\n"
 		    " </head>\n"
 		    " <body>\n"
-		    "  <h1 class='head'>" PACKAGE_NAME ": " + SYS->name() + " (" + SYS->id() + ")</h1>\n"
+		    "  <h1 class='head'>" PACKAGE_NAME ": " + trD(SYS->name()) + " (" + SYS->id() + ")</h1>\n"
 		    "  <hr/><br/>\n"
 		    "<center>\n" CtxTmplMark "</center>\n"
 		    "  <hr/>\n"
@@ -733,7 +727,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Content: %d:\n%s"), request.size(), request.c_str());
 
 	//Parse first record
-	req = TSYS::strLine(request,0,&pos);
+	req = TSYS::strLine(request, 0, &pos);
 	if(req == request) { mNotFull = true; return mNotFull; }	//HTTP header is not full
 	string method   = TSYS::strSepParse(req, 0, ' ');
 	string uris     = TSYS::strSepParse(req, 1, ' ');
@@ -938,7 +932,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	    }
 	    //Check for module's icon and other images in the folder "icons/"
 	    if(method == "GET" && name_mod.rfind(".") != string::npos) {
-		string icoTp, ico = TUIS::icoGet(name_mod.substr(0,name_mod.rfind(".")), &icoTp);
+		string icoTp, ico = TUIS::icoGet(TSYS::strDecode(name_mod.substr(0,name_mod.rfind(".")),TSYS::HttpURL), &icoTp);
 		if(ico.size()) {
 		    answer = pgCreator(ico, "200 OK", "Content-Type: "+TUIS::mimeGet(name_mod,ico,"image/"+icoTp));
 		    return mNotFull || KeepAlive;

@@ -61,7 +61,7 @@
 #define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.5.7"
+#define MOD_VER		"4.5.8"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov(2014)")
 #define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -558,18 +558,18 @@ bool TSocketIn::cfgChange( TCfg &co, const TVariant &pc )
 	string s_type = TSYS::strParse(co.getS(), 0, ":");
 	if(s_type == S_NM_TCP) {
 	    type = S_TCP;
-	    mMode = (s_type=TSYS::strParse(co.getS(),3,":",&off)).size() ? s2i(s_type) : 1;
+	    mMode = (s_type=TSYS::strParse(co.getS(),3,":",&off)).size() ? s2i(s_type) : M_NoDiscon;
 	    addon = (off < (int)co.getS().size()) ? co.getS().substr(off) : "";
 	}
 	else if(s_type == S_NM_UDP)	type = S_UDP;
 	else if(s_type == S_NM_UNIX) {
 	    type = S_UNIX;
-	    mMode = (s_type=TSYS::strParse(co.getS(),2,":")).size() ? s2i(s_type) : 1;
+	    mMode = (s_type=TSYS::strParse(co.getS(),2,":")).size() ? s2i(s_type) : M_NoDiscon;
 	}
 	else if(s_type == S_NM_RAWCAN)	type = S_RAWCAN;
 	else {
 	    type = S_TCP;
-	    mMode = (s_type=TSYS::strParse(co.getS(),2,":",&off)).size() ? s2i(s_type) : 1;
+	    mMode = (s_type=TSYS::strParse(co.getS(),2,":",&off)).size() ? s2i(s_type) : M_NoDiscon;
 	    addon = (off < (int)co.getS().size()) ? co.getS().substr(off) : "";
 	}
     }

@@ -239,24 +239,21 @@ TSYS::~TSYS( )
 	delete iCL->second;
 }
 
-string TSYS::ico( string *tp )
+string TSYS::ico( string *tp, bool retPath )
 {
-    string itp, rez;
-
     //At the localised name
-    rez = TSYS::strEncode(TUIS::icoGet(trD(name()),&itp), TSYS::base64);
+    string itp, rez = TUIS::icoGet(trD(name()), &itp, retPath);
     //... or the base name
     if(itp.empty()) {
 	if(mNameB.empty()) mNameB = TBDS::genPrmGet(nodePath()+"StName", "", "root");
-	rez = TSYS::strEncode(TUIS::icoGet(mNameB,&itp), TSYS::base64);
+	rez = TUIS::icoGet(mNameB, &itp, retPath);
+	//... or ID
+	if(itp.empty()) rez = TUIS::icoGet(id(), &itp, retPath);
     }
-    //... or ID
-    if(itp.empty())
-	rez = TSYS::strEncode(TUIS::icoGet(id(),&itp), TSYS::base64);
 
     if(tp) *tp = itp;
 
-    return rez;
+    return retPath ? rez : TSYS::strEncode(rez, TSYS::base64);
 }
 
 string TSYS::host( )

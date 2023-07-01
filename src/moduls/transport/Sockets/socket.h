@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Sockets file: socket.h
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -76,7 +76,7 @@ class TSocketIn: public TTransportIn
 {
     public:
 	//Data
-	// Flags of the SQL requests
+	// Modes
 	enum TRModes { M_ForceDiscon = 0, M_NoDiscon, M_Initiative };
 
 	//Methods
@@ -152,7 +152,8 @@ class TSocketIn: public TTransportIn
 	string		port;			//Port for TCP/UDP sockets
 	string		addon;
 
-	unsigned short	mMode,			//Mode for TCP/UNIX sockets (0 - no hand; 1 - hand connect; 2 - initiative connection)
+	unsigned short	mMode,			//Mode of the TCP/UNIX sockets:
+						//  0 - force disconnection, 1 - no disconnection, 2 - initiative connection
 			mInBufLen,		//Input buffer length
 			mMSS,			//MSS
 			mMaxQueue,		//Max queue for TCP, UNIX sockets

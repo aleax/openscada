@@ -187,7 +187,7 @@ class TSYS : public TCntrNode
 	string	id( ) const	{ return mId.c_str(); }
 	string	name( ) const	{ return mName.getVal(); }
 	void setName( const string &vl )	{ mName = vl; sysModifFlgs |= MDF_Name; modif(); }
-	string	ico( string *tp = NULL );
+	string	ico( string *tp = NULL, bool retPath = false );
 	string	user( ) const	{ return mUser; }	//Run user name
 	string	host( );
 

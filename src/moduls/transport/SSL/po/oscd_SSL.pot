@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-29 16:05+0300\n"
+"POT-Creation-Date: 2023-07-01 09:47+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,11 +29,18 @@ msgstr ""
 msgid "Addition parameters"
 msgstr ""
 
+#, c-format
 msgid ""
 "SSL output transport has the address format \"{addr}[,{addrN}]:{port}[:{mode}]\", where:\n"
 "    addr - address with which the connection is made; there may be as the symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
 "    port - network port with which the connection is made; indication of the character name of the port according to /etc/services is available;\n"
-"    mode - SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), by default and in error, the safest and most appropriate one is used."
+"    mode - %s."
+msgstr ""
+
+msgid "not used"
+msgstr ""
+
+msgid "SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), by default and in error the safest and most appropriate one is used"
 msgstr ""
 
 msgid ""
@@ -155,11 +162,12 @@ msgstr ""
 msgid "Active connections"
 msgstr ""
 
+#, c-format
 msgid ""
 "SSL input transport has the address format \"{addr}:{port}[:{mode}]\", where:\n"
 "    addr - address to open SSL, it must be one of the addresses of the host; empty or \"*\" address opens SSL for all interfaces; there may be as the symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
 "    port - network port on which the SSL is opened, indication of the character name of the port, according to /etc/services is available;\n"
-"    mode - SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), by default and in error, the safest and most appropriate one is used."
+"    mode - %s."
 msgstr ""
 
 msgid "PEM-file of the certificates and private key"
