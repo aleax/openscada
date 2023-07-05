@@ -61,7 +61,7 @@
 #define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.5.8"
+#define MOD_VER		"4.5.9"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov(2014)")
 #define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -469,7 +469,7 @@ void TSocketIn::stop( )
 void TSocketIn::check( )
 {
     try {
-	//Check for activity the initiative mode
+	//Checking for activity the initiative mode
 	if(mode() == M_Initiative && (toStart() || startStat()) && (!startStat() || time(NULL) > (lastConn()+keepAliveTm()))) {
 	    if(mess_lev() == TMess::Debug)
 		mess_debug(nodePath().c_str(), _("Reconnect due to lack of input activity to '%s'."), addr().c_str());
@@ -628,10 +628,12 @@ void *TSocketIn::Task( void *sock_in )
 			mess_warning(sock->nodePath().c_str(), _("Closing the socket %d error '%s (%d)'!"), sockFdCL, strerror(errno), errno);
 		    continue;
 		}
-		//Creating output transport representing to the client connection
+
+		//Creating an output transport of representing the client connection
 		if(sock->protocols().empty()) {
 		    string outTrId = sock->associateTrO((S_NM_SOCKET ":")+i2s(sockFdCL));
 		    ((AutoHD<TSocketOut>)sock->owner().outAt(outTrId)).at().connAddr = sender;
+
 		    sock->connNumb++;
 		    sock->connTm = time(NULL);
 		    continue;
@@ -993,7 +995,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	ctrRemoveNode(opt, "/prm/cfg/A_PRMS");
 	ctrMkNode("fld", opt, -1, "/prm/cfg/ADDR", EVAL_STR, startStat()?R_R_R_:RWRWR_, "root", STR_ID, 1, "help",
 	    _("Socket's input transport has the address format:\n"
-	    "  [TCP:]{addr}:{port}:{mode}[:{IDmess}] - TCP socket:\n"
+	    "  [TCP:]{addr}:{port}[:{mode}[:{IDmess}]] - TCP socket:\n"
 	    "    addr - address for socket to be opened, empty or \"*\" address opens socket for all interfaces; there may be as the symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
 	    "    port - network port on which the socket is opened, indication of the character name of the port, according to /etc/services is available;\n"
 	    "    mode - mode of operation: 0 - break connections; 1(default) - keep alive; 2 - initiative connections;\n"

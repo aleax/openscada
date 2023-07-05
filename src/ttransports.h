@@ -44,6 +44,9 @@ class TTransportOut;
 class TTransportIn : public TCntrNode, public TConfig
 {
     public:
+	//Data
+	enum AssociateTrStage { ATrStg_Common = 0, ATrStg_Create, ATrStg_Proc };
+
 	//Methods
 	TTransportIn( const string &id, const string &db, TElem *el );
 	virtual ~TTransportIn( );
@@ -93,7 +96,13 @@ class TTransportIn : public TCntrNode, public TConfig
 
     protected:
 	//Methods
-	string associateTrO( const string &addr );	//Associated new output transport
+	// Associated output transport treating per stages
+	//  ATrStg_Common - common stage of default call stages ATrStg_Create, ATrStg_Proc;
+	//		    you can call stage ATrStg_Create, specific init the output transport and next call stage ATrStg_Proc to finish,
+	//		    and under the lock associateTrRes
+	//  ATrStg_Create - creating and registering the representative output transport with <addr> is the transport address
+	//  ATrStg_Proc - starting-connecting, reading the Initiate Connection ID, processing all presented associated transports
+	string associateTrO( const string &addr, char stage = ATrStg_Common );
 
 	void cntrCmdProc( XMLNode *opt );		//Control interface command process
 
@@ -110,6 +119,8 @@ class TTransportIn : public TCntrNode, public TConfig
 	//Attributes
 	bool	runSt;
 
+	ResMtx	associateTrRes;
+
     private:
 	//Methods
 	const char *nodeName( ) const	{ return mId.getSd(); }
@@ -119,7 +130,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	char	&mStart;
 	string	mDB;
 
-	ResMtx	associateTrRes, mLogRes;
+	ResMtx	mLogRes;
 	vector<AutoHD<TTransportOut> >	mAssociateTrO;
 
 	// IO log

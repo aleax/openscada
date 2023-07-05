@@ -3309,7 +3309,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("list",opt,-1,"/tr/mess/base",Mess->langCodeBase().c_str(),RWRW__,"root","root",1,"tp","str");
 		    string lngEl;
 		    for(int off = 0; (lngEl=strParse(Mess->translLangs(),0,";",&off)).size(); )
-			if(lngEl.size() == 2 && lngEl != Mess->langCodeBase())
+			if(lngEl != Mess->langCodeBase())
 			    ctrMkNode("list",opt,-1,("/tr/mess/"+lngEl).c_str(),lngEl.c_str(),RWRW__,"root","root",1,"tp","str");
 		    ctrMkNode("list",opt,-1,"/tr/mess/src",_("Source"),R_R_R_,"root","root",1,"tp","str");
 		}
@@ -3671,7 +3671,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    // Columns list preparing
 	    ns.push_back(ctrMkNode("list",opt,-1,"/tr/mess/base","",RWRW__,"root","root"));
 	    for(int off = 0; (tStr=strParse(Mess->translLangs(),0,";",&off)).size(); )
-		if(tStr.size() == 2 && tStr != Mess->langCodeBase())
+		if(tStr != Mess->langCodeBase())
 		    ns.push_back(ctrMkNode("list",opt,-1,("/tr/mess/"+tStr).c_str(),tStr.c_str(),RWRW__,"root","root"));
 	    ns.push_back(ctrMkNode("list",opt,-1,"/tr/mess/src","",R_R_R_,"root","root"));
 

@@ -120,7 +120,7 @@ AutoHD<TTransportOut> TTransportS::outAt( const string &addr )
 	    (!isIn && !at(trMod).at().outPresent(trId) && trAddr.empty()) )
 	throw err_sys(_("Error the output address '%s'!"), addr.c_str());
 
-    //Input no protocol transports for the remote hosts initiative connections of they control at the connections
+    //Input no protocol transports for the remote hosts initiative connections of their control at the connections
     if(isIn) return at(trMod).at().inAt(trId).at().associateTr(trAddr);
 
     //Standard output connection
@@ -990,49 +990,67 @@ void TTransportIn::pushLogMess( const string &vl, const string &data, int dataDi
     mLogLstDt = dataDir;
 }
 
-string TTransportIn::associateTrO( const string &addr )
+string TTransportIn::associateTrO( const string &addr, char stage )
 {
     MtxAlloc resN(associateTrRes, true);
 
+    string associateTrID;
+
+    //Common stages call
+    if(stage == ATrStg_Common) {
+	associateTrID = TTransportIn::associateTrO(addr, ATrStg_Create);
+	TTransportIn::associateTrO(associateTrID, ATrStg_Proc);
+    }
     //Creating for new associated output transport
-    string associateTrID = "inA_"+id()+"_0";
-    string initConID;
-    while(owner().outPresent(associateTrID)) associateTrID = TSYS::strLabEnum(associateTrID);
-    owner().outAdd(associateTrID);
-    mAssociateTrO.push_back(owner().outAt(associateTrID));
+    else if(stage == ATrStg_Create) {
+	//Creating for new associated output transport
+	associateTrID = "inA_"+id()+"_0";
+	while(owner().outPresent(associateTrID)) associateTrID = TSYS::strLabEnum(associateTrID);
+	owner().outAdd(associateTrID);
+	mAssociateTrO.push_back(owner().outAt(associateTrID));
 
-    mAssociateTrO.back().at().setAddr(addr);
-    mAssociateTrO.back().at().setName("");
-    mAssociateTrO.back().at().setDscr("");
-    mAssociateTrO.back().at().clearConPrm();
-    mAssociateTrO.back().at().modifGClr();
-    try {
-	mAssociateTrO.back().at().start();
-
-	// Reading and registering the initial connection ID
-	char buf[prmStrBuf_SZ];
-	int respLen = mAssociateTrO.back().at().messIO("", 0, buf, sizeof(buf));
-	initConID = string(buf, respLen);
-	mAssociateTrO.back().at().setConPrm("initConID", initConID);
-    } catch(TError &er) { mess_sys(TMess::Error, _("Error connection the new associated node: %s"), er.mess.c_str()); }
-
-    //Removing already freed connections also with the same ID for the last connected
-    for(int iAss = 0; iAss < (int)mAssociateTrO.size()-1; iAss++) {
-	if(mAssociateTrO[iAss].at().startStat() && mAssociateTrO[iAss].at().conPrm("initConID").getS() != initConID) continue;
-	// Try to disconnect and remove
-	string oTrId = mAssociateTrO[iAss].at().id();
-	mAssociateTrO[iAss].free();
+	mAssociateTrO.back().at().setAddr(addr);
+	mAssociateTrO.back().at().setName("");
+	mAssociateTrO.back().at().setDscr("");
+	mAssociateTrO.back().at().clearConPrm();
+	mAssociateTrO.back().at().modifGClr();
+    }
+    //Starting-connecting, reading the Initiate Connection ID, processing all presented associated transports
+    else if(stage == ATrStg_Proc) {
+	string initConID;
+	AutoHD<TTransportOut> tr = owner().outAt(associateTrID=addr);
 	try {
-	    owner().outDel(oTrId);
-	    mAssociateTrO.erase(mAssociateTrO.begin()+iAss);
-	    iAss--;
-	} catch(TError &er) {
-	    mAssociateTrO[iAss] = owner().outAt(oTrId);
-	    mess_sys(TMess::Warning, _("Error removing the associated node/connection: %s"), er.mess.c_str());
+	    tr.at().start();
+
+	    // Reading and registering the initial connection ID
+	    char buf[prmStrBuf_SZ];
+	    int respLen = tr.at().messIO("", 0, buf, sizeof(buf));
+	    initConID = string(buf, respLen);
+	    tr.at().setConPrm("initConID", initConID);
+
+	    printf("TEST 00: '%s'\n", initConID.c_str());
+
+	} catch(TError &er) { mess_sys(TMess::Error, _("Error connection the new associated node: %s"), er.mess.c_str()); }
+
+	// Removing already freed connections also with the same ID for the last connected
+	for(int iAss = 0; iAss < (int)mAssociateTrO.size()-1; iAss++) {
+	    string oTrId = mAssociateTrO[iAss].at().id();
+	    if(oTrId == associateTrID || (mAssociateTrO[iAss].at().startStat() && mAssociateTrO[iAss].at().conPrm("initConID").getS() != initConID))
+		continue;
+	    //  Try to disconnect and remove
+	    mAssociateTrO[iAss].free();
+	    try {
+		owner().outDel(oTrId);
+		mAssociateTrO.erase(mAssociateTrO.begin()+iAss);
+		iAss--;
+	    } catch(TError &er) {
+		mAssociateTrO[iAss] = owner().outAt(oTrId);
+		mess_sys(TMess::Warning, _("Error removing the associated node/connection: %s"), er.mess.c_str());
+	    }
 	}
     }
 
-    return mAssociateTrO.back().at().id();
+    return associateTrID;
 }
 
 TVariant TTransportIn::objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang )

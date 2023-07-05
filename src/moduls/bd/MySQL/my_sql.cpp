@@ -34,7 +34,7 @@
 #define MOD_NAME	trS("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"4.0.7"
+#define MOD_VER		"4.0.8"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -488,22 +488,22 @@ void MTable::fieldFix( TConfig &cfg, const string &ilangLs )
 	//Check other languages
 	if(u_cfg.fld().flg()&TFld::TransltText) {
 	    size_t pos = 0;
+	    string tVl;
 	    //  Change for present translations
 	    for(unsigned iC = iFld; iC < tblStrct.size(); iC++)
-		if(tblStrct[iC].nm.size() > 3 && tblStrct[iC].nm.substr(2) == ("#"+cf_el[iCf])) {
+		if(tblStrct[iC].nm.size() > 3 && TSYS::strParse(tblStrct[iC].nm,1,"#") == cf_el[iCf]) {
 		    if(tblStrct[iC].tp != f_tp && !appMode) {
 			ls += (ls.size()?", CHANGE `":" CHANGE `") + TSYS::strEncode(tblStrct[iC].nm,TSYS::SQL) + "` `" + TSYS::strEncode(tblStrct[iC].nm,TSYS::SQL) + "`";
 			fieldPrmSet(u_cfg, (iCf>0)?cf_el[iCf-1]:"", ls);
 		    }
 
-		    if((pos=langLs.find(tblStrct[iC].nm.substr(0,2)+";")) != string::npos)
-			langLs.replace(pos, 3, "");
+		    if((pos=langLs.find(tVl=TSYS::strParse(tblStrct[iC].nm,0,"#")+";")) != string::npos)
+			langLs.erase(pos, tVl.size());
 		}
 
 	    //  Append translation for new languages
-	    string toLang;
-	    for(int off = 0; (toLang=TSYS::strParse(langLs,0,";",&off)).size(); ) {
-		ls += (ls.size()?", ADD `":" ADD `") + TSYS::strEncode(toLang+"#"+cf_el[iCf],TSYS::SQL) + "`";
+	    for(int off = 0; (tVl=TSYS::strParse(langLs,0,";",&off)).size(); ) {
+		ls += (ls.size()?", ADD `":" ADD `") + TSYS::strEncode(tVl+"#"+cf_el[iCf],TSYS::SQL) + "`";
 		fieldPrmSet(u_cfg, (iCf>0)?cf_el[iCf-1]:"", ls);
 	    }
 	}
@@ -513,8 +513,8 @@ void MTable::fieldFix( TConfig &cfg, const string &ilangLs )
 	for(iCf = 0; iCf < cf_el.size(); iCf++)
 	    if(cf_el[iCf] == tblStrct[iFld].nm ||
 		    // Pass all the column translation
-		    ((cfg.cfg(cf_el[iCf]).fld().flg()&TFld::TransltText) &&
-			tblStrct[iFld].nm.size() > 3 && tblStrct[iFld].nm.substr(2) == ("#"+cf_el[iCf])))
+		    ((cfg.cfg(cf_el[iCf]).fld().flg()&TFld::TransltText) && tblStrct[iFld].nm.size() > 3 &&
+			TSYS::strParse(tblStrct[iFld].nm,1,"#") == cf_el[iCf]))
 		break;
 	if(iCf >= cf_el.size())
 	    ls += (ls.size()?", DROP `":" DROP `") + TSYS::strEncode(tblStrct[iFld].nm,TSYS::SQL) + "`";

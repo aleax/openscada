@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.0.7"
+#define MOD_VER		"3.0.8"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("DB module. Provides support of the DBMS FireBird.")
 #define LICENSE		"GPL2"
@@ -548,7 +548,7 @@ void MTable::fieldFix( TConfig &cfg, const string &ilangLs )
 	    if(cf_el[iCf] == tblStrct[iFld].nm ||
 		// Pass all the column translation
 		(cfg.cfg(cf_el[iCf]).fld().flg()&TFld::TransltText &&
-		    tblStrct[iFld].nm.size() > 3 && tblStrct[iFld].nm.substr(2) == ("#"+cf_el[iCf])))
+		    tblStrct[iFld].nm.size() > 3 && TSYS::strParse(tblStrct[iFld].nm,1,"#") == cf_el[iCf]))
 	    {
 		TCfg &cf = cfg.cfg(cf_el[iCf]);
 		bool isEqual = false;
@@ -612,14 +612,14 @@ void MTable::fieldFix( TConfig &cfg, const string &ilangLs )
 	//Check other languages - append translation for new languages
 	if(cf.fld().flg()&TFld::TransltText && langLs.size()) {
 	    size_t pos = 0;
+	    string tVl;
 	    for(unsigned iC = iFld; iC < tblStrct.size(); iC++)
-		if(tblStrct[iC].nm.size() > 3 && tblStrct[iC].nm.substr(2) == ("#"+cf_el[iCf]) &&
-			(pos=langLs.find(tblStrct[iC].nm.substr(0,2)+";")) != string::npos)
-		    langLs.replace(pos, 3, "");
+		if(tblStrct[iC].nm.size() > 3 &&
+			TSYS::strParse(tblStrct[iC].nm,1,"#") == cf_el[iCf] && (pos=langLs.find(tVl=TSYS::strParse(tblStrct[iC].nm,0,"#")+";")) != string::npos)
+		    langLs.erase(pos, tVl.size());
 
-	    string toLang;
-	    for(int off = 0; (toLang=TSYS::strParse(langLs,0,";",&off)).size(); )
-		ls += (ls.size()?", ADD \"":" ADD \"") + mod->sqlReqCode(toLang+"#"+cf_el[iCf],'"') + "\" "+f_tp;
+	    for(int off = 0; (tVl=TSYS::strParse(langLs,0,";",&off)).size(); )
+		ls += (ls.size()?", ADD \"":" ADD \"") + mod->sqlReqCode(tVl+"#"+cf_el[iCf],'"') + "\" "+f_tp;
 	}
     }
 

@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.1.1"
+#define MOD_VER		"3.1.2"
 #define AUTHORS		trS("Roman Savochenko, Maxim Lysenko (2010-2011)")
 #define DESCRIPTION	trS("DB module. Provides support of the DBMS PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -558,7 +558,7 @@ void MTable::fieldFix_( TConfig &cfg, const string &ilangLs, bool recurse )
 	    if(cf_el[iCf] == tblStrct[iFld].nm ||
 		// Pass all the column translation
 		((cfg.cfg(cf_el[iCf]).fld().flg()&TFld::TransltText) &&
-		    tblStrct[iFld].nm.size() > 3 && tblStrct[iFld].nm.substr(2) == ("#"+cf_el[iCf])))
+		    tblStrct[iFld].nm.size() > 3 && TSYS::strParse(tblStrct[iFld].nm,1,"#") == cf_el[iCf]))
 	    {
 		TCfg &cf = cfg.cfg(cf_el[iCf]);
 		bool isEqual = false;
@@ -629,14 +629,14 @@ void MTable::fieldFix_( TConfig &cfg, const string &ilangLs, bool recurse )
 	//Check other languages - append translation for new languages
 	if(cf.fld().flg()&TFld::TransltText && langLs.size()) {
 	    size_t pos = 0;
+	    string tVl;
 	    for(unsigned iC = iFld; iC < tblStrct.size(); iC++)
-		if(tblStrct[iC].nm.size() > 3 && tblStrct[iC].nm.substr(2) == ("#"+cf_el[iCf]) &&
-			(pos=langLs.find(tblStrct[iC].nm.substr(0,2)+";")) != string::npos)
-		    langLs.replace(pos, 3, "");
+		if(tblStrct[iC].nm.size() > 3 &&
+			TSYS::strParse(tblStrct[iC].nm,1,"#") == cf_el[iCf] && (pos=langLs.find(tVl=TSYS::strParse(tblStrct[iC].nm,0,"#")+";")) != string::npos)
+		    langLs.erase(pos, tVl.size());
 
-	    string toLang;
-	    for(int off = 0; (toLang=TSYS::strParse(langLs,0,";",&off)).size(); )
-		ls += (ls.size()?", ADD \"":" ADD \"") + TSYS::strEncode(toLang+"#"+cf_el[iCf],TSYS::SQL,"\"") + "\" " + f_tp;
+	    for(int off = 0; (tVl=TSYS::strParse(langLs,0,";",&off)).size(); )
+		ls += (ls.size()?", ADD \"":" ADD \"") + TSYS::strEncode(tVl+"#"+cf_el[iCf],TSYS::SQL,"\"") + "\" " + f_tp;
 	}
     }
 

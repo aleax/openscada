@@ -199,7 +199,6 @@ TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	if((extPos=cTmpl.rfind(".")) != string::npos)	{ cTmplExt = cTmpl.substr(extPos); cTmpl = cTmpl.substr(0, extPos); }
 
 	string lang = TSYS::strLine(user_lang, 1);
-	if(lang.size() > 2)	lang = lang.substr(0, 2);
 
 	// HTTP header's attributes
 	string httpattrs = (prms.size() >= 3) ? prms[2].getS() : "";
@@ -767,7 +766,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		}
 	    }
 	    else if(strcasecmp(var.c_str(),"accept-language") == 0 && (brLang=TSYS::strTrim(TSYS::strParse(val,0,","))).size() > 2)
-		brLang = brLang.substr(0, 2);
+		brLang = TSYS::strParse(brLang, 0, "-");
 	    else if(strcasecmp(var.c_str(),"oscd_lang") == 0)	vars.pop_back();
 	}
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 09:47+0300\n"
+"POT-Creation-Date: 2023-07-05 09:53+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -24,44 +24,29 @@ msgstr "Roman Savotschenko"
 
 msgid ""
 "Provides transport based on the secure sockets' layer. OpenSSL is used and "
-"SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported."
+"supported SSL-TLS depending on the library version."
 msgstr ""
-"Gewährt den auf der Schicht von sicheren Sockets begründeten Transport. Es "
-"werden benutzt OpenSSL und unterstützt SSLv3, TLSv1, TLSv1.1, TLSv1.2, "
-"DTLSv1, DTLSv1_2."
+"Stellt Transport basierend auf der Secure-Sockets-Schicht bereit. Abhängig "
+"von der Bibliotheksversion wird OpenSSL verwendet und SSL-TLS unterstützt."
 
 msgid "Addition parameters"
 msgstr "Weitere Optionen"
 
-#, c-format
 msgid ""
-"SSL output transport has the address format \"{addr}[,{addrN}]:{port}[:"
-"{mode}]\", where:\n"
+"SSL output transport has the address format \"{addr}[,{addrN}]:{port}\", "
+"where:\n"
 "    addr - address with which the connection is made; there may be as the "
 "symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
 "    port - network port with which the connection is made; indication of the "
-"character name of the port according to /etc/services is available;\n"
-"    mode - %s."
+"character name of the port according to /etc/services is available."
 msgstr ""
-"Der SSL-Ausgabetransport hat das Adressformat \"{addr}[,{addrN}]:{port}[:"
-"{mode}]\", wob:\n"
+"Der SSL-Ausgabetransport hat das Adressformat \"{addr}[,{addrN}]:{port}\", "
+"wob:\n"
 "    addr - Adresse, mit der die Verbindung hergestellt wird; Dort kann "
 "sowohl die symbolische Darstellung als auch IPv4 \"127.0.0.1\" oder IPv6 "
 "\"[::1]\" der Adressen sein;\n"
 "    port - Netzwerk-Port mit dem die Verbindung hergestellt wird; Angabe des "
-"Charakternamens des Ports gemäß /etc/services ist verfügbar;\n"
-"    mode - %s."
-
-msgid "not used"
-msgstr "nicht benutzt"
-
-msgid ""
-"SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), by "
-"default and in error the safest and most appropriate one is used"
-msgstr ""
-"SSL-Modus und -Version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, "
-"DTLSv1_2), standardmäßig und irrtümlicherweise wird der sicherste und am "
-"besten geeignete verwendet"
+"Charakternamens des Ports gemäß /etc/services ist verfügbar."
 
 msgid ""
 "Connection timings in the format \"{conn}:{next}\", where:\n"
@@ -95,16 +80,25 @@ msgid "Error connecting: "
 msgstr "Verbindungsfehler: "
 
 #, c-format
-msgid ""
-"Connections %d, opened %d, last %s, closed by the limit %d. Traffic in %s, "
-"out %s. "
+msgid "Connections %d, opened %d, last %s, closed by the limit %d. "
 msgstr ""
 "Verbindungen %d, geöffnet %d, zuletzt %s, geschlossen durch das Limit %d. "
-"Verkehr in %s, aus %s. "
+
+#, c-format
+msgid "Traffic in %s, out %s. "
+msgstr "Verkehr in %s, aus %s. "
 
 #, c-format
 msgid "Processing time %s[%s]. "
 msgstr "Bearbeitungszeit %s[%s]. "
+
+#, c-format
+msgid "Error opening the temporary file '%s': '%s'"
+msgstr "Fehler beim Öffnen der temporären Datei '%s': '%s'"
+
+#, c-format
+msgid "Error writing the file '%s'."
+msgstr "Fehler beim Schreiben der Datei '%s'."
 
 msgid "Connected"
 msgstr "Verbunden"
@@ -119,12 +113,8 @@ msgstr ""
 "wird wiederhergestellt..."
 
 #, c-format
-msgid "Error opening the temporary file '%s': '%s'"
-msgstr "Fehler beim Öffnen der temporären Datei '%s': '%s'"
-
-#, c-format
-msgid "Error writing the file '%s'."
-msgstr "Fehler beim Schreiben der Datei '%s'."
+msgid "Reconnect due to lack of input activity to '%s'."
+msgstr "Reconnect wegen fehlender Eingabeaktivität für '%s'."
 
 #, c-format
 msgid "The input transport closed by the error: %s"
@@ -200,26 +190,35 @@ msgstr "Staats"
 msgid "Active connections"
 msgstr "Aktive Verbindungen"
 
-#, c-format
 msgid ""
-"SSL input transport has the address format \"{addr}:{port}[:{mode}]\", "
-"where:\n"
+"SSL input transport has the address format \"{addr}:{port}[:{mode}[:"
+"{IDmess}]]\", where:\n"
 "    addr - address to open SSL, it must be one of the addresses of the host; "
 "empty or \"*\" address opens SSL for all interfaces; there may be as the "
 "symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
 "    port - network port on which the SSL is opened, indication of the "
 "character name of the port, according to /etc/services is available;\n"
-"    mode - %s."
+"    mode - mode of operation: 0(default) - ordinal connection; 2 - "
+"initiative connection;\n"
+"    IDmess - identification message of the initiative connection - the mode "
+"2."
 msgstr ""
-"Das Format der Adresse des SSL Eingangstransports \"{addr}:{port}[:"
-"{mode}]\", wo:\n"
+"Das Format der Adresse des SSL Eingangstransports \"{addr}:{port}[:{mode}[:{IDmess}]]\", wo:\n"
 "    addr - Adresse, um SSL zu öffnen, muss es eine der Adressen des Hosts "
 "sein; leere oder \"*\" Adresse öffnet den SSL für alle Schnittstellen; dort "
 "kann sowohl die symbolische Darstellung als auch IPv4 \"127.0.0.1\" oder "
 "IPv6 \"[::1]\" der Adressen sein;\n"
 "    port - Netzwerkport auf dem das SSL geöffnet ist, Angabe des "
 "Charakternamens des Ports gemäß /etc/services ist verfügbar;\n"
-"    mode - %s."
+"    mode - Arbeitsweise: 0(Default) - Ordinalverbindung; 2 - Initiative "
+"Verbindung;\n"
+"    IDmess - Identifikationsnachricht der Initiativverbindung - der Modus 2."
+
+msgid "Priority"
+msgstr "Priorität"
+
+msgid "Input buffer, kbyte"
+msgstr "Eingangsbuffer, kbyte"
 
 msgid "PEM-file of the certificates and private key"
 msgstr "PEM-Datei der Zertifikate und des privaten Schlüssels"
@@ -242,9 +241,6 @@ msgstr "Maximale Anzahl von Clients pro Host"
 msgid "Set to 0 to disable this limit."
 msgstr "Setzen Sie den Wert auf 0, um dieses Limit zu deaktivieren."
 
-msgid "Input buffer, kbyte"
-msgstr "Eingangsbuffer, kbyte"
-
 msgid "Keep alive requests"
 msgstr "Keep alive Anfragen"
 
@@ -265,9 +261,6 @@ msgstr ""
 "Schließen Sie die Verbindung nach keine Anfragen zu bestimmten Timeout.\n"
 "Null-Wert für disable - nicht immer schließen."
 
-msgid "Priority"
-msgstr "Priorität"
-
 #, c-format
 msgid "%s %d(%s): last %s; traffic in %s, out %s; "
 msgstr "%s %d(%s): letzte %s; eingangstraffik %s, Ausgangs- %s; "
@@ -287,9 +280,6 @@ msgstr "Eingangstraffik %s, Ausgangs %s."
 #, c-format
 msgid "Response time %s[%s]. "
 msgstr "Reaktionszeit %s[%s]. "
-
-msgid "We are stopping!"
-msgstr "Wir hören auf!"
 
 #, c-format
 msgid "Error the address '%s': '%s (%d)'"
@@ -322,9 +312,22 @@ msgstr "SSL_CTX_use_PrivateKey_file: %s"
 msgid "Closing the socket %d error '%s (%d)'!"
 msgstr "Schließen des Sockets %d Fehler '%s (%d)'!"
 
+msgid "We are stopping!"
+msgstr "Wir hören auf!"
+
 #, c-format
 msgid "Error connecting: %s"
 msgstr "Verbindungsfehler: %s"
+
+msgid "The force socket is deactivated!"
+msgstr "Der Kraftsockel ist deaktiviert!"
+
+msgid "The force socket is not activated!"
+msgstr "Die Force-Steckdose ist nicht aktiviert!"
+
+#, c-format
+msgid "Error the force socket %d using: '%s (%d)'!"
+msgstr "Fehler beim Force-Socket %d mit: '%s (%d)'!"
 
 msgid "Unknown error"
 msgstr "Unbekannter Fehler"
@@ -373,4 +376,3 @@ msgstr "Zeitabstände"
 
 msgid "Attempts"
 msgstr "Versuche"
-

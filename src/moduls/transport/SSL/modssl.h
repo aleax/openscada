@@ -33,6 +33,9 @@
 #undef trS
 #define trS(mess) mod->I18N(mess,mess_PreSave)
 
+#define S_NM_SOCKET	"SOCKET"
+
+
 struct CRYPTO_dynlock_value
 {
     pthread_mutex_t mutex;
@@ -51,8 +54,8 @@ class TSocketIn;
 class SSockIn
 {
     public:
-	SSockIn( TSocketIn *is, BIO *ibio, const string &isender ) :
-	    pid(0), bio(ibio), sock(0), sender(isender), tmCreate(time(NULL)), tmReq(time(NULL)), trIn(0), trOut(0), s(is) { }
+	SSockIn( TSocketIn *is, BIO *ibio, const string &isender, bool iisCon = false ) :
+	    pid(0), bio(ibio), sock(0), sender(isender), tmCreate(time(NULL)), tmReq(time(NULL)), trIn(0), trOut(0), s(is), isCon(iisCon) { }
 
 	pthread_t pid;
 	BIO	*bio;
@@ -61,6 +64,7 @@ class SSockIn
 	time_t	tmCreate, tmReq;
 	uint64_t trIn, trOut;	//Traffic in and out counters
 	float	prcTm, prcTmMax;
+	bool	isCon;		//Is an initiative connection
 
 	TSocketIn	*s;
 };
@@ -71,12 +75,18 @@ class SSockIn
 class TSocketIn: public TTransportIn
 {
     public:
+	//Data
+	// Modes
+	enum TRModes { M_Ordinal = 0, M_Initiative = 2 };
+
+	//Methods
 	TSocketIn( string name, const string &idb, TElem *el );
 	~TSocketIn( );
 
 	string getStatus( );
 
 	int lastConn( )		{ return connTm; }
+	unsigned mode( )	{ return mMode; }
 	unsigned bufLen( )	{ return mBufLen; }
 	unsigned maxFork( )	{ return mMaxFork; }
 	unsigned maxForkPerHost( ) { return mMaxForkPerHost; }
@@ -106,6 +116,8 @@ class TSocketIn: public TTransportIn
 
     protected:
 	//Methods
+	bool cfgChange( TCfg &co, const TVariant &pc );
+
 	void load_( );
 	void save_( );
 
@@ -125,18 +137,24 @@ class TSocketIn: public TTransportIn
 	//Attributes
 	ResMtx		sockRes;
 	SSL_CTX		*ctx;
+	SSL		*ssl;
+	BIO		*bio, *abio;
+	int		sockFd;			//For the initiative mode
 
 	bool		endrun;			//Command for stop task
 	bool		endrunCl;		//Command for stop client tasks
 
-	unsigned short	mMaxFork,		//Maximum forking (opened SSL)
+	unsigned short	mMode,			//Mode of SSL:
+						//  0 - ordinal, 2 - initiative connection
+			mMaxFork,		//Maximum forking (opened SSL)
 			mMaxForkPerHost,	//Maximum forking (opened sockets), per host
 			mBufLen,		//Input buffer length
 			mKeepAliveReqs,		//KeepAlive connections
 			mKeepAliveTm;		//KeepAlive timeout
 	int		mTaskPrior;		//Requests processing task prioritet
 	string		mCertKeyFile, mCertKey,	//SSL certificate file and PEM-text
-			mKeyPass;		//SSL private key password
+			mKeyPass,		//SSL private key password
+			addon;
 
 	bool		clFree;			//Clients stopped
 	//vector<pthread_t>	clId;		//Client's pids
@@ -155,6 +173,8 @@ class TSocketIn: public TTransportIn
 //************************************************
 class TSocketOut: public TTransportOut
 {
+    friend class TSocketIn;
+
     public:
 	TSocketOut( string name, const string &idb, TElem *el );
 	~TSocketOut( );
@@ -172,6 +192,10 @@ class TSocketOut: public TTransportOut
 	void setPKeyPass( const string &val )	{ mKeyPass = val; modif(); }
 	void setTimings( const string &vl, bool isDef = false );
 	void setAttempts( unsigned short vl );
+
+	static string connectSSL( const string &addr, SSL_CTX **ctx, SSL **ssl, BIO **conn,
+	    int tmCon, const string &certKey, const string &pKeyPass, const string &certKeyFile );
+	static void disconnectSSL( SSL_CTX **ctx, SSL **ssl, BIO **conn );
 
 	void start( int time = 0 );
 	void stop( );
@@ -196,8 +220,8 @@ class TSocketOut: public TTransportOut
 			mTmNext;
 
 	SSL_CTX		*ctx;
-	BIO		*conn;
 	SSL		*ssl;
+	BIO		*conn;
 
 	// Status atributes
 	string		connAddr;

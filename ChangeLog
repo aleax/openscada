@@ -1,3 +1,18 @@
+2023-07-05 Roman (test)
+- !!!!:SYS,DB.{SQLite,MySQL,PostgreSQL,FireBird},Protocol.HTTP:
+    The messages translation adapted mostly for language codes more of 2 symbols.
+- !!!!:Transport:
+    !!: The TTransportIn::associateTrO() expanded by support the different stages ATrStg_Create, ATrStg_Proc.
+    !!!!:SSL: Expanded by support of the initiative connections:
+	- SSL connection code of TSocketOut::{start,stop}() moved to static ones TSocketOut::{connectSSL,disconnectSSL}()
+	    for using in the input transport;
+	- SSL connection code of TSocketIn::Task() moved to TSocketIn::{start,stop}();
+	- removed for support the SSL algorithms and versions specifying in the mode due to
+	    that removing in the OpenSSL library and that was not used mostly, so there used only
+	    TLS_{client,server}_method() for new libraries (> 1.1) and SSLv23_{client,server}_method() for old ones.
+    FIX:Sockets: Some fixed in the description
+
+
 2023-07-05 Roman (stable)
 - Protocol.HTTP,UI.{WebUser,WebVision}: Finished in adapting for dynamic translation the station name
     with unification the User API function pgCreator() for using language from objFuncCall().

@@ -1449,7 +1449,7 @@ bool TTable::fieldSQLSeek( int row, TConfig &cfg, const string &cacheKey, int fl
 	sid = tblStrct[iFld].nm;
 	TCfg *u_cfg = cfg.at(sid, true);
 	if(!u_cfg && !Mess->translDyn() && sid.find(Mess->langCode()+"#") == 0) {
-	    u_cfg = cfg.at(sid.substr(3), true);
+	    u_cfg = cfg.at(TSYS::strParse(sid,1,"#"), true);
 	    if(u_cfg && !(u_cfg->fld().flg()&TFld::TransltText)) continue;
 	    trPresent = true;
 	}
@@ -1496,7 +1496,8 @@ bool TTable::fieldSQLSeek( int row, TConfig &cfg, const string &cacheKey, int fl
 	sid = (*tbl)[0][iFld];
 	TCfg *u_cfg = cfg.at(sid, true);
 	if(u_cfg) setSQLVal(*u_cfg, (*tbl)[row][iFld]);
-	else if(trPresent && sid.find(Mess->langCode()+"#") == 0 && (*tbl)[row][iFld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
+	else if(trPresent && sid.find(Mess->langCode()+"#") == 0 && (*tbl)[row][iFld].size() &&
+		(u_cfg=cfg.at(TSYS::strParse(sid,1,"#"),true)))
 	    setSQLVal(*u_cfg, (*tbl)[row][iFld], true);
     }
 
@@ -1518,7 +1519,7 @@ void TTable::fieldSQLGet( TConfig &cfg )
 	sid = tblStrct[iFld].nm;
 	TCfg *u_cfg = cfg.at(sid, true);
 	if(!u_cfg && !Mess->translDyn() && sid.find(Mess->langCode()+"#") == 0) {
-	    u_cfg = cfg.at(sid.substr(3), true);
+	    u_cfg = cfg.at(TSYS::strParse(sid,1,"#"), true);
 	    if(u_cfg && !(u_cfg->fld().flg()&TFld::TransltText)) continue;
 	    trPresent = true;
 	}
@@ -1542,7 +1543,8 @@ void TTable::fieldSQLGet( TConfig &cfg )
 	sid = tbl[0][iFld];
 	TCfg *u_cfg = cfg.at(sid, true);
 	if(u_cfg) setSQLVal(*u_cfg, tbl[1][iFld]);
-	else if(trPresent && sid.find(Mess->langCode()+"#") == 0 && tbl[1][iFld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
+	else if(trPresent && sid.find(Mess->langCode()+"#") == 0 && tbl[1][iFld].size() &&
+		(u_cfg=cfg.at(TSYS::strParse(sid,1,"#"),true)))
 	    setSQLVal(*u_cfg, tbl[1][iFld], true);
     }
 }
@@ -1569,7 +1571,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
     //Checking for the translation presence
     bool hasTr = Mess->translCfg(), hasTrCol = false;
     for(unsigned iFld = 0; iFld < tblStrct.size() && !hasTrCol; iFld++)
-	if((sid=tblStrct[iFld].nm).size() > 3 && sid[2] == '#') {
+	if((sid=tblStrct[iFld].nm).size() > 3 && sid.find("#") != string::npos) {
 	    hasTr = true;
 	    if(sid.find(Mess->langCode()+"#") == 0) hasTrCol = true;
 	}
@@ -1662,10 +1664,10 @@ void TTable::fieldSQLSet( TConfig &cfg )
 		if(Mess->translDyn() && !u_cfg.isKey() && u_cfg.view() && u_cfg.fld().flg()&TFld::TransltText && !u_cfg.noTransl()) {
 		    trCacheUpd.push_back(u_cfg.name()+string(1,0)+svalBASE_RAW+string(1,0)+svalRAW+(isTransl?string(1,0)+toLang:""));
 		    for(unsigned iFld = 0; iFld < tblStrct.size(); iFld++)
-			if(tblStrct[iFld].nm.size() > 3 && tblStrct[iFld].nm.compare(3,string::npos,cf_el[iEl]) == 0 &&
-				tblStrct[iFld].nm.find(toLang) != 0 && trD_L(svalBASE_RAW,tblStrct[iFld].nm.substr(0,2)) != svalBASE_RAW) {
+			if(tblStrct[iFld].nm.size() > 3 && TSYS::strParse(tblStrct[iFld].nm,1,"#") == cf_el[iEl] &&
+				tblStrct[iFld].nm.find(toLang) != 0 && trD_L(svalBASE_RAW,TSYS::strParse(tblStrct[iFld].nm,0,"#")) != svalBASE_RAW) {
 			    ls += (ls.size()?", \"":"\"") + TSYS::strEncode(tblStrct[iFld].nm,TSYS::SQL,"\"") + "\"";
-			    ls2 += (ls2.size()?", '":"'") + TSYS::strEncode(trD_L(svalBASE_RAW,tblStrct[iFld].nm.substr(0,2)),TSYS::SQL,"'") + "'";
+			    ls2 += (ls2.size()?", '":"'") + TSYS::strEncode(trD_L(svalBASE_RAW,TSYS::strParse(tblStrct[iFld].nm,0,"#")),TSYS::SQL,"'") + "'";
 			}
 		}
 	    }
@@ -1684,7 +1686,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
 	    sval = getSQLVal(u_cfg);
 
 	    // No translation
-	    if(!hasTr || u_cfg.fld().type() != TFld::String || !(u_cfg.fld().flg()&TFld::TransltText) || (cf_el[iEl].size() > 3 && cf_el[iEl][2] == '#'))
+	    if(!hasTr || u_cfg.fld().type() != TFld::String || !(u_cfg.fld().flg()&TFld::TransltText) || (cf_el[iEl].size() > 3 && cf_el[iEl].find("#") != string::npos))
 		ls += (ls.size()?", \"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval;
 	    else {
 		string svalRAW = u_cfg.getS(), toLang = Mess->langCode();
@@ -1714,7 +1716,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
 		    ls += (ls.size()?", \"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval;
 		    for(unsigned iFld = 0; iFld < tblStrct.size(); iFld++) {
 			sid = tblStrct[iFld].nm;
-			if(sid.size() <= 3 || sid.compare(3,string::npos,cf_el[iEl]) != 0 || sid.compare(0,3,Mess->langCodeBase()+"#") == 0)
+			if(sid.size() <= 3 || TSYS::strParse(sid,1,"#") != cf_el[iEl] || TSYS::strParse(sid,0,"#") == Mess->langCodeBase())
 			    continue;
 			ls += (ls.size()?", \"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=''";
 		    }
@@ -1776,7 +1778,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
 				}
 			    }
 			    //  the base message for mark the translation ones
-			    else if(!isTransl && tbl[0][iFld].size() > 3 && tbl[0][iFld].compare(3,string::npos,sid) == 0 && tbl[0][iFld].compare(0,3,Mess->langCodeBase()+"#") != 0 &&
+			    else if(!isTransl && tbl[0][iFld].size() > 3 && TSYS::strParse(tbl[0][iFld],1,"#") == sid && TSYS::strParse(tbl[0][iFld],0,"#") != Mess->langCodeBase() &&
 				    (svalRAW.empty() || fPos < 0 || tbl[1][fPos].size() <= mess_TrModifMarkLen || tbl[1][fPos].rfind(mess_TrModifMark) != (tbl[1][fPos].size()-mess_TrModifMarkLen)) &&
 				    tbl[1][iFld].size() &&
 				    (svalRAW.empty() || tbl[1][iFld].size() <= mess_TrModifMarkLen || tbl[1][iFld].rfind(mess_TrModifMark) != (tbl[1][iFld].size()-mess_TrModifMarkLen)))
@@ -1785,7 +1787,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
 				ls += (ls.size()?", \"":"\"") + TSYS::strEncode(tbl[0][iFld],TSYS::SQL,"\"") + "\"='" + TSYS::strEncode(tVl,TSYS::SQL,"'") + "'";
 
 				if(Mess->translDyn() && svalRAW.size())
-				    trCacheUpd.push_back(u_cfg.name()+string(1,0)+svalRAW+string(1,0)+tVl+string(1,0)+tbl[0][iFld].substr(0,2));
+				    trCacheUpd.push_back(u_cfg.name() + string(1,0) + svalRAW+string(1,0) + tVl+string(1,0) + TSYS::strParse(tbl[0][iFld],0,"#"));
 			    }
 			}
 		    }
