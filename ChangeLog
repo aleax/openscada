@@ -1,3 +1,8 @@
+2023-07-05 Roman (stable)
+- Protocol.HTTP,UI.{WebUser,WebVision}: Finished in adapting for dynamic translation the station name
+    with unification the User API function pgCreator() for using language from objFuncCall().
+
+
 2023-07-01 Roman (stable)
 - SYS,Protocol.HTTP: Project icons obtaining by the function TSYS::ico() appended by obtaining the file path
     and that used in Protocol.HTTP for obtaining translated icons.

@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.8.10"
+#define MOD_VER		"3.8.11"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -177,7 +177,7 @@ TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	return false;
     }
     //string pgCreator( string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}",
-    //                 string htmlHeadEls = "", string forceTmplFile = "", string lang = "" ) -
+    //                 string htmlHeadEls = "", string forceTmplFile = "" ) -
     //    Forming page or resource from content <cnt>, wrapped to HTTP result <rcode>, with HTTP additional attributes <httpattrs>,
     //    HTML additional head's element <htmlHeadEls> and forced template file <forceTmplFile>.
     //  cnt       - a page or a resource (images, XML, CSS, JavaScript, ...) content;
@@ -185,8 +185,7 @@ TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     //  httpattrs - additional HTTP-attributes, mostly this is "Content-Type" which by default sets to "text/html;charset={SYS}";
     //              only for "Content-Type: text/html" will do wrapping to internal/service or force <forceTmplFile> HTML-template;
     //  htmlHeadEls   - an additional HTML-header's tag, it's mostly META with "Refresh" to pointed URL;
-    //  forceTmplFile - force template file for override the internal/service template by the main-page template or other;
-    //  lang - language.
+    //  forceTmplFile - force template file for override the internal/service template by the main-page template or other.
     if(iid == "pgCreator" && prms.size()) {
 	size_t extPos;
 
@@ -199,7 +198,7 @@ TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	string cTmplExt;
 	if((extPos=cTmpl.rfind(".")) != string::npos)	{ cTmplExt = cTmpl.substr(extPos); cTmpl = cTmpl.substr(0, extPos); }
 
-	string lang = (prms.size() >= 6) ? prms[5].getS() : "";
+	string lang = TSYS::strLine(user_lang, 1);
 	if(lang.size() > 2)	lang = lang.substr(0, 2);
 
 	// HTTP header's attributes
@@ -263,7 +262,7 @@ TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 		    " <head>\n"
 		    "  <meta http-equiv='Content-Type' content='text/html; charset=" + Mess->charset() + "'/>\n" +
 		    ((prms.size() >= 4) ? prms[3].getS() : "" ) +
-		    "  <title>" PACKAGE_NAME ": " + trD(SYS->name()) + " (" + SYS->id() + ")</title>\n" +
+		    "  <title>" PACKAGE_NAME ": " + trD_L(SYS->name(),lang) + " (" + SYS->id() + ")</title>\n" +
 		    (icoNm.size()?"  <link rel='shortcut icon' href='/"+TSYS::strEncode(icoNm,TSYS::HttpURL)+"' type='image' />\n":"") +
 		//    "  <title>" PACKAGE_NAME "!</title>\n"
 		//    "  <link rel='shortcut icon' href='/" SPRT_ID "." MOD_ID ".png' type='image' />\n"
@@ -282,7 +281,7 @@ TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 		    "  </style>\n"
 		    " </head>\n"
 		    " <body>\n"
-		    "  <h1 class='head'>" PACKAGE_NAME ": " + trD(SYS->name()) + " (" + SYS->id() + ")</h1>\n"
+		    "  <h1 class='head'>" PACKAGE_NAME ": " + trD_L(SYS->name(),lang) + " (" + SYS->id() + ")</h1>\n"
 		    "  <hr/><br/>\n"
 		    "<center>\n" CtxTmplMark "</center>\n"
 		    "  <hr/>\n"
@@ -695,9 +694,9 @@ TProtIn::~TProtIn( )
 string TProtIn::pgCreator( const string &cnt, const string &rcode, const string &httpattrs, const string &htmlHeadEls, const string &forceTmplFile )
 {
     vector<TVariant> prms;
-    prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile); prms.push_back(lang());
+    prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile);
 
-    return objFuncCall("pgCreator", prms, "root").getS();
+    return objFuncCall("pgCreator", prms, "root\n"+lang()).getS();
 }
 
 bool TProtIn::pgAccess( const string &URL )
