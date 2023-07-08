@@ -204,18 +204,17 @@
 <ul><li> <i>user</i> — пользователя для смены.</li></ul></li>
 <li> <i>bool pgAccess(string URL)</i> — проверяет доступность страницы, определённой в <i>URL</i>.
 <ul><li> <i>URL</i> — URL страницы, которая проверяется.</li></ul></li>
-<li> <i>string pgCreator(string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}", string htmlHeadEls = "", string forceTmplFile = "", string lang = "" )</i> — формирует страницу или ресурс из содержимого <i>cnt</i>, обёрнутого в HTTP с результатом <i>rcode</i>, с дополнительными атрибутами HTTP <i>httpattrs</i>, дополнительным элементом заголовка HTML <i>htmlHeadEls</i> и использованием файла шаблона <i>forceTmplFile</i>.
+<li> <i>string pgCreator(string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}", string htmlHeadEls = "", string forceTmplFile = "")</i> — формирует страницу или ресурс из содержимого <i>cnt</i>, обёрнутого в HTTP с результатом <i>rcode</i>, с дополнительными атрибутами HTTP <i>httpattrs</i>, дополнительным элементом заголовка HTML <i>htmlHeadEls</i> и использованием файла шаблона <i>forceTmplFile</i>.
 <ul><li> <i>cnt</i> — содержимое страницы или ресурса (изображения, XML, CSS, JavaScript, ...);</li>
 <li> <i>rcode</i> — результирующий код HTTP, вроде "200 OK"; пустое значение выключает добавление HTTP заголовка;</li>
 <li> <i>httpattrs</i> — дополнительные атрибуты HTTP, в основном это "Content-Type" со значением по умолчанию "text/html;charset={SYS}"; только для "Content-Type: text/html" будет осуществляться заворачивание во внутренний/сервисный, или определённый <i>forceTmplFile</i>, HTML-шаблон;</li>
 <li> <i>htmlHeadEls</i> — дополнительный тег заголовка HTML, в основном это META с "Refresh" для указанного URL;</li>
-<li> <i>forceTmplFile</i> — файл прямо определённого шаблона для перекрытия внутреннего/сервисного или главной страницы.</li>
-<li> <i>lang</i> — язык интерфейса, который формируется.</li></ul></li></ul>
+<li> <i>forceTmplFile</i> — файл прямо определённого шаблона для перекрытия внутреннего/сервисного или главной страницы.</li></ul></li></ul>
 
 
 
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/HTTP/ru">Modules/HTTP/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2894</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/HTTP/ru">Modules/HTTP/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2903</td></tr></table></body>
 </html>

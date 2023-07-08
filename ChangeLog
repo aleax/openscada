@@ -1,3 +1,11 @@
+2023-07-08 Roman (stable)
+- !!:Transport.{Sockets,SSL}: The input transports appended by a configuration field of properties of
+    the initiative connection and the associated output transports 
+- !!:Transport.SSL: The input and output transports appended by control MSS and the input transports
+	appended by control the system input buffer, both taken from Transport.Sockets.
+    Warning messages appended by notification the certificates missing for the input transport.
+
+
 2023-07-05 Roman (test)
 - !!!!:SYS,DB.{SQLite,MySQL,PostgreSQL,FireBird},Protocol.HTTP:
     The messages translation adapted mostly for language codes more of 2 symbols.

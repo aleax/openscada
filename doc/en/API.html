@@ -298,7 +298,7 @@ Information variables of the program:
 <li> <i>string id( ) const;</i> — station ID.</li>
 <li> <i>string name( ) const;</i> — Localized name of the station.</li>
 <li> <i>void setName( const string &amp;vl );</i> — Setting the localized name of the station.</li>
-<li> <i>string ico( string *tp = NULL );</i> — Common station icon obtaining with placing the file type to <i>tp</i>.</li>
+<li> <i>string ico( string *tp = NULL, bool retPath = false );</i> — Obtaining file data or path, for <i>retPath</i>, of the station common icon with placing the file type to <i>tp</i>.</li>
 <li> <i>string user( ) const;</i> — The system user on behalf of which the system is running.</li>
 <li> <i>string host( );</i> — Host name for the station run.</li>
 <li> <i>void list( vector&lt;string&gt; &amp;list ) const;</i> — A list of registered subsystems in the system.</li>
@@ -392,7 +392,7 @@ Information variables of the program:
 <li> <i>static string ll2str( long long val, IntView view=Dec );</i> — Transformation of a long integer (64bit) to the string type of view <i>view</i>.</li>
 <li> <i>static string real2str( double val, int prec=15, char tp='g');</i> — Real transformation with an accuracy <i>prec</i> signs and type <i>tp</i> to the string.</li>
 <li> <i>static double realRound( double val, int dig=0, bool toint=false );</i> — Rounding the real number to the specified digit <i>dig</i> after the decimal point with the possibility of transformation to integer after rounding <i>toint</i>.</li>
-<li> <i>static string atime2str( time_t tm, const string &amp;format = "", bool gmt = false );</i> — Astronomic UNIX time <i>tm</i> conversion to a string, in the <i>format</i> of the POSIX-function "strftime()" or "gmtime()", for <i>gmt</i>.</li>
+<li> <i>static string atime2str( time_t tm, const string &amp;format = "", bool gmt = false, const string &amp;user_lang = "" );</i> — Astronomic UNIX time <i>tm</i> conversion to string in the <i>format</i> of the POSIX-function "strftime()" or "gmtime()" for <i>gmt</i>, also can be localised for the user and language <i>user_lang</i> or from the messages translation context.</li>
 <li> <i>static string time2str( double tm );</i> — Convert time interval, in seconds, to string like "1hour 23min 10sec".</li>
 <li> <i>static string cpct2str( double cnt );</i> — Traffic counter <i>cnt</i> (bytes) convert to string like "12.5KiB".</li>
 <li> <i>static double str2real( const string &amp;val );</i> — String transformation to the real.</li>
@@ -1657,6 +1657,12 @@ External hosts mode (enum — TTransportS::ExtHost::Mode):
 <td><b>Inherited:</b></td>
 <td>By the objects of input transports of the subsystem's "Transports" modules.
 </td></tr></table>
+<p><b>Data:</b><br />
+Stages of the new Associated Output Transports processing (enum — TTransportIn::AssociateTrStage):
+</p>
+<ul><li> <i>ATrStg_Common</i> (0) — common stage of default call stages <i>ATrStg_Create</i>, <i>ATrStg_Proc</i>; you can call stage <i>ATrStg_Create</i>, specific init the output transport and next call stage <i>ATrStg_Proc</i> to finish, and under the lock <i>associateTrRes</i>;</li>
+<li> <i>ATrStg_Create</i> (1) — creating and registering the representative output transport with <i>addr</i> is the transport address;</li>
+<li> <i>ATrStg_Proc</i> (2) — starting-connecting, reading the Initiate Connection ID, processing all presented associated transports.</li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>TTransportIn( const string &amp;id, const string &amp;db, TElem *el );</i> — Initializing constructor.</li>
@@ -1691,10 +1697,11 @@ External hosts mode (enum — TTransportS::ExtHost::Mode):
 <li> <i>TTypeTransport &amp;owner( ) const;</i> — Transport's type – the owner of the input transport.</li></ul>
 <p><b>Protected methods:</b>
 </p>
-<ul><li> <i>string associateTrO( const string &amp;addr );</i> — The associated output transport creation with the address <i>addr</i>.</li></ul>
+<ul><li> <i>string associateTrO( const string &amp;addr, char stage = ATrStg_Common );</i> — The associated output transport creation with the address <i>addr</i> on the <i>stage</i> as an enumeration <i>AssociateTrStage</i>.</li></ul>
 <p><b>Protected attributes:</b>
 </p>
-<ul><li> <i>bool runSt;</i> — The sign "Running".</li></ul>
+<ul><li> <i>bool runSt;</i> — The sign "Running".</li>
+<li> <i>ResMtx associateTrRes;</i> — Resources lock of the <i>associateTrO()</i> stages <i>AssociateTrStage</i>.</li></ul>
 <h3><span class="mw-headline" id="The_object_of_the_output_transports_.28TTransportOut.29"><span class="mw-headline-number">6.4</span> <span id="TTransportOut" title="#TTransportOut">The object of the output transports (TTransportOut)</span></span></h3>
 <table class="wikitable">
 
@@ -5001,5 +5008,5 @@ Error codes (enum — TError::Codes):
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2894</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2903</td></tr></table></body>
 </html>

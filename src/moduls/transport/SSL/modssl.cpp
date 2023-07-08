@@ -27,6 +27,7 @@
 #include <sys/ioctl.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <netinet/tcp.h>
 #include <openssl/rand.h>
 #include <openssl/md5.h>
 
@@ -42,7 +43,7 @@
 #define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.0.0"
+#define MOD_VER		"4.1.0"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and supported SSL-TLS depending on the library version.")
@@ -188,18 +189,18 @@ string TTransSock::outAddrHelp( )
 	"\n\n|| " + outTimingsHelp() + "\n\n|| " + outAttemptsHelp();
 }
 
-string TTransSock::outTimingsHelp( )
+string TTransSock::outTimingsHelp( bool noAdd )
 {
-    return _("Connection timings in the format \"{conn}:{next}\", where:\n"
+    return string(_("Connection timings in the format \"{conn}:{next}\", where:\n"
 	"    conn - maximum time of waiting the connection, in seconds;\n"
-	"    next - maximum time of waiting for continue the response, in seconds.\n"
-	"Can be prioritatile specified in the address field as the second global argument, as such \"localhost:123||5:1\".");
+	"    next - maximum time of waiting for continue the response, in seconds.\n")) + 
+	(noAdd?"":_("Can be prioritatile specified in the address field as the second global argument, as such \"localhost:123||5:1\"."));
 }
 
-string TTransSock::outAttemptsHelp( )
+string TTransSock::outAttemptsHelp( bool noAdd )
 {
-    return _("Attempts of the requesting both for this transport and protocol, for full requests.\n"
-	"Can be prioritatile specified in the address field as the third global argument, as such \"localhost:123||5:1||3\".");
+    return string(_("Attempts of the requesting both for this transport and protocol, for full requests.\n")) +
+	(noAdd?"":_("Can be prioritatile specified in the address field as the third global argument, as such \"localhost:123||5:1||3\"."));
 }
 
 string TTransSock::MD5( const string &file )
@@ -224,7 +225,8 @@ string TTransSock::MD5( const string &file )
 //************************************************
 TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) : TTransportIn(name,idb,el),
     sockRes(true), ctx(NULL), ssl(NULL), bio(NULL), abio(NULL), sockFd(-1),
-    mMode(M_Ordinal), mMaxFork(20), mMaxForkPerHost(0), mBufLen(5), mKeepAliveReqs(0), mKeepAliveTm(60), mTaskPrior(0), clFree(true)
+    mMode(M_Ordinal), mInBufLen(0), mMSS(0), mMaxFork(20), mMaxForkPerHost(0),
+    mKeepAliveReqs(0), mKeepAliveTm(60), mTaskPrior(0), clFree(true)
 {
     setAddr("localhost:10045");
 }
@@ -248,6 +250,10 @@ string TSocketIn::getStatus( )
 	if(mess_lev() == TMess::Debug)
 	    rez += TSYS::strMess(_("Processing time %s[%s]. "),
 		tm2s(1e-6*prcTm).c_str(), tm2s(1e-6*prcTmMax).c_str());
+	int bufSz, MSSsz; socklen_t sz = sizeof(socklen_t);
+	getsockopt(sockFd, SOL_SOCKET, SO_RCVBUF, (void*)&bufSz, &sz);
+	getsockopt(sockFd, IPPROTO_TCP, TCP_MAXSEG, (void*)&MSSsz, &sz);
+	rez += TSYS::strMess(_("Size input buffer %s, MSS %s. "), TSYS::cpct2str(bufSz).c_str(), TSYS::cpct2str(MSSsz).c_str());
     }
 
     return rez;
@@ -263,13 +269,15 @@ void TSocketIn::load_( )
 	prmNd.load(cfg("A_PRMS").getS());
 	vl = prmNd.attr("MaxClients");	if(!vl.empty()) setMaxFork(s2i(vl));
 	vl = prmNd.attr("MaxClientsPerHost");	if(!vl.empty()) setMaxForkPerHost(s2i(vl));
-	vl = prmNd.attr("BufLen");	if(!vl.empty()) setBufLen(s2i(vl));
-	vl = prmNd.attr("KeepAliveReqs");	if(!vl.empty()) setKeepAliveReqs(s2i(vl));
+	vl = prmNd.attr("InBufLen");	if(!vl.empty()) setInBufLen(s2i(vl));
+	vl = prmNd.attr("MSS");		if(!vl.empty()) setMSS(s2i(vl));
+	vl = prmNd.attr("KeepAliveReqs"); if(!vl.empty()) setKeepAliveReqs(s2i(vl));
 	vl = prmNd.attr("KeepAliveTm");	if(!vl.empty()) setKeepAliveTm(s2i(vl));
 	vl = prmNd.attr("TaskPrior");	if(!vl.empty()) setTaskPrior(s2i(vl));
 	vl = prmNd.attr("CertKeyFile");	if(!vl.empty()) setCertKeyFile(vl);
 	if(prmNd.childGet("CertKey",0,true)) mCertKey = prmNd.childGet("CertKey")->text();
 	mKeyPass = prmNd.attr("PKeyPass");
+	vl = prmNd.attr("InitAssocPrms"); if(!vl.empty()) setInitAssocPrms(vl);
     } catch(...) { }
 
     //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
@@ -280,7 +288,8 @@ void TSocketIn::save_( )
     XMLNode prmNd("prms");
     prmNd.setAttr("MaxClients", i2s(maxFork()));
     prmNd.setAttr("MaxClientsPerHost", i2s(maxForkPerHost()));
-    prmNd.setAttr("BufLen", i2s(bufLen()));
+    prmNd.setAttr("InBufLen", i2s(inBufLen()));
+    prmNd.setAttr("MSS", i2s(MSS()));
     prmNd.setAttr("KeepAliveReqs", i2s(keepAliveReqs()));
     prmNd.setAttr("KeepAliveTm", i2s(keepAliveTm()));
     prmNd.setAttr("TaskPrior", i2s(taskPrior()));
@@ -288,6 +297,7 @@ void TSocketIn::save_( )
     if(prmNd.childGet("CertKey",0,true)) prmNd.childGet("CertKey")->setText(mCertKey);
     else prmNd.childAdd("CertKey")->setText(mCertKey);
     prmNd.setAttr("PKeyPass",mKeyPass);
+    prmNd.setAttr("InitAssocPrms", initAssocPrms());
     cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TTransportIn::save_();
@@ -306,7 +316,8 @@ void TSocketIn::start( )
 
     //Mode of the initiative connection
     if(mode() == M_Initiative) {
-	TSocketOut::connectSSL(TSYS::strParse(addr(),0,"||"), &ctx, &ssl, &bio, 5, certKey(), pKeyPass(), certKeyFile());
+	TSocketOut::connectSSL(TSYS::strParse(addr(),0,"||"), &ctx, &ssl, &bio,
+	    initAssocPrms().size()?vmax(1,s2i(initAssocPrms())):5, certKey(), pKeyPass(), certKeyFile());
 	sockFd = BIO_get_fd(bio, NULL);
 
 	if(addon.size()) BIO_write(bio, addon.data(), addon.size());	//Writing the identification sequence
@@ -374,7 +385,9 @@ void TSocketIn::start( )
 	    // Load certificate
 	    if(SSL_CTX_use_certificate_chain_file(ctx,cfile.c_str()) != 1) {
 		ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
-		throw TError(nodePath().c_str(), "SSL_CTX_use_certificate_chain_file: %s", err);
+		if(certKeyFile().empty() && certKey().empty())
+		    throw TError(nodePath().c_str(), _("Specify a certificate file or directly the certificates and private key with password!"), err);
+		else throw TError(nodePath().c_str(), "SSL_CTX_use_certificate_chain_file: %s.", err);
 	    }
 	    // Load private key
 	    if(SSL_CTX_use_PrivateKey_file(ctx,cfile.c_str(),SSL_FILETYPE_PEM) != 1) {
@@ -408,6 +421,8 @@ void TSocketIn::start( )
 		throw TError(nodePath().c_str(), "BIO_do_accept: %s", err);
 	    }
 	    aRes.unlock();
+
+	    sockFd = BIO_get_fd(abio, NULL);
 	} catch(TError &err) {
 	    //Free context
 	    if(abio)	{ BIO_reset(abio); abio = NULL; }
@@ -419,6 +434,10 @@ void TSocketIn::start( )
 
 	SYS->taskCreate(nodePath('.',true), taskPrior(), Task, this);
     }
+
+    int vl = 1; setsockopt(sockFd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
+    if(MSS()) { vl = MSS(); setsockopt(sockFd, IPPROTO_TCP, TCP_MAXSEG, &vl, sizeof(int)); }
+    if(inBufLen()) { vl = inBufLen()*1024; setsockopt(sockFd, SOL_SOCKET, SO_RCVBUF, &vl, sizeof(int)); }
 
     runSt = true;
 
@@ -449,6 +468,7 @@ void TSocketIn::stop( )
 	if(bio)	{ BIO_free_all(bio); bio = NULL; }
 	if(ctx)	{ SSL_CTX_free(ctx); ctx = NULL; }
     }
+    sockFd = -1;
 
     runSt = false;
 
@@ -564,6 +584,10 @@ void *TSocketIn::Task( void *sock_in )
 
 		// Additional parameterization
 		AutoHD<TSocketOut> tr = s.owner().outAt(outTrId);
+		if(s.initAssocPrms().size()) {
+		    tr.at().setTimings(TSYS::strParse(s.initAssocPrms(),0,"||"));
+		    tr.at().setAttempts(vmax(1,s2i(TSYS::strParse(s.initAssocPrms(),1,"||"))));
+		}
 		tr.at().connAddr = sender;
 		tr.at().ctx = s.ctx;
 		tr.at().ssl = s.ssl;
@@ -616,7 +640,7 @@ void *TSocketIn::ClTask( void *s_inf )
 
     int		rez;
     char	err[255];
-    char	buf[s.s->bufLen()*1024];
+    char	buf[STR_BUF_LEN];
     string	req, answ;
     vector< AutoHD<TProtocolIn> > prot_in;
     SSL		*ssl;
@@ -866,7 +890,10 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "    IDmess - identification message of the initiative connection - the mode 2."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),RWRWR_,"root",STR_ID,2, "tp","dec", "help",TMess::labTaskPrior().c_str());
-	ctrMkNode("fld",opt,-1,"/prm/cfg/bf_ln",_("Input buffer, kbyte"),RWRWR_,"root",STR_ID,1,"tp","dec");
+	ctrMkNode("fld", opt, -1, "/prm/cfg/inBfLn", _("Input buffer size, kB"), startStat()?R_R_R_:RWRWR_, "root", STR_ID, 2,
+	    "tp","dec", "help",_("Set 0 for the system value."));
+	ctrMkNode("fld", opt, -1, "/prm/cfg/MSS", _("Maximum segment size (MSS), B"), startStat()?R_R_R_:RWRWR_, "root", STR_ID, 2,
+	    "tp","dec", "help",_("Set 0 for the system value."));
 	if(!startStat()) {
 	    if(certKey().empty())
 		ctrMkNode("fld",opt,-1,"/prm/cfg/certKeyFile",_("PEM-file of the certificates and private key"),RWRW__,"root",STR_ID,3,
@@ -885,6 +912,10 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	}
 	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveTm",_("Keep alive timeout, seconds"),RWRWR_,"root",STR_ID,2,"tp","dec",
 	    "help",_("Closing the connection after no requests at the specified timeout.\nZero value to disable - do not close ever."));
+	if(mode() == M_Initiative || protocols().empty())
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/initAssocPrms",_("Timeouts, tries"),RWRW__,"root",STR_ID,2,"tp","str",
+		"help",(_("... of the initiative connection and the associated output transports, empty for default and separated by '||'. ")+
+			 ((TTransSock&)owner()).outTimingsHelp(true)+((TTransSock&)owner()).outAttemptsHelp(true)).c_str());
 	return;
     }
     //Process command to page
@@ -901,6 +932,18 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 		tm2s(1e-6*(*iId)->prcTm).c_str(), tm2s(1e-6*(*iId)->prcTmMax).c_str());
 	    opt->childAdd("el")->setText(mess);
 	}
+    }
+    else if(a_path == "/prm/cfg/taskPrior") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(taskPrior()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTaskPrior(s2i(opt->text()));
+    }
+    else if(a_path == "/prm/cfg/inBfLn") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(inBufLen()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setInBufLen(s2i(opt->text()));
+    }
+    else if(a_path == "/prm/cfg/MSS") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(MSS()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMSS(s2i(opt->text()));
     }
     else if(a_path == "/prm/cfg/certKeyFile") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(certKeyFile());
@@ -922,10 +965,6 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(maxForkPerHost()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMaxForkPerHost(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/bf_ln") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(bufLen()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setBufLen(s2i(opt->text()));
-    }
     else if(a_path == "/prm/cfg/keepAliveReqs") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(keepAliveReqs()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setKeepAliveReqs(s2i(opt->text()));
@@ -934,9 +973,9 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(keepAliveTm()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setKeepAliveTm(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/taskPrior") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(taskPrior()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTaskPrior(s2i(opt->text()));
+    else if(a_path == "/prm/cfg/initAssocPrms") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(initAssocPrms());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setInitAssocPrms(opt->text());
     }
     else if(a_path == "/prm/certKeyFileList" && ctrChkNode(opt)) TSYS::ctrListFS(opt, certKeyFile(), "pem;");
     else TTransportIn::cntrCmdProc(opt);
@@ -945,7 +984,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TSocketOut                                   *
 //************************************************
-TSocketOut::TSocketOut( string name, const string &idb, TElem *el ) : TTransportOut(name, idb, el), mAttemts(1)
+TSocketOut::TSocketOut( string name, const string &idb, TElem *el ) : TTransportOut(name, idb, el), mAttemts(1), mMSS(0)
 {
     setAddr("localhost:10045");
     setTimings("10:1", true);
@@ -959,9 +998,13 @@ string TSocketOut::getStatus( )
 
     if(startStat()) {
 	rez += TSYS::strMess(_("To the host '%s'. "), connAddr.c_str());
-	rez += TSYS::strMess(_("Traffic in %s, out %s."), TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str());
+	rez += TSYS::strMess(_("Traffic in %s, out %s. "), TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str());
 	if(mess_lev() == TMess::Debug && respTmMax)
 	    rez += TSYS::strMess(_("Response time %s[%s]. "), tm2s(1e-6*respTm).c_str(), tm2s(1e-6*respTmMax).c_str());
+	int bufSz, MSSsz; socklen_t sz = sizeof(socklen_t), sockFd = BIO_get_fd(conn, NULL);
+	getsockopt(sockFd, SOL_SOCKET, SO_RCVBUF, (void*)&bufSz, &sz);
+	getsockopt(sockFd, IPPROTO_TCP, TCP_MAXSEG, (void*)&MSSsz, &sz);
+	rez += TSYS::strMess(_("Size input buffer %s, MSS %s. "), TSYS::cpct2str(bufSz).c_str(), TSYS::cpct2str(MSSsz).c_str());
     }
 
     return rez;
@@ -997,7 +1040,8 @@ void TSocketOut::load_( )
 	vl = prmNd.attr("CertKeyFile");	if(!vl.empty()) setCertKeyFile(vl);
 	if(prmNd.childGet("CertKey",0,true)) setCertKey(prmNd.childGet("CertKey")->text());
 	vl = prmNd.attr("PKeyPass");	if(!vl.empty()) setPKeyPass(vl);
-	vl = prmNd.attr("TMS");		if(!vl.empty()) setTimings(vl);
+	vl = prmNd.attr("TMS");	if(!vl.empty()) setTimings(vl);
+	vl = prmNd.attr("MSS");	if(!vl.empty()) setMSS(s2i(vl));
     } catch(...) { }
 
     //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
@@ -1013,6 +1057,7 @@ void TSocketOut::save_( )
     else prmNd.childAdd("CertKey")->setText(certKey());
     prmNd.setAttr("PKeyPass", pKeyPass());
     prmNd.setAttr("TMS", timings());
+    prmNd.setAttr("MSS", i2s(MSS()));
     cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TTransportOut::save_();
@@ -1227,6 +1272,10 @@ void TSocketOut::start( int tmCon )
 	try {
 	    connAddr = connectSSL(TSYS::strParse(addr(),0,"||"), &ctx, &ssl, &conn,
 				    tmCon?tmCon:mTmCon, certKey(), pKeyPass(), certKeyFile());
+
+	    int sockFd = BIO_get_fd(conn,NULL);
+	    int vl = 1; setsockopt(sockFd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
+	    if(MSS()) { vl = MSS(); setsockopt(sockFd, IPPROTO_TCP, TCP_MAXSEG, &vl, sizeof(int)); }
 	} catch(TError &err) {
 	    if(logLen()) pushLogMess(TSYS::strMess(_("Error connecting: %s"),err.mess.c_str()));
 	    throw;
@@ -1430,11 +1479,17 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	}
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2, "tp","str", "help",((TTransSock&)owner()).outTimingsHelp().c_str());
 	ctrMkNode("fld",opt,-1,"/prm/cfg/attempts",_("Attempts"),RWRWR_,"root",STR_ID,2, "tp","dec", "help",((TTransSock&)owner()).outAttemptsHelp().c_str());
+	ctrMkNode("fld",opt,-1,"/prm/cfg/MSS",_("Maximum segment size (MSS), B"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,
+	    "tp","dec","help",_("Set 0 for the system value."));
 	return;
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/certKeyFile") {
+    if(a_path == "/prm/cfg/MSS") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(MSS()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMSS(s2i(opt->text()));
+    }
+    else if(a_path == "/prm/cfg/certKeyFile") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(certKeyFile());
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setCertKeyFile(opt->text());
     }

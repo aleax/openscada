@@ -87,7 +87,8 @@ class TSocketIn: public TTransportIn
 
 	int lastConn( )		{ return connTm; }
 	unsigned mode( )	{ return mMode; }
-	unsigned bufLen( )	{ return mBufLen; }
+	unsigned inBufLen( )	{ return mInBufLen; }
+	unsigned MSS( )		{ return mMSS; }
 	unsigned maxFork( )	{ return mMaxFork; }
 	unsigned maxForkPerHost( ) { return mMaxForkPerHost; }
 	unsigned keepAliveReqs( )  { return mKeepAliveReqs; }
@@ -96,8 +97,10 @@ class TSocketIn: public TTransportIn
 	string certKeyFile( )	{ return mCertKeyFile; }
 	string certKey( )	{ return mCertKey; }
 	string pKeyPass( )	{ return mKeyPass; }
+	string initAssocPrms( )	{ return mInitAssocPrms; }
 
-	void setBufLen( unsigned vl )		{ mBufLen = vmax(1,vmin(1024,vl)); modif(); }
+	void setInBufLen( unsigned vl )		{ mInBufLen = vl ? vmax(4,vmin(10240,vl)) : 0; modif(); }
+	void setMSS( unsigned vl )		{ mMSS = vl ? vmax(100,vmin(65535,vl)) : 0; modif(); }
 	void setMaxFork( unsigned vl )		{ mMaxFork = vmax(1,vmin(1000,vl)); modif(); }
 	void setMaxForkPerHost( unsigned vl )	{ mMaxForkPerHost = vmin(1000,vl); modif(); }
 	void setKeepAliveReqs( unsigned vl )	{ mKeepAliveReqs = vl; modif(); }
@@ -106,6 +109,7 @@ class TSocketIn: public TTransportIn
 	void setCertKeyFile( const string &val ){ mCertKeyFile = val; modif(); }
 	void setCertKey( const string &val )	{ mCertKey = val; modif(); }
 	void setPKeyPass( const string &val )	{ mKeyPass = val; modif(); }
+	void setInitAssocPrms( const string &tms ) { mInitAssocPrms = tms; modif(); }
 
 	void start( );
 	void stop( );
@@ -146,15 +150,16 @@ class TSocketIn: public TTransportIn
 
 	unsigned short	mMode,			//Mode of SSL:
 						//  0 - ordinal, 2 - initiative connection
+			mInBufLen,		//Input buffer length
+			mMSS,			//MSS
 			mMaxFork,		//Maximum forking (opened SSL)
 			mMaxForkPerHost,	//Maximum forking (opened sockets), per host
-			mBufLen,		//Input buffer length
 			mKeepAliveReqs,		//KeepAlive connections
 			mKeepAliveTm;		//KeepAlive timeout
 	int		mTaskPrior;		//Requests processing task prioritet
 	string		mCertKeyFile, mCertKey,	//SSL certificate file and PEM-text
 			mKeyPass,		//SSL private key password
-			addon;
+			addon, mInitAssocPrms;
 
 	bool		clFree;			//Clients stopped
 	//vector<pthread_t>	clId;		//Client's pids
@@ -186,12 +191,14 @@ class TSocketOut: public TTransportOut
 	string pKeyPass( )	{ return mKeyPass; }
 	string timings( )	{ return mTimings; }
 	unsigned short attempts( )	{ return mAttemts; }
+	unsigned MSS( )		{ return mMSS; }
 
 	void setCertKeyFile( const string &val ){ mCertKeyFile = val; modif(); }
 	void setCertKey( const string &val )	{ mCertKey = val; modif(); }
 	void setPKeyPass( const string &val )	{ mKeyPass = val; modif(); }
 	void setTimings( const string &vl, bool isDef = false );
 	void setAttempts( unsigned short vl );
+	void setMSS( unsigned vl )	{ mMSS = vl ? vmax(100,vmin(65535,vl)) : 0; modif(); }
 
 	static string connectSSL( const string &addr, SSL_CTX **ctx, SSL **ssl, BIO **conn,
 	    int tmCon, const string &certKey, const string &pKeyPass, const string &certKeyFile );
@@ -216,6 +223,7 @@ class TSocketOut: public TTransportOut
 			mKeyPass;		//SSL private key password
 	string		mTimings;
 	unsigned short	mAttemts,
+			mMSS,			//MSS
 			mTmCon,
 			mTmNext;
 
@@ -244,8 +252,8 @@ class TTransSock: public TTypeTransport
 	TTransportOut *Out( const string &name, const string &idb );
 
 	string outAddrHelp( );
-	string outTimingsHelp( );
-	string outAttemptsHelp( );
+	string outTimingsHelp( bool noAdd = false );
+	string outAttemptsHelp( bool noAdd = false );
 
 	string MD5( const string &file );
 

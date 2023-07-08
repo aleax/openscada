@@ -103,6 +103,7 @@ class TSocketIn: public TTransportIn
 	unsigned keepAliveReqs( )	{ return mKeepAliveReqs; }
 	unsigned keepAliveTm( )		{ return mKeepAliveTm; }
 	int taskPrior( )		{ return mTaskPrior; }
+	string initAssocPrms( )		{ return mInitAssocPrms; }
 
 	void setInBufLen( unsigned vl )	{ mInBufLen = vl ? vmax(4,vmin(10240,vl)) : 0; modif(); }
 	void setMSS( unsigned vl )	{ mMSS = vl ? vmax(100,vmin(65535,vl)) : 0; modif(); }
@@ -112,6 +113,7 @@ class TSocketIn: public TTransportIn
 	void setKeepAliveReqs( unsigned vl )	{ mKeepAliveReqs = vl; modif(); }
 	void setKeepAliveTm( unsigned vl )	{ mKeepAliveTm = vl; modif(); }
 	void setTaskPrior( int vl )	{ mTaskPrior = vmax(-1,vmin(199,vl)); modif(); }
+	void setInitAssocPrms( const string &tms ) { mInitAssocPrms = tms; modif(); }
 
 	void start( );
 	void stop( );
@@ -150,7 +152,7 @@ class TSocketIn: public TTransportIn
 	string		path;			//Path to file socket for UNIX socket
 	string		host;			//Host for TCP/UDP sockets
 	string		port;			//Port for TCP/UDP sockets
-	string		addon;
+	string		addon, mInitAssocPrms;
 
 	unsigned short	mMode,			//Mode of the TCP/UNIX sockets:
 						//  0 - force disconnection, 1 - no disconnection, 2 - initiative connection
@@ -256,8 +258,8 @@ class TTransSock: public TTypeTransport
 	TTransportOut *Out( const string &name, const string &idb );
 
 	string outAddrHelp( );
-	string outTimingsHelp( );
-	string outAttemptsHelp( );
+	string outTimingsHelp( bool noAdd = false );
+	string outAttemptsHelp( bool noAdd = false );
 
     protected:
 	void load_( );

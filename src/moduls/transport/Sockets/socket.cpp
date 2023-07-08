@@ -61,7 +61,7 @@
 #define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.5.9"
+#define MOD_VER		"4.6.0"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov(2014)")
 #define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -156,19 +156,19 @@ string TTransSock::outAddrHelp( )
 	"    name - UNIX-socket's file name.")) + "\n\n|| " + outTimingsHelp() + "\n\n|| " + outAttemptsHelp();
 }
 
-string TTransSock::outTimingsHelp( )
+string TTransSock::outTimingsHelp( bool noAdd )
 {
-    return _("Connection timings in the format \"{conn}:{next}[:{rep}]\", where:\n"
+    return string(_("Connection timings in the format \"{conn}:{next}[:{rep}]\", where:\n"
 	"    conn - maximum time of waiting the connection, in seconds;\n"
 	"    next - maximum time of waiting for continue the response, in seconds;\n"
-	"    rep  - minimum time of waiting the request repeating, in seconds.\n"
-	"Can be prioritatile specified in the address field as the second global argument, as such \"localhost:123||5:1\".");
+	"    rep  - minimum time of waiting the request repeating, in seconds.\n")) +
+	(noAdd?"":_("Can be prioritatile specified in the address field as the second global argument, as such \"localhost:123||5:1\"."));
 }
 
-string TTransSock::outAttemptsHelp( )
+string TTransSock::outAttemptsHelp( bool noAdd )
 {
-    return _("Attempts of the requesting both for this transport and protocol, for full requests.\n"
-	"Can be prioritatile specified in the address field as the third global argument, as such \"localhost:123||5:1||3\".");
+    return string(_("Attempts of the requesting both for this transport and protocol, for full requests.\n")) +
+	(noAdd?"":_("Can be prioritatile specified in the address field as the third global argument, as such \"localhost:123||5:1||3\"."));
 }
 
 //************************************************
@@ -230,6 +230,7 @@ void TSocketIn::load_( )
 	vl = prmNd.attr("KeepAliveReqs");	if(!vl.empty()) setKeepAliveReqs(s2i(vl));
 	vl = prmNd.attr("KeepAliveTm");	if(!vl.empty()) setKeepAliveTm(s2i(vl));
 	vl = prmNd.attr("TaskPrior");	if(!vl.empty()) setTaskPrior(s2i(vl));
+	vl = prmNd.attr("InitAssocPrms");	if(!vl.empty()) setInitAssocPrms(vl);
     } catch(...) { }
 
     //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
@@ -246,6 +247,7 @@ void TSocketIn::save_( )
     prmNd.setAttr("KeepAliveReqs", i2s(keepAliveReqs()));
     prmNd.setAttr("KeepAliveTm", i2s(keepAliveTm()));
     prmNd.setAttr("TaskPrior", i2s(taskPrior()));
+    prmNd.setAttr("InitAssocPrms", initAssocPrms());
     cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TTransportIn::save_();
@@ -310,6 +312,7 @@ void TSocketIn::start( )
 		if(type == S_TCP) {
 		    if((sockFd=socket((((sockaddr*)&addrs[iA])->sa_family==AF_INET6)?PF_INET6:PF_INET,SOCK_STREAM,0)) == -1)
 			throw TError(nodePath().c_str(), _("Error creating the %s socket: '%s (%d)'!"), s_type.c_str(), strerror(errno), errno);
+
 		    int vl = 1; setsockopt(sockFd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
 		    if(MSS()) { vl = MSS(); setsockopt(sockFd, IPPROTO_TCP, TCP_MAXSEG, &vl, sizeof(int)); }
 		    if(inBufLen()) { vl = inBufLen()*1024; setsockopt(sockFd, SOL_SOCKET, SO_RCVBUF, &vl, sizeof(int)); }
@@ -328,7 +331,7 @@ void TSocketIn::start( )
 			    struct timeval tv;
 			    socklen_t slen = sizeof(rez);
 			    fd_set fdset;
-			    tv.tv_sec = 5; tv.tv_usec = 0;
+			    tv.tv_sec = initAssocPrms().size() ? vmax(1,s2i(initAssocPrms())) : 5; tv.tv_usec = 0;
 			    FD_ZERO(&fdset); FD_SET(sockFd, &fdset);
 			    if((rez=select(sockFd+1,NULL,&fdset,NULL,&tv)) > 0 && !getsockopt(sockFd,SOL_SOCKET,SO_ERROR,&rez,&slen) && !rez)
 				rez = 0;
@@ -632,7 +635,13 @@ void *TSocketIn::Task( void *sock_in )
 		//Creating an output transport of representing the client connection
 		if(sock->protocols().empty()) {
 		    string outTrId = sock->associateTrO((S_NM_SOCKET ":")+i2s(sockFdCL));
-		    ((AutoHD<TSocketOut>)sock->owner().outAt(outTrId)).at().connAddr = sender;
+		    // Additional parameterization
+		    AutoHD<TSocketOut> tr = sock->owner().outAt(outTrId);
+		    if(sock->initAssocPrms().size()) {
+			tr.at().setTimings(TSYS::strParse(sock->initAssocPrms(),0,"||"));
+			tr.at().setAttempts(vmax(1,s2i(TSYS::strParse(sock->initAssocPrms(),1,"||"))));
+		    }
+		    tr.at().connAddr = sender;
 
 		    sock->connNumb++;
 		    sock->connTm = time(NULL);
@@ -1033,6 +1042,10 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    }
 	    ctrMkNode("fld", opt, -1, "/prm/cfg/keepAliveTm", _("Keep alive timeout, seconds"), RWRWR_, "root", STR_ID, 2, "tp","dec",
 		"help",_("Closing the connection after no requests at the specified timeout.\nZero value to disable - do not close ever."));
+	    if(type == S_TCP && (mode() == M_Initiative || protocols().empty()))
+		ctrMkNode("fld",opt,-1,"/prm/cfg/initAssocPrms",_("Timeouts, tries"),RWRW__,"root",STR_ID,2,"tp","str",
+		    "help",(_("... of the initiative connection and the associated output transports, empty for default and separated by '||'. ")+
+			    ((TTransSock&)owner()).outTimingsHelp(true)+((TTransSock&)owner()).outAttemptsHelp(true)).c_str());
 	}
 	return;
     }
@@ -1050,6 +1063,10 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 		    tm2s(1e-6*iId->second->prcTm).c_str(), tm2s(1e-6*iId->second->prcTmMax).c_str());
 	    opt->childAdd("el")->setText(mess);
 	}
+    }
+    else if(a_path == "/prm/cfg/taskPrior") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(taskPrior()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTaskPrior(s2i(opt->text()));
     }
     else if(a_path == "/prm/cfg/inBfLn") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(inBufLen()));
@@ -1079,9 +1096,9 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(keepAliveTm()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setKeepAliveTm(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/taskPrior") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(taskPrior()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTaskPrior(s2i(opt->text()));
+    else if(a_path == "/prm/cfg/initAssocPrms") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(initAssocPrms());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setInitAssocPrms(opt->text());
     }
     else TTransportIn::cntrCmdProc(opt);
 }
@@ -1271,6 +1288,7 @@ void TSocketOut::start( int itmCon )
 		    if(type == S_TCP) {
 			if((sockFd=socket((((sockaddr*)&addrs[iA])->sa_family==AF_INET6)?PF_INET6:PF_INET,SOCK_STREAM,0)) == -1)
 			    throw TError(nodePath().c_str(), _("Error creating the %s socket: '%s (%d)'!"), S_NM_TCP, strerror(errno), errno);
+
 			int vl = 1; setsockopt(sockFd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
 			if(MSS()) { vl = MSS(); setsockopt(sockFd, IPPROTO_TCP, TCP_MAXSEG, &vl, sizeof(int)); }
 		    }
