@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/SSL</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSSL&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/SSL" title="Modules/SSL">Modules/SSL</a> and the translation is 47% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/SSL.html" title="Modules/SSL (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--med">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/SSL.html" title="Модулі/SSL (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSSL&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/SSL" title="Modules/SSL">Modules/SSL</a> and the translation is 24% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/SSL.html" title="Modules/SSL (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--low">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/SSL.html" title="Модулі/SSL (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a> </td>
 <td> SSL
 </td>
-<td> 4.1 </td>
+<td> 4.2 </td>
 <td> GPL2 </td>
 <td> tr_SSL.so </td>
 <td> en,uk,ru,de </td>
@@ -57,16 +57,19 @@
 </ul>
 </div>
 
+<p>On new SSL-versions the "Transports" tab of the module is appended by information of the common-context ciphers for input-server and output-client parts differently, see Figure 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:891px;"><a class="image" href="http://oscada.org/wiki/File:SSL_tr.png"><img class="thumbimage" height="705" src="../../en/files/SSL_tr.png" width="889" /></a>  <div class="thumbcaption">Fig.1. The "Transports" tab with SSL ciphers.</div></div></div></div>
 <h2><span class="mw-headline" id="Input_transports"><span class="mw-headline-number">1</span> Input transports</span></h2>
 <p>Configured and running input transport opens server SSL-socket for the expectation of connection of the clients, besides the initiative connections. SSL-socket is multi-stream, i.e. when the client connects, the client socket and the new thread are created in which the client is served. Server socket in this moment switches to the waiting for the request from the new client. Thus the parallel service of the clients is achieved.
 </p><p>Each input transport is associated with one or several available transport protocols, to which input messages are transmitted. Together with the transport protocols, the mechanism of combining fragmented pieces when sending requests is supported.
 </p><p>Read about the passive acquisition mechanism and initiative connections you can in the corresponding part of the "<a href="../DAQ.html#PassiveAndInitiative" title="Special:MyLanguage/Documents/DAQ">Data acquisition in OpenSCADA</a>" document.
-</p><p>Диалог конфигурации входного SSL-транспорта изображён на рисунке 1.
+</p><p>Configuration dialog of the input SSL-transport is shown in Figure 2.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:892px;"><a class="image" href="http://oscada.org/wiki/File:SSL_in.png"><img class="thumbimage" height="812" src="../../en/files/SSL_in.png" width="890" /></a>  <div class="thumbcaption">Рис.1. Диалог конфигурации входного SSL-транспорта.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:890px;"><a class="image" href="http://oscada.org/wiki/File:SSL_in.png"><img class="thumbimage" height="907" src="../../en/files/SSL_in.png" width="888" /></a>  <div class="thumbcaption">Fig.2. Configuration dialog of the input SSL-transport.</div></div></div></div>
 <p>Using this dialog you can set:
 </p>
-<ul><li> State of the transport, that is: status, "Connect", name of the storage (containing the configuration) and a list with information about the active connections.</li>
+<ul><li> State of the transport, that is: status, "Connect", name of the storage (containing the configuration), a list with information about the active connections and supported ciphers.</li>
 <li> Identifier, name and description of the transport.</li>
 <li> Address of the transport in the format "<b>{addr}:{port}[:{mode}[:{IDmess}]]</b>", where:
 <ul><li> <i>addr</i> — address to open SSL, it must be one of the addresses of the host. Empty or "*" address opens SSL for all interfaces. There may be as the symbolic representation as well as IPv4 "<b>127.0.0.1</b>" or IPv6 "<b>[::1]</b>".</li>
@@ -91,12 +94,12 @@
 <h2><span class="mw-headline" id=".D0.92.D1.8B.D1.85.D0.BE.D0.B4.D0.BD.D1.8B.D0.B5_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.8B"><span class="mw-headline-number">2</span> Выходные транспорты</span></h2>
 <p>Сконфигурированный и запущенный выходной транспорт открывает соединение с указанным сервером. При разрыве соединения выходной транспорт останавливается. Для возобновления соединения транспорт нужно снова запустить, что все протоколы делают автоматически.
 </p><p>The transport supports of direct definition of multiple server addresses and processing of all IP addresses in which the symbolic address is resolved, which allows you to build <a href="../DAQ.html#Redundancy" title="Special:MyLanguage/Documents/DAQ">vertical redundancy</a> directly by the transport that will be automatically connected to the first available server.
-</p><p>Главная вкладка страницы конфигурации выходного SSL-транспорта изображёна на рисунке 2.
+</p><p>Main tab of the configuration page of the output SSL-transport is shown in Figure 3.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:781px;"><a class="image" href="http://oscada.org/wiki/File:SSL_out.png"><img class="thumbimage" height="624" src="../../en/files/SSL_out.png" width="779" /></a>  <div class="thumbcaption">Рис.2. Главная вкладка страницы конфигурации выходного SSL-транспорта.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:891px;"><a class="image" href="http://oscada.org/wiki/File:SSL_out.png"><img class="thumbimage" height="705" src="../../en/files/SSL_out.png" width="889" /></a>  <div class="thumbcaption">Fig.3. Main tab of the configuration page of the output SSL-transport.</div></div></div></div>
 <p>Using this dialog you can set:
 </p>
-<ul><li> State of the transport, that is: status, "Connect" and name of the storage, containing the configuration.</li>
+<ul><li> State of the transport, that is: status, "Connect", name of the storage, containing the configuration, and supported ciphers.</li>
 <li> Identifier, name and description of the transport.</li>
 <li> Address of the transport in the format "<b>{addr}[,{addrN}]:{port}</b>", where:
 <ul><li> <i>addr</i> — address with which the connection is made. There may be as the symbolic representation as well as IPv4 "<b>127.0.0.1</b>" or IPv6 "<b>[::1]</b>".</li>

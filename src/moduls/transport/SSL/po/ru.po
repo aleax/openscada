@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-08 08:49+0300\n"
+"POT-Creation-Date: 2023-07-15 09:39+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -31,6 +31,15 @@ msgstr ""
 
 msgid "Addition parameters"
 msgstr "Дополнительные параметры"
+
+msgid "State"
+msgstr "Состояние"
+
+msgid "Server ciphers"
+msgstr ""
+
+msgid "Client ciphers"
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -101,6 +110,14 @@ msgstr "Время обработки %s[%s]. "
 
 #, c-format
 msgid "Size input buffer %s, MSS %s. "
+msgstr ""
+
+#, c-format
+msgid "Shared ciphers: %s. "
+msgstr ""
+
+#, c-format
+msgid "Client ciphers: %s. "
 msgstr ""
 
 #, c-format
@@ -199,11 +216,11 @@ msgstr "Подключен новый клиент %d из '%s'"
 msgid "The client %d of '%s' disconnected"
 msgstr "Отключен клиент %d из '%s'"
 
-msgid "State"
-msgstr "Состояние"
-
 msgid "Active connections"
 msgstr "Активные подключения"
+
+msgid "Supported ciphers"
+msgstr ""
 
 #, fuzzy
 msgid ""

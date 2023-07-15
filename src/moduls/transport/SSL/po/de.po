@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-08 08:49+0300\n"
+"POT-Creation-Date: 2023-07-15 09:39+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -31,6 +31,15 @@ msgstr ""
 
 msgid "Addition parameters"
 msgstr "Weitere Optionen"
+
+msgid "State"
+msgstr "Staats"
+
+msgid "Server ciphers"
+msgstr "Serverchiffren"
+
+msgid "Client ciphers"
+msgstr "Client-Chiffren"
 
 msgid ""
 "SSL output transport has the address format \"{addr}[,{addrN}]:{port}\", "
@@ -102,6 +111,14 @@ msgid "Size input buffer %s, MSS %s. "
 msgstr "Größe Eingabepuffer %s, MSS %s. "
 
 #, c-format
+msgid "Shared ciphers: %s. "
+msgstr "Gemeinsam genutzte Chiffren: %s. "
+
+#, c-format
+msgid "Client ciphers: %s. "
+msgstr "Client-Chiffren: %s. "
+
+#, c-format
 msgid "Error opening the temporary file '%s': '%s'"
 msgstr "Fehler beim Öffnen der temporären Datei '%s': '%s'"
 
@@ -112,7 +129,9 @@ msgstr "Fehler beim Schreiben der Datei '%s'."
 msgid ""
 "Specify a certificate file or directly the certificates and private key with "
 "password!"
-msgstr "Geben Sie eine Zertifikatsdatei oder direkt die Zertifikate und privaten Schlüssel mit Passwort an!"
+msgstr ""
+"Geben Sie eine Zertifikatsdatei oder direkt die Zertifikate und privaten "
+"Schlüssel mit Passwort an!"
 
 msgid "Connected"
 msgstr "Verbunden"
@@ -198,11 +217,11 @@ msgstr "Ein neuer Kunde %d aus '%s' verbunden"
 msgid "The client %d of '%s' disconnected"
 msgstr "Client %d aus '%s' getrennt"
 
-msgid "State"
-msgstr "Staats"
-
 msgid "Active connections"
 msgstr "Aktive Verbindungen"
+
+msgid "Supported ciphers"
+msgstr "Unterstützte Chiffren"
 
 msgid ""
 "SSL input transport has the address format \"{addr}:{port}[:{mode}[:"

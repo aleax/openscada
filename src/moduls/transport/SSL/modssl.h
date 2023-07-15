@@ -140,7 +140,6 @@ class TSocketIn: public TTransportIn
 
 	//Attributes
 	ResMtx		sockRes;
-	SSL_CTX		*ctx;
 	SSL		*ssl;
 	BIO		*bio, *abio;
 	int		sockFd;			//For the initiative mode
@@ -200,9 +199,9 @@ class TSocketOut: public TTransportOut
 	void setAttempts( unsigned short vl );
 	void setMSS( unsigned vl )	{ mMSS = vl ? vmax(100,vmin(65535,vl)) : 0; modif(); }
 
-	static string connectSSL( const string &addr, SSL_CTX **ctx, SSL **ssl, BIO **conn,
+	static string connectSSL( const string &addr, SSL **ssl, BIO **conn,
 	    int tmCon, const string &certKey, const string &pKeyPass, const string &certKeyFile );
-	static void disconnectSSL( SSL_CTX **ctx, SSL **ssl, BIO **conn );
+	static void disconnectSSL( SSL **ssl, BIO **conn );
 
 	void start( int time = 0 );
 	void stop( );
@@ -227,7 +226,6 @@ class TSocketOut: public TTransportOut
 			mTmCon,
 			mTmNext;
 
-	SSL_CTX		*ctx;
 	SSL		*ssl;
 	BIO		*conn;
 
@@ -257,6 +255,9 @@ class TTransSock: public TTypeTransport
 
 	string MD5( const string &file );
 
+	//Attributes
+	SSL_CTX		*ctxIn, *ctxOut;
+
     protected:
 	void load_( );
 
@@ -264,6 +265,8 @@ class TTransSock: public TTypeTransport
 	//Methods
 	void postEnable( int flag );
 	void preDisable( int flag );
+
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	static unsigned long id_function( );
 	static void locking_function( int mode, int n, const char * file, int line );

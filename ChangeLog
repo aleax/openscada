@@ -1,3 +1,12 @@
+2023-05-15 Roman (stable)
+- !!:Transport.SSL: The SSL context moved to the generic module object separately for input (ctxIn) and output (ctxOut) parts
+	and the ciphers information was appended for:
+    - the generic module object by SSL_CTX_get_ciphers();
+    - input-server transport status for SSL_get_shared_ciphers(), SSL_get_client_ciphers()
+	and SSL_get1_supported_ciphers() or SSL_get_ciphers();
+    - output-client status for SSL_get1_supported_ciphers() or SSL_get_ciphers().
+
+
 2023-07-08 Roman (stable)
 - !!:Transport.{Sockets,SSL}: The input transports appended by a configuration field of properties of
     the initiative connection and the associated output transports 
