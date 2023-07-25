@@ -750,7 +750,9 @@ Where:
 <li> <i>string addr( string vl = "" )</i> — address of the transport, sets the non-empty value <i>vl</i>.</li>
 <li> <i>string writeTo(string sender, string mess)</i> — sends the message <i>mess</i> to the sender <i>sender</i>, as a reply.</li>
 <li> <i>TArrayObj associateTrsList()</i> — associated output transports list to that input one.</li>
-<li> <i>TCntrNodeObj associateTr( string id )</i> — getting the associated transport at that connection <i>id</i>.</li></ul>
+<li> <i>TCntrNodeObj associateTr( string id )</i> — getting the associated transport at that connection <i>id</i>.</li>
+<li> <i>ElTp conPrm( string id, ElTp val = EVAL, string cfg = "" )</i> — common handling the connection time parameter <i>id</i> with setting to the value <i>val</i> at presence; request for configuration parameter of the connection time with registration at the first time from the configuration <i>cfg</i> in the form "{SRC}\n{NAME}\n{HELP}".</li>
+<li> <i>bool setConPrm( string id, ElTp val )</i> — setting the connection time parameter <i>id</i> to the value <i>val</i>, only for compatibility.</li></ul>
 <p>Functions of the output transport object (SYS.Transport["Modul"]["out_Transp"]):
 </p>
 <ul>
@@ -762,8 +764,8 @@ Where:
 <li><i>string addr( string vl = "" )</i> — address of the transport, sets the non-empty value <i>vl</i>.</li>
 <li><i>string timings( string vl = "", isDef = true )</i> — timings of the transport, sets the non-empty value <i>vl</i> and as default one for <i>isDef</i>.</li>
 <li><i>int attempts( int vl = EVAL )</i> — attempts of the transport connection, sets the non-EVAL value <i>vl</i>.</li>
-<li><i>ElTp conPrm( string nm )</i> — getting the connection parameter <i>nm</i>.</li>
-<li><i>bool setConPrm( string nm, ElTp val )</i> — setting the connection parameter <i>nm</i> to the <i>val</i>.</li>
+<li><i>ElTp conPrm( string id, ElTp val = EVAL, string cfg = "" )</i> — common handling the connection time parameter <i>id</i> with setting to the value <i>val</i> at presence; request for configuration parameter of the connection time with registration at the first time from the configuration <i>cfg</i> in the form "{SRC}\n{NAME}\n{HELP}".</li>
+<li><i>bool setConPrm( string id, ElTp val )</i> — setting the connection time parameter <i>id</i> to the value <i>val</i>, only for compatibility.</li>
 <li><i>string messIO( string mess, real timeOut = 0, int inBufLen = -1 );</i> — sends the message <i>mess</i> via the transport with the waiting time of the response <i>timeOut</i> (in seconds) and reads an response (Buffer) in <i>inBufLen</i> byte. In the case of a zero timeout, this time is taken from the settings of the output transport. The <i>timeOut</i> in negative (&lt; -1e-3) disables the transport request/respond mode and allows for independent reading/writing to a buffer IO, with the reading timeout <i>timeOut</i> in absolute. For negative <i>inBufLen</i> the buffer size sets to STR_BUF_LEN(10000) and "0" disables the reading at all.<br />
 <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> If your transport means getting data in parts for a request then for several devices on single bus-transport, use the function into single thread but there is not a way to lock the transport into the user API. Single thread that is any object of controller of DAQ and <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">the module "User protocol"</a> locks the transport internally before self user procedures execution.
 <div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">rez</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">Transport</span><span class="p">.</span><span class="nx">Serial</span><span class="p">.</span><span class="nx">out_ttyUSB0</span><span class="p">.</span><span class="nx">messIO</span><span class="p">(</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">strFromCharCode</span><span class="p">(</span><span class="mh">0x4B</span><span class="p">,</span><span class="mh">0x00</span><span class="p">,</span><span class="mh">0x37</span><span class="p">,</span><span class="mh">0x40</span><span class="p">),</span><span class="mf">0.2</span><span class="p">);</span>

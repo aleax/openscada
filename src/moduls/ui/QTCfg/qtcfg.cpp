@@ -2954,7 +2954,7 @@ void ConfApp::checkBoxStChange( int stat )
 
 	//Check block element
 	if(path[0] == 'b') {
-	    SYS->ctrId(root,TSYS::strDecode(path.substr(1),TSYS::PathEl) )->setText(val);
+	    SYS->ctrId(root,TSYS::strDecode(path.substr(1),TSYS::PathEl))->setText(val);
 	    return;
 	}
 	else {

@@ -1,4 +1,32 @@
 2023-07-25 Roman (stable)
+- !!!!:Transport.*,Protocol.SelfSystem: Refactored and unified in the additional parameters management and expanded in using
+	the connection time parameters for registering configuration parameters of external sources like to protocols:
+    - the modules version of the Transport subsystem increased up to 26;
+    - the container configuration field "A_PRMS" of the additional parameters moved to the core library from the modules;
+    - appended by functions TTransportS::{prm,cntrCmdPrm}(), {TTransportIn,TTransportOut}::prm()
+	with common implementation the additional parameters;
+    - conPrm() expanded by support the configuration parameters of external sources like to protocols
+	and it extended to the input part, also as for the User API;
+    - conPrm() appended by an argument of the default value and what used in all transport modules;
+    - clearConPrm() expanded by clearing single parameter and only from external sources;
+    - setConPrm() was removed after implementing this function in conPrm() and some modules was updated for that:
+	DAQ.AMRDevs, Protocol.SelfSystem, 
+    - Protocol.SelfSystem is the first protocol who is used now the configuration parameters in transport;
+    - the output transports appended by a link to an input transport, who created the output one
+	and it used for holding here the configuration parameters of external sources;
+    - all configuration of the associated output transports are set hidden;
+    - control of the additional parameters moved in own tab "Additional (aprm)" with a function of reseting their values;
+    - marking the input and output transports as modified set only at the configuration fields real change.
+- Protocol.SelfSystem: Due to using the configuration parameters in transport, it appended by the 100x timeout
+    to the common one for closing lost authentications and the timeout default value decreased to 1 minute.
+- !!:FIX:Transport.SSL: Fixed the crash at the ciphers requesting in the status for once created and not connected
+	or wrong connected output transports.
+    The input default address changed to "*:10045".
+- Transport.Serial: The modem additional parameters moved to the separated additional parameters' tab.
+- Transport.Sockets: The input default address changed to "*:10005".
+
+
+2023-07-25 Roman (stable)
 - FIX: LibsDB.vcaBase: wlb_Main.storeHouse: Guaranteed in filling the report dialogs
     by generating the opening events from the procedure.
 

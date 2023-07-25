@@ -197,7 +197,7 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 
 			if((resp_len=trsO[iT].at().messIO(mbap.data(),mbap.size(),buf,sizeof(buf))) >= 4)
 			{
-			    trsO[iT].at().setConPrm("M_PLC", (int)TSYS::i32_BE(*(uint32_t*)buf));
+			    trsO[iT].at().conPrm("M_PLC", (int)TSYS::i32_BE(*(uint32_t*)buf));
 			    trsO[iT].at().setDscr(TSYS::strMess(_("Connection from PLC Kontar %xh."),(int)TSYS::i32_BE(*(uint32_t*)buf)));
 			    if(resp_len >= 13 && (uint8_t)buf[4] == 0xC0)
 			    {

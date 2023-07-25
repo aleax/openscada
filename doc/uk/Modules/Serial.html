@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/Serial</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSerial&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Serial" title="Modules/Serial">Modules/Serial</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Serial.html" title="Modules/Serial (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/Serial.html" title="Модули/Serial (97% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSerial&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Serial" title="Modules/Serial">Modules/Serial</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Serial.html" title="Modules/Serial (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--high" href="../../ru/Modules/Serial.html" title="Модули/Serial (79% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> </td>
 <td> Послідовні інтерфейси
 </td>
-<td> 2.6 </td>
+<td> 2.7 </td>
 <td> GPL2 </td>
 <td> tr_Serial.so </td>
 <td> en,uk,ru,de </td>
@@ -63,10 +63,9 @@
 
 <h2><span class="mw-headline" id=".D0.92.D1.85.D1.96.D0.B4.D0.BD.D1.96_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D0.B8"><span class="mw-headline-number">1</span> Вхідні транспорти</span></h2>
 <p>Сконфігурований та запущений вхідний транспорт відкриває порт послідовного інтерфейсу для очікування запитів клієнтів. Кожний вхідний інтерфейс обов'язково пов'язується з одним із доступних транспортних протоколів, до якого передаються вхідні повідомлення.
-</p><p>Діалог конфігурації вхідного послідовного інтерфейсу зображено на рисунку 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:680px;"><a class="image" href="http://oscada.org/wiki/File:Serial_in_uk.png"><img class="thumbimage" height="619" src="../files/Serial_in_uk.png" width="678" /></a>  <div class="thumbcaption">Рис.1. Діалог конфігурації вхідного послідовного інтерфейсу.</div></div></div></div>
-<p>За допомогою цього діалогу можна встановити:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:791px;"><a class="image" href="http://oscada.org/wiki/File:Serial_in_uk.png"><img class="thumbimage" height="1150" src="../files/Serial_in_uk.png" width="789" /></a>  <div class="thumbcaption">Рис.1. Загальні діалоги конфігурації вхідного послідовного інтерфейсу.</div></div></div></div>
+<p>За допомогою основного діалогу можна встановити:
 </p>
 <ul><li> Стан транспорту, а саме: статус, "Підключення" та ім'я БД, яка містить конфігурацію.</li>
 <li> Ідентифікатор, ім'я та опис транспорту.</li>
@@ -84,19 +83,16 @@
 <li> "[-]RS485" — використовувати RS-485 режим, за посередництвом TIOCSRS485.</li></ul></li>
 <li> <i>mdm</i> — режим модему, очікування 'RING'.</li></ul></li>
 <li> Вибір транспортних протоколів.</li>
-<li> Стан "Підключення", у який переводити транспорт при завантажені.</li>
-<li> Інтервали часу інтерфейсу у форматі рядка: "<b>{symbol}:{frm}[::{rtsDelay1}:{rtsDelay2}]</b>", де:
+<li> Стан "Підключення", у який переводити транспорт при завантажені. </li></ul>
+<p>За допомогою додаткового діалогу можна встановити:
+</p>
+<ul><li> Інтервали часу інтерфейсу у форматі рядка: "<b>{symbol}:{frm}[::{rtsDelay1}:{rtsDelay2}]</b>", де:
 <ul><li> <i>symbol</i> — час символу у мілісекундах, використовується для контролю факту закінчення фрейму;</li>
 <li> <i>frm</i> — максимальний час фрейму у мілісекундах, використовується для обмеження максимального розміру пакету запиту — фрейму;</li>
 <li> <i>rtsDelay1</i> — затримка між включенням передавача сигналом RTS та початком передачі, у мілісекундах;</li>
 <li> <i>rtsDelay2</i> — затримка між закінченням передачі та відключенням передавача сигналом RTS, у мілісекундах.</li></ul></li>
-<li> Пріоритет задачі вхідного потоку.</li></ul>
-<p>Транспорт підтримує можливість роботи у режимі модему. Цей режим включається п'ятим параметром адреси та передбачає очікування дзвінка від віддаленого модему (запит "RING"), відповіді на дзвінок (команда "ATA") та наступної передачі запитів від віддаленої станції до транспортного протоколу. Відключення сеансу зв'язку здійснюється ініціатором з'єднання та призводить до перепідключення модему приймача на очікування нових дзвінків.
-</p><p>Для налаштування модему вхідного транспорту передбачено спеціальну вкладку "Модем" (рис.2).
-</p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:664px;"><a class="image" href="http://oscada.org/wiki/File:Serial_in_mod_uk.png"><img class="thumbimage" height="483" src="../files/Serial_in_mod_uk.png" width="662" /></a>  <div class="thumbcaption">Рис.2. Вкладка "Модем" конфігурації модему вхідного послідовного інтерфейсу.</div></div></div></div>
-<p>За допомогою цього діалогу можна встановити наступні властивості роботи з модемом:
-</p>
+<li> Пріоритет задачі вхідного потоку.</li>
+<li> [MODEM] Параметри модему. Цей режим включається п'ятим параметром адреси та передбачає очікування дзвінка від віддаленого модему (запит "RING"), відповіді на дзвінок (команда "ATA") та наступної передачі запитів від віддаленої станції до транспортного протоколу. Відключення сеансу зв'язку здійснюється ініціатором з'єднання та призводить до перепідключення модему приймача на очікування нових дзвінків.
 <ul><li> Час очікування (таймаут) модему на запит, у секундах.</li>
 <li> Витримка часу перед ініціалізацією модему, в секундах.</li>
 <li> Витримка часу після ініціалізації модема, в секундах.</li>
@@ -105,13 +101,14 @@
 <li> Рядок результату ініціалізації модему (зазвичай "OK"), яким відповідає модем на ініціалізацію та якого треба очікувати.</li>
 <li> Запит дзвінка (зазвичай "RING"), який надсилає модем у випадку надходження вихідного виклику.</li>
 <li> Відповідь на дзвоник (зазвичай "ATA"), який надсилається модему для відповіді на дзвінок.</li>
-<li> Рядок результату на відповідь на дзвінок (зазвичай "CONNECT"), яким відповідає модем на команду відповіді та яку треба очікувати.</li></ul>
+<li> Рядок результату на відповідь на дзвінок (зазвичай "CONNECT"), яким відповідає модем на команду відповіді та яку треба очікувати.</li></ul></li>
+<li> Специфічні до протоколу користувацькі параметри.</li>
+<li> Скинути усі додаткові параметри до типових значень та очистити специфічні до протоколу користувацькі параметри.</li></ul>
 <h2><span class="mw-headline" id=".D0.92.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D1.96_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D0.B8"><span class="mw-headline-number">2</span> Вихідні транспорти</span></h2>
 <p>Сконфігурований та виконуваний вихідний транспорт відкриває порт послідовного інтерфейсу для відправки запитів через нього.
-</p><p>Головна вкладка сторінки конфігурації вихідного послідовного інтерфейсу зображена на рисунку 3.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:680px;"><a class="image" href="http://oscada.org/wiki/File:Serial_out_uk.png"><img class="thumbimage" height="581" src="../files/Serial_out_uk.png" width="678" /></a>  <div class="thumbcaption">Рис.3. Головна вкладка сторінки конфігурації вихідного послідовного інтерфейсі.</div></div></div></div>
-<p>За допомогою цього діалогу можна встановити:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:791px;"><a class="image" href="http://oscada.org/wiki/File:Serial_out_uk.png"><img class="thumbimage" height="1275" src="../files/Serial_out_uk.png" width="789" /></a>  <div class="thumbcaption">Рис.2. Загальні діалоги конфігурації вихідного послідовного інтерфейсу.</div></div></div></div>
+<p>За допомогою основного діалогу можна встановити:
 </p>
 <ul><li> Стан транспорту, а саме: статус, "Підключення" та ім'я БД, яка містить конфігурацію.</li>
 <li> Ідентифікатор, ім'я та опис транспорту.</li>
@@ -127,8 +124,10 @@
 <li> "rtsne" — використання RTS сигналу для передачі(false) без перевірки на луну, для сирого RS-485;</li>
 <li> "rts1ne" — використання RTS сигналу для передачі(true) без перевірки на луну, для сирого RS-485;</li>
 <li> "[-]RS485" — використовувати RS-485 режим, за посередництвом TIOCSRS485.</li></ul></li>
-<li> <i>modTel</i> — телефон модему, присутність цього поля перемикає транспорт на роботу у режимі модему.</li></ul></li>
-<li> Інтервали часу інтерфейсу у форматі рядка: "<b>{conn}:{symbol}[-{NextReqMult}][:{KeepAliveTm}[:{rtsDelay1}:{rtsDelay2}]]</b>", де:
+<li> <i>modTel</i> — телефон модему, присутність цього поля перемикає транспорт на роботу у режимі модему.</li></ul></li></ul>
+<p>За допомогою додаткового діалогу можна встановити:
+</p>
+<ul><li> Інтервали часу інтерфейсу у форматі рядка: "<b>{conn}:{symbol}[-{NextReqMult}][:{KeepAliveTm}[:{rtsDelay1}:{rtsDelay2}]]</b>", де:
 <ul><li> <i>conn</i> — максимальний час очікування відповіді підключення, у мілісекундах — тобто відповіді від віддаленого пристрою;</li>
 <li> <i>symbol</i> — максимальний час одного символу, використовується для виявлення закінчення фрейму та таймауту наступного запиту, у мілісекундах;</li>
 <li> <i>NextReqMult</i> — множник часу наступного запиту до часу символу <i>symbol</i>, 4 по замовченню;</li>
@@ -136,13 +135,8 @@
 <li> <i>rtsDelay1</i> — затримка між включенням передавача сигналом RTS та початком передачі, у мілісекундах;</li>
 <li> <i>rtsDelay2</i> — затримка між закінченням передачі та відключенням передавача сигналом RTS, у мілісекундах.</li></ul></li></ul>
 <dl><dd> Може бути пріоритетно визначено другим глобальним аргументом поля адреси, на кшталт "<b>/dev/rfcomm0:9600||1000:40-20</b>".</dd></dl>
-<ul><li> Не відключати при обробці. Інколи закриття відкритого пристрою може бути руйнівним, наприклад, на ПЛК LP від ICP-DAS, та Ви можете попередити це цією опцією.</li></ul>
-<p>Транспорт підтримує можливість роботи у режимі модему. Цей режим включається наявністю п'ятого параметру адреси та передбачає здійснення дзвінка за телефоном, вказаним цим параметром, на момент запуску транспорту. Після встановлення зв'язку з віддаленим модемом всі запити передачі спрямовуються станції за віддаленим модемом. Відключення сеансу зв'язку, із зупинкою транспорту, здійснюється за таймаутом активності.
-</p><p>Для налаштування модему вихідного транспорту передбачено спеціальну вкладку "Модем" (рис.4).
-</p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:671px;"><a class="image" href="http://oscada.org/wiki/File:Serial_out_mod_uk.png"><img class="thumbimage" height="621" src="../files/Serial_out_mod_uk.png" width="669" /></a>  <div class="thumbcaption">Рис.4. Вкладка "Модем" конфігурації модему вихідного послідовного інтерфейсу.</div></div></div></div>
-<p>За допомогою цього діалогу можна встановити наступні властивості роботи з модемом:
-</p>
+<ul><li> Не відключати при обробці. Інколи закриття відкритого пристрою може бути руйнівним, наприклад, на ПЛК LP від ICP-DAS, та Ви можете попередити це цією опцією.</li>
+<li> [MODEM] Параметри модему. Цей режим включається наявністю п'ятого параметру адреси та передбачає здійснення дзвінка за телефоном, вказаним цим параметром, на момент запуску транспорту. Після встановлення зв'язку з віддаленим модемом всі запити передачі спрямовуються станції за віддаленим модемом. Відключення сеансу зв'язку, із зупинкою транспорту, здійснюється за таймаутом активності.
 <ul><li> Час очікування (таймаут) модема на запити, в секундах.</li>
 <li> Час життя підключення, в секундах. Якщо протягом цього часу буде відсутня передача даних через транспорт, то підключення буде розірвано.</li>
 <li> Витримка часу перед ініціалізацією модема, в секундах.</li>
@@ -157,7 +151,9 @@
 <li> Рядок результату відсутності гудка лінії (зазвичай "NO DIALTONE").</li>
 <li> Рядок виходу з режиму даних (зазвичай "+++") та використовується "Час перед ініціалізацією модему", після неї.</li>
 <li> Команда повісити трубку (зазвичай "+++ATH"). Ця команда викликається завжди, коли потрібно розірвати підключення.</li>
-<li> Рядок результату команди повісити трубку (зазвичай "OK"), яким відповідає модем на команду та який треба очікувати.</li></ul>
+<li> Рядок результату команди повісити трубку (зазвичай "OK"), яким відповідає модем на команду та який треба очікувати.</li></ul></li>
+<li> Специфічні до протоколу користувацькі параметри.</li>
+<li> Скинути усі додаткові параметри до типових значень та очистити специфічні до протоколу користувацькі параметри.</li></ul>
 <p>Транспорт може працювати з апаратною шиною I2С, якщо у якості пристрою обрати "/dev/i2c-{N}" та шина дозволить встановити адресу підлеглого пристрою командою I2C_SLAVE, із <b>першого байту запиту</b>. Швидкість та формат не відіграють ролі в цьому режимі. Із таймаутів тут фактично працює тільки час символу і переважно для розрахунку очікування повтору запиту.
 </p>
 <h2><span class="mw-headline" id="API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">3</span> API користувацького програмування</span></h2>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-15 09:39+0300\n"
+"POT-Creation-Date: 2023-07-23 15:38+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -28,9 +28,6 @@ msgid ""
 msgstr ""
 "Stellt Transport basierend auf der Secure-Sockets-Schicht bereit. Abhängig "
 "von der Bibliotheksversion wird OpenSSL verwendet und SSL-TLS unterstützt."
-
-msgid "Addition parameters"
-msgstr "Weitere Optionen"
 
 msgid "State"
 msgstr "Staats"
@@ -96,7 +93,8 @@ msgstr "Verbindungsfehler: "
 
 #, c-format
 msgid "Connections %d, opened %d, last %s, closed by the limit %d. "
-msgstr "Verbindungen %d, geöffnet %d, zuletzt %s, geschlossen durch das Limit %d. "
+msgstr ""
+"Verbindungen %d, geöffnet %d, zuletzt %s, geschlossen durch das Limit %d. "
 
 #, c-format
 msgid "Traffic in %s, out %s. "
@@ -423,3 +421,5 @@ msgstr "Zeitabstände"
 msgid "Attempts"
 msgstr "Versuche"
 
+#~ msgid "Addition parameters"
+#~ msgstr "Weitere Optionen"

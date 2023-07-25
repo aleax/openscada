@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-15 09:39+0300\n"
+"POT-Creation-Date: 2023-07-23 15:38+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,9 +24,6 @@ msgid "Roman Savochenko"
 msgstr ""
 
 msgid "Provides transport based on the secure sockets' layer. OpenSSL is used and supported SSL-TLS depending on the library version."
-msgstr ""
-
-msgid "Addition parameters"
 msgstr ""
 
 msgid "State"

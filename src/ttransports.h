@@ -21,10 +21,12 @@
 #ifndef TTRANSPORTS_H
 #define TTRANSPORTS_H
 
-#define STR_VER		25		//TransportS type modules version
+#define STR_VER		26		//TransportS type modules version
 #define STR_ID		"Transport"
 #define STR_IN_PREF	"in_"
 #define STR_OUT_PREF	"out_"
+#define STR_A_PRM	"prms"
+#define STR_A_PRM_CFGP	"CFG:"
 
 #include <string>
 
@@ -61,7 +63,9 @@ class TTransportIn : public TCntrNode, public TConfig
 	string	protocols( )	{ return cfg("PROT").getS(); }
 	virtual unsigned keepAliveReqs( )	{ return 0; }
 	virtual unsigned keepAliveTm( )		{ return 0; }
-	virtual	string getStatus( );
+	TVariant prm( const string &id, const TVariant &val = TVariant(), bool toWr = false );
+	TVariant conPrm( const string &id, const TVariant &val = TVariant(), const string &cfg = "" );
+	virtual string getStatus( );
 
 	bool toStart( )		{ return mStart; }
 	bool startStat( ) const	{ return runSt; }
@@ -74,6 +78,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	void setDscr( const string &idscr )	{ cfg("DESCRIPT").setS(idscr); }
 	void setAddr( const string &addr )	{ cfg("ADDR").setS(addr); }
 	void setProtocols( const string &prt )	{ cfg("PROT").setS(prt); }
+	void clearConPrm( const string &id = "" );
 	void setToStart( bool val )		{ mStart = val; modif(); }
 
 	void setDB( const string &vl, bool qTop = false ) { setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
@@ -133,6 +138,8 @@ class TTransportIn : public TCntrNode, public TConfig
 	ResMtx	mLogRes;
 	vector<AutoHD<TTransportOut> >	mAssociateTrO;
 
+	map<string, TVariant>	mConPrms;
+
 	// IO log
 	int		mLogLen, mLogItLim, mLogLstDt, mLogTp, mLogFHD;
 	time_t		mLogLstDtTm;
@@ -144,6 +151,8 @@ class TTransportIn : public TCntrNode, public TConfig
 //************************************************
 class TTransportOut : public TCntrNode, public TConfig
 {
+    friend class TTransportIn;
+
     public:
 	//Methods
 	TTransportOut( const string &id, const string &db, TElem *el );
@@ -160,7 +169,8 @@ class TTransportOut : public TCntrNode, public TConfig
 	string	addr( ) const		{ return cfg("ADDR").getS(); }
 	virtual	string timings( )	{ return ""; }
 	virtual	unsigned short attempts( ) { return 2; }
-	TVariant conPrm( const string &nm );
+	TVariant prm( const string &id, const TVariant &val = TVariant(), bool toWr = false );
+	TVariant conPrm( const string &id, const TVariant &val = TVariant(), const string &cfg = "" );
 	bool	startStat( ) const	{ return runSt; }
 	time_t	startTm( )		{ return mStartTm; }
 	int64_t	lstReqTm( )		{ return mLstReqTm; }
@@ -175,8 +185,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	void setAddr( const string &addr )		{ cfg("ADDR").setS(addr); }
 	virtual void setTimings( const string &vl, bool isDef = false )	{ }
 	virtual void setAttempts( unsigned short vl )	{ }
-	void setConPrm( const string &nm, const TVariant &vl );
-	void clearConPrm( );
+	void clearConPrm( const string &id = "" );
 
 	void setDB( const string &vl, bool qTop = false ) { setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 
@@ -230,6 +239,8 @@ class TTransportOut : public TCntrNode, public TConfig
 	time_t	mStartTm;
 	map<string, TVariant>	mConPrms;
 	ResMtx	mReqRes, mLogRes;
+
+	AutoHD<TTransportIn>	mAssociateSrcO;
 
 	// IO log
 	int		mLogLen, mLogItLim, mLogLstDt, mLogTp, mLogFHD;
@@ -358,6 +369,9 @@ class TTransportS : public TSubSYS
 	TElem &outEl( ) 		{ return elOut; }
 
 	AutoHD<TTypeTransport> at( const string &iid ) const	{ return modAt(iid); }
+
+	static TVariant prm( string &cnt, const string &id, const TVariant &val = TVariant(), bool toWr = false );
+	static string cntrCmdPrm( XMLNode *opt, const string &path, const string &cnt );
 
     protected:
 	void load_( );

@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/Program manual</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Program_manual.html" title="Документы/Руководство по программе (93% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Program_manual.html" title="Документы/Руководство по программе (92% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
@@ -286,6 +286,7 @@
 <li> the transport, receiving confirmation, sends the answer and deletes the object of the protocol, if this is not the keep alive mode;</li>
 <li> if there is no confirmation, the transport continues to wait for the data, and in case of its receipt, it transmits to the saved object of the protocol.</li></ul>
 <p>Protocols are also supported for output transports and assume the function of communication with transport and implementation of features of these protocols, when preparing data for the transmission and analysis of responses. The external interface for accessing protocols, from code of other modules and the OpenSCADA programming environment, implements in an XML tree with its own structure for each protocol module. Such a mechanism allows for transparent access to external systems through transports, simply by specifying the name of the protocol by which to serve transmission.
+</p><p>Transports have a possibility to holding additional parameters, whose can be parameters of used protocols, that is protocols can be individually configured to each connection. [<span style="color: red">PLAN</span>] In further this function will be used for the wrapping protocols.
 </p><p>Thanks to the standard access to transports in OpenSCADA, it's easy to change the way data is exchanged without affecting the exchanging programs themselves. For example, in the case of a local exchange, you can use faster transport based on UNIX-sockets and in the case of exchanging over the Internet and local network use TCP- or UDP-sockets.
 </p>
 <h3><span class="mw-headline" id="User_interfaces.2C_the_subsystem_.22User_Interfaces.22"><span class="mw-headline-number">1.7</span> User interfaces, the subsystem "User Interfaces"</span></h3>
@@ -666,7 +667,7 @@
 </p><p>On the "Module" tab it is provided the information about the module of subsystem "Transports" (Fig.4.1d), whose structure is identical for all modules.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:682px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr.png"><img class="thumbimage" height="559" src="files/QTCfg_subsys_tr_mod_tr.png" width="680" /></a>  <div class="thumbcaption">Fig. 4.3b. The tab "Transports" of the module of the subsystem "Transports".</div></div></div></div>
-<p>Each transport contains its own configuration page with the tab "Transport". This tab contains basic transport settings. <span id="TransportIn" title="#TransportIn">Input transport</span> (Fig.4.3c) contains:
+<p>Each transport contains its own generic configuration dialogues in the tab "Transport" and "Additional". The "Transport" tab contains basic transport settings. <span id="TransportIn" title="#TransportIn">Input transport</span> (Fig.4.3c) contains:
 </p>
 <ul><li> Section "State" — contains the settings that characterize the state of the transport:
 <ul><li> <i>Status</i> — information on the current transport's status and statistics of its work. Most modules provide advanced diagnostics in this field when enabled with <a href="#Config">the debugging mode</a>.</li>
@@ -680,7 +681,7 @@
 <li> <i>Address</i> — transport address in a specific type of transport (module) format. Description of the format of the address of the transport, as a rule, is available in the tooltip for this field.</li>
 <li> <i>Transport protocol</i> — indicates the transport protocol modules (the subsystem "Transport protocols") those should work in conjunction with the input transport. That is, received unstructured data this module will sent to the structuring and processing to the specified modules of the transport protocol.</li>
 <li> <i>To connect</i> — indicates the state/command "Connect", in which to transfer the transport at startup.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_in.png"><img class="thumbimage" height="834" src="files/Sockets_in.png" width="900" /></a>  <div class="thumbcaption">Fig. 4.3c. The tab "Transport" of the page of an input transport of the module of the subsystem "Transports".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:922px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_in.png"><img class="thumbimage" height="1190" src="files/Sockets_in.png" width="920" /></a>  <div class="thumbcaption">Fig. 4.3c. The tab "Transport" and "Additional" of the page of an input transport of the module of the subsystem "Transports".</div></div></div></div>
 <p><span id="TransportOut" title="#TransportOut">Output transport</span> (Fig.4.3d) contains:
 </p>
 <ul><li> Section "State" — contains the settings that characterize the state of the transport:
@@ -692,8 +693,9 @@
 <li> <i>Name</i> — specifies the transport's name.</li>
 <li> <i>Description</i> — brief description of the transport and its appointment.</li>
 <li> <i>Address</i> — transport address in a specific type of transport (module) format. Description of the format of the address of the transport, as a rule, is available in the tooltip for this field.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:780px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out.png"><img class="thumbimage" height="623" src="files/Sockets_out.png" width="778" /></a>  <div class="thumbcaption">Fig. 4.3d. The tab "Transport" of the page of an output transport of the module of the subsystem "Transports".</div></div></div></div>
-<p>Output transport, in addition, provides a tab of forming user requests via this transport (Fig.4.3e). The tab is provided for debugging of communications and communication protocols, and includes:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:922px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out.png"><img class="thumbimage" height="930" src="files/Sockets_out.png" width="920" /></a>  <div class="thumbcaption">Fig. 4.3d. The tab "Transport" and "Additional" of the page of an output transport of the module of the subsystem "Transports".</div></div></div></div>
+<p>The tab "Additional" of both input and output transports contains specific parameters of the transport type and protocols' specific custom parameters. Also there can be reset all the additional parameters to default values and be cleaned the protocols' specific custom parameters.
+</p><p>Output transport, in addition, provides a tab of forming user requests via this transport (Fig.4.3e). The tab is provided for debugging of communications and communication protocols, and includes:
 </p>
 <ul><li> <i>Time</i> — information about the time spent on the request and the response.</li>
 <li> <i>Mode</i> — indicates the mode of data from the following list: "Binary", "Text(LF)", "Text(CR)", "Text(CR/LF)", in which the request will be formed and the answer will be provided. In the binary mode data is recorded in pairs of numbers in hex, i.e. bytes, separated by spaces.</li>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-24 17:09+0300\n"
+"POT-Creation-Date: 2023-07-23 15:32+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2107,6 +2107,9 @@ msgstr ""
 msgid "To connect"
 msgstr ""
 
+msgid "Addition parameters"
+msgstr ""
+
 msgid "User that opens"
 msgstr ""
 
@@ -2127,6 +2130,10 @@ msgstr ""
 
 #, c-format
 msgid "Error the output address '%s'!"
+msgstr ""
+
+#, c-format
+msgid "For %s"
 msgstr ""
 
 msgid "Error finding and creating new input transports."
@@ -2241,6 +2248,12 @@ msgid "Input transport: "
 msgstr ""
 
 msgid "Connect"
+msgstr ""
+
+msgid "Additional"
+msgstr ""
+
+msgid "Reset"
 msgstr ""
 
 msgid "IO log"

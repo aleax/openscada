@@ -258,15 +258,11 @@ class TTransSock: public TTypeTransport
 	TTransportOut *Out( const string &name, const string &idb );
 
 	string outAddrHelp( );
-	string outTimingsHelp( bool noAdd = false );
-	string outAttemptsHelp( bool noAdd = false );
+	static string outTimingsHelp( bool noAdd = false );
+	static string outAttemptsHelp( bool noAdd = false );
 
     protected:
 	void load_( );
-
-    private:
-	//Methods
-	void postEnable( int flag );
 };
 
 extern TTransSock *mod;

@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/Serial</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSerial&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Serial" title="Modules/Serial">Modules/Serial</a> and the translation is 97% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Serial.html" title="Modules/Serial (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Serial.html" title="Модулі/Serial (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSerial&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Serial" title="Modules/Serial">Modules/Serial</a> and the translation is 79% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Serial.html" title="Modules/Serial (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--high">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Serial.html" title="Модулі/Serial (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> </td>
 <td> Последовательные интерфейсы
 </td>
-<td> 2.6 </td>
+<td> 2.7 </td>
 <td> GPL2 </td>
 <td> tr_Serial.so </td>
 <td> en,uk,ru,de </td>
@@ -63,55 +63,52 @@
 
 <h2><span class="mw-headline" id=".D0.92.D1.85.D0.BE.D0.B4.D0.BD.D1.8B.D0.B5_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.8B"><span class="mw-headline-number">1</span> Входные транспорты</span></h2>
 <p>Сконфигурированный и запущенный входной транспорт открывает порт последовательного интерфейса для ожидания запросов клиентов. Каждый входной интерфейс обязательно связывается с одним из доступных транспортных протоколов, к которому передаются входные сообщения.
-</p><p>Диалог конфигурации входного последовательного интерфейса изображён на рисунок 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:680px;"><a class="image" href="http://oscada.org/wiki/File:Serial_in_ru.png"><img class="thumbimage" height="620" src="../files/Serial_in_ru.png" width="678" /></a>  <div class="thumbcaption">Рис.1. Диалог конфигурации входного последовательного интерфейса.</div></div></div></div>
-<p>С помощью этого диалога можно установить:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:779px;"><a class="image" href="http://oscada.org/wiki/File:Serial_in.png"><img class="thumbimage" height="1155" src="../../en/files/Serial_in.png" width="777" /></a>  <div class="thumbcaption">Fig.1. The generic configuration dialogues of the input serial interface.</div></div></div></div>
+<p>Using the main dialog you can set:
 </p>
-<ul><li> Состояние транспорта, а именно: статус, "Подключение" и имя БД, содержащей конфигурацию.</li>
-<li> Идентификатор, имя и описание транспорта.</li>
-<li> Адрес интерфейса в формате строки: "<b>{dev}:{spd}:{format}[:{opts}[:{mdm}]]</b>", где:
-<ul><li> <i>dev</i> — адрес последовательного устройства (/dev/ttyS0);</li>
-<li> <i>spd</i> — скорость последовательного устройства из ряда: 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 500000, 576000 или 921600;</li>
-<li> <i>format</i> — формат асинхронных данных "<b>{размер}{чётность}{стоп}</b>" (8N1, 7E1, 5O2, ...);</li>
-<li> <i>opts</i> — различные параметры, в основном для управления потоком, разделённые символом ',':
-<ul><li> "[-]h" — аппаратное (CRTSCTS);</li>
-<li> "[-]s" — программное (IXON|IXOFF);</li>
-<li> "rts" — использование RTS сигнала для передачи(false) и проверки на эхо, для сырого RS-485;</li>
-<li> "rts1" — использование RTS сигнала для передачи(true) и проверки на эхо, для сырого RS-485;</li>
-<li> "rtsne" — использование RTS сигнала для передачи(false) без проверки на эхо, для сырого RS-485;</li>
-<li> "rts1ne" — использование RTS сигнала для передачи(true) без проверки на эхо, для сырого RS-485;     </li>
-<li> "[-]RS485" — использовать RS-485 режим, посредством TIOCSRS485.</li></ul></li>
-<li> <i>mdm</i> — режим модема, ожидание 'RING'.</li></ul></li>
-<li> Выбор транспортных протоколов.</li>
-<li> Состояние "Подключение", в которое переводить транспорт при загрузке.</li>
-<li> Временные интервалы интерфейса в формате строки: "<b>{symbol}:{frm}[::{rtsDelay1}:{rtsDelay2}]</b>", где:
-<ul><li> <i>symbol</i> — время символа в миллисекундах, используется для контроля факта окончания фрейма;</li>
-<li> <i>frm</i> — максимальное время фрейма в миллисекундах, используется для ограничение максимального размера пакета запроса — фрейма;</li>
-<li> <i>rtsDelay1</i> — задержка между включением передатчика сигналом RTS и началом передачи, в миллисекундах;</li>
-<li> <i>rtsDelay2</i> — задержка между окончанием передачи и отключением передатчика сигналом RTS, в миллисекундах.</li></ul></li>
-<li> Приоритет задачи входного потока.</li></ul>
-<p>Транспорт поддерживает возможность работы в режиме модема. Данный режим включается пятым параметром адреса и подразумевает ожидания звонка от удалённого модема (запрос "RING"), ответа на звонок (команда "ATA") и последующей передачи запросов от удалённой станции к транспортному протоколу. Отключение сеанса связи осуществляется инициатором соединения и приводит к переподключению модема приёмника на ожидание новых звонков.
-</p><p>Для настройки модема входного транспорта предусмотрена специальная вкладка "Модем" (рис.2).
+<ul><li> State of transport, that is: status, "Connect" and name of the database, containing the configuration.</li>
+<li> Identifier, name and description of the transport.</li>
+<li> Address of the transport in the format "<b>{dev}:{spd}:{format}[:{opts}[:{mdm}]]</b>", where:
+<ul><li> <i>dev</i> — address of the serial device (/dev/ttyS0);</li>
+<li> <i>spd</i> — speed of the serial devices from a number: 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 500000, 576000 or 921600;</li>
+<li> <i>format</i> — asynchronous data format "<b>{size}{parity}{stop}</b>" (8N1, 7E1, 5O2, ...);</li>
+<li> <i>opts</i> — different options, mostly for flow control, separated by ',':
+<ul><li> "[-]h" — hardware (CRTSCTS);</li>
+<li> "[-]s" — software (IXON|IXOFF);</li>
+<li> "rts" — using of the RTS signal for transferring(false) and checking for echo, for raw RS-485;</li>
+<li> "rts1" — using of the RTS signal for transferring(true) and checking for echo, for raw RS-485;</li>
+<li> "rtsne" — using of the RTS signal for transferring(false) and without checking for echo, for raw RS-485;</li>
+<li> "rts1ne" — using of the RTS signal for transferring(true) and without checking for echo, for raw RS-485;</li>
+<li> "[-]RS485" — using RS-485 mode, through TIOCSRS485.</li></ul></li>
+<li> <i>mdm</i> — modem mode, listen for "RING".</li></ul></li>
+<li> Choice of transport protocols.</li>
+<li> The state "Connect", in which the transport must be translated at boot. </li></ul>
+<p>Using the additional dialog you can set:
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:710px;"><a class="image" href="http://oscada.org/wiki/File:Serial_in_mod_ru.png"><img class="thumbimage" height="461" src="../files/Serial_in_mod_ru.png" width="708" /></a>  <div class="thumbcaption">Рис.2. Вкладка "Модем" конфигурации модема входного последовательного интерфейса.</div></div></div></div>
-<p>С помощью этого диалога можно установить следующие свойства работы с модемом:
-</p>
-<ul><li> Время ожидания (таймаут) модема на запросы, в секундах.</li>
-<li> Выдержка времени перед инициализацией модема, в секундах.</li>
-<li> Выдержка времени после инициализации модема, в секундах.</li>
-<li> Первая строка инициализации (обычно содержит команду сброса настроек модема "ATZ").</li>
-<li> Вторая строка инициализации.</li>
-<li> Строка результата инициализации модема (обычно "OK"), которой отвечает модем на инициализацию и которую нужно ожидать.</li>
-<li> Запрос звонка (обычно "RING"), который шлёт модем в случае поступления исходящего вызова.</li>
-<li> Ответ на звонок (обычно "ATA"), который отправляется модему для ответа на звонок.</li>
-<li> Строка результата на ответ на звонок (обычно "CONNECT"), которой отвечает модем на команду ответа и которую нужно ожидать.</li></ul>
+<ul><li> Time intervals of the interface in the format of string "<b>{symbol}:{frm}[::{rtsDelay1}:{rtsDelay2}]</b>", where:
+<ul><li> <i>symbol</i> — character time in milliseconds, used to control of the frame end;</li>
+<li> <i>frm</i> — maximum time of the frame in milliseconds, used to limit the package maximum size of the request — the frame;</li>
+<li> <i>rtsDelay1</i> — delay between the transmitter activation with RTS signal and start up of the transmission, in milliseconds;</li>
+<li> <i>rtsDelay2</i> — delay between the transmitting and disconnecting the transmitter with RTS signal, in milliseconds.</li></ul></li>
+<li> Priority of the input stream task.</li>
+<li> [MODEM] Modem parameters. This mode is activated by the fifth parameter of the address and includes call waiting from the remote modem (the request "RING"), answering the call (the command "ATA") and the subsequent transfer of requests from the remote station to the transport protocol. The disconnection of the communication session is performed by the connection initiator and leads to the reconnection of the receiver modem to wait for new calls.
+<ul><li> Requests timeout of the modem, in seconds.</li>
+<li> Time delay before initializing the modem, in seconds.</li>
+<li> Time delay after initializing the modem, in seconds.</li>
+<li> First initialization string (typically contains the reset command of the modem "ATZ").</li>
+<li> Second initialization string.</li>
+<li> Result string of the modem's initialization (usually "OK"), with which the modem answers for initializing and which must be expected.</li>
+<li> Call's request (usually "RING"), which is sent by the modem in the case of an output call.</li>
+<li> Answer to the call (usually "ATA"), which is sent to the modem to answer the call.</li>
+<li> Result line for the answer to the call (usually "CONNECT"), with which the modem answers to the answer command, and that is to be expected.</li></ul></li>
+<li> Protocols' specific custom parameters.</li>
+<li> Reset all the additional parameters to default values and cleanup the protocols' specific custom parameters.</li></ul>
 <h2><span class="mw-headline" id=".D0.92.D1.8B.D1.85.D0.BE.D0.B4.D0.BD.D1.8B.D0.B5_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.8B"><span class="mw-headline-number">2</span> Выходные транспорты</span></h2>
 <p>Сконфигурированный и исполняющийся выходной транспорт открывает порт последовательного интерфейса для отправки запросов через него.
-</p><p>Главная вкладка страницы конфигурации выходного последовательного интерфейса изображёна на рисунке 3.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:680px;"><a class="image" href="http://oscada.org/wiki/File:Serial_out_ru.png"><img class="thumbimage" height="578" src="../files/Serial_out_ru.png" width="678" /></a>  <div class="thumbcaption">Рис.3. Главная вкладка страницы конфигурации выходного последовательного интерфейса.</div></div></div></div>
-<p>Using this dialog you can set:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:823px;"><a class="image" href="http://oscada.org/wiki/File:Serial_out.png"><img class="thumbimage" height="1265" src="../../en/files/Serial_out.png" width="821" /></a>  <div class="thumbcaption">Fig.2. The generic configuration dialogues of the output serial interface.</div></div></div></div>
+<p>Using the main dialog you can set:
 </p>
 <ul><li> The state of transport, that is: status, "Connect" and name of the database, containing the configuration.</li>
 <li> Identifier, name and description of the transport.</li>
@@ -127,8 +124,10 @@
 <li> "rtsne" — using of the RTS signal for transferring(false) and without checking for echo, for raw RS-485;</li>
 <li> "rts1ne" — using of the RTS signal for transferring(true) and without checking for echo, for raw RS-485;</li>
 <li> "[-]RS485" — using RS-485 mode, through TIOCSRS485.</li></ul></li>
-<li> <i>modTel</i> — modem phone, presence of this field switches transport to work in the modem mode.</li></ul></li>
-<li> Time intervals of the interface in format of the string "<b>{conn}:{symbol}[-{NextReqMult}][:{KeepAliveTm}[:{rtsDelay1}:{rtsDelay2}]]</b>", where:
+<li> <i>modTel</i> — modem phone, presence of this field switches transport to work in the modem mode.</li></ul></li></ul>
+<p>Using the additional dialog you can set:
+</p>
+<ul><li> Time intervals of the interface in format of the string "<b>{conn}:{symbol}[-{NextReqMult}][:{KeepAliveTm}[:{rtsDelay1}:{rtsDelay2}]]</b>", where:
 <ul><li> <i>conn</i> — maximum time of waiting the connecting response, in milliseconds;</li>
 <li> <i>symbol</i> — maximum time of one symbol, used for the frame end detection, in milliseconds;</li>
 <li> <i>NextReqMult</i> — next request's multiplicator to the <i>symbol</i> time, 4 by default;</li>
@@ -136,28 +135,25 @@
 <li> <i>rtsDelay1</i> — delay between the transmitter activation with RTS signal and start up of the transmission, in milliseconds;</li>
 <li> <i>rtsDelay2</i> — delay between the transmitting and disconnecting the transmitter with RTS signal, in milliseconds.</li></ul></li></ul>
 <dl><dd> Can be prioritatile specified into the address field as the second global argument, as such "<b>/dev/rfcomm0:9600||1000:40-20</b>".</dd></dl>
-<ul><li> Do not disconnect at processing. Sometimes the closing of an open device can be destructive, for example, on an ICP-DAS LP PLC, and you can prevent it with this option.</li></ul>
-<p>Транспорт поддерживает возможность работы в режиме модема. Данный режим включается наличием пятого параметра адреса и подразумевает осуществление звонка по телефону, указанному этим параметром, в момент запуска транспорта. После установки связи с удалённым модемом все запросы передачи направляются станции за удалённым модемом. Отключение сеанса связи, с остановкой транспорта, осуществляется по таймауту активности.
-</p><p>Для настройки модема выходного транспорта предусмотрена специальная вкладка "Модем" (рис.4).
-</p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:710px;"><a class="image" href="http://oscada.org/wiki/File:Serial_out_mod_ru.png"><img class="thumbimage" height="621" src="../files/Serial_out_mod_ru.png" width="708" /></a>  <div class="thumbcaption">Рис.4. Вкладка "Модем" конфигурации модема выходного последовательного интерфейса.</div></div></div></div>
-<p>С помощью этого диалога можно установить следующие свойства работы с модемом:
-</p>
-<ul><li> Время ожидания (таймаут) модема на запросы, в секундах.</li>
-<li> Время жизни соединения, в секундах. Если в течении этого времени будет отсутствовать передача данных через транспорт, то соединение будет разорвано.</li>
-<li> Выдержка времени перед инициализацией модема, в секундах.</li>
-<li> Выдержка времени после инициализации модема, в секундах.</li>
-<li> Первая строка инициализации (обычно содержит команду сброса настроек модема "ATZ").</li>
-<li> Вторая строка инициализации.</li>
-<li> Строка результата инициализации модема (обычно "OK"), которой отвечает модем на инициализацию и которую нужно ожидать.</li>
-<li> Строка дозвона к удалённому модему (обычно "ATDT"). При дозвоне номер телефона добавляется к данному префиксу.</li>
-<li> Строка результата удачного соединения (обычно "CONNECT").</li>
-<li> Строка результата занятости линии (обычно "BUSY").</li>
-<li> Строка результата отсутствия несущей в линии (обычно "NO CARRIER").</li>
-<li> Строка результата отсутствия гудка линии (обычно "NO DIALTONE").</li>
-<li> Строка выхода из режима данных (обычно "+++") и используется "Время перед инициализацией модема", после неё.</li>
-<li> Команда повесить трубку (обычно "+++ATH"). Данная команда вызывается всегда, когда нужно разорвать соединение.</li>
-<li> Строка результата команды повесить трубку (обычно "OK"), которой отвечает модем на команду и которую нужно ожидать.</li></ul>
+<ul><li> Do not disconnect at processing. Sometimes the closing of an open device can be destructive, for example, on an ICP-DAS LP PLC, and you can prevent it with this option.</li>
+<li> [MODEM] Modem parameters. This mode is enabled by the fifth parameter presence of the address and it involves making a call on the phone specified by this parameter at the start time of the transport. After establishing a connection to the remote modem, all transmission requests are sent to the remote modem station. Disconnection of a communication session, with the transport stopping, is carried out according to the activity timeout.
+<ul><li> Requests timeout of the modem, in seconds.</li>
+<li> Lifetime of the connection, in seconds. If during this time there will be no data transmission over the transport the connection will be aborted.</li>
+<li> Delay time before initializing the modem, in seconds.</li>
+<li> Delay time after initializing the modem, in seconds.</li>
+<li> First initialization string (typically contains the reset command "ATZ" of the modem).</li>
+<li> Second initialization string.</li>
+<li> Result string of the modem's initialization (usually "OK"), with which the modem answers for initializing and which must be expected.</li>
+<li> Dialling string to the remote modem (usually "ATDT"). When dialing, the phone number is added to this prefix.</li>
+<li> Result string of the successful connection (usually "CONNECT").</li>
+<li> Result string of the busy line (usually is "BUSY").</li>
+<li> Result string of the absence of the carrier in line (usually "NO CARRIER").</li>
+<li> Result string of the dial tone lack in the line (usually "NO DIALTONE").</li>
+<li> Exit string from the data mode (usually "+++") and the "Delay time before initializing the modem" is used, after it.</li>
+<li> Hang up command (usually "+++ATH"). This command is called whenever there is need to break the connection.</li>
+<li> Result string of the hanging up command (usually "OK"), with which the modem answers to the command and which must be expected.</li></ul></li>
+<li> Protocols' specific custom parameters.</li>
+<li> Reset all the additional parameters to default values and cleanup the protocols' specific custom parameters.</li></ul>
 <p>Транспорт может работать с аппаратной шиной I2С, если в качестве устройства выбрать "/dev/i2c-{N}" и шина позволит установить адрес подчинённого устройства командой I2C_SLAVE, из <b>первого байта запроса</b>. Скорость и формат не играют роли в данном режиме. Из таймаутов тут фактически работает только время символа и в основном для расчёта ожидания повтора запроса.
 </p>
 <h2><span class="mw-headline" id="API_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">3</span> API пользовательского программирования</span></h2>

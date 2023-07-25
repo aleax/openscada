@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-29 16:06+0300\n"
+"POT-Creation-Date: 2023-07-23 15:38+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,9 +24,6 @@ msgid "Roman Savochenko, Maxim Kochetkov (2016)"
 msgstr ""
 
 msgid "Provides transport based on the serial interfaces. It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar."
-msgstr ""
-
-msgid "Addition parameters"
 msgstr ""
 
 msgid ""

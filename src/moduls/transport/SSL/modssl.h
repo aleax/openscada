@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.SSL file: modssl.h
 /***************************************************************************
- *   Copyright (C) 2008-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -263,7 +263,6 @@ class TTransSock: public TTypeTransport
 
     private:
 	//Methods
-	void postEnable( int flag );
 	void preDisable( int flag );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process

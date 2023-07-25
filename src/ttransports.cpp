@@ -52,6 +52,7 @@ TTransportS::TTransportS( ) : TSubSYS(STR_ID, true), extHostLoad(0)
     elIn.fldAdd(new TFld("ADDR",trS("Address"),TFld::String,TFld::NoFlag,"100"));
     elIn.fldAdd(new TFld("PROT",trS("Transport protocol"),TFld::String,TFld::NoFlag,i2s(limObjID_SZ*10).c_str()));
     elIn.fldAdd(new TFld("START",trS("To connect"),TFld::Boolean,TFld::NoFlag,"1"));
+    elIn.fldAdd(new TFld("A_PRMS",trS("Addition parameters"),TFld::String,TFld::FullText,"1000000"));
 
     //Output transport BD structure
     elOut.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ*2).c_str()));
@@ -59,6 +60,7 @@ TTransportS::TTransportS( ) : TSubSYS(STR_ID, true), extHostLoad(0)
     elOut.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     elOut.fldAdd(new TFld("DESCRIPT",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"500"));
     elOut.fldAdd(new TFld("ADDR",trS("Address"),TFld::String,TFld::NoFlag,"100"));
+    elOut.fldAdd(new TFld("A_PRMS",trS("Addition parameters"),TFld::String,TFld::FullText,"1000000"));
 
     //External hosts' connection DB struct
     elExt.fldAdd(new TFld("OP_USER",trS("User that opens"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
@@ -136,6 +138,93 @@ AutoHD<TTransportOut> TTransportS::outAt( const string &addr )
 }
 
 string TTransportS::extHostsDB( )	{ return DB_GEN ".CfgExtHosts"; }
+
+TVariant TTransportS::prm( string &cnt, const string &iid, const TVariant &val, bool toWr )
+{
+    int off = 0;
+    string id = TSYS::strLine(iid, 0, &off);
+    TVariant rez = val;
+
+    XMLNode prmNd(STR_A_PRM);
+    try { prmNd.load(cnt); } catch(...) { }
+
+    if(id == iid) {
+	XMLNode *valN = prmNd.childGet(id, 0, true);
+	bool presence = valN;
+	if(toWr) {
+	    if(val.getS().size() < CFG_A_LEN) {
+		prmNd.setAttr(id, val.getS());
+		if(valN) { prmNd.childDel(valN); valN = NULL; }
+	    }
+	    else {
+		if(!valN) valN = prmNd.childAdd(id);
+		valN->setText(val.getS());
+		prmNd.setAttr(id, "");
+	    }
+	}
+	rez = valN ? valN->text() : prmNd.attr(id, true, &presence);
+	if(!presence) rez = val;
+    }
+    else {
+	XMLNode *srcN = NULL, *itN = NULL;
+	string src = TSYS::strLine(iid, 0, &off);
+	if((srcN=prmNd.childGet("id",src,true)) && (itN=srcN->childGet("id",id,true)) && !toWr) {
+	    rez.setType((TVariant::Type)s2i(itN->attr("tp")), true);
+	    rez.setS(itN->text());
+	}
+	else {
+	    if(!srcN)	srcN = prmNd.childAdd("SRC")->setAttr("id", src);
+	    if(!itN)	itN = srcN->childAdd("p")->setAttr("id", id);
+	    if(!toWr) {
+		itN->setAttr("tp", i2s(val.type()));
+		if((src=TSYS::strLine(iid,0,&off)).size()) itN->setAttr("nm", src);
+		if(off < iid.size()) itN->setAttr("help", iid.substr(off));
+	    }
+	    itN->setText(val.getS());
+	}
+    }
+
+    if(!val.isNull()) cnt = prmNd.save(XMLNode::BrAllPast);
+
+    return rez;
+}
+
+string TTransportS::cntrCmdPrm( XMLNode *opt, const string &path, const string &cnt )
+{
+    if(opt->name() == "info") {
+	// Prepairing the source configuration
+	XMLNode prmNd(STR_A_PRM);
+	try { prmNd.load(cnt); } catch(...) { }
+
+	XMLNode *srcN = NULL;
+	for(int iSrc = 0; (srcN=prmNd.childGet("SRC",iSrc,true)); ++iSrc)
+	    if(ctrMkNode("area",opt,-1,(path+srcN->attr("id")).c_str(),TSYS::strMess(_("For %s"),srcN->attr("id").c_str())))
+		for(int iP = 0; iP < srcN->childSize(); ++iP) {
+		    XMLNode *pN = srcN->childGet(iP);
+		    string pTp = "str";
+		    switch(s2i(pN->attr("tp"))) {
+			case TVariant::Boolean:	pTp = "bool";	break;
+			case TVariant::Integer:	pTp = "dec";	break;
+			case TVariant::Real:	pTp = "real";	break;
+		    }
+		    ctrMkNode("fld",opt,-1,(path+srcN->attr("id")+"/"+pN->attr("id")).c_str(),
+			(pN->attr("nm").size()?pN->attr("nm").c_str():((iP==0)?pN->attr("id").c_str():"")),
+			    RWRWR_,"root",STR_ID,2,"tp",pTp.c_str(),"help",pN->attr("help").size()?pN->attr("help").c_str():"");
+		}
+	return cnt;
+    }
+
+    string a_path = opt->attr("path");
+    if(a_path.find(path) == 0) {
+	string cntPrc = cnt;
+	opt->setAttr("sid", TSYS::pathLevEnd(a_path,1).substr(TSYS::pathLevEnd(path,0).size()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(prm(cntPrc,TSYS::pathLevEnd(a_path,0)+"\n"+opt->attr("sid")));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	prm(cntPrc, TSYS::pathLevEnd(a_path,0)+"\n"+opt->attr("sid"), opt->text(), true);
+	return cntPrc;
+    }
+
+    return cnt;
+}
 
 void TTransportS::load_( )
 {
@@ -830,7 +919,7 @@ void TTransportIn::postDisable( int flag )
 bool TTransportIn::cfgChange( TCfg &co, const TVariant &pc )
 {
     if(co.name() == "ADDR" && co.getS() != pc.getS()) stop();	//By the address change and reconnect need ordinary
-    modif();
+    if(co.getS() != pc.getS()) modif();
 
     return true;
 }
@@ -854,6 +943,44 @@ string TTransportIn::name( )
 {
     string rez = cfg("NAME").getS();
     return rez.size() ? rez : mId;
+}
+
+TVariant TTransportIn::prm( const string &id, const TVariant &val, bool toWr )
+{
+    MtxAlloc res(dataRes(), true);
+    string cnt = cfg("A_PRMS").getS();
+    TVariant rez = TTransportS::prm(cnt, id, val, toWr);
+    cfg("A_PRMS").setS(cnt);
+
+    return rez;
+}
+
+TVariant TTransportIn::conPrm( const string &iid, const TVariant &val, const string &cfg )
+{
+    int off = 0;
+    string  src = TSYS::strLine(cfg, 0, &off),
+	    id = (src.size()?STR_A_PRM_CFGP+src+":":"") + iid;
+    TVariant rez = val;
+
+    MtxAlloc res(dataRes(), true);
+    map<string, TVariant>::iterator iprm = mConPrms.find(id);
+    if(cfg.empty() && !val.isNull()) mConPrms[id] = rez;
+    if(cfg.size() && iprm == mConPrms.end()) mConPrms[id] = rez = prm(iid+"\n"+cfg, val);
+
+    return (iprm != mConPrms.end()) ? iprm->second : rez;
+}
+
+void TTransportIn::clearConPrm( const string &id )
+{
+    dataRes().lock();
+    if(id.empty()) mConPrms.clear();
+    else if(id == STR_A_PRM_CFGP) {
+	for(map<string, TVariant>::iterator ip = mConPrms.begin(); ip != mConPrms.end(); )
+	    if(ip->first.find(STR_A_PRM_CFGP) == 0) mConPrms.erase(ip++);
+	    else ++ip;
+    }
+    else mConPrms.erase(id);
+    dataRes().unlock();
 }
 
 string TTransportIn::workId( )		{ return owner().modId()+"."+id(); }
@@ -1009,9 +1136,11 @@ string TTransportIn::associateTrO( const string &addr, char stage )
 	owner().outAdd(associateTrID);
 	mAssociateTrO.push_back(owner().outAt(associateTrID));
 
+	mAssociateTrO.back().at().mAssociateSrcO = AutoHD<TTransportIn>(this);
 	mAssociateTrO.back().at().setAddr(addr);
 	mAssociateTrO.back().at().setName("");
 	mAssociateTrO.back().at().setDscr("");
+	//mAssociateTrO.back().at().cfg("A_PRMS").setS(cfg("A_PRMS").getS());
 	mAssociateTrO.back().at().clearConPrm();
 	mAssociateTrO.back().at().modifGClr();
     }
@@ -1026,7 +1155,7 @@ string TTransportIn::associateTrO( const string &addr, char stage )
 	    char buf[prmStrBuf_SZ];
 	    int respLen = tr.at().messIO("", 0, buf, sizeof(buf));
 	    initConID = string(buf, respLen);
-	    tr.at().setConPrm("initConID", initConID);
+	    tr.at().conPrm("initConID", initConID);
 	} catch(TError &er) { mess_sys(TMess::Error, _("Error connection the new associated node: %s"), er.mess.c_str()); }
 
 	// Removing already freed connections also with the same ID for the last connected
@@ -1080,6 +1209,20 @@ TVariant TTransportIn::objFuncCall( const string &id, vector<TVariant> &prms, co
 
 	return false;
     }
+    // ElTp conPrm( string id, ElTp val = EVAL, string cfg = "" ) - common handling the connection time parameter <id>
+    //  id - connection parameter identifier;
+    //  val - setting to the value at presence;
+    //  cfg - request for configuration parameter of the connection time with registration at the first time
+    //        from the configuration in the form "{SRC}\n{NAME}\n{HELP}".
+    if(id == "conPrm" && prms.size() >= 1)
+	return conPrm(prms[0].getS(), (prms.size()>=2)?prms[1]:TVariant(), (prms.size()>=3)?prms[2].getS():"");
+    // bool setConPrm( string id, ElTp val ) - setting the connection time parameter <id> to the value <val>, only for compatibility
+    //  id - connection parameter identifier;
+    //  val - parameter value.
+    if(id == "setConPrm" && prms.size() >= 2) {
+	conPrm(prms[0].getS(), prms[1]);
+	return true;
+    }
 
     return TCntrNode::objFuncCall(id, prms, user_lang);
 
@@ -1107,10 +1250,15 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 			TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",STR_ID,1,"help",TMess::labStorRem(mDB).c_str());
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
-		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",STR_ID,RWRWR_);
-		ctrRemoveNode(opt,"/prm/cfg/MODULE");
+		TConfig::cntrCmdMake(opt,"/prm/cfg",-1,"root",STR_ID,RWRWR_);
+		ctrRemoveNode(opt, "/prm/cfg/MODULE");
+		ctrRemoveNode(opt, "/prm/cfg/A_PRMS");
 		ctrMkNode2("fld",opt,-1,"/prm/cfg/PROT",EVAL_STR,RWRWR_,"root",STR_ID,"dest","select","select","/prm/cfg/p_mod",NULL);
 	    }
+	}
+	if(ctrMkNode("area",opt,-1,"/aprm",_("Additional"))) {
+	    TTransportS::cntrCmdPrm(opt, "/aprm/src_", cfg("A_PRMS").getS());
+	    if(cfg("A_PRMS").getS().size()) ctrMkNode("comm",opt,-1,"/aprm/acfgReset",_("Reset"),RWRW__,"root",STR_ID);
 	}
 	if(ctrMkNode("area",opt,-1,"/log",_("IO log"),R_R___,"root",STR_ID)) {
 	    ctrMkNode("fld",opt,-1,"/log/logLen",_("Log length, block limit, type"),RWRW__,"root",STR_ID,4,"tp","dec", "min","-1", "max","10000",
@@ -1161,7 +1309,21 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	}
 	opt->childAdd("el")->setText("");
     }
-    else if(a_path.find("/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",STR_ID,RWRWR_);
+    else if(a_path.find("/prm/cfg/") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",STR_ID,RWRWR_);
+    else if(a_path.find("/aprm/src_") == 0) {
+	MtxAlloc res(dataRes(), true);
+	string aprms = TTransportS::cntrCmdPrm(opt, "/aprm/src_", cfg("A_PRMS").getS());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR)) {
+	    cfg("A_PRMS").setS(aprms);
+	    clearConPrm(STR_A_PRM_CFGP+opt->attr("sid")+":"+TSYS::pathLevEnd(a_path,0));
+	}
+    }
+    else if(a_path == "/aprm/acfgReset" && ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR)) {
+	MtxAlloc res(dataRes(), true);
+	cfg("A_PRMS").setS("");
+	clearConPrm(STR_A_PRM_CFGP);
+	load_();
+    }
     else if(a_path == "/log/logLen") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(i2s(logLen()));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setLogLen(s2i(opt->text()));
@@ -1242,25 +1404,45 @@ string TTransportOut::workId( )		{ return owner().modId()+"."+id(); }
 
 string TTransportOut::tbl( ) const	{ return owner().owner().subId()+"_out"; }
 
-TVariant TTransportOut::conPrm( const string &nm )
+TVariant TTransportOut::prm( const string &id, const TVariant &val, bool toWr )
 {
     MtxAlloc res(dataRes(), true);
-    map<string, TVariant>::iterator iprm = mConPrms.find(nm);
-    if(iprm == mConPrms.end())	return TVariant();
-    return iprm->second;
+    string cnt = cfg("A_PRMS").getS();
+    TVariant rez = TTransportS::prm(cnt, id, val, toWr);
+    cfg("A_PRMS").setS(cnt);
+
+    return rez;
 }
 
-void TTransportOut::setConPrm( const string &nm, const TVariant &vl )
+TVariant TTransportOut::conPrm( const string &iid, const TVariant &val, const string &cfg )
 {
-    dataRes().lock();
-    mConPrms[nm] = vl;
-    dataRes().unlock();
+    int off = 0;
+    string  src = TSYS::strLine(cfg, 0, &off),
+	    id = (src.size()?STR_A_PRM_CFGP+src+":":"") + iid;
+    TVariant rez = val;
+
+    //Requesting the configuration parameters of the connection time from input transport of the associated output
+    if(cfg.size() && !mAssociateSrcO.freeStat())
+	return mAssociateSrcO.at().conPrm(iid, val, cfg);
+
+    MtxAlloc res(dataRes(), true);
+    map<string, TVariant>::iterator iprm = mConPrms.find(id);
+    if(cfg.empty() && !val.isNull()) mConPrms[id] = rez;
+    if(cfg.size() && iprm == mConPrms.end()) mConPrms[id] = rez = prm(iid+"\n"+cfg, val);
+
+    return (iprm != mConPrms.end()) ? iprm->second : rez;
 }
 
-void TTransportOut::clearConPrm( )
+void TTransportOut::clearConPrm( const string &id )
 {
     dataRes().lock();
-    mConPrms.clear();
+    if(id.empty()) mConPrms.clear();
+    else if(id == STR_A_PRM_CFGP) {
+	for(map<string, TVariant>::iterator ip = mConPrms.begin(); ip != mConPrms.end(); )
+	    if(ip->first.find(STR_A_PRM_CFGP) == 0) mConPrms.erase(ip++);
+	    else ++ip;
+    }
+    else mConPrms.erase(id);
     dataRes().unlock();
 }
 
@@ -1279,7 +1461,7 @@ void TTransportOut::postDisable( int flag )
 bool TTransportOut::cfgChange( TCfg &co, const TVariant &pc )
 {
     if(co.name() == "ADDR") stop();	//By the address change and reconnect need ordinary
-    modif();
+    if(co.getS() != pc.getS()) modif();
 
     return true;
 }
@@ -1441,15 +1623,18 @@ TVariant TTransportOut::objFuncCall( const string &id, vector<TVariant> &prms, c
 	    try{ setAttempts(prms[0].getI()); } catch(TError&) { }
 	return attempts();
     }
-    // ElTp conPrm( string nm ) - getting the connection parameter <nm>
-    //  nm - connection parameter name.
+    // ElTp conPrm( string id, ElTp val = EVAL, string cfg = "" ) - common handling the connection time parameter <id>
+    //  id - connection parameter identifier;
+    //  val - setting to the value at presence;
+    //  cfg - request for configuration parameter of the connection time with registration at the first time
+    //        from the configuration in the form "{SRC}\n{NAME}\n{HELP}".
     if(id == "conPrm" && prms.size() >= 1)
-	return conPrm(prms[0].getS());
-    // bool setConPrm( string nm, ElTp val ) - setting the connection parameter <nm> to the <val>
-    //  nm - connection parameter name;
+	return conPrm(prms[0].getS(), (prms.size()>=2)?prms[1]:TVariant(), (prms.size()>=3)?prms[2].getS():"");
+    // bool setConPrm( string id, ElTp val ) - setting the connection time parameter <id> to the value <val>, only for compatibility
+    //  id - connection parameter identifier;
     //  val - parameter value.
     if(id == "setConPrm" && prms.size() >= 2) {
-	setConPrm(prms[0].getS(), prms[1]);
+	conPrm(prms[0].getS(), prms[1]);
 	return true;
     }
 
@@ -1470,16 +1655,23 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),R_R_R_,"root",STR_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Connect"),RWRWR_,"root",STR_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Storage"),RWRWR_,"root",STR_ID,4,
-		    "tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
-		if(DB(true).size())
-		    ctrMkNode("comm",opt,-1,"/prm/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),
-			TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",STR_ID,1,"help",TMess::labStorRem(mDB).c_str());
+		if(mAssociateSrcO.freeStat()) {
+		    ctrMkNode("fld",opt,-1,"/prm/st/db",_("Storage"),RWRWR_,"root",STR_ID,4,
+			"tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
+		    if(DB(true).size())
+			ctrMkNode("comm",opt,-1,"/prm/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),
+			    TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",STR_ID,1,"help",TMess::labStorRem(mDB).c_str());
+		}
 	    }
-	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
-		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",STR_ID,RWRWR_);
-		ctrRemoveNode(opt,"/prm/cfg/MODULE");
+	    if(mAssociateSrcO.freeStat() && ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
+		TConfig::cntrCmdMake(opt,"/prm/cfg",-1,"root",STR_ID,RWRWR_);
+		ctrRemoveNode(opt, "/prm/cfg/MODULE");
+		ctrRemoveNode(opt, "/prm/cfg/A_PRMS");
 	    }
+	}
+	if(mAssociateSrcO.freeStat() && ctrMkNode("area",opt,-1,"/aprm",_("Additional"))) {
+	    TTransportS::cntrCmdPrm(opt, "/aprm/src_", cfg("A_PRMS").getS());
+	    if(cfg("A_PRMS").getS().size()) ctrMkNode("comm",opt,-1,"/aprm/acfgReset",_("Reset"),RWRW__,"root",STR_ID);
 	}
 	if(ctrMkNode("area",opt,-1,"/req",_("Request"),RWRW__,"root",STR_ID)) {
 	    ctrMkNode("fld",opt,-1,"/req/tm",_("Time"),R_R___,"root",STR_ID,1,"tp","str");
@@ -1522,7 +1714,21 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))
 	postDisable(NodeRemoveOnlyStor);
-    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",STR_ID,RWRWR_);
+    else if(a_path.find("/prm/cfg/") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",STR_ID,RWRWR_);
+    else if(a_path.find("/aprm/src_") == 0) {
+	MtxAlloc res(dataRes(), true);
+	string aprms = TTransportS::cntrCmdPrm(opt, "/aprm/src_", cfg("A_PRMS").getS());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR)) {
+	    cfg("A_PRMS").setS(aprms);
+	    clearConPrm(STR_A_PRM_CFGP+opt->attr("sid")+":"+TSYS::pathLevEnd(a_path,0));
+	}
+    }
+    else if(a_path == "/aprm/acfgReset" && ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR)) {
+	MtxAlloc res(dataRes(), true);
+	cfg("A_PRMS").setS("");
+	clearConPrm(STR_A_PRM_CFGP);
+	load_();
+    }
     else if(a_path == "/req/tm" && ctrChkNode(opt,"get",R_R___,"root",STR_ID,SEC_RD))
 	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ReqTm",DEF_ReqTm,opt->attr("user")));
     else if(a_path == "/req/mode") {

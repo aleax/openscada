@@ -37,13 +37,23 @@
 #include <tmodule.h>
 #include "modssl.h"
 
+#define DEF_MaxClients		20
+#define DEF_MaxClientsPerHost	0
+#define DEF_InBufLen		0
+#define DEF_MSS			0
+#define DEF_KeepAliveReqs	0
+#define DEF_KeepAliveTm		60
+#define DEF_TaskPrior		0
+#define DEF_TMS			"10:1"
+
+
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"SSL"
 #define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.2.0"
+#define MOD_VER		"4.3.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and supported SSL-TLS depending on the library version.")
@@ -135,16 +145,6 @@ TTransSock::~TTransSock( )
     CRYPTO_set_dynlock_destroy_callback(NULL);
     for(int i = 0; i < CRYPTO_num_locks(); i++) pthread_mutex_destroy(&bufRes[i]);
     free(bufRes);
-}
-
-void TTransSock::postEnable( int flag )
-{
-    TModule::postEnable(flag);
-
-    if(flag&TCntrNode::NodeConnect) {
-	owner().inEl().fldAdd(new TFld("A_PRMS",trS("Addition parameters"),TFld::String,TFld::FullText,"10000"));
-	owner().outEl().fldAdd(new TFld("A_PRMS",trS("Addition parameters"),TFld::String,TFld::FullText,"10000"));
-    }
 }
 
 void TTransSock::preDisable( int flag )
@@ -284,11 +284,11 @@ string TTransSock::MD5( const string &file )
 //* TSocketIn                                    *
 //************************************************
 TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) : TTransportIn(name,idb,el),
-    sockRes(true), ssl(NULL), bio(NULL), abio(NULL), sockFd(-1),
-    mMode(M_Ordinal), mInBufLen(0), mMSS(0), mMaxFork(20), mMaxForkPerHost(0),
-    mKeepAliveReqs(0), mKeepAliveTm(60), mTaskPrior(0), clFree(true)
+    sockRes(true), ssl(NULL), bio(NULL), abio(NULL), sockFd(-1), mMode(M_Ordinal),
+    mInBufLen(DEF_InBufLen), mMSS(DEF_MSS), mMaxFork(DEF_MaxClients), mMaxForkPerHost(DEF_MaxClientsPerHost),
+    mKeepAliveReqs(DEF_KeepAliveReqs), mKeepAliveTm(DEF_KeepAliveTm), mTaskPrior(DEF_TaskPrior), clFree(true)
 {
-    setAddr("localhost:10045");
+    setAddr("*:10045");
 }
 
 TSocketIn::~TSocketIn( )
@@ -318,7 +318,7 @@ string TSocketIn::getStatus( )
 	getsockopt(sockFd, IPPROTO_TCP, TCP_MAXSEG, (void*)&MSSsz, &sz);
 	rez += TSYS::strMess(_("Size input buffer %s, MSS %s. "), TSYS::cpct2str(bufSz).c_str(), TSYS::cpct2str(MSSsz).c_str());
 
-	char buf[prmStrBuf_SZ], *rezSh = SSL_get_shared_ciphers(ssl,buf,sizeof(buf));
+	char buf[prmStrBuf_SZ], *rezSh = SSL_get_shared_ciphers(ssl, buf, sizeof(buf));
 	if(rezSh) rez += TSYS::strMess(_("Shared ciphers: %s. "), rezSh);
 
 #if OPENSSL_VERSION_NUMBER >= 0x10100000L
@@ -338,48 +338,34 @@ string TSocketIn::getStatus( )
 
 void TSocketIn::load_( )
 {
-    //TTransportIn::load_();
-
-    try {
-	XMLNode prmNd;
-	string  vl;
-	prmNd.load(cfg("A_PRMS").getS());
-	vl = prmNd.attr("MaxClients");	if(!vl.empty()) setMaxFork(s2i(vl));
-	vl = prmNd.attr("MaxClientsPerHost");	if(!vl.empty()) setMaxForkPerHost(s2i(vl));
-	vl = prmNd.attr("InBufLen");	if(!vl.empty()) setInBufLen(s2i(vl));
-	vl = prmNd.attr("MSS");		if(!vl.empty()) setMSS(s2i(vl));
-	vl = prmNd.attr("KeepAliveReqs"); if(!vl.empty()) setKeepAliveReqs(s2i(vl));
-	vl = prmNd.attr("KeepAliveTm");	if(!vl.empty()) setKeepAliveTm(s2i(vl));
-	vl = prmNd.attr("TaskPrior");	if(!vl.empty()) setTaskPrior(s2i(vl));
-	vl = prmNd.attr("CertKeyFile");	if(!vl.empty()) setCertKeyFile(vl);
-	if(prmNd.childGet("CertKey",0,true)) mCertKey = prmNd.childGet("CertKey")->text();
-	mKeyPass = prmNd.attr("PKeyPass");
-	vl = prmNd.attr("InitAssocPrms"); if(!vl.empty()) setInitAssocPrms(vl);
-    } catch(...) { }
-
-    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
+    setMaxFork((int)prm("MaxClients",DEF_MaxClients));
+    setMaxForkPerHost((int)prm("MaxClientsPerHost",DEF_MaxClientsPerHost));
+    setInBufLen((int)prm("InBufLen",DEF_InBufLen));
+    setMSS((int)prm("MSS",DEF_MSS));
+    setKeepAliveReqs((int)prm("KeepAliveReqs",DEF_KeepAliveReqs));
+    setKeepAliveTm((int)prm("KeepAliveTm",DEF_KeepAliveTm));
+    setTaskPrior(prm("TaskPrior",DEF_TaskPrior));
+    setCertKeyFile(prm("CertKeyFile",""));
+    setCertKey(prm("CertKey",""));
+    setPKeyPass(prm("PKeyPass",""));
+    setInitAssocPrms(prm("InitAssocPrms",""));
 }
 
 void TSocketIn::save_( )
 {
-    XMLNode prmNd("prms");
-    prmNd.setAttr("MaxClients", i2s(maxFork()));
-    prmNd.setAttr("MaxClientsPerHost", i2s(maxForkPerHost()));
-    prmNd.setAttr("InBufLen", i2s(inBufLen()));
-    prmNd.setAttr("MSS", i2s(MSS()));
-    prmNd.setAttr("KeepAliveReqs", i2s(keepAliveReqs()));
-    prmNd.setAttr("KeepAliveTm", i2s(keepAliveTm()));
-    prmNd.setAttr("TaskPrior", i2s(taskPrior()));
-    prmNd.setAttr("CertKeyFile", certKeyFile());
-    if(prmNd.childGet("CertKey",0,true)) prmNd.childGet("CertKey")->setText(mCertKey);
-    else prmNd.childAdd("CertKey")->setText(mCertKey);
-    prmNd.setAttr("PKeyPass",mKeyPass);
-    prmNd.setAttr("InitAssocPrms", initAssocPrms());
-    cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
+    prm("MaxClients", (int)maxFork(), true);
+    prm("MaxClientsPerHost", (int)maxForkPerHost(), true);
+    prm("InBufLen", (int)inBufLen(), true);
+    prm("MSS", (int)MSS(), true);
+    prm("KeepAliveReqs", (int)keepAliveReqs(), true);
+    prm("KeepAliveTm", (int)keepAliveTm(), true);
+    prm("TaskPrior", taskPrior(), true);
+    prm("CertKeyFile", certKeyFile(), true);
+    prm("CertKey", certKey(), true);
+    prm("PKeyPass", pKeyPass(), true);
+    prm("InitAssocPrms", initAssocPrms(), true);
 
     TTransportIn::save_();
-
-    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
 }
 
 void TSocketIn::start( )
@@ -942,7 +928,6 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list", opt, -1, "/prm/st/conns", _("Active connections"), R_R_R_, "root", STR_ID);
 	    if(ssl) ctrMkNode("fld",opt,-1,"/prm/st/ciphers",_("Supported ciphers"),R_R_R_,"root",STR_ID,3,"tp","str", "cols","90", "rows","3");
 	}
-	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID,1,"help",
 	    _("SSL input transport has the address format \"{addr}:{port}[:{mode}[:{IDmess}]]\", where:\n"
 	    "    addr - address to open SSL, it must be one of the addresses of the host; empty or \"*\" address opens SSL for all interfaces; "
@@ -951,31 +936,33 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "    mode - mode of operation: 0(default) - ordinal connection; 2 - initiative connection;\n"
 	    "    IDmess - identification message of the initiative connection - the mode 2."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),RWRWR_,"root",STR_ID,2, "tp","dec", "help",TMess::labTaskPrior().c_str());
-	ctrMkNode("fld", opt, -1, "/prm/cfg/inBfLn", _("Input buffer size, kB"), startStat()?R_R_R_:RWRWR_, "root", STR_ID, 2,
+
+	int pos = 0;
+	ctrMkNode("fld",opt,pos++,"/aprm/taskPrior",_("Priority"),RWRWR_,"root",STR_ID,2, "tp","dec", "help",TMess::labTaskPrior().c_str());
+	ctrMkNode("fld",opt,pos++,"/aprm/inBfLn",_("Input buffer size, kB"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,
 	    "tp","dec", "help",_("Set 0 for the system value."));
-	ctrMkNode("fld", opt, -1, "/prm/cfg/MSS", _("Maximum segment size (MSS), B"), startStat()?R_R_R_:RWRWR_, "root", STR_ID, 2,
+	ctrMkNode("fld",opt,pos++,"/aprm/MSS",_("Maximum segment size (MSS), B"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,
 	    "tp","dec", "help",_("Set 0 for the system value."));
 	if(!startStat()) {
 	    if(certKey().empty())
-		ctrMkNode("fld",opt,-1,"/prm/cfg/certKeyFile",_("PEM-file of the certificates and private key"),RWRW__,"root",STR_ID,3,
-		    "tp","str","dest","sel_ed","select","/prm/certKeyFileList");
+		ctrMkNode("fld",opt,pos++,"/aprm/certKeyFile",_("PEM-file of the certificates and private key"),RWRW__,"root",STR_ID,3,
+		    "tp","str","dest","sel_ed","select","/aprm/certKeyFileList");
 	    if(certKeyFile().empty())
-		ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),RWRW__,"root",STR_ID,4,
+		ctrMkNode("fld",opt,pos++,"/aprm/certKey",_("Certificates and private key"),RWRW__,"root",STR_ID,4,
 		    "tp","str","cols","90","rows","7","help",_("SSL PAM certificates chain and private key."));
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),RWRW__,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,pos++,"/aprm/pkey_pass",_("Private key password"),RWRW__,"root",STR_ID,1,"tp","str");
 	}
 	if(mode() != M_Initiative) {
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/cl_n",_("Maximum number of clients"),RWRWR_,"root",STR_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/cl_n_pHost",_("Maximum number of clients per host"),RWRWR_,"root",STR_ID,2,"tp","dec",
+	    ctrMkNode("fld",opt,pos++,"/aprm/cl_n",_("Maximum number of clients"),RWRWR_,"root",STR_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,pos++,"/aprm/cl_n_pHost",_("Maximum number of clients per host"),RWRWR_,"root",STR_ID,2,"tp","dec",
 		"help",_("Set to 0 to disable this limit."));
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveReqs",_("Keep alive requests"),RWRWR_,"root",STR_ID,2,"tp","dec",
+	    ctrMkNode("fld",opt,pos++,"/aprm/keepAliveReqs",_("Keep alive requests"),RWRWR_,"root",STR_ID,2,"tp","dec",
 		"help",_("Closing the connection after the specified requests.\nZero value to disable - do not close ever."));
 	}
-	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveTm",_("Keep alive timeout, seconds"),RWRWR_,"root",STR_ID,2,"tp","dec",
+	ctrMkNode("fld",opt,pos++,"/aprm/keepAliveTm",_("Keep alive timeout, seconds"),RWRWR_,"root",STR_ID,2,"tp","dec",
 	    "help",_("Closing the connection after no requests at the specified timeout.\nZero value to disable - do not close ever."));
 	if(mode() == M_Initiative || protocols().empty())
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/initAssocPrms",_("Timeouts, tries"),RWRW__,"root",STR_ID,2,"tp","str",
+	    ctrMkNode("fld",opt,pos++,"/aprm/initAssocPrms",_("Timeouts, tries"),RWRW__,"root",STR_ID,2,"tp","str",
 		"help",(_("... of the initiative connection and the associated output transports, empty for default and separated by '||'. ")+
 			 ((TTransSock&)owner()).outTimingsHelp(true)+((TTransSock&)owner()).outAttemptsHelp(true)).c_str());
 	return;
@@ -1009,61 +996,62 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	}
 	if(toFree) sk_SSL_CIPHER_free(sk);
     }
-    else if(a_path == "/prm/cfg/taskPrior") {
+    else if(a_path == "/aprm/taskPrior") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(taskPrior()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTaskPrior(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/inBfLn") {
+    else if(a_path == "/aprm/inBfLn") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(inBufLen()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setInBufLen(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/MSS") {
+    else if(a_path == "/aprm/MSS") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(MSS()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMSS(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/certKeyFile") {
+    else if(a_path == "/aprm/certKeyFile") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(certKeyFile());
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setCertKeyFile(opt->text());
     }
-    else if(a_path == "/prm/cfg/certKey") {
+    else if(a_path == "/aprm/certKey") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(certKey());
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setCertKey(opt->text());
     }
-    else if(a_path == "/prm/cfg/pkey_pass") {
+    else if(a_path == "/aprm/pkey_pass") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(string(pKeyPass().size(),'*'));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setPKeyPass(opt->text());
     }
-    else if(a_path == "/prm/cfg/cl_n") {
+    else if(a_path == "/aprm/cl_n") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(maxFork()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMaxFork(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/cl_n_pHost") {
+    else if(a_path == "/aprm/cl_n_pHost") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(maxForkPerHost()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMaxForkPerHost(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/keepAliveReqs") {
+    else if(a_path == "/aprm/keepAliveReqs") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(keepAliveReqs()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setKeepAliveReqs(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/keepAliveTm") {
+    else if(a_path == "/aprm/keepAliveTm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(keepAliveTm()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setKeepAliveTm(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/initAssocPrms") {
+    else if(a_path == "/aprm/initAssocPrms") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(initAssocPrms());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setInitAssocPrms(opt->text());
     }
-    else if(a_path == "/prm/certKeyFileList" && ctrChkNode(opt)) TSYS::ctrListFS(opt, certKeyFile(), "pem;");
+    else if(a_path == "/aprm/certKeyFileList" && ctrChkNode(opt)) TSYS::ctrListFS(opt, certKeyFile(), "pem;");
     else TTransportIn::cntrCmdProc(opt);
 }
 
 //************************************************
 //* TSocketOut                                   *
 //************************************************
-TSocketOut::TSocketOut( string name, const string &idb, TElem *el ) : TTransportOut(name, idb, el), mAttemts(1), mMSS(0)
+TSocketOut::TSocketOut( string name, const string &idb, TElem *el ) : TTransportOut(name, idb, el),
+    mAttemts(1), mMSS(0), ssl(NULL), conn(NULL)
 {
     setAddr("localhost:10045");
-    setTimings("10:1", true);
+    setTimings(DEF_TMS, true);
 }
 
 TSocketOut::~TSocketOut( )	{ }
@@ -1109,38 +1097,24 @@ void TSocketOut::setAttempts( unsigned short vl )
 
 void TSocketOut::load_( )
 {
-    //TTransportOut::load_();
-
-    try {
-	XMLNode prmNd;
-	string  vl;
-	prmNd.load(cfg("A_PRMS").getS());
-	vl = prmNd.attr("CertKeyFile");	if(!vl.empty()) setCertKeyFile(vl);
-	if(prmNd.childGet("CertKey",0,true)) setCertKey(prmNd.childGet("CertKey")->text());
-	vl = prmNd.attr("PKeyPass");	if(!vl.empty()) setPKeyPass(vl);
-	vl = prmNd.attr("TMS");	if(!vl.empty()) setTimings(vl);
-	vl = prmNd.attr("MSS");	if(!vl.empty()) setMSS(s2i(vl));
-    } catch(...) { }
-
-    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
+    setCertKeyFile(prm("CertKeyFile",""));
+    setCertKey(prm("CertKey",""));
+    setPKeyPass(prm("PKeyPass",""));
+    setTimings(prm("TMS",DEF_TMS));
+    setMSS((int)prm("MSS",DEF_MSS));
 }
 
 void TSocketOut::save_( )
 {
     if(addr().find(S_NM_SOCKET ":") != string::npos)	return;
 
-    XMLNode prmNd("prms");
-    prmNd.setAttr("CertKeyFile", certKeyFile());
-    if(prmNd.childGet("CertKey",0,true)) prmNd.childGet("CertKey")->setText(certKey());
-    else prmNd.childAdd("CertKey")->setText(certKey());
-    prmNd.setAttr("PKeyPass", pKeyPass());
-    prmNd.setAttr("TMS", timings());
-    prmNd.setAttr("MSS", i2s(MSS()));
-    cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
+    prm("CertKeyFile", certKeyFile(), true);
+    prm("CertKey", certKey(), true);
+    prm("PKeyPass", pKeyPass(), true);
+    prm("TMS", timings(), true);
+    prm("MSS", (int)MSS(), true);
 
     TTransportOut::save_();
-
-    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
 }
 
 string TSocketOut::connectSSL( const string &addr, SSL **ssl, BIO **conn,
@@ -1278,8 +1252,8 @@ string TSocketOut::connectSSL( const string &addr, SSL **ssl, BIO **conn,
 		if(sockFd >= 0 && close(sockFd) != 0)
 		    mess_warning(mod->nodePath().c_str(), _("Closing the socket %d error '%s (%d)'!"), sockFd, strerror(errno), errno);
 		sockFd = -1;
-		if(*conn)	BIO_free_all(*conn);
-		if(*ssl)	SSL_free(*ssl);
+		if(*conn)	{ BIO_free_all(*conn); *conn = NULL; }
+		if(*ssl)	{ SSL_free(*ssl); *ssl = NULL; }
 		if(!cfile.empty() && certKeyFile.empty()) remove(cfile.c_str());
 		continue;	//Try next
 	    }
@@ -1523,22 +1497,26 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	TTransportOut::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/st",_("State")) && ssl)
 	    ctrMkNode("fld",opt,-1,"/prm/st/ciphers",_("Supported ciphers"),R_R_R_,"root",STR_ID,3,"tp","str", "cols","90", "rows","3");
-	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",STR_ID,1, "help",owner().outAddrHelp().c_str());
-	if(!startStat()) {
-	    if(certKey().empty())
-		ctrMkNode("fld",opt,-1,"/prm/cfg/certKeyFile",_("PEM-file of the certificates and private key"),RWRW__,"root",STR_ID,3,
-		    "tp","str","dest","sel_ed","select","/prm/certKeyFileList");
-	    if(certKeyFile().empty())
-		ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),RWRW__,"root",STR_ID,4,
-		    "tp","str","cols","90","rows","7",
-		    "help",_("SSL PAM certificates chain and private key."));
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),RWRW__,"root",STR_ID,1,"tp","str");
+	if(opt->childSize() && ctrId(opt->childGet(0),"/prm/cfg",true))
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",STR_ID,1, "help",owner().outAddrHelp().c_str());
+
+	if(opt->childSize() && ctrId(opt->childGet(0),"/aprm",true)) {
+	    int pos = 0;
+	    if(!startStat()) {
+		if(certKey().empty())
+		    ctrMkNode("fld",opt,pos++,"/aprm/certKeyFile",_("PEM-file of the certificates and private key"),RWRW__,"root",STR_ID,3,
+			"tp","str","dest","sel_ed","select","/aprm/certKeyFileList");
+		if(certKeyFile().empty())
+		    ctrMkNode("fld",opt,pos++,"/aprm/certKey",_("Certificates and private key"),RWRW__,"root",STR_ID,4,
+			"tp","str","cols","90","rows","7",
+			"help",_("SSL PAM certificates chain and private key."));
+		ctrMkNode("fld",opt,pos++,"/aprm/pkey_pass",_("Private key password"),RWRW__,"root",STR_ID,1,"tp","str");
+	    }
+	    ctrMkNode("fld",opt,pos++,"/aprm/TMS",_("Timings"),RWRWR_,"root",STR_ID,2, "tp","str", "help",((TTransSock&)owner()).outTimingsHelp().c_str());
+	    ctrMkNode("fld",opt,pos++,"/aprm/attempts",_("Attempts"),RWRWR_,"root",STR_ID,2, "tp","dec", "help",((TTransSock&)owner()).outAttemptsHelp().c_str());
+	    ctrMkNode("fld",opt,pos++,"/aprm/MSS",_("Maximum segment size (MSS), B"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,
+		"tp","dec","help",_("Set 0 for the system value."));
 	}
-	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2, "tp","str", "help",((TTransSock&)owner()).outTimingsHelp().c_str());
-	ctrMkNode("fld",opt,-1,"/prm/cfg/attempts",_("Attempts"),RWRWR_,"root",STR_ID,2, "tp","dec", "help",((TTransSock&)owner()).outAttemptsHelp().c_str());
-	ctrMkNode("fld",opt,-1,"/prm/cfg/MSS",_("Maximum segment size (MSS), B"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,
-	    "tp","dec","help",_("Set 0 for the system value."));
 	return;
     }
     //Process command to page
@@ -1557,30 +1535,30 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	}
 	if(toFree) sk_SSL_CIPHER_free(sk);
     }
-    else if(a_path == "/prm/cfg/MSS") {
+    else if(a_path == "/aprm/MSS") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(MSS()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMSS(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/certKeyFile") {
+    else if(a_path == "/aprm/certKeyFile") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(certKeyFile());
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setCertKeyFile(opt->text());
     }
-    else if(a_path == "/prm/cfg/certKey") {
+    else if(a_path == "/aprm/certKey") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(certKey());
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setCertKey(opt->text());
     }
-    else if(a_path == "/prm/cfg/pkey_pass") {
+    else if(a_path == "/aprm/pkey_pass") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(string(pKeyPass().size(),'*'));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setPKeyPass(opt->text());
     }
-    else if(a_path == "/prm/cfg/TMS") {
+    else if(a_path == "/aprm/TMS") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(timings());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTimings(opt->text());
     }
-    else if(a_path == "/prm/cfg/attempts") {
+    else if(a_path == "/aprm/attempts") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(attempts()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setAttempts(s2i(opt->text()));
     }
-    else if(a_path == "/prm/certKeyFileList" && ctrChkNode(opt)) TSYS::ctrListFS(opt, certKeyFile(), "pem;");
+    else if(a_path == "/aprm/certKeyFileList" && ctrChkNode(opt)) TSYS::ctrListFS(opt, certKeyFile(), "pem;");
     else TTransportOut::cntrCmdProc(opt);
 }

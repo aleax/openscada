@@ -2360,7 +2360,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainUPSOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="747" src="../en/files/LibsMainUPSOp.png" width="402" /></a></div>
-<p>Data combination of the Uninterruptible Power Supply in a complex object of the attribute "All items". The template designed to use together with the DAQ-module "<a href="Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>" in the part "UPS" and to represent this data by the frame "<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Object properties</a>" as a complex object with properties, signalling at single borders and writing.
+<p>Data combination of the Uninterruptible Power Supply in a complex object of the attribute "All items". The template designed to use together with the DAQ-module "<a href="../en/Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>" in the part "UPS" and to represent this data by the frame "<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Object properties</a>" as a complex object with properties, signalling at single borders and writing.
 </p>
 <ul><li> <b>Sponsored by:</b> <a class="external text" href="http://diyaorg.dp.ua" rel="nofollow noreferrer noopener" target="_blank">DIYA Ltd</a></li></ul>
 <p><b><u>Template IOs</u></b><br />
@@ -2595,7 +2595,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainUPSCfg.png" title="Configuration."><img alt="Configuration." height="172" src="../en/files/LibsMainUPSCfg.png" width="356" /></a></div>
 <p><b><u>Configuring and using</u></b><br />
 </p>
-<dl><dd>1. Create a source controller object into the module "<a href="Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>" and set its Identifier like to "SYSData".</dd>
+<dl><dd>1. Create a source controller object into the module "<a href="../en/Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>" and set its Identifier like to "SYSData".</dd>
 <dd>2. Create a source parameter object into the previous controller object and set its Identifier like to "UPS".</dd>
 <dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
 <dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for it. Enable the parameter.</dd>
@@ -3001,7 +3001,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <dl><dd>1. Create a parameter in a controller object of <a href="DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">the Logical Level</a> or a controller object in <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">the module DAQ.JavaLikeCalc</a>.</dd>
 <dd>2. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "SMS", one transport suitable for more receivers.</dd>
 <dd>3. Set for proper address, only for the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device. The serial port speed, asynchronous data format and timeouts will adjusted by the function.</dd>
-<dd>4. Create an output transport of the type "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" or "<a href="Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a>" and set its Identifier like to "SMTP", one transport suitable for more receivers. </dd>
+<dd>4. Create an output transport of the type "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" or "<a href="../en/Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a>" and set its Identifier like to "SMTP", one transport suitable for more receivers. </dd>
 <dd>5. Set-up for proper address, for Sockets(25) or SSL(465). The transport timeouts will be adjusted by the function.</dd>
 <dd>6. In the tab "Template configuration" you need to set:
 <ul><li> Maximum notification timeout, seconds.</li>
@@ -3052,7 +3052,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <dd><i>err</i> — sets for the request result.</dd></dl>
 <p><b><u>Configuring and using</u></b><br />
 </p>
-<dl><dd>1. Create an output transport of the type "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" or "<a href="Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a>" and set its Identifier like to "SMTP", one transport suitable for more receivers. </dd>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" or "<a href="../en/Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a>" and set its Identifier like to "SMTP", one transport suitable for more receivers. </dd>
 <dd>2. Set-up for proper address, for Sockets(25) or SSL(465). The transport timeouts will be adjusted by the function.</dd>
 <dd>3. Create of needed <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">user protocol object</a> based on the templates, with Identifier like to "SMTP".</dd>
 <dd>4. Place some requesting commands directly into allowed or a new internal OpenSCADA procedure like to:</dd></dl>

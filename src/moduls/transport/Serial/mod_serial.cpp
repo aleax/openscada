@@ -49,13 +49,37 @@
 # include <linux/spi/spidev.h>
 #endif
 
+#define DEF_TMS			"6:320"
+#define DEF_TaskPrior		0
+#define DEF_MdmTm		30
+#define DEF_MdmLifeTime		40
+#define DEF_MdmPreInit		0.5
+#define DEF_MdmPostInit		1.0
+#define DEF_MdmInitStr1		"ATZ"
+#define DEF_MdmInitStr2		""
+#define DEF_MdmInitResp		"OK"
+#define DEF_MdmRingReq		"RING"
+#define DEF_MdmRingAnswer	"ATA"
+#define DEF_MdmRingAnswerResp	"CONNECT"
+#define DEF_MdmDialStr		"ATDT"
+#define DEF_MdmCnctResp		"CONNECT"
+#define DEF_MdmBusyResp		"BUSY"
+#define DEF_MdmNoCarResp	"NO CARRIER"
+#define DEF_MdmNoDialToneResp	"NO DIALTONE"
+#define DEF_MdmExit		"+++"
+#define DEF_MdmHangUp		"+++ATH"
+#define DEF_MdmHangUpResp	"OK"
+#define DEF_TMS_OUT		"640:6"
+#define DEF_NoStopOnProceed	false
+
+
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"Serial"
 #define MOD_NAME	trS("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.6.11"
+#define MOD_VER		"2.7.1"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	trS("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -102,16 +126,6 @@ TTr::TTr( string name ) : TTypeTransport(MOD_ID)
 TTr::~TTr( )
 {
     try { modStop(); } catch(...) { }
-}
-
-void TTr::postEnable( int flag )
-{
-    TModule::postEnable(flag);
-
-    if(flag&TCntrNode::NodeConnect) {
-	owner().inEl().fldAdd(new TFld("A_PRMS",trS("Addition parameters"),TFld::String,TFld::FullText,"10000"));
-	owner().outEl().fldAdd(new TFld("A_PRMS",trS("Addition parameters"),TFld::String,TFld::FullText,"10000"));
-    }
 }
 
 AutoHD<TTrIn> TTr::inAt( const string &name )	{ return TTypeTransport::inAt(name); }
@@ -238,60 +252,48 @@ string TTr::expect( int fd, const string& expLst, int tm )
 //* TTrIn					 *
 //************************************************
 TTrIn::TTrIn( string name, const string &idb, TElem *el ) :
-    TTransportIn(name,idb,el), fd(-1), endrun(false), trIn(0), trOut(0), tmMax(0), prcTm(0), prcTmMax(0), mTaskPrior(0),
-    mMdmTm(20), mMdmPreInit(0.5), mMdmPostInit(1), mMdmInitStr1("ATZ"), mMdmInitStr2(""), mMdmInitResp("OK"),
-    mMdmRingReq("RING"), mMdmRingAnswer("ATA"), mMdmRingAnswerResp("CONNECT"),
+    TTransportIn(name,idb,el), fd(-1), endrun(false), trIn(0), trOut(0), tmMax(0), prcTm(0), prcTmMax(0),
+    mTaskPrior(DEF_TaskPrior), mMdmTm(DEF_MdmTm), mMdmPreInit(DEF_MdmPreInit), mMdmPostInit(DEF_MdmPostInit),
+    mMdmInitStr1(DEF_MdmInitStr1), mMdmInitStr2(DEF_MdmInitStr2), mMdmInitResp(DEF_MdmInitResp),
+    mMdmRingReq(DEF_MdmRingReq), mMdmRingAnswer(DEF_MdmRingAnswer), mMdmRingAnswerResp(DEF_MdmRingAnswerResp),
     mMdmMode(false), mMdmDataMode(false), mRTSfc(false), mRTSlvl(false), mRTSEcho(false)
 {
     setAddr("/dev/ttyS0:19200:8E2");
-    setTimings("6:320");
+    setTimings(DEF_TMS);
 }
 
 TTrIn::~TTrIn( )	{ }
 
 void TTrIn::load_( )
 {
-    //TTransportIn::load_();
-
-    try {
-	XMLNode prmNd;
-	string  vl;
-	prmNd.load(cfg("A_PRMS").getS());
-	vl = prmNd.attr("TMS");		if(!vl.empty()) setTimings(vl);
-	vl = prmNd.attr("TaskPrior");	if(!vl.empty()) setTaskPrior(s2i(vl));
-	vl = prmNd.attr("MdmTm");	if(!vl.empty()) setMdmTm(s2i(vl));
-	vl = prmNd.attr("MdmPreInit");	if(!vl.empty()) setMdmPreInit(s2r(vl));
-	vl = prmNd.attr("MdmPostInit");	if(!vl.empty()) setMdmPostInit(s2r(vl));
-	vl = prmNd.attr("MdmInitStr1");	if(!vl.empty()) setMdmInitStr1(vl);
-	vl = prmNd.attr("MdmInitStr2");	if(!vl.empty()) setMdmInitStr2(vl);
-	vl = prmNd.attr("MdmInitResp");	if(!vl.empty()) setMdmInitResp(vl);
-	vl = prmNd.attr("MdmRingReq");	if(!vl.empty()) setMdmRingReq(vl);
-	vl = prmNd.attr("MdmRingAnswer");if(!vl.empty()) setMdmRingAnswer(vl);
-	vl = prmNd.attr("MdmRingAnswerResp");	if(!vl.empty()) setMdmRingAnswerResp(vl);
-    } catch(...) { }
-
-    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
+    setTimings(prm("TMS",DEF_TMS));
+    setTaskPrior(prm("TaskPrior",DEF_TaskPrior));
+    setMdmTm(prm("MdmTm",DEF_MdmTm));
+    setMdmPreInit((double)prm("MdmPreInit",DEF_MdmPreInit));
+    setMdmPostInit((double)prm("MdmPostInit",DEF_MdmPostInit));
+    setMdmInitStr1(prm("MdmInitStr1",DEF_MdmInitStr1));
+    setMdmInitStr2(prm("MdmInitStr2",DEF_MdmInitStr2));
+    setMdmInitResp(prm("MdmInitResp",DEF_MdmInitResp));
+    setMdmRingReq(prm("MdmRingReq",DEF_MdmRingReq));
+    setMdmRingAnswer(prm("MdmRingAnswer",DEF_MdmRingAnswer));
+    setMdmRingAnswerResp(prm("MdmRingAnswerResp",DEF_MdmRingAnswerResp));
 }
 
 void TTrIn::save_( )
 {
-    XMLNode prmNd("prms");
-    prmNd.setAttr("TMS", timings());
-    prmNd.setAttr("TaskPrior", i2s(taskPrior()));
-    prmNd.setAttr("MdmTm", i2s(mdmTm()));
-    prmNd.setAttr("MdmPreInit", r2s(mdmPreInit()));
-    prmNd.setAttr("MdmPostInit", r2s(mdmPostInit()));
-    prmNd.setAttr("MdmInitStr1",mdmInitStr1());
-    prmNd.setAttr("MdmInitStr2",mdmInitStr2());
-    prmNd.setAttr("MdmInitResp",mdmInitResp());
-    prmNd.setAttr("MdmRingReq",mdmRingReq());
-    prmNd.setAttr("MdmRingAnswer",mdmRingAnswer());
-    prmNd.setAttr("MdmRingAnswerResp",mdmRingAnswerResp());
-    cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
+    prm("TMS", timings(), true);
+    prm("TaskPrior", taskPrior(), true);
+    prm("MdmTm", mdmTm(), true);
+    prm("MdmPreInit", mdmPreInit(), true);
+    prm("MdmPostInit", mdmPostInit(), true);
+    prm("MdmInitStr1", mdmInitStr1(), true);
+    prm("MdmInitStr2", mdmInitStr2(), true);
+    prm("MdmInitResp", mdmInitResp(), true);
+    prm("MdmRingReq", mdmRingReq(), true);
+    prm("MdmRingAnswer", mdmRingAnswer(), true);
+    prm("MdmRingAnswerResp", mdmRingAnswerResp(), true);
 
     TTransportIn::save_();
-
-    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
 }
 
 bool TTrIn::cfgChange( TCfg &co, const TVariant &pc )
@@ -715,7 +717,6 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TTransportIn::cntrCmdProc(opt);
-	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID,3,
 	    "dest","sel_ed","select","/prm/cfg/devLS","help",
 	    _("The serial transport has the address format \"{dev}:{speed}:{format}[:{opts}[:{mdm}]]\", where:\n"
@@ -733,24 +734,26 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	    "      '[-]RS485' - using RS-485 mode, through TIOCSRS485.\n"
 	    "    mdm - modem mode, listen for 'RING'."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,"tp","str","help",
+
+	int pos = 0;
+	ctrMkNode("fld",opt,pos++,"/aprm/TMS",_("Timings"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Connection timings in the format \"{symbol}:{frm}[::{rtsDelay1}:{rtsDelay2}]\", where:\n"
 	    "    symbol - maximum time of one symbol, used for the frame end detection and for timeout of the next request, in milliseconds;\n"
 	    "    frm - maximum frame length, in milliseconds;\n"
 	    "    rtsDelay1 - delay between the transmitter activation with RTS signal and start up of the transmission, in milliseconds;\n"
 	    "    rtsDelay2 - delay between the transmitting and disconnecting the transmitter with RTS signal, in milliseconds."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,
+	ctrMkNode("fld",opt,pos++,"/aprm/taskPrior",_("Priority"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,
 	    "tp","dec", "help",TMess::labTaskPrior().c_str());
-	if(s2i(TSYS::strParse(addr(),4,":")) && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID)) {
-	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout, seconds"),RWRWR_,"root",STR_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-initial delay, seconds"),RWRWR_,"root",STR_ID,1,"tp","real");
-	    ctrMkNode("fld",opt,-1,"/mod/postInitDl",_("Post-initial delay, seconds"),RWRWR_,"root",STR_ID,1,"tp","real");
-	    ctrMkNode("fld",opt,-1,"/mod/initStr1",_("Initialization string 1"),RWRWR_,"root",STR_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/initStr2",_("Initialization string 2"),RWRWR_,"root",STR_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/initResp",_("Initial response"),RWRWR_,"root",STR_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/ringReq",_("Ring request"),RWRWR_,"root",STR_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/ringAnswer",_("Ring answer"),RWRWR_,"root",STR_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/ringAnswerResp",_("Result of the ring answer"),RWRWR_,"root",STR_ID,1,"tp","str");
+	if(s2i(TSYS::strParse(addr(),4,":")) && ctrMkNode("area",opt,pos++,"/aprm/mod",_("Modem"),R_R_R_,"root",STR_ID)) {
+	    ctrMkNode("fld",opt,-1,"/aprm/mod/tm",_("Timeout, seconds"),RWRWR_,"root",STR_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/aprm/mod/preInitDl",_("Pre-initial delay, seconds"),RWRWR_,"root",STR_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/aprm/mod/postInitDl",_("Post-initial delay, seconds"),RWRWR_,"root",STR_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/aprm/mod/initStr1",_("Initialization string 1"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/aprm/mod/initStr2",_("Initialization string 2"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/aprm/mod/initResp",_("Initial response"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/aprm/mod/ringReq",_("Ring request"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/aprm/mod/ringAnswer",_("Ring answer"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/aprm/mod/ringAnswerResp",_("Result of the ring answer"),RWRWR_,"root",STR_ID,1,"tp","str");
 	}
 	return;
     }
@@ -765,47 +768,47 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	    if(opt->childGet(iT)->text().size())
 		opt->childGet(iT)->setText(opt->childGet(iT)->text()+":"+suf);
     }
-    else if(a_path == "/prm/cfg/TMS") {
+    else if(a_path == "/aprm/TMS") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(timings());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTimings(opt->text());
     }
-    else if(a_path == "/prm/cfg/taskPrior") {
+    else if(a_path == "/aprm/taskPrior") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))   opt->setText(i2s(taskPrior()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))   setTaskPrior(s2i(opt->text()));
     }
-    else if(a_path == "/mod/tm") {
+    else if(a_path == "/aprm/mod/tm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(mdmTm()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmTm(s2i(opt->text()));
     }
-    else if(a_path == "/mod/preInitDl") {
+    else if(a_path == "/aprm/mod/preInitDl") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(r2s(mdmPreInit()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmPreInit(s2r(opt->text()));
     }
-    else if(a_path == "/mod/postInitDl") {
+    else if(a_path == "/aprm/mod/postInitDl") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(r2s(mdmPostInit()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmPostInit(s2r(opt->text()));
     }
-    else if(a_path == "/mod/initStr1") {
+    else if(a_path == "/aprm/mod/initStr1") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmInitStr1());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmInitStr1(opt->text());
     }
-    else if(a_path == "/mod/initStr2") {
+    else if(a_path == "/aprm/mod/initStr2") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmInitStr2());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmInitStr2(opt->text());
     }
-    else if(a_path == "/mod/initResp") {
+    else if(a_path == "/aprm/mod/initResp") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmInitResp());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmInitResp(opt->text());
     }
-    else if(a_path == "/mod/ringReq") {
+    else if(a_path == "/aprm/mod/ringReq") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmRingReq());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmRingReq(opt->text());
     }
-    else if(a_path == "/mod/ringAnswer") {
+    else if(a_path == "/aprm/mod/ringAnswer") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmRingAnswer());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmRingAnswer(opt->text());
     }
-    else if(a_path == "/mod/ringAnswerResp") {
+    else if(a_path == "/aprm/mod/ringAnswerResp") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmRingAnswerResp());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmRingAnswerResp(opt->text());
     }
@@ -816,73 +819,61 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 //* TTrOut					 *
 //************************************************
 TTrOut::TTrOut(string name, const string &idb, TElem *el) :
-    TTransportOut(name,idb,el), mNotStopOnProceed(false), fd(-1), mKeepAliveLstTm(0), trIn(0), trOut(0),
-    mMdmTm(30), mMdmLifeTime(30), mMdmPreInit(0.5), mMdmPostInit(1), mMdmInitStr1("ATZ"), mMdmInitStr2(""), mMdmInitResp("OK"),
-    mMdmDialStr("ATDT"), mMdmCnctResp("CONNECT"), mMdmBusyResp("BUSY"), mMdmNoCarResp("NO CARRIER"), mMdmNoDialToneResp("NO DIALTONE"),
-    mMdmExit("+++"), mMdmHangUp("+++ATH"), mMdmHangUpResp("OK"),
+    TTransportOut(name,idb,el), mNotStopOnProceed(DEF_NoStopOnProceed), fd(-1), mKeepAliveLstTm(0), trIn(0), trOut(0),
+    mMdmTm(DEF_MdmTm), mMdmLifeTime(DEF_MdmLifeTime), mMdmPreInit(DEF_MdmPreInit), mMdmPostInit(DEF_MdmPostInit),
+    mMdmInitStr1(DEF_MdmInitStr1), mMdmInitStr2(DEF_MdmInitStr2), mMdmInitResp(DEF_MdmInitResp), mMdmDialStr(DEF_MdmDialStr),
+    mMdmCnctResp(DEF_MdmCnctResp), mMdmBusyResp(DEF_MdmBusyResp), mMdmNoCarResp(DEF_MdmNoCarResp), mMdmNoDialToneResp(DEF_MdmNoDialToneResp),
+    mMdmExit(DEF_MdmExit), mMdmHangUp(DEF_MdmHangUp), mMdmHangUpResp(DEF_MdmHangUpResp),
     mMdmMode(false), mMdmDataMode(false), mRTSfc(false), mRTSlvl(false), mRTSEcho(false), mI2C(false), mSPI(false)
 {
     setAddr("/dev/ttyS0:19200:8E2");
-    setTimings("640:6", true);
+    setTimings(DEF_TMS_OUT, true);
 }
 
 TTrOut::~TTrOut( )	{ }
 
 void TTrOut::load_( )
 {
-    //TTransportOut::load_();
-
-    try {
-	XMLNode prmNd;
-	string  vl;
-	prmNd.load(cfg("A_PRMS").getS());
-	vl = prmNd.attr("TMS");		if(!vl.empty()) setTimings(vl);
-	vl = prmNd.attr("NoStopOnProceed");	if(!vl.empty()) setNotStopOnProceed(s2i(vl));
-	vl = prmNd.attr("MdmTm");	if(!vl.empty()) setMdmTm(s2i(vl));
-	vl = prmNd.attr("MdmLifeTime");	if(!vl.empty()) setMdmLifeTime(s2i(vl));
-	vl = prmNd.attr("MdmPreInit");	if(!vl.empty()) setMdmPreInit(s2r(vl));
-	vl = prmNd.attr("MdmPostInit");	if(!vl.empty()) setMdmPostInit(s2r(vl));
-	vl = prmNd.attr("MdmInitStr1");	if(!vl.empty()) setMdmInitStr1(vl);
-	vl = prmNd.attr("MdmInitStr2");	if(!vl.empty()) setMdmInitStr2(vl);
-	vl = prmNd.attr("MdmInitResp");	if(!vl.empty()) setMdmInitResp(vl);
-	vl = prmNd.attr("MdmDialStr");	if(!vl.empty()) setMdmDialStr(vl);
-	vl = prmNd.attr("MdmCnctResp");	if(!vl.empty()) setMdmCnctResp(vl);
-	vl = prmNd.attr("MdmBusyResp");	if(!vl.empty()) setMdmBusyResp(vl);
-	vl = prmNd.attr("MdmNoCarResp");if(!vl.empty()) setMdmNoCarResp(vl);
-	vl = prmNd.attr("MdmNoDialToneResp");	if(!vl.empty()) setMdmNoDialToneResp(vl);
-	vl = prmNd.attr("MdmExit");	if(!vl.empty()) setMdmExit(vl);
-	vl = prmNd.attr("MdmHangUp");	if(!vl.empty()) setMdmHangUp(vl);
-	vl = prmNd.attr("MdmHangUpResp");if(!vl.empty()) setMdmHangUpResp(vl);
-    } catch(...) { }
-
-    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
+    setTimings(prm("TMS",DEF_TMS_OUT));
+    setNotStopOnProceed((char)prm("NoStopOnProceed",DEF_NoStopOnProceed));
+    setMdmTm(prm("MdmTm",DEF_MdmTm));
+    setMdmLifeTime(prm("MdmLifeTime",DEF_MdmLifeTime));
+    setMdmPreInit((double)prm("MdmPreInit",DEF_MdmPreInit));
+    setMdmPostInit((double)prm("MdmPostInit",DEF_MdmPostInit));
+    setMdmInitStr1(prm("MdmInitStr1",DEF_MdmInitStr1));
+    setMdmInitStr2(prm("MdmInitStr2",DEF_MdmInitStr2));
+    setMdmInitResp(prm("MdmInitResp",DEF_MdmInitResp));
+    setMdmDialStr(prm("MdmDialStr",DEF_MdmDialStr));
+    setMdmCnctResp(prm("MdmCnctResp",DEF_MdmCnctResp));
+    setMdmBusyResp(prm("MdmBusyResp",DEF_MdmBusyResp));
+    setMdmNoCarResp(prm("MdmNoCarResp",DEF_MdmNoCarResp));
+    setMdmNoDialToneResp(prm("MdmNoDialToneResp",DEF_MdmNoDialToneResp));
+    setMdmExit(prm("MdmExit",DEF_MdmExit));
+    setMdmHangUp(prm("MdmHangUp",DEF_MdmHangUp));
+    setMdmHangUpResp(prm("MdmHangUpResp",DEF_MdmHangUpResp));
 }
 
 void TTrOut::save_( )
 {
-    XMLNode prmNd("prms");
-    prmNd.setAttr("TMS", timings());
-    prmNd.setAttr("NoStopOnProceed", i2s(notStopOnProceed()));
-    prmNd.setAttr("MdmTm", i2s(mdmTm()));
-    prmNd.setAttr("MdmLifeTime", i2s(mdmLifeTime()));
-    prmNd.setAttr("MdmPreInit", r2s(mdmPreInit()));
-    prmNd.setAttr("MdmPostInit", r2s(mdmPostInit()));
-    prmNd.setAttr("MdmInitStr1",mdmInitStr1());
-    prmNd.setAttr("MdmInitStr2",mdmInitStr2());
-    prmNd.setAttr("MdmInitResp",mdmInitResp());
-    prmNd.setAttr("MdmDialStr",mdmDialStr());
-    prmNd.setAttr("MdmCnctResp",mdmCnctResp());
-    prmNd.setAttr("MdmBusyResp",mdmBusyResp());
-    prmNd.setAttr("MdmNoCarResp",mdmNoCarResp());
-    prmNd.setAttr("MdmNoDialToneResp",mdmNoDialToneResp());
-    prmNd.setAttr("MdmExit",mdmExit());
-    prmNd.setAttr("MdmHangUp",mdmHangUp());
-    prmNd.setAttr("MdmHangUpResp",mdmHangUpResp());
-    cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
+    prm("TMS", timings(), true);
+    prm("NoStopOnProceed", notStopOnProceed(), true);
+    prm("MdmTm", mdmTm(), true);
+    prm("MdmLifeTime", mdmLifeTime(), true);
+    prm("MdmPreInit", mdmPreInit(), true);
+    prm("MdmPostInit", mdmPostInit(), true);
+    prm("MdmInitStr1", mdmInitStr1(), true);
+    prm("MdmInitStr2", mdmInitStr2(), true);
+    prm("MdmInitResp", mdmInitResp(), true);
+    prm("MdmDialStr", mdmDialStr(), true);
+    prm("MdmCnctResp", mdmCnctResp(), true);
+    prm("MdmBusyResp", mdmBusyResp(), true);
+    prm("MdmNoCarResp", mdmNoCarResp(), true);
+    prm("MdmNoDialToneResp", mdmNoDialToneResp(), true);
+    prm("MdmExit", mdmExit(), true);
+    prm("MdmHangUp", mdmHangUp(), true);
+    prm("MdmHangUpResp", mdmHangUpResp(), true);
 
     TTransportOut::save_();
-
-    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
 }
 
 string TTrOut::getStatus( )
@@ -1442,28 +1433,33 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TTransportOut::cntrCmdProc(opt);
-	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",STR_ID,3,
-	    "dest","sel_ed", "select","/prm/cfg/devLS", "help",owner().outAddrHelp().c_str());
-	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",((TTr&)owner()).outTimingsHelp().c_str());
-	ctrMkNode("fld",opt,-1,"/prm/cfg/notStopOnProceed",_("Do not disconnect at processing"),RWRWR_,"root",STR_ID,2,"tp","bool", "help",
-	    _("Sometime opened device closing can be breakage, on ICP-DAS LP PLC for example, then you are alowed to prevent it by this option."));
-	if(TSYS::strParse(addr(),4,":").size() && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID)) {
-	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout, seconds"),RWRWR_,"root",STR_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/mod/lifeTm",_("Life time, seconds"),RWRWR_,"root",STR_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-initial delay, seconds"),RWRWR_,"root",STR_ID,1,"tp","real");
-	    ctrMkNode("fld",opt,-1,"/mod/postInitDl",_("Post-initial delay, seconds"),RWRWR_,"root",STR_ID,1,"tp","real");
-	    ctrMkNode("fld",opt,-1,"/mod/initStr1",_("Initialization string 1"),RWRWR_,"root",STR_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/initStr2",_("Initialization string 2"),RWRWR_,"root",STR_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/initResp",_("Initial response"),RWRWR_,"root",STR_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/dialStr",_("Dial string"),RWRWR_,"root",STR_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/cnctResp",_("Connect response"),RWRWR_,"root",STR_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/busyResp",_("Busy response"),RWRWR_,"root",STR_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/noCarResp",_("No carrier response"),RWRWR_,"root",STR_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/noDialToneResp",_("No dial tone response"),RWRWR_,"root",STR_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/exit",_("Exit"),RWRWR_,"root",STR_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/hangUp",_("Hangup string"),RWRWR_,"root",STR_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/mod/hangUpResp",_("Hangup response"),RWRWR_,"root",STR_ID,1,"tp","str");
+	if(opt->childSize() && ctrId(opt->childGet(0),"/prm/cfg/",true))
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",STR_ID,3,
+		"dest","sel_ed", "select","/prm/cfg/devLS", "help",owner().outAddrHelp().c_str());
+
+	if(opt->childSize() && ctrId(opt->childGet(0),"/aprm/",true)) {
+	    int pos = 0;
+	    ctrMkNode("fld",opt,pos++,"/aprm/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",TTr::outTimingsHelp().c_str());
+	    ctrMkNode("fld",opt,pos++,"/aprm/notStopOnProceed",_("Do not disconnect at processing"),RWRWR_,"root",STR_ID,2,"tp","bool", "help",
+		_("Sometime opened device closing can be breakage, on ICP-DAS LP PLC for example, then you are alowed to prevent it by this option."));
+
+	    if(TSYS::strParse(addr(),4,":").size() && ctrMkNode("area",opt,pos++,"/aprm/mod",_("Modem"),R_R_R_,"root",STR_ID)) {
+		ctrMkNode("fld",opt,-1,"/aprm/mod/tm",_("Timeout, seconds"),RWRWR_,"root",STR_ID,1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/aprm/mod/lifeTm",_("Life time, seconds"),RWRWR_,"root",STR_ID,1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/aprm/mod/preInitDl",_("Pre-initial delay, seconds"),RWRWR_,"root",STR_ID,1,"tp","real");
+		ctrMkNode("fld",opt,-1,"/aprm/mod/postInitDl",_("Post-initial delay, seconds"),RWRWR_,"root",STR_ID,1,"tp","real");
+		ctrMkNode("fld",opt,-1,"/aprm/mod/initStr1",_("Initialization string 1"),RWRWR_,"root",STR_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/aprm/mod/initStr2",_("Initialization string 2"),RWRWR_,"root",STR_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/aprm/mod/initResp",_("Initial response"),RWRWR_,"root",STR_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/aprm/mod/dialStr",_("Dial string"),RWRWR_,"root",STR_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/aprm/mod/cnctResp",_("Connect response"),RWRWR_,"root",STR_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/aprm/mod/busyResp",_("Busy response"),RWRWR_,"root",STR_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/aprm/mod/noCarResp",_("No carrier response"),RWRWR_,"root",STR_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/aprm/mod/noDialToneResp",_("No dial tone response"),RWRWR_,"root",STR_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/aprm/mod/exit",_("Exit"),RWRWR_,"root",STR_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/aprm/mod/hangUp",_("Hangup string"),RWRWR_,"root",STR_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/aprm/mod/hangUpResp",_("Hangup response"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    }
 	}
 	return;
     }
@@ -1478,71 +1474,71 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	    if(opt->childGet(iT)->text().size())
 		opt->childGet(iT)->setText(opt->childGet(iT)->text()+":"+suf);
     }
-    else if(a_path == "/prm/cfg/TMS") {
+    else if(a_path == "/aprm/TMS") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(timings());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTimings(opt->text());
     }
-    else if(a_path == "/prm/cfg/notStopOnProceed") {
+    else if(a_path == "/aprm/notStopOnProceed") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(notStopOnProceed()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setNotStopOnProceed(s2i(opt->text()));
     }
-    else if(a_path == "/mod/tm") {
+    else if(a_path == "/aprm/mod/tm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(mdmTm()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmTm(s2i(opt->text()));
     }
-    else if(a_path == "/mod/lifeTm") {
+    else if(a_path == "/aprm/mod/lifeTm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(mdmLifeTime()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmLifeTime(s2i(opt->text()));
     }
-    else if(a_path == "/mod/preInitDl") {
+    else if(a_path == "/aprm/mod/preInitDl") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(r2s(mdmPreInit()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmPreInit(s2r(opt->text()));
     }
-    else if(a_path == "/mod/postInitDl") {
+    else if(a_path == "/aprm/mod/postInitDl") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(r2s(mdmPostInit()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmPostInit(s2r(opt->text()));
     }
-    else if(a_path == "/mod/initStr1") {
+    else if(a_path == "/aprm/mod/initStr1") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmInitStr1());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmInitStr1(opt->text());
     }
-    else if(a_path == "/mod/initStr2") {
+    else if(a_path == "/aprm/mod/initStr2") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmInitStr2());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmInitStr2(opt->text());
     }
-    else if(a_path == "/mod/initResp") {
+    else if(a_path == "/aprm/mod/initResp") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmInitResp());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmInitResp(opt->text());
     }
-    else if(a_path == "/mod/dialStr") {
+    else if(a_path == "/aprm/mod/dialStr") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmDialStr());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmDialStr(opt->text());
     }
-    else if(a_path == "/mod/cnctResp") {
+    else if(a_path == "/aprm/mod/cnctResp") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmCnctResp());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmCnctResp(opt->text());
     }
-    else if(a_path == "/mod/busyResp") {
+    else if(a_path == "/aprm/mod/busyResp") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmBusyResp());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmBusyResp(opt->text());
     }
-    else if(a_path == "/mod/noCarResp") {
+    else if(a_path == "/aprm/mod/noCarResp") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmNoCarResp());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmNoCarResp(opt->text());
     }
-    else if(a_path == "/mod/noDialToneResp") {
+    else if(a_path == "/aprm/mod/noDialToneResp") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmNoDialToneResp());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmNoDialToneResp(opt->text());
     }
-    else if(a_path == "/mod/exit") {
+    else if(a_path == "/aprm/mod/exit") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmExit());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmExit(opt->text());
     }
-    else if(a_path == "/mod/hangUp") {
+    else if(a_path == "/aprm/mod/hangUp") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmHangUp());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmHangUp(opt->text());
     }
-    else if(a_path == "/mod/hangUpResp") {
+    else if(a_path == "/aprm/mod/hangUpResp") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmHangUpResp());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmHangUpResp(opt->text());
     }

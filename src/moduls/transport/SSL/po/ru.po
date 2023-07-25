@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-15 09:39+0300\n"
+"POT-Creation-Date: 2023-07-23 15:38+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -28,9 +28,6 @@ msgid ""
 msgstr ""
 "Предоставляет транспорт основанный на слое безопасных сокетов. Используется "
 "OpenSSL и поддерживаются: SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2."
-
-msgid "Addition parameters"
-msgstr "Дополнительные параметры"
 
 msgid "State"
 msgstr "Состояние"
@@ -419,6 +416,9 @@ msgstr "Временные интервалы"
 
 msgid "Attempts"
 msgstr "Попыток"
+
+#~ msgid "Addition parameters"
+#~ msgstr "Дополнительные параметры"
 
 #~ msgid ""
 #~ "SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), "

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-24 17:09+0300\n"
+"POT-Creation-Date: 2023-07-23 15:32+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -2557,6 +2557,10 @@ msgstr "Транспортный протокол"
 msgid "To connect"
 msgstr "Подключаться"
 
+#, fuzzy
+msgid "Addition parameters"
+msgstr "Ошибка добавления параметра '%s'."
+
 msgid "User that opens"
 msgstr "Открывающий пользователь"
 
@@ -2578,6 +2582,10 @@ msgstr "Уровень поднятия"
 #, fuzzy, c-format
 msgid "Error the output address '%s'!"
 msgstr "Ошибка удалённого хоста '%s'!"
+
+#, c-format
+msgid "For %s"
+msgstr ""
 
 msgid "Error finding and creating new input transports."
 msgstr "Ошибка поиска и создания новых входных транспортов."
@@ -2705,6 +2713,12 @@ msgstr "Входной транспорт: "
 
 msgid "Connect"
 msgstr "Подключение"
+
+msgid "Additional"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
 
 msgid "IO log"
 msgstr "Лог ВВ"

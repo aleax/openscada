@@ -162,9 +162,9 @@ XMLNode *TCntrNode::ctrId( XMLNode *inf, const string &name_id, bool noex )
 	s_el = TSYS::pathLev(name_id, 0, true, &l_off);
 	if(s_el.empty()) return t_node;
 	bool ok = false;
-	for(unsigned i_f = 0; i_f < t_node->childSize(); i_f++)
-	    if(t_node->childGet(i_f)->attr("id") == s_el) {
-		t_node = t_node->childGet(i_f);
+	for(unsigned iF = 0; iF < t_node->childSize(); iF++)
+	    if(t_node->childGet(iF)->attr("id") == s_el) {
+		t_node = t_node->childGet(iF);
 		ok = true;
 		break;
 	    }

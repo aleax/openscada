@@ -663,7 +663,7 @@ Flags of the function <i>dbList()</i> (enum – TDBS::DBLsFlg):
 </p>
 <ul><li> <i>LsNoFlg</i> (0) — no list flag;</li>
 <li> <i>LsCheckSel</i> (0x01) —  points to the necessity of verifying the fact of boot from the selected database and to insert to the db list the only selected one;</li>
-<li> <i>LsInclGenFirst</i> (0x02) — include the Generic Storage "<b>*.*</b>" in the first.</li></ul>
+<li> <i>LsInclGenFirst</i> (0x02) — include the Generic Storage ("&lt;gen&gt;") in the first.</li></ul>
 <p>Flags of the queries to the storage (enum – TDBS::ReqGenFlg):
 </p>
 <ul><li> <i>NoFlg</i> (0) — no query flag;</li>
@@ -677,7 +677,7 @@ Flags of the function <i>dbList()</i> (enum – TDBS::DBLsFlg):
 </p>
 <ul><li> <i>static string fullDBSYS( );</i> — The full name of the system table.</li>
 <li> <i>static string fullDB( );</i> — The full name of the table with a description of the registered databases.</li>
-<li> <i>static string realDBName( const string &amp;bdn, bool back = false );</i> — Conversion of the full template name of the database or table (of view *.*.myTbl) in the real name. Actually the replacement of the special elements '*' by the elements of the working DB. Use <i>back</i> for the backward conversion.</li>
+<li> <i>static string realDBName( const string &amp;bdn, bool back = false );</i> — Conversion of the full template name of the database or table (of view "&lt;gen&gt;.myTbl") in the real name. Use <i>back</i> for the backward conversion.</li>
 <li> <i>static string dbPart( const string &amp;bdn, bool tbl = false );</i> — Getting the generic storage address part or the table at <i>tbl</i> from the common storage name <i>bdn</i>.</li>
 <li> <i>static void dbList( vector&lt;string&gt; &amp;ls, char flags = LsNoFlg );</i> — List of available databases with the DBLsFlg <i>flags</i>.</li>
 <li> <i>static AutoHD&lt;TTable&gt; tblOpen( const string &amp;bdn, bool create = false );</i> — Opening the table <i>bdn</i> of the storage by it full path with the creation <i>create</i> at absence.</li>
@@ -687,8 +687,8 @@ Flags of the function <i>dbList()</i> (enum – TDBS::DBLsFlg):
 <li> <i>static bool dataSet( const string &amp;bdn, const string &amp;path, TConfig &amp;cfg, char flags = NoFlg, XMLNode *localCfgCtx = NULL );</i> — Setting/Saving the record to the storage according to the ReqGenFlg <i>flags</i>. If the DB name <i>bdn</i> or path <i>path</i> to the configuration file are not pointed, their processing is skipped. More about conditions of using the Configuration File and the Data Bases read in the <a href="#DataConcept">Data storing conception</a>. <i>localCfgCtx</i> is used for saving to the local configuration context, is prepared for <i>dataSeek()</i> and <i>dataGet()</i>, and it missing causes for checking and using, at presence, the global configuration context <i>SYS-&gt;cfgCtx()</i>.</li>
 <li> <i>static bool dataDel( const string &amp;bdn, const string &amp;path, TConfig &amp;cfg, char flags = NoFlg );</i> — Deleting the record in the storage according to the ReqGenFlg <i>flags</i>. If the DB name <i>bdn</i> or path <i>path</i> to the configuration file are not pointed, their processing is skipped. More about conditions of using the Configuration File and the Data Bases read in the <a href="#DataConcept">Data storing conception</a>.</li>
 <li> <i>static bool dataDelTbl( const string &amp;bdn, const string &amp;path = "", char flags = NoFlg );</i> — The data container table common removing from the storage <i>bbn</i> and the configuration file <i>path</i>, according to the ReqGenFlg <i>flags</i>.</li>
-<li> <i>static string genPrmGet( const string &amp;path, const string &amp;oval = "", const string &amp;user = "root", char flags = NoFlg );</i> — Getting the generic parameter <i>path</i> from the Generic Storage "<b>*.*.SYS</b>" on behalf of the <i>user</i> and according to the ReqGenFlg <i>flags</i>. If the data are not available the value <i>oval</i> is returned. On the Configuration File there are used the object parameters by the tags "prm" and on the Data Base there is used the table "SYS".</li>
-<li> <i>static void genPrmSet( const string &amp;path, const string &amp;val, const string &amp;user = "root", char flags = NoFlg );</i> — Setting/Saving the generic parameter <i>path</i> to the Generic Storage "<b>*.*.SYS</b>" of the <i>user</i> and according to the ReqGenFlg <i>flags</i>.</li></ul>
+<li> <i>static string genPrmGet( const string &amp;path, const string &amp;oval = "", const string &amp;user = "root", char flags = NoFlg );</i> — Getting the generic parameter <i>path</i> from the Generic Storage ("&lt;gen&gt;.SYS") on behalf of the <i>user</i> and according to the ReqGenFlg <i>flags</i>. If the data are not available the value <i>oval</i> is returned. On the Configuration File there are used the object parameters by the tags "prm" and on the Data Base there is used the table "SYS".</li>
+<li> <i>static void genPrmSet( const string &amp;path, const string &amp;val, const string &amp;user = "root", char flags = NoFlg );</i> — Setting/Saving the generic parameter <i>path</i> to the Generic Storage ("&lt;gen&gt;.SYS") of the <i>user</i> and according to the ReqGenFlg <i>flags</i>.</li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>int subVer( );</i> — Subsystem version.</li>
@@ -1570,7 +1570,15 @@ The data acquisition mode/source (enumeration — TVArchive::SrcMode):
 <td><i><a href="#TSubSYS">TSubSYS</a></i>
 </td></tr></table>
 <p><b>Data:</b><br />
-External hosts mode (enum — TTransportS::ExtHost::Mode):
+Definitions of space the Transport subsystem (definition):
+</p>
+<ul><li> <i>STR_VER</i> — Modules version (26);</li>
+<li> <i>STR_ID</i> — Identifier the subsystem ("Transport");</li>
+<li> <i>STR_IN_PREF</i> — Prefix of the input transports ("in_");</li>
+<li> <i>STR_OUT_PREF</i> — Prefix of the output transports ("out_");</li>
+<li> <i>STR_A_PRM</i> — Root XML-tag of the additional parameters ("prms");</li>
+<li> <i>STR_A_PRM_CFGP</i> — Prefix of the configuration parameters of the connection time ("CFG:").</li></ul>
+<p>External hosts mode (enum — TTransportS::ExtHost::Mode):
 </p>
 <ul><li> <i>User</i> (0) — User.</li>
 <li> <i>System</i> (1) — System.</li>
@@ -1611,9 +1619,11 @@ External hosts mode (enum — TTransportS::ExtHost::Mode):
 <li> <i>int cntrIfCmd( XMLNode &amp;node, const string &amp;senderPref, const string &amp;user = "" );</i> — Transfer of the control area request of the OpenSCADA <i>node</i> to the remote station.  </li>
 <li> <i>void subStart( );</i> — Start of the subsystem.</li>
 <li> <i>void subStop( );</i> — Stop of the subsystem.</li>
-<li> <i>TElem &amp;inEl( );</i> — DB structure of the input transports</li>
-<li> <i>TElem &amp;outEl( );</i> — DB structure of the output transports</li>
-<li> <i>AutoHD&lt;TTypeTransport&gt; at( const string &amp;id ) const;</i> — Addressing/connection to the type of transport <i>id</i>.</li></ul>
+<li> <i>TElem &amp;inEl( );</i> — DB structure of the input transports.</li>
+<li> <i>TElem &amp;outEl( );</i> — DB structure of the output transports.</li>
+<li> <i>AutoHD&lt;TTypeTransport&gt; at( const string &amp;id ) const;</i> — Addressing/connection to the type of transport <i>id</i>.</li>
+<li> <i>static TVariant prm( string &amp;cnt, const string &amp;id, const TVariant &amp;val = TVariant(), bool toWr = false );</i> — Getting for value the addition parameter <i>id</i> with default one <i>val</i>, or setting to the value <i>val</i> at <i>toWr</i>. The additional parameters can store the connection time parameters at pointing <i>id</i> in the form "{id}\n{SRC}[\n{NAME}[\n{HELP}]]". The additional parameters stored in the XML-container <i>cnt</i> and this function used from <a href="#TTransportIn">TTransportIn</a>::prm() and <a href="#TTransportOut">TTransportOut</a>::prm() for the configuration field "A_PRMS" as a container.</li>
+<li> <i>static string cntrCmdPrm( XMLNode *opt, const string &amp;path, const string &amp;cnt );</i> — Providing the OpenSCADA Control Interface in <i>opt</i> and <i>path</i> for the addition parameters in the input container. Changed container content is returned.</li></ul>
 <h3><span class="mw-headline" id="The_modular_object_of_the_transports.27_type_.28TTypeTransport.29"><span class="mw-headline-number">6.2</span> <span id="TTypeTransport" title="#TTypeTransport">The modular object of the transports' type (TTypeTransport)</span></span></h3>
 <table class="wikitable">
 
@@ -1674,6 +1684,8 @@ Stages of the new Associated Output Transports processing (enum — TTransportIn
 <li> <i>string protocols( );</i> — Linked transport protocols.</li>
 <li> <i>virtual unsigned keepAliveReqs( );</i> — Maximum Keep Alive requests.</li>
 <li> <i>virtual unsigned keepAliveTm( );</i> — Keep Alive time.</li>
+<li> <i>TVariant prm( const string &amp;id, const TVariant &amp;val = TVariant(), bool toWr = false );</i> — Getting for value the addition parameter <i>id</i> with default one <i>val</i>, or setting to the value <i>val</i> at <i>toWr</i>. The additional parameters can store the connection time parameters at pointing <i>id</i> in the form "{id}\n{SRC}[\n{NAME}[\n{HELP}]]". The additional parameters stored in XML of the configuration field "A_PRMS".</li>
+<li> <i>TVariant conPrm( const string &amp;id, const TVariant &amp;val = TVariant(), const string &amp;cfg = "" );</i> — Getting for value the connection time parameter <i>id</i> and setting the parameter at specifying the value <i>val</i>. If the connection time parameter also is a configuration from an external source, you specify the argument <i>cfg</i> in the form "{SRC}[\n{NAME}[\n{HELP}]]". Configuration of the external sources is read only by this function with setting the value <i>val</i> and configuration <i>cfg</i> once at initialisation, all changes for value the configuration performed by user from control interface of the transport.</li>
 <li> <i>virtual string getStatus( );</i> — Getting the status of the input transport.</li>
 <li> <i>bool toStart( );</i> — The sign "To start".</li>
 <li> <i>bool startStat( );</i> — The status "Running".</li>
@@ -1684,6 +1696,7 @@ Stages of the new Associated Output Transports processing (enum — TTransportIn
 <li> <i>void setDscr( const string &amp;idscr );</i> — Setting the description of transport in <i>idscr</i>.</li>
 <li> <i>void setAddr( const string &amp;addr );</i> — Setting the address of transport in <i>addr</i>.</li>
 <li> <i>void setProtocols( const string &amp;prt );</i> — Setting of the linked transport protocols.</li>
+<li> <i>void clearConPrm( const string &amp;id = "" );</i> — Clearing the connection time parameter <i>id</i> at non empty, all ones at empty and the external source configuration at "CFG:".</li>
 <li> <i>void setToStart( bool val );</i> — Setting of the sign "To start".</li>
 <li> <i>void setDB( const string &amp;vl, bool qTop = false );</i> — Setting of the transport's storage address, <i>qTop</i> for the storage queue top.</li>
 <li> <i>virtual void start( );</i> — Start of the transport.</li>
@@ -1724,7 +1737,8 @@ Stages of the new Associated Output Transports processing (enum — TTransportIn
 <li> <i>string addr( ) const;</i> — Transport address.</li>
 <li> <i>virtual string timings( );</i> — Transport timeouts.</li>
 <li> <i>virtual unsigned short attempts( );</i> — Connection attempts.</li>
-<li> <i>TVariant conPrm( const string &amp;nm );</i> — Getting the connection parameter <i>nm</i> value.</li>
+<li> <i>TVariant prm( const string &amp;id, const TVariant &amp;val = TVariant(), bool toWr = false );</i> — Getting for value the addition parameter <i>id</i> with default one <i>val</i>, or setting to the value <i>val</i> at <i>toWr</i>. The additional parameters can store the connection time parameters at pointing <i>id</i> in the form "{id}\n{SRC}[\n{NAME}[\n{HELP}]]". The additional parameters stored in XML of the configuration field "A_PRMS".</li>
+<li> <i>TVariant conPrm( const string &amp;id, const TVariant &amp;val = TVariant(), const string &amp;cfg = "" );</i> — Getting for value the connection time parameter <i>id</i> and setting the parameter at specifying the value <i>val</i>. If the connection time parameter also is a configuration from an external source, you specify the argument <i>cfg</i> in the form "{SRC}[\n{NAME}[\n{HELP}]]". Configuration of the external sources is read only by this function with setting the value <i>val</i> and configuration <i>cfg</i> once at initialisation, all changes for value the configuration performed by user from control interface of the transport.</li>
 <li> <i>bool startStat( );</i> — Status "Running".</li>
 <li> <i>time_t startTm( );</i> — Status "Time of starting/connection".</li>
 <li> <i>int64_t lstReqTm( );</i> — Status "Last request time".</li>
@@ -1737,8 +1751,7 @@ Stages of the new Associated Output Transports processing (enum — TTransportIn
 <li> <i>void setAddr( const string &amp;addr );</i> — Setting the address of transport.</li>
 <li> <i>virtual void setTimings( const string &amp;vl, bool isDef = false );</i> — Setting the transport timeouts, as default one for <i>isDef</i>.</li>
 <li> <i>virtual void setAttempts( unsigned short vl );</i> — Setting the connection attempts.</li>
-<li> <i>void setConPrm( const string &amp;nm, const TVariant &amp;vl );</i> — Setting the connection parameter <i>nm</i> to value <i>vl</i>.</li>
-<li> <i>void clearConPrm( );</i> — Clearing the connection parameters.</li>
+<li> <i>void clearConPrm( const string &amp;id = "" );</i> — Clearing the connection time parameter <i>id</i> at non empty, all ones at empty and the external source configuration at "CFG:".</li>
 <li> <i>void setDB( const string &amp;vl, bool qTop = false );</i> — Setting of the transport's storage address, <i>qTop</i> for the storage queue top.</li>
 <li> <i>virtual void start( int time = 0 );</i> — Starting the transport with the connection timeout <i>time</i>. When you start the output transport the actual connection to the remote station is established for the interfaces that works by the connection. At this time the errors can occur if the connection is impossible and the transport should return to the stopped state.</li>
 <li> <i>virtual void stop( );</i> — Stopping the transport.</li>
@@ -2143,11 +2156,11 @@ Parameter's type (enum — IO::Type):
 </p>
 <h3><span class="mw-headline" id="Data_storing_conception"><span class="mw-headline-number">13.1</span> <span id="DataConcept" title="#DataConcept">Data storing conception</span></span></h3>
 <p>OpenSCADA commonly defines and uses as the storage only the Configuration File and the Data Bases of different types of the "DB" subsystem. Where the Configuration File has the highest priority as an obligatory and always present storage.
-</p><p>The Generic Storage is a common system configuration field of selection a storage for common program data and as default storage value of OpenSCADA nodes to store. As the Generic Storage there can be selected whether the Configuration File "<b>&lt;cfg&gt;</b>" or a DB "<b>{DB module}.{DB name}</b>", and the same is pointed as "<b>*.*</b>" for enabling the implicit data accessing method in OpenSCADA nodes.
+</p><p>The Generic Storage is a common system configuration field of selection a storage for common program data and as default storage value of OpenSCADA nodes to store. As the Generic Storage there can be selected whether the Configuration File "<b>&lt;cfg&gt;</b>" or a DB "<b>{DB module}.{DB name}</b>", and the same is pointed as "<b>&lt;gen&gt;</b>" for enabling the implicit data accessing method in OpenSCADA nodes.
 </p><p>There are provided two variants of the data accessing:
 </p>
 <ol><li> directly and exclusively at the specified storage name;</li>
-<li> implicitly at specifying the Generic Storage name "<b>*.*</b>", what commonly means of accessing to the Configuration File firstly and the Generic Storage DB secondary, at the data missing in the Configuration File.</li></ol>
+<li> implicitly at specifying the Generic Storage name "<b>&lt;gen&gt;</b>", what commonly means of accessing to the Configuration File firstly and the Generic Storage DB secondary, at the data missing in the Configuration File.</li></ol>
 <p>The "DB" subsystem (the class <i>TBDS</i>) provides the functions <i>dataSeek()</i>, <i>dataGet()</i>, <i>dataSet()</i>, <i>dataDel()</i> of accessing the data which perform the data accessing variants in such ways:
 </p>
 <ul><li> <i>dataSeek()</i> — the data seeking function:</li></ul>

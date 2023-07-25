@@ -31,6 +31,13 @@
 // Own includings of the module - add need ones
 #include "module.h"
 
+#define DEF_KeepAliveReqs	0
+#define DEF_KeepAliveTm		60
+#define DEF_TaskPrior		0
+#define DEF_tms			"10:1"
+#define DEF_attempts		1
+
+
 //************************************************
 //* Module info!                                 *
 #define MOD_ID		"Tmpl"
@@ -86,16 +93,6 @@ TTr::~TTr( )
 
 }
 
-void TTr::postEnable( int flag )
-{
-    TModule::postEnable(flag);
-
-    if(flag&TCntrNode::NodeConnect) {
-	owner().inEl().fldAdd(new TFld("A_PRMS",trS("Addition parameters"),TFld::String,TFld::FullText,"10000"));
-	owner().outEl().fldAdd(new TFld("A_PRMS",trS("Addition parameters"),TFld::String,TFld::FullText,"10000"));
-    }
-}
-
 TTransportIn *TTr::In( const string &id, const string &stor )	{ return new TTrIn(id, stor, &owner().inEl()); }
 
 TTransportOut *TTr::Out( const string &id, const string &stor )	{ return new TTrOut(id, stor, &owner().outEl()); }
@@ -110,11 +107,11 @@ string TTr::outAddrHelp( )
 //************************************************
 //* TTrIn                                        *
 //************************************************
-TTrIn::TTrIn( string name, const string &idb, TElem *el ) :
-    TTransportIn(name,idb,el), mKeepAliveReqs(0), mKeepAliveTm(60), mTaskPrior(0)
+TTrIn::TTrIn( string name, const string &idb, TElem *el ) : TTransportIn(name,idb,el),
+    mKeepAliveReqs(DEF_KeepAliveReqs), mKeepAliveTm(DEF_KeepAliveTm), mTaskPrior(DEF_TaskPrior)
 {
     //???? Set here the default input transport address
-    setAddr("localhost:10005");
+    setAddr("*:10005");
 }
 
 TTrIn::~TTrIn( )
@@ -137,31 +134,20 @@ string TTrIn::getStatus( )
 
 void TTrIn::load_( )
 {
-    try {
-	XMLNode prmNd;
-	string  vl;
-	prmNd.load(cfg("A_PRMS").getS());
-	vl = prmNd.attr("KeepAliveReqs"); if(!vl.empty()) setKeepAliveReqs(s2i(vl));
-	vl = prmNd.attr("KeepAliveTm");	if(!vl.empty()) setKeepAliveTm(s2i(vl));
-	vl = prmNd.attr("TaskPrior");	if(!vl.empty()) setTaskPrior(s2i(vl));
-	//???? Append loading the additional configuration attributes
-    } catch(...) { }
-
-    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
+    setKeepAliveReqs((int)prm("KeepAliveReqs",DEF_KeepAliveReqs));
+    setKeepAliveTm((int)prm("KeepAliveTm",DEF_KeepAliveTm));
+    setTaskPrior(prm("TaskPrior",DEF_TaskPrior));
+    //???? Append loading the additional configuration parameters
 }
 
 void TTrIn::save_( )
 {
-    XMLNode prmNd("prms");
-    prmNd.setAttr("KeepAliveReqs", i2s(keepAliveReqs()));
-    prmNd.setAttr("KeepAliveTm", i2s(keepAliveTm()));
-    prmNd.setAttr("TaskPrior", i2s(taskPrior()));
-    //???? Append saving the additional configuration attributes
-    cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
+    prm("KeepAliveReqs", (int)keepAliveReqs(), true);
+    prm("KeepAliveTm", (int)keepAliveTm(), true);
+    prm("TaskPrior", taskPrior(), true);
+    //???? Append saving the additional configuration parameters
 
     TTransportIn::save_();
-
-    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
 }
 
 void TTrIn::start( )
@@ -225,30 +211,31 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
     //Getting the page info
     if(opt->name() == "info") {
 	TTransportIn::cntrCmdProc(opt);
-	ctrRemoveNode(opt, "/prm/cfg/A_PRMS");
 	ctrMkNode("fld", opt, -1, "/prm/cfg/ADDR", EVAL_STR, startStat()?R_R_R_:RWRWR_, "root", STR_ID, 1, "help",
 	    _("Input transport has the address format:\n"
 		//???? Describe here the input transport address
 	    ));
-	ctrMkNode("fld", opt, -1, "/prm/cfg/taskPrior", _("Priority"), startStat()?R_R_R_:RWRWR_, "root", STR_ID, 2,
+
+	int pos = 0;
+	ctrMkNode("fld", opt, pos++, "/aprm/taskPrior", _("Priority"), startStat()?R_R_R_:RWRWR_, "root", STR_ID, 2,
 		"tp","dec", "help",TMess::labTaskPrior().c_str());
-	ctrMkNode("fld", opt, -1, "/prm/cfg/keepAliveReqs", _("Keep alive requests"), RWRWR_, "root", STR_ID, 2, "tp","dec",
+	ctrMkNode("fld", opt, pos++, "/aprm/keepAliveReqs", _("Keep alive requests"), RWRWR_, "root", STR_ID, 2, "tp","dec",
 		"help",_("Closing the connection after the specified requests.\nZero value to disable - do not close ever."));
-	ctrMkNode("fld", opt, -1, "/prm/cfg/keepAliveTm", _("Keep alive timeout, seconds"), RWRWR_, "root", STR_ID, 2, "tp","dec",
+	ctrMkNode("fld", opt, pos++, "/aprm/keepAliveTm", _("Keep alive timeout, seconds"), RWRWR_, "root", STR_ID, 2, "tp","dec",
 		"help",_("Closing the connection after no requests at the specified timeout.\nZero value to disable - do not close ever."));
 	return;
     }
     //Processing for commands to the page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/keepAliveReqs") {
+    if(a_path == "/aprm/keepAliveReqs") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(keepAliveReqs()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setKeepAliveReqs(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/keepAliveTm") {
+    else if(a_path == "/aprm/keepAliveTm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(keepAliveTm()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setKeepAliveTm(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/taskPrior") {
+    else if(a_path == "/aprm/taskPrior") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(taskPrior()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTaskPrior(s2i(opt->text()));
     }
@@ -258,12 +245,15 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TTrOut                                   *
 //************************************************
-TTrOut::TTrOut(string name, const string &idb, TElem *el) : TTransportOut(name,idb,el), mAttemts(1)
+TTrOut::TTrOut(string name, const string &idb, TElem *el) : TTransportOut(name,idb,el),
+    mAttemts(DEF_attempts)
 {
-
+    //???? Set here the default output transport address and timeouts
+    setAddr("localhost:10005");
+    setTimings(DEF_tms, true);
 }
 
-TTrOut::~TTrOut()
+TTrOut::~TTrOut( )
 {
 
 }
@@ -299,29 +289,18 @@ void TTrOut::setAttempts( unsigned short vl )
 
 void TTrOut::load_( )
 {
-    try {
-	XMLNode prmNd;
-	string  vl;
-	prmNd.load(cfg("A_PRMS").getS());
-	vl = prmNd.attr("tms"); if(!vl.empty()) setTimings(vl);
-	vl = prmNd.attr("attempts"); if(!vl.empty()) setAttempts(s2i(vl));
-	//???? Append loading the additional configuration attributes
-    } catch(...) { }
-
-    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
+    setTimings(prm("tms",DEF_tms));
+    setAttempts((int)prm("attempts",DEF_attempts));
+    //???? Append loading the additional configuration parameters
 }
 
 void TTrOut::save_( )
 {
-    XMLNode prmNd("prms");
-    prmNd.setAttr("tms", timings());
-    prmNd.setAttr("attempts", i2s(attempts()));
-    //???? Append saving the additional configuration attributes
-    cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
+    prm("tms", timings(), true);
+    prm("attempts", attempts(), true);
+    //???? Append saving the additional configuration parameters
 
     TTransportOut::save_();
-
-    //cfg("A_PRMS").setS("");	//!!!! For preventing of holding the parameters source in the memory we need to implement their copying before
 }
 
 bool TTrOut::cfgChange( TCfg &co, const TVariant &pc )
@@ -384,19 +363,22 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
     //Getting the page info
     if(opt->name() == "info") {
 	TTransportOut::cntrCmdProc(opt);
-	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",STR_ID,1, "help",owner().outAddrHelp().c_str());
-	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,1, "tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/attempts",_("Attempts"),RWRWR_,"root",STR_ID,1, "tp","dec");
+	if(opt->childSize() && ctrId(opt->childGet(0),"/prm/cfg",true))
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",STR_ID,1, "help",owner().outAddrHelp().c_str());
+
+	if(opt->childSize() && ctrId(opt->childGet(0),"/aprm",true)) {
+	    ctrMkNode("fld",opt,-1,"/aprm/TMS",_("Timings"),RWRWR_,"root",STR_ID,1, "tp","str");
+	    ctrMkNode("fld",opt,-1,"/aprm/attempts",_("Attempts"),RWRWR_,"root",STR_ID,1, "tp","dec");
+	}
 	return;
     }
     //Processing for commands to the page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/TMS") {
+    if(a_path == "/aprm/TMS") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(timings());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTimings(opt->text());
     }
-    else if(a_path == "/prm/cfg/attempts") {
+    else if(a_path == "/aprm/attempts") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(attempts()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setAttempts(s2i(opt->text()));
     }

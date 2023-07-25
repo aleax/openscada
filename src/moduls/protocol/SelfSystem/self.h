@@ -36,7 +36,7 @@
 #define EMPTY_PASS	"<EMPTY>"
 #define H_LIM		255
 
-#define DEF_SessTimeLife	60
+#define DEF_SessTimeLife	1
 #define DEF_ComprLev		0
 #define DEF_ComprBrd		80
 #define DEF_SingleUserHostLimit	100
@@ -66,7 +66,7 @@ class TProtIn: public TProtocolIn
 //*************************************************
 //* TProt                                         *
 //*************************************************
-class TProt: public TProtocol
+class TProt : public TProtocol
 {
     public:
 	//Data
@@ -98,12 +98,18 @@ class TProt: public TProtocol
 	void setComprLev( int vl )	{ mComprLev = vmax(-1,vmin(9,vl)); modif(); }
 	void setComprBrd( int vl )	{ mComprBrd = vmax(10,vl); modif(); }
 
-	int sesOpen( const string &user, const string &pass, const string &src = "" );
+	int sesOpen( const string &user, const string &pass, const string &src, int authTime, int singleUserHostLimit );
 	void sesClose( int idSes );
-	SAuth sesGet( int idSes );
+	SAuth sesGet( int idSes, int authTime );
 	void sesSet( int idSes, const SAuth &auth );
 
 	void outMess( XMLNode &io, TTransportOut &tro );
+
+	static string comprLevLab( );
+	static string authTimeLab( );
+	static string singleUserHostLimitLab( );
+	static string comprLevHelp( );
+	static string comprBrdHelp( );
 
     protected:
 	void load_( );

@@ -333,7 +333,7 @@ Modules/DBF:en,uk,ru:Modules/DBF.html
 Modules/LDAP:en,uk,ru:Modules/LDAP.html
 Modules/Sockets:en,uk,ru:Modules/Sockets.html
 Modules/Serial:en,uk,ru:Modules/Serial.html
-Modules/SSL:en,uk,ru:Modules/SSL.html
+Modules/SSL:en,uk:Modules/SSL.html
 Modules/SelfSystem:en,uk,ru:Modules/SelfSystem.html
 Modules/UserProtocol:en,uk,ru:Modules/UserProtocol.html
 Modules/HTTP:en,uk,ru:Modules/HTTP.html
@@ -341,7 +341,7 @@ Modules/JavaLikeCalc:en,uk,ru:Modules/JavaLikeCalc.html
 Modules/LogicLev:en,uk,ru:Modules/LogicLev.html
 Modules/BlockCalc:en,uk,ru:Modules/BlockCalc.html
 Modules/DAQGate:en,uk,ru:Modules/DAQGate.html
-Modules/System:en,uk,ru:Modules/System.html
+Modules/System:en,uk:Modules/System.html
 Modules/ModBus:en,uk,ru:Modules/ModBus.html
 Modules/DCON:en,uk,ru:Modules/DCON.html
 Modules/OPC_UA:en,uk,ru:Modules/OPC_UA.html

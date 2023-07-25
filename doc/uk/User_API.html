@@ -749,7 +749,9 @@
 <li> <i>string addr( string vl = "" )</i> — адреса транспорту, встановлює у непорожнє значення <i>vl</i>.</li>
 <li> <i>string writeTo( string sender, string mess )</i> — відправляє повідомлення <i>mess</i> відправнику <i>sender</i>, як відповідь.</li>
 <li> <i>TArrayObj associateTrsList( )</i> — перелік асоційованих вихідних транспортів із цим вхідним.</li>
-<li> <i>TCntrNodeObj associateTr( string id )</i> — отримання асоційованого транспорту за підключенням <i>id</i>.</li></ul>
+<li> <i>TCntrNodeObj associateTr( string id )</i> — отримання асоційованого транспорту за підключенням <i>id</i>.</li>
+<li> <i>ElTp conPrm( string id, ElTp val = EVAL, string cfg = "" )</i> — загальне поводження із параметром часу підключення <i>id</i> з встановленням у значення <i>val</i> за наявності; запит конфігураційного параметру часу підключення із реєстрацією конфігурації <i>cfg</i> у форматі "{SRC}\n{NAME}\n{HELP}" вперше.</li>
+<li> <i>bool setConPrm( string id, ElTp val )</i> — встановлення параметру часу підключення <i>id</i> у значення <i>val</i>, лише для сумісності.</li></ul>
 <p>Функції об'єкту вихідного транспорту (SYS.Transport["Modul"]["out_Transp"]):
 </p>
 <ul>
@@ -761,8 +763,8 @@
 <li><i>string addr( string vl = "" )</i> — адреса транспорту, встановлює у непорожнє значення <i>vl</i>.</li>
 <li><i>string timings( string vl = "", isDef = true )</i> — таймінги транспорту, встановлює у непорожнє значення <i>vl</i> та по замовченню для <i>isDef</i>. </li>
 <li><i>int attempts( int vl = EVAL )</i> — спроб підключень транспорту, встановлює у не-EVAL значення <i>vl</i>.</li>
-<li><i>ElTp conPrm( string nm )</i> — отримання параметру підключення <i>nm</i>.</li>
-<li><i>bool setConPrm( string nm, ElTp val )</i> — встановлення параметру підключення <i>nm</i> у <i>val</i>.</li>
+<li><i>ElTp conPrm( string id, ElTp val = EVAL, string cfg = "" )</i> — загальне поводження із параметром часу підключення <i>id</i> з встановленням у значення <i>val</i> за наявності; запит конфігураційного параметру часу підключення із реєстрацією конфігурації <i>cfg</i> у форматі "{SRC}\n{NAME}\n{HELP}" вперше.</li>
+<li><i>bool setConPrm( string id, ElTp val )</i> — встановлення параметру часу підключення <i>id</i> у значення <i>val</i>, лише для сумісності.</li>
 <li><i>string messIO( string mess, real timeOut = 0, int inBufLen = -1 );</i> — відправляє повідомлення <i>mess</i> через транспорт з таймаутом очікування відповіді <i>timeOut</i> (у секундах) та читає відповідь (буфер) розміром <i>inBufLen</i> байт. У випадку нульового таймауту цей час береться з налаштувань вихідного транспорту. Негативний час <i>timeOut</i> (&lt; -1e-3) вимикає роботу транспорту у режимі запит/відповідь та дозволяє незалежно читати/писати у буфер ВВ, з таймаутом читання <i>timeOut</i>, у абсолютному значенні. Для негативного <i>inBufLen</i> розмір буферу встановлюється у STR_BUF_LEN(10000), а "0" вимикає читання взагалі.<br />
 <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Якщо Ваш транспорт у відповідь на запит передбачає отримання даних частинами тоді використовуйте цю функцію у одному потоці для декількох пристроїв на одній шині-транспорті оскільки тут не існує способу блокування транспорту з користувацького API. Один потік це об'єкт контролеру підсистеми "Збір даних", а <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">модуль "Протокол користувача"</a> блокує транспорт всередині, перед виконанням своїх користувацьких процедур.
 <div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">rez</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">Transport</span><span class="p">.</span><span class="nx">Serial</span><span class="p">.</span><span class="nx">out_ttyUSB0</span><span class="p">.</span><span class="nx">messIO</span><span class="p">(</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">strFromCharCode</span><span class="p">(</span><span class="mh">0x4B</span><span class="p">,</span><span class="mh">0x00</span><span class="p">,</span><span class="mh">0x37</span><span class="p">,</span><span class="mh">0x40</span><span class="p">),</span><span class="mf">0.2</span><span class="p">);</span>
