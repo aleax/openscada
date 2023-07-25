@@ -1,4 +1,9 @@
-2023-05-15 Roman (stable)
+2023-07-25 Roman (stable)
+- FIX: LibsDB.vcaBase: wlb_Main.storeHouse: Guaranteed in filling the report dialogs
+    by generating the opening events from the procedure.
+
+
+2023-07-15 Roman (stable)
 - !!:Transport.SSL: The SSL context moved to the generic module object separately for input (ctxIn) and output (ctxOut) parts
 	and the ciphers information was appended for:
     - the generic module object by SSL_CTX_get_ciphers();

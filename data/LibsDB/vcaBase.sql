@@ -13895,8 +13895,14 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		}
 		delete dataTblOneReq;
 		go_reportIt_report += "</body>";
+
+		this.attrSet("event", this.attr("event")+"usr_report:/go_reportIt\n");
 	}
-	else if(sval == "ws_BtRelease:/go_report")	toUpdate = toReport = true, toCalcCycles = 1;
+	else if(sval == "ws_BtRelease:/go_report") {
+		toUpdate = toReport = true, toCalcCycles = 1;
+
+		this.attrSet("event", this.attr("event")+"usr_report:/go_report\n");
+	}
 }
 
 //Clearing the filter up to fClrTo
@@ -23831,7 +23837,7 @@ The frame provides currently and in future for next features:
   - [PLANNED] detailed control panel of the selected item with the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.1
+Version: 1.3.2
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -23845,7 +23851,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - [ЗАПЛАНОВАНО] деталізована панель керування обраним елементом зі специфічними полями.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.3.1
+Версія: 1.3.2
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');
@@ -23853,8 +23859,8 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','900',32,'','','','','','','
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','580',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','22',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','evProc','ws_BtPress:/itDel:open:/pg_control/pg_accept
-ws_BtPress:/go_report:open:/pg_control/pg_alarmsStReport
-ws_BtPress:/go_reportIt:open:/pg_control/pg_alarmsStReport',32,'','','','','','','','','','');
+usr_report:/go_report:open:/pg_control/pg_alarmsStReport
+usr_report:/go_reportIt:open:/pg_control/pg_alarmsStReport',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','pgOpenSrc','',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','pgGrp','so',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','backColor','grey',96,'','','','','','','','','','');
