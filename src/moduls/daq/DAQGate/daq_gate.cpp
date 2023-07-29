@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.12.4"
+#define MOD_VER		"2.12.5"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -825,6 +825,7 @@ void *TMdContr::Task( void *icntr )
 			    errM += (errM.size()?"; ":"") + TSYS::strMess(_("Station '%s' - %s"),st->first.c_str(),st->second.err.c_str());
 			    st->second.dataRes.unlock();
 			}
+		    if(errM.empty())	errM = _("No active source on the remote station");
 		    cntr.alarmSet(TSYS::strMess(_("Connection to the data source: %s."),TRegExp(":","g").replace(errM,"=").c_str()));
 		}
 		alSt = !someLive;

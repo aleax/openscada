@@ -1,3 +1,10 @@
+2023-07-29 Roman (stable)
+- DAQ.DAQGate: Appended of the error message "No active source on the remote station" instead empty errors.
+- !!!!:FIX:Transport.SSL: TSocketOut::messIO() prevented from hang at endlessly reading by BIO_read() after the socket closing,
+	by checking errno for EAGAIN.
+    The connection error message appended by the timeout value information.
+
+
 2023-07-25 Roman (stable)
 - !!!!:Transport.*,Protocol.SelfSystem: Refactored and unified in the additional parameters management and expanded in using
 	the connection time parameters for registering configuration parameters of external sources like to protocols:

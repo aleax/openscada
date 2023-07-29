@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-20 10:03+0200\n"
+"POT-Creation-Date: 2023-07-29 08:21+0300\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -21,8 +21,7 @@ msgstr "Шлюз джерел даних"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid ""
-"Allows to locate data sources of the remote OpenSCADA stations to local ones."
+msgid "Allows to locate data sources of the remote OpenSCADA stations to local ones."
 msgstr ""
 "Дозволяє виконувати шлюзування джерел даних віддалених OpenSCADA станцій до "
 "локальних."
@@ -101,6 +100,7 @@ msgstr "Наступний збір за cron '%s'. "
 msgid "Spent time %s[%s]. "
 msgstr "Витрачено часу %s[%s]. "
 
+#, c-format
 msgid "Station '%s' - ERROR, restoring in %.3g s. "
 msgstr "Станція '%s' - ПОМИЛКА, відновлення через %.3g с. "
 
@@ -122,8 +122,7 @@ msgstr "До запису %d. "
 
 #, c-format
 msgid "Enabling: station '%s' processing item '%s' for parameters %d."
-msgstr ""
-"Включення: станція '%s' опрацьовує елемент '%s' на предмет параметрів %d."
+msgstr "Включення: станція '%s' опрацьовує елемент '%s' на предмет параметрів %d."
 
 #, c-format
 msgid ""
@@ -146,6 +145,9 @@ msgstr "НОРМА"
 #, c-format
 msgid "Station '%s' - %s"
 msgstr "Станція '%s' - %s"
+
+msgid "No active source on the remote station"
+msgstr "Жодного активного джерела на віддаленій станції"
 
 msgid "10:Data not available."
 msgstr "10:Дані не доступні."
@@ -241,3 +243,4 @@ msgstr "Конфігурація віддаленого параметру"
 
 msgid "Controller is not started!"
 msgstr "Контролер не запущено!"
+

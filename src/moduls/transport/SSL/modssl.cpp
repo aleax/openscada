@@ -53,7 +53,7 @@
 #define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.3.2"
+#define MOD_VER		"4.3.4"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and supported SSL-TLS depending on the library version.")
@@ -1172,8 +1172,8 @@ string TSocketOut::connectSSL( const string &addr, SSL **ssl, BIO **conn,
 		    else res = -1;
 		}
 		if(res)	throw TError(mod->nodePath().c_str(),
-		    _("Error connecting to the internet socket '%s:%s' during the timeout, it seems in down or inaccessible: '%s (%d)'!"),
-		    ssl_host_.c_str(), ssl_port.c_str(), strerror(errno), errno);
+		    _("Error connecting to the internet socket '%s:%s' during the time %s, it seems in down or inaccessible: '%s (%d)'!"),
+		    ssl_host_.c_str(), ssl_port.c_str(), tm2s(1e-3*tmCon).c_str(), strerror(errno), errno);
 
 		//Certificates, private key and it password loading
 
@@ -1461,9 +1461,7 @@ repeate:
 		throw TError(nodePath().c_str(),_("Error reading (select): %s"), err.c_str());
 	    }
 	    else if(FD_ISSET(sockFd,&rd_fd)) {
-		ret = BIO_read(conn, iBuf, iLen);
-		if(ret == -1)
-		    while((ret=BIO_read(conn,iBuf,iLen)) == -1) sched_yield();
+		while((ret=BIO_read(conn,iBuf,iLen)) == -1 && errno == EAGAIN) sched_yield();
 		if(ret < 0) {
 		    err = (ret < 0) ? TSYS::strMess("%s (%d)",strerror(errno),errno) : _("No data, the connection seems closed");
 		    stop();
