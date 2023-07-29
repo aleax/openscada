@@ -45,6 +45,7 @@
 #define DEF_KeepAliveTm		60
 #define DEF_TaskPrior		0
 #define DEF_TMS			"10:1"
+#define DEF_PORT		"10045"
 
 
 //************************************************
@@ -53,7 +54,7 @@
 #define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.3.4"
+#define MOD_VER		"4.3.6"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and supported SSL-TLS depending on the library version.")
@@ -288,7 +289,7 @@ TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) : TTransportIn
     mInBufLen(DEF_InBufLen), mMSS(DEF_MSS), mMaxFork(DEF_MaxClients), mMaxForkPerHost(DEF_MaxClientsPerHost),
     mKeepAliveReqs(DEF_KeepAliveReqs), mKeepAliveTm(DEF_KeepAliveTm), mTaskPrior(DEF_TaskPrior), clFree(true)
 {
-    setAddr("*:10045");
+    setAddr("*:" DEF_PORT);
 }
 
 TSocketIn::~TSocketIn( )
@@ -380,7 +381,7 @@ void TSocketIn::start( )
     //Mode of the initiative connection
     if(mode() == M_Initiative) {
 	TSocketOut::connectSSL(TSYS::strParse(addr(),0,"||"), &ssl, &bio,
-	    initAssocPrms().size()?vmax(1,s2i(initAssocPrms())):5, certKey(), pKeyPass(), certKeyFile());
+	    1000*(initAssocPrms().size()?vmax(1,s2i(initAssocPrms())):5), certKey(), pKeyPass(), certKeyFile());
 	sockFd = BIO_get_fd(bio, NULL);
 
 	if(addon.size()) BIO_write(bio, addon.data(), addon.size());	//Writing the identification sequence
@@ -1050,7 +1051,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 TSocketOut::TSocketOut( string name, const string &idb, TElem *el ) : TTransportOut(name, idb, el),
     mAttemts(1), mMSS(0), ssl(NULL), conn(NULL)
 {
-    setAddr("localhost:10045");
+    setAddr("localhost:" DEF_PORT);
     setTimings(DEF_TMS, true);
 }
 
@@ -1138,7 +1139,7 @@ string TSocketOut::connectSSL( const string &addr, SSL **ssl, BIO **conn,
 	int error;
 
 	MtxAlloc aRes(*SYS->commonLock("getaddrinfo"), true);
-	if((error=getaddrinfo(ssl_host_.c_str(),(ssl_port.size()?ssl_port.c_str():"10045"),&hints,&res)))
+	if((error=getaddrinfo(ssl_host_.c_str(),(ssl_port.size()?ssl_port.c_str():DEF_PORT),&hints,&res)))
 	    throw TError(mod->nodePath().c_str(), _("Error the address '%s': '%s (%d)'"), addr_.c_str(), gai_strerror(error), error);
 	vector<sockaddr_storage> addrs;
 	for(struct addrinfo *iAddr = res; iAddr != NULL; iAddr = iAddr->ai_next) {
@@ -1157,6 +1158,7 @@ string TSocketOut::connectSSL( const string &addr, SSL **ssl, BIO **conn,
 		    throw TError(mod->nodePath().c_str(), _("Error creating TCP socket: %s!"), strerror(errno));
 		int vl = 1;
 		setsockopt(sockFd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
+
 
 		//Connect to the socket
 		int flags = fcntl(sockFd, F_GETFL, 0);

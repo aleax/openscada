@@ -1,4 +1,10 @@
 2023-07-29 Roman (stable)
+- Transport.{SSL,Sockets}: The default port value moved to the definition DEF_PORT.
+- !!:FIX:Transport.SSL: Fixed in specifying the connection timeout of TSocketOut::connectSSL() in milliseconds
+    at performing the initiative connection.
+
+
+2023-07-29 Roman (stable)
 - DAQ.DAQGate: Appended of the error message "No active source on the remote station" instead empty errors.
 - !!!!:FIX:Transport.SSL: TSocketOut::messIO() prevented from hang at endlessly reading by BIO_read() after the socket closing,
 	by checking errno for EAGAIN.

@@ -64,6 +64,7 @@
 #define DEF_TaskPrior		0
 #define DEF_tms			"10:1"
 #define DEF_attempts		1
+#define DEF_PORT		"10005"
 
 
 //************************************************
@@ -72,7 +73,7 @@
 #define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.7.1"
+#define MOD_VER		"4.7.2"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov(2014)")
 #define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -180,7 +181,7 @@ TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) :
     mInBufLen(DEF_InBufLen), mMSS(DEF_MSS), mMaxQueue(DEF_MaxQueue), mMaxFork(DEF_MaxClients), mMaxForkPerHost(DEF_MaxClientsPerHost),
     mKeepAliveReqs(DEF_KeepAliveReqs), mKeepAliveTm(DEF_KeepAliveTm), mTaskPrior(DEF_TaskPrior), clFree(true)
 {
-    setAddr("*:10005");
+    setAddr("*:" DEF_PORT);
 }
 
 TSocketIn::~TSocketIn( )	{ }
@@ -282,7 +283,7 @@ void TSocketIn::start( )
 	sockFd = -1;
 
 	MtxAlloc aRes(*SYS->commonLock("getaddrinfo"), true);
-	if((error=getaddrinfo(((host.size() && host != "*")?host.c_str():NULL),(port.size()?port.c_str():"10005"),&hints,&res)))
+	if((error=getaddrinfo(((host.size() && host != "*")?host.c_str():NULL),(port.size()?port.c_str():DEF_PORT),&hints,&res)))
 	    throw TError(nodePath().c_str(), _("Error the address '%s': '%s (%d)'"), addr().c_str(), gai_strerror(error), error);
 	vector<sockaddr_storage> addrs;
 	for(struct addrinfo *iAddr = res; iAddr != NULL; iAddr = iAddr->ai_next) {
@@ -1098,7 +1099,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 TSocketOut::TSocketOut( string name, const string &idb, TElem *el ) :
     TTransportOut(name, idb, el), mAttemts(DEF_attempts), mMSS(DEF_MSS), sockFd(-1), type(S_TCP)
 {
-    setAddr("localhost:10005");
+    setAddr("localhost:" DEF_PORT);
     setTimings(DEF_tms, true);
 }
 
@@ -1245,7 +1246,7 @@ void TSocketOut::start( int itmCon )
 	    if(logLen()) pushLogMess(TSYS::strMess(_("Resolving for '%s'"),host_.c_str()));
 
 	    MtxAlloc aRes(*SYS->commonLock("getaddrinfo"), true);
-	    if((error=getaddrinfo(host_.c_str(),(port.size()?port.c_str():"10005"),&hints,&res)))
+	    if((error=getaddrinfo(host_.c_str(),(port.size()?port.c_str():DEF_PORT),&hints,&res)))
 		throw TError(nodePath().c_str(), _("Error the address '%s': '%s (%d)'"), addr_.c_str(), gai_strerror(error), error);
 	    vector<sockaddr_storage> addrs;
 	    for(struct addrinfo *iAddr = res; iAddr != NULL; iAddr = iAddr->ai_next) {
