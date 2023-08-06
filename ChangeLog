@@ -1,3 +1,7 @@
+2023-08-06 Roman (stable)
+- !!:FIX:Protocol.SelfSystem: Fixed in double request packing of the output requests at second tries of reconnection or reauth.
+
+
 2023-07-29 Roman (stable)
 - Transport.{SSL,Sockets}: The default port value moved to the definition DEF_PORT.
 - !!:FIX:Transport.SSL: Fixed in specifying the connection timeout of TSocketOut::connectSSL() in milliseconds
