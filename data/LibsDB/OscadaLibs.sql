@@ -5317,7 +5317,16 @@ function req(data, pref, respPref) {
 	return "0";
 }
 
-if(f_start || f_stop) return;
+if(f_start || f_stop) {
+	EnActFull = EnActImp = EnActExp = EnActFullDrop = EnActImpDrop = EnActExpDrop = EVAL;
+	EnReactFull = EnReactImp = EnReactExp = EnReactFullDrop = EnReactImpDrop = EnReactExpDrop = EVAL;
+	V_L1 = V_L2 = V_L3 = V_L12 = V_L23 = V_L31 = EVAL;
+	I_1 = I_2 = I_3 = I_N = EVAL;
+	P = P_1 = P_2 = P_3 = EVAL;
+	Pr = Pr_1 = Pr_2 = Pr_3 = EVAL;
+	CoefP = CoefP_1 = CoefP_2 = CoefP_3 = EVAL;
+	return;
+}
 
 tErr = "";
 
@@ -5366,14 +5375,14 @@ else {
 			I_N = SYS.strDecode(SYS.strEncode(data.slice(18+6*9,18+6*9+3),"Reverse"),"Bin").toInt() / 1000;
 
 			P = SYS.strDecode(SYS.strEncode(data.slice(77+5*0,77+5*0+3),"Reverse"),"Bin").toInt() / 100;
-			P_1 = SYS.strDecode(SYS.strEncode(data.slice(77+5*1,77+5*1+3),"Reverse"),"Bin").toInt() / 100;
-			P_2 = SYS.strDecode(SYS.strEncode(data.slice(77+5*2,77+5*2+3),"Reverse"),"Bin").toInt() / 100;
-			P_3 = SYS.strDecode(SYS.strEncode(data.slice(77+5*3,77+5*3+3),"Reverse"),"Bin").toInt() / 100;
+			P_1 = SYS.strDecode(SYS.strEncode(data.slice(77+5*1,77+5*1+3),"Reverse"),"Bin").toInt() / 1000;
+			P_2 = SYS.strDecode(SYS.strEncode(data.slice(77+5*2,77+5*2+3),"Reverse"),"Bin").toInt() / 1000;
+			P_3 = SYS.strDecode(SYS.strEncode(data.slice(77+5*3,77+5*3+3),"Reverse"),"Bin").toInt() / 1000;
 
-			Pr = SYS.strDecode(SYS.strEncode(data.slice(98+6*0,98+6*0+3),"Reverse"),"Bin").toInt() / 100;
-			Pr_1 = SYS.strDecode(SYS.strEncode(data.slice(98+6*1,98+6*1+3),"Reverse"),"Bin").toInt() / 100;
-			Pr_2 = SYS.strDecode(SYS.strEncode(data.slice(98+6*2,98+6*2+3),"Reverse"),"Bin").toInt() / 100;
-			Pr_3 = SYS.strDecode(SYS.strEncode(data.slice(98+6*3,98+6*3+3),"Reverse"),"Bin").toInt() / 100;
+			Pr = SYS.strDecode(SYS.strEncode(data.slice(98+6*0,98+6*0+3),"Reverse"),"Bin").toInt() / 1000;
+			Pr_1 = SYS.strDecode(SYS.strEncode(data.slice(98+6*1,98+6*1+3),"Reverse"),"Bin").toInt() / 10000;
+			Pr_2 = SYS.strDecode(SYS.strEncode(data.slice(98+6*2,98+6*2+3),"Reverse"),"Bin").toInt() / 10000;
+			Pr_3 = SYS.strDecode(SYS.strEncode(data.slice(98+6*3,98+6*3+3),"Reverse"),"Bin").toInt() / 10000;
 
 			CoefP = SYS.strDecode(SYS.strEncode(data.slice(122+5*0,122+5*0+2),"Reverse"),"Bin").toInt() / 1000;
 			CoefP_1 = SYS.strDecode(SYS.strEncode(data.slice(122+5*1,122+5*1+2),"Reverse"),"Bin").toInt() / 1000;
@@ -5387,10 +5396,19 @@ else {
 if(!tErr.length)	tErr = "0";
 if(tErr.toInt()) {
 	if(!tr.isEVal() && tr.start()) tr.start(false);
-	if(f_err != tErr)
+	if(f_err != tErr) {
 		SYS.messDebug("/FF/"+this.cfg("SHIFR"), tr("Error")+": "+tErr);
+
+		EnActFull = EnActImp = EnActExp = EnActFullDrop = EnActImpDrop = EnActExpDrop = EVAL;
+		EnReactFull = EnReactImp = EnReactExp = EnReactFullDrop = EnReactImpDrop = EnReactExpDrop = EVAL;
+		V_L1 = V_L2 = V_L3 = V_L12 = V_L23 = V_L31 = EVAL;
+		I_1 = I_2 = I_3 = I_N = EVAL;
+		P = P_1 = P_2 = P_3 = EVAL;
+		Pr = Pr_1 = Pr_2 = Pr_3 = EVAL;
+		CoefP = CoefP_1 = CoefP_2 = CoefP_3 = EVAL;
+	}
 }
-f_err = tErr;','','',1681968337);
+f_err = tErr;','','',1691152291);
 INSERT INTO tmplib_DevLib VALUES('ergomera625','Ergomera 625','','','','','',30,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(PDU) {

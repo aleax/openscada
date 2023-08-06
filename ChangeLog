@@ -1,4 +1,8 @@
 2023-08-06 Roman (stable)
+- LibsDB.OscadaLibs: tmplib_DevLib.FF_LE: Finished in the implementation.
+
+
+2023-08-06 Roman (stable)
 - !!:FIX:Protocol.SelfSystem: Fixed in double request packing of the output requests at second tries of reconnection or reauth.
 
 
