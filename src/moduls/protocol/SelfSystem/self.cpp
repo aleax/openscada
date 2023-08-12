@@ -32,7 +32,7 @@
 #define MOD_NAME	trS("Own protocol of OpenSCADA")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.10.2"
+#define MOD_VER		"1.10.3"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -194,6 +194,11 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
     try {
 	int reqTrs = tro.attempts(), iTr = 0;
+
+	// Compressing the data
+	bool reqCompr = (comprLev() && (int)data.size() > comprBrd());
+	if(reqCompr) data = TSYS::strCompr(data, comprLev());
+
 	string errTr;
 	for(iTr = 0; iTr < reqTrs; ++iTr) {
 	    int64_t authID = tro.conPrm("auth"+user);
@@ -226,10 +231,6 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    }
 
 	    //The same Request
-	    // Compressing the data
-	    bool reqCompr = (comprLev() && (int)data.size() > comprBrd());
-	    if(reqCompr) data = TSYS::strCompr(data, comprLev());
-
 	    if(isDir)	req = "REQDIR " + user + " " + pass + " " + i2s(data.size()*(reqCompr?-1:1)) + "\x0A" + data;
 	    else	req = "REQ " + i2s(authID) + " " + i2s(data.size()*(reqCompr?-1:1)) + "\x0A" + data;
 

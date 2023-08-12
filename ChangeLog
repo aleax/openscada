@@ -1,3 +1,14 @@
+2023-08-12 Roman 0.9.6.2
+- FIX: LibsDB.vcaBase: wlb_Main.storeHouse: Guaranteed in filling the report dialogs
+    by generating the opening events from the procedure.
+- DAQ.DAQGate: Appended of the error message "No active source on the remote station" instead empty errors.
+- FIX:Transport.Sockets: Some fixed in the description.
+- !!!!:FIX:Transport.SSL: TSocketOut::messIO() prevented from hang at endlessly reading by BIO_read() after the socket closing,
+    by checking errno for EAGAIN.
+    The connection error message appended by the timeout value information.
+- !!:FIX:Protocol.SelfSystem: Fixed in double request packing of the output requests at second tries of reconnection or reauth.
+
+
 2023-06-25 Roman 0.9.6.1
 - LibsDB.OscadaLibs: tmplib_base.{digAlarm,manInUnif,anUnif,pidUnifImp,anUnifSt,pidUnif,codeState,SNMP,UPS}: 
     The NAME IO set to the type "String (translate)" and the DESCR IO to the type "Text (translate)".
