@@ -54,7 +54,10 @@ AC_CHECK_HEADERS([time.h signal.h fcntl.h math.h errno.h unistd.h dirent.h stdio
     AC_MSG_ERROR([Some GLibC headers are not found. Install or check the GLibC developing package!]))
 AC_CHECK_HEADERS([string vector map exception typeinfo deque],[],
     AC_MSG_ERROR([Some STL headers are not found. Install or check the STL of StdC++ developing package!]))
-AC_CHECK_HEADERS([langinfo.h syscall.h iconv.h libintl.h], [], AC_MSG_NOTICE([Some system headers aren't found. Using disabled!]))
+AC_CHECK_HEADERS([langinfo.h syscall.h iconv.h libintl.h pthread.h], [], AC_MSG_NOTICE([Some system headers aren't found - disabled]))
+AC_CHECK_DECLS([clock_nanosleep, pthread_rwlock_timedwrlock, newlocale], [], [],
+[[#include <pthread.h>
+#include <locale.h>]])
 
 if test $ac_cv_header_iconv_h = yes; then
     AC_SEARCH_LIBS(libiconv_open, [iconv])
@@ -68,7 +71,10 @@ if test $ac_cv_header_libintl_h = yes; then
     if test $XGETTEXT = false -o $MSGMERGE = false -o $MSGFMT = false; then
 	AC_MSG_ERROR([Some utilities of I18N gettext are not present! Install the gettext utilites package.]);
     fi
-    AC_SEARCH_LIBS(libintl_bindtextdomain, [intl])
+    AC_CHECK_FUNC(bindtextdomain, [],
+	AC_SEARCH_LIBS(libintl_bindtextdomain, [intl], [], [
+	    AC_DEFINE(HAVE_LIBINTL_H, 0, [No LibIntl in real, disabling])
+	    ac_cv_header_libintl_h=no]))
 fi
 
 # Checking for typedefs, structures, and compiler characteristics
@@ -148,9 +154,7 @@ if test $enable_CrossCompile = no; then
 fi
 AC_SEARCH_LIBS(sin, [m], [], AC_MSG_ERROR([The mathematic library isn't found. Install or check the GLibC core package!]))
 AC_SEARCH_LIBS(dlopen, [dl], [], AC_MSG_ERROR([The dynamic linking library isn't found. Install or check the GLibC core package!]))
-# AC_SEARCH_LIBS(clock_gettime, [rt])
-AC_SEARCH_LIBS(clock_nanosleep, [rt])
-AC_CHECK_HEADERS([crypt.h], AC_SEARCH_LIBS(crypt,[crypt]), AC_MSG_NOTICE([crypt.h header isn't found. Using disabled!]))
+AC_CHECK_HEADERS([crypt.h], AC_SEARCH_LIBS(crypt,[crypt]), AC_MSG_NOTICE([crypt.h header isn't found - disabled]))
 AC_SEARCH_LIBS(deflate, [z], [], AC_MSG_ERROR([Z library isn't found. Install or check the libz package!]))
 
 # Check for the PCRE library using in the OpenSCADA core
@@ -283,12 +287,12 @@ AX_MOD_Archive_EN(DBArch, [disable or enable[=incl] compilation module Archive.D
 
 # Transport modules
 AX_MOD_Transport_EN(Sockets, [disable or enable[=incl] compilation module Transport.Sockets], disable, incl, [
-    AC_CHECK_HEADERS([linux/can.h], [], AC_MSG_NOTICE([linux/can.h header isn't found. Using disabled!]))
+    AC_CHECK_HEADERS([linux/can.h], [], AC_MSG_NOTICE([linux/can.h header isn't found - disabled]))
     AC_CHECK_HEADERS([sys/un.h sys/socket.h sys/select.h arpa/inet.h netinet/in.h netdb.h], [],
 	AC_MSG_ERROR([Transport.Sockets: Some GLibC network headers aren't found. Install or check the GLibC development package!]))
 ])
 AX_MOD_Transport_EN(Serial, [disable or enable[=incl] compilation module Transport.Serial], disable, incl, [
-    AC_CHECK_HEADERS([linux/serial.h linux/i2c-dev.h linux/spi/spidev.h], [], AC_MSG_NOTICE([Some Linux headers aren't found. Using disabled!]))
+    AC_CHECK_HEADERS([linux/serial.h linux/i2c-dev.h linux/spi/spidev.h], [], AC_MSG_NOTICE([Some Linux headers aren't found - disabled]))
 ])
 AX_MOD_Transport_EN(SSL, [disable or enable[=incl] compilation module Transport.SSL], disable, incl, [
     AX_LIB_OpenSSL()
@@ -307,13 +311,13 @@ AX_MOD_UI_EN(QTStarter, [disable or enable[=incl] compilation module UI.QTStarte
     AS_IF([test "x${Qt5_use}" = "x"], [
 	PKG_CHECK_MODULES(QtSensors, [QtSensors > 1.2.0],
 	    AC_DEFINE(HAVE_QTSENSORS, 1, [QtSensors for mobility devices is allowed]),
-	    AC_MSG_NOTICE([QtSensors has not found. Using disabled!]))
+	    AC_MSG_NOTICE([QtSensors has not found - disabled]))
     ], [
 	PKG_CHECK_MODULES(Qt5Sensors, [Qt5Sensors > 1.2.0], [
 	    AC_DEFINE(HAVE_QTSENSORS, 1, [QtSensors for mobility devices is allowed])
 	    QtSensors_CFLAGS=$Qt5Sensors_CFLAGS
 	    QtSensors_LIBS=$Qt5Sensors_LIBS
-	], AC_MSG_NOTICE([QtSensors has not found. Using disabled!]))
+	], AC_MSG_NOTICE([QtSensors has not found - disabled]))
     ])
 ])
 AX_MOD_UI_EN(QTCfg, [disable or enable[=incl] compilation module UI.QTCfg], disable, incl, [
@@ -325,31 +329,43 @@ AX_MOD_UI_EN(Vision, [disable or enable[=incl] compilation module UI.Vision], di
 
     AC_ARG_ENABLE(WebKit, AC_HELP_STRING([--disable-WebKit], [disable the WebKit library using]), [], [
 	AS_IF([test "x${Qt5_use}" = "x"], [
-	    PKG_CHECK_MODULES(QtWebKit, [QtWebKit > 4.4.0],
+	    PKG_CHECK_MODULES([QtWebKit], [QtWebKit > 4.4.0],
 		AC_DEFINE(HAVE_WEBKIT, 1, [The WebKit web browser engine is allowed]),
-		AC_MSG_NOTICE([WebKit isn't found. Using disabled!]))
+		AC_MSG_NOTICE([WebKit isn't found - disabled]))
 	], [
-	    PKG_CHECK_MODULES(Qt5WebKitWidgets, [Qt5WebKitWidgets > 5.1.0], [
-		AC_DEFINE(HAVE_WEBKIT, 1, [The WebKit web browser engine is allowed])
-		QtWebKit_CFLAGS=$Qt5WebKitWidgets_CFLAGS
-		QtWebKit_LIBS=$Qt5WebKitWidgets_LIBS
-	    ], AC_MSG_NOTICE([WebKit isn't found. Using disabled!]))
+	    PKG_CHECK_MODULES([Qt5WebEngineWidgets], [Qt5WebEngineWidgets > 5.8.0], [
+		AC_DEFINE(HAVE_WEBENGINE, 1, [The WebEngine interface is allowed])
+		QtWebKit_CFLAGS="$Qt5WebEngineWidgets_CFLAGS"
+		QtWebKit_LIBS="$Qt5WebEngineWidgets_LIBS"
+	    ], [
+		PKG_CHECK_MODULES([Qt5WebKitWidgets], [Qt5WebKitWidgets > 5.1.0], [
+		    AC_DEFINE(HAVE_WEBKIT, 1, [The WebKit web browser engine is allowed])
+		    QtWebKit_CFLAGS="$Qt5WebKitWidgets_CFLAGS"
+		    QtWebKit_LIBS="$Qt5WebKitWidgets_LIBS"
+		], AC_MSG_NOTICE([WebView or WebKit isn't found - disabled]))
+	    ])
 	])
     ])
 
     AC_ARG_ENABLE(Phonon, AC_HELP_STRING([--disable-Phonon], [disable the Phonon library using]), [], [
 	AS_IF([test "x${Qt5_use}" = "x"], [
-	    PKG_CHECK_MODULES(phonon, [phonon > 4.3.0],
+	    PKG_CHECK_MODULES([phonon], [phonon > 4.3.0],
 		AC_DEFINE(HAVE_PHONON, 1, [The Phonon media player engine is allowed.]),
-		AC_MSG_NOTICE([The Phonon media player engine isn't found. Using disabled!]))
+		AC_MSG_NOTICE([The Phonon media player engine isn't found - disabled]))
 	], [
-	    PKG_CHECK_MODULES(phonon4qt5, [phonon4qt5 > 4.3.0], [
-		AC_DEFINE(HAVE_PHONON, 1, [The Phonon media player engine is allowed.])
-		phonon_CFLAGS=$phonon4qt5_CFLAGS
-		phonon_LIBS=$phonon4qt5_LIBS
-	    ], AC_MSG_NOTICE([The Phonon media player engine isn't found. Using disabled!]))
+	    PKG_CHECK_MODULES([Qt5MultimediaWidgets], [Qt5MultimediaWidgets > 5.1.0], [
+		AC_DEFINE(HAVE_MULTIMEDIA, 1, [The Phonon media player engine is allowed.])
+		phonon_CFLAGS="$Qt5MultimediaWidgets_CFLAGS"
+		phonon_LIBS="$Qt5MultimediaWidgets_LIBS"
+	    ], [
+		PKG_CHECK_MODULES([phonon4qt5], [phonon4qt5 > 4.3.0], [
+		    AC_DEFINE(HAVE_PHONON, 1, [The Phonon media player engine is allowed.])
+		    phonon_CFLAGS="$phonon4qt5_CFLAGS"
+		    phonon_LIBS="$phonon4qt5_LIBS"
+		], AC_MSG_NOTICE([The Phonon media player engine isn't found - disabled]))
+	    ])
 	])
-	AS_IF([test "x${phonon_CFLAGS}" = "x"], [], [
+	AS_IF([test "x${phonon_CFLAGS}" = "x" -o "x${Qt5MultimediaWidgets_CFLAGS}" != "x"], [], [
 	    SAVE_CXXFLAGS="$CXXFLAGS"
 	    CXXFLAGS="$CXXFLAGS -fpic $QtGui_CFLAGS $phonon_CFLAGS"
 	    AC_CHECK_HEADERS([phonon/VideoPlayer],[],[])
@@ -386,23 +402,23 @@ AC_OUTPUT
 AC_MSG_RESULT([============ Final configuration results ==============])
 AC_MSG_RESULT([* Status:])
 AC_MSG_RESULT([  - To enable (yes), to include/builtin (incl), for a distributive (dist), to disable (no) all modules = $enable_AllModuls])
-AC_MSG_RESULT([  - Cross compilation                                           = $enable_CrossCompile])
-AC_MSG_RESULT([  - The core library compilation only in static                 = $enable_CoreLibStatic])
+AC_MSG_RESULT([  - Cross compilation                              = $enable_CrossCompile])
+AC_MSG_RESULT([  - The core library compilation only in static    = $enable_CoreLibStatic])
 AC_MSG_RESULT([* Generic features:])
-AC_MSG_RESULT([  - Strings charset encode support (by iconv)                   = $ac_cv_header_iconv_h])
-AC_MSG_RESULT([  - Interfaces internationalisation (I18N) support (by LibIntl) = $ac_cv_header_libintl_h])
-AC_MSG_RESULT([  - LibGD forcing for the core and the modules                  = $enable_LibGD])
+AC_MSG_RESULT([  - Strings charset encode support (by iconv)      = $ac_cv_header_iconv_h])
+AC_MSG_RESULT([  - Interfaces internationalisation (I18N) support (generic or by LibIntl) = $ac_cv_header_libintl_h])
+AC_MSG_RESULT([  - LibGD forcing for the core and the modules     = $enable_LibGD])
 AC_MSG_RESULT([  - Compilation modules of the subsystems:])
-AC_MSG_RESULT([    "DB":                   $DBSub_mod])
-AC_MSG_RESULT([    "DAQ":                  $DAQSub_mod])
-AC_MSG_RESULT([    "Archive":              $ArchSub_mod])
-AC_MSG_RESULT([    "Transport":            $TranspSub_mod])
-AC_MSG_RESULT([    "Transport's protocol": $ProtSub_mod])
-AC_MSG_RESULT([    "UI":                   $UISub_mod])
-AC_MSG_RESULT([    "Special":              $SpecSub_mod])
+AC_MSG_RESULT([    DB:                 $DBSub_mod])
+AC_MSG_RESULT([    DAQ:                $DAQSub_mod])
+AC_MSG_RESULT([    Archive-History:    $ArchSub_mod])
+AC_MSG_RESULT([    Transport:          $TranspSub_mod])
+AC_MSG_RESULT([    Transport Protocol: $ProtSub_mod])
+AC_MSG_RESULT([    UI:                 $UISub_mod])
+AC_MSG_RESULT([    Special:            $SpecSub_mod])
 AC_MSG_RESULT([  - Including/builtin modules to the OpenSCADA core: $ModsIncl])
 AC_MSG_RESULT([* Features of some specific modules:])
-AC_MSG_RESULT([  - FFTW3 to obtain spectrum of signal: $LIB_FFTW3])
-AC_MSG_RESULT([  - Library of the Linux sensors:       $LIB_SENSORS])
-AC_MSG_RESULT([  - Web-browser's engine WebKit:        $QtWebKit_LIBS])
-AC_MSG_RESULT([  - Media player's engine:              $phonon_LIBS])
+AC_MSG_RESULT([  - Fast Fourier Transform (FFTW3): $LIB_FFTW3])
+AC_MSG_RESULT([  - Library of the Linux sensors:   $LIB_SENSORS])
+AC_MSG_RESULT([  - Web-browser engine:             $QtWebKit_LIBS])
+AC_MSG_RESULT([  - Media-player engine:            $phonon_LIBS])

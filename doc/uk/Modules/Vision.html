@@ -30,7 +30,7 @@
 <td> <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> </td>
 <td> Робочий інтерфейс користувача (Qt)
 </td>
-<td> 8.7 </td>
+<td> 8.8 </td>
 <td> GPL2 </td>
 <td> ui_Vision.so </td>
 <td> en,uk,ru,de </td>
@@ -585,7 +585,7 @@
 <tr>
 <td> notify{N}, notifyVisVision{N} (сторінка) </td>
 <td> Сповіщувач: тип {N} </td>
-<td> Визначає сповіщувач і процедуру отримання ресурсу сповіщення та безпосередньо сповіщення, згідно до <a href="../Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">концепції "Сигналізації (Аларми)"</a>. Сповіщення здійснюється за такою пріоритетністю — <b>notifyVisVision{N}</b> &gt; <b>Phonon</b> &gt; <b>notify{N}</b>. Тобто, <b>notifyVisVision{N}</b> є найбільш пріоритетним, підміняє сповіщення <b>Phonon</b> і тут ви можете реалізувати дуже неординарне сповіщення.
+<td> Визначає сповіщувач і процедуру отримання ресурсу сповіщення та безпосередньо сповіщення, згідно до <a href="../Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">концепції "Сигналізації (Аларми)"</a>. Сповіщення здійснюється за такою пріоритетністю — <b>notifyVisVision{N}</b> &gt; <b>{Qt|Phonon}</b> &gt; <b>notify{N}</b>. Тобто, <b>notifyVisVision{N}</b> є найбільш пріоритетним, підміняє сповіщення <b>{Qt|Phonon}</b> і тут ви можете реалізувати дуже неординарне сповіщення.
 </td></tr>
 <tr>
 <td> statLine (головна сторінка) </td>
@@ -751,7 +751,7 @@ else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user:user";
 <ul><li> Вказання джерела медіа даних: зображення або відео-матеріалу.</li>
 <li> Перегляд зображень більшості відомих форматів з можливістю їх вписування у розмір віджету.</li>
 <li> Програвання простих анімованих форматів зображень та відео з можливістю управління швидкістю програвання.</li>
-<li> Програвання повноформатного відео та аудіо, за посередництвом <a class="extiw" href="https://en.wikipedia.org/wiki/Phonon" title="wikipedia:Phonon">Phonon</a>.</li>
+<li> Програвання повноформатного відео та аудіо, за посередництвом Qt або <a class="extiw" href="https://en.wikipedia.org/wiki/Phonon" title="wikipedia:Phonon">Phonon</a>.</li>
 <li> Відображення фону у вигляді кольору та зображення.</li>
 <li> Відображення бордюру по периметру віджету, з вказаним кольором, шириною та стилем.</li>
 <li> Формування активних областей та генерація повідомлень при їх активації.</li></ul>
@@ -978,5 +978,5 @@ else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user:user";
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/uk">Modules/Vision/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2903</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/uk">Modules/Vision/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2914</td></tr></table></body>
 </html>

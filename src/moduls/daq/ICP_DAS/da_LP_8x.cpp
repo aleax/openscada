@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ICP_DAS file: da_LP_8x.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2012-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -615,8 +615,6 @@ void *da_LP_8x::fastTask( void *ip )
 	    //Calc next work time and sleep
 	    wTm += 1000000ll*ePrm->fastPer;
 	    TSYS::taskSleep(int64_t(1e9*ePrm->fastPer));	//To prevent hang at wTm more lesser to current
-	    //sp_tm.tv_sec = wTm/1000000; sp_tm.tv_nsec = 1000*(wTm%1000000);
-	    //clock_nanosleep(CLOCK_REALTIME, TIMER_ABSTIME, &sp_tm, NULL);
 	}
     }
 

@@ -194,7 +194,7 @@ INSERT INTO wlb_test_io VALUES('DiagramTest','backColor','grey',96,'','','tr1','
 INSERT INTO wlb_test_io VALUES('DiagramTest','bordWidth','1',32,'','','tr1','','','','','','');
 INSERT INTO wlb_test_io VALUES('DiagramTest','bordColor','black',32,'','','tr1','','','','','','');
 INSERT INTO wlb_test_io VALUES('DiagramTest','trcPer','1',32,'','','tr1','','','','','','');
-INSERT INTO wlb_test_io VALUES('DiagramTest','prm0addr','/DAQ/System/AutoDA/CPULoad/load',32,'','','tr1','','','','','','');
+INSERT INTO wlb_test_io VALUES('DiagramTest','prm0addr','/DAQ/System/AutoDA/CPU/load',32,'','','tr1','','','','','','');
 INSERT INTO wlb_test_io VALUES('DiagramTest','prm0bordU','100',32,'','','tr1','','','','','','');
 INSERT INTO wlb_test_io VALUES('DiagramTest','prm0color','lightgreen',96,'labColorGood','','tr1','','','','','','');
 INSERT INTO wlb_test_io VALUES('FormElTests','name','Tests "FormEl"',32,'','','','Тести "FormEl"','','Тесты "FormEl"','','','');
@@ -467,10 +467,10 @@ INSERT INTO wlb_test_io VALUES('test1','arg0tp','1',0,'','','newText','','','','
 INSERT INTO wlb_test_io VALUES('test1','arg0val','34.12',0,'','','newText','','','','','','');
 INSERT INTO wlb_test_io VALUES('test1','arg0cfg','5;f;1',0,'','','newText','','','','','','');
 INSERT INTO wlb_test_io VALUES('DiagramTest','parNum','3',32,'','','tr2','','','','','','');
-INSERT INTO wlb_test_io VALUES('DiagramTest','prm0addr','/DAQ/System/AutoDA/CPULoad/load',32,'','','tr2','','','','','','');
+INSERT INTO wlb_test_io VALUES('DiagramTest','prm0addr','/DAQ/System/AutoDA/CPU/load',32,'','','tr2','','','','','','');
 INSERT INTO wlb_test_io VALUES('DiagramTest','prm0bordU','100',32,'','','tr2','','','','','','');
 INSERT INTO wlb_test_io VALUES('DiagramTest','prm0color','orange',96,'labColorGrph2','','tr2','','','','','','');
-INSERT INTO wlb_test_io VALUES('DiagramTest','prm1addr','/DAQ/System/AutoDA/MemInfo/use',0,'','','tr2','','','','','','');
+INSERT INTO wlb_test_io VALUES('DiagramTest','prm1addr','/DAQ/System/AutoDA/MEM/use',0,'','','tr2','','','','','','');
 INSERT INTO wlb_test_io VALUES('DiagramTest','prm1color','magenta',64,'labColorGrph7','','tr2','','','','','','');
 INSERT INTO wlb_test_io VALUES('DiagramTest','prm2addr','/DAQ/System/AutoDA/SensorsData/TEMP0',0,'','','tr2','','','','','','');
 INSERT INTO wlb_test_io VALUES('DiagramTest','prm2bordU','100',0,'','','tr2','','','','','','');

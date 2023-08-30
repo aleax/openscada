@@ -148,7 +148,7 @@ class VisRun : public QMainWindow
 		pthread_cond_t	callCV;
 		VisRun	*mOwner;
 		QAction	*actAlrm;
-		QWidget	*ntfPlay;
+		QObject	*ntfPlay;
 	};
 
 	//Public methods

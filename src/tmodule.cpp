@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmodule.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,7 +30,7 @@
 #include "tsubsys.h"
 #include "tmodule.h"
 
-#ifdef HAVE_LIBINTL_H
+#if HAVE_LIBINTL_H
 #include <libintl.h>
 #endif
 
@@ -45,7 +45,7 @@ TModule::TModule( const string &id ) : mModId(id)
 {
     lcId = string("oscd_")+mModId;
 
-#ifdef HAVE_LIBINTL_H
+#if HAVE_LIBINTL_H
     bindtextdomain(lcId.c_str(), localedir_full);
 #endif
 
@@ -192,7 +192,7 @@ void TModule::modInfoMainSet( const string &name, const string &type, const stri
 
 string TModule::I18N( const string &mess, const char *mLang )
 {
-#ifdef HAVE_LIBINTL_H
+#if HAVE_LIBINTL_H
     return Mess->I18N(mess, mLang, lcId.c_str());
 #else
     return mess;

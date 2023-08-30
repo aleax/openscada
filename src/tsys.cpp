@@ -382,8 +382,9 @@ string TSYS::atime2str( time_t itm, const string &format, bool gmt, const string
     if(gmt) gmtime_r(&itm, &tm_tm);
     else localtime_r(&itm, &tm_tm);
     char buf[100];
-
     int rez = 0;
+
+#if HAVE_DECL_NEWLOCALE
     string user = user_lang.size() ? user_lang : Mess->trCtx();
     if(user.size()) {
 	string lang = TSYS::strLine(user, 1);
@@ -399,6 +400,7 @@ string TSYS::atime2str( time_t itm, const string &format, bool gmt, const string
 	    return (rez > 0) ? string(buf,rez) : "";
 	}
     }
+#endif
 
     rez = strftime(buf, sizeof(buf), format.empty()?"%d-%m-%Y %H:%M:%S":format.c_str(), &tm_tm);
     return (rez > 0) ? string(buf,rez) : string("");
@@ -2606,12 +2608,11 @@ int TSYS::sysSleep( float tm )
 
     spTm.tv_sec = (time_t)tm;
     spTm.tv_nsec = (long)(1e9*(tm-floorf(tm)));
+#if HAVE_DECL_CLOCK_NANOSLEEP
     return clock_nanosleep(clkId, 0, &spTm, NULL);
-
-    /*struct timespec spTm;
-    spTm.tv_sec = (time_t)tm;
-    spTm.tv_nsec = (long int)(1e9*(tm-floorf(tm)));
-    return nanosleep(&spTm, NULL);*/
+#else
+    return nanosleep(&spTm, NULL);
+#endif
 }
 
 void TSYS::taskSleep( int64_t per, const string &icron, int64_t *lag )
@@ -2629,7 +2630,11 @@ void TSYS::taskSleep( int64_t per, const string &icron, int64_t *lag )
 		wake_tm = 0;
 	do {
 	    spTm.tv_sec = (pnt_tm+off)/1000000000ll; spTm.tv_nsec = (pnt_tm+off)%1000000000ll;
+#if HAVE_DECL_CLOCK_NANOSLEEP
 	    if(clock_nanosleep(clkId,TIMER_ABSTIME,&spTm,NULL)) return;
+#else
+	    if(nanosleep(&spTm,NULL)) return;
+#endif
 	    clock_gettime(clkId, &spTm);
 	    wake_tm = (int64_t)spTm.tv_sec*1000000000ll + spTm.tv_nsec - off;
 	} while(wake_tm < pnt_tm);
@@ -2909,16 +2914,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     // int sleep(real tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.
     //  tm - wait time in seconds (precised up to nanoseconds), up to prmInterf_TM(7 seconds)
     //  ntm - wait time part in nanoseconds
-    if(iid == "sleep" && prms.size() >= 1) {
+    if(iid == "sleep" && prms.size() >= 1)
 	return sysSleep(fmin(prms[0].getR()+1e-9*((prms.size()>=2)?prms[1].getI():0),(double)prmInterf_TM));
-	/*struct timespec spTm;
-	spTm.tv_sec = prms[0].getI();
-	spTm.tv_nsec = 1000000000l*(prms[0].getR()-spTm.tv_sec) + ((prms.size()>=2)?prms[1].getI():0);
-	spTm.tv_sec = vmin(prmInterf_TM, spTm.tv_sec);
-	clockid_t clkId = SYS->clockRT() ? CLOCK_REALTIME : CLOCK_MONOTONIC;
-	return clock_nanosleep(clkId, 0, &spTm, NULL);*/
-	//return nanosleep(&spTm, NULL);
-    }
     // int time(int usec) - returns absolute time in seconds from the epoch of 1/1/1970 and in microseconds, if <usec> is specified
     //  usec - microseconds of time
     if(iid == "time") {
@@ -3005,6 +3002,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	else localtime_r(&tm_t, &tm_tm);
 	char buf[1000];
 	int rez = 0;
+#if HAVE_DECL_NEWLOCALE
 	string lang = TSYS::strLine(user_lang, 1);
 	if(lang.size()) {
 	    lang = Mess->langToLocale(lang);
@@ -3016,6 +3014,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 		return (rez > 0) ? string(buf,rez) : "";
 	    }
 	}
+#endif
 	rez = strftime(buf, sizeof(buf), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &tm_tm);
 	return (rez > 0) ? string(buf,rez) : "";
     }

@@ -1,4 +1,28 @@
 2023-08-30 Roman (stable)
+- LibsDB.vcaTest: Finished in renaming CPULoad to CPU and MemInfo to MEM.
+- !!:acinclude.m4: The AutoConf macro AX_LIB_Qt improved in MOC and RCC detection for Qt5, by the package variable "host_bins"
+	    of Qt5Core primarily, than preventing the global MOC and RCC problems in their switching for Qt versions.
+	Some messages improved.
+	Prepared also for further adaption to Qt6.
+    !!!:configure.ac: Appended by checking Qt5WebEngineWidgets and Qt5MultimediaWidgets for support in UI.Vision.
+	!!: Appended by checking the declarations-functions clock_nanosleep, pthread_rwlock_timedwrlock, newlocale
+	    with improving the LibIntl detection, for very pure environments of MIPS with UCLibC.
+	Appended by checking the header pthread.h.
+	Some messages improved.
+	Prepared also for further adaption to Qt6.
+- data/{debian,debian_mod}/control: Appended by the dependency variants qtwebengine5-dev and qtmultimedia5-dev.
+- SYS: ResRW::resRequestW() and ResRW::resRequestR() appended of using the timed version at the definition
+	HAVE_DECL_PTHREAD_RWLOCK_TIMEDWRLOCK.
+    TSYS::atime2str(),SYS.strftime(): appended of using the localized data at the definition HAVE_DECL_NEWLOCALE.
+    TSYS::sysSleep(),TSYS::taskSleep(): appended of using the clocked sleep at the definition HAVE_DECL_CLOCK_NANOSLEEP.
+    TMess,TModule: The HAVE_LIBINTL_H checking replaced by "#if HAVE_LIBINTL_H", that is checking for 1.
+- !!!!:FIX:UI.Vision: Adaption to Qt WebEngineWidgets instead WebKit and checking the playing moved to a QTimer
+	at the period STD_WAIT_TM(5) seconds for: updating the size and position attributes,
+	    stopping the playing in cache and rolling;
+    !!!!: Adaption to Qt MultimediaWidgets instead Phonon and appending for alarms notifying in runtime.
+
+
+2023-08-30 Roman (stable)
 - LibsDB.OscadaLibs: tmplib_LowDevLib.RDTech: Nondouble commands set to send the command tvicely for stable applying by the device,
     postcommand delay set to 0.2 and moved in common.
 - DAQ: Information of the value attribute appended by the field of timestamp the current value.

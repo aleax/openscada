@@ -43,11 +43,11 @@
 #ifdef HAVE_ICONV_H
 #include <iconv.h>
 #endif
-#ifdef HAVE_LIBINTL_H
+#if HAVE_LIBINTL_H
 #include <libintl.h>
 #endif
 
-#ifdef HAVE_LIBINTL_H
+#if HAVE_LIBINTL_H
 extern int _nl_msg_cat_cntr;	//Detection counter of an environment of language changes of gettext
 #endif
 
@@ -78,7 +78,7 @@ TMess::TMess( ) : IOCharSet(DEF_IOCharSet), mMessLevel(DEF_MessLev), mLogDir(DEF
     IOCharSet = nl_langinfo(CODESET);
 #endif
 
-#ifdef HAVE_LIBINTL_H
+#if HAVE_LIBINTL_H
     bindtextdomain(PACKAGE, localedir_full);
     textdomain(PACKAGE);
 #endif
@@ -880,7 +880,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 
 string TMess::I18N( const string &imess, const char *mLang, const char *d_name )
 {
-#ifdef HAVE_LIBINTL_H
+#if HAVE_LIBINTL_H
     if(imess.empty() || (TSYS::strParse(imess,0,string(1,0)).empty() && TSYS::strParse(imess,1,string(1,0)).empty()))
 	return "";
     if(TSYS::strParse(imess,2,string(1,0)).size()) return imess;	//That is a dynamic data changing message - pass

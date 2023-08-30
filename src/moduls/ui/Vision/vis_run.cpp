@@ -56,16 +56,18 @@
 #include "vis_run_widgs.h"
 #include "vis_shapes.h"
 
-#ifdef HAVE_PHONON
-#ifdef HAVE_PHONON_VIDEOPLAYER
-#include <phonon/VideoPlayer>
-#include <phonon/VideoWidget>
-#include <phonon/MediaObject>
-#else
-#include <Phonon/VideoPlayer>
-#include <Phonon/VideoWidget>
-#include <Phonon/MediaObject>
-#endif
+#if HAVE_MULTIMEDIA
+#include <QMediaPlayer>
+#elif HAVE_PHONON
+# ifdef HAVE_PHONON_VIDEOPLAYER
+# include <phonon/VideoPlayer>
+# include <phonon/VideoWidget>
+# include <phonon/MediaObject>
+# else
+# include <Phonon/VideoPlayer>
+# include <Phonon/VideoWidget>
+# include <Phonon/MediaObject>
+# endif
 using namespace Phonon;
 #endif
 
@@ -2046,9 +2048,13 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown, bool 
 	else if(ico.empty() && (size_t)(fPos=iLn.find("ico=")) != string::npos)	  ico = iLn.substr(fPos+4);
 	else if(name.empty() && (size_t)(fPos=iLn.find("name=")) != string::npos) name = iLn.substr(fPos+5);
 
-#ifdef HAVE_PHONON
+#if HAVE_MULTIMEDIA || HAVE_PHONON
     if(f_notify && (f_queue || f_resource) && !isPriorProc)
+# if HAVE_MULTIMEDIA
+	ntfPlay = new QMediaPlayer;
+# elif HAVE_PHONON
 	ntfPlay = new VideoPlayer(Phonon::MusicCategory);
+# endif
 #endif
 
     //The command procedure prepare
@@ -2132,7 +2138,7 @@ VisRun::Notify::~Notify( )
 	SYS->taskDestroy(mod->nodePath('.',true)+".sesRun_"+owner()->workSess()+".ntf"+i2s(tp), NULL, 60, false, &callCV);
 	pthread_cond_destroy(&callCV);
     }
-#ifdef HAVE_PHONON
+#if HAVE_MULTIMEDIA || HAVE_PHONON
     if(ntfPlay) { delete ntfPlay; ntfPlay = NULL; }
 #endif
 
@@ -2172,13 +2178,21 @@ void VisRun::Notify::ntf( int ialSt )
 {
     alEn = (bool)((ialSt>>16)&(1<<tp));
 
-#ifdef HAVE_PHONON
+#if HAVE_MULTIMEDIA || HAVE_PHONON
     if(ntfPlay) {
+# if HAVE_MULTIMEDIA
+	QMediaPlayer::State mSt = ((QMediaPlayer*)ntfPlay)->state();
+	bool plSt = (mSt == QMediaPlayer::PlayingState);
+	if(!alEn && !((QMediaPlayer*)ntfPlay)->currentMedia().isNull())
+	    ((QMediaPlayer*)ntfPlay)->setMedia(QMediaContent());
+	else if(alEn && (((QMediaPlayer*)ntfPlay)->currentMedia().isNull() ||
+# elif HAVE_PHONON
 	State mSt = ((VideoPlayer*)ntfPlay)->mediaObject()->state();
 	bool plSt = (mSt == LoadingState || mSt == BufferingState || mSt == PlayingState);
 	if(!alEn && ((VideoPlayer*)ntfPlay)->mediaObject()->currentSource().type() != MediaSource::Empty)
 	    ((VideoPlayer*)ntfPlay)->load(MediaSource());
 	else if(alEn && (((VideoPlayer*)ntfPlay)->mediaObject()->currentSource().type() == MediaSource::Empty ||
+# endif
 			    (repDelay >= 0 && !plSt && (delay-=vmax(TM_ALRM_UPD,1e-3*owner()->planePer)) <= 0))) {
 	    string nRes, nResTp, nMess, nLang;
 	    nRes = ntfRes(nResTp, nMess, nLang);
@@ -2245,7 +2259,13 @@ void VisRun::Notify::commCall( string &res, string &resTp, const string &mess, c
     }
 
     //Playing by an internal mechanism (Phonon)
-#ifdef HAVE_PHONON
+#if HAVE_MULTIMEDIA
+    if(ntfPlay)	{
+	((QMediaPlayer*)ntfPlay)->setMedia(QUrl::fromLocalFile(QDir::currentPath()+"/"+resFile.c_str()));
+	((QMediaPlayer*)ntfPlay)->play();
+    }
+    else
+#elif HAVE_PHONON
     if(ntfPlay)	((VideoPlayer*)ntfPlay)->play(MediaSource(QUrl::fromLocalFile(QDir::currentPath()+"/"+resFile.c_str())));
     else
 #endif

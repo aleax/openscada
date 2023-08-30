@@ -1,7 +1,7 @@
 
 //OpenSCADA file: resalloc.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -50,8 +50,9 @@ void ResRW::resRequestW( unsigned short tm )
     if(wThr && wThr == pthread_self()) rez = EDEADLK;
     else
 #endif
-    if(!tm) rez = pthread_rwlock_wrlock(&rwc);
-    else {
+
+#if HAVE_DECL_PTHREAD_RWLOCK_TIMEDWRLOCK
+    if(tm) {
 	timespec wtm;
 	//clock_gettime(SYS->clockRT()?CLOCK_REALTIME:CLOCK_MONOTONIC, &wtm);
 	clock_gettime(CLOCK_REALTIME, &wtm);	//But for pthread_rwlock the clock source changing unallowed!
@@ -59,9 +60,14 @@ void ResRW::resRequestW( unsigned short tm )
 	wtm.tv_sec += tm/1000 + wtm.tv_nsec/1000000000; wtm.tv_nsec = wtm.tv_nsec%1000000000;
 	rez = pthread_rwlock_timedwrlock(&rwc, &wtm);
     }
+    else
+#endif
+    rez = pthread_rwlock_wrlock(&rwc);
+
     if(rez == EDEADLK)
 	throw TError(TError::Core_RWLock_EDEADLK, "ResRW", _("The resource tries to tightly block the thread!"));
     else if(tm && rez == ETIMEDOUT) throw TError("ResRW", _("Resource is timeouted!"));
+
 #if !__GLIBC_PREREQ(2,4)
     wThr = pthread_self();
 #endif
@@ -83,8 +89,9 @@ void ResRW::resRequestR( unsigned short tm )
     if(wThr && wThr == pthread_self()) rez = EDEADLK;
     else
 #endif
-    if(!tm) rez = pthread_rwlock_rdlock(&rwc);
-    else {
+
+#if HAVE_DECL_PTHREAD_RWLOCK_TIMEDWRLOCK
+    if(tm) {
 	timespec wtm;
 	//clock_gettime(SYS->clockRT()?CLOCK_REALTIME:CLOCK_MONOTONIC, &wtm);
 	clock_gettime(CLOCK_REALTIME, &wtm);	//But for pthread_rwlock the clock source changing unallowed!
@@ -92,6 +99,10 @@ void ResRW::resRequestR( unsigned short tm )
 	wtm.tv_sec += tm/1000 + wtm.tv_nsec/1000000000; wtm.tv_nsec = wtm.tv_nsec%1000000000;
 	rez = pthread_rwlock_timedrdlock(&rwc,&wtm);
     }
+    else
+#endif
+    rez = pthread_rwlock_rdlock(&rwc);
+
     if(rez == EDEADLK)
 	throw TError(TError::Core_RWLock_EDEADLK, "ResRW", _("The resource tries to tightly block the thread!"));
     else if(tm && rez == ETIMEDOUT) throw TError("ResRW", _("Resource is timeouted!"));
