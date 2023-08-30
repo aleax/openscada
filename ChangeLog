@@ -1,4 +1,8 @@
 2023-08-30 Roman (stable)
+- FIX:UI.Vision: Fixed in building with no Media engine.
+
+
+2023-08-30 Roman (stable)
 - LibsDB.vcaTest: Finished in renaming CPULoad to CPU and MemInfo to MEM.
 - !!:acinclude.m4: The AutoConf macro AX_LIB_Qt improved in MOC and RCC detection for Qt5, by the package variable "host_bins"
 	    of Qt5Core primarily, than preventing the global MOC and RCC problems in their switching for Qt versions.

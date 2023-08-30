@@ -2027,9 +2027,9 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		    player->setVolume(shD->audioVolume/100);
 		}
 # endif
-#endif
 		break;
 	    }
+#endif
 	}
 	if(mk_new && (endW || (endW=qobject_cast<QWidget*>(shD->addrWdg)))) {
 #if HAVE_PHONON
