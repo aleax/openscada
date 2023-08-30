@@ -154,6 +154,7 @@ if test $enable_CrossCompile = no; then
 fi
 AC_SEARCH_LIBS(sin, [m], [], AC_MSG_ERROR([The mathematic library isn't found. Install or check the GLibC core package!]))
 AC_SEARCH_LIBS(dlopen, [dl], [], AC_MSG_ERROR([The dynamic linking library isn't found. Install or check the GLibC core package!]))
+AC_SEARCH_LIBS(pthread_create, [rt])	#To search and append the external library -lrt on old systems
 AC_CHECK_HEADERS([crypt.h], AC_SEARCH_LIBS(crypt,[crypt]), AC_MSG_NOTICE([crypt.h header isn't found - disabled]))
 AC_SEARCH_LIBS(deflate, [z], [], AC_MSG_ERROR([Z library isn't found. Install or check the libz package!]))
 

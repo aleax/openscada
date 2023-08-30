@@ -1,5 +1,9 @@
 2023-08-30 Roman (stable)
-- FIX:UI.Vision: Fixed in building with no Media engine.
+- FIX:SYS: Restored in building on old systems with the separated -lrt.
+
+
+2023-08-30 Roman (stable)
+- FIX:UI.Vision: Restored in building with no Media engine.
 
 
 2023-08-30 Roman (stable)
