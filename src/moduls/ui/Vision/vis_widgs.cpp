@@ -1100,9 +1100,11 @@ WdgView::WdgView( const string &iwid, int ilevel, QMainWindow *mainWind, QWidget
 
 WdgView::~WdgView( )
 {
-    childsClear();
+    //childsClear();
 
     if(shape) shape->destroy(this);
+
+    childsClear();	//!!!! After the shape destroying to alow some specific locks processing
 }
 
 void WdgView::childsClear( )

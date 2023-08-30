@@ -295,8 +295,9 @@ VisRun::~VisRun( )
     //Clear cache
     pgCacheClear();
 
+    if(masterPg()) delete masterPg();
+
 #ifndef QT_NO_PRINTER
-    //Print objects free
     if(prPg)	delete prPg;
     if(prDiag)	delete prDiag;
     if(prDoc)	delete prDoc;
@@ -312,13 +313,6 @@ VisRun::~VisRun( )
 
 	// Push down all Qt events of the window to free the module
 	for(int iTr = 0; iTr < 5; iTr++) qApp->processEvents();
-    }
-
-    //Child widgets remove before
-    QObjectList chLst = children();
-    for(int iC = 0; iC < chLst.size(); iC++) {
-	WdgView *cw = qobject_cast<WdgView*>(chLst[iC]);
-	if(cw)	delete cw;//cw->deleteLater();	//!!!! Direct deleting due to this step is the last one
     }
 }
 
@@ -2252,7 +2246,7 @@ void VisRun::Notify::commCall( string &res, string &resTp, const string &mess, c
 
     //Playing by an internal mechanism (Phonon)
 #ifdef HAVE_PHONON
-    if(ntfPlay)	((VideoPlayer*)ntfPlay)->play(MediaSource(QUrl(resFile.c_str())));
+    if(ntfPlay)	((VideoPlayer*)ntfPlay)->play(MediaSource(QUrl::fromLocalFile(QDir::currentPath()+"/"+resFile.c_str())));
     else
 #endif
     //Call external procedures

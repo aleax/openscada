@@ -1803,7 +1803,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 	case A_MediaVolume:
 	    if(shD->audioVolume == s2r(val)) break;
 	    shD->audioVolume = s2r(val);
-	    if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg))) player->setVolume(shD->audioVolume);
+	    if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg))) player->setVolume(shD->audioVolume/100);
 	    break;
 #endif
 	default:
@@ -1896,11 +1896,15 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		if(!player) break;
 		MediaSource mSrc;
 		if(player->isPlaying()) { player->stop(); player->seek(0); }
-		//Try play local file
-		if(shD->mediaSrc.compare(0,5,"file:") == 0)
-		    mSrc = MediaSource(QUrl(shD->mediaSrc.substr(5).c_str()));
-		//Try play Stream by URL
-		else if(shD->mediaSrc.compare(0,7,"stream:") == 0)
+		//Try playing the local file
+		if(shD->mediaSrc.find("file:") == 0) {
+		    QString fNm = shD->mediaSrc.substr(5).c_str(), fPath = QDir::currentPath() + "/" + fNm;
+		    if(QFile(fPath).open(QIODevice::ReadOnly) || QFile(fPath=fNm).open(QIODevice::ReadOnly))
+			mSrc = MediaSource(QUrl::fromLocalFile(fPath));
+		    //mSrc = MediaSource(QUrl(shD->mediaSrc.substr(5).c_str()));
+		}
+		//Try playing a Stream by URL
+		else if(shD->mediaSrc.find("stream:") == 0)
 		    mSrc = MediaSource(QUrl(shD->mediaSrc.substr(7).c_str()));
 		//Try remote VCAEngine resource at last
 		if(shD->mediaSrc.size() && (mSrc.type() == MediaSource::Invalid || mSrc.type() == MediaSource::Empty)) {
@@ -1926,7 +1930,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		    else player->stop();
 		    if(shD->videoPause) player->pause();
 		    player->seek(shD->videoSeek);
-		    player->setVolume(shD->audioVolume);
+		    player->setVolume(shD->audioVolume/100);
 		}
 		break;
 	    }

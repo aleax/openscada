@@ -1,3 +1,15 @@
+2023-08-30 Roman (stable)
+- LibsDB.OscadaLibs: tmplib_LowDevLib.RDTech: Nondouble commands set to send the command tvicely for stable applying by the device,
+    postcommand delay set to 0.2 and moved in common.
+- DAQ: Information of the value attribute appended by the field of timestamp the current value.
+- Transports: List of the OpenSCADA hosts appended by the empty item for the possibility of changing the transport type.
+    The IO log expanded for cleaning at the log disabling.
+- Protocol.SelfSystem: Some improved in the compression processing.
+- FIX:UI.Vision: Fixed in early OpenSCADA pages removing before the prinitng and exporting dialogs.
+    FIX: The local media URL of Phonon transferred in absolute one for playing by GStream.
+    FIX: Fixed in the Phonon volume translation to 1.0 as 100%.
+
+
 2023-08-06 Roman (stable)
 - LibsDB.OscadaLibs: tmplib_DevLib.FF_LE: Finished in the implementation.
 

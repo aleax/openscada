@@ -705,6 +705,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 			opt->childAdd("el")->setText(list[iA]+"."+STR_IN_PREF+listTrs[iATrs]);
 	    }
 	}
+	opt->childAdd("el")->setText("");
     }
     else if(a_path == "/sub/ehost") {
 	bool sysHostAcs = SYS->security().at().access(u, SEC_WR, "root", STR_ID, RWRWR_);
@@ -1066,7 +1067,7 @@ void TTransportIn::setLogLen( int vl )
 
     vl = vmax(-1, vmin(10000,vl));
     if(vl && !mLogLen) mLogLstDt = 0;
-    while(vl > 0 && (int)mLog.size() > vl) mLog.pop_back();
+    while(vl >= 0 && (int)mLog.size() > vl) mLog.pop_back();
 
     if(vl < 0 && mLogFHD < 0) {
 	string fNm;
@@ -1505,7 +1506,7 @@ void TTransportOut::setLogLen( int vl )
 
     vl = vmax(-1, vmin(10000,vl));
     if(vl && !mLogLen) mLogLstDt = 0;
-    while(vl > 0 && (int)mLog.size() > vl) mLog.pop_back();
+    while(vl >= 0 && (int)mLog.size() > vl) mLog.pop_back();
 
     if(vl < 0 && mLogFHD < 0) {
 	string fNm;
