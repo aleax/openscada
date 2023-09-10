@@ -1256,7 +1256,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		    dBlk = document.createElement('fieldset');
 		    dBlk.appendChild(document.createElement('legend'));
 		    dBlk.childNodes[0].appendChild(document.createTextNode(t_s.getAttribute('dscr')));
-		}else dBlk = document.createElement('div');
+		} else dBlk = document.createElement('div');
 		dBlk.className = 'elem';
 		button = document.createElement('input'); button.type = 'button';
 		button.srcNode = t_s;
@@ -1273,9 +1273,9 @@ function selectChildRecArea( node, aPath, cBlk )
 			var com = '<set>';
 			for(var f_com = 0; f_com < this.srcNode.childNodes.length; f_com++)
 			    com += "<"+this.srcNode.childNodes[f_com].nodeName+" id='"+this.srcNode.childNodes[f_com].getAttribute('id')+"'>"+
-			this.srcNode.childNodes[f_com].textContent+"</"+this.srcNode.childNodes[f_com].nodeName+">";
+				this.srcNode.childNodes[f_com].textContent+"</"+this.srcNode.childNodes[f_com].nodeName+">";
 			com += '</set>';
-			var rez = servSet(selPath+'/'+this.brPath,'com=com',com,true);
+			var rez = servSet(selPath+'/'+this. brPath, 'com=com', com, true);
 			if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
 			pageRefresh();
 		    }
@@ -1537,7 +1537,9 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 			    var val_w = this.parentNode;
 			    if(val_w.childNodes[0].value) {
 				vD = val_w.childNodes[0].value.split("T")[0].split("-");
+				while(vD.length < 3) vD.push(0);
 				vT = val_w.childNodes[0].value.split("T")[1].split(":");
+				while(vT.length < 3) vT.push(0);
 				var dt = new Date(parseInt(vD[0]), parseInt(vD[1])-1, parseInt(vD[2]), parseInt(vT[0]), parseInt(vT[1]), parseInt(vT[2]));
 				val_w.srcNode.textContent = Math.floor(dt.getTime()/1000);
 			    }
@@ -1557,7 +1559,9 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 			btOk.onclick = function( ) {
 			    var val_w = this.parentNode;
 			    vD = val_w.childNodes[0].value.split("T")[0].split("-");
+			    while(vD.length < 3) vD.push(0);
 			    vT = val_w.childNodes[0].value.split("T")[1].split(":");
+			    while(vT.length < 3) vT.push(0);
 			    var dt = new Date(parseInt(vD[0]), parseInt(vD[1])-1, parseInt(vD[2]), parseInt(vT[0]), parseInt(vT[1]), parseInt(vT[2]));
 			    var rez = servSet(val_w.itPath, 'com=com', '<set>'+Math.floor(dt.getTime()/1000)+'</set>', true);
 			    if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);

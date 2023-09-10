@@ -2206,7 +2206,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"vMin",DEF_vMin,opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"vMin",opt->text(),opt->attr("user"));
     }
-    else if(a_path == "/val/lstAVal" && ctrChkNode(opt,"get",R_R___)) {
+    else if(a_path == "/val/lstAVal" && ctrChkNode(opt,"get",RWRW__,"root",SARH_ID)) {
 	opt->childAdd("el")->setText("");
 	opt->childAdd("el")->setText(ARCH_BUF);
 	vector<string> lsm, lsa;

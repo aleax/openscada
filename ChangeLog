@@ -1,3 +1,9 @@
+2023-09-09 Roman (stable)
+- FIX:LibsDB.vcaBase: wlb_doc.docRepInstVals: Restored in translation values of title and parameter's dimension, name.
+- FIX:Archive: Fixed in permition to list of archivers of tab the archive values.
+- FIX:UI.WebCfgD: Data edition fields fixed for the standard date from WebBrowser without seconds.
+
+
 2023-08-31 Roman (stable)
 - FIX:SYS: Restored in building on old systems with the separated -lrt also for ALTLinux6.
 
