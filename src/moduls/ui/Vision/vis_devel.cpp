@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,6 +35,7 @@
 #include <QScrollBar>
 #include <QCheckBox>
 #include <QMdiSubWindow>
+#include <QActionGroup>
 
 #include "../QTStarter/lib_qtgen.h"
 #include "vis_run.h"
@@ -43,6 +44,10 @@
 #include "vis_devel_dlgs.h"
 #include "vis_devel.h"
 #include "vis_shape_elfig.h"
+
+#if QT_VERSION < 0x050000
+# define mappedObject(obj)	mapped(obj)
+#endif
 
 #undef _
 #define _(mess) mod->I18N(mess, lang().c_str()).c_str()
@@ -77,12 +82,12 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     QImage ico_t;
     if(!ico_t.load(TUIS::icoGet("close",NULL,true).c_str())) ico_t.load(":/images/close.png");
     actClose = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actClose->setShortcut(Qt::CTRL+Qt::Key_W);
+    actClose->setShortcut(Qt::CTRL|Qt::Key_W);
     connect(actClose, SIGNAL(triggered()), this, SLOT(close()));
     //  Quit
     if(!ico_t.load(TUIS::icoGet("exit",NULL,true).c_str())) ico_t.load(":/images/exit.png");
     actQuit = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actQuit->setShortcut(Qt::CTRL+Qt::Key_Q);
+    actQuit->setShortcut(Qt::CTRL|Qt::Key_Q);
     connect(actQuit, SIGNAL(triggered()), this, SLOT(quitSt()));
     //  About "Program info"
     if(!ico_t.load(TUIS::icoGet("help",NULL,true).c_str())) ico_t.load(":/images/help.png");
@@ -113,7 +118,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     //  What is
     if(!ico_t.load(TUIS::icoGet("contexthelp",NULL,true).c_str())) ico_t.load(":/images/contexthelp.png");
     actWhatIs = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actWhatIs->setShortcut(Qt::SHIFT+Qt::Key_F1);
+    actWhatIs->setShortcut(Qt::SHIFT|Qt::Key_F1);
     connect(actWhatIs, SIGNAL(triggered()), this, SLOT(enterWhatsThis()));
 
     // Page, project, widget and this library actions
@@ -386,7 +391,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     menuBar()->addMenu((menuWindow=new QMenu(this)));
     connect(menuWindow, SIGNAL(aboutToShow()), this, SLOT(updateMenuWindow()));
     wMapper = new QSignalMapper(this);
-    connect(wMapper, SIGNAL(mapped(QWidget *)), this, SLOT(setActiveSubWindow(QWidget *)));
+    connect(wMapper, SIGNAL(mappedObject(QObject*)), this, SLOT(setActiveSubWindow(QObject*)));
 
     menuBar()->addMenu((menuView=new QMenu(this)));
     if(s2i(SYS->cmdOpt("showWin")) != 2) {
@@ -978,7 +983,7 @@ void VisDevelop::setToolIconSize( )
     }
 }
 
-void VisDevelop::setActiveSubWindow( QWidget *w )	{ work_space->setActiveSubWindow(dynamic_cast<QMdiSubWindow *>(w)); }
+void VisDevelop::setActiveSubWindow( QObject *w )	{ work_space->setActiveSubWindow(dynamic_cast<QMdiSubWindow *>(w)); }
 
 void VisDevelop::fullScreen( bool vl )
 {

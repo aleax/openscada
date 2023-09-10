@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_run_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,7 +25,6 @@
 #include <QPainter>
 #include <QComboBox>
 #include <QStatusBar>
-#include <QDesktopWidget>
 #include <QScrollBar>
 
 #include "vis_run.h"
@@ -511,7 +510,7 @@ bool RunWdgView::event( QEvent *event )
 	    switch(((QMouseEvent*)event)->button()) {
 		case Qt::LeftButton:	mod_ev += "Left";	break;
 		case Qt::RightButton:	mod_ev += "Right";	break;
-		case Qt::MidButton:	mod_ev += "Midle";	break;
+		case Qt::MiddleButton:	mod_ev += "Midle";	break;
 		default: break;
 	    }
 	    if(isVisible(mapFromGlobal(cursor().pos()))) {
@@ -806,7 +805,7 @@ bool UserItStBar::event( QEvent *event )
 	    switch(((QMouseEvent*)event)->button()) {
 		case Qt::LeftButton:	mod_ev += "Left";	break;
 		case Qt::RightButton:	mod_ev += "Right";	break;
-		case Qt::MidButton:	mod_ev += "Midle";	break;
+		case Qt::MiddleButton:	mod_ev += "Midle";	break;
 		default: break;
 	    }
 	    if(w && w->masterPg()) { w->masterPg()->attrSet("event", mod_ev+":/stIt_"+objId, A_NO_ID, true); return true; }

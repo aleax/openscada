@@ -178,7 +178,7 @@ private:
     int		simulRightMKeyTm;
     int64_t	mouseBtPress;
     QObject	*mouseBtRecv;
-    QMouseEvent	mouseBtHold;
+    QPointF	mouseBtHoldPos, mouseBtHoldPosG;
 
     string	sessPrjToRestore;
 };

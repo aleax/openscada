@@ -49,13 +49,6 @@
 #include <QToolTip>
 #include <QScrollBar>
 #include <QHeaderView>
-#if QT_VERSION < 0x050000
-# include <QPlastiqueStyle>
-#else
-# include <QCommonStyle>
-# include <qdrawutil.h>
-#endif
-
 #include "vis_run.h"
 #include "vis_devel.h"
 #include "vis_run_widgs.h"
@@ -64,19 +57,38 @@
 #include "vis_shapes.h"
 
 #if HAVE_MULTIMEDIA
-#include <QMediaPlayer>
-#include <QVideoWidget>
+# include <QMediaPlayer>
+# include <QVideoWidget>
+# if QT_VERSION >= 0x060000
+#  include <QAudioOutput>
+#  define setVolume(vol) audioOutput()->setVolume(vol)
+#  define setMedia(url)  setSource(url)
+#  define state()	playbackState()
+# endif
 #elif HAVE_PHONON
 # ifdef HAVE_PHONON_VIDEOPLAYER
-# include <phonon/VideoPlayer>
-# include <phonon/VideoWidget>
-# include <phonon/MediaObject>
+#  include <phonon/VideoPlayer>
+#  include <phonon/VideoWidget>
+#  include <phonon/MediaObject>
 # else
-# include <Phonon/VideoPlayer>
-# include <Phonon/VideoWidget>
-# include <Phonon/MediaObject>
+#  include <Phonon/VideoPlayer>
+#  include <Phonon/VideoWidget>
+#  include <Phonon/MediaObject>
 # endif
 using namespace Phonon;
+#endif
+
+#if QT_VERSION >= 0x050000
+# include <QCommonStyle>
+# include <qdrawutil.h>
+#else
+# include <QPlastiqueStyle>
+
+# define setSecsSinceEpoch(tm)	setTime_t(tm)
+#endif
+
+#if QT_VERSION < 0x060000
+# define typeId()		type()
 #endif
 
 using namespace OSCADA_QT;
@@ -221,7 +233,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	    break;
 	case A_GEOM_W: case A_GEOM_X_SC: rel_cfg = (shD->elType==F_TABLE);	break;
 	case A_GEOM_MARGIN:
-	    w->layout()->setMargin(s2i(val));
+	    w->layout()->setContentsMargins(s2i(val), s2i(val), s2i(val), s2i(val));
 	    rel_cfg = (shD->elType==F_BUTTON);
 	    break;
 	case A_FormElType:
@@ -356,9 +368,12 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		wdg->setStyle(NULL);
 		if(!backimg.empty() && img.loadFromData((const uchar*)backimg.data(),backimg.size())) {
 		    if(mod->dropCommonWdgStls()) toStlSYS = true;
-		    int icSzW = w->width() - w->layout()->margin();
-		    int icSzH = w->height() - w->layout()->margin();
-		    img = img.scaled(w->width()-w->layout()->margin(), w->height()-w->layout()->margin(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+		    int icSzW = 0, icSzH = 0;
+		    w->layout()->getContentsMargins(&icSzW, &icSzH, NULL, NULL);
+		    icSzW = w->width() - icSzW, icSzH = w->height() - icSzH;
+		    //int icSzW = w->width() - w->layout()->margin();
+		    //int icSzH = w->height() - w->layout()->margin();
+		    img = img.scaled(icSzW, icSzH, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
 		    wdg->setIconSize(QSize(icSzW,icSzH));
 		    wdg->setIcon(QPixmap::fromImage(img));
@@ -396,7 +411,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		if(!wdg || !qobject_cast<QComboBox*>(wdg)) {
 		    if(wdg) wdg->deleteLater();
 		    shD->addrWdg = wdg = new QComboBox(w);
-		    if(runW) connect(wdg, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboChange(const QString&)));
+		    if(runW) connect(wdg, SIGNAL(currentIndexChanged(int)), this, SLOT(comboChange(int)));
 		    mk_new = true;
 		}
 		//Font
@@ -1250,17 +1265,19 @@ void ShapeFormEl::buttonToggled( bool val )
 void ShapeFormEl::buttonMenuTrig( )
 {
     QAction *act = (QAction*)sender();
-    WdgView *w = (WdgView *)act->parentWidget()->parentWidget();
-    w->attrSet("event", "ws_BtMenu="+act->data().toString().toStdString(), A_NO_ID, true);
+    QWidget *wA = dynamic_cast<QWidget*>(act->parent());
+    WdgView *w = wA ? dynamic_cast<WdgView*>(wA->parentWidget()) : NULL;
+    if(w) w->attrSet("event", "ws_BtMenu="+act->data().toString().toStdString(), A_NO_ID, true);
 }
 
-void ShapeFormEl::comboChange( const QString &val )
+void ShapeFormEl::comboChange( int id )
 {
-    WdgView *w = (WdgView *)((QWidget*)sender())->parentWidget();
+    QComboBox *comb = (QComboBox *)sender();
+    WdgView *w = (WdgView *)comb->parentWidget();
     if(((ShpDt*)w->shpData)->evLock)	return;
 
     AttrValS attrs;
-    attrs.push_back(std::make_pair("value",val.toStdString()));
+    attrs.push_back(std::make_pair("value",comb->itemText(id).toStdString()));
     attrs.push_back(std::make_pair("event","ws_CombChange"));
     w->attrsSet(attrs);
 }
@@ -1341,7 +1358,7 @@ void ShapeFormEl::tableChange( int row, int col )
     QTableWidgetItem *wIt = el->item(row, col);
 
     QVariant val = wIt->data(Qt::DisplayRole);
-    if(val.type() == QVariant::Bool) val = val.toInt();
+    if(val.typeId() == QVariant::Bool) val = val.toInt();
 
     //Events prepare
     AttrValS attrs;
@@ -1429,11 +1446,11 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val, const stri
 	    shD->backGrnd.setColor(getColor(val));
 
 	    QPalette plt(w->palette());
-	    QBrush brsh = plt.brush(QPalette::Background);
+	    QBrush brsh = plt.brush(QPalette::Window);
 	    brsh.setColor(shD->backGrnd.color());
-	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Background).color());
+	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Window).color());
 	    brsh.setStyle(brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern);
-	    plt.setBrush(QPalette::Background, brsh);
+	    plt.setBrush(QPalette::Window, brsh);
 	    w->setPalette(plt);
 
 	    up = true;
@@ -1445,7 +1462,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val, const stri
 	    shD->backGrnd.setTextureImage((!backimg.empty()&&img.loadFromData((const uchar*)backimg.data(),backimg.size()))?img:QImage());
 
 	    QPalette plt(w->palette());
-	    QBrush brsh = plt.brush(QPalette::Background);
+	    QBrush brsh = plt.brush(QPalette::Window);
 	    brsh.setTextureImage(img);
 	    brsh.setStyle(!brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern);
 	    plt.setBrush(QPalette::Base,brsh);
@@ -1504,7 +1521,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val, const stri
 		if(argN >= (int)shD->args.size()) break;
 		if((uiPrmPos%A_TextArsSz) == A_TextArsVal || (uiPrmPos%A_TextArsSz) == A_TextArsTp) {
 		    QVariant gval = shD->args[argN].val();
-		    int tp = (gval.type()==QVariant::Double) ? 1 : ((gval.type()==QVariant::String) ? 2 : 0);
+		    int tp = (gval.typeId()==QVariant::Double) ? 1 : ((gval.typeId()==QVariant::String) ? 2 : 0);
 		    if((uiPrmPos%A_TextArsSz) == A_TextArsVal)	gval = val.c_str();
 		    if((uiPrmPos%A_TextArsSz) == A_TextArsTp)	tp = s2i(val);
 		    switch(tp) {
@@ -1522,7 +1539,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val, const stri
     if(reform && !w->allAttrLoad()) {
 	QString text = shD->text_tmpl.c_str();
 	for(unsigned iA = 0; iA < shD->args.size(); iA++) {
-	    switch(shD->args[iA].val().type()) {
+	    switch(shD->args[iA].val().typeId()) {
 		case QVariant::String:
 		    text = text.arg(shD->args[iA].val().toString(), vmax(-1000,vmin(1000,s2i(shD->args[iA].cfg()))));
 		    break;
@@ -1623,6 +1640,7 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 //************************************************
 //* Media view shape widget                      *
 //************************************************
+
 ShapeMedia::ShapeMedia( ) : WdgShape("Media")
 {
 
@@ -1742,17 +1760,17 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 	    break;
 	case A_GEOM_MARGIN:
 	    shD->geomMargin = s2i(val);
-	    w->layout()->setMargin(shD->geomMargin);
+	    w->layout()->setContentsMargins(shD->geomMargin, shD->geomMargin, shD->geomMargin, shD->geomMargin);
 	    break;
 	case A_BackColor: {
 	    shD->backGrnd.setColor(getColor(val));
 
 	    QPalette plt(w->palette());
-	    QBrush brsh = plt.brush(QPalette::Background);
+	    QBrush brsh = plt.brush(QPalette::Window);
 	    brsh.setColor(shD->backGrnd.color());
-	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Background).color());
+	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Window).color());
 	    brsh.setStyle( brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern );
-	    plt.setBrush(QPalette::Background,brsh);
+	    plt.setBrush(QPalette::Window,brsh);
 	    w->setPalette(plt);
 	    break;
 	}
@@ -1764,10 +1782,10 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		shD->backGrnd.setTextureImage(img);
 
 	    QPalette plt(w->palette());
-	    QBrush brsh = plt.brush(QPalette::Background);
+	    QBrush brsh = plt.brush(QPalette::Window);
 	    brsh.setTextureImage(img);
 	    brsh.setStyle(!brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern);
-	    plt.setBrush(QPalette::Background,brsh);
+	    plt.setBrush(QPalette::Window,brsh);
 	    w->setPalette(plt);
 	    break;
 	}
@@ -1935,6 +1953,9 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 # if HAVE_MULTIMEDIA
 		if(!shD->addrWdg) {
 		    shD->addrWdg = player = new QMediaPlayer(w);
+#  if QT_VERSION >= 0x060000
+		    player->setAudioOutput(new QAudioOutput);
+#  endif
 		    if(shD->mediaType == FM_VIDEO) {
 			shD->extO = endW = new QVideoWidget(w);
 			player->setVideoOutput((QVideoWidget*)endW);
@@ -1953,13 +1974,19 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		    QString fNm = shD->mediaSrc.substr(5).c_str(), fPath = QDir::currentPath() + "/" + fNm;
 		    if(QFile(fPath).open(QIODevice::ReadOnly) || QFile(fPath=fNm).open(QIODevice::ReadOnly))
 			player->setMedia(QUrl::fromLocalFile(fPath));
-		    else player->setMedia(QMediaContent());
+		    else player->setMedia(QUrl());
 		}
 		//Try playing a Stream by URL
 		else if(shD->mediaSrc.find("stream:") == 0)
 		    player->setMedia(QUrl(shD->mediaSrc.substr(5).c_str()));
 		//Try for remote VCAEngine resource at last
-		if(shD->mediaSrc.size() && player->currentMedia().isNull()) {
+		if(shD->mediaSrc.size() &&
+#  if QT_VERSION < 0x060000
+			player->currentMedia().isNull())
+#  else
+			player->mediaStatus() == QMediaPlayer::NoMedia)
+#  endif
+		{
 		    string sdata = w->resGet(shD->mediaSrc);
 		    if(sdata.size()) {
 			shD->tfile = TSYS::path2sepstr(w->id(), '_');
@@ -1973,7 +2000,12 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 			}
 		    }
 		}
-		if(!player->currentMedia().isNull()) {
+#  if QT_VERSION < 0x060000
+		if(!player->currentMedia().isNull())
+#  else
+		if(player->mediaStatus() != QMediaPlayer::NoMedia)
+#  endif
+		{
 		    if(shD->videoPlay) player->play();
 		    else player->stop();
 		    if(shD->videoPause) player->pause();
@@ -2097,7 +2129,7 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 		switch(((QMouseEvent*)event)->button()) {
 		    case Qt::LeftButton:	sev += "Left";	break;
 		    case Qt::RightButton:	sev += "Right";	break;
-		    case Qt::MidButton:		sev += "Midle";	break;
+		    case Qt::MiddleButton:	sev += "Midle";	break;
 		    default: return false;
 		}
 		w->attrSet("event", sev, A_NO_ID, true);
@@ -2216,11 +2248,11 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val, const s
 	    shD->backGrnd.setColor(getColor(val));
 
 	    QPalette plt(w->palette());
-	    QBrush brsh = plt.brush(QPalette::Background);
+	    QBrush brsh = plt.brush(QPalette::Window);
 	    brsh.setColor(shD->backGrnd.color());
-	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Background).color());
+	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Window).color());
 	    brsh.setStyle(brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern);
-	    plt.setBrush(QPalette::Background, brsh);
+	    plt.setBrush(QPalette::Window, brsh);
 	    w->setPalette(plt);
 	    up = true;
 	    break;
@@ -2233,10 +2265,10 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val, const s
 		shD->backGrnd.setTextureImage(img);
 
 	    QPalette plt(w->palette());
-	    QBrush brsh = plt.brush(QPalette::Background);
+	    QBrush brsh = plt.brush(QPalette::Window);
 	    brsh.setTextureImage(img);
 	    brsh.setStyle(!brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern);
-	    plt.setBrush(QPalette::Background, brsh);
+	    plt.setBrush(QPalette::Window, brsh);
 	    w->setPalette(plt);
 	    up = true;
 	    break;
@@ -4316,7 +4348,7 @@ void ShapeProtocol::init( WdgView *w )
 
     //Bckground palette init
     QPalette plt(shD->addrWdg->palette());
-    plt.setBrush(QPalette::Background, QPalette().brush(QPalette::Background));
+    plt.setBrush(QPalette::Window, QPalette().brush(QPalette::Window));
     shD->addrWdg->setPalette(plt);
 }
 
@@ -4351,7 +4383,7 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val, const 
 	    shD->addrWdg->setSelectionMode(shD->active ? QAbstractItemView::SingleSelection : QAbstractItemView::NoSelection);
 //	    shD->addrWdg->setEnabled( shD->active && ((RunWdgView*)w)->permCntr() );
 	    break;
-	case A_GEOM_MARGIN: w->layout()->setMargin(s2i(val));	break;
+	case A_GEOM_MARGIN: w->layout()->setContentsMargins(s2i(val), s2i(val), s2i(val), s2i(val));	break;
 	case A_BackColor: {
 	    QPalette plt(shD->addrWdg->palette());
 	    QBrush brsh = plt.brush(QPalette::Base);
@@ -4633,7 +4665,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	    tit = NULL;
 	    if(iCl == c_tm) {
 		QDateTime	dtm;
-		dtm.setTime_t(shD->messList[sortIts[iM].second].time);
+		dtm.setSecsSinceEpoch(shD->messList[sortIts[iM].second].time);
 		shD->addrWdg->setItem(iM, c_tm, tit=new QTableWidgetItem(dtm.toString("dd.MM.yyyy hh:mm:ss")));
 		tit->setData(Qt::TextAlignmentRole, (int)(Qt::AlignCenter|Qt::TextWordWrap));
 	    }
@@ -4769,6 +4801,9 @@ void ShapeDocument::init( WdgView *w )
     QVBoxLayout *lay = new QVBoxLayout(w);
 #if HAVE_WEBENGINE
     shD->web = new QWebEngineView(w);
+# if QT_VERSION >= 0x060000
+    connect(shD->web, SIGNAL(printFinished(bool)), this, SLOT(printFinished()));
+# endif
 #elif HAVE_WEBKIT
     shD->web = new QWebView(w);
     shD->web->setAttribute(Qt::WA_AcceptTouchEvents, false);
@@ -4816,7 +4851,7 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val, const 
 	    setFocus(w, shD->web, shD->active && runW->permCntr());
 	    shD->web->setEnabled(shD->active && runW->permCntr());
 	    break;
-	case A_GEOM_MARGIN: w->layout()->setMargin(s2i(val));	break;
+	case A_GEOM_MARGIN: w->layout()->setContentsMargins(s2i(val), s2i(val), s2i(val), s2i(val));	break;
 	case A_DocStyle: if(shD->style != val) { shD->style = val; relDoc = true; }	break;
 	case A_DocTmpl:
 	    if((!shD->doc.empty() && !shD->tmpl) || shD->doc == val) break;
@@ -4912,7 +4947,12 @@ void ShapeDocument::custContextMenu( )
     RunWdgView *w = dynamic_cast<RunWdgView*>(web->parent());
 
 #if HAVE_WEBENGINE
+    QMenu *menu = new QMenu(w);	//!!!! Due to there is no sense in the StandardContextMenu
+/*# if QT_VERSION < 0x060000
     QMenu *menu = ((QWebEngineView*)web)->page()->createStandardContextMenu();
+# else
+    QMenu *menu = ((QWebEngineView*)web)->createStandardContextMenu();
+# endif*/
 #elif HAVE_WEBKIT
     QMenu *menu = ((QWebView*)web)->page()->createStandardContextMenu();
 #else
@@ -4931,9 +4971,15 @@ void ShapeDocument::custContextMenu( )
     if(rez == actPrint) w->mainWin()->printDoc(w->id());
     else if(rez == actExp) w->mainWin()->exportDoc(w->id());
 
-#if !HAVE_WEBENGINE
+//#if !HAVE_WEBENGINE
     menu->deleteLater();	//delete menu;
-#endif
+//#endif
+}
+
+void ShapeDocument::printFinished( )
+{
+    WdgView *w = dynamic_cast<WdgView*>(sender()->parent());
+    if(w) ((ShpDt*)w->shpData)->printCB = false;
 }
 
 void ShapeDocument::setFocus( WdgView *view, QWidget *wdg, bool en, bool devel )
@@ -5020,7 +5066,11 @@ void ShapeDocument::ShpDt::print( QPrinter *printer )
 # if HAVE_WEBENGINE
     //Starting the print
     printCB = true;
+#  if QT_VERSION < 0x060000
     web->page()->print(printer, [this](bool) { this->printCB = false; } );
+#  else
+    web->print(printer);
+#  endif
 # elif HAVE_WEBKIT
     web->print(printer);
 # else
@@ -5088,7 +5138,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
 	    break;
 	case A_GEOM_MARGIN:
 	    shD->geomMargin = s2i(val);
-	    if(w->layout()) w->layout()->setMargin(shD->geomMargin);
+	    if(w->layout()) w->layout()->setContentsMargins(shD->geomMargin, shD->geomMargin, shD->geomMargin, shD->geomMargin);
 	    break;
 	case A_BackColor: {
 	    shD->backGrnd.setColor(getColor(val));
@@ -5157,7 +5207,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
 		    if(!shD->inclScrl) {
 			QGridLayout *wlay = (QGridLayout*)w->layout();
 			if(!wlay) wlay = new QGridLayout(w);
-			wlay->setMargin(0/*shD->geomMargin*/);
+			wlay->setContentsMargins(0, 0, 0, 0);
 			shD->inclScrl = new QScrollArea(w);
 			shD->inclScrl->setFocusPolicy(Qt::NoFocus);
 			shD->inclScrl->setFrameShape(QFrame::NoFrame);

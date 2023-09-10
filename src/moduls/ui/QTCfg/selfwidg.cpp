@@ -36,19 +36,24 @@
 #include <QToolTip>
 #include <QStatusBar>
 #include <QMenu>
-#if QT_VERSION < 0x050000
-#include <QPlastiqueStyle>
-#else
-#include <QCommonStyle>
-#endif
 #include <QScrollBar>
 #include <QCompleter>
-#include <QDesktopWidget>
+//#include <QDesktopWidget>
 
 #include "qtcfg.h"
 #include "tuimod.h"
 #include "../QTStarter/lib_qtgen.h"
 #include "selfwidg.h"
+
+#if QT_VERSION < 0x050000
+#include <QPlastiqueStyle>
+
+#define fromSecsSinceEpoch(tm)	fromTime_t(tm)
+#define toSecsSinceEpoch()	toTime_t()
+#else
+#include <QCommonStyle>
+#endif
+
 
 using namespace OSCADA_QT;
 using namespace QTCFG;
@@ -121,7 +126,7 @@ LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis ) :
     QWidget(parent), mTp((LineEdit::LType)-1), mPrev(!prev_dis), edFld(NULL), btFld(NULL)
 {
     QHBoxLayout *box = new QHBoxLayout(this);
-    box->setMargin(0);
+    box->setContentsMargins(0, 0, 0, 0);
     box->setSpacing(0);
 
     setType(tp);
@@ -227,8 +232,8 @@ void LineEdit::setValue(const QString &txt)
 	    ((QTimeEdit*)edFld)->setTime(QTime().addSecs(txt.toInt()));
 	    break;
 	case Date: case DateTime:
-	    if(QDateTime::fromTime_t(txt.toInt()) == ((QDateTimeEdit*)edFld)->dateTime()) break;
-	    ((QDateTimeEdit*)edFld)->setDateTime(QDateTime::fromTime_t(txt.toInt()));
+	    if(QDateTime::fromSecsSinceEpoch(txt.toInt()) == ((QDateTimeEdit*)edFld)->dateTime()) break;
+	    ((QDateTimeEdit*)edFld)->setDateTime(QDateTime::fromSecsSinceEpoch(txt.toInt()));
 	    break;
 	case Combo:
 	    if(txt == ((QComboBox*)edFld)->currentText()) break;
@@ -308,7 +313,7 @@ QString LineEdit::value( )
 	case Real:	return QString::number(((QDoubleSpinBox*)edFld)->value());
 	case Time:	return QString::number(QTime().secsTo(((QTimeEdit*)edFld)->time()));
 	case Date: case DateTime:
-	    return QString::number(((QDateTimeEdit*)edFld)->dateTime().toTime_t());
+	    return QString::number(((QDateTimeEdit*)edFld)->dateTime().toSecsSinceEpoch());
 	case Combo:	return ((QComboBox*)edFld)->currentText();
     }
     return "";
@@ -333,7 +338,7 @@ void LineEdit::btCancel( )
 
 bool LineEdit::event( QEvent * e )
 {
-    if(e->type() == QEvent::KeyRelease && btFld) {
+    if(e->type() == QEvent::KeyPress && btFld) {	//!!!! QEvent::KeyRelease doesn't come in Qt6.4
 	QKeyEvent *keyEvent = (QKeyEvent*)e;
 	if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
 	    btFld->animateClick();
@@ -376,7 +381,7 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
     QImage ico_t;
     if(!ico_t.load(TUIS::icoGet("find",NULL,true).c_str())) ico_t.load(":/images/find.png");
     actFind = new QAction(QPixmap::fromImage(ico_t), _("Find"), edFld);
-    actFind->setShortcut(Qt::CTRL+Qt::Key_F);
+    actFind->setShortcut(Qt::CTRL|Qt::Key_F);
     actFind->setShortcutContext(Qt::WidgetShortcut);
     connect(actFind, SIGNAL(triggered()), this, SLOT(find()));
     edFld->addAction(actFind);
@@ -672,7 +677,7 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess,
     setSizeGripEnabled(true);
 
     QVBoxLayout *dlg_lay = new QVBoxLayout(this);
-    dlg_lay->setMargin(10);
+    dlg_lay->setContentsMargins(10, 10, 10, 10);
     dlg_lay->setSpacing(6);
 
     //Icon label and text message
@@ -756,9 +761,7 @@ void InputDlg::showEvent( QShowEvent * event )
     adjustSize();
     resize(size().expandedTo(src));
 
-#if defined(__ANDROID__)
-    move((QApplication::desktop()->width()-width())/2, (QApplication::desktop()->height()-height())/2);
-#endif
+    winFit(*this);
 }
 
 //*****************************************************
@@ -824,7 +827,7 @@ DlgUser::DlgUser( QWidget *parent ) : QDialog(parent)
     setWindowTitle(_("Selecting an user"));
 
     QVBoxLayout *dlg_lay = new QVBoxLayout(this);
-    dlg_lay->setMargin(10);
+    dlg_lay->setContentsMargins(10, 10, 10, 10);
     dlg_lay->setSpacing(6);
 
     QGridLayout *edLay = new QGridLayout;
@@ -893,9 +896,7 @@ void DlgUser::showEvent( QShowEvent * event )
     adjustSize();
     resize(size().expandedTo(src));
 
-#if defined(__ANDROID__)
-    move((QApplication::desktop()->width()-width())/2, (QApplication::desktop()->height()-height())/2);
-#endif
+    winFit(*this);
 }
 
 //*********************************************

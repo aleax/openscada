@@ -62,6 +62,10 @@
 #include "../QTStarter/lib_qtgen.h"
 #include "tuimod.h"
 
+#if QT_VERSION < 0x050000
+# define setSecsSinceEpoch(tm)	setTime_t(tm)
+#endif
+
 #define CH_REFR_TM	100
 #define GRP_SHOW_OP_LIM	10
 
@@ -92,7 +96,7 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     //Init centrall widget
     setCentralWidget(new QWidget(this));
     QGridLayout *QTCfgLayout = new QGridLayout(centralWidget());
-    QTCfgLayout->setMargin(3);
+    QTCfgLayout->setContentsMargins(3, 3, 3, 3);
 
     //Init splitter
     splitter = new QSplitter(centralWidget());
@@ -101,7 +105,7 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     //Create Navigator tree
     QFrame *frm = new QFrame(splitter);
     QVBoxLayout *vlay = new QVBoxLayout;
-    vlay->setMargin(0);
+    vlay->setContentsMargins(0, 0, 0, 0);
     CtrTree = new QTreeWidget;
     vlay->addWidget(CtrTree);
     CtrTree->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -168,29 +172,29 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     // Close
     if(!ico_t.load(TUIS::icoGet("close",NULL,true).c_str())) ico_t.load(":/images/close.png");
     actClose = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actClose->setShortcut(Qt::CTRL+Qt::Key_W);
+    actClose->setShortcut(Qt::CTRL|Qt::Key_W);
     connect(actClose, SIGNAL(triggered()), this, SLOT(close()));
     // Quit
     if(!ico_t.load(TUIS::icoGet("exit",NULL,true).c_str())) ico_t.load(":/images/exit.png");
     actQuit = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actQuit->setShortcut(Qt::CTRL+Qt::Key_Q);
+    actQuit->setShortcut(Qt::CTRL|Qt::Key_Q);
     connect(actQuit, SIGNAL(triggered()), this, SLOT(quitSt()));
     // Up button
     if(!ico_t.load(TUIS::icoGet("up",NULL,true).c_str())) ico_t.load(":/images/up.png");
     actUp = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actUp->setShortcut(Qt::ALT+Qt::Key_Up);
+    actUp->setShortcut(Qt::ALT|Qt::Key_Up);
     actUp->setEnabled(false);
     connect(actUp, SIGNAL(triggered()), this, SLOT(pageUp()));
     // Previous page
     if(!ico_t.load(TUIS::icoGet("previous",NULL,true).c_str())) ico_t.load(":/images/previous.png");
     actPrev = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actPrev->setShortcut(Qt::ALT+Qt::Key_Left);
+    actPrev->setShortcut(Qt::ALT|Qt::Key_Left);
     actPrev->setEnabled(false);
     connect(actPrev, SIGNAL(triggered()), this, SLOT(pagePrev()));
     // Next page
     if(!ico_t.load(TUIS::icoGet("next",NULL,true).c_str())) ico_t.load(":/images/next.png");
     actNext = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actNext->setShortcut(Qt::ALT+Qt::Key_Right);
+    actNext->setShortcut(Qt::ALT|Qt::Key_Right);
     actNext->setEnabled(false);
     connect(actNext, SIGNAL(triggered()), this, SLOT(pageNext()));
     // Load item from db
@@ -245,19 +249,19 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     // Start of "Auto update"
     if(!ico_t.load(TUIS::icoGet("start",NULL,true).c_str())) ico_t.load(":/images/start.png");
     actStartUpd = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actStartUpd->setShortcut(Qt::CTRL+Qt::Key_R);
+    actStartUpd->setShortcut(Qt::CTRL|Qt::Key_R);
     connect(actStartUpd, SIGNAL(triggered()), this, SLOT(pageCyclRefrStart()));
     // Stop of "Auto update"
     if(!ico_t.load(TUIS::icoGet("stop",NULL,true).c_str())) ico_t.load(":/images/stop.png");
     actStopUpd = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actStopUpd->setShortcut(Qt::CTRL+Qt::Key_E);
+    actStopUpd->setShortcut(Qt::CTRL|Qt::Key_E);
     actStopUpd->setEnabled(false);
     connect(actStopUpd, SIGNAL(triggered()), this, SLOT(pageCyclRefrStop()));
     // Favorite page toggling
     if(!favToggleAdd.load(TUIS::icoGet("favorites_add",NULL,true).c_str())) favToggleAdd.load(":/images/favorites_add.png");
     if(!favToggleDel.load(TUIS::icoGet("favorites_del",NULL,true).c_str())) favToggleDel.load(":/images/favorites_del.png");
     actFavToggle = new QAction(QPixmap::fromImage(favToggleAdd), "", this);
-    actFavToggle->setShortcut(Qt::CTRL+Qt::Key_B);
+    actFavToggle->setShortcut(Qt::CTRL|Qt::Key_B);
     actFavToggle->setEnabled(false);
     connect(actFavToggle, SIGNAL(triggered()), this, SLOT(favToggle()));
     // Favorite page
@@ -290,7 +294,7 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     // What is
     if(!ico_t.load(TUIS::icoGet("contexthelp",NULL,true).c_str())) ico_t.load(":/images/contexthelp.png");
     actWhatIs = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actWhatIs->setShortcut(Qt::SHIFT+Qt::Key_F1);
+    actWhatIs->setShortcut(Qt::SHIFT|Qt::Key_F1);
     connect(actWhatIs, SIGNAL(triggered()), this, SLOT(enterWhatsThis()));
 
     // Menus
@@ -1455,7 +1459,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		QVBoxLayout *w_lay = new QVBoxLayout(wdg);
 		//((QGroupBox *)wdg)->setColumnLayout(0, Qt::Vertical);
 		w_lay->setSpacing(3);
-		w_lay->setMargin(3);
+		w_lay->setContentsMargins(3, 3, 3, 3);
 		//w_lay->setAlignment(Qt::AlignTop);
 		widget->layout()->addWidget(wdg);
 	    }
@@ -1543,7 +1547,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		if(!ico_t.load(TUIS::icoGet("find",NULL,true).c_str())) ico_t.load(":/images/find.png");
 		QAction *actFind = new QAction(QPixmap::fromImage(ico_t), _("Find"), tbl);
 		actFind->setObjectName("tableFind");
-		actFind->setShortcut(Qt::CTRL+Qt::Key_F);
+		actFind->setShortcut(Qt::CTRL|Qt::Key_F);
 		actFind->setShortcutContext(Qt::WidgetShortcut);
 		connect(actFind, SIGNAL(triggered()), this, SLOT(tableFind()));
 		tbl->addAction(actFind);
@@ -1859,7 +1863,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		val_w->setObjectName(br_path.c_str());
 		val_w->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 		val_w->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed));
-		connect(val_w, SIGNAL(activated(const QString&)), this, SLOT(combBoxActivate(const QString&)));
+		connect(val_w, SIGNAL(activated(int)), this, SLOT(combBoxActivate(int)));
 	    }
 
 	    if(t_s.attr("dscr").size()) {
@@ -2118,7 +2122,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		if(data_req.text().size()) tm_t = s2i(data_req.text());
 		else tm_t = time(NULL);
 		QDateTime dtm;
-		dtm.setTime_t(tm_t);
+		dtm.setSecsSinceEpoch(tm_t);
 		mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, val_r);
 		val_r->setText( "<b>"+dtm.toString("dd.MM.yyyy hh:mm:ss")+"</b>" );
 	    }
@@ -3009,12 +3013,12 @@ void ConfApp::buttonClicked( )
     pageRefresh(CH_REFR_TM);
 }
 
-void ConfApp::combBoxActivate( const QString& ival )
+void ConfApp::combBoxActivate( int ival )
 {
     bool block = false;
-    string val = ival.toStdString();
     XMLNode *n_el;
     QComboBox *comb = (QComboBox *)sender();
+    string val = comb->itemText(ival).toStdString();
 
     try {
 	string path = comb->objectName().toStdString();
@@ -3611,7 +3615,7 @@ void ConfApp::applyButton( )
 	string sval = el->text();
 	if(el->attr("tp") == "dec" || el->attr("tp") == "hex" || el->attr("tp") == "oct") {
 	    //Check and change decimal format and the limits control
-	    if(sval.compare(0,2,"0x") == 0 || QString(sval.c_str()).contains(QRegExp("[abcdefABCDEF]")))
+	    if(TRegExp("^0x[0-9a-fA-F]+$").test(sval))
 		el->setAttr("tpCh", "hex");
 	    else if(sval.size() > 1 && sval[0] == '0')
 		el->setAttr("tpCh", "oct");

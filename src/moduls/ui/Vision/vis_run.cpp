@@ -20,19 +20,14 @@
  ***************************************************************************/
 
 #include <sys/stat.h>
+#include <linux/input.h>
 #include <fcntl.h>
 #include <errno.h>
 
 #include <algorithm>
 
-#include <linux/input.h>
-
 #include <QApplication>
-#if QT_VERSION >= 0x050000
-# include <QWindow>
-#endif
 #include <QLocale>
-#include <QDesktopWidget>
 #include <QTimer>
 #include <QMenuBar>
 #include <QCloseEvent>
@@ -57,18 +52,35 @@
 #include "vis_shapes.h"
 
 #if HAVE_MULTIMEDIA
-#include <QMediaPlayer>
+# include <QMediaPlayer>
+# if QT_VERSION >= 0x060000
+#  include <QAudioOutput>
+# endif
 #elif HAVE_PHONON
 # ifdef HAVE_PHONON_VIDEOPLAYER
-# include <phonon/VideoPlayer>
-# include <phonon/VideoWidget>
-# include <phonon/MediaObject>
+#  include <phonon/VideoPlayer>
+#  include <phonon/VideoWidget>
+#  include <phonon/MediaObject>
 # else
-# include <Phonon/VideoPlayer>
-# include <Phonon/VideoWidget>
-# include <Phonon/MediaObject>
+#  include <Phonon/VideoPlayer>
+#  include <Phonon/VideoWidget>
+#  include <Phonon/MediaObject>
 # endif
 using namespace Phonon;
+#endif
+
+#if QT_VERSION >= 0x050000
+# include <QWindow>
+# include <QScreen>
+#else
+# include <QDesktopWidget>
+
+# define setSecsSinceEpoch(utm)	setTime_t(utm)
+#endif
+
+#if QT_VERSION < 0x060000
+# define typeId()		type()
+# define setSource(url)		setMedia(url)
 #endif
 
 #undef _
@@ -142,12 +154,12 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     //  Close
     if(!ico_t.load(TUIS::icoGet("close",NULL,true).c_str())) ico_t.load(":/images/close.png");
     actClose = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actClose->setShortcut(Qt::CTRL+Qt::Key_W);
+    actClose->setShortcut(Qt::CTRL|Qt::Key_W);
     connect(actClose, SIGNAL(triggered()), this, SLOT(close()));
     //  Quit
     if(!ico_t.load(TUIS::icoGet("exit",NULL,true).c_str())) ico_t.load(":/images/exit.png");
     actQuit = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actQuit->setShortcut(Qt::CTRL+Qt::Key_Q);
+    actQuit->setShortcut(Qt::CTRL|Qt::Key_Q);
     connect(actQuit, SIGNAL(triggered()), this, SLOT(quitSt()));
     // View actions
     //  Fullscreen
@@ -177,7 +189,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     //  What is
     if(!ico_t.load(TUIS::icoGet("contexthelp",NULL,true).c_str())) ico_t.load(":/images/contexthelp.png");
     actWhatIs = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actWhatIs->setShortcut(Qt::SHIFT+Qt::Key_F1);
+    actWhatIs->setShortcut(Qt::SHIFT|Qt::Key_F1);
     connect(actWhatIs, SIGNAL(triggered()), this, SLOT(enterWhatsThis()));
 
     // Alarms actions
@@ -417,10 +429,10 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob, bool main )
 	    conErr->setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
 	    conErr->setAutoFillBackground(true);
 	    QPalette plt(conErr->palette());
-	    QBrush brsh = plt.brush(QPalette::Background);
+	    QBrush brsh = plt.brush(QPalette::Window);
 	    brsh.setColor(Qt::red);
 	    brsh.setStyle(Qt::SolidPattern);
-	    plt.setBrush(QPalette::Background, brsh);
+	    plt.setBrush(QPalette::Window, brsh);
 	    conErr->setPalette(plt);
 	    //Calc size and position
 	    conErr->resize(300, 100);
@@ -456,7 +468,7 @@ QString VisRun::getFileName( const QString &caption, const QString &dir, const Q
     fileDlg->setNameFilter(filter);
     if(dir.size()) { QString dirF = dir; fileDlg->selectFile(dirF.replace("\"","")); }
 #if QT_VERSION >= 0x040500
-    fileDlg->setReadOnly(!winMenu());
+    fileDlg->setOption(QFileDialog::ReadOnly, !winMenu());
 #endif
     if(fileDlg->exec() && !fileDlg->selectedFiles().empty()) return fileDlg->selectedFiles()[0];
 
@@ -508,11 +520,16 @@ void VisRun::resizeEvent( QResizeEvent *ev )
 	} else x_scale = y_scale = 1;
 	if(x_scale_old != x_scale || y_scale_old != y_scale)	fullUpdatePgs();
 
-	// Fit to the master page size
+	//Fit to the master page size
 	if((x_scale_old != x_scale || y_scale_old != y_scale || !ev || !ev->oldSize().isValid()) && !(windowState()&(Qt::WindowMaximized|Qt::WindowFullScreen))) {
+#if QT_VERSION < 0x050000
 	    QRect ws = QApplication::desktop()->availableGeometry(this);
-	    resize(fmin(ws.width()-10,masterPg()->size().width()+(centralWidget()->parentWidget()->width()-centralWidget()->width())+5),
-		fmin(ws.height()-10,masterPg()->size().height()+(centralWidget()->parentWidget()->height()-centralWidget()->height())+5));
+#else
+	    QRect ws = qApp->screens().size() ? qApp->screens()[0]->availableGeometry() : QRect();
+#endif
+	    if(!ws.isNull())
+		resize(fmin(ws.width()-10,masterPg()->size().width()+(centralWidget()->parentWidget()->width()-centralWidget()->width())+5),
+		    fmin(ws.height()-10,masterPg()->size().height()+(centralWidget()->parentWidget()->height()-centralWidget()->height())+5));
 	}
 
 	mess_debug(mod->nodePath().c_str(), _("Scale of the root page [%f:%f]."), x_scale, y_scale);
@@ -529,6 +546,7 @@ void VisRun::quitSt( )
 {
     SYS->stop();
 }
+
 
 void VisRun::print( )
 {
@@ -582,12 +600,12 @@ void VisRun::printPg( const string &ipg )
     QPrintDialog dlg(prPg, this);
     dlg.setWindowTitle(QString(_("Printing the page: \"%1\" (%2)")).arg(pnm.c_str()).arg(pg.c_str()));
     if(dlg.exec() == QDialog::Accepted) {
-#if QT_VERSION >= 0x050300
+# if QT_VERSION >= 0x050300
 	QRect	paperRect = prPg->pageLayout().fullRectPixels(prPg->resolution()),
 		pgRect = prPg->pageLayout().paintRectPixels(prPg->resolution());
-#else
+# else
 	QRect	paperRect = prPg->paperRect(), pgRect = prPg->pageRect();
-#endif
+# endif
 	int fntSize = 35;
 	QSize papl(2048, 2048*paperRect.height()/paperRect.width());
 	QSize pagl(papl.width()*pgRect.width()/paperRect.width(), papl.height()*pgRect.height()/paperRect.height());
@@ -615,7 +633,7 @@ void VisRun::printPg( const string &ipg )
 	painter.drawText(QRect(0,0,pagl.width(),fntSize),Qt::AlignRight,QString(_("User: \"%1\"")).arg(user().c_str()));
 	painter.drawText(QRect(0,im.height()+fntSize,pagl.width(),fntSize),Qt::AlignLeft,(pnm+" ("+pg+")").c_str());
 	QDateTime dt;
-	dt.setTime_t(time(NULL));
+	dt.setSecsSinceEpoch(time(NULL));
 	painter.drawText(QRect(0,im.height()+fntSize,pagl.width(),fntSize),Qt::AlignRight,dt.toString("d.MM.yyyy h:mm:ss"));
 
 	painter.end();
@@ -662,12 +680,12 @@ void VisRun::printDiag( const string &idg )
     QPrintDialog dlg(prDiag, this);
     dlg.setWindowTitle(QString(_("Printing the diagram: \"%1\" (%2)")).arg(dgnm.c_str()).arg(dg.c_str()));
     if(dlg.exec() == QDialog::Accepted) {
-#if QT_VERSION >= 0x050300
+# if QT_VERSION >= 0x050300
 	QRect	paperRect = prDiag->pageLayout().fullRectPixels(prDiag->resolution()),
 		pgRect = prDiag->pageLayout().paintRectPixels(prDiag->resolution());
-#else
+# else
 	QRect	paperRect = prDiag->paperRect(), pgRect = prDiag->pageRect();
-#endif
+# endif
 	int fntSize = 35;
 	QSize papl(2048, 2048*paperRect.height()/paperRect.width());
 	QSize pagl(papl.width()*pgRect.width()/paperRect.width(), papl.height()*pgRect.height()/paperRect.height());
@@ -695,7 +713,7 @@ void VisRun::printDiag( const string &idg )
 	fnt.setPixelSize(fntSize-5);
 	painter.setFont(fnt);
 	QDateTime dt;
-	dt.setTime_t(time(NULL));
+	dt.setSecsSinceEpoch(time(NULL));
 	painter.drawText(QRect(0,0,pagl.width(),fntSize*2),Qt::AlignLeft,QString(_("OpenSCADA project: \"%1\"\n%2 (%3)")).arg(windowTitle()).arg(dgnm.c_str()).arg(dg.c_str()));
 	painter.drawText(QRect(0,0,pagl.width(),fntSize*2),Qt::AlignRight,QString(_("User: \"%1\"\n%2")).arg(user().c_str()).arg(dt.toString("d.MM.yyyy h:mm:ss")));
 
@@ -874,7 +892,7 @@ void VisRun::exportDiag( const string &idg )
 	_("Images (*.png *.xpm *.jpg);;CSV file (*.csv)"), QFileDialog::AcceptSave);
     if(!fileName.isEmpty()) {
 	// Export to CSV
-	if(fileName.indexOf(QRegExp("\\.csv$")) != -1) {
+	if(fileName.toStdString().rfind(".csv") == (fileName.toStdString().size()-4)) {
 	    //  Open destination file
 	    int fd = open(fileName.toStdString().c_str(), O_WRONLY|O_CREAT|O_TRUNC, SYS->permCrtFiles());
 	    if(fd < 0) {
@@ -996,7 +1014,7 @@ void VisRun::exportDoc( const string &idoc )
 	}
 	string rez;
 	// Export to CSV
-	if(fileName.indexOf(QRegExp("\\.csv$")) != -1) {
+	if(fileName.toStdString().rfind(".csv") == (fileName.toStdString().size()-4)) {
 	    //  Parse document
 	    XMLNode docTree;
 	    docTree.load(((ShapeDocument::ShpDt*)rwdg->shpData)->doc, true);
@@ -1117,7 +1135,7 @@ void VisRun::exportTable( const string &itbl )
 	}
 	string rez;
 	//Export to CSV
-	if(fileName.indexOf(QRegExp("\\.csv$")) != -1) {
+	if(fileName.toStdString().rfind(".csv") == (fileName.toStdString().size()-4)) {
 	    QTableWidgetItem *tit;
 	    for(int iC = 0; iC < wdg->columnCount(); iC++)
 		rez += "\""+((tit=wdg->horizontalHeaderItem(iC))?tit->text().toStdString():string(""))+"\";";
@@ -1126,7 +1144,8 @@ void VisRun::exportTable( const string &itbl )
 		for(int iC = 0; iC < wdg->columnCount(); iC++) {
 		    QVariant vl = (tit=wdg->item(iR,iC)) ? tit->data(Qt::DisplayRole) : QVariant();
 		    if(!vl.isValid()) rez += ";";
-		    else if(vl.type() == QVariant::String) rez += "\""+TSYS::strEncode(vl.toString().toStdString(),TSYS::SQL,"\"")+"\";";
+		    else if(vl.typeId() == QVariant::String)
+			rez += "\""+TSYS::strEncode(vl.toString().toStdString(),TSYS::SQL,"\"")+"\";";
 		    else rez += vl.toString().toStdString()+";";
 		}
 		rez += "\x0D\x0A";
@@ -2181,11 +2200,19 @@ void VisRun::Notify::ntf( int ialSt )
 #if HAVE_MULTIMEDIA || HAVE_PHONON
     if(ntfPlay) {
 # if HAVE_MULTIMEDIA
+#  if QT_VERSION < 0x060000
 	QMediaPlayer::State mSt = ((QMediaPlayer*)ntfPlay)->state();
 	bool plSt = (mSt == QMediaPlayer::PlayingState);
 	if(!alEn && !((QMediaPlayer*)ntfPlay)->currentMedia().isNull())
 	    ((QMediaPlayer*)ntfPlay)->setMedia(QMediaContent());
 	else if(alEn && (((QMediaPlayer*)ntfPlay)->currentMedia().isNull() ||
+#  else
+	QMediaPlayer::PlaybackState mSt = ((QMediaPlayer*)ntfPlay)->playbackState();
+	bool plSt = (mSt == QMediaPlayer::PlayingState);
+	if(!alEn && ((QMediaPlayer*)ntfPlay)->mediaStatus() != QMediaPlayer::NoMedia)
+	    ((QMediaPlayer*)ntfPlay)->setSource(QUrl());
+	else if(alEn && (((QMediaPlayer*)ntfPlay)->mediaStatus() == QMediaPlayer::NoMedia ||
+#  endif
 # elif HAVE_PHONON
 	State mSt = ((VideoPlayer*)ntfPlay)->mediaObject()->state();
 	bool plSt = (mSt == LoadingState || mSt == BufferingState || mSt == PlayingState);
@@ -2260,9 +2287,13 @@ void VisRun::Notify::commCall( string &res, string &resTp, const string &mess, c
 
     //Playing by an internal mechanism (Phonon)
 #if HAVE_MULTIMEDIA
-    if(ntfPlay)	{
-	((QMediaPlayer*)ntfPlay)->setMedia(QUrl::fromLocalFile(QDir::currentPath()+"/"+resFile.c_str()));
-	((QMediaPlayer*)ntfPlay)->play();
+    if(ntfPlay) {
+	QMediaPlayer *player = (QMediaPlayer*)ntfPlay;
+# if QT_VERSION >= 0x060000
+	if(!player->audioOutput()) player->setAudioOutput(new QAudioOutput);
+# endif
+	player->setSource(QUrl::fromLocalFile(QDir::currentPath()+"/"+resFile.c_str()));
+	player->play();
     }
     else
 #elif HAVE_PHONON

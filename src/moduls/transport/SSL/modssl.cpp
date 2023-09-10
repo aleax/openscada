@@ -54,7 +54,7 @@
 #define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.3.6"
+#define MOD_VER		"4.3.7"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and supported SSL-TLS depending on the library version.")
@@ -1120,7 +1120,7 @@ void TSocketOut::save_( )
 
 string TSocketOut::connectSSL( const string &addr, SSL **ssl, BIO **conn,
     int tmCon, const string &certKey, const string &pKeyPass, const string &certKeyFile )
-{ 
+{
     int sockFd = -1, aOff = 0;
     string	cfile, aErr, connAddr;
     char	err[255];
@@ -1159,7 +1159,6 @@ string TSocketOut::connectSSL( const string &addr, SSL **ssl, BIO **conn,
 		int vl = 1;
 		setsockopt(sockFd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
 
-
 		//Connect to the socket
 		int flags = fcntl(sockFd, F_GETFL, 0);
 		fcntl(sockFd, F_SETFL, flags|O_NONBLOCK);
@@ -1184,7 +1183,7 @@ string TSocketOut::connectSSL( const string &addr, SSL **ssl, BIO **conn,
 		// Write certificate and private key to temorary file
 		else if(!sTrm(certKey).empty()) {
 #if defined(__ANDROID__)
-		    cfile = MOD_TYPE "_" MOD_ID "_" + id() + "_" + i2s(rand()) + ".tmp";
+		    cfile = MOD_TYPE "_" MOD_ID "_" + i2s(rand()) + ".tmp";
 #else
 		    cfile = tmpnam(err);
 #endif

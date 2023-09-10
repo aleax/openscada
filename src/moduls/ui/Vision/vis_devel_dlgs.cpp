@@ -37,13 +37,16 @@
 #include <QScrollArea>
 #include <QMessageBox>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QMenuBar>
 
 #include "../QTStarter/lib_qtgen.h"
 #include "vis_widgs.h"
 #include "vis_devel.h"
 #include "vis_devel_dlgs.h"
+
+#if QT_VERSION < 0x060000
+# define typeId()	type()
+#endif
 
 #undef _
 #define _(mess) mod->I18N(mess, owner()->lang().c_str()).c_str()
@@ -66,7 +69,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
 
     //Create tabulator
     QVBoxLayout *tab_lay = new QVBoxLayout(this);
-    tab_lay->setMargin(5);
+    tab_lay->setContentsMargins(5, 5, 5, 5);
     wdg_tabs = new QTabWidget(this);
     tab_lay->addWidget(wdg_tabs);
     connect(wdg_tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
@@ -91,13 +94,13 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     //QWidget *tab_w = wdg_tabs->widget(0);
 
     dlg_lay = new QGridLayout(tab_w);
-    dlg_lay->setMargin(9);
+    dlg_lay->setContentsMargins(9, 9, 9, 9);
     dlg_lay->setSpacing(6);
 
     //State parameters
     grp = new QGroupBox(_("State"),tab_w);
     glay = new QGridLayout;
-    glay->setMargin(4);
+    glay->setContentsMargins(4, 4, 4, 4);
     glay->setSpacing(6);
 
     obj_ico = new QPushButton(tab_w);
@@ -161,7 +164,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     //Configuration parameters
     grp = new QGroupBox(_("Configuration"), tab_w);
     glay = new QGridLayout;
-    glay->setMargin(4);
+    glay->setContentsMargins(4, 4, 4, 4);
     glay->setSpacing(6);
 
     glay->addWidget(new QLabel(_("Identifier:"),tab_w), 0, 0);
@@ -229,7 +232,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     tab_w = wdg_tabs->widget(1);
 
     dlg_lay = new QGridLayout(tab_w);
-    dlg_lay->setMargin(9);
+    dlg_lay->setContentsMargins(9, 9, 9, 9);
     dlg_lay->setSpacing(6);
 
     mimeDataTable = new QTableWidget(0, 3, tab_w);
@@ -258,7 +261,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     tab_w = wdg_tabs->widget(2);
 
     dlg_lay = new QGridLayout(tab_w);
-    dlg_lay->setMargin(9);
+    dlg_lay->setContentsMargins(9, 9, 9, 9);
     dlg_lay->setSpacing(6);
 
     lab = new QLabel(_("Style:"),tab_w);
@@ -296,7 +299,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     //------------------
     wdg_tabs->addTab((tab_w=new QWidget),_("Diagnostics"));
     dlg_lay = new QGridLayout(tab_w);
-    dlg_lay->setMargin(9);
+    dlg_lay->setContentsMargins(9, 9, 9, 9);
     dlg_lay->setSpacing(6);
 
     lab = new QLabel(_("Time:"), tab_w);
@@ -907,9 +910,7 @@ void LibProjProp::showEvent( QShowEvent * event )
     adjustSize();
     resize(size().expandedTo(src));
 
-#if defined(__ANDROID__)
-    move((QApplication::desktop()->width()-width())/2, (QApplication::desktop()->height()-height())/2);
-#endif
+    winFit(*this);
 }
 
 void LibProjProp::addMimeData( )
@@ -1056,7 +1057,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
 
     //Create tabulator
     QVBoxLayout *tab_lay = new QVBoxLayout(this);
-    tab_lay->setMargin(5);
+    tab_lay->setContentsMargins(5, 5, 5, 5);
     wdg_tabs = new QTabWidget(this);
     tab_lay->addWidget(wdg_tabs);
     connect(wdg_tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
@@ -1080,13 +1081,13 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     //QWidget *tab_w = wdg_tabs->widget(0);
 
     dlg_lay = new QGridLayout(tab_w);
-    dlg_lay->setMargin(9);
+    dlg_lay->setContentsMargins(9, 9, 9, 9);
     dlg_lay->setSpacing(6);
 
     // State parameters
     grp = new QGroupBox(_("State"),tab_w);
     glay = new QGridLayout;
-    glay->setMargin(4);
+    glay->setContentsMargins(4, 4, 4, 4);
     glay->setSpacing(6);
     obj_ico = new QPushButton(tab_w);
     obj_ico->setObjectName("/wdg/cfg/ico");
@@ -1152,7 +1153,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     //  Configuration parameters
     grp = new QGroupBox(_("Configuration"),tab_w);
     glay = new QGridLayout;
-    glay->setMargin(4);
+    glay->setContentsMargins(4, 4, 4, 4);
     glay->setSpacing(6);
 
     glay->addWidget(new QLabel(_("Identifier:"),tab_w), 0, 0);
@@ -1204,7 +1205,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     tab_w = wdg_tabs->widget(1);
 
     dlg_lay = new QGridLayout(tab_w);
-    dlg_lay->setMargin(9);
+    dlg_lay->setContentsMargins(9, 9, 9, 9);
     dlg_lay->setSpacing(6);
 
     // Add attributes view widget
@@ -1223,7 +1224,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     proc_split->addWidget(attr_cf_fr);
 
     glay = new QGridLayout(attr_cf_fr);
-    glay->setMargin(9);
+    glay->setContentsMargins(9, 9, 9, 9);
     glay->setSpacing(6);
 
     // Add attributes configuration widget
@@ -1251,7 +1252,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     proc_split->addWidget(wdg_proc_fr);
 
     glay = new QGridLayout(wdg_proc_fr);
-    glay->setMargin(9);
+    glay->setContentsMargins(9, 9, 9, 9);
     glay->setSpacing(6);
 
     //????[v1.0] Remove at moving to the main tab in proc_perG
@@ -1291,7 +1292,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     tab_w = wdg_tabs->widget(3);
 
     dlg_lay = new QGridLayout(tab_w);
-    dlg_lay->setMargin(9);
+    dlg_lay->setContentsMargins(9, 9, 9, 9);
     dlg_lay->setSpacing(6);
 
     // Add attributes view widget
@@ -1854,9 +1855,7 @@ void VisItProp::showEvent( QShowEvent * event )
     adjustSize();
     resize(size().expandedTo(src));
 
-#if defined(__ANDROID__)
-    move((QApplication::desktop()->width()-width())/2, (QApplication::desktop()->height()-height())/2);
-#endif
+    winFit(*this);
 }
 
 void VisItProp::addAttr( )
@@ -1985,6 +1984,7 @@ void VisItProp::ItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
     QItemDelegate::paint(painter, option, index);
 }
 
+
 QWidget *VisItProp::ItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QWidget *wDel = NULL;
@@ -2008,7 +2008,7 @@ QWidget *VisItProp::ItemDelegate::createEditor(QWidget *parent, const QStyleOpti
 	else if(index.column() == 2 || index.column() == 5) wDel = new QComboBox(parent);
 	else {
 	    QItemEditorFactory factory;
-	    wDel = factory.createEditor(value.type(),parent);
+	    wDel = factory.createEditor(value.typeId(),parent);
 	}
     }
 

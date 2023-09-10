@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-27 21:52+0300\n"
+"POT-Creation-Date: 2023-09-06 19:44+0300\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -165,6 +165,15 @@ msgstr "Перейти назад"
 
 msgid "Go forward"
 msgstr "Перейти вперед"
+
+msgid "Reload"
+msgstr "Перевантажити"
+
+msgid "Save page"
+msgstr "Зберегти сторінку"
+
+msgid "View page source"
+msgstr "Переглянути джерело сторінки"
 
 msgid "Go to the parent directory"
 msgstr "Перейти до батьківської теки"
@@ -505,6 +514,7 @@ msgstr "Помилка закриття файлу %d - '%s (%d)'!"
 msgid "Error writing the file '%s': %s"
 msgstr "Помилка запису файлу '%s': %s"
 
+#, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "    --QtInNotMainThread Starts Qt into a different from the main thread.\n"

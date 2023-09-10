@@ -71,10 +71,12 @@ if test $ac_cv_header_libintl_h = yes; then
     if test $XGETTEXT = false -o $MSGMERGE = false -o $MSGFMT = false; then
 	AC_MSG_ERROR([Some utilities of I18N gettext are not present! Install the gettext utilites package.]);
     fi
-    AC_CHECK_FUNC(bindtextdomain, [],
-	AC_SEARCH_LIBS(libintl_bindtextdomain, [intl], [], [
-	    AC_DEFINE(HAVE_LIBINTL_H, 0, [No LibIntl in real, disabling])
-	    ac_cv_header_libintl_h=no]))
+    AC_CHECK_FUNC(bindtextdomain, [
+	AC_SEARCH_LIBS(libintl_bindtextdomain, [intl])
+    ], [
+	AC_DEFINE(HAVE_LIBINTL_H, 0, [No LibIntl in real, disabling])
+	ac_cv_header_libintl_h=no
+    ])
 fi
 
 # Checking for typedefs, structures, and compiler characteristics
@@ -309,15 +311,23 @@ AX_MOD_UI_EN(VCAEngine, [disable or enable[=incl] compilation module UI.VCAEngin
 AX_MOD_UI_EN(QTStarter, [disable or enable[=incl] compilation module UI.QTStarter], disable, incl, [
     AX_LIB_Qt()
 
-    AS_IF([test "x${Qt5_use}" = "x"], [
+    AS_IF([test "x${Qt4_use}" != "x"], [
 	PKG_CHECK_MODULES(QtSensors, [QtSensors > 1.2.0],
 	    AC_DEFINE(HAVE_QTSENSORS, 1, [QtSensors for mobility devices is allowed]),
 	    AC_MSG_NOTICE([QtSensors has not found - disabled]))
-    ], [
+    ])
+    AS_IF([test "x${Qt5_use}" != "x"], [
 	PKG_CHECK_MODULES(Qt5Sensors, [Qt5Sensors > 1.2.0], [
 	    AC_DEFINE(HAVE_QTSENSORS, 1, [QtSensors for mobility devices is allowed])
 	    QtSensors_CFLAGS=$Qt5Sensors_CFLAGS
 	    QtSensors_LIBS=$Qt5Sensors_LIBS
+	], AC_MSG_NOTICE([QtSensors has not found - disabled]))
+    ])
+    AS_IF([test "x${Qt6_use}" != "x"], [
+	PKG_CHECK_MODULES(Qt6Sensors, [Qt6Sensors > 6.1.0], [
+	    AC_DEFINE(HAVE_QTSENSORS, 1, [QtSensors for mobility devices is allowed])
+	    QtSensors_CFLAGS=$Qt6Sensors_CFLAGS
+	    QtSensors_LIBS=$Qt6Sensors_LIBS
 	], AC_MSG_NOTICE([QtSensors has not found - disabled]))
     ])
 ])
@@ -328,44 +338,61 @@ AX_MOD_UI_EN(Vision, [disable or enable[=incl] compilation module UI.Vision], di
     AX_LIB_FFTW3()
     AX_LIB_Qt()
 
-    AC_ARG_ENABLE(WebKit, AC_HELP_STRING([--disable-WebKit], [disable the WebKit library using]), [], [
-	AS_IF([test "x${Qt5_use}" = "x"], [
+    AC_ARG_ENABLE(WebEngine, AC_HELP_STRING([--disable-WebEngine], [disable of using WebEngine]), [], [
+	AS_IF([test "x${Qt4_use}" != "x"], [
 	    PKG_CHECK_MODULES([QtWebKit], [QtWebKit > 4.4.0],
-		AC_DEFINE(HAVE_WEBKIT, 1, [The WebKit web browser engine is allowed]),
+		AC_DEFINE(HAVE_WEBKIT, 1, [The WebKit WebEngine is allowed]),
 		AC_MSG_NOTICE([WebKit isn't found - disabled]))
-	], [
+	])
+	AS_IF([test "x${Qt5_use}" != "x"], [
 	    PKG_CHECK_MODULES([Qt5WebEngineWidgets], [Qt5WebEngineWidgets > 5.8.0], [
-		AC_DEFINE(HAVE_WEBENGINE, 1, [The WebEngine interface is allowed])
+		AC_DEFINE(HAVE_WEBENGINE, 1, [The Qt WebEngine interface is allowed])
 		QtWebKit_CFLAGS="$Qt5WebEngineWidgets_CFLAGS"
 		QtWebKit_LIBS="$Qt5WebEngineWidgets_LIBS"
 	    ], [
 		PKG_CHECK_MODULES([Qt5WebKitWidgets], [Qt5WebKitWidgets > 5.1.0], [
-		    AC_DEFINE(HAVE_WEBKIT, 1, [The WebKit web browser engine is allowed])
+		    AC_DEFINE(HAVE_WEBKIT, 1, [The WebKit WebEngine is allowed])
 		    QtWebKit_CFLAGS="$Qt5WebKitWidgets_CFLAGS"
 		    QtWebKit_LIBS="$Qt5WebKitWidgets_LIBS"
-		], AC_MSG_NOTICE([WebView or WebKit isn't found - disabled]))
+		], AC_MSG_NOTICE([No WebEngine is found - disabled]))
 	    ])
+	])
+	AS_IF([test "x${Qt6_use}" != "x"], [
+	    PKG_CHECK_MODULES([Qt6WebEngineWidgets], [Qt6WebEngineWidgets > 6.1.0], [
+		AC_DEFINE(HAVE_WEBENGINE, 1, [The Qt WebEngine interface is allowed])
+		QtWebKit_CFLAGS="$Qt6WebEngineWidgets_CFLAGS"
+		QtWebKit_LIBS="$Qt6WebEngineWidgets_LIBS"
+	    ], AC_MSG_NOTICE([No WebEngine is found - disabled]))
 	])
     ])
 
-    AC_ARG_ENABLE(Phonon, AC_HELP_STRING([--disable-Phonon], [disable the Phonon library using]), [], [
-	AS_IF([test "x${Qt5_use}" = "x"], [
+    AC_ARG_ENABLE(MultimediaEngine, AC_HELP_STRING([--disable-MultimediaEngine], [disable of using MultimediaEngine]), [], [
+	AS_IF([test "x${Qt4_use}" != "x"], [
 	    PKG_CHECK_MODULES([phonon], [phonon > 4.3.0],
-		AC_DEFINE(HAVE_PHONON, 1, [The Phonon media player engine is allowed.]),
-		AC_MSG_NOTICE([The Phonon media player engine isn't found - disabled]))
-	], [
+		AC_DEFINE(HAVE_PHONON, 1, [The Phonon MultimediaEngine is allowed.]),
+		AC_MSG_NOTICE([The Phonon MultimediaEngine isn't found - disabled]))
+	])
+	AS_IF([test "x${Qt5_use}" != "x"], [
 	    PKG_CHECK_MODULES([Qt5MultimediaWidgets], [Qt5MultimediaWidgets > 5.1.0], [
-		AC_DEFINE(HAVE_MULTIMEDIA, 1, [The Phonon media player engine is allowed.])
+		AC_DEFINE(HAVE_MULTIMEDIA, 1, [The Qt MultimediaEngine is allowed.])
 		phonon_CFLAGS="$Qt5MultimediaWidgets_CFLAGS"
 		phonon_LIBS="$Qt5MultimediaWidgets_LIBS"
 	    ], [
 		PKG_CHECK_MODULES([phonon4qt5], [phonon4qt5 > 4.3.0], [
-		    AC_DEFINE(HAVE_PHONON, 1, [The Phonon media player engine is allowed.])
+		    AC_DEFINE(HAVE_PHONON, 1, [The Phonon MultimediaEngine is allowed.])
 		    phonon_CFLAGS="$phonon4qt5_CFLAGS"
 		    phonon_LIBS="$phonon4qt5_LIBS"
-		], AC_MSG_NOTICE([The Phonon media player engine isn't found - disabled]))
+		], AC_MSG_NOTICE([No MultimediaEngine is found - disabled]))
 	    ])
 	])
+	AS_IF([test "x${Qt6_use}" != "x"], [
+	    PKG_CHECK_MODULES([Qt6MultimediaWidgets], [Qt6MultimediaWidgets > 6.1.0], [
+		AC_DEFINE(HAVE_MULTIMEDIA, 1, [The Qt MultimediaEngine is allowed.])
+		phonon_CFLAGS="$Qt6MultimediaWidgets_CFLAGS"
+		phonon_LIBS="$Qt6MultimediaWidgets_LIBS"
+	    ], AC_MSG_NOTICE([No MultimediaEngine is found - disabled]))
+	])
+
 	AS_IF([test "x${phonon_CFLAGS}" = "x" -o "x${Qt5MultimediaWidgets_CFLAGS}" != "x"], [], [
 	    SAVE_CXXFLAGS="$CXXFLAGS"
 	    CXXFLAGS="$CXXFLAGS -fpic $QtGui_CFLAGS $phonon_CFLAGS"
@@ -421,5 +448,5 @@ AC_MSG_RESULT([  - Including/builtin modules to the OpenSCADA core: $ModsIncl])
 AC_MSG_RESULT([* Features of some specific modules:])
 AC_MSG_RESULT([  - Fast Fourier Transform (FFTW3): $LIB_FFTW3])
 AC_MSG_RESULT([  - Library of the Linux sensors:   $LIB_SENSORS])
-AC_MSG_RESULT([  - Web-browser engine:             $QtWebKit_LIBS])
-AC_MSG_RESULT([  - Media-player engine:            $phonon_LIBS])
+AC_MSG_RESULT([  - WebEngine:          $QtWebKit_LIBS])
+AC_MSG_RESULT([  - MultimediaEngine:   $phonon_LIBS])

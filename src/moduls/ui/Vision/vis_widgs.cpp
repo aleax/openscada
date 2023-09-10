@@ -42,7 +42,6 @@
 #include <QStatusBar>
 #include <QToolTip>
 #include <QCompleter>
-#include <QDesktopWidget>
 #include <QScrollBar>
 
 #include "vis_run.h"
@@ -50,11 +49,16 @@
 #include "vis_widgs.h"
 #include "vis_run_widgs.h"
 
-using namespace OSCADA_QT;
-using namespace VISION;
+#if QT_VERSION < 0x050000
+# define fromSecsSinceEpoch(tm)	fromTime_t(tm)
+# define toSecsSinceEpoch()	toTime_t()
+#endif
 
 #undef _
 #define _(mess) mod->I18N(mess, lang.c_str()).c_str()
+
+using namespace OSCADA_QT;
+using namespace VISION;
 
 //*************************************************
 //* Id and name input dialog                      *
@@ -70,7 +74,7 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, con
     //setSizeGripEnabled(true);
 
     QVBoxLayout *dlg_lay = new QVBoxLayout(this);
-    dlg_lay->setMargin(10);
+    dlg_lay->setContentsMargins(10, 10, 10, 10);
     dlg_lay->setSpacing(6);
 
     //Icon label and text message
@@ -172,9 +176,7 @@ void InputDlg::showEvent( QShowEvent * event )
     adjustSize();
     resize(size().expandedTo(src));
 
-#if defined(__ANDROID__)
-    move((QApplication::desktop()->width()-width())/2, (QApplication::desktop()->height()-height())/2);
-#endif
+    winFit(*this);
 }
 
 //*************************************************
@@ -186,7 +188,7 @@ DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVC
     setWindowTitle(_("Selecting an user"));
 
     QVBoxLayout *dlg_lay = new QVBoxLayout(this);
-    dlg_lay->setMargin(10);
+    dlg_lay->setContentsMargins(10, 10, 10, 10);
     dlg_lay->setSpacing(6);
 
     QGridLayout *edLay = new QGridLayout;
@@ -320,9 +322,7 @@ void DlgUser::showEvent( QShowEvent * event )
     adjustSize();
     resize(size().expandedTo(src));
 
-#if defined(__ANDROID__)
-    move((QApplication::desktop()->width()-width())/2, (QApplication::desktop()->height()-height())/2);
-#endif
+    winFit(*this);
 }
 
 //*********************************************
@@ -411,7 +411,7 @@ FontDlg::FontDlg( QWidget *parent, const QString &ifnt )
     setWindowTitle(_("Selecting a font"));
 
     QGridLayout *dlg_lay = new QGridLayout(this);
-    dlg_lay->setMargin(10);
+    dlg_lay->setContentsMargins(10, 10, 10, 10);
     dlg_lay->setSpacing(6);
 
     QLabel *lab = new QLabel(_("Font:"),this);
@@ -432,7 +432,7 @@ FontDlg::FontDlg( QWidget *parent, const QString &ifnt )
     sz_lay->addWidget(spBox);
     QGroupBox *grpBox = new QGroupBox(_("Style:"),this);
     QVBoxLayout *grpLay = new QVBoxLayout;
-    grpLay->setMargin(5);
+    grpLay->setContentsMargins(5, 5, 5, 5);
     chBold = new QCheckBox(_("Bold"), this);		grpLay->addWidget(chBold);
     connect(chBold, SIGNAL(stateChanged(int)), this, SLOT(cfgChange()));
     chItalic = new QCheckBox(_("Italic"), this);	grpLay->addWidget(chItalic);
@@ -447,7 +447,7 @@ FontDlg::FontDlg( QWidget *parent, const QString &ifnt )
 
     grpBox = new QGroupBox(_("Sample:"),this);
     grpLay = new QVBoxLayout;
-    grpLay->setMargin(5);
+    grpLay->setContentsMargins(5, 5, 5, 5);
     sampleText = new QLineEdit(_("AaBbCcDdEeFf"),this);
     sampleText->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
     sampleText->setAlignment(Qt::AlignCenter);
@@ -480,7 +480,7 @@ FontDlg::FontDlg( QWidget *parent, const QString &ifnt )
 
 QString FontDlg::font( )
 {
-    return QString("%1 %2 %3 %4 %5 %6").arg(fntSel->currentFont().family().replace(QRegExp(" "),"_")).
+    return QString("%1 %2 %3 %4 %5 %6").arg(TRegExp(" ").replace(fntSel->currentFont().family().toStdString(),"_").c_str()).
 					arg(spBox->value()).
 					arg(chBold->checkState()?"1":"0").
 					arg(chItalic->checkState()?"1":"0").
@@ -493,7 +493,7 @@ void FontDlg::setFont( const QString &fnt )
     char family[101]; strcpy(family,"Arial");
     int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;
     sscanf(fnt.toStdString().c_str(),"%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
-    fntSel->setCurrentFont(QFont(QString(family).replace(QRegExp("_")," ")));
+    fntSel->setCurrentFont(QFont(TRegExp("_").replace(family," ").c_str()));
     spBox->setValue(size);
     chBold->setCheckState(bold?Qt::Checked:Qt::Unchecked);
     chItalic->setCheckState(italic?Qt::Checked:Qt::Unchecked);
@@ -519,9 +519,7 @@ void FontDlg::showEvent( QShowEvent * event )
     adjustSize();
     resize(size().expandedTo(src));
 
-#if defined(__ANDROID__)
-    move((QApplication::desktop()->width()-width())/2, (QApplication::desktop()->height()-height())/2);
-#endif
+    winFit(*this);
 }
 
 //*********************************************************************************************
@@ -533,7 +531,7 @@ LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis, bool resApply ) :
     edFld(NULL), btFld(NULL), btTm(NULL)
 {
     QHBoxLayout *box = new QHBoxLayout(this);
-    box->setMargin(0);
+    box->setContentsMargins(0, 0, 0, 0);
     box->setSpacing(0);
 
     if(resApply) {
@@ -672,7 +670,7 @@ void LineEdit::setValue( const QString &txt )
 	    }
 	    case Date: case DateTime:
 		if(((QDateTimeEdit*)edFld)->calendarWidget() && ((QDateTimeEdit*)edFld)->calendarWidget()->isVisible()) break;
-		((QDateTimeEdit*)edFld)->setDateTime(QDateTime::fromTime_t(txt.toInt()));
+		((QDateTimeEdit*)edFld)->setDateTime(QDateTime::fromSecsSinceEpoch(txt.toInt()));
 		break;
 	    case Combo:
 		if(((QComboBox*)edFld)->findText(txt) < 0) ((QComboBox*)edFld)->addItem(txt);
@@ -778,7 +776,7 @@ QString LineEdit::value( )
 	    return QString::number(tm.hour()*3600 + tm.minute()*60 + tm.second() /*QTime().secsTo(((QTimeEdit*)edFld)->time())*/);
 	}
 	case Date: case DateTime:
-			return QString::number(((QDateTimeEdit*)edFld)->dateTime().toTime_t());
+			return QString::number(((QDateTimeEdit*)edFld)->dateTime().toSecsSinceEpoch());
 	case Combo:	return ((QComboBox*)edFld)->currentText();
     }
     return "";
@@ -837,7 +835,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     lang = dynamic_cast<VisRun*>(window()) ? ((VisRun*)window())->lang() : "";
 
     QVBoxLayout *box = new QVBoxLayout(this);
-    box->setMargin(0);
+    box->setContentsMargins(0, 0, 0, 0);
     box->setSpacing(0);
 
     edFld = new QTextEdit(this);
@@ -858,7 +856,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     QImage ico_t;
     if(!ico_t.load(TUIS::icoGet("find",NULL,true).c_str())) ico_t.load(":/images/find.png");
     actFind = new QAction(QPixmap::fromImage(ico_t), _("Find"), edFld);
-    actFind->setShortcut(Qt::CTRL+Qt::Key_F);
+    actFind->setShortcut(Qt::CTRL|Qt::Key_F);
     actFind->setShortcutContext(Qt::WidgetShortcut);
     connect(actFind, SIGNAL(triggered()), this, SLOT(find()));
     edFld->addAction(actFind);

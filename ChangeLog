@@ -1,4 +1,39 @@
 2023-09-09 Roman (stable)
+- !!!!:acinclude.m4: The AutoConf macro AX_LIB_Qt expanded by Qt6 support.
+    !!!!:FIX:configure.ac: In appending Qt6 that is appended by Qt6Sensors, Qt6WebEngineWidgets, Qt6MultimediaWidgets.
+	The parameters --disable-WebKit and --disable-Phonon renamed to --disable-WebEngine and --disable-MultimediaEngine.
+	Most of the corresponding messages were improved.
+	FIX: Restored in building on old systems with the separated -lintl.
+- data/{debian,debian_mod}/control: Appended by the dependency variants qt6-base-dev, qt6-webengine-dev, qt6-multimedia-dev.
+- FIX:Transport.SSL: Restored in building for Android.
+- !!!!:UI.{QTStarter}: Adapting for building with Qt6, including adapting to Qt6WebEngine and Qt6Multimedia:
+	- QLayout::{setMargin,margin}() replaced by QLayout::{setContentsMargins,getContentsMargins}();
+	- QVariant(char*) replaced by QVariant(QString);
+	- the QMouseEvent constructor replaced by one with the global position;
+	- QRegExp replaced by the OpenSCADA's variant TRegExp for functions of replacing and testing or by the direct checking;
+	- the QComboBox signal activated(const QString&), currentIndexChanged(const QString&)
+	    replaced by activated(int), currentIndexChanged(int);
+	- the QSignalMapper signal mapped(QWidget*) replaced by mappedObject(QObject*);
+	- QPalette::Background replaced by QPalette::Window and Qt::MidButton by Qt::MiddleButton;
+	- QFileDialog::setReadOnly() replaced by setOption();
+	- QApplication::desktop() replaced by QScreen;
+	- QAction::parentWidget() replaced by parent();
+	- QVariant::type() renamed to typeId(), QMouseEvent::{pos,globalPos}() renamed to {position,globalPosition}(),
+	    QDateTime::{setTime_t,fromTime_t,toTime_t}() renamed to {setSecsSinceEpoch,fromSecsSinceEpoch,toSecsSinceEpoch}();
+	- appended by renaming functions for different Qt versions with help the macro definitions in different files and for:
+	    typeId() to type(), position() to pos(), globalPosition() to globalPos(), setSecsSinceEpoch() to setTime_t(),
+	    fromSecsSinceEpoch() to fromTime_t(), toSecsSinceEpoch() to toTime_t(), mappedObject() to mapped(),
+	    setSource() to setMedia(), setVolume() to audioOutput()->setVolume(), setMedia() to setSource(), state() to playbackState();
+	- appended for support QRegularExpression instead QRegExp in Qt6;
+	- the QMouseEvent property mouseBtHold splitted on two QPointF: mouseBtHoldPos, mouseBtHoldPosG
+	- the keyboard combination separator "+" replaced by "|", that is "Qt::SHIFT|Qt::Key_F1"
+	- the event QEvent::KeyRelease in LineEdit apply replaced by QEvent::KeyPress
+    The generic library lib_qtgen appended by the function winFit()
+	for specific windows fitting on mobile systems in common.
+- UI.QTStarter: Appended by the new Qt messages for translation: "Reload", "Save page", "View page source".
+
+
+2023-09-09 Roman (stable)
 - FIX:LibsDB.vcaBase: wlb_doc.docRepInstVals: Restored in translation values of title and parameter's dimension, name.
 - FIX:Archive: Fixed in permition to list of archivers of tab the archive values.
 - FIX:UI.WebCfgD: Data edition fields fixed for the standard date from WebBrowser without seconds.
@@ -18,7 +53,7 @@
 
 2023-08-30 Roman (stable)
 - LibsDB.vcaTest: Finished in renaming CPULoad to CPU and MemInfo to MEM.
-- !!:acinclude.m4: The AutoConf macro AX_LIB_Qt improved in MOC and RCC detection for Qt5, by the package variable "host_bins"
+- !!!:acinclude.m4: The AutoConf macro AX_LIB_Qt improved in MOC and RCC detection for Qt5, by the package variable "host_bins"
 	    of Qt5Core primarily, than preventing the global MOC and RCC problems in their switching for Qt versions.
 	Some messages improved.
 	Prepared also for further adaption to Qt6.

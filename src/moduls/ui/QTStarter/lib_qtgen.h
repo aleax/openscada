@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTStarter file: lib_qtgen.h
 /***************************************************************************
- *   Copyright (C) 2021-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2021-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,6 +39,8 @@ extern QColor colorAdjToBack( const QColor &clr, const QColor &backClr );
 
 extern QFont getFont( const string &val, float fsc = 1, bool pixSize = true, const QFont &defFnt = QFont() );
 extern QColor getColor( const string &val );
+
+extern void winFit( QWidget &w );
 
 //*************************************************
 //* TableDelegate: Combobox table delegate        *

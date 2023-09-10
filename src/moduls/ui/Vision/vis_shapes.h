@@ -162,7 +162,7 @@ class ShapeFormEl : public WdgShape
 	// Check box events
 	void checkChange( int );
 	// Combo box and list events
-	void comboChange( const QString& );
+	void comboChange( int );
 	// List events
 	void listChange( );
 	// Tree events
@@ -580,6 +580,7 @@ class ShapeDocument : public WdgShape
 
     private slots:
 	void custContextMenu( );
+	void printFinished( );
 
     private:
 	//Methods

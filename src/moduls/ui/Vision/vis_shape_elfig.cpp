@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VISION file: vis_shape_elfig.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2021 by Roman Savochenko <roman@oscada.org>
+ *   Copyright (C) 2012-2023 by Roman Savochenko <roman@oscada.org>
  *		   2007-2012 by Lysenko Maxim <mlisenko@oscada.org>
  *		   2007-2008 by Yashina Kseniya <ksu@oscada.org>
  *
@@ -1564,7 +1564,7 @@ bool ShapeElFigure::event( WdgView *w, QEvent *event )
 		    if(!runW->hasFocus())		runW->setFocus(Qt::MouseFocusReason);
 		    if(ev->buttons()&Qt::LeftButton)	attrs.push_back(std::make_pair("event",sev+"Left\nws_FigLeft"));
 		    if(ev->buttons()&Qt::RightButton)	attrs.push_back(std::make_pair("event",sev+"Right\nws_FigRight"));
-		    if(ev->buttons()&Qt::MidButton)	attrs.push_back(std::make_pair("event",sev+"Midle\nws_FigMiddle"));
+		    if(ev->buttons()&Qt::MiddleButton)	attrs.push_back(std::make_pair("event",sev+"Midle\nws_FigMiddle"));
 		    w->attrsSet(attrs);
 		    return false;
 		}

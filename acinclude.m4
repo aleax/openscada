@@ -1456,17 +1456,21 @@ AC_DEFUN([AX_LIB_FFTW3], [
 #     PKG_CHECK_MODULES([QtGui],[QtGui > 4.3.0])
 #     PKG_CHECK_MODULES([Qt5Widgets],[Qt5Widgets > 5.1.0]
 #     PKG_CHECK_MODULES([Qt5PrintSupport],[Qt5PrintSupport > 5.1.0]
+#     PKG_CHECK_MODULES([Qt6Widgets],[Qt6Widgets > 6.1.0]
+#     PKG_CHECK_MODULES([Qt6PrintSupport],[Qt6PrintSupport > 6.1.0]
 #     AC_SUBST(Qt_MOC)
 #     AC_SUBST(Qt_RCC)
 #
 #   And sets:
 #
 #     Qt_use=true
+#     Qt4_use=true
 #     Qt5_use=true
+#     Qt6_use=true
 #
 # LICENSE
 #
-#   Copyright (c) 2011-2017 Roman Savochenko <roman@oscada.org>
+#   Copyright (c) 2011-2023 Roman Savochenko <roman@oscada.org>
 #
 #   Copying and distribution of this file, with or without modification, are
 #   permitted in any medium without royalty provided the copyright notice
@@ -1474,26 +1478,29 @@ AC_DEFUN([AX_LIB_FFTW3], [
 #   warranty.
 AC_DEFUN([AX_LIB_Qt],
 [
-    AC_ARG_WITH([qt5],AS_HELP_STRING([--with-qt5=@<:@ARG@:>@],[Force check and use Qt5 @<:@default=no@:>@, else Qt4 will be checked firstly]), [], [withval="no"])
+    Qt_check=4
+    AC_ARG_WITH([qt5],AS_HELP_STRING([--with-qt5=@<:@ARG@:>@],[Force check and use Qt5 @<:@default=no@:>@, else Qt4 will be checked firstly]), [Qt_check=5])
+    AC_ARG_WITH([qt6],AS_HELP_STRING([--with-qt6=@<:@ARG@:>@],[Force check and use Qt6 @<:@default=no@:>@, else Qt5 will be checked firstly]), [Qt_check=6])
 
     if test "x$Qt_use" = "x"; then
 	AC_SUBST(Qt_MOC)
 	AC_SUBST(Qt_RCC)
 
 	# Qt4 detection
-	if test "$withval" = "no"; then
+	if test $Qt_check = 4; then
 	    PKG_CHECK_MODULES([QtGui], [QtGui > 4.3.0], [
 		Qt_MOC="$($PKG_CONFIG --variable=moc_location QtGui)"
 		Qt_RCC="$($PKG_CONFIG --variable=rcc_location QtGui)"
 		Qt_prefix="$($PKG_CONFIG --variable=prefix QtGui)"
 		Qt_use=true
-	    ], AC_MSG_NOTICE([Qt4 is not found.]))
+		Qt4_use=true
+	    ], AC_MSG_NOTICE([[Qt4 is not found.]]))
 	fi
 
 	# Qt5 detection
-	if test "x${Qt_use}" = "x"; then
+	if test "x${Qt_use}" = "x" -a $Qt_check != 6; then
 	    PKG_CHECK_MODULES([Qt5Widgets],[Qt5Widgets > 5.1.0], [
-		PKG_CHECK_MODULES([Qt5PrintSupport],[Qt5PrintSupport > 5.1.0],[],AC_MSG_NOTICE([Qt5PrintSupport is not found - printing disabled.]))
+		PKG_CHECK_MODULES([Qt5PrintSupport],[Qt5PrintSupport > 5.1.0],[],AC_MSG_NOTICE([[Qt5PrintSupport is not found - printing disabled.]]))
 		QtGui_CFLAGS="$Qt5Widgets_CFLAGS $Qt5PrintSupport_CFLAGS"
 		QtGui_LIBS="$Qt5Widgets_LIBS $Qt5PrintSupport_LIBS"
 		Qt_MOC="$($PKG_CONFIG --variable=host_bins Qt5Core)/moc"
@@ -1501,7 +1508,21 @@ AC_DEFUN([AX_LIB_Qt],
 		Qt_prefix="$($PKG_CONFIG --variable=prefix Qt5Core)"
 		Qt_use=true
 		Qt5_use=true
-	    ], AC_MSG_ERROR([Qt5 isn't found. Install development packages of the Qt4 or Qt5 library.]))
+	    ], AC_MSG_NOTICE([[Qt5 isn't found.]]))
+	fi
+
+	# Qt6 detection
+	if test "x${Qt_use}" = "x"; then
+	    PKG_CHECK_MODULES([Qt6Widgets],[Qt6Widgets > 6.1.0], [
+		PKG_CHECK_MODULES([Qt6PrintSupport],[Qt6PrintSupport > 6.1.0],[],AC_MSG_NOTICE([[Qt6PrintSupport is not found - printing disabled.]]))
+		QtGui_CFLAGS="$Qt6Widgets_CFLAGS $Qt6PrintSupport_CFLAGS"
+		QtGui_LIBS="$Qt6Widgets_LIBS $Qt6PrintSupport_LIBS"
+		Qt_MOC="$($PKG_CONFIG --variable=libexecdir Qt6Gui)/moc"
+		Qt_RCC="$($PKG_CONFIG --variable=libexecdir Qt6Gui)/rcc"
+		Qt_prefix="$($PKG_CONFIG --variable=prefix Qt6Gui)"
+		Qt_use=true
+		Qt6_use=true
+	    ], AC_MSG_ERROR([[Qt6 isn't found. Install development packages of the Qt4, Qt5 or Qt6 library.]]))
 	fi
 
 	# Final MOC and RCC checking

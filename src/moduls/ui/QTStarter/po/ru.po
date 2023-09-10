@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-27 21:52+0300\n"
+"POT-Creation-Date: 2023-09-06 19:44+0300\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -165,6 +165,17 @@ msgstr "Перейти назад"
 
 msgid "Go forward"
 msgstr "Перейти вперёд"
+
+msgid "Reload"
+msgstr ""
+
+#, fuzzy
+msgid "Save page"
+msgstr "Сохранить как"
+
+#, fuzzy
+msgid "View page source"
+msgstr "Источник бумаги:"
 
 msgid "Go to the parent directory"
 msgstr "Перейти в родительскую директорию"

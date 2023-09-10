@@ -50,6 +50,7 @@
 #include <QMimeData>
 #include <QCompleter>
 #include <QMdiSubWindow>
+#include <QActionGroup>
 
 #include "../QTStarter/lib_qtgen.h"
 #include "vis_widgs.h"
@@ -57,11 +58,20 @@
 #include "vis_shapes.h"
 #include "vis_devel_widgs.h"
 
-using namespace OSCADA_QT;
-using namespace VISION;
+#if QT_VERSION < 0x050000
+# define fromSecsSinceEpoch(tm)	fromTime_t(tm)
+# define toSecsSinceEpoch()	toTime_t()
+#endif
+
+#if QT_VERSION < 0x060000
+# define typeId()		type()
+#endif
 
 #undef _
 #define _(mess) mod->I18N(mess, mainWin()->lang().c_str()).c_str()
+
+using namespace OSCADA_QT;
+using namespace VISION;
 
 //****************************************
 //* Inspector of attributes model        *
@@ -446,8 +456,8 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 	    switch(role) {
 		case Qt::DisplayRole:
 		    val = it->data();
-		    if(val.type() == QVariant::Int && it->flag()&ModInspAttr::Item::DateTime)
-			val = QDateTime::fromTime_t(val.toInt()?val.toInt():time(NULL)).toString("dd.MM.yyyy hh:mm:ss");
+		    if(val.typeId() == QVariant::Int && it->flag()&ModInspAttr::Item::DateTime)
+			val = QDateTime::fromSecsSinceEpoch(val.toInt()?val.toInt():time(NULL)).toString("dd.MM.yyyy hh:mm:ss");
 		    break;
 		case Qt::EditRole:	val = it->dataEdit();	break;
 		case Qt::UserRole:	val = it->flag();	break;
@@ -550,7 +560,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &ivl, int ro
 
 	XMLNode chCtx("attr");
 
-	string val = (value.type()==QVariant::Bool) ? (value.toBool()?"1":"0") : value.toString().toStdString();
+	string val = (value.typeId()==QVariant::Bool) ? (value.toBool()?"1":"0") : value.toString().toStdString();
 	XMLNode req("set"), reqPrev("get");
 	bool toSetWdg = false;
 	for(int off = 0; (swdg=TSYS::strSepParse(nwdg,0,';',&off)).size(); ) {
@@ -581,7 +591,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &ivl, int ro
 		    if(it->dataEdit1().toStringList()[iIt] == value) { value = it->dataEdit().toStringList()[iIt]; break; }
 
 		//Local update
-		switch(it->data().type()) {
+		switch(it->data().typeId()) {
 		    case QVariant::Bool:	it->setData((bool)s2i(reqVal));	break;
 		    case QVariant::Int:		it->setData(s2i(reqVal));	break;
 		    case QVariant::Double:	it->setData(s2r(reqVal));	break;
@@ -831,7 +841,7 @@ QWidget *InspAttr::ItemDelegate::createEditor( QWidget *parent, const QStyleOpti
 	w_del = new QComboBox(parent);
 	if(flag&ModInspAttr::Item::SelEd) ((QComboBox*)w_del)->setEditable(true);
     }
-    else if(value.type() == QVariant::String && flag&ModInspAttr::Item::FullText) {
+    else if(value.typeId() == QVariant::String && flag&ModInspAttr::Item::FullText) {
 	w_del = new QTextEdit(parent);
 #if QT_VERSION >= 0x050A00
 	((QTextEdit*)w_del)->setTabStopDistance(40);
@@ -850,21 +860,21 @@ QWidget *InspAttr::ItemDelegate::createEditor( QWidget *parent, const QStyleOpti
 	    snt_hgl->setSnthHgl(rules);
 	}
     }
-    else if(value.type() == QVariant::String && flag&ModInspAttr::Item::Font)
+    else if(value.typeId() == QVariant::String && flag&ModInspAttr::Item::Font)
 	w_del = new LineEditProp(parent,LineEditProp::Font);
-    else if(value.type() == QVariant::String && flag&ModInspAttr::Item::Color)
+    else if(value.typeId() == QVariant::String && flag&ModInspAttr::Item::Color)
 	w_del = new LineEditProp(parent,LineEditProp::Color);
-    else if(value.type() == QVariant::Int && flag&ModInspAttr::Item::DateTime) {
+    else if(value.typeId() == QVariant::Int && flag&ModInspAttr::Item::DateTime) {
 	w_del = new QDateTimeEdit(parent);
 	((QDateTimeEdit*)w_del)->setCalendarPopup(true);
 	((QDateTimeEdit*)w_del)->setDisplayFormat("dd.MM.yyyy hh:mm:ss");
     }
-    else if(value.type() == QVariant::Int) {
+    else if(value.typeId() == QVariant::Int) {
 	w_del = new QSpinBox(parent);
 	((QSpinBox*)w_del)->setMinimum(-2147483647);
 	((QSpinBox*)w_del)->setMaximum(2147483647);
     }
-    else if(value.type() == QVariant::Double) {
+    else if(value.typeId() == QVariant::Double) {
 	w_del = new QDoubleSpinBox(parent);
 	((QDoubleSpinBox*)w_del)->setMinimum(-1e100);
 	((QDoubleSpinBox*)w_del)->setMaximum(1e100);
@@ -872,7 +882,7 @@ QWidget *InspAttr::ItemDelegate::createEditor( QWidget *parent, const QStyleOpti
     }
     else {
 	QItemEditorFactory factory;
-	w_del = factory.createEditor(value.type(), parent);
+	w_del = factory.createEditor(value.typeId(), parent);
     }
 
     w_del->installEventFilter(const_cast<InspAttr::ItemDelegate*>(this));
@@ -891,12 +901,12 @@ void InspAttr::ItemDelegate::setEditorData( QWidget *editor, const QModelIndex &
 	if(flag&ModInspAttr::Item::SelEd) comb->setEditText(index.data(Qt::DisplayRole).toString());
 	else comb->setCurrentIndex(comb->findText(index.data(Qt::DisplayRole).toString()));
     }
-    else if(value.type()==QVariant::String && flag&ModInspAttr::Item::FullText && dynamic_cast<QTextEdit*>(editor))
+    else if(value.typeId() == QVariant::String && flag&ModInspAttr::Item::FullText && dynamic_cast<QTextEdit*>(editor))
 	((QTextEdit*)editor)->setPlainText(value.toString());
-    else if(value.type() == QVariant::String && (flag&ModInspAttr::Item::Font || flag&ModInspAttr::Item::Color) && dynamic_cast<LineEditProp*>(editor))
+    else if(value.typeId() == QVariant::String && (flag&ModInspAttr::Item::Font || flag&ModInspAttr::Item::Color) && dynamic_cast<LineEditProp*>(editor))
 	((LineEditProp*)editor)->setValue(value.toString());
-    else if(value.type() == QVariant::Int && flag&ModInspAttr::Item::DateTime && dynamic_cast<QDateTimeEdit*>(editor))
-	((QDateTimeEdit*)editor)->setDateTime(QDateTime::fromTime_t(value.toInt()?value.toInt():time(NULL)));
+    else if(value.typeId() == QVariant::Int && flag&ModInspAttr::Item::DateTime && dynamic_cast<QDateTimeEdit*>(editor))
+	((QDateTimeEdit*)editor)->setDateTime(QDateTime::fromSecsSinceEpoch(value.toInt()?value.toInt():time(NULL)));
     else QItemDelegate::setEditorData(editor, index);
 }
 
@@ -907,13 +917,13 @@ void InspAttr::ItemDelegate::setModelData( QWidget *editor, QAbstractItemModel *
 
     if(flag&ModInspAttr::Item::Select && dynamic_cast<QComboBox*>(editor))
 	model->setData(index,((QComboBox*)editor)->currentText(),Qt::EditRole);
-    else if(value.type()==QVariant::String && flag&ModInspAttr::Item::FullText && dynamic_cast<QTextEdit*>(editor))
+    else if(value.typeId() == QVariant::String && flag&ModInspAttr::Item::FullText && dynamic_cast<QTextEdit*>(editor))
 	model->setData(index,((QTextEdit*)editor)->toPlainText(),Qt::EditRole);
-    else if(value.type() == QVariant::String && (flag&ModInspAttr::Item::Font || flag&ModInspAttr::Item::Color) && dynamic_cast<LineEditProp*>(editor))
+    else if(value.typeId() == QVariant::String && (flag&ModInspAttr::Item::Font || flag&ModInspAttr::Item::Color) && dynamic_cast<LineEditProp*>(editor))
 	model->setData(index,((LineEditProp*)editor)->value());
-    else if(value.type() == QVariant::Int && flag&ModInspAttr::Item::DateTime && dynamic_cast<QDateTimeEdit*>(editor))
+    else if(value.typeId() == QVariant::Int && flag&ModInspAttr::Item::DateTime && dynamic_cast<QDateTimeEdit*>(editor))
     {
-	int tm = ((QDateTimeEdit*)editor)->dateTime().toTime_t();
+	int tm = ((QDateTimeEdit*)editor)->dateTime().toSecsSinceEpoch();
 	model->setData(index,(tm>(time(NULL)+3600))?0:tm,Qt::EditRole);
     }
     else QItemDelegate::setModelData(editor, model, index);
@@ -925,7 +935,7 @@ QSize InspAttr::ItemDelegate::sizeHint( const QStyleOptionViewItem &option, cons
 
     QVariant value = index.data(Qt::EditRole);
     int flag = index.data(Qt::UserRole).toInt();
-    if(value.type()==QVariant::String && flag&ModInspAttr::Item::FullText)
+    if(value.typeId() == QVariant::String && flag&ModInspAttr::Item::FullText)
 	return QSize(w_sz.width(),vmin(150,vmax(50,w_sz.height())));
 
     return QSize(w_sz.width(),vmin(150,w_sz.height()));
@@ -1999,7 +2009,7 @@ void ProjTree::ctrTreePopup( )
 LineEditProp::LineEditProp( QWidget *parent, DType tp, bool m_toClose ) : QWidget( parent ), m_tp(tp), toClose(m_toClose)
 {
     QHBoxLayout *box = new QHBoxLayout(this);
-    box->setMargin(0);
+    box->setContentsMargins(0, 0, 0, 0);
     box->setSpacing(0);
 
     ed_fld = new QLineEdit(this);
