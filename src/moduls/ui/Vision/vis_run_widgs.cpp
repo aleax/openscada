@@ -31,6 +31,10 @@
 #include "vis_run_widgs.h"
 #include "vis_shapes.h"
 
+#if QT_VERSION < 0x060000
+# define MiddleButton	MidButton
+#endif
+
 #undef _
 #define _(mess) mod->I18N(mess, mainWin()->lang().c_str()).c_str()
 

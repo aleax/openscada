@@ -1,6 +1,16 @@
+2023-09-11 Roman (stable)
+- configure.ac: The parameters --disable-WebEngine and --disable-MultimediaEngine renamed
+	to --disable-QtWebEngine and --disable-QtMultimediaEngine.
+    The generic variables QtWebKit_{CFLAGS,LIBS} and phonon_{CFLAGS,LIBS} renamed
+	to QtWebEngine_{CFLAGS,LIBS} and QtMultimediaEngine_{CFLAGS,LIBS} respectively.
+- FIX:UI.{QTStarter,Vision}: Restored in building on Qt4.5 (N800).
+- FIX:UI.{QTCfg,Vision}: Restored in building on Qt5 < 5.8 (Debian 9).
+- FIX:UI.QTStarter: Appended by the attribute Qt::AA_ShareOpenGLContexts before the Qt application object for QtWebEngine work on Qt6.
+
+
 2023-09-09 Roman (stable)
 - !!!!:acinclude.m4: The AutoConf macro AX_LIB_Qt expanded by Qt6 support.
-    !!!!:FIX:configure.ac: In appending Qt6 that is appended by Qt6Sensors, Qt6WebEngineWidgets, Qt6MultimediaWidgets.
+- !!!!:FIX:configure.ac: In appending Qt6 that is appended by Qt6Sensors, Qt6WebEngineWidgets, Qt6MultimediaWidgets.
 	The parameters --disable-WebKit and --disable-Phonon renamed to --disable-WebEngine and --disable-MultimediaEngine.
 	Most of the corresponding messages were improved.
 	FIX: Restored in building on old systems with the separated -lintl.

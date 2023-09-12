@@ -62,7 +62,7 @@
 #include "../QTStarter/lib_qtgen.h"
 #include "tuimod.h"
 
-#if QT_VERSION < 0x050000
+#if QT_VERSION < 0x060000
 # define setSecsSinceEpoch(tm)	setTime_t(tm)
 #endif
 

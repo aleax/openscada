@@ -10,8 +10,8 @@ ui_Vision_la_LIBTOOLFLAGS = --tag=disable-static
 ui_Vision_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
 endif
 
-ui_Vision_la_CXXFLAGS += $(QtGui_CFLAGS) $(QtWebKit_CFLAGS) $(phonon_CFLAGS)
-ui_Vision_la_LDFLAGS += $(QtGui_LIBS) $(LIB_FFTW3) $(QtWebKit_LIBS) $(phonon_LIBS)
+ui_Vision_la_CXXFLAGS += $(QtGui_CFLAGS) $(QtWebEngine_CFLAGS) $(QtMultimediaEngine_CFLAGS)
+ui_Vision_la_LDFLAGS += $(QtGui_LIBS) $(LIB_FFTW3) $(QtWebEngine_LIBS) $(QtMultimediaEngine_LIBS)
 ui_Vision_la_SOURCES = tvision.cpp qrc_vision.cpp vis_widgs.cpp moc_vis_widgs.cpp vis_shapes.cpp moc_vis_shapes.cpp \
     vis_devel.cpp moc_vis_devel.cpp vis_devel_dlgs.cpp moc_vis_devel_dlgs.cpp vis_devel_widgs.cpp moc_vis_devel_widgs.cpp \
     vis_run.cpp moc_vis_run.cpp vis_run_widgs.cpp moc_vis_run_widgs.cpp vis_shape_elfig.cpp moc_vis_shape_elfig.cpp ../QTStarter/lib_qtgen.cpp moc_lib_qtgen.cpp

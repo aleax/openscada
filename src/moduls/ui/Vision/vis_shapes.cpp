@@ -83,11 +83,11 @@ using namespace Phonon;
 # include <qdrawutil.h>
 #else
 # include <QPlastiqueStyle>
-
-# define setSecsSinceEpoch(tm)	setTime_t(tm)
 #endif
 
 #if QT_VERSION < 0x060000
+# define MiddleButton		MidButton
+# define setSecsSinceEpoch(tm)	setTime_t(tm)
 # define typeId()		type()
 #endif
 

@@ -58,12 +58,9 @@
 #include "vis_shapes.h"
 #include "vis_devel_widgs.h"
 
-#if QT_VERSION < 0x050000
+#if QT_VERSION < 0x060000
 # define fromSecsSinceEpoch(tm)	fromTime_t(tm)
 # define toSecsSinceEpoch()	toTime_t()
-#endif
-
-#if QT_VERSION < 0x060000
 # define typeId()		type()
 #endif
 

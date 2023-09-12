@@ -65,7 +65,7 @@
 #define MOD_NAME	trS("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"6.0.2"
+#define MOD_VER		"6.0.4"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -177,13 +177,15 @@ void TUIMod::postEnable( int flag )
 #endif
     }
 
-
     if(!SYS->cmdOptPresent("QtInNotMainThread")) {
 	if(SYS->mainThr.freeStat()) SYS->mainThr = this;
 	if(hideMode) return;
 
-	//Init locale setLocale
 	QLocale::setDefault(QLocale(Mess->lang().c_str()));
+
+#if HAVE_WEBENGINE
+	QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+#endif
 
 	//Qt application object init
 	QtApp = new StApp(mod->qtArgC, (char**)&mod->qtArgV);
@@ -493,8 +495,11 @@ void TUIMod::toQtArg( const char *nm, const char *arg )
 
 void *TUIMod::Task( void * )
 {
-    //Init locale setLocale
     QLocale::setDefault(QLocale(Mess->lang().c_str()));
+
+#if HAVE_WEBENGINE
+    QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+#endif
 
     //Qt application object init
     mod->QtApp = new StApp(mod->qtArgC, (char**)&mod->qtArgV);
@@ -733,7 +738,7 @@ bool StApp::notify( QObject *receiver, QEvent *event )
 	}
 	if(mouseBtPress && ((event->type() == QEvent::MouseButtonRelease && ((QMouseEvent*)event)->button() == Qt::LeftButton) ||
 		(event->type() == QEvent::MouseMove &&
-		    (((QMouseEvent*)event)->globalPosition()-mouseBtHoldPosG).manhattanLength() > QFontMetrics(font()).height()) ||
+		    (((QMouseEvent*)event)->globalPosition()-mouseBtHoldPosG).toPoint().manhattanLength() > QFontMetrics(font()).height()) ||
 		(event->type() == QEvent::FocusOut && mouseBtRecv == receiver)))
 	    mouseBtPress = 0;
     }

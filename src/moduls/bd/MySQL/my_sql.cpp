@@ -34,7 +34,7 @@
 #define MOD_NAME	trS("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"4.0.8"
+#define MOD_VER		"4.0.9"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -432,8 +432,6 @@ void MTable::fieldStruct( TConfig &cfg )
 
 void MTable::fieldFix( TConfig &cfg, const string &ilangLs )
 {
-    bool next = false;
-
     if(tblStrct.empty()) throw err_sys(_("Table is empty."));
 
     bool appMode = cfg.reqKeys() || (cfg.incomplTblStruct() && !isEmpty());	//Only for append no present fields

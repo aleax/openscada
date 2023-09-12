@@ -74,11 +74,10 @@ using namespace Phonon;
 # include <QScreen>
 #else
 # include <QDesktopWidget>
-
-# define setSecsSinceEpoch(utm)	setTime_t(utm)
 #endif
 
 #if QT_VERSION < 0x060000
+# define setSecsSinceEpoch(tm)	setTime_t(tm)
 # define typeId()		type()
 # define setSource(url)		setMedia(url)
 #endif

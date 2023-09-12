@@ -40,16 +40,16 @@
 #include <QFont>
 #include <QCheckBox>
 #include <QPushButton>
-//#include <QPolygonF>
 
-//#include <tsys.h>
-//#include "tvision.h"
-//#include "vis_widgs.h"
 #include "vis_run_widgs.h"
 #include "vis_devel.h"
 #include "vis_devel_widgs.h"
 #include "../QTStarter/lib_qtgen.h"
 #include "vis_shape_elfig.h"
+
+#if QT_VERSION < 0x060000
+# define MiddleButton	MidButton
+#endif
 
 using namespace OSCADA_QT;
 using namespace VISION;

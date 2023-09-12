@@ -49,7 +49,7 @@
 #include "vis_widgs.h"
 #include "vis_run_widgs.h"
 
-#if QT_VERSION < 0x050000
+#if QT_VERSION < 0x060000
 # define fromSecsSinceEpoch(tm)	fromTime_t(tm)
 # define toSecsSinceEpoch()	toTime_t()
 #endif

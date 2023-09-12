@@ -46,14 +46,15 @@
 #include "selfwidg.h"
 
 #if QT_VERSION < 0x050000
-#include <QPlastiqueStyle>
-
-#define fromSecsSinceEpoch(tm)	fromTime_t(tm)
-#define toSecsSinceEpoch()	toTime_t()
+# include <QPlastiqueStyle>
 #else
-#include <QCommonStyle>
+# include <QCommonStyle>
 #endif
 
+#if QT_VERSION < 0x060000
+# define fromSecsSinceEpoch(tm)	fromTime_t(tm)
+# define toSecsSinceEpoch()	toTime_t()
+#endif
 
 using namespace OSCADA_QT;
 using namespace QTCFG;
