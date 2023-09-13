@@ -2849,13 +2849,14 @@ msgstr "Логический"
 msgid "-select"
 msgstr "-выбор"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Parameter attribute\n"
 "  ID: '%s'\n"
 "  Name: '%s'\n"
 "  Type: '%s'\n"
-"  Read only: %d"
+"  Read only: %d\n"
+"  Timestamp: %s"
 msgstr ""
 "Атрибут параметра\n"
 "  ID: '%s'\n"

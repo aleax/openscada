@@ -283,9 +283,10 @@ void TValue::cntrCmdProc( XMLNode *opt )
 			    "  ID: '%s'\n"
 			    "  Name: '%s'\n"
 			    "  Type: '%s'\n"
-			    "  Read only: %d"),
+			    "  Read only: %d\n"
+			    "  Timestamp: %s"),
 			    vl.at().fld().name().c_str(),TSYS::strLine(trD(vl.at().fld().descr()),0).c_str(),
-			    sType.c_str(),(vl.at().fld().flg()&TFld::NoWrite)?1:0));
+			    sType.c_str(),(vl.at().fld().flg()&TFld::NoWrite)?1:0, TSYS::atime2str(vl.at().time()/1000000).c_str()));
 		    if(vl.at().fld().values().size())
 			nE->setAttr("help",nE->attr("help")+_("\n  Values: ")+vl.at().fld().values());
 		    if(vl.at().fld().selNames().size())

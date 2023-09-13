@@ -1,3 +1,17 @@
+2023-09-13 Roman 0.9.6.3
+- LibsDB.OscadaLibs: tmplib_LowDevLib.RDTech: Nondouble commands set to send the command tvicely for stable applying by the device,
+    postcommand delay set to 0.2 and moved in common.
+- FIX:LibsDB.vcaBase: wlb_doc.docRepInstVals: Restored in translation values of title and parameter's dimension, name.
+- DAQ: Information of the value attribute appended by the field of timestamp the current value.
+- FIX:Archive: Fixed in permition to list of archivers of tab the archive values.
+- Transports: List of the OpenSCADA hosts appended by the empty item for the possibility of changing the transport type.
+    The IO log expanded for cleaning at the log disabling.
+- FIX:UI.Vision: Fixed in early OpenSCADA pages removing before the prinitng and exporting dialogs.
+    FIX: The local media URL of Phonon transferred in absolute one for playing by GStream.
+    FIX: Fixed in the Phonon volume translation to 1.0 as 100%.
+- FIX:UI.WebCfgD: Data edition fields fixed for the standard date from WebBrowser without seconds.
+
+
 2023-08-12 Roman 0.9.6.2
 - FIX: LibsDB.vcaBase: wlb_Main.storeHouse: Guaranteed in filling the report dialogs
     by generating the opening events from the procedure.

@@ -16035,7 +16035,7 @@ This template in first time uses the new output transports connection function S
 Author: Roman Savochenko <roman@oscada.org>
 Total complexity: 0.3 HD
 Thanks: for Ryan Finnie at the protocol initial processing in RDUMTOOL (https://github.com/smandon/rdumtool)
-Version: 1.1.1
+Version: 1.1.2
 License: GPLv2','Шаблон BlueTooth інтерфейсу до RDTech UM24C/UM25C/UM34C. !!!! Наразі перевірено лише на UM24C.
 
 UM24C, UM25C та UM34C від RDTech (RuiDeng) є недорогими пристроями вимірювання прохідної потужності на USB, та вони підтримують достатню колекцію властивостей так само як і забезпечують повний контроль через Bluetooth. Цей шаблон реалізує найбільш явні команди та збір даних, які доступні через Bluetooth інтерфейс пристрою.
@@ -16045,7 +16045,7 @@ UM24C, UM25C та UM34C від RDTech (RuiDeng) є недорогими прис
 Автор: Роман Савоченко <roman@oscada.org>
 Загальна працемісткість: 0.3 ЛД
 Подяки: Райан Фінніє за початкове опрацювання протоколу у RDUMTOOL (https://github.com/smandon/rdumtool)
-Версія: 1.1.1
+Версія: 1.1.2
 Ліцензія: GPLv2',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	recThr_ = recThr; scrBright_ = scrBright; scrTm_ = scrTm;
@@ -16057,6 +16057,7 @@ if(f_start) {
 }
 
 tErr = "";
+wTm = 0.2;	//Waiting time after commands
 
 if(!(tr=SYS.Transport.outAt(transport)) || !tr.start(true))
 	tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
@@ -16077,31 +16078,31 @@ else {
 	else {
 		// Setting
 		if(scrNext) {
-			if(scrNext == true) { tr.messIO(SYS.strFromCharCode(0xF1), 0, 0); SYS.sleep(0.1); }
+			if(scrNext == true) { tr.messIO(SYS.strFromCharCode(0xF1), 0, 0); SYS.sleep(wTm); }
 			scrNext = false;
 		}
 		if(scrRot) {
-			if(scrRot == true) { tr.messIO(SYS.strFromCharCode(0xF2), 0, 0); SYS.sleep(0.1); }
+			if(scrRot == true) { tr.messIO(SYS.strFromCharCode(0xF2), 0, 0); SYS.sleep(wTm); }
 			scrRot = false;
 		}
 		if(grpNext) {
-			if(grpNext == true)	{ tr.messIO(SYS.strFromCharCode(0xF3), 0, 0); SYS.sleep(0.1); }
+			if(grpNext == true)	{ tr.messIO(SYS.strFromCharCode(0xF3), 0, 0); SYS.sleep(wTm); }
 			grpNext = false;
 		}
 		if(grpClear) {
-			if(grpClear == true) { tr.messIO(SYS.strFromCharCode(0xF4), 0, 0); SYS.sleep(0.1); }
+			if(grpClear == true) { tr.messIO(SYS.strFromCharCode(0xF4,0xF4), 0, 0); SYS.sleep(wTm); }
 			grpClear = false;
 		}
 		if(recThr != recThr_) {
-			if(!recThr.isEVal()) { tr.messIO(SYS.strFromCharCode(0xB0+max(0,min(0.3,recThr))*100), 0, 0); SYS.sleep(0.1); }
+			if(!recThr.isEVal()) { tr.messIO(SYS.strFromCharCode(tVl=0xB0+max(0,min(0.3,recThr))*100,tVl), 0, 0); SYS.sleep(wTm); }
 			recThr_ = recThr;
 		}
 		if(scrBright != scrBright_) {
-			if(!scrBright.isEVal()) { tr.messIO(SYS.strFromCharCode(0xD0+max(0,min(5,scrBright))), 0, 0); SYS.sleep(0.1); }
+			if(!scrBright.isEVal()) { tr.messIO(SYS.strFromCharCode(tVl=0xD0+max(0,min(5,scrBright)),tVl), 0, 0); SYS.sleep(wTm); }
 			scrBright_ = scrBright;
 		}
 		if(scrTm != scrTm_) {
-			if(!scrTm.isEVal()) { tr.messIO(SYS.strFromCharCode(0xE0+max(0,min(9,scrTm))), 0, 0); SYS.sleep(0.1); }
+			if(!scrTm.isEVal()) { tr.messIO(SYS.strFromCharCode(tVl=0xE0+max(0,min(9,scrTm)),tVl), 0, 0); SYS.sleep(wTm); }
 			scrTm_ = scrTm;
 		}
 
@@ -16147,5 +16148,5 @@ if(tErr.length) {
 	V = A = W = T = dG = chMode = recAh = recWh = recThr = recTm = rec = scrTm = scrBright = R = scr = EVAL;
 	grps = EVAL;
 }
-else f_err = "0";','',1662902645);
+else f_err = "0";','',1693313193);
 COMMIT;

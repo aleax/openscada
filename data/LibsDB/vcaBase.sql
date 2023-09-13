@@ -15715,7 +15715,7 @@ if(f_start) {
 	this.doc.attrSet("params", params);
 
 	doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120;
-}','','',-1,'name;dscr;',1582472916);
+}','','',-1,'name;dscr;',1694269838);
 INSERT INTO wlb_doc VALUES('docDin','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAG
 f0lEQVRYhe1XS28TPRe2PddkZjKZJG1J2tKGQAlpERSWrCq27Fmx4d/wb5BAQgLBigVCLFg0CSml
 jXpLmtsMnfvF9rewFCJKCx+b8Ep5FlF8fC7z+Bz72PDly5fXrl0D/03U63W+XC7funULAJAkCYQQ
@@ -24271,8 +24271,8 @@ INSERT INTO wlb_doc_uio VALUES('docMessRep','sourceCache','Source cache',131078,
 </TVarObj>
 ',0,'','','doc','Кеш джерел','','','Кеш источников','','','','','Кеш меморија');
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p1var','Parameter 1: variable',196613,'',2,'Parameter1|var','','doc','Параметр 1: змінна','','','Параметр 1: переменная','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p1ed','Parameter 1: dimension',131077,'',2,'Parameter1|ed','','doc','Параметр 1: од.виміру','','','Параметр 1: ед.измерения','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p1name','Parameter 1: name',131077,'',2,'Parameter1|NAME','','doc','Параметр 1: назва','','','Параметр 1: имя','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p1ed','Parameter 1: dimension',131333,'',2,'Parameter1|ed','','doc','Параметр 1: од.виміру','','','Параметр 1: ед.измерения','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p1name','Parameter 1: name',131333,'',2,'Parameter1|NAME','','doc','Параметр 1: назва','','','Параметр 1: имя','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p2var','Parameter 2: variable',196613,'',2,'Parameter2|var','','doc','Параметр 2: змінна','','','Параметр 2: переменная','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p3var','Parameter 3: variable',196613,'',2,'Parameter3|var','','doc','Параметр 3: змінна','','','Параметр 3: переменная','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p4var','Parameter 4: variable',196613,'',2,'Parameter4|var','','doc','Параметр 4: змінна','','','Параметр 4: переменная','','','','','');
@@ -24282,24 +24282,24 @@ INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p7var','Parameter 7: variable',
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p8var','Parameter 8: variable',196613,'',2,'Parameter8|var','','doc','Параметр 8: змінна','','','Параметр 8: переменная','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p9var','Parameter 9: variable',196613,'',2,'Parameter9|var','','doc','Параметр 9: змінна','','','Параметр 9: переменная','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p10var','Parameter 10: variable',196613,'',2,'Parameter10|var','','doc','Параметр 10: змінна','','','Параметр 10: переменная','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p2ed','Parameter 2: dimension',131077,'',2,'Parameter2|ed','','doc','Параметр 2: од.виміру','','','Параметр 2: ед.измерения','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p3ed','Parameter 3: dimension',131077,'',2,'Parameter3|ed','','doc','Параметр 3: од.виміру','','','Параметр 3: ед.измерения','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p4ed','Parameter 4: dimension',131077,'',2,'Parameter4|ed','','doc','Параметр 4: од.виміру','','','Параметр 4: ед.измерения','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p5ed','Parameter 5: dimension',131077,'',2,'Parameter5|ed','','doc','Параметр 5: од.виміру','','','Параметр 5: ед.измерения','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p6ed','Parameter 6: dimension',131077,'',2,'Parameter6|ed','','doc','Параметр 6: од.виміру','','','Параметр 6: ед.измерения','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p7ed','Parameter 7: dimension',131077,'',2,'Parameter7|ed','','doc','Параметр 7: од.виміру','','','Параметр 7: ед.измерения','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p8ed','Parameter 8: dimension',131077,'',2,'Parameter8|ed','','doc','Параметр 8: од.виміру','','','Параметр 8: ед.измерения','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p9ed','Parameter 9: dimension',131077,'',2,'Parameter9|ed','','doc','Параметр 9: од.виміру','','','Параметр 9: ед.измерения','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p10ed','Parameter 10: dimension',131077,'',2,'Parameter10|ed','','doc','Параметр 10: од.виміру','','','Параметр 10: ед.измерения','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p2name','Parameter 2: name',131077,'',2,'Parameter2|NAME','','doc','Параметр 2: назва','','','Параметр 2: имя','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p3name','Parameter 3: name',131077,'',2,'Parameter3|NAME','','doc','Параметр 3: назва','','','Параметр 3: имя','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p4name','Parameter 4: name',131077,'',2,'Parameter4|NAME','','doc','Параметр 4: назва','','','Параметр 4: имя','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p5name','Parameter 5: name',131077,'',2,'Parameter5|NAME','','doc','Параметр 5: назва','','','Параметр 5: имя','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p6name','Parameter 6: name',131077,'',2,'Parameter6|NAME','','doc','Параметр 6: назва','','','Параметр 6: имя','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p7name','Parameter 7: name',131077,'',2,'Parameter7|NAME','','doc','Параметр 7: назва','','','Параметр 7: имя','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p8name','Parameter 8: name',131077,'',2,'Parameter8|NAME','','doc','Параметр 8: назва','','','Параметр 8: имя','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p9name','Parameter 9: name',131077,'',2,'Parameter9|NAME','','doc','Параметр 9: назва','','','Параметр 9: имя','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p10name','Parameter 10: name',131077,'',2,'Parameter10|NAME','','doc','Параметр 10: назва','','','Параметр 10: имя','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p2ed','Parameter 2: dimension',131333,'',2,'Parameter2|ed','','doc','Параметр 2: од.виміру','','','Параметр 2: ед.измерения','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p3ed','Parameter 3: dimension',131333,'',2,'Parameter3|ed','','doc','Параметр 3: од.виміру','','','Параметр 3: ед.измерения','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p4ed','Parameter 4: dimension',131333,'',2,'Parameter4|ed','','doc','Параметр 4: од.виміру','','','Параметр 4: ед.измерения','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p5ed','Parameter 5: dimension',131333,'',2,'Parameter5|ed','','doc','Параметр 5: од.виміру','','','Параметр 5: ед.измерения','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p6ed','Parameter 6: dimension',131333,'',2,'Parameter6|ed','','doc','Параметр 6: од.виміру','','','Параметр 6: ед.измерения','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p7ed','Parameter 7: dimension',131333,'',2,'Parameter7|ed','','doc','Параметр 7: од.виміру','','','Параметр 7: ед.измерения','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p8ed','Parameter 8: dimension',131333,'',2,'Parameter8|ed','','doc','Параметр 8: од.виміру','','','Параметр 8: ед.измерения','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p9ed','Parameter 9: dimension',131333,'',2,'Parameter9|ed','','doc','Параметр 9: од.виміру','','','Параметр 9: ед.измерения','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p10ed','Parameter 10: dimension',131333,'',2,'Parameter10|ed','','doc','Параметр 10: од.виміру','','','Параметр 10: ед.измерения','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p2name','Parameter 2: name',131333,'',2,'Parameter2|NAME','','doc','Параметр 2: назва','','','Параметр 2: имя','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p3name','Parameter 3: name',131333,'',2,'Parameter3|NAME','','doc','Параметр 3: назва','','','Параметр 3: имя','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p4name','Parameter 4: name',131333,'',2,'Parameter4|NAME','','doc','Параметр 4: назва','','','Параметр 4: имя','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p5name','Parameter 5: name',131333,'',2,'Parameter5|NAME','','doc','Параметр 5: назва','','','Параметр 5: имя','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p6name','Parameter 6: name',131333,'',2,'Parameter6|NAME','','doc','Параметр 6: назва','','','Параметр 6: имя','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p7name','Parameter 7: name',131333,'',2,'Parameter7|NAME','','doc','Параметр 7: назва','','','Параметр 7: имя','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p8name','Parameter 8: name',131333,'',2,'Parameter8|NAME','','doc','Параметр 8: назва','','','Параметр 8: имя','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p9name','Parameter 9: name',131333,'',2,'Parameter9|NAME','','doc','Параметр 9: назва','','','Параметр 9: имя','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p10name','Parameter 10: name',131333,'',2,'Parameter10|NAME','','doc','Параметр 10: назва','','','Параметр 10: имя','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p1prec','Parameter 1: precision',131073,'0|',2,'Parameter1|prec','','doc','Параметр 1: точність','','','Параметр 1: точность','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p2prec','Parameter 2: precision',131073,'0|',2,'Parameter2|prec','','doc','Параметр 2: точність','','','Параметр 2: точность','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p3prec','Parameter 3: precision',131073,'0|',2,'Parameter3|prec','','doc','Параметр 3: точність','','','Параметр 3: точность','','','','','');
@@ -24330,7 +24330,7 @@ INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p9min','Parameter 9: minimum',1
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p9max','Parameter 9: maximum',196613,'',2,'Parameter9|max','','doc','Параметр 9: максимум','','','Параметр 9: максимум','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p10min','Parameter 10: minimum',196613,'',2,'Parameter10|min','','doc','Параметр 10: мінімум','','','Параметр 10: минимум','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','p10max','Parameter 10: maximum',196613,'',2,'Parameter10|max','','doc','Параметр 10: максимум','','','Параметр 10: максимум','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepInstVals','title','Title',131077,'',1,'','','doc','Заголовок','','','Заголовок','','','','','Наслов');
+INSERT INTO wlb_doc_uio VALUES('docRepInstVals','title','Title',131333,'',1,'','','doc','Заголовок','','','Заголовок','','','','','Наслов');
 INSERT INTO wlb_doc_uio VALUES('docRepInstVals','params','Parameters container in the process',131078,'<TVarObj>
 </TVarObj>
 ',8,'','','doc','Контейнер опрацьованих параметрів','','','Контейнер параметров в обработке','','','','','');
@@ -29013,11 +29013,11 @@ License: GPLv2',32,'','','','Документ слугує для генерац
 INSERT INTO wlb_doc_io VALUES('docRepInstVals','dscr','The document is provided for generating a report of the instantaneous values in view of the trends diagram and the data table. The document is the dynamic type, so you can specify the data time and depth. The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.1.2
+Version: 2.1.3
 License: GPLv2',32,'','','','Документ слугує для генерації звіту миттєвих значень у вигляді діаграми трендів та таблиці даних. Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають архіви значень DAQ-параметрів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.1.2
+Версія: 2.1.3
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepMonth','dscr','The document is provided for generating a month report of the day-averaged values in view of the trends diagram and the data table. The document is initially the archival type but in time it is made dynamic also, so, depending from the execution mode, you can whether select a ready document from the archive or specify the data time and depth. The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
 
