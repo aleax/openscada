@@ -9,7 +9,7 @@ else
 oscd_modul_LTLIBRARIES = bd_MySQL.la
 bd_MySQL_la_CXXFLAGS =
 bd_MySQL_la_LIBTOOLFLAGS = --tag=disable-static
-bd_MySQL_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+bd_MySQL_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 bd_MySQL_la_CXXFLAGS += $(MYSQL_CFLAGS)

@@ -8,7 +8,7 @@ daq_DAQGate_la_LDFLAGS = -module
 else
 oscd_modul_LTLIBRARIES = daq_DAQGate.la
 daq_DAQGate_la_LIBTOOLFLAGS = --tag=disable-static
-daq_DAQGate_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+daq_DAQGate_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 daq_DAQGate_la_SOURCES = daq_gate.cpp

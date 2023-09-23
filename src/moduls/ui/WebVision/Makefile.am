@@ -9,7 +9,7 @@ else
 oscd_modul_LTLIBRARIES = ui_WebVision.la
 ui_WebVision_la_CXXFLAGS =
 ui_WebVision_la_LIBTOOLFLAGS = --tag=disable-static
-ui_WebVision_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+ui_WebVision_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 ui_WebVision_la_CXXFLAGS += $(gdlib_CFLAGS)

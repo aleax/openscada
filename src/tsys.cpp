@@ -2629,10 +2629,11 @@ void TSYS::taskSleep( int64_t per, const string &icron, int64_t *lag )
 		pnt_tm = ((cur_tm-off)/per + 1)*per,
 		wake_tm = 0;
 	do {
-	    spTm.tv_sec = (pnt_tm+off)/1000000000ll; spTm.tv_nsec = (pnt_tm+off)%1000000000ll;
 #if HAVE_DECL_CLOCK_NANOSLEEP
+	    spTm.tv_sec = (pnt_tm+off)/1000000000ll; spTm.tv_nsec = (pnt_tm+off)%1000000000ll;
 	    if(clock_nanosleep(clkId,TIMER_ABSTIME,&spTm,NULL)) return;
 #else
+	    spTm.tv_sec = (pnt_tm+off-cur_tm)/1000000000ll; spTm.tv_nsec = (pnt_tm+off-cur_tm)%1000000000ll;
 	    if(nanosleep(&spTm,NULL)) return;
 #endif
 	    clock_gettime(clkId, &spTm);
@@ -3240,11 +3241,13 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/gen/env/time",_("System time"),R_R_R_,"root","root",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/gen/env/clk",_("System planning clock"),R_R_R_,"root","root",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/gen/env/user",_("System user"),R_R_R_,"root","root",1,"tp","str");
+#if HAVE_LIBINTL_H
 		ctrMkNode("fld",opt,-1,"/gen/env/in_charset",_("Language"),R_R___,"root","root",2,
 		    "tp","str", "help",_("System locale charset."));
 		ctrMkNode("fld",opt,-1,"/gen/env/lang","",RWRWR_,"root","root",4,
 		    "tp","str", "dest","sel_ed", "sel_list",Mess->langBase().c_str(),
 		    "help",_("Complete locale information with language, country and charset in the view \"en_GB.UTF-8\"."));
+#endif
 		ctrMkNode("fld",opt,-1,"/gen/env/host",_("Host name"),R_R_R_,"root","root",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/gen/env/CPU",_("CPU"),R_R_R_,"root","root",1,"tp","str");
 		if(nCPU() > 1)
@@ -3274,6 +3277,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    }
 	    ctrMkNode("comm",opt,-1,"/redund/hostLnk",_("Go to the configuration of the list of remote stations"),RWRW__,"root","Transport",1,"tp","lnk");
 	}
+#if HAVE_LIBINTL_H
 	if(ctrMkNode("area",opt,-1,"/tr",_("Translations"))) {
 	    ctrMkNode("fld",opt,-1,"/tr/status",_("Status"),R_R_R_,"root","root",1,"tp","str");
 	    XMLNode *blNd = ctrMkNode("fld",opt,-1,"/tr/baseLang",_("Base language - locales list"),RWRWR_,"root","root",2,
@@ -3314,6 +3318,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		}
 	    }
 	}
+#endif
 	if(ctrMkNode("area",opt,-1,"/tasks",_("Tasks"),R_R___))
 	    if(ctrMkNode("table",opt,-1,"/tasks/tasks",_("Tasks"),RWRW__,"root","root",1,"key","path")) {
 		ctrMkNode("list",opt,-1,"/tasks/tasks/path",_("Path"),R_R___,"root","root",1,"tp","str");
@@ -3608,6 +3613,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    TBDS::genPrmSet(nodePath()+"TaskPhase:"+it->first, i2s(tVl));
 	}
     }
+#if HAVE_LIBINTL_H
     else if(a_path == "/tr/status" && ctrChkNode(opt)) {
 	string stM, stV;
 	if(Mess->langCodeBase().empty())
@@ -3850,6 +3856,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		!Mess->translItSplit(opt->attr("key_base"),TBDS::genPrmGet(nodePath()+"TrFltr","",opt->attr("user"))))
 	    opt->setAttr("noReload", "1");
     }
+#endif
     else if(!cntrEmpty() && a_path == "/debug/cntr" && ctrChkNode(opt,"get",R_R_R_,"root","root")) {
 	XMLNode *n_id	= ctrMkNode("list",opt,-1,"/debug/cntr/id","",R_R_R_,"root","root");
 	XMLNode *n_vl	= ctrMkNode("list",opt,-1,"/debug/cntr/vl","",R_R_R_,"root","root");

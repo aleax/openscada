@@ -8,7 +8,7 @@ prot_UserProtocol_la_LDFLAGS = -module
 else
 oscd_modul_LTLIBRARIES = prot_UserProtocol.la
 prot_UserProtocol_la_LIBTOOLFLAGS = --tag=disable-static
-prot_UserProtocol_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+prot_UserProtocol_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 prot_UserProtocol_la_SOURCES = user_prt.cpp

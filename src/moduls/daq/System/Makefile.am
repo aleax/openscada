@@ -9,7 +9,7 @@ else
 oscd_modul_LTLIBRARIES = daq_System.la
 daq_System_la_CXXFLAGS =
 daq_System_la_LIBTOOLFLAGS = --tag=disable-static
-daq_System_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+daq_System_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 daq_System_la_LDFLAGS += $(LIB_SENSORS)

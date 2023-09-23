@@ -34,7 +34,7 @@
 #define MOD_NAME	trS("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"4.0.9"
+#define MOD_VER		"4.0.10"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"

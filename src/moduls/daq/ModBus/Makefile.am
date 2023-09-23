@@ -8,7 +8,7 @@ daq_ModBus_la_LDFLAGS = -module
 else
 oscd_modul_LTLIBRARIES = daq_ModBus.la
 daq_ModBus_la_LIBTOOLFLAGS = --tag=disable-static
-daq_ModBus_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+daq_ModBus_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 daq_ModBus_la_SOURCES = moduls.cpp modbus_daq.cpp modbus_prt.cpp

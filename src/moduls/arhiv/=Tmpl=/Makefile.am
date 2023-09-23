@@ -17,7 +17,7 @@ arh_Tmpl_la_CXXFLAGS =
 #  Libtool flags - typical
 arh_Tmpl_la_LIBTOOLFLAGS = --tag=disable-static
 #  Flags of linking the module
-arh_Tmpl_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+arh_Tmpl_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 # Compiler flags

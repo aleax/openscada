@@ -8,7 +8,7 @@ daq_FT3_la_LDFLAGS = -module
 else
 oscd_modul_LTLIBRARIES = daq_FT3.la
 daq_FT3_la_LIBTOOLFLAGS = --tag=disable-static
-daq_FT3_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+daq_FT3_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 daq_FT3_la_SOURCES = da.cpp mod_FT3.cpp FT3_prt.cpp BUC.cpp BVI.cpp BVTC.cpp BVT.cpp BIP.cpp PAUK.cpp ACCOUNT.cpp BTR.cpp BTE.cpp ODOR.cpp GKR.cpp GZD.cpp GNS.cpp TANK.cpp

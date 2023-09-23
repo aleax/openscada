@@ -2,7 +2,7 @@
 //OpenSCADA module DAQ.DCON file: DCON_client.cpp
 /***************************************************************************
  *   Copyright (C) 2008-2011 by Almaz Karimov                              *
- *		   2008-2022 by Roman Savochenko, roman@oscada.org         *
+ *		   2008-2023 by Roman Savochenko, roman@oscada.org         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@
 #define MOD_NAME	trS("DCON client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.3.15"
+#define MOD_VER		"1.3.16"
 #define AUTHORS		trS("Roman Savochenko, Almaz Karimov")
 #define DESCRIPTION	trS("Provides an implementation of DCON-client protocol. Supports I-7000 DCON protocol.")
 #define LICENSE		"GPL2"

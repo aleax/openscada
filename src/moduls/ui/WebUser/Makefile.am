@@ -8,7 +8,7 @@ ui_WebUser_la_LDFLAGS = -module
 else
 oscd_modul_LTLIBRARIES = ui_WebUser.la
 ui_WebUser_la_LIBTOOLFLAGS = --tag=disable-static
-ui_WebUser_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+ui_WebUser_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 ui_WebUser_la_SOURCES = web_user.cpp

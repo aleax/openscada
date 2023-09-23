@@ -9,7 +9,7 @@ else
 oscd_modul_LTLIBRARIES = bd_LDAP.la
 bd_LDAP_la_CXXFLAGS =
 bd_LDAP_la_LIBTOOLFLAGS = --tag=disable-static
-bd_LDAP_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+bd_LDAP_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 bd_LDAP_la_CXXFLAGS += -DLDAP_DEPRECATED

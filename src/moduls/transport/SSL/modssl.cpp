@@ -54,7 +54,7 @@
 #define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.3.7"
+#define MOD_VER		"4.3.8"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and supported SSL-TLS depending on the library version.")
@@ -407,7 +407,6 @@ void TSocketIn::start( )
 
 	try {
 	    char err[255];
-
 
 	    //Try the external PEM-file of the certificates and the private key
 	    if(certKeyFile().size()) stErrMD5 = mod->MD5(cfile=certKeyFile());

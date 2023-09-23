@@ -8,7 +8,7 @@ daq_BlockCalc_la_LDFLAGS = -module
 else
 oscd_modul_LTLIBRARIES = daq_BlockCalc.la
 daq_BlockCalc_la_LIBTOOLFLAGS = --tag=disable-static
-daq_BlockCalc_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+daq_BlockCalc_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 daq_BlockCalc_la_SOURCES = virtual.cpp block.cpp

@@ -317,7 +317,7 @@ Documents/How_to/Violations,_alarms_and_notifications:en,uk,ru:How_to_Violations
 Documents/How_to/Cyclic_programming:en,uk,ru:How_to_Cyclic_programming.html
 Documents/How_to/Debug:en,uk,ru:How_to_Debug.html
 Documents/How_to/Transferring_project_configuration:en,uk,ru:How_to_Transferring_project_configuration.html
-Documents/How_to/Build_from_source:en,uk,ru:How_to_Build_from_source.html
+Documents/How_to/Build_from_source:en,uk:How_to_Build_from_source.html
 Documents/How_to/Crash_report:en,uk,ru:How_to_Crash_report.html
 Documents/How_to/Create_module:en,uk,ru:How_to_Create_module.html
 Documents/How_to/Create_multi_language_project:en,uk:Create_multi_language_project.html

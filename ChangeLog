@@ -1,3 +1,16 @@
+2023-09-22 Roman (stable)
+- !!!!:FIX:SYS: Finished in true building with the core library only in static:
+	- configure.ac: the configuration option --enable-CoreLibStatic expanded for definition the AM_CONDITIONAL(CoreLibStatic)
+	    and the environment variable LIB_MOD;
+	- src/Makefile.am: appended by the option --tag=disable-shared here;
+	- moduls/*/*/Makefile.am: expanded by using the environment variable LIB_MOD.
+	- src_call/Makefile.am: expanded by the AM_CONDITIONAL(CoreLibStatic) specific processing
+	    for static linking the core library with all included modules.
+    FIX: TSYS::sysSleep() Fixed in work with nanosleep().
+    Control Interface of the main page appended by hiding the tab "Translations" and the language fields at missing
+	the internationalisation in whole.
+
+
 2023-09-11 Roman (stable)
 - configure.ac: The parameters --disable-WebEngine and --disable-MultimediaEngine renamed
 	to --disable-QtWebEngine and --disable-QtMultimediaEngine.

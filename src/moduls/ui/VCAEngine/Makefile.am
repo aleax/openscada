@@ -8,7 +8,7 @@ ui_VCAEngine_la_LDFLAGS = -module
 else
 oscd_modul_LTLIBRARIES = ui_VCAEngine.la
 ui_VCAEngine_la_LIBTOOLFLAGS = --tag=disable-static
-ui_VCAEngine_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+ui_VCAEngine_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 ui_VCAEngine_la_SOURCES = vcaengine.cpp libwidg.cpp widget.cpp origwidg.cpp project.cpp session.cpp

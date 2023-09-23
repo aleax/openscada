@@ -10,7 +10,7 @@ else
 oscd_modul_LTLIBRARIES = bd_ODBC.la
 bd_ODBC_la_CXXFLAGS =
 bd_ODBC_la_LIBTOOLFLAGS = --tag=disable-static
-bd_ODBC_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+bd_ODBC_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 bd_ODBC_la_CXXFLAGS += $(IODBC_CFLAGS)

@@ -8,7 +8,7 @@ bd_DBF_la_LDFLAGS = -module
 else
 oscd_modul_LTLIBRARIES = bd_DBF.la
 bd_DBF_la_LIBTOOLFLAGS = --tag=disable-static
-bd_DBF_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+bd_DBF_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 bd_DBF_la_SOURCES = dbf_mod.cpp dbf.cpp

@@ -90,6 +90,7 @@ AC_HEADER_TIME
 AC_STRUCT_TM
 
 AC_SUBST(LIB_CORE)
+AC_SUBST(LIB_MOD)
 
 ix86=no;
 if test $target_cpu = "i386" -o $target_cpu = "i486" -o $target_cpu = "i586" -o $target_cpu = "i686" -o \
@@ -139,7 +140,8 @@ fi
 AC_ARG_ENABLE(CrossCompile, AC_HELP_STRING([--enable-CrossCompile],[enable the crosscompile build]), [],
     [if test $host = $build; then enable_CrossCompile=no; else enable_CrossCompile=yes; fi])
 AC_ARG_ENABLE(CoreLibStatic, AC_HELP_STRING([--enable-CoreLibStatic],[enable OpenSCADA core library to build only in static, without the shared one.]),
-    [liboscada_la_LIBTOOLFLAGS="--tag=disable-shared"; AC_SUBST(liboscada_la_LIBTOOLFLAGS)], [enable_CoreLibStatic=no;])
+    [], [enable_CoreLibStatic=no; LIB_MOD="\$(top_builddir)/src/liboscada.la"])
+AM_CONDITIONAL([CoreLibStatic], [test $enable_CoreLibStatic != no])
 AC_ARG_ENABLE(CoreLibVersion, AC_HELP_STRING([--disable-CoreLibVersion],[disable version for OpenSCADA core library.]), [], [enable_CoreLibVersion=yes;])
 if test $enable_CoreLibVersion = yes; then liboscada_la_LDFLAGS="-version-info ${oscd_LIBREVISION}"; else liboscada_la_LDFLAGS="-avoid-version"; fi
 AC_SUBST(liboscada_la_LDFLAGS)

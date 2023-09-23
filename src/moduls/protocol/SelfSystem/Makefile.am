@@ -8,7 +8,7 @@ prot_SelfSystem_la_LDFLAGS = -module
 else
 oscd_modul_LTLIBRARIES = prot_SelfSystem.la
 prot_SelfSystem_la_LIBTOOLFLAGS = --tag=disable-static
-prot_SelfSystem_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+prot_SelfSystem_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 prot_SelfSystem_la_SOURCES = self.cpp

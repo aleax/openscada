@@ -34,7 +34,7 @@
 #define MOD_NAME	trS("Directory by LDAP")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.6.8"
+#define MOD_VER		"0.6.9"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("BD module. Provides support of directories by LDAP.")
 #define MOD_LICENSE	"GPL2"

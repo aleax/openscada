@@ -8,7 +8,7 @@ arh_FSArch_la_LDFLAGS = -module
 else
 oscd_modul_LTLIBRARIES = arh_FSArch.la
 arh_FSArch_la_LIBTOOLFLAGS = --tag=disable-static
-arh_FSArch_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+arh_FSArch_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 arh_FSArch_la_SOURCES = base.cpp mess.cpp val.cpp

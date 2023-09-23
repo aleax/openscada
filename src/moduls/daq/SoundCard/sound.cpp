@@ -35,7 +35,7 @@
 #define MOD_NAME	trS("Sound card")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.8.10"
+#define MOD_VER		"0.8.11"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides an access to the sound card.")
 #define LICENSE		"GPL2"
