@@ -13,7 +13,7 @@ oscd_modulpref="oscd_"
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE([1.10 subdir-objects])
-AM_CONFIG_HEADER(src/config.h)
+AC_CONFIG_HEADER(src/config.h)
 
 AC_LANG(C++)
 
@@ -22,7 +22,7 @@ AC_LANG(C++)
 
 AC_ENABLE_SHARED(yes)
 AC_ENABLE_STATIC(yes)
-AC_LIBTOOL_DLOPEN
+LT_INIT([dlopen])
 
 # AM_GNU_GETTEXT
 
@@ -32,8 +32,8 @@ AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
-AC_PROG_LIBTOOL
-AM_PROG_LIBTOOL
+# AC_PROG_LIBTOOL
+# AM_PROG_LIBTOOL
 
 if test "$ac_cv_prog_cc_g" = "no" -o "$ac_cv_prog_cxx_g" = "no"; then
     AC_MSG_ERROR([No C/C++ compiler present. Install GCC and G++.]);
@@ -48,7 +48,7 @@ AM_SANITY_CHECK
 
 # Checking for the header files
 AC_HEADER_DIRENT
-AC_HEADER_STDC
+# AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS([time.h signal.h fcntl.h math.h errno.h unistd.h dirent.h stdio.h stdarg.h stdlib.h dlfcn.h locale.h pthread.h sys/types.h sys/stat.h sys/time.h sys/utsname.h],[],
     AC_MSG_ERROR([Some GLibC headers are not found. Install or check the GLibC developing package!]))
@@ -86,7 +86,7 @@ AC_C_INLINE
 AC_TYPE_OFF_T
 AC_TYPE_PID_T
 AC_TYPE_SIZE_T
-AC_HEADER_TIME
+# AC_HEADER_TIME
 AC_STRUCT_TM
 
 AC_SUBST(LIB_CORE)
@@ -104,10 +104,10 @@ AM_CONDITIONAL([ResourcesAllow], [test -d data])
 AC_FUNC_CLOSEDIR_VOID
 AC_FUNC_MKTIME
 AC_FUNC_SELECT_ARGTYPES
-AC_TYPE_SIGNAL
+# AC_TYPE_SIGNAL
 AC_FUNC_STAT
-#AC_CHECK_FUNCS([getcwd gethostbyname inet_ntoa memmove memset mkdir nl_langinfo pow select setenv setlocale socket strdup strerror strtol uname])
-AC_ISC_POSIX
+# AC_CHECK_FUNCS([getcwd gethostbyname inet_ntoa memmove memset mkdir nl_langinfo pow select setenv setlocale socket strdup strerror strtol uname])
+# AC_ISC_POSIX
 
 oscd_moduldir=\${libdir}/${PACKAGE}
 oscd_datadir=\${datadir}/${PACKAGE}
@@ -137,21 +137,22 @@ if test -d data; then
 fi
 
 #====== Generic functions enable/disable ======
-AC_ARG_ENABLE(CrossCompile, AC_HELP_STRING([--enable-CrossCompile],[enable the crosscompile build]), [],
+AC_ARG_ENABLE(CrossCompile, AS_HELP_STRING([--enable-CrossCompile],[enable the crosscompile build]), [],
     [if test $host = $build; then enable_CrossCompile=no; else enable_CrossCompile=yes; fi])
-AC_ARG_ENABLE(CoreLibStatic, AC_HELP_STRING([--enable-CoreLibStatic],[enable OpenSCADA core library to build only in static, without the shared one.]),
+AC_ARG_ENABLE(CoreLibStatic, AS_HELP_STRING([--enable-CoreLibStatic],[enable OpenSCADA core library to build only in static, without the shared one.]),
     [], [enable_CoreLibStatic=no; LIB_MOD="\$(top_builddir)/src/liboscada.la"])
 AM_CONDITIONAL([CoreLibStatic], [test $enable_CoreLibStatic != no])
-AC_ARG_ENABLE(CoreLibVersion, AC_HELP_STRING([--disable-CoreLibVersion],[disable version for OpenSCADA core library.]), [], [enable_CoreLibVersion=yes;])
+AC_ARG_ENABLE(CoreLibVersion, AS_HELP_STRING([--disable-CoreLibVersion],[disable version for OpenSCADA core library.]), [], [enable_CoreLibVersion=yes;])
 if test $enable_CoreLibVersion = yes; then liboscada_la_LDFLAGS="-version-info ${oscd_LIBREVISION}"; else liboscada_la_LDFLAGS="-avoid-version"; fi
 AC_SUBST(liboscada_la_LDFLAGS)
-AC_ARG_ENABLE(LibGD, AC_HELP_STRING([--enable-LibGD], [enable/force of using the library LibGD into the core or the modules]), [], [enable_LibGD=no;])
+AC_ARG_ENABLE(LibGD, AS_HELP_STRING([--enable-LibGD], [enable/force of using the library LibGD into the core or the modules]), [], [enable_LibGD=no;])
 AC_ARG_ENABLE(AllModuls,
-    AC_HELP_STRING([--enable-AllModuls],[all modules to enable (yes), to include/builtin (incl), for a distributive (dist) or to disable (no) for next its separated selection]),
+    AS_HELP_STRING([--enable-AllModuls],[all modules to enable (yes), to include/builtin (incl), for a distributive (dist) or to disable (no) for next its separated selection]),
 	[],[enable_AllModuls=individual;])
 
-AC_MSG_RESULT([========== Check for libraries of the core =============])
-AX_PTHREAD
+AC_MSG_RESULT([========== Checking for libraries of the core =============])
+# AX_PTHREAD
+AC_SEARCH_LIBS(pthread, [pthread_create])
 if test $enable_CrossCompile = no; then
     AC_FUNC_MALLOC
     AC_FUNC_REALLOC
@@ -340,7 +341,7 @@ AX_MOD_UI_EN(Vision, [disable or enable[=incl] compilation module UI.Vision], di
     AX_LIB_FFTW3()
     AX_LIB_Qt()
 
-    AC_ARG_ENABLE(QtWebEngine, AC_HELP_STRING([--disable-QtWebEngine], [disable of using Qt Web Engine]), [], [
+    AC_ARG_ENABLE(QtWebEngine, AS_HELP_STRING([--disable-QtWebEngine], [disable of using Qt Web Engine]), [], [
 	AC_SUBST(QtWebEngine_CFLAGS)
 	AC_SUBST(QtWebEngine_LIBS)
 	AS_IF([test "x${Qt4_use}" != "x"], [
@@ -372,7 +373,7 @@ AX_MOD_UI_EN(Vision, [disable or enable[=incl] compilation module UI.Vision], di
 	])
     ])
 
-    AC_ARG_ENABLE(QtMultimediaEngine, AC_HELP_STRING([--disable-QtMultimediaEngine], [disable of using Qt MultimediaEngine]), [], [
+    AC_ARG_ENABLE(QtMultimediaEngine, AS_HELP_STRING([--disable-QtMultimediaEngine], [disable of using Qt MultimediaEngine]), [], [
 	AC_SUBST(QtMultimediaEngine_CFLAGS)
 	AC_SUBST(QtMultimediaEngine_LIBS)
 	AS_IF([test "x${Qt4_use}" != "x"], [

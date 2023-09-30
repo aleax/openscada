@@ -1,3 +1,22 @@
+2023-09-30 Roman (stable)
+- !!!!:configure.ac,acinclude.m4: Cleaned from the deprecated macroses in AutoConf 2.70:
+    - AC_HELP_STRING renamed to AS_HELP_STRING;
+    - AM_CONFIG_HEADER renamed to AC_CONFIG_HEADER;
+    - AC_LIBTOOL_DLOPEN replaced by LT_INIT([dlopen]);
+    - AX_PTHREAD replaced by AC_SEARCH_LIBS(pthread, [pthread_create])
+    - commented for AC_PROG_LIBTOOL, AM_PROG_LIBTOOL, AC_HEADER_STDC, AC_HEADER_TIME, AC_TYPE_SIGNAL, AC_ISC_POSIX.
+- !!!!:acinclude.m4,DAQ.OPC_UA.libOPC_UA,Transport.SSL,Special.FLibSYS: Cleaned from deprecated functions in OpenSSL 3.0:
+    - acinclude.m4: testing function of the macro AX_LIB_OpenSSL() and AX_LIB_OpenSSL_opt() for libcrypto
+	    replaced from MD5_Init() to BIO_new();
+	testing function of the macro AX_LIB_OpenSSL() for libssl replaced from SSL_free() to SSL_new();
+    - OPC_UA.libOPC_UA: UA::symmetricEncrypt() and UA::symmetricDecrypt() merged to UA::symmetricCrypt()
+	    and switched for using EVP_CipherInit() and EVP_CipherUpdate() instead AES_cbc_encrypt();
+	- using of RSA_public_encrypt() moved to EVP_PKEY_encrypt() of RSA_private_decrypt() moved to EVP_PKEY_decrypt()
+	    for new versions.
+    - Transport.SSL,Special.FLibSYS: using of MD5() moved to EVP_DigestInit_ex(), EVP_DigestUpdate(), EVP_DigestFinal_ex()
+	for new versions.
+
+
 2023-09-22 Roman (stable)
 - !!!!:FIX:SYS: Finished in true building with the core library only in static:
 	- configure.ac: the configuration option --enable-CoreLibStatic expanded for definition the AM_CONDITIONAL(CoreLibStatic)

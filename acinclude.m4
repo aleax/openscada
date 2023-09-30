@@ -45,7 +45,7 @@
 AC_DEFUN([AX_LIB_MYSQL],
 [
     AC_ARG_WITH([mysql],
-        AC_HELP_STRING([--with-mysql=@<:@ARG@:>@],
+        AS_HELP_STRING([--with-mysql=@<:@ARG@:>@],
             [use MySQL client library @<:@default=yes@:>@, optionally specify path to mysql_config]
         ),
         [
@@ -185,7 +185,7 @@ AC_DEFUN([AX_LIB_MYSQL],
 AC_DEFUN([AX_LIB_FIREBIRD],
 [
     AC_ARG_WITH([firebird],
-	AC_HELP_STRING(
+	AS_HELP_STRING(
 	    [--with-firebird=@<:@ARG@:>@],
 	    [use Firebird client library @<:@default=yes@:>@, optionally specify the prefix for firebird library]
 	),
@@ -344,7 +344,7 @@ AC_DEFUN([AX_LIB_FIREBIRD],
 AC_DEFUN([AX_LIB_SQLITE3],
 [
     AC_ARG_WITH([sqlite3],
-        AC_HELP_STRING(
+        AS_HELP_STRING(
             [--with-sqlite3=@<:@ARG@:>@],
             [use SQLite 3 library @<:@default=yes@:>@, optionally specify the prefix for sqlite3 library]
         ),
@@ -1375,9 +1375,9 @@ AC_DEFUN([AX_LIB_OpenSSL], [
     if test "x${OpenSSLuse}" = "x"; then
 	AC_CHECK_HEADERS([openssl/ssl.h openssl/err.h openssl/bio.h openssl/md5.h], [],
 	    AC_MSG_ERROR([Some OpenSSL headers aren't found. Install or check the OpenSSL developing package!]))
-	AC_CHECK_LIB(crypto, MD5_Init, [],
+	AC_CHECK_LIB(crypto, BIO_new, [],
 	    AC_MSG_ERROR([OpenSSL libcrypto isn't found. Install or check the OpenSSL installation!]))
-	AC_CHECK_LIB(ssl, SSL_free, [],
+	AC_CHECK_LIB(ssl, SSL_new, [],
 	    AC_MSG_ERROR([OpenSSL libssl isn't found. Install or check the OpenSSL installation!]))
 	LIB_OpenSSL="-lssl -lcrypto"
 	AC_SUBST(LIB_OpenSSL)
@@ -1387,7 +1387,7 @@ AC_DEFUN([AX_LIB_OpenSSL], [
 AC_DEFUN([AX_LIB_OpenSSL_opt], [
     if test "x${OpenSSLuse}" = "x"; then
 	AC_CHECK_HEADERS([openssl/ssl.h openssl/err.h openssl/bio.h openssl/md5.h],
-	    AC_CHECK_LIB(crypto, MD5_Init, [
+	    AC_CHECK_LIB(crypto, BIO_new, [
 		LIB_OpenSSL="-lssl -lcrypto"
 		AC_SUBST(LIB_OpenSSL)
 		OpenSSLuse=true
@@ -1556,7 +1556,7 @@ AC_DEFUN([AX_LIB_Qt],
 #   This macro calls:
 #
 #     AC_ARG_ENABLE()
-#     AC_HELP_STRING()
+#     AS_HELP_STRING()
 #     AM_CONDITIONAL()
 #     AS_IF()
 #
@@ -1575,7 +1575,7 @@ AC_DEFUN([AX_LIB_Qt],
 
 AC_DEFUN([AX_MOD_EN],
 [
-    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],
+    AC_ARG_ENABLE([$1],AS_HELP_STRING([--$3-$1],[$2]),[ ],
     [
 	if test "x$3" = "xdisable"; then
 	    if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
@@ -1591,7 +1591,7 @@ AC_DEFUN([AX_MOD_EN],
 
 AC_DEFUN([AX_MOD_DB_EN],
 [
-    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],[
+    AC_ARG_ENABLE([$1],AS_HELP_STRING([--$3-$1],[$2]),[ ],[
 	    if test "x$3" = "xdisable"; then
 		if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
 		else enable_$1=yes; fi
@@ -1618,7 +1618,7 @@ AC_DEFUN([AX_MOD_DB_EN],
 
 AC_DEFUN([AX_MOD_DAQ_EN],
 [
-    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],[
+    AC_ARG_ENABLE([$1],AS_HELP_STRING([--$3-$1],[$2]),[ ],[
 	    if test "x$3" = "xdisable"; then
 		if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
 		else enable_$1=yes; fi
@@ -1645,7 +1645,7 @@ AC_DEFUN([AX_MOD_DAQ_EN],
 
 AC_DEFUN([AX_MOD_Archive_EN],
 [
-    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],[
+    AC_ARG_ENABLE([$1],AS_HELP_STRING([--$3-$1],[$2]),[ ],[
 	    if test "x$3" = "xdisable"; then
 		if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
 		else enable_$1=yes; fi
@@ -1672,7 +1672,7 @@ AC_DEFUN([AX_MOD_Archive_EN],
 
 AC_DEFUN([AX_MOD_Transport_EN],
 [
-    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],[
+    AC_ARG_ENABLE([$1],AS_HELP_STRING([--$3-$1],[$2]),[ ],[
 	    if test "x$3" = "xdisable"; then
 		if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
 		else enable_$1=yes; fi
@@ -1699,7 +1699,7 @@ AC_DEFUN([AX_MOD_Transport_EN],
 
 AC_DEFUN([AX_MOD_TrProt_EN],
 [
-    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],[
+    AC_ARG_ENABLE([$1],AS_HELP_STRING([--$3-$1],[$2]),[ ],[
 	    if test "x$3" = "xdisable"; then
 		if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
 		else enable_$1=yes; fi
@@ -1726,7 +1726,7 @@ AC_DEFUN([AX_MOD_TrProt_EN],
 
 AC_DEFUN([AX_MOD_UI_EN],
 [
-    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],[
+    AC_ARG_ENABLE([$1],AS_HELP_STRING([--$3-$1],[$2]),[ ],[
 	    if test "x$3" = "xdisable"; then
 		if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
 		else enable_$1=yes; fi
@@ -1753,7 +1753,7 @@ AC_DEFUN([AX_MOD_UI_EN],
 
 AC_DEFUN([AX_MOD_Special_EN],
 [
-    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],[
+    AC_ARG_ENABLE([$1],AS_HELP_STRING([--$3-$1],[$2]),[ ],[
 	    if test "x$3" = "xdisable"; then
 		if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
 		else enable_$1=yes; fi

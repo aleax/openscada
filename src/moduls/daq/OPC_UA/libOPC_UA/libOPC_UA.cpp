@@ -980,31 +980,50 @@ string UA::asymmetricEncrypt( const string &mess, const string &certPem, const s
     X509 *x = NULL;
     BIO *bm = NULL;
     EVP_PKEY *pkey = NULL;
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+    EVP_PKEY_CTX *ctx = NULL;
+    size_t blen = 0;
+#else
     RSA *rsa = NULL;
+    int blen = 0;
+#endif
 
     int paddSize = 11, padd = RSA_PKCS1_PADDING;
-    if(secPolicy.find("Rsa15") == string::npos) { paddSize = 42; padd = RSA_PKCS1_OAEP_PADDING; }
+    if(secPolicy.find("Rsa15") == string::npos) paddSize = 42, padd = RSA_PKCS1_OAEP_PADDING;
 
     if(!certPem.empty() && !mess.empty()) bm = BIO_new(BIO_s_mem());
     if(bm && BIO_write(bm,certPem.data(),certPem.size()) == (int)certPem.size())
 	x = PEM_read_bio_X509_AUX(bm, NULL, NULL, NULL);
     if(x)	pkey = X509_get_pubkey(x);
+
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+    if(pkey)	ctx = EVP_PKEY_CTX_new(pkey, NULL);
+    if(ctx && EVP_PKEY_encrypt_init(ctx) > 0 && EVP_PKEY_CTX_set_rsa_padding(ctx,padd) > 0)
+		keysize = (EVP_PKEY_get_bits(pkey)+7)/8;
+#else
     if(pkey)	rsa = EVP_PKEY_get1_RSA(pkey);
     if(rsa)	keysize = RSA_size(rsa);
+#endif
     if(keysize && !(mess.size()%(keysize-paddSize))) {
 	unsigned char rsaOut[keysize];
-	for(unsigned i_b = 0; i_b < mess.size()/(keysize-paddSize); i_b++) {
-	    int blen = RSA_public_encrypt((keysize-paddSize),
-		(const unsigned char *)(mess.data()+i_b*(keysize-paddSize)), rsaOut, rsa, padd);
-	    if(blen <= 0) break;
-	    rez.append((char*)rsaOut, blen);
-	}
+	for(unsigned iB = 0; iB < mess.size()/(keysize-paddSize); ++iB)
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+	    if(EVP_PKEY_encrypt(ctx,rsaOut,&blen,(const unsigned char *)(mess.data()+iB*(keysize-paddSize)),(keysize-paddSize)) <= 0)
+#else
+	    if((blen=RSA_public_encrypt((keysize-paddSize),(const unsigned char *)(mess.data()+iB*(keysize-paddSize)),rsaOut,rsa,padd)) <= 0)
+#endif
+		break;
+	    else rez.append((char*)rsaOut, blen);
     }
 
     //Free temporary data
     if(pkey)	EVP_PKEY_free(pkey);
     if(bm)	BIO_free(bm);
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+    if(ctx)	EVP_PKEY_CTX_free(ctx);
+#else
     if(rsa)	RSA_free(rsa);
+#endif
     if(x)	X509_free(x);
 
     if(rez.empty()) {
@@ -1019,30 +1038,53 @@ string UA::asymmetricEncrypt( const string &mess, const string &certPem, const s
 string UA::asymmetricDecrypt( const string &mess, const string &keyPem, const string &secPolicy )
 {
     int keysize = 0;
-    BIO *bm = NULL;
-    RSA *rsa = NULL;
-    EVP_PKEY *pkey = NULL;
     string rez = "";
+    BIO *bm = NULL;
+    EVP_PKEY *pkey = NULL;
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+    EVP_PKEY_CTX *ctx = NULL;
+    size_t blen = 0;
+#else
+    RSA *rsa = NULL;
+    int blen = 0;
+#endif
+
+    int padd = RSA_PKCS1_PADDING;
+    if(secPolicy.find("Rsa15") == string::npos) padd = RSA_PKCS1_OAEP_PADDING;
 
     if(!keyPem.empty() && !mess.empty()) bm = BIO_new(BIO_s_mem());
     if(bm && BIO_write(bm,keyPem.data(),keyPem.size()) == (int)keyPem.size())
 	pkey = PEM_read_bio_PrivateKey(bm, NULL, 0, (char*)"keypass");
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+    if(pkey)	ctx = EVP_PKEY_CTX_new(pkey, NULL);
+    if(ctx && EVP_PKEY_decrypt_init(ctx) > 0 && EVP_PKEY_CTX_set_rsa_padding(ctx,padd) > 0)
+		keysize = (EVP_PKEY_get_bits(pkey)+7)/8;
+#else
     if(pkey)	rsa = EVP_PKEY_get1_RSA(pkey);
     if(rsa)	keysize = RSA_size(rsa);
+#endif
     if(keysize && !(mess.size()%keysize)) {
 	unsigned char rsaOut[keysize];
-	for(unsigned i_b = 0; i_b < mess.size()/keysize; i_b++) {
-	    int blen = RSA_private_decrypt(keysize, (const unsigned char *)(mess.data()+i_b*keysize), rsaOut, rsa,
-		((secPolicy.find("Rsa15") == string::npos) ? RSA_PKCS1_OAEP_PADDING : RSA_PKCS1_PADDING));
-	    if(blen <= 0) break;
-	    rez.append((char*)rsaOut, blen);
+	for(unsigned iB = 0; iB < mess.size()/keysize; ++iB) {
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+	    blen = keysize;
+	    if(EVP_PKEY_decrypt(ctx,rsaOut,&blen,(const unsigned char*)(mess.data()+iB*keysize),keysize) <= 0)
+#else
+	    if((blen=RSA_private_decrypt(keysize,(const unsigned char*)(mess.data()+iB*keysize),rsaOut,rsa,padd)) <= 0)
+#endif
+		break;
+	    else rez.append((char*)rsaOut, blen);
 	}
     }
 
     //Free temporary data
     if(pkey)	EVP_PKEY_free(pkey);
     if(bm)	BIO_free(bm);
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+    if(ctx)	EVP_PKEY_CTX_free(ctx);
+#else
     if(rsa)	RSA_free(rsa);
+#endif
 
     if(rez.empty()) {
 	char err[255];
@@ -1166,7 +1208,7 @@ string UA::deriveKey( const string &secret, const string &seed, int keyLen )
     return string((const char*)hashRez, keyLen);
 }
 
-string UA::symmetricEncrypt( const string &mess, const string &keySet, const string &secPolicy )
+string UA::symmetricCrypt( const string &mess, const string &keySet, const string &secPolicy, bool encrypt )
 {
     if(mess.empty() || keySet.size() < (3*16)) return "";
     int keySize = keySet.size()/3;
@@ -1174,16 +1216,29 @@ string UA::symmetricEncrypt( const string &mess, const string &keySet, const str
     if(secPolicy == "Basic256") signSize = 24;
 
     unsigned char obuf[mess.size()], ivecb[keySize];
-
-    AES_KEY key;
-    AES_set_encrypt_key((const unsigned char*)(keySet.data()+signSize), keySize*8, &key);
     memcpy(ivecb, keySet.data()+signSize+keySize, keySize);
-    AES_cbc_encrypt((const unsigned char*)mess.data(), obuf, mess.size(), &key, ivecb, 1);
+
+    //!!!! Old
+    /*AES_KEY key;
+    if(encrypt)
+	AES_set_encrypt_key((const unsigned char*)(keySet.data()+signSize), keySize*8, &key);
+    else AES_set_decrypt_key((const unsigned char*)(keySet.data()+signSize), keySize*8, &key);
+    AES_cbc_encrypt((const unsigned char*)mess.data(), obuf, mess.size(), &key, ivecb, encrypt);*/
+
+    //!!!! New
+    int obufl = 0;
+    unsigned char key[keySize];
+    memcpy(key, keySet.data()+signSize, keySize);
+    EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+    EVP_CipherInit(ctx, (keySize==32)?EVP_aes_256_cbc():EVP_aes_128_cbc(), key, ivecb, encrypt);
+    EVP_CIPHER_CTX_set_padding(ctx, false);
+    EVP_CipherUpdate(ctx, obuf, &obufl, (const unsigned char*)mess.data(), mess.size());
+    EVP_CIPHER_CTX_free(ctx);
 
     return string((char*)obuf, mess.size());
 }
 
-string UA::symmetricDecrypt( const string &mess, const string &keySet, const string &secPolicy )
+/*string UA::symmetricDecrypt( const string &mess, const string &keySet, const string &secPolicy )
 {
     if(mess.empty() || keySet.size() < (3*16)) return "";
     int keySize = keySet.size()/3;
@@ -1198,7 +1253,7 @@ string UA::symmetricDecrypt( const string &mess, const string &keySet, const str
     AES_cbc_encrypt((const unsigned char*)mess.data(), obuf, mess.size(), &key, ivecb, 0);
 
     return string((char*)obuf, mess.size());
-}
+}*/
 
 string UA::symmetricSign( const string &mess, const string &keySet, const string &secPolicy )
 {
@@ -1384,7 +1439,7 @@ void Client::protIO( XML_N &io )
 		    rez += symmetricSign(rez, sess.servKey, sess.secPolicy);
 		    // Encoding
 		    if(sess.secMessMode == MS_SignAndEncrypt)
-			rez.replace(begEncBlck, rez.size()-begEncBlck, symmetricEncrypt(rez.substr(begEncBlck),sess.servKey,sess.secPolicy));
+			rez.replace(begEncBlck, rez.size()-begEncBlck, symmetricCrypt(rez.substr(begEncBlck),sess.servKey,sess.secPolicy,true));
 		}
 
 		//Parameters clear
@@ -1738,7 +1793,7 @@ void Client::protIO( XML_N &io )
 
 			    // Encoding
 			    if(sess.secMessMode == MS_SignAndEncrypt)
-				req.replace(begEncBlck, req.size()-begEncBlck, symmetricEncrypt(req.substr(begEncBlck),sess.servKey,sess.secPolicy));
+				req.replace(begEncBlck, req.size()-begEncBlck, symmetricCrypt(req.substr(begEncBlck),sess.servKey,sess.secPolicy,true));
 			}
 
 			//Sending the request
@@ -1889,7 +1944,7 @@ void Client::protIO( XML_N &io )
 		    // Decrypt message block and signature check
 		    if(sess.secMessMode == MS_Sign || sess.secMessMode == MS_SignAndEncrypt) {
 			if(sess.secMessMode == MS_SignAndEncrypt)
-			    rb.replace(off, rb.size()-off, symmetricDecrypt(rb.substr(off),sess.clKey,sess.secPolicy));
+			    rb.replace(off, rb.size()-off, symmetricCrypt(rb.substr(off),sess.clKey,sess.secPolicy,false));
 			if(rb.substr(rb.size()-20) != symmetricSign(rb.substr(0,rb.size()-20),sess.clKey,sess.secPolicy))	//Check Signature
 			    throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Signature error");
 			rb.erase(rb.size()-20);				//Remove the signature
@@ -2839,7 +2894,7 @@ nextReq:
 	    if(scHd.tokenId != tokId)	throw OPCError(OpcUa_BadSecureChannelTokenUnknown, "Secure channel unknown");
 	    // Decrypt message block
 	    if(scHd.secMessMode == MS_SignAndEncrypt)
-		rb.replace(off, rb.size()-off, symmetricDecrypt(rb.substr(off),scHd.servKey,scHd.secPolicy));
+		rb.replace(off, rb.size()-off, symmetricCrypt(rb.substr(off),scHd.servKey,scHd.secPolicy,false));
 								//> Sequence header
 	    iNu(rb, off, 4);					//Sequence number
 	    iNu(rb, off, 4);					//RequestId
@@ -2886,7 +2941,7 @@ nextReq:
 	    // Decrypt message block and signature check
 	    if(rb[3] != 'Q' && (scHd.secMessMode == MS_Sign || scHd.secMessMode == MS_SignAndEncrypt)) {
 		if(scHd.secMessMode == MS_SignAndEncrypt)
-		    rb.replace(off, rb.size()-off, symmetricDecrypt(rb.substr(off),scHd.servKey,scHd.secPolicy));
+		    rb.replace(off, rb.size()-off, symmetricCrypt(rb.substr(off),scHd.servKey,scHd.secPolicy,false));
 		if(rb.substr(rb.size()-20) != symmetricSign(rb.substr(0,rb.size()-20),scHd.servKey,scHd.secPolicy))	//Check the signature
 		    throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Signature error");
 		rb.erase(rb.size()-20);				//Remove the signature
@@ -4006,7 +4061,7 @@ nextReq:
 
 		    //Encoding
 		    if(scHd.secMessMode == MS_SignAndEncrypt)
-			resp.replace(begEncBlck, resp.size()-begEncBlck, symmetricEncrypt(resp.substr(begEncBlck),scHd.clKey,scHd.secPolicy));
+			resp.replace(begEncBlck, resp.size()-begEncBlck, symmetricCrypt(resp.substr(begEncBlck),scHd.clKey,scHd.secPolicy,true));
 		}
 		if(answ && isFinal) out += resp;	//!!!! isFinal is to ensure separate packages for chunks
 		else writeToClient(inPrtId, resp);

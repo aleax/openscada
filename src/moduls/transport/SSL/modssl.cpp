@@ -29,7 +29,9 @@
 #include <netdb.h>
 #include <netinet/tcp.h>
 #include <openssl/rand.h>
-#include <openssl/md5.h>
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+# include <openssl/md5.h>
+#endif
 
 #include <tsys.h>
 #include <tmess.h>
@@ -54,7 +56,7 @@
 #define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.3.8"
+#define MOD_VER		"4.4.0"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and supported SSL-TLS depending on the library version.")
@@ -275,10 +277,21 @@ string TTransSock::MD5( const string &file )
     if(close(hd) != 0)
 	mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 
-    unsigned char result[MD5_DIGEST_LENGTH];
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+    EVP_MD_CTX *mdctx = EVP_MD_CTX_new();
+    EVP_DigestInit_ex(mdctx, EVP_md5(), NULL);
+    EVP_DigestUpdate(mdctx, (unsigned char*)data.data(), data.size());
+    unsigned int result_len = EVP_MD_size(EVP_md5());
+    unsigned char *result = (unsigned char *)OPENSSL_malloc(result_len);
+    EVP_DigestFinal_ex(mdctx, result, &result_len);
+    EVP_MD_CTX_free(mdctx);
+#else
+    unsigned int result_len = MD5_DIGEST_LENGTH;
+    unsigned char result[result_len];
     ::MD5((unsigned char*)data.data(), data.size(), result);
+#endif
 
-    return string((char*)result, MD5_DIGEST_LENGTH);
+    return string((char*)result, result_len);
 }
 
 //************************************************

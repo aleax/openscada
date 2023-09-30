@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibSYS file: sysfnc.h
 /***************************************************************************
- *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,8 +28,11 @@
 
 #include "statfunc.h"
 
-#ifdef HAVE_OPENSSL_MD5_H
-# include <openssl/md5.h>
+#if HAVE_OPENSSL_SSL_H
+# include "openssl/ssl.h"
+# if OPENSSL_VERSION_NUMBER < 0x10100000L
+#  include <openssl/md5.h>
+# endif
 #endif
 
 namespace FLibSYS
@@ -585,7 +588,7 @@ class CRC : public TFunction
 	}
 };
 
-#ifdef HAVE_OPENSSL_MD5_H
+#if HAVE_OPENSSL_SSL_H
 //*************************************************
 //* Message Digest 5                              *
 //*************************************************
@@ -602,9 +605,21 @@ class MD5 : public TFunction
 
 	void calc( TValFunc *val ) {
 	    string data = val->getS(1);
-	    unsigned char result[MD5_DIGEST_LENGTH];
+
+# if OPENSSL_VERSION_NUMBER >= 0x10100000L
+	    EVP_MD_CTX *mdctx = EVP_MD_CTX_new();
+	    EVP_DigestInit_ex(mdctx, EVP_md5(), NULL);
+	    EVP_DigestUpdate(mdctx, (unsigned char*)data.data(), data.size());
+	    unsigned int result_len = EVP_MD_size(EVP_md5());
+	    unsigned char *result = (unsigned char *)OPENSSL_malloc(result_len);
+	    EVP_DigestFinal_ex(mdctx, result, &result_len);
+	    EVP_MD_CTX_free(mdctx);
+# else
+	    unsigned int result_len = MD5_DIGEST_LENGTH;
+	    unsigned char result[result_len];
 	    ::MD5((unsigned char*)data.data(), data.size(), result);
-	    val->setS(0, string((char*)result, MD5_DIGEST_LENGTH));
+# endif
+	    val->setS(0, string((char*)result, result_len));
 	}
 };
 #endif
