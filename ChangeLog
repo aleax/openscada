@@ -1,4 +1,8 @@
 2023-09-30 Roman (stable)
+- DAQ.OPC_UA.libOPC_UA: Restored in building with OpenSSL < 3.0 and >= 1.0.
+
+
+2023-09-30 Roman (stable)
 - !!!!:configure.ac,acinclude.m4: Cleaned from the deprecated macroses in AutoConf 2.70:
     - AC_HELP_STRING renamed to AS_HELP_STRING;
     - AM_CONFIG_HEADER renamed to AC_CONFIG_HEADER;

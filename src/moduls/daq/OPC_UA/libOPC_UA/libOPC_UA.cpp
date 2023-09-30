@@ -980,7 +980,7 @@ string UA::asymmetricEncrypt( const string &mess, const string &certPem, const s
     X509 *x = NULL;
     BIO *bm = NULL;
     EVP_PKEY *pkey = NULL;
-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+#if OPENSSL_VERSION_NUMBER >= 0x30000000L
     EVP_PKEY_CTX *ctx = NULL;
     size_t blen = 0;
 #else
@@ -996,7 +996,7 @@ string UA::asymmetricEncrypt( const string &mess, const string &certPem, const s
 	x = PEM_read_bio_X509_AUX(bm, NULL, NULL, NULL);
     if(x)	pkey = X509_get_pubkey(x);
 
-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+#if OPENSSL_VERSION_NUMBER >= 0x30000000L
     if(pkey)	ctx = EVP_PKEY_CTX_new(pkey, NULL);
     if(ctx && EVP_PKEY_encrypt_init(ctx) > 0 && EVP_PKEY_CTX_set_rsa_padding(ctx,padd) > 0)
 		keysize = (EVP_PKEY_get_bits(pkey)+7)/8;
@@ -1007,7 +1007,7 @@ string UA::asymmetricEncrypt( const string &mess, const string &certPem, const s
     if(keysize && !(mess.size()%(keysize-paddSize))) {
 	unsigned char rsaOut[keysize];
 	for(unsigned iB = 0; iB < mess.size()/(keysize-paddSize); ++iB)
-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+#if OPENSSL_VERSION_NUMBER >= 0x30000000L
 	    if(EVP_PKEY_encrypt(ctx,rsaOut,&blen,(const unsigned char *)(mess.data()+iB*(keysize-paddSize)),(keysize-paddSize)) <= 0)
 #else
 	    if((blen=RSA_public_encrypt((keysize-paddSize),(const unsigned char *)(mess.data()+iB*(keysize-paddSize)),rsaOut,rsa,padd)) <= 0)
@@ -1019,7 +1019,7 @@ string UA::asymmetricEncrypt( const string &mess, const string &certPem, const s
     //Free temporary data
     if(pkey)	EVP_PKEY_free(pkey);
     if(bm)	BIO_free(bm);
-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+#if OPENSSL_VERSION_NUMBER >= 0x30000000L
     if(ctx)	EVP_PKEY_CTX_free(ctx);
 #else
     if(rsa)	RSA_free(rsa);
@@ -1041,7 +1041,7 @@ string UA::asymmetricDecrypt( const string &mess, const string &keyPem, const st
     string rez = "";
     BIO *bm = NULL;
     EVP_PKEY *pkey = NULL;
-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+#if OPENSSL_VERSION_NUMBER >= 0x30000000L
     EVP_PKEY_CTX *ctx = NULL;
     size_t blen = 0;
 #else
@@ -1055,7 +1055,7 @@ string UA::asymmetricDecrypt( const string &mess, const string &keyPem, const st
     if(!keyPem.empty() && !mess.empty()) bm = BIO_new(BIO_s_mem());
     if(bm && BIO_write(bm,keyPem.data(),keyPem.size()) == (int)keyPem.size())
 	pkey = PEM_read_bio_PrivateKey(bm, NULL, 0, (char*)"keypass");
-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+#if OPENSSL_VERSION_NUMBER >= 0x30000000L
     if(pkey)	ctx = EVP_PKEY_CTX_new(pkey, NULL);
     if(ctx && EVP_PKEY_decrypt_init(ctx) > 0 && EVP_PKEY_CTX_set_rsa_padding(ctx,padd) > 0)
 		keysize = (EVP_PKEY_get_bits(pkey)+7)/8;
@@ -1066,7 +1066,7 @@ string UA::asymmetricDecrypt( const string &mess, const string &keyPem, const st
     if(keysize && !(mess.size()%keysize)) {
 	unsigned char rsaOut[keysize];
 	for(unsigned iB = 0; iB < mess.size()/keysize; ++iB) {
-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+#if OPENSSL_VERSION_NUMBER >= 0x30000000L
 	    blen = keysize;
 	    if(EVP_PKEY_decrypt(ctx,rsaOut,&blen,(const unsigned char*)(mess.data()+iB*keysize),keysize) <= 0)
 #else
@@ -1080,7 +1080,7 @@ string UA::asymmetricDecrypt( const string &mess, const string &keyPem, const st
     //Free temporary data
     if(pkey)	EVP_PKEY_free(pkey);
     if(bm)	BIO_free(bm);
-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+#if OPENSSL_VERSION_NUMBER >= 0x30000000L
     if(ctx)	EVP_PKEY_CTX_free(ctx);
 #else
     if(rsa)	RSA_free(rsa);
