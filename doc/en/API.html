@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/API</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/API.html" title="Документы/API (2% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../uk/API.html" title="Документи/API (32% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint nomobile" dir="ltr" lang="en">This page contains <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Documents/API&amp;oldid=81159&amp;diff=82234" rel="nofollow noreferrer noopener" target="_blank">changes</a></span> which are not marked for translation.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/API.html" title="Документы/API (2% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../uk/API.html" title="Документи/API (32% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
@@ -1083,7 +1083,8 @@ Additional flags to the object <a href="#TFld">#TFld</a> (enum TVal::AttrFlag):
 <li> <i>void setFld( TFld &amp;fld );</i> — Initialization as the repository of dynamic data.</li>
 <li> <i>void setCfg( TCfg &amp;cfg );</i> — Initialization as the reflection of static data (DB).</li>
 <li> <i>string name( );</i> — Attribute's name.</li>
-<li> <i>int64_t time( );</i> — Time marker of the the last/current value (10<sup>-6</sup>s).</li>
+<li> <i>int64_t time( );</i> — Timestamp of the the last/current value (10<sup>-6</sup>s).</li>
+<li> <i>void setTime( int64_t vl );</i> — Setting the timestamp outside the value setting.</li>
 <li> <i>bool isCfg( );</i> — Sign of the value object created in base of a configuration element.</li>
 <li> <i>bool dataActive( );</i> — Activity (updatable) flag of data.</li>
 <li> <i>string getSEL( long long *tm = NULL, bool sys = false );</i> — Request of the selected type value for the specified time <i>tm</i>. If NULL then it will be returned the last value.</li>
@@ -2472,7 +2473,7 @@ Error values for the different data types (definition):
 </p><p>The container allows you to assemble several information structures and dynamic parts into one request, thereby optimizing the request time, especially on high-latency network interfaces.
 </p><p>The general Control Interface is built from individual nodes of the dynamic tree. Hierarchical inheritance from the object <a href="#TCntrNode">#TCntrNode</a> allows you to implement multi-level addition of the configuration of the Control Interface. The view of the dynamic tree of nodes is shown in Figure 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Enlarge" /></div>Fig.8. An example of the dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Збільшити" /></div>Fig.8. An example of the dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
 <p>Nodes, containing data for the Control Interface, should also be connected to the dynamic object tree.
 </p><p>Connection of the node to the dynamic tree is done as follows:
 </p>
@@ -5021,5 +5022,5 @@ Error codes (enum — TError::Codes):
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2919</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2925</td></tr></table></body>
 </html>
