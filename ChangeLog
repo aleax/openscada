@@ -1,3 +1,17 @@
+2023-10-08 Roman (stable)
+- DAQ: The TVal object appended by the function setTime().
+- !!:FIX:DAQ.DAQGate: Time of the requesting archive increased for 1 microsecond to prevent of spare values requesting
+	and their direct rewriting to the archives.
+    !!: Improved in work with remote host without the time sync:
+	- the values can be in future up to one hour;
+	- the remote host timestamp always used at the archive presence even in the tag "<vl>";
+	- appended of detection the remote host time for its display and using in timestamp the changed values.
+    FIX: Prevented of the foreign packages processing in the response by checking for the "lcPs" presence.
+    Appended by detection of the remote archive presence for hiding the spare requesting tag "<vl>".
+- Archive: TVArchEl::setVals() allowed for processing the data from future not more at one hour, for DAQ.DAQGate mostly.
+- Protocol: The messages "The authentication session for the user '%s' is expired." moved in the debugging space.
+
+
 2023-09-30 Roman (stable)
 - DAQ.OPC_UA.libOPC_UA: Restored in building with OpenSSL < 3.0 and >= 1.0.
 

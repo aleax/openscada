@@ -418,6 +418,8 @@ TVal::~TVal( )
 
 string TVal::objName( )	{ return TCntrNode::objName()+":TVal"; }
 
+void TVal::setTime( int64_t vl ){ mTime = vl ? vl : TSYS::curTime(); }
+
 string TVal::DAQPath( )	{ return owner().DAQPath()+"."+TSYS::strEncode(name(),TSYS::Custom,". "); }
 
 TValue &TVal::owner( ) const	{ return *(TValue*)nodePrev(); }

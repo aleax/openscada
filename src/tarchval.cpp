@@ -1252,10 +1252,10 @@ void TVArchive::setVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
 {
     //Check for put to buffer
     if(((arch.empty() && TValBuf::end()) || arch == ARCH_BUF) && iend > TValBuf::begin()) {
-	bool onlyBuf = (ibeg >= TValBuf::end()) &&
-	    (iend-ibeg)/TValBuf::period() <= TValBuf::size();	//!!!! Allow of writing new data blocks for the redundancy and DAQGate
+	bool onlyBuf = (ibeg >= TValBuf::end() &&
+	    (iend-ibeg)/TValBuf::period() <= TValBuf::size());	//!!!! Allow of writing new data blocks for the redundancy and DAQGate
 	TValBuf::setVals(buf, vmax(ibeg,iend-TValBuf::size()*TValBuf::period()), iend);
-	if(arch == ARCH_BUF || onlyBuf) return;	//To prevent spare writings direct to the archivers
+	if(arch == ARCH_BUF || onlyBuf) return;	//To prevent spare writings directly to the archivers
     }
 
     //Put to the archivers
@@ -2683,8 +2683,7 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end, bool toAccum )
 
     if(!beg || !end) { beg = ibuf.begin(); end = ibuf.end(); }
     beg = vmax((beg/a_per)*a_per, ibuf.begin());
-    end = vmin(end, vmin(ibuf.end(),TSYS::curTime()));	//!!!! Prevents also writing in the future
-
+    end = vmin(end, vmin(ibuf.end(),TSYS::curTime()+3600ll*1000000));	//!!!! Prevents also writing in very future, one hour
     if(!beg || !end || beg/a_per > end/a_per) return;
 
     //Check for put to the buffer

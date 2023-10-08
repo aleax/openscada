@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.12.6"
+#define MOD_VER		"2.13.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -121,7 +121,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     mSched(cfg("SCHEDULE")), mStat(cfg("STATIONS")), mMessLev(cfg("GATH_MESS_LEV")), mRestDtTm(cfg("TM_REST_DT").getRd()),
     mSync(cfg("SYNCPER").getId()), mRestTm(cfg("TM_REST").getId()), mPrior(cfg("PRIOR").getId()),
     mAsynchWr(cfg("WR_ASYNCH").getBd()), mAllowToDelPrmAttr(cfg("ALLOW_DEL_PA").getBd()), mPlaceCntrToVirtPrm(cfg("CNTR_TO_VPRM").getBd()),
-    prcSt(false), callSt(false), syncSt(false), syncForce(false), endrunReq(false), curPat(dataRes()), mPer(1e9)
+    prcSt(false), callSt(false), syncSt(false), syncForce(false), endrunReq(false), mStatTm(0), curPat(dataRes()), mPer(1e9)
 {
     cfg("PRM_BD").setS(MOD_ID"Prm_"+name_c);
 }
@@ -144,6 +144,7 @@ string TMdContr::getStatus( )
 	}
 	val += TSYS::strMess(_("Spent time %s[%s]. "),
 	    tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
+	val += TSYS::strMess(_("Remote time %s. "), atm2s(1e-6*mStatTm).c_str());
 
 	bool isWork = false;
 	for(map<string,StHd>::iterator st = mStatWork.begin(); st != mStatWork.end(); ++st) {
@@ -469,6 +470,8 @@ void TMdContr::start_( )
 {
     if(prcSt) return;
 
+    mStatTm = 0;
+
     //Controllers initialisation for messaging
     map<string, bool> cntrLstMA;
     string cpEl, curPat_, daqTp, cntrId;
@@ -688,13 +691,17 @@ void *TMdContr::Task( void *icntr )
 			    for(unsigned iV = 0; iV < listV.size(); iV++) {
 				if(listV[iV] == "SHIFR") continue;
 				AutoHD<TVal> vl = prm.vlAt(listV[iV]);
-				if(sepReq && (!vl.at().arch().freeStat() || vl.at().reqFlg())) {
+				if(sepReq && ((!vl.at().arch().freeStat() && !vl.at().resB1()) ||	//!!!! Hiding the tag <el> at the remote archive presence
+										vl.at().reqFlg())) {
 				    prmNd->childAdd("el")->setAttr("id",listV[iV]);
 				    rC++;
 				}
-				if(!vl.at().arch().freeStat())
+				if(!vl.at().arch().freeStat())	//?!?! Append the tag <ael> for hiding when missing the remote archive,
+								//     now it is used itself for detection the archive missing.
 				    prmNd->childAdd("ael")->setAttr("id", listV[iV])->
-					setAttr("tm", ll2s(vmax(vl.at().arch().at().end(""),TSYS::curTime()-(int64_t)(3.6e9*cntr.restDtTm()))));
+					setAttr("tm", ll2s(vmax(vl.at().arch().at().end("")+1,	//!!!! +1 to prevent of spare values requesting
+												//     and their direct writing to the archives
+							TSYS::curTime()-(int64_t)(3.6e9*cntr.restDtTm()))));
 			    }
 			    if(sepReq && !prmNd->childSize()) { req.childDel(prmNd); prm.isPrcOK = true; }	//Pass request and mark by processed
 			    if(sepReq && rC > listV.size()/2) {
@@ -781,7 +788,7 @@ void *TMdContr::Task( void *icntr )
 			    SYS->archive().at().messPut(mess, isHistReq?ARCH_NOALRM:"");	//No alarms setting at the initial
 			    stO.numRM += mess.size();
 			}
-			else {
+			else if(prmNd->attr("lcPs").size()) {
 			    TMdPrm &prm = cntr.pHd[s2i(prmNd->attr("lcPs"))].at();
 			    if(prm.isPrcOK) continue;
 			    prm.isPrcOK = true;
@@ -795,9 +802,14 @@ void *TMdContr::Task( void *icntr )
 				if(!prm.vlPresent(tVl)) continue;
 				AutoHD<TVal> vl = prm.vlAt(tVl);
 				if(aNd->name() == "el") {
-				    vl.at().setS(aNd->text(), cntr.restDtTm()?atoll(aNd->attr("tm").c_str()):0, true);
+				    vl.at().setS(aNd->text(),
+						    (!vl.at().arch().freeStat() ||
+						    cntr.restDtTm())?atoll(aNd->attr("tm").c_str()):0,	//!!!! Force to time of the remote host
+													//     for preventing reset the fixed buffer of the value archive
+						    true);
 				    vl.at().setReqFlg(false);
 				    stO.numR++;
+				    cntr.mStatTm = vmax(cntr.mStatTm, atoll(aNd->attr("tm").c_str()));
 				}
 				else if(aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize()) {
 				    int64_t btm = atoll(aNd->attr("tm").c_str());
@@ -808,6 +820,8 @@ void *TMdContr::Task( void *icntr )
 					stO.numRA++;
 				    }
 				    vl.at().arch().at().setVals(buf, buf.begin(), buf.end(), "");
+				    cntr.mStatTm = vmax(cntr.mStatTm, btm + per*aNd->childSize());
+				    if(aNd->childSize()) vl.at().setResB1(true);
 				}
 			    }
 			}
@@ -1122,9 +1136,11 @@ void TMdPrm::load_( )
 	attrsNd.load(cfg("ATTRS").getS());
 	for(unsigned iEl = 0; iEl < attrsNd.childSize(); iEl++) {
 	    XMLNode *aEl = attrsNd.childGet(iEl);
-	    if(vlPresent(aEl->attr("id"))) continue;
-	    pEl.fldAdd(new TFld(aEl->attr("id").c_str(),aEl->attr("nm").c_str(),(TFld::Type)s2i(aEl->attr("tp")),
+	    string aId = aEl->attr("id");
+	    if(vlPresent(aId)) continue;
+	    pEl.fldAdd(new TFld(aId.c_str(),aEl->attr("nm").c_str(),(TFld::Type)s2i(aEl->attr("tp")),
 		s2i(aEl->attr("flg")),"","",aEl->attr("vals").c_str(),aEl->attr("names").c_str()));
+	    vlAt(aId).at().setResB1(false);
 	    //vlAt(aEl->attr("id")).at().setS(aEl->text());
 	}
 	vlAt("err").at().setS(_("10:Data not available."), 0, true);
@@ -1185,14 +1201,17 @@ void TMdPrm::sync( )
 	    // Check and create new attributes
 	    for(unsigned iA = 0; iA < req.childGet(2)->childSize(); iA++) {
 		XMLNode *ael = req.childGet(2)->childGet(iA);
-		als.push_back(ael->attr("id"));
+		string aId = ael->attr("id");
+		als.push_back(aId);
 
-		if(vlPresent(ael->attr("id")))	continue;
-		TFld::Type tp = (TFld::Type)s2i(ael->attr("tp"));
-		pEl.fldAdd(new TFld(ael->attr("id").c_str(),ael->attr("nm").c_str(),tp,
-		    (s2i(ael->attr("flg"))&(TFld::Selectable|TFld::NoWrite|TFld::HexDec|TFld::OctDec|TFld::FullText))|TVal::DirWrite|TVal::DirRead,
-		    "","",ael->attr("vals").c_str(),ael->attr("names").c_str()));
-		modif(true);
+		if(!vlPresent(aId)) {
+		    TFld::Type tp = (TFld::Type)s2i(ael->attr("tp"));
+		    pEl.fldAdd(new TFld(aId.c_str(),ael->attr("nm").c_str(),tp,
+			(s2i(ael->attr("flg"))&(TFld::Selectable|TFld::NoWrite|TFld::HexDec|TFld::OctDec|TFld::FullText))|TVal::DirWrite|TVal::DirRead,
+			"","",ael->attr("vals").c_str(),ael->attr("names").c_str()));
+		    modif(true);
+		}
+		vlAt(aId).at().setResB1(false);
 	    }
 
 	    // Check for remove attributes
@@ -1237,6 +1256,10 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     for(int cOff = 0; (scntr=TSYS::strParse(stats(),0,";",&cOff)).size(); ) {
 	map<string,TMdContr::StHd>::iterator st = owner().mStatWork.find(scntr);
 	if(st == owner().mStatWork.end())	continue;
+
+	//Time setting to the next period and not more for the station time - to prevent the archive buffer reset
+	if(owner().mStatTm && !vo.arch().freeStat())
+	    vo.setTime(vmin(vo.arch().at().end(),owner().mStatTm)+vo.arch().at().period());
 
 	//Registering for the later common writing in the asynchronous mode and pass updating the just writed values
 	if(owner().mAsynchWr) {

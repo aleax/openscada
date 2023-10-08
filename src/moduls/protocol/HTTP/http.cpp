@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.8.12"
+#define MOD_VER		"3.8.13"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -389,7 +389,7 @@ string TProt::sesCheck( int sid, const string &chUser )
 			TBDS::dataDel(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, TBDS::UseAllKeys|TBDS::NoException);
 		    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
-		mess_info(nodePath().c_str(), _("The authentication session for the user '%s' is expired. Host: %s."),
+		mess_debug(nodePath().c_str(), _("The authentication session for the user '%s' is expired. Host: %s."),
 		    authEl->second.name.c_str(), authEl->second.addr.c_str());
 		mAuth.erase(authEl++);
 	    } else authEl++;

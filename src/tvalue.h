@@ -66,7 +66,8 @@ class TVal: public TCntrNode
 	void setCfg( TCfg &cfg );
 
 	string	name( );
-	int64_t time( )		{ return mTime; }
+	int64_t	time( )		{ return mTime; }
+	void	setTime( int64_t vl );
 	bool	isCfg( )	{ return mCfg; }
 	bool	dataActive( );
 
