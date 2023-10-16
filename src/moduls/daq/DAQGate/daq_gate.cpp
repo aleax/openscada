@@ -31,13 +31,13 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.13.2"
+#define MOD_VER		"2.13.4"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
 //******************************************************
 
-DAQGate::TTpContr *DAQGate::mod;  //Pointer for direct access to main module object
+DAQGate::TTpContr *DAQGate::mod;	//Pointer for direct access to main module object
 
 extern "C"
 {
@@ -63,6 +63,11 @@ extern "C"
 }
 
 using namespace DAQGate;
+
+#define hasArch()		resB1()
+#define setHasArch(val)		setResB1(val)
+#define hasArchReq()		resB2()
+#define setHasArchReq(val)	setResB2(val)
 
 //******************************************************
 //* TTpContr                                           *
@@ -691,17 +696,16 @@ void *TMdContr::Task( void *icntr )
 			    for(unsigned iV = 0; iV < listV.size(); iV++) {
 				if(listV[iV] == "SHIFR") continue;
 				AutoHD<TVal> vl = prm.vlAt(listV[iV]);
-				if(sepReq && ((!vl.at().arch().freeStat() && !vl.at().resB1()) ||	//!!!! Hiding the tag <el> at the remote archive presence
+				if(sepReq && ((!vl.at().arch().freeStat() && !vl.at().hasArch()) ||	//!!!! Hiding the tag <el> at the remote archive presence
 										vl.at().reqFlg())) {
 				    prmNd->childAdd("el")->setAttr("id",listV[iV]);
 				    rC++;
 				}
-				if(!vl.at().arch().freeStat())	//?!?! Append the tag <ael> for hiding when missing the remote archive,
-								//     now it is used itself for detection the archive missing.
+				if(!vl.at().arch().freeStat() && (!vl.at().hasArchReq() || vl.at().hasArch()))	//!!!! Hidding the tag <ael> at the remote archive missing
 				    prmNd->childAdd("ael")->setAttr("id", listV[iV])->
 					setAttr("tm", ll2s(vmax(vl.at().arch().at().end("")+1,	//!!!! +1 to prevent of spare values requesting
 												//     and their direct writing to the archives
-							TSYS::curTime()-(int64_t)(3.6e9*cntr.restDtTm()))));
+							    TSYS::curTime()-(int64_t)(3.6e9*cntr.restDtTm()))));
 			    }
 			    if(sepReq && !prmNd->childSize()) { req.childDel(prmNd); prm.isPrcOK = true; }	//Pass request and mark by processed
 			    if(sepReq && rC > listV.size()/2) {
@@ -810,6 +814,7 @@ void *TMdContr::Task( void *icntr )
 				    vl.at().setReqFlg(false);
 				    stO.numR++;
 				    cntr.mStatTm = vmax(cntr.mStatTm, atoll(aNd->attr("tm").c_str()));
+				    vl.at().setHasArchReq(true);
 				}
 				else if(aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize()) {
 				    int64_t btm = atoll(aNd->attr("tm").c_str());
@@ -821,7 +826,7 @@ void *TMdContr::Task( void *icntr )
 				    }
 				    vl.at().arch().at().setVals(buf, buf.begin(), buf.end(), "");
 				    cntr.mStatTm = vmax(cntr.mStatTm, btm + per*aNd->childSize());
-				    if(aNd->childSize()) vl.at().setResB1(true);
+				    if(aNd->childSize()) vl.at().setHasArch(true);
 				}
 			    }
 			}
@@ -1140,7 +1145,8 @@ void TMdPrm::load_( )
 	    if(vlPresent(aId)) continue;
 	    pEl.fldAdd(new TFld(aId.c_str(),aEl->attr("nm").c_str(),(TFld::Type)s2i(aEl->attr("tp")),
 		s2i(aEl->attr("flg")),"","",aEl->attr("vals").c_str(),aEl->attr("names").c_str()));
-	    vlAt(aId).at().setResB1(false);
+	    vlAt(aId).at().setHasArch(false);
+	    vlAt(aId).at().setHasArchReq(false);
 	    //vlAt(aEl->attr("id")).at().setS(aEl->text());
 	}
 	vlAt("err").at().setS(_("10:Data not available."), 0, true);
@@ -1211,7 +1217,8 @@ void TMdPrm::sync( )
 			"","",ael->attr("vals").c_str(),ael->attr("names").c_str()));
 		    modif(true);
 		}
-		vlAt(aId).at().setResB1(false);
+		vlAt(aId).at().setHasArch(false);
+		vlAt(aId).at().setHasArchReq(false);
 	    }
 
 	    // Check for remove attributes
@@ -1309,6 +1316,9 @@ bool TMdPrm::cfgChange( TCfg &co, const TVariant &pc )
 void TMdPrm::vlArchMake( TVal &val )
 {
     TParamContr::vlArchMake(val);
+
+    val.setHasArch(false);
+    val.setHasArchReq(false);
 
     if(val.arch().freeStat())	return;
     val.arch().at().setSrcMode(TVArchive::DAQAttr);

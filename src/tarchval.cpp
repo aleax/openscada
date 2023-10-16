@@ -2582,6 +2582,8 @@ TVariant TVArchEl::getValProc( int64_t *tm, bool up_ord )
 
 void TVArchEl::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, bool onlyLocal )
 {
+    iend = vmin(ibeg + (int64_t)(1e6*archivator().valPeriod())*limUserIts_N, iend);	//!!!! Limiting of number the processing items in limUserIts_N
+
     //Get local archive data
     unsigned int ecnt = buf.evalCnt();
     getValsProc(buf, ibeg, iend);

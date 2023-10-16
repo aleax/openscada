@@ -1,3 +1,13 @@
+2023-10-16 Roman (stable)
+- !!:FIX:Archive: The requests TVArchEl::getVals() and "TValue:get:/serv/attr" appended of limiting the requesting depth
+	in limUserIts_N (1e6) items, to prevent for big memory consumption.
+    !!:FIX: The Control Interface request "TValue:get:/serv/attr" fixed in longing to equivalent archivators
+	and the limit calculation of the function getVals().
+- !:DAQ.DAQGate: Appended for definition hasArch() to resB1() and hasArchReq() to resB2(),
+	when hasArchReq() used for the tag "ael" hiding at missing the archive remotely.
+    Appended for the flags hasArch() and hasArchReq() reseting at new archives assignement.
+
+
 2023-10-08 Roman (stable)
 - ModelsDB.AGLKS.St: Updated for the parameter cache of DAQGate.test.
 - data/{debian,debian_mod}/compat: The level was rose up to 7 for default building at modern Debian distributives.
