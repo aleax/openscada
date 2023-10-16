@@ -1,4 +1,10 @@
 2023-10-16 Roman (stable)
+- !:UI.QTCfg: Expanded in favorites for saving also the opened tab.
+- FIX:UI.Vision: Fixed in processing the combobox fields without indexes,
+    like to access the Storage field from the LTS branch on the Work branch.
+
+
+2023-10-16 Roman (stable)
 - !!:FIX:Archive: The requests TVArchEl::getVals() and "TValue:get:/serv/attr" appended of limiting the requesting depth
 	in limUserIts_N (1e6) items, to prevent for big memory consumption.
     !!:FIX: The Control Interface request "TValue:get:/serv/attr" fixed in longing to equivalent archivators

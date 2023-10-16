@@ -1012,7 +1012,7 @@ void ConfApp::favToggle( )
 
     int fvPresent = -1;
     for(unsigned iFv = 0; fvPresent < 0 && iFv < favs.size(); ++iFv)
-	if(TSYS::strParse(favs[iFv],0,":") == selPath) fvPresent = iFv;
+	if(TSYS::strParse(TSYS::strParse(favs[iFv],0,":"),0,"#") == selPath) fvPresent = iFv;
 
     if(fvPresent >= 0) {
 	favs.erase(favs.begin()+fvPresent);
@@ -1020,7 +1020,8 @@ void ConfApp::favToggle( )
 	actFavToggle->setText(TSYS::strMess(_("Append to favorite for '%s'"),(selNmPath.size()?selNmPath:selPath).c_str()).c_str());
     }
     else {
-	favs.push_back(selPath+(selNmPath.size()?":"+selNmPath:""));
+	XMLNode *tabN = root->childGet("area", tabs->currentIndex(), true);
+	favs.push_back(selPath + (tabN?"#"+tabN->attr("id"):"") + (selNmPath.size()?":"+selNmPath:""));
 	while(favs.size() > limCacheIts_N) favs.erase(favs.begin());
 
 	actFavToggle->setIcon(QPixmap::fromImage(favToggleDel));
@@ -1072,7 +1073,7 @@ void ConfApp::favUpd( unsigned opts )
 	if(selNmPath.size()) {
 	    bool fvPresent = false;
 	    for(unsigned iFv = 0; !fvPresent && iFv < favs.size(); ++iFv)
-		fvPresent = (TSYS::strParse(favs[iFv],0,":") == selPath);
+		fvPresent = (TSYS::strParse(TSYS::strParse(favs[iFv],0,":"),0,"#") == selPath);
 	    if(!fvPresent) {
 		actFavToggle->setIcon(QPixmap::fromImage(favToggleAdd));
 		actFavToggle->setText(TSYS::strMess(_("Append to favorite for '%s'"),selNmPath.c_str()).c_str());
@@ -2296,10 +2297,14 @@ void ConfApp::viewChild( QTreeWidgetItem * i )
     } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 }
 
-void ConfApp::pageDisplay( const string path )
+void ConfApp::pageDisplay( const string &ipath )
 {
     if(pgDisplay) return;
     pgDisplay = true;
+
+    int off = 0;
+    string  path = TSYS::strParse(ipath, 0, "#", &off),
+	    tab = TSYS::strParse(ipath, 0, "#", &off);
 
     try {
     //Checking for Up
@@ -2435,6 +2440,14 @@ loadGenReqDate:
 	pgDisplay = false;
 	if(winClose) close();
 	throw;
+    }
+
+    //Changing the tab
+    XMLNode *tabN;
+    for(int tabId = 0; tab.size() && (tabN=root->childGet("area",tabId,true)); ++tabId) {
+	if(tabN->attr("id") != tab)	continue;
+	if(tabs->currentIndex() != tabId) tabs->setCurrentIndex(tabId);
+	break;
     }
 }
 

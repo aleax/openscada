@@ -421,8 +421,11 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    if(!owner()->cntrIfCmd(req)) {
 		if(!isEd && cBox) {
 		    cBox->clear();
+		    bool hasId = false;
+		    for(unsigned iEl = 0; iEl < req.childSize() && !hasId; ++iEl)
+			hasId = req.childGet(iEl)->attr("id").size();
 		    for(unsigned iEl = 0; iEl < req.childSize(); ++iEl)
-			cBox->addItem(req.childGet(iEl)->text().c_str(),req.childGet(iEl)->attr("id").c_str());
+			cBox->addItem(req.childGet(iEl)->text().c_str(), hasId?QString(req.childGet(iEl)->attr("id").c_str()):QVariant());
 		}
 		else {
 		    string els;
@@ -434,8 +437,9 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_db->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) {
-		if(!isEd && cBox)
-		    cBox->setCurrentIndex(cBox->findData(req.text().c_str()));
+		int curIdx;
+		if(!isEd && cBox && (curIdx=cBox->findData(req.text().c_str())) >= 0)
+		    cBox->setCurrentIndex(curIdx);
 		else obj_db->setValue(req.text().c_str());
 	    }
 	}
