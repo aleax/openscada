@@ -115,27 +115,27 @@ void Kontar::regVal( TMdPrm *p, int off, int sz )
 
     //Register to acquisition block
     vector<SMemBlk> &wCnt = ((tval*)p->extPrms)->mBlks;
-    unsigned i_b;
-    for(i_b = 0; i_b < wCnt.size(); i_b++)
+    unsigned iB;
+    for(iB = 0; iB < wCnt.size(); iB++)
     {
-	if(off < wCnt[i_b].off)
+	if(off < wCnt[iB].off)
 	{
-	    if((wCnt[i_b].val.size()+wCnt[i_b].off-off) < MaxLenReq)
+	    if((wCnt[iB].val.size()+wCnt[iB].off-off) < MaxLenReq)
 	    {
-		wCnt[i_b].val.insert(0, wCnt[i_b].off-off, 0);
-		wCnt[i_b].off = off;
+		wCnt[iB].val.insert(0, wCnt[iB].off-off, 0);
+		wCnt[iB].off = off;
 	    }
-	    else wCnt.insert(wCnt.begin()+i_b, SMemBlk(off,sz));
+	    else wCnt.insert(wCnt.begin()+iB, SMemBlk(off,sz));
 	}
-	else if((off+sz) > (wCnt[i_b].off+(int)wCnt[i_b].val.size()))
+	else if((off+sz) > (wCnt[iB].off+(int)wCnt[iB].val.size()))
 	{
-	    if((off+sz-wCnt[i_b].off) < MaxLenReq)
-		wCnt[i_b].val.append((off+sz)-(wCnt[i_b].off+wCnt[i_b].val.size()), 0);
+	    if((off+sz-wCnt[iB].off) < MaxLenReq)
+		wCnt[iB].val.append((off+sz)-(wCnt[iB].off+wCnt[iB].val.size()), 0);
 	    else continue;
 	}
 	break;
     }
-    if(i_b >= wCnt.size()) wCnt.insert(wCnt.begin()+i_b,SMemBlk(off,sz));
+    if(iB >= wCnt.size()) wCnt.insert(wCnt.begin()+iB,SMemBlk(off,sz));
 }
 
 const char *Kontar::getVal( TMdPrm *ip, int off, int dtSz )
@@ -146,11 +146,10 @@ const char *Kontar::getVal( TMdPrm *ip, int off, int dtSz )
     const char *rez = NULL;
 
     vector<SMemBlk> &wCnt = ePrm->mBlks;
-    for(unsigned i_b = 0; i_b < wCnt.size(); i_b++)
-	if(off >= wCnt[i_b].off && (off+dtSz) <= (wCnt[i_b].off+(int)wCnt[i_b].val.size()))
-	{
-	    p->mErr = wCnt[i_b].err;
-	    if(p->mErr.empty())	rez = wCnt[i_b].val.data() + (off-wCnt[i_b].off);
+    for(unsigned iB = 0; iB < wCnt.size(); iB++)
+	if(off >= wCnt[iB].off && (off+dtSz) <= (wCnt[iB].off+(int)wCnt[iB].val.size())) {
+	    p->mErr = wCnt[iB].err;
+	    if(p->mErr.empty())	rez = wCnt[iB].val.data() + (off-wCnt[iB].off);
 	    break;
 	}
 
@@ -165,56 +164,44 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 
     uint32_t cntrMN = p->cfg("M_PLC").getI();
 
-    try
-    {
-	//Try connect to previous transport
-	AutoHD<TTypeTransport> ttr = SYS->transport().at().at("Sockets");
+    try {
+	//Connection mine transport
 	AutoHD<TTransportOut> trO;
-	if(!(ePrm->prevTr.size() && ttr.at().outPresent(ePrm->prevTr) &&
-		(trO=ttr.at().outAt(ePrm->prevTr)).at().startStat() && trO.at().conPrm("M_PLC").getI() == cntrMN))
-	{
-	    ePrm->prevTr = "";
-	    trO.free();
-	}
+	try { trO = SYS->transport().at().at("Sockets").at().inAt(p->cfg("ADDR")).at().associateTr(i2s(cntrMN)); }
+	catch(TError&) { }
 
-	//Find for proper transport by send master PLC serial number request
-	if(trO.freeStat())
-	{
-	    //Same find
-	    vector<AutoHD<TTransportOut> > trsO = ttr.at().inAt(p->cfg("ADDR")).at().associateTrs();
-	    for(unsigned iT = 0; iT < trsO.size() && trO.freeStat(); iT++)
-	    {
-		if(!trsO[iT].at().startStat())	continue;
-		// Serial number request
-		if(trsO[iT].at().conPrm("M_PLC").isEVal())
-		    try
-		    {
-			int resp_len = 0;
-			mbap = char(0);
+	//Detection the new connection
+	if(trO.freeStat()) {
+	    try {
+		if((trO=SYS->transport().at().at("Sockets").at().inAt(p->cfg("ADDR")).at().associateTr("")).at().startStat()) {
+		    int resp_len = 0;
+		    mbap = char(0);
 
-			if(p->owner().messLev() == TMess::Debug)
-			    mess_debug_(p->nodePath().c_str(), _("Master PLC ID Request: '%s'"),TSYS::strDecode(mbap,TSYS::Bin," ").c_str());
+		    if(p->owner().messLev() == TMess::Debug)
+			mess_debug_(p->nodePath().c_str(), _("Master PLC ID Request: '%s'"),TSYS::strDecode(mbap,TSYS::Bin," ").c_str());
 
-			if((resp_len=trsO[iT].at().messIO(mbap.data(),mbap.size(),buf,sizeof(buf))) >= 4)
-			{
-			    trsO[iT].at().conPrm("M_PLC", (int)TSYS::i32_BE(*(uint32_t*)buf));
-			    trsO[iT].at().setDscr(TSYS::strMess(_("Connection from PLC Kontar %xh."),(int)TSYS::i32_BE(*(uint32_t*)buf)));
-			    if(resp_len >= 13 && (uint8_t)buf[4] == 0xC0)
-			    {
-				ePrm->pass = ePrm->RC5Decr(string(buf+5,8), ePrm->RC5Key(TSYS::strEncode(p->cfg("PASS").getS(),TSYS::Bin)));
-				ePrm->key = ePrm->RC5Key(ePrm->pass);
-				if(p->owner().messLev() == TMess::Debug)
-				    mess_debug_(p->nodePath().c_str(), _("Password sequence set: '%s'."), TSYS::strDecode(ePrm->pass,TSYS::Bin," ").c_str());
-			    }
+		    if((resp_len=trO.at().messIO(mbap.data(),mbap.size(),buf,sizeof(buf))) >= 4) {
+			trO.at().conPrm("initConID", i2s((int)TSYS::i32_BE(*(uint32_t*)buf)));
+			trO.at().setDscr(TSYS::strMess(_("Connection from PLC Kontar %xh."),(int)TSYS::i32_BE(*(uint32_t*)buf)));
+			if(resp_len >= 13 && (uint8_t)buf[4] == 0xC0) {
+			    ePrm->pass = ePrm->RC5Decr(string(buf+5,8), ePrm->RC5Key(TSYS::strEncode(p->cfg("PASS").getS(),TSYS::Bin)));
+			    ePrm->key = ePrm->RC5Key(ePrm->pass);
+			    if(p->owner().messLev() == TMess::Debug)
+				mess_debug_(p->nodePath().c_str(), _("Password sequence set: '%s'."), TSYS::strDecode(ePrm->pass,TSYS::Bin," ").c_str());
 			}
+		    }
 
-			if(p->owner().messLev() == TMess::Debug)
-			    mess_debug_(p->nodePath().c_str(), _("Master PLC ID Response: '%s'"),TSYS::strDecode(string(buf,resp_len),TSYS::Bin," ").c_str());
-		    } catch(...) { }
-		if(trsO[iT].at().conPrm("M_PLC").getI() == cntrMN) { trO = trsO[iT]; ePrm->prevTr = trO.at().id(); }
-	    }
+		    if(p->owner().messLev() == TMess::Debug)
+			mess_debug_(p->nodePath().c_str(), _("Master PLC ID Response: '%s'"),TSYS::strDecode(string(buf,resp_len),TSYS::Bin," ").c_str());
+		}
+	    } catch(TError&) { }
+
+	    //Connection mine transport after the detection
+	    try { trO = SYS->transport().at().at("Sockets").at().inAt(p->cfg("ADDR")).at().associateTr(i2s(cntrMN)); }
+	    catch(TError&) { }
 	}
-	if(trO.freeStat()) throw TError(p->nodePath(), _("No a propper connection from PLC."));
+
+	if(trO.freeStat()) throw TError(p->nodePath(), _("No propper connection from PLC."));
 
 	//Main request prepare
 	mbap.reserve(pdu.size()+17);
@@ -324,38 +311,34 @@ void Kontar::getVals( TParamContr *ip )
 
     //Request blocks
     string pdu;
-    for(unsigned i_b = 0; i_b < ePrm->mBlks.size(); i_b++)
-    {
-	if(err.size())	{ ePrm->mBlks[i_b].err = err; continue; }
+    for(unsigned iB = 0; iB < ePrm->mBlks.size(); iB++) {
+	if(err.size())	{ ePrm->mBlks[iB].err = err; continue; }
 
 	// Encode request
 	pdu  = (char)0x67;				//Read memory
 	pdu += (char)0x04;				//Memory, PARAMETER
 	pdu += (char)0x00;
-	pdu += (char)(ePrm->mBlks[i_b].off>>8);		//Address MSB
-	pdu += (char)(ePrm->mBlks[i_b].off);		//Address LSB
-	pdu += (char)(ePrm->mBlks[i_b].val.size()>>8);	//Number of registers MSB
-	pdu += (char)(ePrm->mBlks[i_b].val.size());	//Number of registers LSB
+	pdu += (char)(ePrm->mBlks[iB].off>>8);		//Address MSB
+	pdu += (char)(ePrm->mBlks[iB].off);		//Address LSB
+	pdu += (char)(ePrm->mBlks[iB].val.size()>>8);	//Number of registers MSB
+	pdu += (char)(ePrm->mBlks[iB].val.size());	//Number of registers LSB
 	// Request to remote server
-	if((err=ePrm->mBlks[i_b].err=req(p,pdu)).empty())
-	{
-	    if(pdu.size() < ePrm->mBlks[i_b].val.size())
-		ePrm->mBlks[i_b].err = TSYS::strMess(_("15:Response PDU size (%d from %d) error."),pdu.size(),ePrm->mBlks[i_b].val.size());
-	    else { ePrm->mBlks[i_b].val.assign(pdu,0,ePrm->mBlks[i_b].val.size()); p->numBytes += pdu.size(); }
+	if((err=ePrm->mBlks[iB].err=req(p,pdu)).empty()) {
+	    if(pdu.size() < ePrm->mBlks[iB].val.size())
+		ePrm->mBlks[iB].err = TSYS::strMess(_("15:Response PDU size (%d from %d) error."),pdu.size(),ePrm->mBlks[iB].val.size());
+	    else { ePrm->mBlks[iB].val.assign(pdu,0,ePrm->mBlks[iB].val.size()); p->numBytes += pdu.size(); }
 	}
     }
 
     //Load values to attributes
-    for(unsigned i_a = 0; i_a < p->els.fldSize(); i_a++)
-    {
+    for(unsigned i_a = 0; i_a < p->els.fldSize(); i_a++) {
 	AutoHD<TVal> val = p->vlAt(p->els.fldAt(i_a).name());
 	int off = 0;
 	string pTp = TSYS::strParse(val.at().fld().reserve(),0,":",&off);
 	int pTpSz = atoi(TSYS::strParse(val.at().fld().reserve(),0,":",&off).c_str());
 	int aoff = strtol(TSYS::strParse(val.at().fld().reserve(),0,":",&off).c_str(),NULL,0);
 	const char *dt = getVal(p, aoff, pTpSz);
-	switch(val.at().fld().type())
-	{
+	switch(val.at().fld().type()) {
 	    case TFld::Boolean:	val.at().setB(dt?*dt:EVAL_BOOL, 0, true);	break;
 	    case TFld::Integer:	val.at().setI(dt?(int16_t)TSYS::i16_BE(TSYS::getUnalign16(dt)):EVAL_INT, 0, true);	break;
 	    case TFld::Real:
@@ -508,14 +491,14 @@ bool Kontar::cntrCmdProc( TParamContr *ip, XMLNode *opt )
 	try {
 	    vector<string> sls;
 	    SYS->transport().at().at("Sockets").at().inList(sls);
-	    for(unsigned i_s = 0; i_s < sls.size(); i_s++) opt->childAdd("el")->setText(sls[i_s]);
+	    for(unsigned iS = 0; iS < sls.size(); iS++) opt->childAdd("el")->setText(sls[iS]);
 	} catch(TError &err) { }
     else if(a_path == "/prm/cfg/mPLCLst" && ip->ctrChkNode(opt,"get"))
 	try {
 	    vector<AutoHD<TTransportOut> > trsO = SYS->transport().at().at("Sockets").at().inAt(p->cfg("ADDR")).at().associateTrs();
 	    for(unsigned iT = 0; iT < trsO.size(); iT++)
-		if(trsO[iT].at().startStat())
-		    opt->childAdd("el")->setText(u2s(trsO[iT].at().conPrm("M_PLC").getI()));
+		if(trsO[iT].at().startStat() && trsO[iT].at().conPrm("initConID").getS().size())
+		    opt->childAdd("el")->setText(u2s(trsO[iT].at().conPrm("initConID").getI()));
 	} catch(TError &err) { }
     else if(a_path == "/prm/cfg/fileList" && ip->ctrChkNode(opt,"get")) TSYS::ctrListFS(opt, ip->cfg("CNTR_NET_CFG"), "xml;");
     else if(a_path == "/prm/cfg/PLCList" && ip->ctrChkNode(opt,"get")) {
@@ -555,7 +538,7 @@ string Kontar::tval::RC5Encr( const string &src, const string &ikey )
 		//src.size()/4+((src.size()%4)?1:0);
 
     uint32_t cdata[blocks*2];
-    for(unsigned i_s = 0; i_s < blocks; i_s++) cdata[i_s] = 0;
+    for(unsigned iS = 0; iS < blocks; iS++) cdata[iS] = 0;
     memcpy(cdata, src.data(), src.size());
     if(ikey.size() < 20*4) return src;
     const uint32_t *keybuf = (const uint32_t *)ikey.data();

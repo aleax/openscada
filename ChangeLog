@@ -1,3 +1,13 @@
+2023-11-04 Roman (stable)
+- FIX:SYS:Fixed in mark the WorkDB configuration field as modified one at changing
+    and its changes saving in the configuration file.
+- Transport: Level the message "Error connection the new associated node: %s" set to "Debug",
+    since setting the "initConID" parameter can be performed by the source object itself.
+- !!:DAQ.AMRDevs: Adapted in the Kontar part to the new conception of the associated output transports for the input ones.
+    Was not tested due to missing such devices and need in some specific configuration file for activation some traffic!!!
+- !:FIX:DAQ.LogicLev: Fixed and unified in calculation the execution time per parameter object.
+
+
 2023-10-16 Roman (stable)
 - !:UI.QTCfg: Expanded in favorites for saving also the opened tab.
 - FIX:UI.Vision: Fixed in processing the combobox fields without indexes,

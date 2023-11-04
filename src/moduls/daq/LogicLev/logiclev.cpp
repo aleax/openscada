@@ -39,7 +39,7 @@
 #define MOD_NAME	trS("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.7.5"
+#define MOD_VER		"2.7.6"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -214,23 +214,15 @@ void *TMdContr::Task( void *icntr )
 
     bool isStart = true;
     bool isStop  = false;
-    int64_t tCnt1 = 0, tCnt2 = 0;
 
     while(true) {
 	//Update controller's data
 	if(!cntr.redntUse()) {
-	    if(cntr.messLev() == TMess::Debug) tCnt1 = TSYS::curTime();
 	    cntr.enRes.lock();
 	    for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
 		try {
 		    cntr.pHd[iP].at().calc(isStart, isStop,
 			(isStart||isStop) ? DAQ_APER_FRQ : (tsk.period()?(1/tsk.period()):1e9/vmax(1e9/DAQ_APER_FRQ,cntr.period())));
-		    if(cntr.messLev() == TMess::Debug) {
-			tCnt2 = TSYS::curTime();
-			cntr.pHd[iP].at().tmCalc = 1e-6*(tCnt2-tCnt1);
-			cntr.pHd[iP].at().tmCalcMax = vmax(cntr.pHd[iP].at().tmCalcMax, cntr.pHd[iP].at().tmCalc);
-			tCnt1 = tCnt2;
-		    }
 		} catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 	    isStart = false;
 	    cntr.enRes.unlock();
@@ -652,6 +644,9 @@ void TMdPrm::calc( bool first, bool last, double frq )
 
     if(!isStd() || !tmpl->func()) return;
     try {
+	int64_t stTm = 0;
+	if(owner().messLev() == TMess::Debug) stTm = TSYS::curTime();
+
 	//ResAlloc cres(calcRes, true);
 	if(chkLnkNeed) chkLnkNeed = tmpl->initLnks();
 
@@ -680,6 +675,9 @@ void TMdPrm::calc( bool first, bool last, double frq )
 	//Put fixed system attributes
 	if(idNm >= 0 && tmpl->ioMdf(idNm))	setName(tmpl->getS(idNm));
 	if(idDscr >= 0 && tmpl->ioMdf(idDscr))	setDescr(tmpl->getS(idDscr));
+
+	if(owner().messLev() == TMess::Debug && stTm)
+	    tmCalc = 1e-6*(TSYS::curTime()-stTm), tmCalcMax = vmax(tmCalcMax, tmCalc);
     } catch(TError &err) {
 	mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
 	mess_warning(nodePath().c_str(), _("Error calculating template."));

@@ -1157,7 +1157,7 @@ string TTransportIn::associateTrO( const string &addr, char stage )
 	    int respLen = tr.at().messIO("", 0, buf, sizeof(buf));
 	    initConID = string(buf, respLen);
 	    tr.at().conPrm("initConID", initConID);
-	} catch(TError &er) { mess_sys(TMess::Error, _("Error connection the new associated node: %s"), er.mess.c_str()); }
+	} catch(TError &er) { mess_sys(TMess::Debug, _("Error connection the new associated node: %s"), er.mess.c_str()); }
 
 	// Removing already freed connections also with the same ID for the last connected
 	for(int iAss = 0; iAss < (int)mAssociateTrO.size()-1; iAss++) {
