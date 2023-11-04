@@ -4797,28 +4797,30 @@ void ShapeDocument::init( WdgView *w )
 {
     w->shpData = new ShpDt();
     ShpDt *shD = (ShpDt*)w->shpData;
+    DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
 
     QVBoxLayout *lay = new QVBoxLayout(w);
+    if(devW)	shD->web = new QTextBrowser(w);	//!!!! Only QTextBrowser in the development mode
+    else {
 #if HAVE_WEBENGINE
-    shD->web = new QWebEngineView(w);
+	shD->web = new QWebEngineView(w);
 # if QT_VERSION >= 0x060000
-    connect(shD->web, SIGNAL(printFinished(bool)), this, SLOT(printFinished()));
+	connect(shD->web, SIGNAL(printFinished(bool)), this, SLOT(printFinished()));
 # endif
 #elif HAVE_WEBKIT
-    shD->web = new QWebView(w);
-    shD->web->setAttribute(Qt::WA_AcceptTouchEvents, false);
+	shD->web = new QWebView(w);
+	shD->web->setAttribute(Qt::WA_AcceptTouchEvents, false);
 #else
-    shD->web = new QTextBrowser(w);
+	shD->web = new QTextBrowser(w);
 #endif
 
-    if(qobject_cast<RunWdgView*>(w)) {
 	shD->web->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(shD->web, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(custContextMenu()));
     }
 
     eventFilterSet(w, shD->web, true);
     w->setFocusProxy(shD->web);
-    if(qobject_cast<DevelWdgView*>(w)) setFocus(w, shD->web, false, true);
+    if(devW) setFocus(w, shD->web, false, true);
 
     lay->addWidget(shD->web);
 }
@@ -4870,25 +4872,31 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val, const 
     if(relDoc && !w->allAttrLoad()) {
 	shD->web->setFont(getFont(shD->font,vmin(w->xScale(true),w->yScale(true)),false));
 
+	if(!runW) ((QTextBrowser*)shD->web)->setHtml(shD->toHtml().c_str());
+	else {
 #if HAVE_WEBENGINE
-	//!!!! Impossible to change the scroll position in WebEngine, only read
+	    QWebEngineView *wb = (QWebEngineView *)shD->web;
+	    //!!!! Impossible to change the scroll position in WebEngine, only read
 #elif HAVE_WEBKIT
-	QPoint scrollPos;
-	if(shD->web->page() && shD->web->page()->mainFrame()) scrollPos = shD->web->page()->mainFrame()->scrollPosition();
+	    QWebView *wb = (QWebView *)shD->web;
+	    QPoint scrollPos;
+	    if(wb->page() && wb->page()->mainFrame()) scrollPos = wb->page()->mainFrame()->scrollPosition();
 #else
-	int scrollPos = shD->web->verticalScrollBar()->value();
+	    QTextBrowser *wb = (QTextBrowser *)shD->web;
+	    int scrollPos = wb->verticalScrollBar()->value();
 #endif
 
-	shD->web->setHtml(shD->toHtml().c_str());
+	    wb->setHtml(shD->toHtml().c_str());
 
 #if HAVE_WEBENGINE
-	//!!!! Impossible to change the scroll position in WebEngine, only read
+	    //!!!! Impossible to change the scroll position in WebEngine, only read
 #elif HAVE_WEBKIT
-	if(!scrollPos.isNull() && shD->web->page() && shD->web->page()->mainFrame())
-	    shD->web->page()->mainFrame()->setScrollPosition(scrollPos);
+	    if(!scrollPos.isNull() && wb->page() && wb->page()->mainFrame())
+		wb->page()->mainFrame()->setScrollPosition(scrollPos);
 #else
-	shD->web->verticalScrollBar()->setValue(scrollPos);
+	    wb->verticalScrollBar()->setValue(scrollPos);
 #endif
+	}
     }
 
     return true;
@@ -4945,6 +4953,7 @@ void ShapeDocument::custContextMenu( )
 {
     QObject *web = sender();
     RunWdgView *w = dynamic_cast<RunWdgView*>(web->parent());
+    if(!w) return;
 
 #if HAVE_WEBENGINE
     QMenu *menu = new QMenu(w);	//!!!! Due to there is no sense in the StandardContextMenu
@@ -5067,14 +5076,14 @@ void ShapeDocument::ShpDt::print( QPrinter *printer )
     //Starting the print
     printCB = true;
 #  if QT_VERSION < 0x060000
-    web->page()->print(printer, [this](bool) { this->printCB = false; } );
+    ((QWebEngineView*)web)->page()->print(printer, [this](bool) { this->printCB = false; } );
 #  else
-    web->print(printer);
+    ((QWebEngineView*)web)->print(printer);
 #  endif
 # elif HAVE_WEBKIT
-    web->print(printer);
+    ((QWebView*)web)->print(printer);
 # else
-    web->document()->print(printer);
+    ((QTextBrowser*)web)->document()->print(printer);
 # endif
 }
 #endif

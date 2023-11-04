@@ -14104,6 +14104,17 @@ INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','grpClear','Group clear',3,32,''
 INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','dev','Device to bind
 Like to "98:D3:31:F8:52:29" for binding by "rfcomm bind {N} 98:D3:31:F8:52:29".',0,64,'',1,'Пристрій для зв''язування
 На кшталт "98:D3:31:F8:52:29" для зв''язування за допомогою "rfcomm bind {N} 98:D3:31:F8:52:29".','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','transport','Transport',0,64,'Serial.UC96:/dev/rfcomm0:9600||1000:40-20',0,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','dev','Device to bind
+Like to "58:F4:04:33:D5:FD" for binding by "rfcomm bind {N} 58:F4:04:33:D5:FD".',0,64,'',1,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','V','Volts',2,16,'',2,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','A','Amperes',2,16,'',3,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','T','Temperature, °С',1,16,'',4,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Ah','Capacity, Ah',2,16,'',5,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Wh','Capacity, Wh',2,16,'',6,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Tm','Time, seconds',1,16,'',7,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','clear','Clear',3,32,'',8,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','this','Object',4,0,'',9,'','','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_tests_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_tests_io VALUES('ai_simple','val_cod','Value''s source code',1,128,'',0,'Вихідний код значення','','Исходный код значения','','');
 INSERT INTO tmplib_tests_io VALUES('ai_simple','val','Value',2,16,'0',1,'Значення','','Значение','','Вредност');
@@ -16516,4 +16527,64 @@ if(tErr.length) {
 	grps = EVAL;
 }
 else f_err = "0";','',1693313193);
+INSERT INTO tmplib_LowDevLib VALUES('UC96','BT: ATORCH UC96','','','',10,0,'JavaLikeCalc.JavaScript
+if(f_start) {
+	clear = false;
+
+	isBound = -1;
+	if(dev.match("^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$").length &&
+			(tVl=transport.match("/dev/rfcomm(\\d)")).length && SYS.system("rfcomm bind "+tVl[1]+" "+dev,true) == 0)
+		isBound = tVl[1];
+}
+
+tErr = "";
+
+if(!(tr=SYS.Transport.outAt(transport)) || !tr.start(true))
+	tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else {
+	if(f_stop) {
+		tr.start(false);
+		if(isBound >= 0)	SYS.system("rfcomm release "+isBound, true);
+		return;
+	}
+
+	for(ibuf = tr.messIO("",-10e-3); ibuf.length && ibuf.length < 36 &&
+			ibuf.slice(-9,-1) != "\x3C\x0C\x80\x00\x00\x03\x20\x00" && (rd=tr.messIO()).length; )
+		ibuf += rd;
+
+	while(ibuf.length)
+		if(ibuf.slice(0,5) == "\xFF\x55\x01\x03\x00" && ibuf.length >= 36 &&
+			ibuf.slice(27,27+8) == "\x3C\x0C\x80\x00\x00\x03\x20\x00")
+		{
+			data = ibuf.slice(0, 36);
+			//SYS.messInfo("/UC96/"+this.cfg("SHIFR"), tr("Data")+": "+SYS.strDecode(data,"Bin"," "));
+
+			io = Special.FLibSYS.IO(data, "", "b");
+			io.pos = 5;
+			V = io.read("uint16",1)/100;
+			io.pos -= 1;
+			A = (io.read("uint32",1)&0xFFFFFF)/100;
+			io.pos -= 1;
+			Ah = (io.read("uint32",1)&0xFFFFFF)/1000;
+			Wh = io.read("uint32",1)/100;
+			io.pos += 4;
+			T = io.read("uint16",1);
+			Tm = io.read("uint16",1)*3600 + io.read("uint8",1)*60 + io.read("uint8",1);
+
+			ibuf = ibuf.slice(36);
+		} else ibuf = "";
+
+	if(clear) {
+		clear = false;
+		tr.messIO("\xff\x55\x11\x03\x01\x00\x00\x00\x00\x51", 0, 0);
+		tr.messIO("\xff\x55\x11\x03\x02\x00\x00\x00\x00\x52", 0, 0);
+		tr.messIO("\xff\x55\x11\x03\x03\x00\x00\x00\x00\x53", 0, 0);
+	}
+}
+
+if(tErr.length) {
+	f_err = tErr;
+	V = A = T = Ah = Wh = Tm = EVAL;
+}
+else f_err = "0";','',1698699533);
 COMMIT;

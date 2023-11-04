@@ -556,13 +556,7 @@ class ShapeDocument : public WdgShape
 		short	active	:1;
 		short	view	:4;
 		short	tmpl	:1;
-#if HAVE_WEBENGINE
-		QWebEngineView	*web;
-#elif HAVE_WEBKIT
-		QWebView	*web;
-#else
-		QTextBrowser	*web;
-#endif
+		QWidget	*web;
 		string	font;
 		string	style;
 		string	doc;
