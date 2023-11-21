@@ -14104,17 +14104,21 @@ INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','grpClear','Group clear',3,32,''
 INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','dev','Device to bind
 Like to "98:D3:31:F8:52:29" for binding by "rfcomm bind {N} 98:D3:31:F8:52:29".',0,64,'',1,'Пристрій для зв''язування
 На кшталт "98:D3:31:F8:52:29" для зв''язування за допомогою "rfcomm bind {N} 98:D3:31:F8:52:29".','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','transport','Transport',0,64,'Serial.UC96:/dev/rfcomm0:9600||1000:40-20',0,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','transport','Transport',0,64,'Serial.UC96:/dev/rfcomm0:9600||1000:40-20',0,'Транспорт','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','dev','Device to bind
-Like to "58:F4:04:33:D5:FD" for binding by "rfcomm bind {N} 58:F4:04:33:D5:FD".',0,64,'',1,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','V','Volts',2,16,'',2,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','A','Amperes',2,16,'',3,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','T','Temperature, °С',1,16,'',4,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Ah','Capacity, Ah',2,16,'',5,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Wh','Capacity, Wh',2,16,'',6,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Tm','Time, seconds',1,16,'',7,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','clear','Clear',3,32,'',8,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','this','Object',4,0,'',9,'','','','','');
+Like to "58:F4:04:33:D5:FD" for binding by "rfcomm bind {N} 58:F4:04:33:D5:FD".',0,64,'',1,'Пристрій для зв''язування
+На кшталт "58:F4:04:33:D5:FD" для зв''язування за допомогою "rfcomm bind {N} 58:F4:04:33:D5:FD".','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','V','Volts',2,16,'',3,'Вольти','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','A','Amperes',2,16,'',4,'Ампери','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','T','Temperature, °С',1,16,'',7,'Температура, °С','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Ah','Capacity, Ah',2,16,'',8,'Ємність, Аг','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Wh','Capacity, Wh',2,16,'',9,'Ємність, ВтГ','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Tm','Time, seconds',1,16,'',10,'Час, секунди','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','clear','Clear',3,32,'',11,'Очистити','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','this','Object',4,0,'',12,'Об''єкт','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','W','Watts',2,16,'',5,'Вати','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','noDataTm','No data detection time, seconds',1,64,'60',2,'Час виявлення відсутності даних, секунд','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','R','Resistance, Om',2,16,'',6,'Опір, Ом','','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_tests_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_tests_io VALUES('ai_simple','val_cod','Value''s source code',1,128,'',0,'Вихідний код значення','','Исходный код значения','','');
 INSERT INTO tmplib_tests_io VALUES('ai_simple','val','Value',2,16,'0',1,'Значення','','Значение','','Вредност');
@@ -16404,7 +16408,7 @@ else	t = (v>>3)*0.25;
 
 if(t_err.toInt() && !f_err.toInt()) t = EVAL;
 f_err = t_err;','',1550995458);
-INSERT INTO tmplib_LowDevLib VALUES('RDTech','BT: RDTech UM24C, UM25C and UM34C','RDTech UM24C, UM25C та UM34C','RDTech UM24C/UM25C/UM34C BlueTooth interface template. ￼!!!! Tested only on UM24C now.
+INSERT INTO tmplib_LowDevLib VALUES('RDTech','BT: RDTech UM24C, UM25C and UM34C','BT: RDTech UM24C, UM25C та UM34C','RDTech UM24C/UM25C/UM34C BlueTooth interface template. ￼!!!! Tested only on UM24C now.
 
 The RDTech (RuiDeng) UM24C, UM25C and UM34C are low-cost USB pass-through power measurement devices, and support a decent number of collection features, as well as full control via Bluetooth. This template implements most exposed commands and data collection available by the device''s Bluetooth interface.
 
@@ -16526,65 +16530,96 @@ if(tErr.length) {
 	V = A = W = T = dG = chMode = recAh = recWh = recThr = recTm = rec = scrTm = scrBright = R = scr = EVAL;
 	grps = EVAL;
 }
-else f_err = "0";','',1693313193);
-INSERT INTO tmplib_LowDevLib VALUES('UC96','BT: ATORCH UC96','','','',10,0,'JavaLikeCalc.JavaScript
-if(f_start) {
-	clear = false;
+else f_err = "0";','',1700566043);
+INSERT INTO tmplib_LowDevLib VALUES('UC96','BT: ATORCH UC96','','ATORCH UC96 BlueTooth interface template.
 
+The ATORCH UC96 are low-cost USB pass-through power measurement device with many interfaces and supporting a decent number of collection features, as well as control via Bluetooth. This template implements only the clearing data command and data collection by the device''s Bluetooth interface.
+
+The device sends data packages not at a request and just after establishing the connection, that is broadcasting with one second period. The device may not to send the data packages at enable not in the first screen, so you need to switch the first screen for the data appearance. The data can be missed also after suspending the PC, so this template in the first time implements the data missing detection and reconnection.
+
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 0.3 HD
+Version: 1.0.0
+License: GPLv2','Шаблон BlueTooth інтерфейсу ATORCH UC96.
+
+ATORCH UC96 є недорогим пристроєм вимірювання прохідної потужності на USB із багатьма інтерфейсами і підтримкою достатньої колекції властивостей, як і контролем через Bluetooth. Цей шаблон реалізує лише команду очищення даних і збір даних через Bluetooth інтерфейс пристрою.
+
+Пристрій надсилає пакети даних не за запитом, тобто розсилає із періодом у одну секунду. Пристрій може не надсилати пакети даних при увімкнені не на першому екрані, тож вам необхідно перемкнутися на перший екран для появи даних. Дані також можуть бути відсутні після присипляння ПК, тож цей шаблон першим реалізує виявлення відсутності даних і перепідключення.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Загальна працемісткість: 0.3 ЛД
+Версія: 1.0.0
+Ліцензія: GPLv2',10,0,'JavaLikeCalc.JavaScript
+if(f_start) {
 	isBound = -1;
-	if(dev.match("^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$").length &&
-			(tVl=transport.match("/dev/rfcomm(\\d)")).length && SYS.system("rfcomm bind "+tVl[1]+" "+dev,true) == 0)
-		isBound = tVl[1];
+	tr = false;
+	dataTm = SYS.time();
+	V = A = W = R = T = Ah = Wh = Tm = EVAL;
+	clear = false;
+	conCntr = 0;
 }
 
 tErr = "";
 
-if(!(tr=SYS.Transport.outAt(transport)) || !tr.start(true))
-	tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+if(f_stop || (tr && (SYS.time()-dataTm) > noDataTm)) {
+	conCntr++;
+	dataTm = SYS.time();
+	if(tr) tr.start(false);
+	if(isBound >= 0)	{ SYS.system("rfcomm release "+isBound, true); isBound = -1; }
+
+	tErr = "2:"+tr("No data, reconnection. Switch to the first screen of the device for the data receive!");
+	V = A = W = R = T = Ah = Wh = Tm = EVAL;
+}
 else {
-	if(f_stop) {
-		tr.start(false);
-		if(isBound >= 0)	SYS.system("rfcomm release "+isBound, true);
-		return;
-	}
+	if(isBound < 0 && dev.match("^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$").length &&
+			(tVl=transport.match("/dev/rfcomm(\\d)")).length && SYS.system("rfcomm bind "+tVl[1]+" "+dev,true) == 0)
+		isBound = tVl[1];
 
-	for(ibuf = tr.messIO("",-10e-3); ibuf.length && ibuf.length < 36 &&
-			ibuf.slice(-9,-1) != "\x3C\x0C\x80\x00\x00\x03\x20\x00" && (rd=tr.messIO()).length; )
-		ibuf += rd;
+	if(!(tr=SYS.Transport.outAt(transport)) || !tr.start(true))
+		tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+	else {
+		for(ibuf = tr.messIO("",-10e-3); ibuf.length && ibuf.length < 36 &&
+				ibuf.slice(-9,-1) != "\x3C\x0C\x80\x00\x00\x03\x20\x00" && (rd=tr.messIO()).length; )
+			ibuf += rd;
 
-	while(ibuf.length)
-		if(ibuf.slice(0,5) == "\xFF\x55\x01\x03\x00" && ibuf.length >= 36 &&
-			ibuf.slice(27,27+8) == "\x3C\x0C\x80\x00\x00\x03\x20\x00")
-		{
-			data = ibuf.slice(0, 36);
-			//SYS.messInfo("/UC96/"+this.cfg("SHIFR"), tr("Data")+": "+SYS.strDecode(data,"Bin"," "));
+		while(ibuf.length)
+			if(ibuf.slice(0,5) == "\xFF\x55\x01\x03\x00" && ibuf.length >= 36 &&
+				ibuf.slice(27,27+8) == "\x3C\x0C\x80\x00\x00\x03\x20\x00")
+			{
+				dataTm = SYS.time();
+				data = ibuf.slice(0, 36);
+				//SYS.messInfo("/UC96/"+this.cfg("SHIFR"), tr("Data")+": "+SYS.strDecode(data,"Bin"," "));
 
-			io = Special.FLibSYS.IO(data, "", "b");
-			io.pos = 5;
-			V = io.read("uint16",1)/100;
-			io.pos -= 1;
-			A = (io.read("uint32",1)&0xFFFFFF)/100;
-			io.pos -= 1;
-			Ah = (io.read("uint32",1)&0xFFFFFF)/1000;
-			Wh = io.read("uint32",1)/100;
-			io.pos += 4;
-			T = io.read("uint16",1);
-			Tm = io.read("uint16",1)*3600 + io.read("uint8",1)*60 + io.read("uint8",1);
+				io = Special.FLibSYS.IO(data, "", "b");
+				io.pos = 5;
+				V = io.read("uint16",1)/100;
+				io.pos -= 1;
+				A = (io.read("uint32",1)&0xFFFFFF)/100;
+				io.pos -= 1;
+				Ah = (io.read("uint32",1)&0xFFFFFF)/1000;
+				Wh = io.read("uint32",1)/100;
+				io.pos += 4;
+				T = io.read("uint16",1);
+				Tm = io.read("uint16",1)*3600 + io.read("uint8",1)*60 + io.read("uint8",1);
 
-			ibuf = ibuf.slice(36);
-		} else ibuf = "";
+				W = V*A;
+				R = A ? V/A : 9999;
 
-	if(clear) {
-		clear = false;
-		tr.messIO("\xff\x55\x11\x03\x01\x00\x00\x00\x00\x51", 0, 0);
-		tr.messIO("\xff\x55\x11\x03\x02\x00\x00\x00\x00\x52", 0, 0);
-		tr.messIO("\xff\x55\x11\x03\x03\x00\x00\x00\x00\x53", 0, 0);
+				ibuf = ibuf.slice(36);
+			} else ibuf = "";
+
+		if(clear) {
+			clear = false;
+			tr.messIO("\xff\x55\x11\x03\x01\x00\x00\x00\x00\x51", 0, 0);
+			tr.messIO("\xff\x55\x11\x03\x02\x00\x00\x00\x00\x52", 0, 0);
+			tr.messIO("\xff\x55\x11\x03\x03\x00\x00\x00\x00\x53", 0, 0);
+		}
 	}
 }
 
 if(tErr.length) {
-	f_err = tErr;
-	V = A = T = Ah = Wh = Tm = EVAL;
-}
-else f_err = "0";','',1698699533);
+	f_err = tErr + " ";
+	V = A = W = R = T = Ah = Wh = Tm = EVAL;
+} else f_err = "0:";
+f_err += tr("Reconnects %1, left %2s.").replace("%1",conCntr.toString()).replace("%2",(noDataTm-(SYS.time()-dataTm)).toString());','',1700566287);
 COMMIT;

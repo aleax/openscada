@@ -48,7 +48,7 @@
 <li> <b><a href="To_do.html" title="Special:MyLanguage/Works/To do">To Do</a>:</b></li></ul>
 <dl><dd> + <a href="#storeHouse">Storehouse</a>: generation of the report document of the selected item, which is ready to print and convenient in complete observing;</dd>
 <dd> + <a href="#storeHouse">Storehouse</a>: generation of the report document of the main table with accounting the filter settings and natural show the specific fields;</dd>
-<dd> - <a href="#storeHouse">Storehouse</a>: detailed control panel of the selected item with the specific fields.</dd></dl>
+<dd> + <a href="#storeHouse">Storehouse</a>: detailed control panel-form of the selected item with the specific fields.</dd></dl>
 </td></tr></table>
 <p>The library is created to provide main elements of the user interface and it contains graphic elements, often need when forming the user interface of the automation of technological and common processes. The library is built on the basis <a href="Modules/VCAEngine.html#WidgetPrimitives" title="Special:MyLanguage/Modules/VCAEngine">primitives of the widgets</a> and the internal programming language <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>.
 </p><p>The element's names and their parameters are available in languages: English, Ukrainian and mRussian. Their source code wrote in the human-language independent mode with calls for the translations by the function <i>tr()</i> and the message's translation also allowed for English, Ukrainian and mRussian.
@@ -2277,7 +2277,7 @@ The frame provides currently and in future for next features:
 <li> adding, copying and removing of records-rows of the table in the edition mode;</li>
 <li> generation of the report document of the selected item, which is ready to print and convenient in complete observing;</li>
 <li> generation of the report document of the main table with accounting the filter settings and natural show the specific fields;</li>
-<li> [PLANNED] detailed control panel of the selected item with the specific fields.</li></ul></li></ul>
+<li> detailed control panel-form of the selected item with the specific fields.</li></ul></li></ul>
 <p>The storehouse classes store in the table "classes" with the fixed table structure "<u><b>CLASS</b></u>, <u><b>ID</b></u>, <b>NAME</b>, <b>TP</b> , <b>TBL</b>, <b>FILTER</b>, <b>PROC</b>", where:
 </p>
 <ul><li> <i>CLASS</i> [varchar(20)] — class ID;</li>
@@ -2300,8 +2300,8 @@ The frame provides currently and in future for next features:
 <dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Setting here a procedure will clean up (set to NULL) all the column cells!</dd></dl>
 <p>Data of storehouse of the corresponded class stores in different table with name "sh_{CLASS}" and the structure "<u><b>ID</b></u>, <b>NAME</b>, <b>DSCR</b>, <b>SP_{ID}1</b>, ..., <b>SP_{ID}N</b>", where:
 </p>
-<ul><li> <i>ID</i> [INT] — automatic index of the table, allowed for the visibility change;</li>
-<li> <i>NAME</i> [varchar(200)] — name of the item, allowed for type changing;</li>
+<ul><li> <i>ID</i> [INT] — automatic index of the table, allowed for change the visibility;</li>
+<li> <i>NAME</i> [varchar(200)] — name of the item, allowed for change the type;</li>
 <li> <i>DSCR</i> [text] — description of the item;</li>
 <li> <i>SP_{ID}X</i> — specific field of the class corresponding to <i>ID</i> in the class table.</li></ul>
 <p>For the special means there in the table "classes" reserved and forcibly created fields "*TITLE" for the whole storehouse localised name and "*NAME", "*DSCR" which control the corresponded fixed fields.
@@ -2311,7 +2311,7 @@ The frame provides currently and in future for next features:
 The widget is designed to perform the role of a page, and should therefore be placed directly in the project's tree. Additionally, into the panels folder of the project, you need to place <a href="#accept">the accepting dialog frame</a> and some attribute configuration is required, below, where no links are provided.
 </p><p>To enable the reporting, you have to place <a href="#alarmsStReport">the frame of alarms reporting</a> in the logical container of panels of the project tree.
 </p><p><b><u>Using — runtime</u></b><br />
-In the runtime mode you will see single big table for class (Fig.3.8b) and data (Fig.3.8c) edition and representing.
+In the runtime mode you will see a single big table for class (Fig.3.8b) and data (Fig.3.8c) representing with edition right in the table or in the item edition form (Fig.3.8d).
 </p><p>In the main class data representing mode the users can observe the table, filter and sort the representing data at the specified fields.
 </p><p>In the main class data edition mode the users, allowed to edit, can add, copy, remove the rows/records and edit the fields.
 </p><p>In the class edition mode, the users, allowed to edit, can add new and remove present (after removing the last item) classes; and add, remove the specific class fields and edit properties of that fields.
@@ -2321,6 +2321,7 @@ In the runtime mode you will see single big table for class (Fig.3.8b) and data 
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseClassR.png"><img class="thumbimage" height="580" src="files/LibMainEls_storeHouseClassR.png" width="900" /></a>  <div class="thumbcaption">Fig.3.8b. The "Storehouse" frame in the runtime mode at the class representing.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseDataR.png"><img class="thumbimage" height="580" src="files/LibMainEls_storeHouseDataR.png" width="900" /></a>  <div class="thumbcaption">Fig.3.8c. The "Storehouse" frame in the runtime mode at the data representing.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseDataRf.png"><img class="thumbimage" height="580" src="files/LibMainEls_storeHouseDataRf.png" width="900" /></a>  <div class="thumbcaption">Fig.3.8d. The "Storehouse" frame in the runtime mode at the item edition form.</div></div></div></div>
 <p><b><u>Linking and configuring the attributes</u></b><br />
 </p>
 <table class="wikitable">
@@ -3173,5 +3174,5 @@ Calling the dialogue is made from the frame-initiator, and closing is made by pr
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/en">Libs/Main_graphical_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2925</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/en">Libs/Main_graphical_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2932</td></tr></table></body>
 </html>

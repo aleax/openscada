@@ -1,3 +1,10 @@
+2023-11-21 Roman (stable)
+- !!:LibsDB.OscadaLibs: The template tmplib_LowDevLib.UC96 expanded by the data tracing with the reconnections,
+    appended by some logical parameters, translated to Ukrainian and documented.
+- !!!!:LibsDB.vcaBase: wlb_Main.storeHouse: Expanded by creating the item edition form in the main frame after hiding
+    the main table and other.
+
+
 2023-11-20 Roman (stable)
 - !!:FIX:SYS: The TCfg::setS() function appended of locking the critical sections at accessing the container TVariant.
 - !!:FIX:DAQ.JavaLikeCalc: The strings concatenation operation appended by the limit checking on limUserFile_SZ(10M).

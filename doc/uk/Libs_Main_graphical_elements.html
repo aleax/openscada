@@ -48,7 +48,7 @@
 <li> <b><a href="../en/To_do.html" title="Special:MyLanguage/Works/To do">Завдання (To Do)</a>:</b></li></ul>
 <dl><dd> + <a href="#storeHouse">Storehouse</a>: генерація звітної документації до обраного елементу, готової до друку та зручної для повного огляду;</dd>
 <dd> + <a href="#storeHouse">Storehouse</a>: генерація звітної документації до основної таблиці з урахуванням налаштувань фільтру та природним відображенням специфічних полів;</dd>
-<dd> - <a href="#storeHouse">Storehouse</a>: деталізована панель керування обраним елементом зі специфічними полями.</dd></dl>
+<dd> + <a href="#storeHouse">Storehouse</a>: деталізована панель-форма керування обраним елементом зі специфічними полями.</dd></dl>
 </td></tr></table>
 <p>Бібліотека створюється для надання основних елементів користувацького інтерфейсу та містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних та загальних процесів. Будується бібліотека на основі <a href="Modules/VCAEngine.html#WidgetPrimitives" title="Special:MyLanguage/Modules/VCAEngine">примітивів віджетів</a> та мови внутрішнього програмування <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>.
 </p><p>Назви елементів та їх параметрів доступні на мовах: Англійська, Українська та mRussian. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу <i>tr()</i> та переклад цих повідомлень також доступний Англійською, Українською та mRussian.
@@ -2277,7 +2277,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <li> додання, копіювання та видалення записів-рядків таблиці у режимі редагування;</li>
 <li> генерація звітної документації до обраного елементу, готової до друку та зручної для повного огляду;</li>
 <li> генерація звітної документації до основної таблиці з урахуванням налаштувань фільтру та природним відображенням специфічних полів;</li>
-<li> [ЗАПЛАНОВАНО] деталізована панель керування обраним елементом зі специфічними полями.</li></ul></li></ul>
+<li> деталізована панель-форма керування обраним елементом зі специфічними полями.</li></ul></li></ul>
 <p>Класи складів зберігаються у таблиці "classes" із фіксованою структурою таблиці "<u><b>CLASS</b></u>, <u><b>ID</b></u>, <b>NAME</b>, <b>TP</b> , <b>TBL</b>, <b>FILTER</b>", де:
 </p>
 <ul><li> <i>CLASS</i> [varchar(20)] — ІД класу;</li>
@@ -2311,7 +2311,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 Віджет призначено для виконання ролі сторінки, а, відповідно, він має безпосередньо розташовуватися у дерево проекту. Додатково, ви маєте розташувати <a href="#accept">діалог прийняття</a> до теки панелей проекту та треба здійснити деяку конфігурацію атрибутів, нижче, де жодних зв'язків не передбачено.
 </p><p>Для увімкнення звітності ви маєте розташувати <a href="#alarmsStReport">кадр звітності порушень</a> до логічного контейнеру панелей у дереві проєкту.
 </p><p><b><u>Використання — виконання</u></b><br />
-У режимі виконання ви побачити одну велику таблицю для редагування та представлення класів (Рис.3.8b) та даних (Рис.3.8c).
+У режимі виконання ви побачити одну велику таблицю для редагування класів (Рис.3.8b) і представлення даних (Рис.3.8c) із редагуванням даних безпосередньо у таблиці або у формі редагування елементу (Рис.3.8d).
 </p><p>У режимі представлення основних даних класу користувачі можуть споглядати таблицю, фільтрувати та сортувати представлені дані за визначеними полями.
 </p><p>У режимі редагування основних даних класу, користувачі, допущені до редагування, можуть додавати, копіювати, видаляти рядки/записи та редагувати поля.
 </p><p>У режимі редагування класу, користувачі, допущені до редагування, можуть додавати нові та видаляти представлені (після видалення останнього елементу) класи; та додавати, видаляти специфічні поля класу і редагувати властивості цих полів.
@@ -2321,6 +2321,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseClassR_uk.png"><img class="thumbimage" height="580" src="files/LibMainEls_storeHouseClassR_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.8b. Кадр "Склад" у режимі виконання на представлені класу.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseDataR_uk.png"><img class="thumbimage" height="580" src="files/LibMainEls_storeHouseDataR_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.8c. Кадр "Склад" у режимі виконання на представлені даних.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseDataRf_uk.png"><img class="thumbimage" height="580" src="files/LibMainEls_storeHouseDataRf_uk.png" width="900" /></a>  <div class="thumbcaption">Fig.3.8d. Кадр "Склад" у режимі виконання на формі редагування елементу.</div></div></div></div>
 <p><b><u>Властивості зв'язування та конфігурації</u></b><br />
 </p>
 <table class="wikitable">
@@ -3173,5 +3174,5 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/uk">Libs/Main_graphical_elements/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2925</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/uk">Libs/Main_graphical_elements/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2932</td></tr></table></body>
 </html>
