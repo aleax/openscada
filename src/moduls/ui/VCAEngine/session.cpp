@@ -1577,15 +1577,15 @@ TVariant SessPage::vlGet( Attr &a )
     if(a.owner() == this) {
 	if(a.id() == "owner") {
 	    short perm = attrAt("perm").at().getI(true);
-	    if(!(perm&01000)) return a.getS(true);
+	    if(!(perm&PERM_INHER)) return a.getS(true);
 	    SessPage *oP = ownerPage();
 	    return oP ? oP->attrAt("owner").at().getS() : ownerSess()->owner()+":"+ownerSess()->grp();
 	}
 	else if(a.id() == "perm") {
 	    short perm = a.getI(true);
-	    if(!(perm&01000)) return perm;
+	    if(!(perm&PERM_INHER)) return perm;
 	    SessPage *oP = ownerPage();
-	    return (oP?oP->attrAt("perm").at().getI():ownerSess()->permit())|01000;
+	    return (oP?oP->attrAt("perm").at().getI():ownerSess()->permit())|PERM_INHER;
 	}
     }
     return Widget::vlGet(a);
@@ -1777,7 +1777,7 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
 	    curw.at().attrList(als);
 	    for(unsigned iA = 0; iA < als.size(); iA++) {
 		AutoHD<Attr> cattr = curw.at().attrAt(als[iA]);
-		if(cattr.at().flgSelf()&Attr::ProcAttr || als[iA] == "focus")
+		if(cattr.at().flgSelf()&Attr::ProcAttr /*|| als[iA] == "focus"*/)
 		    fio.ioAdd(new IO((iwls[iW]+"_"+als[iA]).c_str(),(curw.at().name()+"."+cattr.at().name()).c_str(),
 			cattr.at().fld().typeIO(),IO::Output,"",false,(iwls[iW]+"/"+als[iA]).c_str()));
 	    }
@@ -2148,7 +2148,7 @@ void SessWdg::calc( bool first, bool last, int pos )
 	    resDt.unlock();
 	    wdg.at().calc(first, last, pos+iL);
 	    resDt.lock();
-	} catch(TError &err) { }
+	} catch(TError&) { }
     resDt.unlock();
 
     try {
@@ -2171,7 +2171,7 @@ void SessWdg::calc( bool first, bool last, int pos )
 	    string  reqLang = ownerSess()->reqLang(),
 		    reqUser = ownerSess()->reqUser();
 	    for(unsigned iA = 0; iA < mAttrLnkLs.size(); iA++) {
-		try { attr = attrAt(mAttrLnkLs[iA]); } catch(TError &err) { continue; }
+		try { attr = attrAt(mAttrLnkLs[iA]); } catch(TError&) { continue; }
 		string	cfgVal = attr.at().cfgVal(), cfgValTr = cfgVal;
 		if(attr.at().type() == TFld::String)
 		    cfgValTr = trD_LU(cfgVal, reqLang, reqUser);
@@ -2235,10 +2235,12 @@ void SessWdg::calc( bool first, bool last, int pos )
 		    if(func()->io(iIO)->rez().empty()) continue;
 		    sw_attr = TSYS::pathLev(func()->io(iIO)->rez(), 0);
 		    s_attr  = TSYS::pathLev(func()->io(iIO)->rez(), 1);
-		    attr = (sw_attr==".") ? attrAt(s_attr) : wdgAt(sw_attr).at().attrAt(s_attr);
-		    if(attr.at().type() == TFld::String && attr.at().flgGlob()&TFld::TransltText)
-			set(iIO, trD_LU(attr.at().getS(),reqLang,reqUser));
-		    else set(iIO, attr.at().get());
+		    try {
+			attr = (sw_attr == ".") ? attrAt(s_attr) : wdgAt(sw_attr).at().attrAt(s_attr);
+			if(attr.at().type() == TFld::String && attr.at().flgGlob()&TFld::TransltText)
+			    set(iIO, trD_LU(attr.at().getS(),reqLang,reqUser));
+			else set(iIO, attr.at().get());
+		    } catch(TError &) { }
 		}
 
 		// Calc
@@ -2250,10 +2252,11 @@ void SessWdg::calc( bool first, bool last, int pos )
 		    if(func()->io(iIO)->rez().empty() || !ioMdf(iIO)) continue;
 		    sw_attr = TSYS::pathLev(func()->io(iIO)->rez(), 0);
 		    s_attr  = TSYS::pathLev(func()->io(iIO)->rez(), 1);
-		    attr = (sw_attr==".") ? attrAt(s_attr) : wdgAt(sw_attr).at().attrAt(s_attr);
-
-		    if(s_attr == "pgOpen" && attr.at().getB() != getB(iIO)) { pgOpenPrc = iIO; continue; }
-		    attr.at().set(get(iIO));
+		    try {
+			attr = (sw_attr == ".") ? attrAt(s_attr) : wdgAt(sw_attr).at().attrAt(s_attr);
+			if(s_attr == "pgOpen" && attr.at().getB() != getB(iIO)) { pgOpenPrc = iIO; continue; }
+			attr.at().set(get(iIO));
+		    } catch(TError &) { }
 		}
 		// Save events from calc procedure
 		if(evId >= 0) wevent = getS(evId);

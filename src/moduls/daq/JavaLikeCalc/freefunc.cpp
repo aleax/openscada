@@ -190,7 +190,7 @@ void Func::loadIO( )
     //Position fixing
     for(int iP = 0; iP < (int)u_pos.size(); iP++) {
 	int iid = ioId(u_pos[iP]);
-	if(iid != iP) try{ ioMove(iid,iP); } catch(...) { }
+	if(iid != iP) try{ ioMove(iid,iP); } catch(TError&) { }
     }
 }
 
@@ -1926,7 +1926,7 @@ void Func::calc( TValFunc *val )
 	ExecData dt = { SYS->sysTm(), 0 };
 	exec(val, (const uint8_t*)prg.c_str(), dt);
 	if(dt.flg&0x08) throw TError(nodePath(), _("Function is interrupted by an error"));
-    } catch(...) { fRes().resRelease(); throw; }
+    } catch(TError&) { fRes().resRelease(); throw; }
     fRes().resRelease();
 }
 
@@ -2187,9 +2187,11 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 			    setValR(val, reg[ptr->rez], getValR(val,reg[ptr->a1]) + getValR(val,reg[ptr->a2]));
 			    break;
 			case Reg::String:
-			    if(ptr->rez == ptr->a1 && reg[ptr->rez].type() == Reg::String)
+			    if(ptr->rez == ptr->a1 && reg[ptr->rez].type() == Reg::String) {
+				if(reg[ptr->rez].val().s->size() > limUserFile_SZ)
+				    throw TError(nodePath().c_str(), _("String size achieved the limit %d."), limUserFile_SZ);
 				reg[ptr->rez].val().s->append(getValS(val,reg[ptr->a2]));
-			    else setValS(val, reg[ptr->rez], getValS(val,reg[ptr->a1]) + getValS(val,reg[ptr->a2]));
+			    } else setValS(val, reg[ptr->rez], getValS(val,reg[ptr->a1]) + getValS(val,reg[ptr->a2]));
 			    break;
 			default:
 			    throw TError(nodePath().c_str(), _("Type %d, which is not supported by the 'Add' operation."), reg[ptr->a1].vType(this));

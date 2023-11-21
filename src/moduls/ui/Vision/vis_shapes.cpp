@@ -224,7 +224,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	    if(!runW)	break;
 	    shD->en = (bool)s2i(val);
 	    runW->setVisible(shD->en && runW->permView());
-	    if(shD->elType >= 0) shD->addrWdg->setVisible(shD->en && runW->permView());
+	    if(shD->elType >= 0 && shD->addrWdg)	//!!!! shD->addrWdg can to be not ready here in some cases
+		shD->addrWdg->setVisible(shD->en && runW->permView());
 	    break;
 	case A_ACTIVE:
 	    if(!runW)	break;

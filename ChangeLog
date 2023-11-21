@@ -1,3 +1,18 @@
+2023-11-20 Roman (stable)
+- !!:FIX:SYS: The TCfg::setS() function appended of locking the critical sections at accessing the container TVariant.
+- !!:FIX:DAQ.JavaLikeCalc: The strings concatenation operation appended by the limit checking on limUserFile_SZ(10M).
+    !:FIX: The exceptions processing with catch(...) replaced by catch(TError&) for true detecting of places of STL exceptions.
+- !!:FIX:UI.VCAEngine: Prevented from connection the attribute "focus" of any included widget to the calculation IOs
+	and appended by processing the exceptions of accessing those IOs for missing included widgets.
+    !:FIX: Attr::setS() improved in the critical section processing.
+    !:FIX: Fixed in processing the inheritance of the "owner" attribute from the widgets level
+	and up to the projects level after copy some widget on the widgets level.
+    Appended by definition PERM_INHER(01000) fot the inheritance flag.
+- !:FIX:UI.Vision: Prevented from crash at accessing to not initiated yet shD->addrWdg during setting the attribute "en"
+	in some remote connections.
+    Improved for some original messages.
+
+
 2023-11-04 Roman (stable)
 - !!:LibsDB.OscadaLibs: The library tmplib_LowDevLib appended by the template "BT: ATORCH UC96".
 - UI.Vision: The primitive Document splitted for force using QTextBrowser in the development mode,

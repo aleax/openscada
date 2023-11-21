@@ -557,12 +557,19 @@ void TCfg::setSEL( const string &ival, uint8_t RqFlg )
 
 void TCfg::setS( const string &ival, uint8_t RqFlg )
 {
-    if(!extVal() && (RqFlg&(ExtValTwo|ExtValOne|ExtValThree))) { mExtVal = true; setType(TVariant::String); }
+    if(!extVal() && (RqFlg&(ExtValTwo|ExtValOne|ExtValThree))) {
+	mExtVal = true;
+	mOwner.mRes.lock();
+	setType(TVariant::String);
+	mOwner.mRes.unlock();
+    }
     if(!extVal()) setS(ival);
     else {
+	mOwner.mRes.lock();
 	TVariant::setS(((RqFlg&ExtValOne || !(RqFlg&(ExtValTwo|ExtValThree)))?ival:getS(ExtValOne))+string(1,0)+
 		((RqFlg&ExtValTwo)?ival:getS(ExtValTwo))+string(1,0)+
 		((RqFlg&ExtValThree)?ival:getS(ExtValThree)));
+	mOwner.mRes.unlock();
 	if(mOwner.trcSet())	setIsSet(true);
     }
     if(RqFlg&TCfg::ForceUse)	{ setView(true); setKeyUse(true); }

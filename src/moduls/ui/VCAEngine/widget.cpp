@@ -70,9 +70,9 @@ TCntrNode &Widget::operator=( const TCntrNode &node )
 	setName(srcN->name());
     if(srcN->parent().freeStat() || srcN->descr() != srcN->parent().at().descr()) setDescr(srcN->descr());
     if(srcN->parent().freeStat() || srcN->ico() != srcN->parent().at().ico())	setIco(srcN->ico());
+    setPermit(srcN->permit());
     setOwner(srcN->owner());
     setGrp(srcN->grp());
-    setPermit(srcN->permit());
     if(srcN->parent().freeStat() || srcN->calcLang() != srcN->parent().at().calcLang())	setCalcLang(srcN->calcLang());
     if(srcN->parent().freeStat() || srcN->calcProg() != srcN->parent().at().calcProg())	setCalcProg(srcN->calcProg());
     if(srcN->parent().freeStat() || srcN->calcPer() != srcN->parent().at().calcPer())	setCalcPer(srcN->calcPer());
@@ -134,9 +134,12 @@ void Widget::postEnable( int flag )
 	attrAdd(new TFld("path",trS("Path"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic));
 	attrAdd(new TFld("parent",trS("Parent"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic));
 	attrAdd(new TFld("owner",trS("Owner"),TFld::String,Attr::Generic|Attr::PreRead,"","root:UI"));
-	attrAdd(new TFld("perm",trS("Access"),TFld::Integer,TFld::OctDec|TFld::Selectable|Attr::Generic|Attr::PreRead,"","01000",
-	    "0;0400;0440;0444;0600;0640;0644;0660;0664;0666;"
-	    "01000;01400;01440;01444;01600;01640;01644;01660;01664;01666",
+	attrAdd(new TFld("perm",trS("Access"),TFld::Integer,TFld::Selectable|Attr::Generic|Attr::PreRead,"",i2s(PERM_INHER).c_str(),
+	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d",
+		0,R_____,R_R___,R_R_R_,RW____,RWR___,RWR_R_,RWRW__,RWRWR_,RWRWRW,
+		PERM_INHER,PERM_INHER|R_____,PERM_INHER|R_R___,PERM_INHER|R_R_R_,
+		PERM_INHER|RW____,PERM_INHER|RWR___,PERM_INHER|RWR_R_,
+		PERM_INHER|RWRW__,PERM_INHER|RWRWR_,PERM_INHER|RWRWRW).c_str(),
 	    _("No access;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW;"
 	      "Inheritance;Inherit.(R_____);Inherit.(R_R___);Inherit.(R_R_R_);Inherit.(RW____);"
 	      "Inherit.(RWR___);Inherit.(RWR_R_);Inherit.(RWRW__);Inherit.(RWRWR_);Inherit.(RWRWRW)")));
@@ -214,13 +217,13 @@ string Widget::owner( ) const
 void Widget::setOwner( const string &iown )
 {
     attrAt("owner").at().setS(iown+":"+grp());
-    //Group update
-    if(SYS->security().at().grpAt("UI").at().user(iown)) setGrp("UI");
+    //Group update. Why?
+    /*if(SYS->security().at().grpAt("UI").at().user(iown)) setGrp("UI");
     else {
 	vector<string> gls;
 	SYS->security().at().usrGrpList(owner(), gls);
 	setGrp(gls.size()?gls[0]:Widget::grp());
-    }
+    }*/
 }
 
 string Widget::grp( ) const
@@ -836,15 +839,15 @@ TVariant Widget::vlGet( Attr &a )
 	else if(a.id() == "parent")	return TVariant(parentAddr());
 	else if(a.id() == "owner") {
 	    short perm = attrAt("perm").at().getI(true);
-	    if(!(perm&01000)) return a.getS(true);
+	    if(!(perm&PERM_INHER)) return a.getS(true);
 	    Widget *ownW = dynamic_cast<Widget*>(nodePrev());
 	    return ownW ? ownW->attrAt("owner").at().getS() : "root:UI";
 	}
 	else if(a.id() == "perm") {
 	    short perm = a.getI(true);
-	    if(!(perm&01000)) return perm;
+	    if(!(perm&PERM_INHER)) return perm;
 	    Widget *ownW = dynamic_cast<Widget*>(nodePrev());
-	    return (ownW?ownW->attrAt("perm").at().getI():RWRWR_)|01000;
+	    return (ownW?ownW->attrAt("perm").at().getI():RWRWR_)|PERM_INHER;
 	}
     }
 
@@ -1939,10 +1942,12 @@ void Attr::setS( const string &val, bool strongPrev, bool sys )
 	    setO((val!=EVAL_STR) ? TVarObj::parseStrXML(val,NULL,getO()) : AutoHD<TVarObj>(new TEValObj), strongPrev, sys);
 	    break;
 	case TFld::String: {
-	    if((!strongPrev && *mVal.s == val) ||
-		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull())) break;
 	    owner()->mtxAttr().lock();
 	    string t_str = *mVal.s;
+	    owner()->mtxAttr().unlock();
+	    if((!strongPrev && val == t_str) ||
+		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull())) break;
+	    owner()->mtxAttr().lock();
 	    *mVal.s = val;
 	    owner()->mtxAttr().unlock();
 	    if(!sys && !owner()->attrChange(*this,TVariant(t_str))) {
