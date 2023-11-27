@@ -1194,7 +1194,7 @@ function selectChildRecArea( node, aPath, cBlk )
 					    combMenu.childNodes[0].onclick = function() {
 						this.parentNode.style.cssText = 'visibility: hidden; left: -200px; top: -200px;';
 						if(this.selectedIndex < 0) return;
-						this.edFld.value = this.options[this.selectedIndex].innerText;
+						this.edFld.value = this.options[this.selectedIndex].value;
 						this.edFld.parentNode.parentNode.parentNode.comSet(this.edFld.parentNode.cRow,this.edFld.parentNode.cCol,this.edFld.value);
 						return false;
 					    }
@@ -1647,7 +1647,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 			    combMenu.childNodes[0].onclick = function( ) {
 				this.parentNode.style.cssText = 'visibility: hidden; left: -200px; top: -200px;';
 				if(this.selectedIndex < 0) return;
-				this.edFld.value = this.options[this.selectedIndex].innerText;
+				this.edFld.value = this.options[this.selectedIndex].value;
 				if(this.edFld.parentNode.itComm) this.edFld.parentNode.srcNode.textContent = this.edFld.value;
 				else {
 				    var rez = servSet(this.edFld.parentNode.itPath, 'com=com', '<set>'+this.edFld.value+'</set>', true);

@@ -1,3 +1,19 @@
+2023-11-27 Roman (stable)
+- FIX:ModelsDB.AGLKS.St: WebUser.test restored in the text before unification the translation.
+- !:FIX:SYS: The TCfg::setS() function in a variant with RqFlg appended by notification,
+	only on the data stages and without the returning back.
+    !: TValFunc::calc() appended by notification of the calc errors on the Information Level.
+- !!:DAQ.LogicLev: Significant improving the Parameter Reflection mode in:
+    - dynamic creation and removing attributes;
+    - disabling at the error enabling with missing the source parameter with removing all attributes;
+    - the selection changed to not editable;
+    - measuring the processing time.
+- FIX:UI.WebCfgD: Fixed in processing the selected value of the editable combobox on FireFox.
+- FIX:UI.WebVision: The textarea edition appended of an early applying to prevent of indication the false modification.
+- !:FIX:UI.WebUser: Fixed in translation the page name in the index.
+    The selection control item of the "procedure language or the DAQ-template" changed to noneditable combobox.
+
+
 2023-11-21 Roman (stable)
 - !!:LibsDB.OscadaLibs: The template tmplib_LowDevLib.UC96 expanded by the data tracing with the reconnections,
     appended by some logical parameters, translated to Ukrainian and documented.
@@ -6,7 +22,8 @@
 
 
 2023-11-20 Roman (stable)
-- !!:FIX:SYS: The TCfg::setS() function appended of locking the critical sections at accessing the container TVariant.
+- !!:FIX:SYS: The TCfg::setS() function in a variant with RqFlg appended of locking the critical sections at
+    accessing the container TVariant.
 - !!:FIX:DAQ.JavaLikeCalc: The strings concatenation operation appended by the limit checking on limUserFile_SZ(10M).
     !:FIX: The exceptions processing with catch(...) replaced by catch(TError&) for true detecting of places of STL exceptions.
 - !!:FIX:UI.VCAEngine: Prevented from connection the attribute "focus" of any included widget to the calculation IOs

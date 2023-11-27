@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.6.8"
+#define MOD_VER		"1.6.10"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -255,7 +255,7 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 			" <tr><td class='content'><ul>\n";
 		for(unsigned iP = 0; iP < upLs.size(); iP++)
 		    if(uPgAt(upLs[iP]).at().enableStat() && pgAccess(iprt,sender+"/" MOD_ID "/"+upLs[iP]+"/"))
-			page += "   <li><a href='"+upLs[iP]+"/'>"+uPgAt(upLs[iP]).at().name()+"</a></li>\n";
+			page += "   <li><a href='"+upLs[iP]+"/'>"+trD(uPgAt(upLs[iP]).at().name())+"</a></li>\n";
 		page += "</ul></td></tr></table>\n";
 
 		page = pgCreator(iprt, page, "200 OK", "", "", "", ses.lang);
@@ -715,7 +715,8 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 		TConfig::cntrCmdMake(opt,"/up/cfg",0,"root",SUI_ID,RWRWR_);
 		ctrRemoveNode(opt, "/up/cfg/PROG");
 		ctrRemoveNode(opt, "/up/cfg/TIMESTAMP");
-		ctrMkNode("fld",opt,-1,"/up/cfg/PROGLang",_("Procedure language or the DAQ-template"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/plang/list");
+		ctrMkNode("fld",opt,-1,"/up/cfg/PROGLang",_("Procedure language or DAQ-template"),RWRWR_,"root",SUI_ID,3,
+		    "tp","str","dest","select","select","/plang/list");
 	    }
 	    ResAlloc res(cfgRes, false);
 	    if(ctrMkNode("area",opt,-1,"/prgm",_("Procedure"))) {

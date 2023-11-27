@@ -1514,7 +1514,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			e.stopImmediatePropagation();
 			if(this.saveVal != this.value) this.setModify(true);
 			if(this.modify()) {
-			    if(e.keyCode == 13 && e.ctrlKey) this.nextSibling.onclick();
+			    if(e.keyCode == 13 && e.ctrlKey) {
+				this.saveVal = this.value;	//!!!! Must be early applied to prevent of indication the false modification
+				this.nextSibling.onclick();
+			    }
 			    if(e.keyCode == 27) this.nextSibling.nextSibling.onclick();
 			}
 			return true;

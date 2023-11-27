@@ -746,7 +746,8 @@ void TValFunc::calc( const string &user )
     if(!mFunc) return;
     if(!user.empty()) mUser = user;
     mCalc = true;
-    try { mFunc->calc(this); } catch(TError&) { }
+    try { mFunc->calc(this); }
+    catch(TError &err) { mess_warning(err.cat.c_str(), err.mess.c_str()); }
     mCalc = false;
 }
 

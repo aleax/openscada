@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tconfig.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -566,10 +566,20 @@ void TCfg::setS( const string &ival, uint8_t RqFlg )
     if(!extVal()) setS(ival);
     else {
 	mOwner.mRes.lock();
+	string tVal = TVariant::getS();
 	TVariant::setS(((RqFlg&ExtValOne || !(RqFlg&(ExtValTwo|ExtValThree)))?ival:getS(ExtValOne))+string(1,0)+
 		((RqFlg&ExtValTwo)?ival:getS(ExtValTwo))+string(1,0)+
 		((RqFlg&ExtValThree)?ival:getS(ExtValThree)));
 	mOwner.mRes.unlock();
+
+	if(RqFlg&(ExtValOne|ExtValTwo)) {	//!!!! Notify only on the data stages and without the returning back
+	    bool mInCfgCh_ = mInCfgCh;
+	    try {
+		if(!mInCfgCh && (mInCfgCh=true) && !mOwner.cfgChange(*this,tVal)) /* return back */ ;
+	    } catch(TError &err) { /* return back */ }
+	    if(!mInCfgCh_)	mInCfgCh = false;
+	}
+
 	if(mOwner.trcSet())	setIsSet(true);
     }
     if(RqFlg&TCfg::ForceUse)	{ setView(true); setKeyUse(true); }
