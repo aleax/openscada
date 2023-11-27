@@ -31,7 +31,7 @@
 <td> <a href="../Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a> </td>
 <td> Logical level
 </td>
-<td> 2.7 </td>
+<td> 2.8 </td>
 <td> GPL2 </td>
 <td> daq_LogicLev.so </td>
 <td> en,uk,ru,de </td>
@@ -62,7 +62,7 @@
 <h2><span class="mw-headline" id="Controller_object"><span class="mw-headline-number">1</span> Controller object</span></h2>
 <p>To add a data source of the logical level parameters, a controller object of OpenSCADA is created and configured. An example of the configuration tab for a controller object of this type is shown in Figure 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:740px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_cntr.png"><img class="thumbimage" height="646" src="../files/LogicLev_cntr.png" width="738" /></a>  <div class="thumbcaption">Fig.1. Configuration tab of a controller object.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_cntr.png"><img class="thumbimage" height="674" src="../files/LogicLev_cntr.png" width="773" /></a>  <div class="thumbcaption">Fig.1. Configuration tab of a controller object.</div></div></div></div>
 <p>With this tab you can set:
 </p>
 <ul><li> State of the controller object, as follows: status, "Enabled", "Running" and the database name containing the configuration.</li>
@@ -96,11 +96,11 @@
 <li> <i>this</i> — object of the parameter, allows access to the attributes of the parameter, for example, to access archives-history.</li></ul>
 <p>The sign "(+)" at the end of the address signals the successful linking and presence of the target object. For object-type attributes, hierarchical access to a specific property of the object is allowed by defining its path through the '#' symbol, for example: "LogicLev.experiment.Pi.var#pr1.pr2".
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:809px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_prm_tmpl.png"><img class="thumbimage" height="581" src="../files/LogicLev_prm_tmpl.png" width="807" /></a>  <div class="thumbcaption">Fig.3. Configuration tab of a parameter template.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:809px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_prm_tmpl1.png"><img class="thumbimage" height="581" src="../files/LogicLev_prm_tmpl1.png" width="807" /></a>  <div class="thumbcaption">Fig.4. Configuration tab of a parameter template. Show only attributes.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_prm_tmpl.png"><img class="thumbimage" height="364" src="../files/LogicLev_prm_tmpl.png" width="773" /></a>  <div class="thumbcaption">Fig.3. Configuration tab of a parameter template.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_prm_tmpl1.png"><img class="thumbimage" height="441" src="../files/LogicLev_prm_tmpl1.png" width="773" /></a>  <div class="thumbcaption">Fig.4. Configuration tab of a parameter template. Show only attributes.</div></div></div></div>
 <p>In accordance with the template underlying the parameter, we obtain a set of attributes of the parameter as in Figure 5.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:836px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_prm_attr.png"><img class="thumbimage" height="570" src="../files/LogicLev_prm_attr.png" width="834" /></a>  <div class="thumbcaption">Fig.5. Tab of attributes of a parameter.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_prm_attr.png"><img class="thumbimage" height="483" src="../files/LogicLev_prm_attr.png" width="773" /></a>  <div class="thumbcaption">Fig.5. Tab of attributes of a parameter.</div></div></div></div>
 <h3><span class="mw-headline" id="Parameter_reflection_.28pRef.29"><span class="mw-headline-number">2.2</span> Parameter reflection (pRef)</span></h3>
 <p>All attributes of the parameter specified in the reflection simply become available in this parameter, thereby performing the proxying function, for example, to bring the parameters of other sources into one — the export object of the controller (for the PLC).
 </p>

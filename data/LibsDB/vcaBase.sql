@@ -13586,6 +13586,39 @@ function labSize( ltext, charW ) {
 	return ceil(ceil(labSz*charW*0.6)/10)*10;
 }
 
+function itHighl( celO, itVl ) {
+	if(celO == null)	return "";
+	tLs = new Array();
+	if(celO.fltr.indexOf("index") == 0 && itVl.length) { celO.ls[tVl=itVl.trim()] = true; tLs.push(tVl); }
+	else if(celO.fltr.indexOf("list") == 0)
+		for(tLs = itVl.split(celO.fltr[4]), iLs = 0; iLs < tLs.length; iLs++)
+			celO.ls[tLs[iLs]=tLs[iLs].trim()] = true;
+
+	for(iLn = 0, off = 0; tLs.length && (tVl=celO.fltr.parseLine(0,off)).length; iLn++)
+		if(iLn && tLs.indexOf(tVl.parse(0,":")) >= 0) return tVl;
+
+	return "";
+}
+
+function updProc(iR, dataTbl, clsLsO ) {
+	procLng = "JavaLikeCalc.JavaScript";
+	procArgs = new Object();
+
+	updReq = "";
+	for(iC = 0; iC < dataTbl[iR].length; iC++)
+		if((itID=dataTbl[0][iC]).indexOf("SP_") == 0)
+			procArgs[itID.slice(3)] = ((itVl=dataTbl[iR][iC]) != "<NULL>") ? itVl : "";
+	for(iC = 0; iC < dataTbl[iR].length; iC++) {
+		if((itID=dataTbl[0][iC]).indexOf("SP_") != 0 || (tClO=clsLsO[(itID=itID.slice(3))]).isEVal() || !tClO.prc.length || dataTbl[iR][iC] != "<NULL>") continue;
+		if(tClO.prcId == null) tClO.prcId = this.nodePath("_")+"_"+itID;
+			SYS.DAQ.funcCall(procLng, procArgs, tClO.prc, tClO.prcId);
+			dataTbl[iR][iC] = procArgs[itID];
+			updReq += (updReq.length?", ":"") + "`SP_"+itID+"`=''"+SYS.strEncode(procArgs[itID],"SQL")+"''";
+		}
+	if(updReq.length)
+		SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET "+updReq+" WHERE `"+dataTbl[0][0]+"`=''"+dataTbl[iR][0]+"'';", true);
+}
+
 if(f_start) {
 	geomHOrig = 580;
 	toUpdate = toReport = false;
@@ -13603,6 +13636,7 @@ if(f_start) {
 	btClassEdit_value = btEdit_value = btItEdit_en = btItEdit_value = false;
 	wUser = "";
 	geomH = geomHOrig;
+	dataTbl_geomH = itDel_geomY - dataTbl_geomY + itDel_geomH;
 }
 
 if(wUser != this.ownerSess().reqUser()) {
@@ -13810,9 +13844,6 @@ if(f_start || toUpdate) {
 				clsLsReq += (clsLsReq.length?",":"") + "`"+((tVl[0]=="*")?tVl.slice(1):"SP_"+tVl)+"`";
 
 		//Updation the main table
-		procLng = "JavaLikeCalc.JavaScript";
-		procArgs = new Object();
-
 		// Where prepairing for the filter
 		for(wherePart = "", iF = 0; iF < fMax; iF++) {
 			if(!(tVl=this["fltr"+iF].attr("value")).length)	continue;
@@ -13863,43 +13894,23 @@ if(f_start || toUpdate) {
 			//  ... the data
 			else {
 				//  ... prepairing the logical cells
-				if(hasProc) {
-					updReq = "";
-					for(iC = 0; iC < dataTbl[iR].length; iC++)
-						if((itID=dataTbl[0][iC]).indexOf("SP_") == 0)
-							procArgs[itID.slice(3)] = ((itVl=dataTbl[iR][iC]) != "<NULL>") ? itVl : "";
-					for(iC = 0; iC < dataTbl[iR].length; iC++) {
-						if((itID=dataTbl[0][iC]).indexOf("SP_") != 0 || (tClO=clsLsO[(itID=itID.slice(3))]).isEVal() || !tClO.prc.length || dataTbl[iR][iC] != "<NULL>") continue;
-						if(tClO.prcId.isEVal()) tClO.prcId = this.nodePath("_")+"_"+itID;
-						SYS.DAQ.funcCall(procLng, procArgs, tClO.prc, tClO.prcId);
-						dataTbl[iR][iC] = procArgs[itID];
-						updReq += (updReq.length?", ":"") + "`SP_"+itID+"`=''"+SYS.strEncode(procArgs[itID],"SQL")+"''";
-					}
-					if(updReq.length)
-						SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET "+updReq+" WHERE `"+dataTbl[0][0]+"`=''"+dataTbl[iR][0]+"'';", true);
-				}
+				if(hasProc) updProc(iR, dataTbl, clsLsO);
 
 				//  ... representing
 				for(iC = 0; iC < dataTbl[iR].length; iC++) {
 					itVl = dataTbl[iR][iC];
 					opt = "";
 					if(itVl == "<NULL>")	itVl = "";
-					if(!(tVl2=colVars[dataTbl[0][iC]]).isEVal())	{
-						tLs = new Array();
-						if(tVl2.fltr.indexOf("index") == 0 && itVl.length) { tVl2.ls[tVl=itVl.trim()] = true; tLs.push(tVl); }
-						else if(tVl2.fltr.indexOf("list") == 0)
-							for(tLs = itVl.split(tVl2.fltr[4]), iLs = 0; iLs < tLs.length; iLs++)
-								tVl2.ls[tLs[iLs]=tLs[iLs].trim()] = true;
-						// Highlight
-						for(iLn = 0, off = 0; tLs.length && (tVl1=tVl2.fltr.parseLine(0,off)).length; iLn++)
-							if(iLn && tLs.indexOf(tVl1.parse(0,":")) >= 0) {
-								tVl = ((tVl=tVl1.parse(2,":")).length?" color=''"+tVl+"''":"") + ((tVl=tVl1.parse(3,":")).length?" font=''"+tVl+"''":"");
-								if(tVl1.parse(1,":")[0] == "1") optR += tVl; else opt += tVl;
-							}
+					if((tVl1=itHighl(colVars[dataTbl[0][iC]],itVl)).length) {
+						tVl = ((tVl=tVl1.parse(2,":")).length?" color=''"+tVl+"''":"") + ((tVl=tVl1.parse(3,":")).length?" font=''"+tVl+"''":"");
+						if(tVl1.parse(1,":")[0] == "1") optR += tVl; else opt += tVl;
 					}
 					if(!colTps[iC].isEVal())	cntR += "<"+colTps[iC]+opt+">"+SYS.strEncode(itVl,"HTML")+"</"+colTps[iC]+">";
 					else cntR += "<s"+opt+">"+SYS.strEncode(itVl,"HTML")+"</s>";
-					if(toReport) tRep += "<td style=''white-space: pre-wrap;"+((colTps[iC]=="t")?"text-align: left;":"")+"''>"+SYS.strEncode(itVl,"HTML")+"</td>";
+					if(toReport)
+						tRep += "<td style=''white-space: pre-wrap;"+((colTps[iC]=="t")?"text-align: left;":"")+"''>"+
+							SYS.strEncode(itVl,"HTML").replace(new RegExp("(http|https|ftp)://(\\S+)","g"),"<a target=''_blank'' href=''$1://$2''>$2</a>")+
+							"</td>";
 				}
 			}
 			dataTbl_items += (iR?"<r":"<h")+optR+">" + cntR + (iR?"</r>\n":"</h>\n");
@@ -13934,20 +13945,23 @@ if(f_start || toUpdate) {
 		dataTblOneReq = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`,"+clsLsReq+" FROM `sh_"+class+"` WHERE `ID`=''"+dataTbl_value+"'';");
 		for(iR = 1; iR < dataTblOneReq.length; iR++) {
 			if(dataTblOneReq[iR][0] != dataTbl_value) continue;
+
+			if(hasProc) updProc(iR, dataTblOneReq, clsLsO);
+
 			for(iC = 0; iC < dataTblOneReq[iR].length; iC++) {
 				itVlNm = itVlId = dataTblOneReq[0][iC];
-				if((itVlId.indexOf("SP_") == 0 && !(tVl=clsLsO[itVlId.slice(3)]).isEVal()) || ((itVlId == "NAME" || itVlId == "DSCR") && !(tVl=clsLsO["*"+itVlId]).isEVal()))
-					itVlNm = tVl.name;
+				if((itVlId.indexOf("SP_") == 0 && !(celO=clsLsO[itVlId.slice(3)]).isEVal()) || ((itVlId == "NAME" || itVlId == "DSCR") && !(celO=clsLsO["*"+itVlId]).isEVal()))
+					itVlNm = celO.name;
 				if((itVl=dataTblOneReq[iR][iC]) == "<NULL>") itVl = "";
 				if(toCreatFormIt) {
 					if(itEdFormOff == null)	itEdFormOff = itEdFormY;
 					// Label
-					nwO = this.wdgAdd("fItLab"+itVlId, "", "/wlb_originals/wdg_Text");
-					nwO.attrSet("geomX", itEdFormX).attrSet("geomW", tVl2=labSize(itVlNm+":"))
+					nwlO = this.wdgAdd("fItLab"+itVlId, "", "/wlb_originals/wdg_Text");
+					nwlO.attrSet("geomX", itEdFormX).attrSet("geomW", tVl2=labSize(itVlNm+":"))
 						.attrSet("geomY", itEdFormOff).attrSet("geomH", itEdFormLineHigh).attrSet("text", itVlNm+":")
 						.attrSet("alignment", 8);
-
-					if(tVl.prc.length || itVlId == "ID") {	//RO items
+					// Value
+					if(celO.prc.length || itVlId == "ID") {	//RO items
 						nwO = this.wdgAdd("fItVal"+itVlId, "", "/wlb_originals/wdg_Text");
 						nwO.attrSet("geomX", itEdFormX+tVl2).attrSet("geomW", itEdFormW - tVl2)
 							.attrSet("geomY", itEdFormOff).attrSet("geomH", itEdFormLineHigh)
@@ -13959,16 +13973,16 @@ if(f_start || toUpdate) {
 						nwO.attrSet("geomX", itEdFormX+tVl2).attrSet("geomW", itEdFormW - tVl2)
 							.attrSet("geomY", itEdFormOff).attrSet("geomH", itEdFormLineHigh).attrSet("active", 1);
 						itEdFormOff += itEdFormLineHigh;
-						//this.messInfo("TEST 00: "+itVlId+" > "+tVl.tp);
-						if(tVl.tp.search("bool","i") >= 0)
+						//this.messInfo("TEST 00: "+itVlId+" > "+celO.tp);
+						if(celO.tp.search("bool","i") >= 0)
 							nwO.attrSet("elType", 2);
-						else if(tVl.tp.search("int","i") >= 0)
+						else if(celO.tp.search("int","i") >= 0)
 							nwO.attrSet("geomW", 100).attrSet("elType", 0).attrSet("view", 0);
-						else if(tVl.tp.search("(float|double)","i") >= 0)
+						else if(celO.tp.search("(float|double)","i") >= 0)
 							nwO.attrSet("geomW", 100).attrSet("elType", 0).attrSet("view", 0);
-						else if(tVl.tp.search("text","i") >= 0) {
+						else if(celO.tp.search("text","i") >= 0) {
 							txtH = 10*itEdFormLineHigh;
-							if((tVl3=tVl.tbl.parse(1,":")).length) {
+							if((tVl3=celO.tbl.parse(1,":")).length) {
 								if(tVl3.indexOf("px") > 0)	txtH = (tVl3.toInt()/geomW)*geomHOrig;
 								else if(tVl3.indexOf("%") > 0)	txtH = (tVl3.toInt()/100)*geomHOrig;
 								else txtH = 3*itEdFormLineHigh;
@@ -13977,20 +13991,31 @@ if(f_start || toUpdate) {
 								.attrSet("geomY", itEdFormOff).attrSet("geomH", txtH).attrSet("elType", 1);
 							itEdFormOff += txtH;
 						}
-						// Selection for indexes
-						if((tVl.fltr == "index" || tVl.fltr.indexOf("list") == 0) && nwO.attr("elType") == 0) {
-							nwO.attrSet("view", 1);
-							fCfg = "", fCfgPref = (tVl.fltr == "index") ? "" : itVl+tVl.fltr[4];
-							if(tVl.fltr.indexOf("list") == 0)
-								for(fCfgAdd = "", off = 0; (iFv=itVl.parse(0,tVl.fltr[4],off)).length; )
-									fCfgAdd += (fCfgAdd.length?tVl.fltr[4]:"") + iFv, fCfg += fCfgAdd + "\n";
-							for(var iFv in colVars[itVlId].ls) fCfg += fCfgPref + iFv + "\n";
-								nwO.attrSet("cfg", fCfg);
-						}
 					}
-				} else nwO = this.wdgAt("fItVal"+itVlId);
-				nwO.attrSet((tVl.prc.length||itVlId == "ID")?"text":"value", itVl);
-				delete nwO;
+				} else nwlO = this.wdgAt("fItLab"+itVlId), nwO = this.wdgAt("fItVal"+itVlId);
+				//Dynamic
+				// Selection for indexes
+				if((celO.fltr == "index" || celO.fltr.indexOf("list") == 0) && nwO.attr("elType") == 0) {
+					nwO.attrSet("view", 1);
+					fCfg = "", fCfgPref = (celO.fltr == "index" || !itVl.length) ? "" :
+														itVl+((celO.fltr[4]==" ")?"":celO.fltr[4]+" ");
+					if(celO.fltr.indexOf("list") == 0)
+						for(fCfgAdd = "", off = 0; (iFv=itVl.parse(0,celO.fltr[4],off)).length; )
+							fCfgAdd += (fCfgAdd.length?celO.fltr[4]:"") + iFv, fCfg += fCfgAdd + "\n";
+					for(var iFv in colVars[itVlId].ls)
+						if(fCfg.indexOf(iFv) < 0)
+							fCfg += fCfgPref + iFv + "\n";
+					nwO.attrSet("cfg", fCfg);
+				}
+				// Highlighting
+				nwlO.attrSet("backColor","").attrSet("font","Arial 11");
+				if((tVl1=itHighl(celO,itVl)).length) {
+					if((tVl=tVl1.parse(2,":")).length)	nwlO.attrSet("backColor", tVl);
+					if((tVl=tVl1.parse(3,":")).length)	nwlO.attrSet("font", tVl);
+				}
+				// Value
+				nwO.attrSet((celO.prc.length||itVlId == "ID")?"text":"value", itVl);
+				delete nwlO; delete nwO;
 
 				if(itEdFormOff && (itEdFormOff+itEdFormMarg) > geomH)	geomH = itEdFormOff + itEdFormMarg;
 			}
@@ -14086,7 +14111,9 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 					itVl = tVl.name;
 				go_reportIt_report += "<span style=''font: bold 15px/25px Arial, sans-serif''>"+SYS.strEncode(itVl,"HTML")+":</span>";
 				if(colTps[iC] == "t")	go_reportIt_report += "<br/>";
-				go_reportIt_report += "<span style=''margin-left: 3pt; white-space: pre-wrap;''>"+SYS.strEncode(dataTblOneReq[iR][iC],"HTML")+"</span><br/>";
+				go_reportIt_report += "<span style=''margin-left: 3pt; white-space: pre-wrap;''>"+
+						SYS.strEncode(dataTblOneReq[iR][iC],"HTML").replace(new RegExp("(http|https|ftp)://(\\S+)","g"),"<a target=''_blank'' href=''$1://$2''>$2</a>")+
+						"</span><br/>";
 			}
 			break;
 		}
@@ -14114,7 +14141,7 @@ if(fClrTo >= 0) {
 if(toCalcCycles > 0.1) {
 	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
 	toCalcCycles = max(0, toCalcCycles-1);
-}','','',-2,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1700549868);
+}','','',-2,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1701066699);
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_mnEls VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB
@@ -24031,10 +24058,10 @@ The frame provides currently and in future for next features:
   - adding, copying and removing of records-rows of the table in the edition mode;
   - generation of the report document of the selected item, which is ready to print and convenient in complete observing;
   - generation of the report document of the main table with accounting the filter settings and natural show the specific fields;
-  - [PLANNED] detailed control panel of the selected item with the specific fields.
+  - detailed control panel-form of the selected item with the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.2
+Version: 1.4.2
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -24045,10 +24072,10 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - додання, копіювання та видалення записів-рядків таблиці у режимі редагування;
   - генерація звітної документації до обраного елементу, готової до друку та зручної для повного огляду;
   - генерація звітної документації до основної таблиці з урахуванням налаштувань фільтру та природним відображенням специфічних полів;
-  - [ЗАПЛАНОВАНО] деталізована панель керування обраним елементом зі специфічними полями.
+  - деталізована панель-форма керування обраним елементом зі специфічними полями.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.3.2
+Версія: 1.4.2
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');
@@ -24384,7 +24411,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','1',32,'','','btItEdit','','
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','92',32,'','','btItEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','22',32,'','','btItEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','22',32,'','','btItEdit','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Edit the selected item in form',32,'','','btItEdit','Редагувати обраний елемент у формі','','Редактировать класс склада<!>','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Edit the selected item in a form',32,'','','btItEdit','Редагувати обраний елемент у формі','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',40,'','','btItEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','elType','3',32,'','','btItEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','value','0',8,'','','btItEdit','','','','','','','');

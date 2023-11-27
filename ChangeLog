@@ -1,4 +1,10 @@
 2023-11-27 Roman (stable)
+- !!:FIX:LibsDB.vcaBase: wlb_Main.storeHouse: The item edition form expanded by the highlighting and processing with unification that.
+    The reports appended by processing the links as the external ones.
+    FIX: Indexes and lists set as dynamic ones.
+
+
+2023-11-27 Roman (stable)
 - FIX:ModelsDB.AGLKS.St: WebUser.test restored in the text before unification the translation.
 - !:FIX:SYS: The TCfg::setS() function in a variant with RqFlg appended by notification,
 	only on the data stages and without the returning back.
