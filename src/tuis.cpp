@@ -72,6 +72,14 @@ void TUIS::save_( )
     TBDS::genPrmSet(nodePath()+"FontSnthHglCode", fontSnthHglCode());
 }
 
+TVariant TUIS::objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang )
+{
+    // string mimeGet(string fnm) - obtaining the MIME type at the file name ''fnm''.
+    if(id == "mimeGet" && prms.size() >= 1)	return mimeGet(prms[0].getS(), "");
+
+    return TCntrNode::objFuncCall(id, prms, user_lang);
+}
+
 string TUIS::icoGet( const string &inm, string *tp, bool retPath )
 {
     unsigned iT = 0;
@@ -177,7 +185,7 @@ string TUIS::mimeGet( const string &inm, const string &fDt, const string &orig )
     //Adjust to group for used and known ones
     stvl = TSYS::pathLev(prc, 1);
     const char *tvl = stvl.c_str();
-    // Text
+    // Text/documents
     if(strcasecmp(tvl,"txt") == 0)					prc = "text/plain";
     else if(strcasecmp(tvl,"xml") == 0)					prc = "text/xml";
     else if(strcasecmp(tvl,"html") == 0)				prc = "text/html";
@@ -192,6 +200,7 @@ string TUIS::mimeGet( const string &inm, const string &fDt, const string &orig )
     else if(strcasecmp(tvl,"ics") == 0)					prc = "text/calendar";
     else if(strcasecmp(tvl,"vcs") == 0)					prc = "text/vcalendar";
     else if(strcasecmp(tvl,"vcf") == 0 || strcasecmp(tvl,"vct") == 0)	prc = "text/vcard";
+    else if(strcasecmp(tvl,"pdf") == 0)					prc = "application/pdf";
     // Images
     else if(strcasecmp(tvl,"png") == 0)					prc = "image/png";
     else if(strcasecmp(tvl,"jpg") == 0 || strcasecmp(tvl,"jpeg") == 0)	prc = "image/jpg";

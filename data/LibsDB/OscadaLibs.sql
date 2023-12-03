@@ -7819,6 +7819,30 @@ else {
 //Error set
 if(tErr.length)	f_err = tErr;
 else f_err = "0";','','',1657998607);
+INSERT INTO tmplib_base VALUES('fileServerHTTP','WebUser: HTTP File Server','','','','','',10,0,'JavaLikeCalc.JavaScript
+offPath = 0; url.parsePath(0, 0, offPath);
+reqF = url.slice(offPath);
+if(!(fSz=SYS.fileSize(baseD+reqF)))	{
+	page = "<center><h1>The file ''%1'' not found!</h1></center>".replace("%1", reqF);
+	HTTPvars["Content-Type"] = "text/html;charset=UTF-8";
+	return "404 Not Found";
+}
+
+fSzLim = max(10e3, fSzSolidLim);	//File''s block size for reading
+fOff = 0;			//File offset
+if(HTTPvars["Range"] != null) {
+	tVl = HTTPvars["Range"].parse(1, "bytes=");
+	fOff = tVl.parse(0,"-").toInt();
+	if((tVl=tVl.parse(1,"-")).toInt())	fSzLim = tVl.toInt() - fOff + 1;
+}
+//SYS.messInfo("FileHTTP", "fOff="+fOff);
+
+page = SYS.fileRead(baseD+reqF, fOff, fSzLim);
+
+HTTPvars["Content-Type"] = SYS.UI.mimeGet(reqF);
+if(!fOff && fSz < fSzLim)	return "200 OK";
+HTTPvars["Content-Range"] = "bytes "+fOff+"-"+(fOff+page.length-1)+"/"+fSz;
+return "206 Partial Content";','','',1701543690);
 CREATE TABLE IF NOT EXISTS 'flb_Controller' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO flb_Controller VALUES('prescr','Prescriptions manager (moved)','','','!!!!: Moved and replaced by the template PrescrTempl.manager. Will be removed soon
 Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
@@ -13320,6 +13344,13 @@ INSERT INTO tmplib_base_io VALUES('pidUnifImp','alDelay','Violations delay, seco
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','log','Logarithmic scale',3,32,'0',22,'Логарифмічна шкала','','Логарифмическая шкала','','Логаритамска скала');
 INSERT INTO tmplib_base_io VALUES('anUnif','alNormForceStart','Force NORM violation at the start',3,32,'0',11,'Примусове порушення НОРМА при запуску','','Принудительное нарушение НОРМА при запуске','','');
 INSERT INTO tmplib_base_io VALUES('ntf','messCatExcl','Message exclusion category, in regular expression',0,64,'',5,'Категорія виключення повідомлень, у регулярному виразі','','','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','rez','Result',0,0,'200 OK',0,'','','','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','HTTPreq','HTTP request',0,0,'',1,'','','','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','url','URL',0,0,'',2,'','','','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','page','WWW-page',0,1,'',3,'','','','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','HTTPvars','HTTP variables',4,1,'',4,'','','','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','baseD','Base directory',0,64,'/data/share_res/local/Lib/',5,'','','','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','fSzSolidLim','File size limit for solid reading, else enables the partial content',1,64,'10e6',6,'','','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_DevLib_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_DevLib_io VALUES('SCU750','transport','Transport',0,64,'SCU750',0,'Транспорт','','Транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('SCU750','addr','Device address (-1...255)',1,64,'1',1,'Адрес устройства (-1...255)','','Адреса пристрою (-1...255)','','');
