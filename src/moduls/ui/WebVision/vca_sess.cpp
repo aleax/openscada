@@ -231,9 +231,10 @@ void VCASess::getReq( SSess &ses )
 
 	    string mime;
 	    ses.page = resGet(prmEl->second, ses.url, ses, &mime, start, &size);
-	    if(range.size() && size)
+	    if((range.size() && size) || size > limUserFile_SZ)
 		ses.page = mod->pgCreator(ses.prt, ses.page, "206 Partial Content",
-		    "Content-Type: "+TSYS::strParse(mime,0,";")+"\x0D\x0A"+"Content-Range: bytes "+i2s(start)+"-"+i2s(start+ses.page.size()-1)+"/"+i2s(size));
+		    "Content-Type: "+TSYS::strParse(mime,0,";")+"\x0D\x0A"+"Content-Range: bytes "+
+			i2s(vmax(0,start))+"-"+i2s(vmax(0,start)+ses.page.size()-1)+"/"+i2s(size));
 	    else {
 		mod->imgConvert(ses, mime);
 		ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: "+TSYS::strParse(mime,0,";"));

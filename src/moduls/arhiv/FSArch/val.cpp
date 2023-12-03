@@ -660,8 +660,8 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/arch/lst" && ctrChkNode(opt)) {
 	vector<string> a_ls;
 	archiveList(a_ls);
-	for(unsigned i_el = 0; i_el < a_ls.size(); i_el++)
-	    opt->childAdd("el")->setText(a_ls[i_el]);
+	for(unsigned iEl = 0; iEl < a_ls.size(); iEl++)
+	    opt->childAdd("el")->setText(a_ls[iEl]);
     }
     else if(a_path == "/arch/tpflst" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setText("ascii");
@@ -1038,12 +1038,12 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
 	    eVal  = s_val;
 
 	    //Init pack table
-	    int i_buf = 0;
-	    for(int i_bt = 0; i_bt < mpos*vSize; i_bt++, i_buf++) {
-		if(i_buf == sizeof(buf)) { fOK = fOK && (write(hd,buf,i_buf) == i_buf); i_buf = 0; }
-		buf[i_buf] = i_bt ? 0 : strlen(EVAL_STR);
+	    int iBuf = 0;
+	    for(int iBt = 0; iBt < mpos*vSize; iBt++, iBuf++) {
+		if(iBuf == sizeof(buf)) { fOK = fOK && (write(hd,buf,iBuf) == iBuf); iBuf = 0; }
+		buf[iBuf] = iBt ? 0 : strlen(EVAL_STR);
 	    }
-	    if(i_buf)	fOK = fOK && (write(hd,buf,i_buf) == i_buf);
+	    if(iBuf)	fOK = fOK && (write(hd,buf,iBuf) == iBuf);
 
 	    fOK = fOK && (write(hd,s_val.c_str(),s_val.size()) == (int)s_val.size());
 	    break;
@@ -1054,12 +1054,12 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
 	    int16_t s_val = EVAL_INT16;
 	    eVal.assign((char*)&s_val, vSize);
 
-	    int i_buf = 0;
-	    for(int i_bt = 0; i_bt < (mpos/8+(bool)(mpos%8)); i_bt++, i_buf++) {
-		if(i_buf == sizeof(buf)) { fOK = fOK && (write(hd,buf,i_buf) == i_buf); i_buf = 0; }
-		buf[i_buf] = i_bt ? 0 : 1;
+	    int iBuf = 0;
+	    for(int iBt = 0; iBt < (mpos/8+(bool)(mpos%8)); iBt++, iBuf++) {
+		if(iBuf == sizeof(buf)) { fOK = fOK && (write(hd,buf,iBuf) == iBuf); iBuf = 0; }
+		buf[iBuf] = iBt ? 0 : 1;
 	    }
-	    if(i_buf)	fOK = fOK && (write(hd,buf,i_buf) == i_buf);
+	    if(iBuf)	fOK = fOK && (write(hd,buf,iBuf) == iBuf);
 
 	    fOK = fOK && (write(hd,&s_val,sizeof(s_val)) == sizeof(s_val));
 	    break;
@@ -1070,12 +1070,12 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
 	    int32_t s_val = EVAL_INT32;
 	    eVal.assign((char*)&s_val, vSize);
 
-	    int i_buf = 0;
-	    for(int i_bt = 0; i_bt < (mpos/8+(bool)(mpos%8)); i_bt++, i_buf++) {
-		if(i_buf == sizeof(buf)) { fOK = fOK && (write(hd,buf,i_buf) == i_buf); i_buf = 0; }
-		buf[i_buf] = i_bt ? 0 : 1;
+	    int iBuf = 0;
+	    for(int iBt = 0; iBt < (mpos/8+(bool)(mpos%8)); iBt++, iBuf++) {
+		if(iBuf == sizeof(buf)) { fOK = fOK && (write(hd,buf,iBuf) == iBuf); iBuf = 0; }
+		buf[iBuf] = iBt ? 0 : 1;
 	    }
-	    if(i_buf)	fOK = fOK && (write(hd,buf,i_buf) == i_buf);
+	    if(iBuf)	fOK = fOK && (write(hd,buf,iBuf) == iBuf);
 
 	    fOK = fOK && (write(hd,&s_val,sizeof(s_val)) == sizeof(s_val));
 	    break;
@@ -1086,12 +1086,12 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
 	    int64_t s_val = EVAL_INT64;
 	    eVal.assign((char*)&s_val, vSize);
 
-	    int i_buf = 0;
-	    for(int i_bt = 0; i_bt < (mpos/8+(bool)(mpos%8)); i_bt++, i_buf++) {
-		if(i_buf == sizeof(buf)) { fOK = fOK && (write(hd,buf,i_buf) == i_buf); i_buf = 0; }
-		buf[i_buf] = i_bt ? 0 : 1;
+	    int iBuf = 0;
+	    for(int iBt = 0; iBt < (mpos/8+(bool)(mpos%8)); iBt++, iBuf++) {
+		if(iBuf == sizeof(buf)) { fOK = fOK && (write(hd,buf,iBuf) == iBuf); iBuf = 0; }
+		buf[iBuf] = iBt ? 0 : 1;
 	    }
-	    if(i_buf)	fOK = fOK && (write(hd,buf,i_buf) == i_buf);
+	    if(iBuf)	fOK = fOK && (write(hd,buf,iBuf) == iBuf);
 
 	    fOK = fOK && (write(hd,&s_val,sizeof(s_val)) == sizeof(s_val));
 	    break;
@@ -1102,12 +1102,12 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
 	    float s_val = TSYS::floatLE(EVAL_RFlt);
 	    eVal.assign((char*)&s_val, vSize);
 
-	    int i_buf = 0;
-	    for(int i_bt = 0; i_bt < (mpos/8+(bool)(mpos%8)); i_bt++, i_buf++) {
-		if(i_buf == sizeof(buf)) { fOK = fOK && (write(hd,buf,i_buf) == i_buf); i_buf = 0; }
-		buf[i_buf] = i_bt ? 0 : 1;
+	    int iBuf = 0;
+	    for(int iBt = 0; iBt < (mpos/8+(bool)(mpos%8)); iBt++, iBuf++) {
+		if(iBuf == sizeof(buf)) { fOK = fOK && (write(hd,buf,iBuf) == iBuf); iBuf = 0; }
+		buf[iBuf] = iBt ? 0 : 1;
 	    }
-	    if(i_buf)	fOK = fOK && (write(hd,buf,i_buf) == i_buf);
+	    if(iBuf)	fOK = fOK && (write(hd,buf,iBuf) == iBuf);
 
 	    fOK = fOK && (write(hd,&s_val,sizeof(s_val)) == sizeof(s_val));
 	    break;
@@ -1118,12 +1118,12 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
 	    double s_val = TSYS::doubleLE(EVAL_RDbl);
 	    eVal.assign((char*)&s_val, vSize);
 
-	    int i_buf = 0;
-	    for(int i_bt = 0; i_bt < (mpos/8+(bool)(mpos%8)); i_bt++, i_buf++) {
-		if(i_buf == sizeof(buf)) { fOK = fOK && (write(hd,buf,i_buf) == i_buf); i_buf = 0; }
-		buf[i_buf] = i_bt ? 0 : 1;
+	    int iBuf = 0;
+	    for(int iBt = 0; iBt < (mpos/8+(bool)(mpos%8)); iBt++, iBuf++) {
+		if(iBuf == sizeof(buf)) { fOK = fOK && (write(hd,buf,iBuf) == iBuf); iBuf = 0; }
+		buf[iBuf] = iBt ? 0 : 1;
 	    }
-	    if(i_buf)	fOK = fOK && (write(hd,buf,i_buf) == i_buf);
+	    if(iBuf)	fOK = fOK && (write(hd,buf,iBuf) == iBuf);
 
 	    fOK = fOK && (write(hd,&s_val,sizeof(s_val)) == sizeof(s_val));
 	    break;
@@ -1134,12 +1134,12 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
 	    char s_val = EVAL_BOOL;
 	    eVal.assign((char*)&s_val,vSize);
 
-	    int i_buf = 0;
-	    for(int i_bt = 0; i_bt < (mpos/8+(bool)(mpos%8)); i_bt++, i_buf++) {
-		if(i_buf == sizeof(buf)) { fOK = fOK && (write(hd,buf,i_buf) == i_buf); i_buf = 0; }
-		buf[i_buf] = i_bt ? 0 : 1;
+	    int iBuf = 0;
+	    for(int iBt = 0; iBt < (mpos/8+(bool)(mpos%8)); iBt++, iBuf++) {
+		if(iBuf == sizeof(buf)) { fOK = fOK && (write(hd,buf,iBuf) == iBuf); iBuf = 0; }
+		buf[iBuf] = iBt ? 0 : 1;
 	    }
-	    if(i_buf)	fOK = fOK && (write(hd,buf,i_buf) == i_buf);
+	    if(iBuf)	fOK = fOK && (write(hd,buf,iBuf) == iBuf);
 
 	    fOK = fOK && (write(hd,&s_val,sizeof(s_val)) == sizeof(s_val));
 	    break;
@@ -1380,48 +1380,48 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
     //Get the pack index block and the value block
     if(fixVl) {
 	// Get index block
-	int i_beg = sizeof(FHead) + vpos_beg/8;
-	int i_end = sizeof(FHead) + vpos_end/8+1;
-	lseek(hd, i_beg, SEEK_SET);
-	pid_b = (char*)malloc(i_end-i_beg);
-	if((fOK=(read(hd,pid_b,i_end-i_beg) == (i_end-i_beg)))) {
+	int iBeg = sizeof(FHead) + vpos_beg/8;
+	int iEnd = sizeof(FHead) + vpos_end/8+1;
+	lseek(hd, iBeg, SEEK_SET);
+	pid_b = (char*)malloc(iEnd-iBeg);
+	if((fOK=(read(hd,pid_b,iEnd-iBeg) == (iEnd-iBeg)))) {
 	    // Calc end offset
 	    voff_end = voff_beg;
 	    for(int iPos = vpos_beg+1; iPos <= vpos_end; iPos++)
 		voff_end += vSize*(bool)((0x01<<(iPos%8))&pid_b[(iPos/8)-(vpos_beg/8)]);
 	    // Get value block
-	    i_beg = voff_beg;
-	    i_end = voff_end+vSize;
-	    lseek(hd, i_beg, SEEK_SET);
-	    val_b = (char*)malloc(i_end-i_beg);
-	    fOK = (read(hd,val_b,i_end-i_beg) == (i_end-i_beg));
+	    iBeg = voff_beg;
+	    iEnd = voff_end+vSize;
+	    lseek(hd, iBeg, SEEK_SET);
+	    val_b = (char*)malloc(iEnd-iBeg);
+	    fOK = (read(hd,val_b,iEnd-iBeg) == (iEnd-iBeg));
 	}
     }
     else {
 	// Get index block
-	int i_beg = sizeof(FHead) + vpos_beg*vSize;
-	int i_end = sizeof(FHead) + vpos_end*vSize+vSize;
-	lseek(hd, i_beg, SEEK_SET);
-	pid_b = (char*)malloc(i_end-i_beg);
-	if((fOK=(read(hd,pid_b,i_end-i_beg) == (i_end-i_beg)))) {
+	int iBeg = sizeof(FHead) + vpos_beg*vSize;
+	int iEnd = sizeof(FHead) + vpos_end*vSize+vSize;
+	lseek(hd, iBeg, SEEK_SET);
+	pid_b = (char*)malloc(iEnd-iBeg);
+	if((fOK=(read(hd,pid_b,iEnd-iBeg) == (iEnd-iBeg)))) {
 	    // Calc end offset
 	    voff_end = voff_beg;
 	    vlen_end = vlen_beg;
 	    for(int iPos = (vpos_beg+1); iPos <= vpos_end; iPos++) {
 		int pk_vl = 0;
-		for(int i_e = 0; i_e < vSize; i_e++)
-		    pk_vl += pid_b[vSize*(iPos-vpos_beg)+i_e]<<(8*i_e);
+		for(int iE = 0; iE < vSize; iE++)
+		    pk_vl += pid_b[vSize*(iPos-vpos_beg)+iE]<<(8*iE);
 		if(pk_vl) {
 		    voff_end += vlen_end;
 		    vlen_end = pk_vl;
 		}
 	    }
 	    // Get value block
-	    i_beg = voff_beg;
-	    i_end = voff_end + vlen_end;
-	    lseek(hd, i_beg, SEEK_SET);
-	    val_b = (char*)malloc(i_end-i_beg);
-	    fOK = (read(hd,val_b,i_end-i_beg) == (i_end-i_beg));
+	    iBeg = voff_beg;
+	    iEnd = voff_end + vlen_end;
+	    lseek(hd, iBeg, SEEK_SET);
+	    val_b = (char*)malloc(iEnd-iBeg);
+	    fOK = (read(hd,val_b,iEnd-iBeg) == (iEnd-iBeg));
 	}
     }
 
@@ -1473,7 +1473,7 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
 	if(fixVl) voff_beg += vSize*(bool)(pid_b[(vpos_beg/8)-(pid_off/8)]&(0x01<<(vpos_beg%8)));
 	else {
 	    int pk_vl = 0;
-	    for(int i_e = 0; i_e < vSize; i_e++) pk_vl += pid_b[vSize*(vpos_beg-pid_off)+i_e]<<(8*i_e);
+	    for(int iE = 0; iE < vSize; iE++) pk_vl += pid_b[vSize*(vpos_beg-pid_off)+iE]<<(8*iE);
 	    if(pk_vl) {
 		voff_beg += vlen_beg;
 		vlen_beg = pk_vl;
@@ -1600,7 +1600,8 @@ bool VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     vpos_beg = 0;
     vpos_end = -1;
     double pRc = ((ModVArch&)owner().archivator()).roundProc();
-    while(ibeg <= iend) {
+    int itCnt = 0;
+    for( ; ibeg <= iend && itCnt < limUserIts_N; ++itCnt) {	//!!!! Limited for limUserIts_N entries
 	// Get value and put it to file
 	switch(type()) {
 	    case TFld::Boolean: {
@@ -1695,6 +1696,11 @@ bool VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 	}
 	ibeg++;
     }
+
+    if(itCnt >= limUserIts_N)
+	mess_warning(owner().archivator().nodePath().c_str(),
+	    _("Number of the setting to file items achieved the limit %d for time range [%lld:%lld]!"),
+	    limUserIts_N, ibeg, iend);
 
     res.request(true);
     //Open archive file
@@ -1814,9 +1820,9 @@ string VFileArch::getValue( int hd, int voff, int vsz )
     lseek(hd, voff, SEEK_SET);
     if((fOK=(read(hd,&tbt,1)==1))) {
 	get_vl.assign((char *)&tbt,sizeof(char));
-	for(int i_vs = 0; fOK && i_vs < (vsz-1); i_vs++)
+	for(int iVs = 0; fOK && iVs < (vsz-1); iVs++)
 	    if((fOK=(read(hd,&tbt,1)==1)))
-		get_vl.append((char *)&tbt,sizeof(char));
+		get_vl.append((char *)&tbt, sizeof(char));
     }
 
     if(!fOK) {
@@ -1889,17 +1895,18 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr, int *rvpos )
 	else vOff = sizeof(FHead) + mpos*vSize;
 	lseek(hd, sizeof(FHead)+cachPos*vSize, SEEK_SET);
 
-	if(mess_lev() == TMess::Debug) owner().archive().mess_sys(TMess::Debug, "Cache (start) pos %d(%d,%d) = %d", vpos, mpos, cachPos, vOff);
+	if(mess_lev() == TMess::Debug)
+	    owner().archive().mess_sys(TMess::Debug, "Cache (start) pos %d(%d,%d) = %d", vpos, mpos, cachPos, vOff);
 
 	for(int iPs = cachPos; fOK && iPs <= vmin(vpos,mpos-1); iPs++) {
 	    int pkVl = 0;
-	    for(int i_e = 0; i_e < vSize; ++i_e) {
+	    for(int iE = 0; iE < vSize; ++iE) {
 		if(++iBf >= bSz) {
 		    bSz = vmin(vSize*(vpos-iPs+1), (int)sizeof(buf));
 		    fOK = (read(hd,&buf,bSz) == bSz);
 		    iBf = 0;
 		}
-		pkVl += buf[iBf]<<(8*i_e);
+		pkVl += buf[iBf]<<(8*iE);
 	    }
 	    if(pkVl) {
 		if(iPs) vOff += lstPkVl;
@@ -2107,6 +2114,10 @@ void VFileArch::cacheSet( int pos, int off, int vsz, bool last, bool wr  )
 
     MtxAlloc res(dtRes, true);
     if(!last) {
+	//Limiting the cache items
+	while(cache.size() >= limCacheIts_N) cache.erase(cache.begin());
+
+	//Appending new items
 	for(unsigned iP = 0; iP < cache.size(); iP++)
 	    if(el.pos == cache[iP].pos)	{ cache[iP] = el; return; }
 	    else if(el.pos < cache[iP].pos)	{ cache.insert(cache.begin()+iP,el); return; }
@@ -2119,10 +2130,10 @@ void VFileArch::cacheSet( int pos, int off, int vsz, bool last, bool wr  )
 void VFileArch::cacheDrop( int pos )
 {
     dtRes.lock();
-    for(unsigned iP = 0; iP < cache.size(); ) {
-	if(cache[iP].pos >= pos) { cache.erase(cache.begin()+iP); continue; }
-	iP++;
-    }
+    for(unsigned iP = 0; iP < cache.size(); )
+	if(cache[iP].pos >= pos) cache.erase(cache.begin()+iP);
+	else ++iP;
+
     if(cach_pr_rd.pos >= pos)	cach_pr_rd.off = cach_pr_rd.pos = cach_pr_rd.vsz = 0;
     if(cach_pr_wr.pos >= pos)	cach_pr_wr.off = cach_pr_wr.pos = cach_pr_wr.vsz = 0;
     dtRes.unlock();

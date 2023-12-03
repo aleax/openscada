@@ -1126,8 +1126,8 @@ INSERT INTO Transport_out VALUES('OPCUAtest','Sockets','','OPC UA automatic crea
 INSERT INTO Transport_out VALUES('sys_UPS','Sockets','UPS','','localhost:3493',0,'','','','ДБЖ','','ИБП','','<prms tms="3:0.1" />
 ');
 CREATE TABLE IF NOT EXISTS 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-CREATE TABLE IF NOT EXISTS 'WebUser_uPg' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"PROG" TEXT DEFAULT '' ,"uk#PROG" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#PROG" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO WebUser_uPg VALUES('test','','','','',1,'JavaLikeCalc.JavaScript
+CREATE TABLE IF NOT EXISTS 'WebUser_uPg' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"PROG" TEXT DEFAULT '' ,"uk#PROG" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#PROG" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO WebUser_uPg VALUES('FlowTec.txt','','',1,'JavaLikeCalc.JavaScript
 //SYS.messDebug("TESTWWW","HTTPreq: "+HTTPreq+". URL: "+url+". Sender: "+sender+". User: "+user);
 //for( var i in HTTPvars ) SYS.messDebug("test","Prop ''"+i+"'' = "+HTTPvars[i]);
 if( cnts.length )
@@ -1154,7 +1154,7 @@ if( cnts.length )
 }
 //SYS.messDebug("TESTWWW","Page: "+page);
 page = "TEST 00";','','','','');
-INSERT INTO WebUser_uPg VALUES('FlowTec.txt','','','','',1,'JavaLikeCalc.JavaScript
+INSERT INTO WebUser_uPg VALUES('test','','',1,'JavaLikeCalc.JavaScript
 SYS.messDebug("TESTWWW","HTTPreq: "+HTTPreq+". URL: "+url+". Sender: "+sender+". User: "+user);
 SYS.messDebug("TESTWWW","User-Agent: "+HTTPvars["User-Agent"]);
 SYS.messDebug("TESTWWW","Page: "+page);

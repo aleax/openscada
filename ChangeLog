@@ -1,3 +1,14 @@
+2023-12-03 Roman (stable)
+- FIX:ModelsDB.AGLKS.St: WebUser.test finished in restoring the text before unification the translation.
+- FIX:DB: Allowed in true writing of user changes in the Dynamic Translation Mode on non Base Language,
+    by early checking for dynamic data.
+- FIX:Archive,Archive.FSArch: The values archiving appended by limiting the writing operations at limUserIts_N (1e6) entries
+    for tracing of consuming all memory in some cases.
+- FIX:UI.WebUser: Appended by freeing of very big data in the "page" attribute.
+- FIX:UI.WebVision: The resources getting code through HTTP appended of force switching to the Partial Mode
+    at achieving size in limUserIts_N (1e6).
+
+
 2023-11-27 Roman (stable)
 - !!:FIX:LibsDB.vcaBase: wlb_Main.storeHouse: The item edition form expanded by the highlighting and processing with unification that.
     The reports appended by processing the links as the external ones.

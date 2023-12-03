@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.6.10"
+#define MOD_VER		"1.6.11"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -473,6 +473,7 @@ void UserPg::HTTP( const string &req, SSess &s, TProtocolIn *iprt )
 
 	string rez = getS(ioRez);
 	s.page = getS(ioPage);
+	if(s.page.size() > limUserFile_SZ) setS(ioPage, "");	//Freeing the memory for very big data
 
 	//HTTP properties prepare
 	AutoHD<TVarObj> hVars = getO(ioHTTPvars);

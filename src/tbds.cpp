@@ -1684,14 +1684,17 @@ void TTable::fieldSQLSet( TConfig &cfg )
 	    if((u_cfg.isKey() && !u_cfg.extVal()) || !u_cfg.view()) continue;
 
 	    sval = getSQLVal(u_cfg);
+	    string svalRAW = u_cfg.getS(), toLang = Mess->langCode();
+
+	    // Early checking for ... dynamic data
+	    if(!hasTr && Mess->translDyn() && TSYS::strParse(svalRAW,2,string(1,0)).size() && TSYS::strParse(svalRAW,1,string(1,0)) != toLang)
+		hasTr = true;
 
 	    // No translation
 	    if(!hasTr || u_cfg.fld().type() != TFld::String || !(u_cfg.fld().flg()&TFld::TransltText) || (cf_el[iEl].size() > 3 && cf_el[iEl].find("#") != string::npos))
 		ls += (ls.size()?", \"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval;
+	    // Translation
 	    else {
-		string svalRAW = u_cfg.getS(), toLang = Mess->langCode();
-
-		// Translation
 		bool isTransl = true /*u_cfg.fld().flg()&TFld::TransltText*/, isDynSet = false;
 		//  ... system prestored
 		bool isSysPreStor = (isTransl && TSYS::strParse(svalRAW,0,string(1,0)) != svalRAW && TSYS::strParse(svalRAW,2,string(1,0)).empty());
