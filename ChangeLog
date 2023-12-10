@@ -1,3 +1,11 @@
+2023-12-10 Roman (stable)
+- !!:FIX:Archive: The message archivers are prevented from reseting the buffer position of the last read message
+    since we get doubling the messages at each updating the subsystem, which is often for updation the value archive connections,
+    and especially at missing the resource lock.
+- Security: Simplified in description the system users and groups.
+- FIX:UI.WebVision: Fixed in dynamic translation the user name on the index page.
+
+
 2023-12-03 Roman (stable)
 - !!:LibsDB.OscadaLibs: tmplib_base: Appended by a new template for WebUser "HTTP File Server (fileServerHTTP)"
     with implementing the HTTP File Server in OpenSCADA, currently that is only reading resources with support partiality.

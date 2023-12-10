@@ -494,7 +494,8 @@ void TArchiveS::messPut( const TMess::SRec &rec, const string &arch )
 	//Check for the archiver headers to messages buffer
 	for(unsigned iM = 0; iM < actMess.size(); iM++) {
 	    int &messHead = actMess[iM].at().messHead;
-	    if(messHead >= 0 && messHead == (int)headBuf && (++messHead) >= (int)mBuf.size()) messHead = 0;
+	    if(messHead >= 0 && messHead == (int)headBuf && (++messHead) >= (int)mBuf.size())
+		messHead = 0;
 	}
 	res.unlock();
     }
@@ -858,15 +859,16 @@ void *TArchiveS::ArhMessTask( void *param )
     //Turns cycle
     while(true) {
 	if(TSYS::taskEndRun()) isLast = true;
-	//Message buffer read
+	//Reading the message buffer
 	MtxAlloc res(arh.mRes, true);
 	for(unsigned iM = 0; iM < arh.actMess.size(); iM++) {
 	    AutoHD<TMArchivator> mArh = arh.actMess[iM];
 	    int &messHead = mArh.at().messHead;
-	    if(messHead < 0 && ((messHead=arh.headBuf+1) >= (int)arh.mBuf.size() || !arh.mBuf[messHead].time)) messHead = 0;
+	    if(messHead < 0 && ((messHead=arh.headBuf+1) >= (int)arh.mBuf.size() || !arh.mBuf[messHead].time))
+		messHead = 0;
 	    if(messHead == (int)arh.headBuf)	continue;
 
-	    // Get new messages
+	    // Getting new messages
 	    unsigned newHeadLstread = arh.headBuf;
 	    vector<TMess::SRec> oMess;
 	    for(unsigned iM2 = messHead; iM2 != newHeadLstread; ) {
@@ -1488,7 +1490,12 @@ void TMArchivator::redntDataUpdate( )
 
 void TMArchivator::start( )
 {
-    messHead = -1;
+    /*if(!startStat()) {	//!!!! We need no reset here the buffer position of the read message,
+				//     otherwise we get whether doubling the messages at each updating the subsystem or one at the restart
+	owner().owner().mRes.lock();
+	messHead = -1;
+	owner().owner().mRes.unlock();
+    }*/
 
     runSt = true;
     owner().owner().setActMess(this, true);
@@ -1498,8 +1505,6 @@ void TMArchivator::stop( )
 {
     owner().owner().setActMess(this, false);
     runSt = false;
-
-    messHead = -1;
 }
 
 bool TMArchivator::put( vector<TMess::SRec> &mess, bool force )

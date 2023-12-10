@@ -205,7 +205,7 @@ time_t ModMArch::end( )
 
 bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 {
-    TMArchivator::put(mess, force);	//Allow redundancy
+    TMArchivator::put(mess, force);	//For allow redundancy
 
     int64_t t_cnt = TSYS::curTime();
 
@@ -229,7 +229,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 		iF = -1;
 		break;
 	    }
-	//If going a new data then create new file
+	//At comming new data we create new file
 	if(iF >= 0) {
 	    //res.request(true);
 	    time_t f_beg = mess[iM].time;
