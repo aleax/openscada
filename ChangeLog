@@ -1,4 +1,17 @@
 2023-12-10 Roman (stable)
+- FIX:LibsDB.OscadaLibs: tmplib_base.fileServerHTTP: Type of the IO "fSzSolidLim" changed to Real.
+    Translated to Ukrainian and documented.
+- !!:FIX:LibsDB.vcaBase: wlb_Main.storeHouse: The checkbox items of the item form appended for processing.
+    The text fields of the single-item report were cleared from the left margin.
+- data/{oscada_plc.xml,oscada_server.xml,oscada_start.xml,ModelsDB/{AGLKS/oscada_AGLKS.xml,Boiler/oscada_Boiler.xml}}:
+    Cleared in the input transport description and the transports appended by the port group:
+	10002,10001,10000 for WEB and 10005,10004,10003 for CNTR.
+- !!:Transport.Sockets: Appended for initial support by groups of the ports in the input transports, that is connection to any free.
+- !!:UI.{VCAEngine,Vision,WebVision}: Appended by initial support of data built-in to resource marked attributes,
+    primarily for the source attribute of the Media Primitive.
+
+
+2023-12-10 Roman (stable)
 - !!:FIX:Archive: The message archivers are prevented from reseting the buffer position of the last read message
     since we get doubling the messages at each updating the subsystem, which is often for updation the value archive connections,
     and especially at missing the resource lock.

@@ -253,8 +253,8 @@ void WidgetLib::resourceDataList( vector<string> &list, const string &idb ) cons
 
 bool WidgetLib::resourceDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb, int off, int *size ) const
 {
-    bool is_file = (iid.find("file:")==0);
-    bool is_res  = (iid.find("res:")==0);
+    bool is_file = (iid.find("file:") == 0);
+    bool is_res  = (iid.find("res:") == 0);
 
     if(!is_file) {
 	//Get resource file from DB

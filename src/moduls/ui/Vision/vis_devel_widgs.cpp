@@ -718,8 +718,8 @@ bool InspAttr::event( QEvent *event )
 void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 {
     string nattr, nwdg;
-    QAction *actClr, *actChDown, *actCopy, *actEdit;
-    actClr = actChDown = actCopy = actEdit = NULL;
+    QAction *actClr, *actChDown, *actCopy, *actEdit, *actUpload;
+    actClr = actChDown = actCopy = actEdit = actUpload = NULL;
     ModInspAttr::Item *it = NULL;
 
     //Attribute
@@ -763,6 +763,12 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	    actChDown = new QAction(QPixmap::fromImage(ico_t),_("Lower the widget changes to its parent"),this);
 	    actChDown->setStatusTip(_("Press for lowering the widget changes to its parent."));
 	    popup.addAction(actChDown);
+	}
+
+	// Image data loading directly
+	if(it->flag()&ModInspAttr::Item::Resource) {
+	    actUpload = new QAction(_("Upload file"), this);
+	    popup.addAction(actUpload);
 	}
     }
 
@@ -813,6 +819,22 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	    if(dlg.exec() == QDialog::Accepted) {
 		modelData.mainWin()->visualItDownParent(nwdg+"/a_"+nattr);
 		modelData.setWdg(modelData.curWdg());
+	    }
+	}
+	else if(actUpload && rez == actUpload) {
+	    QString fn = ((VisDevelop*)window())->getFileName(_("Loading a file"),"",_("Any (*)"), QFileDialog::AcceptOpen);
+	    if(fn.size()) {
+		QFile file(fn);
+		if(!file.open(QFile::ReadOnly))
+		    mod->postMess(mod->nodePath().c_str(), QString(_("Error opening the file '%1': %2")).arg(fn).arg(file.errorString()), TVision::Error, this);
+		else if(file.size() >= limUserFile_SZ)
+		    mod->postMess(mod->nodePath().c_str(), QString(_("The download file '%1' is very large.")).arg(fn), TVision::Error);
+		else {
+		    QByteArray data = file.readAll();
+		    model()->setData(selectedIndexes()[0],
+			("data:"+TUIS::mimeGet(file.fileName().toStdString(),"")+"\n"+TSYS::strEncode(string(data.data(),data.size()),TSYS::base64)).c_str(),
+			Qt::EditRole);
+		}
 	    }
 	}
 	popup.clear();
@@ -900,7 +922,8 @@ void InspAttr::ItemDelegate::setEditorData( QWidget *editor, const QModelIndex &
     }
     else if(value.typeId() == QVariant::String && flag&ModInspAttr::Item::FullText && dynamic_cast<QTextEdit*>(editor))
 	((QTextEdit*)editor)->setPlainText(value.toString());
-    else if(value.typeId() == QVariant::String && (flag&ModInspAttr::Item::Font || flag&ModInspAttr::Item::Color) && dynamic_cast<LineEditProp*>(editor))
+    else if(value.typeId() == QVariant::String && (flag&ModInspAttr::Item::Font || flag&ModInspAttr::Item::Color) &&
+	    dynamic_cast<LineEditProp*>(editor))
 	((LineEditProp*)editor)->setValue(value.toString());
     else if(value.typeId() == QVariant::Int && flag&ModInspAttr::Item::DateTime && dynamic_cast<QDateTimeEdit*>(editor))
 	((QDateTimeEdit*)editor)->setDateTime(QDateTime::fromSecsSinceEpoch(value.toInt()?value.toInt():time(NULL)));
@@ -916,7 +939,8 @@ void InspAttr::ItemDelegate::setModelData( QWidget *editor, QAbstractItemModel *
 	model->setData(index,((QComboBox*)editor)->currentText(),Qt::EditRole);
     else if(value.typeId() == QVariant::String && flag&ModInspAttr::Item::FullText && dynamic_cast<QTextEdit*>(editor))
 	model->setData(index,((QTextEdit*)editor)->toPlainText(),Qt::EditRole);
-    else if(value.typeId() == QVariant::String && (flag&ModInspAttr::Item::Font || flag&ModInspAttr::Item::Color) && dynamic_cast<LineEditProp*>(editor))
+    else if(value.typeId() == QVariant::String && (flag&ModInspAttr::Item::Font || flag&ModInspAttr::Item::Color) &&
+	    dynamic_cast<LineEditProp*>(editor))
 	model->setData(index,((LineEditProp*)editor)->value());
     else if(value.typeId() == QVariant::Int && flag&ModInspAttr::Item::DateTime && dynamic_cast<QDateTimeEdit*>(editor))
     {
@@ -2003,7 +2027,7 @@ void ProjTree::ctrTreePopup( )
 //**********************************************************************************************
 //* Text edit line widget with detail dialog edit button. Support: Font and Color edit dialogs.*
 //**********************************************************************************************
-LineEditProp::LineEditProp( QWidget *parent, DType tp, bool m_toClose ) : QWidget( parent ), m_tp(tp), toClose(m_toClose)
+LineEditProp::LineEditProp( QWidget *parent, DType tp, bool m_toClose ) : QWidget(parent), m_tp(tp), toClose(m_toClose)
 {
     QHBoxLayout *box = new QHBoxLayout(this);
     box->setContentsMargins(0, 0, 0, 0);

@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/Main</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/Libs_Main.html" title="Библиотеки/Основная (8% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main.html" title="Бібліотеки/Основна (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/Libs_Main.html" title="Библиотеки/Основная (6% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main.html" title="Бібліотеки/Основна (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -27,7 +27,7 @@
 <tr>
 <td> <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">Main library</a>
 </td>
-<td> 2.0 </td>
+<td> 2.1 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_base </td>
 <td> en, uk, ru
@@ -38,6 +38,7 @@
 <ul><li> <b>Founded:</b> January 2006</li>
 <li> <b>Sponsored by:</b> depending on the item ...</li>
 <li> <b>Used by:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">most projects on OpenSCADA</a></li></ul>
+<dl><dd>- finish of implementation the Partial Content requests in <a href="Libs_Main.html#fileServerHTTP" title="Special:MyLanguage/Libs/Main">WebUser: HTTP File Server</a> after support the HEAD request in <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a>.</dd></dl>
 </td></tr></table>
 <p>The library was created to provide main templates of the DAQ-sources processing and related services.
 </p><p>The template's names and their parameters are available in languages: English, Ukrainian and mRussian. Their source code wrote in the human-language independent mode with calls for the translations by the function <i>tr()</i> and the message's translation also allowed for English, Ukrainian and mRussian.
@@ -76,6 +77,11 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <ul>
 <li class="toclevel-2"><a href="#Notificator_by_SMS.2C_EMail-SMTP_.28ntf.29"><span class="tocnumber">3.1</span> <span class="toctext">Notificator by SMS, EMail-SMTP (ntf)</span></a></li>
 <li class="toclevel-2"><a href="#Initiative_connections_processing_for_the_associated_output_transports_.28initConAssociateTrs.29"><span class="tocnumber">3.2</span> <span class="toctext">Initiative connections processing for the associated output transports (initConAssociateTrs)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#For_WebUser"><span class="tocnumber">4</span> <span class="toctext">For WebUser</span></a>
+<ul>
+<li class="toclevel-2"><a href="#WebUser:_HTTP_File_Server_.28fileServerHTTP.29"><span class="tocnumber">4.1</span> <span class="toctext">WebUser: HTTP File Server (fileServerHTTP)</span></a></li>
 </ul>
 </li>
 </ul>
@@ -3192,6 +3198,140 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <li> <i>Output transport timeouts</i> — increase the first digit for very slow connections and typical is normal in most situations</li>
 <li> <i>Source objects path</i> — set according to the item 3, for the first part, and to the control field path, for the second part, for example, and typically for for "ModBus", is — "ModBus:%2fcntr%2fcfg%2fADDR".</li></ul></dd>
 <dd>6. RESULT: Starting the controller object (where this parameter was created) and if it was not started, we should get, in the attribute <i>prcTr</i> of the parameter for information about the processed and therefore successfully transport-linked data sources. In case of some violations, we will get the corresponding information in the attribute <i>err</i> of the parameter. The absence of a representative object for the received identifier is placed in the protocol of messages.</dd></dl>
+<h2><span class="mw-headline" id="For_WebUser"><span class="mw-headline-number">4</span> <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">For WebUser</a></span></h2>
+<table class="wikitable">
+
+<tr>
+<td> <span id="fileServerHTTP" title="#fileServerHTTP"><h3><span class="mw-headline" id="WebUser:_HTTP_File_Server_.28fileServerHTTP.29"><span class="mw-headline-number">4.1</span> WebUser: HTTP File Server (<a href="Libs_Main.html#fileServerHTTP" title="Special:MyLanguage/Libs/Main">fileServerHTTP</a>)</span></h3></span>
+</td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The template for implementing a HTTP File Server directly in OpenSCADA, which is suitable one at missing a full-featured one for functions of servicing file requests from OpenSCADA Web-interfaces.
+</p><p>Currently there implemented only requesting files by the GET request of HTTP. There are supported also the Partial Content requests in single range and with forcing to this mode at some configured file size. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> That is work properly only for video and audio files and doesn't work for other files especially documents, so you have to configure the file size limit for solid reading in maximum size of your documents. For proper working the Partial Content requests we need to implement the HTTP request HEAD in the module <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> before implementing here!
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Result </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 200 OK
+</td></tr>
+<tr>
+<td> HTTPreq </td>
+<td> HTTP request </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> url </td>
+<td> URL </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> page </td>
+<td> WWW-page </td>
+<td> String </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> HTTPvars </td>
+<td> HTTP variables </td>
+<td> Object </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> baseD </td>
+<td> Base directory </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> /data/share_res/local/Lib/
+</td></tr>
+<tr>
+<td> fSzSolidLim </td>
+<td> File size limit for solid reading, else enables the partial content </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 10e6
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz	Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainFileServerHTTPCfg.png" title="Configuration."><img alt="Configuration." height="513" src="files/LibsMainFileServerHTTPCfg.png" width="575" /></a></div>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create a page in the <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">UI.WebUser</a> module with some reasonable <i>PageId</i>.</dd>
+<dd>2. In the tab "Procedure" you need to set:
+<ul><li> Base directory from which the page'll search files.</li>
+<li> File size limit for solid reading, else enables the partial content.</li></ul></dd>
+<dd>3. RESULT: Opening URL "http://{OpenSCADAHost}/WebUser/{PageId}/{MyFile}" in a WebBrowser will open and send you file on FS "{baseD}/{MyFile}".</dd></dl>
 
 
 

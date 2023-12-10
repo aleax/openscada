@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-24 16:27+0300\n"
+"POT-Creation-Date: 2023-12-10 09:30+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -343,8 +343,7 @@ msgstr ""
 "Кнопка принудительного сохранения данных элемента в БД, не только когда "
 "изменено"
 
-msgid ""
-"Press for saving the item data to the DB forcibly, not only when it changed."
+msgid "Press for saving the item data to the DB forcibly, not only when it changed."
 msgstr ""
 "Нажать для принудительного сохранения данных элемента в БД, не только когда "
 "изменено."
@@ -407,8 +406,7 @@ msgstr ""
 msgid "Delete visual item"
 msgstr "Удалить визуальный элемент"
 
-msgid ""
-"Deleting the visual item from the library, container widget, project or page"
+msgid "Deleting the visual item from the library, container widget, project or page"
 msgstr ""
 "Удаление визуального элемента из библиотеки, контейнера виджетов, проекта "
 "или страницы"
@@ -1158,9 +1156,8 @@ msgstr "Изображения (*.png *.xpm *.jpg)"
 msgid "Error saving to the file '%s'."
 msgstr "Ошибка сохранения в файл '%1'."
 
-#, fuzzy
-msgid "Loading the picture"
-msgstr "Загрузка данных"
+msgid "Loading a picture"
+msgstr "Загрузка картинки"
 
 msgid "Images (*.png *.jpg)"
 msgstr "Изображения (*.png *.jpg)"
@@ -1302,6 +1299,10 @@ msgstr "Опустить изменения виджета предку"
 msgid "Press for lowering the widget changes to its parent."
 msgstr "Нажать для опускания изменений виджета предку."
 
+#, fuzzy
+msgid "Upload file"
+msgstr "Загрузка файла."
+
 msgid "Full-text editing of the attribute."
 msgstr "Полнотекстовое редактирование атрибута."
 
@@ -1322,10 +1323,14 @@ msgstr ""
 "В случае отсутствия визуальный элемент будет создан у предка а все другие "
 "визуальные элементы, наследники от данного предка, будут использовать его!"
 
-msgid ""
-"Lowering down the selected attribute change of the visual item to the parent"
+msgid "Lowering down the selected attribute change of the visual item to the parent"
+msgstr "Опускание изменения выбранного атрибута визуального элемента к родителю"
+
+msgid "Loading a file"
+msgstr "Загрузка файла"
+
+msgid "Any (*)"
 msgstr ""
-"Опускание изменения выбранного атрибута визуального элемента к родителю"
 
 msgid "Widgets"
 msgstr "Виджет"
@@ -2064,8 +2069,7 @@ msgstr "Точка 4:"
 msgid "Point 5:"
 msgstr "Точка 5:"
 
-msgid ""
-"Include(checked)/Exclude(unchecked) the fill color from the properties list."
+msgid "Include(checked)/Exclude(unchecked) the fill color from the properties list."
 msgstr "Включить(включен)/Исключить(выключен) цвет заливки из списка свойств."
 
 msgid "Fill Color"
@@ -2074,10 +2078,8 @@ msgstr "Цвет заливки"
 msgid "Set the default fill color."
 msgstr "Установить цвет заливки по умолчанию."
 
-msgid ""
-"Include(checked)/Exclude(unchecked) the fill image from the properties list."
-msgstr ""
-"Включить(включен)/Исключить(выключен) изображение заливки из списка свойств."
+msgid "Include(checked)/Exclude(unchecked) the fill image from the properties list."
+msgstr "Включить(включен)/Исключить(выключен) изображение заливки из списка свойств."
 
 msgid "Fill Image"
 msgstr "Изображение заливки"
@@ -2092,11 +2094,9 @@ msgid "Dyn/Stat"
 msgstr "Дин/Стат"
 
 msgid "Make the fill image Dynamic(checked)/Static(unchecked)."
-msgstr ""
-"Сделать изображение заливки Динамическим(включена)/Статическим(выключена)."
+msgstr "Сделать изображение заливки Динамическим(включена)/Статическим(выключена)."
 
-msgid ""
-"Include(checked)/Exclude(unchecked) the line width from the properties list."
+msgid "Include(checked)/Exclude(unchecked) the line width from the properties list."
 msgstr "Включить(включен)/Исключить(выключен) ширину линии из списка свойств."
 
 msgid "Line width"
@@ -2108,8 +2108,7 @@ msgstr "Установить ширину линии по умолчанию. "
 msgid "Make the line width Dynamic(checked)/Static(unchecked)."
 msgstr "Сделать ширину линии Динамической(включена)/Статической(выключена)."
 
-msgid ""
-"Include(checked)/Exclude(unchecked) the line color from the properties list."
+msgid "Include(checked)/Exclude(unchecked) the line color from the properties list."
 msgstr "Включить(включен)/Исключить(выключен) цвет линии из списка свойств."
 
 msgid "Line color"
@@ -2121,8 +2120,7 @@ msgstr "Установить цвет линии по умолчанию."
 msgid "Make the line color Dynamic(checked)/Static(unchecked)."
 msgstr "Сделать цвет линии Динамическим(включена)/Статическим(выключена)."
 
-msgid ""
-"Include(checked)/Exclude(unchecked) the line style from the properties list."
+msgid "Include(checked)/Exclude(unchecked) the line style from the properties list."
 msgstr "Включить(включен)/Исключить(выключен) стиль линии из списка свойств."
 
 msgid "Line style"
@@ -2137,8 +2135,7 @@ msgstr "Сделать стиль линии Динамическим(включ
 msgid ""
 "Include(checked)/Exclude(unchecked) the border width from the properties "
 "list."
-msgstr ""
-"Включить(включен)/Исключить(выключен) ширину границы из списка свойств."
+msgstr "Включить(включен)/Исключить(выключен) ширину границы из списка свойств."
 
 msgid "Border width"
 msgstr "Ширина границы"
@@ -2198,9 +2195,6 @@ msgstr "Образ виджета '%1' ещё не реализован!"
 
 msgid "Saving a file"
 msgstr "Сохранение файла."
-
-msgid "Loading a file"
-msgstr "Загрузка файла."
 
 msgid "Error writing to the file '%1'."
 msgstr "Ошибка записи в файл '%1'."
@@ -2332,11 +2326,3 @@ msgstr "Время инициализации '%s': %f мс."
 msgid "Input dialog of Vision"
 msgstr "Диалог ввода Vision"
 
-#~ msgid "Container DB:"
-#~ msgstr "БД контейнера:"
-
-#~ msgid "Item icon. Click to download another."
-#~ msgstr "Иконка элемента. Нажмите для загрузки другой."
-
-#~ msgid "Downloading the image icon"
-#~ msgstr "Загрузка изображения иконки"

@@ -795,7 +795,7 @@ void LibProjProp::doIco( QAction *it )
 		throw TError(mod->nodePath().c_str(), _("Error saving to the file '%s'."), fileName.toStdString().c_str());
 	}
 	else if(it->objectName() == "load") {
-	    QString fileName = owner()->getFileName(_("Loading the picture"),"",_("Images (*.png *.jpg)"));
+	    QString fileName = owner()->getFileName(_("Loading a picture"),"",_("Images (*.png *.jpg)"));
 	    if(fileName.isEmpty())	return;
 
 	    QImage ico_t;
@@ -1747,7 +1747,7 @@ void VisItProp::doIco( QAction *it )
 		throw TError(mod->nodePath().c_str(), _("Error saving to the file '%s'."), fileName.toStdString().c_str());
 	}
 	else if(it->objectName() == "load") {
-	    QString fileName = owner()->getFileName(_("Loading the picture"),"",_("Images (*.png *.jpg)"));
+	    QString fileName = owner()->getFileName(_("Loading a picture"),"",_("Images (*.png *.jpg)"));
 	    if(fileName.isEmpty())	return;
 
 	    QImage ico_t;

@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/Sockets</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSockets&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Sockets" title="Modules/Sockets">Modules/Sockets</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Sockets.html" title="Modules/Sockets (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--high" href="../../ru/Modules/Sockets.html" title="Модули/Sockets (60% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSockets&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Sockets" title="Modules/Sockets">Modules/Sockets</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Sockets.html" title="Modules/Sockets (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--med" href="../../ru/Modules/Sockets.html" title="Модули/Sockets (55% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a> </td>
 <td> Сокети
 </td>
-<td> 4.7 </td>
+<td> 4.8 </td>
 <td> GPL2 </td>
 <td> tr_Sockets.so </td>
 <td> en,uk,ru,de </td>
@@ -89,11 +89,11 @@
 <tr>
 <td> TCP </td>
 <td>
-<p><b>[TCP:]{addr}:{port}[:{mode}[:{IDmess}]]</b><br />
+<p><b>[TCP:]{addr}[:{port}[,{port2}[,{portN}]][:{mode}[:{IDmess}]]]</b><br />
 де:
 </p>
 <ul><li> <i>addr</i> — адреса відкриття сокету, порожня або "*" адреса відкриває сокет на всіх інтерфейсах. Допускаються як символьне, так й IPv4 "<b>127.0.0.1</b>" або IPv6 "<b>[::1]</b>" представлення адреси.</li>
-<li> <i>port</i> — мережевий порт на якому відкривається сокет, можливе вказання символьного ім'я порту відповідно до <i>/etc/services</i>.</li>
+<li> <i>port</i>, <i>port2</i>, <i>portN</i> — мережеві порти на яких послідовно відкривається сокет (при зайнятості перших), можливе вказання символьної назви порту відповідно до <i>/etc/services</i>.</li>
 <li> <i>mode</i> — режим роботи вхідного сокету:
 <ul><li> <b>0</b> — примусово розривати з'єднання після сеансу прийом-відповідь.</li>
 <li> <b>1</b>(типово) — не розривати з'єднання, тільки з урахуванням параметрів KeepAlive.</li>

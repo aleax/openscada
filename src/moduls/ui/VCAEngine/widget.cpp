@@ -116,7 +116,7 @@ TCntrNode &Widget::operator=( const TCntrNode &node )
     for(unsigned iA = 0; iA < els.size(); iA++)
 	if((attr=attrAt(els[iA])).at().flgGlob()&Attr::Image || (rootId() == "Media" && els[iA] == "src")) {
 	    string rId = attr.at().getS(), mime, data;
-	    if(rId.find("file:") == 0 || rId.find("stream:") == 0) continue;
+	    if(rId.find("file:") == 0 || rId.find("stream:") == 0 || rId.find("data:") == 0) continue;
 	    if(rId.find("res:") == 0)	rId = rId.substr(4);
 	    data = srcN->resourceGet(rId, &mime, -1, NULL, true);
 	    if(data.size()) resourceSet(rId, mime, data);

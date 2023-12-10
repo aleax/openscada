@@ -62,6 +62,7 @@ class ModInspAttr: public QAbstractItemModel //QAbstractTableModel
 		    Image	= 0x0200,
 		    Color	= 0x0400,
 		    Font	= 0x0800,
+		    Resource  = 0x100000,
 		    DateTime	= 0x0200,
 		    SelEd	= 0x1000
 		};

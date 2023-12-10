@@ -30,7 +30,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Движок Среды Визуализации и Управления
 </td>
-<td> 7.11 </td>
+<td> 7.12 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -1972,186 +1972,183 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 </td></tr></table>
 <h4><span class="mw-headline" id=".D0.AD.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82_.D0.BE.D1.82.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.B8.D1.8F_.D0.BC.D0.B5.D0.B4.D0.B8.D0.B0-.D0.BC.D0.B0.D1.82.D0.B5.D1.80.D0.B8.D0.B0.D0.BB.D0.BE.D0.B2_.28Media.29"><span class="mw-headline-number">3.9.4</span> <span id="Media" title="#Media">Элемент отображения медиа-материалов (Media)</span></span></h4>
 <p>Данный примитив предназначен для проигрывания различных медиа-материалов, начиная от простых изображений и заканчивая полноценными аудио и видео потоками.
-</p><p><b>Таблица.</b> Набор дополнительных свойств/атрибутов примитива "Элемент отображения медиа-материалов (Media)"
+</p><p><b>Table.</b> List of additional properties/attributes of the primitive "Element of visualization of media-materials (Media)"
 </p>
 <table class="wikitable">
 
 <tr>
-<th> Идентификатор </th>
-<th> Имя </th>
-<th> Номер </th>
-<th> Значение
+<th> Identifier </th>
+<th> Name </th>
+<th> Number </th>
+<th> Value
 </th></tr>
 <tr>
 <td> backColor </td>
-<td> Фон: цвет </td>
+<td> Background: color </td>
 <td> 20 </td>
-<td>
-<p>Фоновый цвет. Имя цвета в виде "<b>{color}[-{alpha}]</b>", где:
+<td> Background color. Color name in the view "<b>{color}[-{alpha}]</b>", where:
+<ul><li> "color" — standard color name or its numeric representation of three hexadecimal numbers of individual colors "#RRGGBB";</li>
+<li> "alpha" — level of the alpha [0...255], where 0 — completely transparent.<br /></li></ul>
+<p>Examples:
 </p>
-<ul><li> "color" — стандартное имя цвета или его числовое представление из трёх шестнадцатеричных чисел отдельных цветов "#RRGGBB";</li>
-<li> "alpha" — уровень альфа-канала [0...255], где 0 — полностью прозрачный.<br /></li></ul>
-<p>Примеры:
-</p>
-<ul><li> "red" — сплошной красный цвет;</li>
-<li> "#FF0000" — сплошной красный цвет в цифровом коде;</li>
-<li> "red-127" — полупрозрачный красный цвет.</li></ul>
+<ul><li> "red" — solid red color;</li>
+<li> "#FF0000" — solid red color by the digital code;</li>
+<li> "red-127" — half transparent red color. </li></ul>
 </td></tr>
 <tr>
 <td> backImg </td>
-<td> Фон: изображение </td>
+<td> Background: image </td>
 <td> 21 </td>
-<td>
-<p>Фоновое изображение. Имя изображения в виде "<b>[{src}:]{name}</b>", где:
+<td> Background image. The image name in the view "<b>[{src}:]{name}</b>", where:
+<ul><li> "src" — source of the image:
+<ul><li> <i>file</i> — directly from the local file by the path;</li>
+<li> <i>res</i> — from the resources table of DB.</li></ul></li>
+<li> "name" — file path or identifier of the resource.<br /></li></ul>
+<p>Examples:
 </p>
-<ul><li> "src" — источник изображения:
-<ul><li> <i>file</i> — прямо из локального файла по пути;</li>
-<li> <i>res</i> — из таблицы ресурсов БД.</li></ul></li>
-<li> "name" — путь файла или идентификатор ресурса.<br /></li></ul>
-<p>Примеры:
-</p>
-<ul><li> "res:backLogo" — из таблицы ресурсов БД для идентификатора "backLogo";</li>
-<li> "backLogo" — как и предыдущий;</li>
-<li> "file:/var/tmp/backLogo.png" — из локального файла по пути "/var/tmp/backLogo.png". </li></ul>
+<ul><li> "res:backLogo" — from the resources table of DB for the identifier "backLogo";</li>
+<li> "backLogo" — like toe the previous;</li>
+<li> "file:/var/tmp/backLogo.png" — from local file by the path "/var/tmp/backLogo.png".</li></ul>
 </td></tr>
 <tr>
 <td> bordWidth </td>
-<td> Граница: ширина </td>
+<td> Border: width </td>
 <td> 22 </td>
-<td> Ширина бордюра.
+<td> Border width.
 </td></tr>
 <tr>
 <td> bordColor </td>
-<td> Граница: цвет </td>
+<td> Border: color </td>
 <td> 23 </td>
-<td> Цвет бордюра (детальнее в атрибуте 20).
+<td> Border color (details in attribute 20).
 </td></tr>
 <tr>
 <td> bordStyle </td>
-<td> Граница: стиль </td>
+<td> Border: style </td>
 <td> 24 </td>
-<td> Стиль бордюра: "Нет", "Точечный", "Пунктирный", "Сплошной", "Двойной", "Канавка", "Кромка", "Вдавлен", "Выступающий".
+<td> Border style: "None", "Dotted", "Dashed", "Solid", "Double", "Groove", "Ridge", "Inset", "Outset".
 </td></tr>
 <tr>
 <td> src </td>
-<td> Источник </td>
+<td> Source </td>
 <td> 25 </td>
 <td>
-<p>Имя источника медиа в виде "<b>[{src}:]{name}</b>", где:
+<p>Name of the Media source in the view "<b>[{src}:]{name}</b>", where:
 </p>
-<ul><li> "src" — источник:
-<ul><li> <i>file</i> — прямо из локального, визуализатор и движок, файла по пути;</li>
-<li> <i>res</i> — из таблицы ресурсов БД;</li>
-<li> <i>stream</i> — URL потока проигрывания видео или аудио.</li></ul></li>
-<li> "name" — путь файла или идентификатор ресурса.<br /></li></ul>
-<p>Примеры:
+<ul><li> "src" — source:
+<ul><li> <i>file</i> — directly from the local file, visualizer and engine, by the path;</li>
+<li> <i>res</i> — from the resources table of DB;</li>
+<li> <i>data</i> — directly data in the form "data:{mime}\n{base64}";</li>
+<li> <i>stream</i> — stream URL for playback video and audio.</li></ul></li>
+<li> "name" — file path or identifier of the resource.<br /></li></ul>
+<p>Examples:
 </p>
-<ul><li> "res:workMedia" — из таблицы ресурсов БД для идентификатора "workMedia";</li>
-<li> "workMedia" — как и предыдущий;</li>
-<li> "file:/var/tmp/workMedia.mng" — из локального файла по пути "/var/tmp/workMedia.mng";</li>
-<li> "stream:http://localhost.localhost:5050" — проигрывание видео или аудио из URL.</li></ul>
+<ul><li> "res:workMedia" — from the resources table of DB for the identifier "workMedia";</li>
+<li> "workMedia" — like to previous;</li>
+<li> "file:/var/tmp/workMedia.mng" — from the local file by the path "/var/tmp/workMedia.mng";</li>
+<li> "stream:http://localhost.localhost:5050" — playback for video and audio stream from the URL.</li></ul>
 </td></tr>
 <tr>
 <td> type </td>
-<td> Тип </td>
+<td> Type </td>
 <td> 27 </td>
 <td>
-<p>Тип медиа:
+<p>Media type:
 </p>
-<ul><li> "Изображение" — растровое или векторное (может не поддерживаться) изображение, вроде: PNG, JPEG, GIF, SVG;</li>
-<li> "Анимация" — простое анимированное изображение, вроде: GIF, MNG;</li>
-<li> "Видео" — полное видео или поток, вроде: OGM, AVI, MKV, MPG, MP4;</li>
-<li> "Аудио" — просто аудио или поток, вроде: OGG, MP3, WAV.</li></ul>
+<ul><li> "Image" — raster or vector (can not support) image, like to: PNG, JPEG, GIF, SVG;</li>
+<li> "Animation" — simple animation image, like to: GIF, MNG;</li>
+<li> "Video" — full video or stream, like to: OGM, AVI, MKV, MPG, MP4;</li>
+<li> "Audio" — just audio or stream, like to: OGG, MP3, WAV.</li></ul>
 </td></tr>
 <tr>
 <td> areas </td>
-<td> Области карты </td>
+<td> Map areas </td>
 <td> 28 </td>
-<td> Количество активных областей.
+<td> Number of the active areas.
 </td></tr>
 <tr>
-<td colspan="4"> <i>Атрибуты изображения (Image)</i>
-</td></tr>
-<tr>
-<td> fit </td>
-<td> Заполнять виджет </td>
-<td> 26 </td>
-<td> Признак "Согласовать содержимое с размером виджета".
-</td></tr>
-<tr>
-<td colspan="4"> <i>Атрибуты анимации-видеоролика (Animation)</i>
+<td colspan="4"> <i>Attributes of the image (Image)</i>
 </td></tr>
 <tr>
 <td> fit </td>
-<td> Заполнять виджет </td>
+<td> Fit to the widget size </td>
 <td> 26 </td>
-<td> Признак "Согласовать содержимое с размером виджета".
+<td> Sign "Coordinate the contents with the widget size".
+</td></tr>
+<tr>
+<td colspan="4"> <i>Attributes of the animation-video (Animation)</i>
+</td></tr>
+<tr>
+<td> fit </td>
+<td> Fit to the widget size </td>
+<td> 26 </td>
+<td> Sign "Coordinate the contents with the widget size".
 </td></tr>
 <tr>
 <td> speed </td>
-<td> Скорость проигрывания </td>
+<td> Play speed </td>
 <td> 29 </td>
-<td> Скорость проигрывания, в процентах от оригинальной скорости. Если значение меньше или равно 1% то проигрывание прекращается.
+<td> Speed of playback, as a percentage from the original speed. If the value is less or even than 1%, the playback stops.
 </td></tr>
 <tr>
-<td colspan="4"> <i>Атрибуты полноформатного видео (Full video)</i>
+<td colspan="4"> <i>Attributes of the full video (Full video)</i>
 </td></tr>
 <tr>
 <td> play </td>
-<td> Играть </td>
+<td> Play </td>
 <td> 29 </td>
-<td> Видео/аудио — "Играть".
+<td> Video/audio — "Play".
 </td></tr>
 <tr>
 <td> roll </td>
-<td> Заворачивать проигрывание </td>
+<td> Roll play </td>
 <td> 30 </td>
-<td> Повторение проигрывания по завершению.
+<td> Roll play on the finish.
 </td></tr>
 <tr>
 <td> pause </td>
-<td> Пауза </td>
+<td> Pause </td>
 <td> 31 </td>
-<td> Приостановить проигрывание.
+<td> Playing pause.
 </td></tr>
 <tr>
 <td> size </td>
-<td> Размер </td>
+<td> Size </td>
 <td> 32 </td>
-<td> Общий размер видео, в миллисекундах.
+<td> Total video size, in milliseconds.
 </td></tr>
 <tr>
 <td> seek </td>
-<td> Положение </td>
+<td> Seek </td>
 <td> 33 </td>
-<td> Позиция проигрывания видео, в миллисекундах.
+<td> Seek video playing, in milliseconds.
 </td></tr>
 <tr>
 <td> volume </td>
-<td> Громкость </td>
+<td> Volume </td>
 <td> 34 </td>
-<td> Громкость звука [0...100].
+<td> Sound volume [0...100].
 </td></tr>
 <tr>
-<td colspan="4"> <i>Активные области</i>
+<td colspan="4"> <i>Active areas</i>
 </td></tr>
 <tr>
 <td> area{x}shp </td>
-<td> Область {x}: образ </td>
+<td> Area {x}: shape </td>
 <td> 40+3*x </td>
-<td> Вид области <i>x</i>: "Квадрат", "Полилиния", "Окружность".
+<td> Type of the area <i>x</i>: "Rect", "Poly", "Circle".
 </td></tr>
 <tr>
 <td> area{x}coord </td>
-<td> Область {x}: координаты </td>
+<td> Area {x}: coordinates </td>
 <td> 40+3*x+1 </td>
-<td> Координаты области <i>x</i>, через запятую идут координаты: "x1,y1,x2,y2,xN,yN".
+<td> Coordinates of the area <i>x</i>, are separated by commas: "x1,y1,x2,y2,xN,yN".
 </td></tr>
 <tr>
 <td> area{x}title </td>
-<td> Область {x}: заголовок </td>
+<td> Area {x}: title </td>
 <td> 40+3*x+2 </td>
-<td> Заголовок области <i>x</i>.
+<td> Title of the area <i>x</i>.
 </td></tr></table>
 <h4><span class="mw-headline" id=".D0.AD.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82_.D0.BF.D0.BE.D1.81.D1.82.D1.80.D0.BE.D0.B5.D0.BD.D0.B8.D1.8F_.D0.B4.D0.B8.D0.B0.D0.B3.D1.80.D0.B0.D0.BC.D0.BC_.28Diagram.29"><span class="mw-headline-number">3.9.5</span> <span id="Diagram" title="#Diagram">Элемент построения диаграмм (Diagram)</span></span></h4>
 <p>Данный примитив предназначен для построения различных диаграмм во времени, включая графики-тренды отображения текущего процесса и архивных данных. Реализованы следующие типы диаграмм:

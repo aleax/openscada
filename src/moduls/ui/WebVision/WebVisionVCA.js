@@ -938,6 +938,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		if(!this.attrs['src'].length || (this.attrs['play'] && !parseInt(this.attrs['play'])))	medObj.src = "";
 		else if(this.attrs['src'].indexOf("http://") == 0 || this.attrs['src'].indexOf("https://") == 0)
 		    medObj.src = this.attrs['src'];
+		else if(this.attrs['src'].indexOf("data:") == 0 && (fLine=this.attrs['src'].indexOf("\n")) >= 0)
+		    medObj.src = "data:"+this.attrs['src'].slice(5,fLine)+";base64,"+this.attrs['src'].slice(fLine+1);
 		else medObj.src = "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['src'];
 		medObj.hidden = !this.attrs['src'].length;
 	    }
@@ -952,7 +954,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		if(this.attrs['fit'] == 1) {
 		    medObj.width = geomW; medObj.height = geomH;
 		    // Only for the type "Image(0)"
-		    if(this.attrs['src'].length && this.attrs['type'] == 0) medObj.src += "&size="+geomH;
+		    if(this.attrs['src'].length && this.attrs['type'] == 0 && this.attrs['src'].indexOf("data:") != 0)
+			medObj.src += "&size="+geomH;
 		    medObj.onload = null;
 		}
 		else medObj.onload = function() {

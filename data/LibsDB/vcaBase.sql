@@ -58,7 +58,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: September 2007
-Version: 2.1.23
+Version: 2.1.30
 License: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAA
 GXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAABTxJREFUeJzt2XFo3GcZwPHPZdFO
@@ -91,7 +91,7 @@ a2szNDQ003rWz1l8E6+v4549pu7vO8XPaqeq5K4XUXBF9j0PVV1f6D+L53+M5OTk5OTk5OTk5OTk
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Вересень 2007
-Версія: 2.1.23
+Версія: 2.1.30
 Ліцензія: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса и содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
 
@@ -99,7 +99,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основны�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Сентябрь 2007
-Версия: 2.1.23
+Версия: 2.1.30
 Лицензия: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements');
 INSERT INTO VCALibs VALUES('mnEls','Mnemo elements','Provides the mnemonic elements library of the user interface of the industrial automation.
@@ -14074,7 +14074,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `sh_"+class+"` ("+colLs+") (SELECT "+colLs+" FROM `sh_"+class+"` WHERE `ID` = "+dataTbl_value+");");
 		toUpdate = true; toCalcCycles = 1;
 	}
-	else if((isTbl=(sval.slice(0,12)=="ws_TableEdit")) || (tVl=sval.match("^ws_(LnAccept|TxtAccept):/fItVal(.+)$")).length) {
+	else if((isTbl=(sval.slice(0,12)=="ws_TableEdit")) || (tVl=sval.match("^ws_(LnAccept|TxtAccept|ChkChange):/fItVal(.+)$")).length) {
 		if(isTbl) col = dataTbl[0][sval.parse(0,"_",13).toInt()], row = dataTbl[sval.parse(1,"_",13).toInt()+1][0], toVal = dataTbl_set;
 		else col = tVl[2], row = this.fItValID.attr("text"), toVal = this["fItVal"+col].attr("value");
 		//this.messInfo("TEST 00: col="+col+", row="+row+", toVal="+toVal);
@@ -14111,7 +14111,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 					itVl = tVl.name;
 				go_reportIt_report += "<span style=''font: bold 15px/25px Arial, sans-serif''>"+SYS.strEncode(itVl,"HTML")+":</span>";
 				if(colTps[iC] == "t")	go_reportIt_report += "<br/>";
-				go_reportIt_report += "<span style=''margin-left: 3pt; white-space: pre-wrap;''>"+
+				go_reportIt_report += "<span style=''/*margin-left: 3pt;*/ white-space: pre-wrap;''>"+
 						SYS.strEncode(dataTblOneReq[iR][iC],"HTML").replace(new RegExp("(http|https|ftp)://(\\S+)","g"),"<a target=''_blank'' href=''$1://$2''>$2</a>")+
 						"</span><br/>";
 			}
@@ -24061,7 +24061,7 @@ The frame provides currently and in future for next features:
   - detailed control panel-form of the selected item with the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.4.2
+Version: 1.4.3
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -24075,7 +24075,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - деталізована панель-форма керування обраним елементом зі специфічними полями.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.4.2
+Версія: 1.4.3
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');

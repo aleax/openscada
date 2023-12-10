@@ -835,7 +835,7 @@ void OrigMedia::postEnable( int flag )
 	attrAdd(new TFld("bordStyle",trS("Border: style"),TFld::Integer,TFld::Selectable,"","3",
 	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d",FBRD_NONE,FBRD_DOT,FBRD_DASH,FBRD_SOL,FBRD_DBL,FBRD_GROOVE,FBRD_RIDGE,FBRD_INSET,FBRD_OUTSET).c_str(),
 	    _("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),i2s(A_BordStyle).c_str()));
-	attrAdd(new TFld("src",trS("Source"),TFld::String,0,"50","","","",i2s(A_MediaSrc).c_str()));
+	attrAdd(new TFld("src",trS("Source"),TFld::String,Attr::Resource,"50","","","",i2s(A_MediaSrc).c_str()));
 	attrAdd(new TFld("type",trS("Type"),TFld::Integer,TFld::Selectable|Attr::Active,"1","0",
 	    TSYS::strMess("%d;%d;%d;%d",FM_IMG,FM_ANIM,FM_VIDEO,FM_AUDIO).c_str(),_("Image;Animation;Video;Audio"),i2s(A_MediaType).c_str()));
 	attrAdd(new TFld("areas",trS("Map areas"),TFld::Integer,Attr::Active,"2","0","0;100","",i2s(A_MediaAreas).c_str()));
@@ -934,6 +934,7 @@ bool OrigMedia::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			"  \"src\" - source:\n"
 			"    file - directly from a local file (for visualizator or engine) by the path;\n"
 			"    res - from table of DB-mime resources;\n"
+			"    data - directly data in the form \"data:{mime}\\n{base64}\";\n"
 			"    stream - stream URL to play video and audio.\n"
 			"  \"name\" - file path or mime-resource identifier.\n"
 			"Examples:\n"

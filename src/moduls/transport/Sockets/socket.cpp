@@ -73,7 +73,7 @@
 #define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.7.3"
+#define MOD_VER		"4.8.0"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov(2014)")
 #define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -141,6 +141,16 @@ TTransportIn *TTransSock::In( const string &name, const string &idb )	{ return n
 
 TTransportOut *TTransSock::Out( const string &name, const string &idb )	{ return new TSocketOut(name, idb, &owner().outEl()); }
 
+string TTransSock::getAddr( const sockaddr_storage &addr )
+{
+    if(((sockaddr*)&addr)->sa_family == AF_INET6) {
+	char aBuf[INET6_ADDRSTRLEN];
+	getnameinfo((sockaddr*)&addr, sizeof(addr), aBuf, sizeof(aBuf), 0, 0, NI_NUMERICHOST);
+	return string(aBuf) + ":" + i2s(htons(((sockaddr_in6*)&addr)->sin6_port));
+    }
+    return string(inet_ntoa(((sockaddr_in*)&addr)->sin_addr)) + ":" + i2s(htons(((sockaddr_in*)&addr)->sin_port));
+}
+
 string TTransSock::outAddrHelp( )
 {
     return string(_("Socket's output transport has the address format:\n"
@@ -199,6 +209,8 @@ string TSocketIn::getStatus( )
 	    case S_UNIX:  s_type = S_NM_UNIX;	break;
 	    case S_RAWCAN:s_type = S_NM_RAWCAN;	break;
 	}
+	if(connAddr.size())
+	    rez += TSYS::strMess(_("The host address '%s'. "), connAddr.c_str());
 	if(type == S_TCP || type == S_UDP)
 	    rez += TSYS::strMess(_("Connections %d, opened %d, last %s, closed by the limit %d. "),
 				connNumb, (protocols().empty()?associateTrs().size():clId.size()), atm2s(lastConn()).c_str(), clsConnByLim);
@@ -251,8 +263,9 @@ void TSocketIn::start( )
     //Status clear
     trIn = trOut = prcTm = prcTmMax = clntDetchCnt = 0;
     connNumb = connTm = clsConnByLim = 0;
+    connAddr = "";
 
-    int aOff = 0;
+    int aOff = 0, tOff = 0;
 
     //Socket init
     string s_type = TSYS::strParse(addr(), 0, ":", &aOff);
@@ -283,16 +296,23 @@ void TSocketIn::start( )
 	sockFd = -1;
 
 	MtxAlloc aRes(*SYS->commonLock("getaddrinfo"), true);
-	if((error=getaddrinfo(((host.size() && host != "*")?host.c_str():NULL),(port.size()?port.c_str():DEF_PORT),&hints,&res)))
-	    throw TError(nodePath().c_str(), _("Error the address '%s': '%s (%d)'"), addr().c_str(), gai_strerror(error), error);
 	vector<sockaddr_storage> addrs;
-	for(struct addrinfo *iAddr = res; iAddr != NULL; iAddr = iAddr->ai_next) {
-	    static struct sockaddr_storage ss;
-	    if(iAddr->ai_addrlen > sizeof(ss))	{ aErr = _("sockaddr to large."); continue; }
-	    memcpy(&ss, iAddr->ai_addr, iAddr->ai_addrlen);
-	    addrs.push_back(ss);
+	tOff = 0; string portIt = TSYS::strParse(port, 0, ",", &tOff);
+	while(true) {
+	    if((error=getaddrinfo(((host.size() && host != "*")?host.c_str():NULL),(portIt.size()?portIt.c_str():DEF_PORT),&hints,&res)))
+		throw TError(nodePath().c_str(), _("Error the address '%s': '%s (%d)'"), addr().c_str(), gai_strerror(error), error);
+
+	    for(struct addrinfo *iAddr = res; iAddr != NULL; iAddr = iAddr->ai_next) {
+		static struct sockaddr_storage ss;
+		if(iAddr->ai_addrlen > sizeof(ss))	{ aErr = _("sockaddr very big."); continue; }
+		memcpy(&ss, iAddr->ai_addr, iAddr->ai_addrlen);
+		addrs.push_back(ss);
+	    }
+
+	    freeaddrinfo(res);
+
+	    if((portIt=TSYS::strParse(port,0,",",&tOff)).empty()) break;
 	}
-	freeaddrinfo(res);
 	aRes.unlock();
 
 	// Try for all addresses
@@ -305,6 +325,8 @@ void TSocketIn::start( )
 		    int vl = 1; setsockopt(sockFd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
 		    if(MSS()) { vl = MSS(); setsockopt(sockFd, IPPROTO_TCP, TCP_MAXSEG, &vl, sizeof(int)); }
 		    if(inBufLen()) { vl = inBufLen()*1024; setsockopt(sockFd, SOL_SOCKET, SO_RCVBUF, &vl, sizeof(int)); }
+
+		    connAddr = TTransSock::getAddr(addrs[iA]);
 		}
 		else {
 		    if((sockFd=socket((((sockaddr*)&addrs[iA])->sa_family==AF_INET6)?PF_INET6:PF_INET,SOCK_DGRAM,0)) == -1)
@@ -992,9 +1014,9 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list", opt, -1, "/prm/st/conns", _("Active connections"), R_R_R_, "root", STR_ID);
 	ctrMkNode("fld", opt, -1, "/prm/cfg/ADDR", EVAL_STR, startStat()?R_R_R_:RWRWR_, "root", STR_ID, 1, "help",
 	    _("Socket's input transport has the address format:\n"
-	    "  [TCP:]{addr}:{port}[:{mode}[:{IDmess}]] - TCP socket:\n"
+	    "  [TCP:]{addr}[:{port}[,{port2}[,{portN}]][:{mode}[:{IDmess}]]] - TCP socket:\n"
 	    "    addr - address for socket to be opened, empty or \"*\" address opens socket for all interfaces; there may be as the symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
-	    "    port - network port on which the socket is opened, indication of the character name of the port, according to /etc/services is available;\n"
+	    "    port, port2, portN - network ports on which the socket is sequential opened (at busy the first ones), indication of the character name of the port, according to /etc/services is available;\n"
 	    "    mode - mode of operation: 0 - break connections; 1(default) - keep alive; 2 - initiative connections;\n"
 	    "    IDmess - identification message of the initiative connection - the mode 2.\n"
 	    "  UDP:{addr}:{port} - UDP socket:\n"
@@ -1118,7 +1140,7 @@ string TSocketOut::getStatus( )
 	    case S_UNIX:  s_type = S_NM_UNIX;	break;
 	    case S_RAWCAN:s_type = S_NM_RAWCAN;	break;
 	}
-	rez += TSYS::strMess(_("To the host '%s'. "), connAddr.c_str());
+	rez += TSYS::strMess(_("To the host address '%s'. "), connAddr.c_str());
 	rez += TSYS::strMess(_("%s traffic in %s, out %s. "), s_type.c_str(), TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str());
 	if(mess_lev() == TMess::Debug && respTmMax)
 	    rez += TSYS::strMess(_("Response time %s[%s]. "), tm2s(1e-6*respTm).c_str(), tm2s(1e-6*respTmMax).c_str());
@@ -1274,12 +1296,7 @@ void TSocketOut::start( int itmCon )
 			    throw TError(nodePath().c_str(), _("Error creating the %s socket: '%s (%d)'!"), S_NM_UDP, strerror(errno), errno);
 		    }
 
-		    //Get the connected address
-		    if(((sockaddr*)&addrs[iA])->sa_family == AF_INET6) {
-			char aBuf[INET6_ADDRSTRLEN];
-			getnameinfo((sockaddr*)&addrs[iA], sizeof(addrs[iA]), aBuf, sizeof(aBuf), 0, 0, NI_NUMERICHOST);
-			connAddr = aBuf;
-		    } else connAddr = inet_ntoa(((sockaddr_in*)&addrs[iA])->sin_addr);
+		    connAddr = TTransSock::getAddr(addrs[iA]);
 
 		    if(logLen()) pushLogMess(TSYS::strMess(_("Connecting to '%s'"), connAddr.c_str()));
 

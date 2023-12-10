@@ -359,8 +359,8 @@ void Project::resourceDataList( vector<string> &list, const string &idb ) const
 
 bool Project::resourceDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb, int off, int *size ) const
 {
-    bool is_file = (iid.compare(0,5,"file:")==0);
-    bool is_res  = (iid.compare(0,4,"res:")==0);
+    bool is_file = (iid.find("file:") == 0);
+    bool is_res  = (iid.find("res:") == 0);
 
     if(!is_file) {
 	//Get resource file from DB

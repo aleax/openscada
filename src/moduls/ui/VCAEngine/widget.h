@@ -56,13 +56,14 @@ class Attr
 	    Color	= 0x00400,	//Store color
 	    Font	= 0x00800,	//Store font
 	    Address	= 0x01000,	//Store address to a parameter or an attribute
+	    Resource   = 0x100000,	//Loading-builtin the data in the attribute value
 
 	    IsUser	= 0x02000,	//User created element
 	    Mutable	= 0x08000,	//Mutable attribute, present depend from "Active" attribute value
-	    Generic	= 0x10000,	//Generic atributes' flag. This atributes loaded independent from enabled state
+	    Generic	= 0x10000,	//Generic attribute, loaded independently from the enabled state
 	    OnlyRead	= 0x20000,	//Only read attribute, through widget, no the attribute storing location
 	    PreRead	= 0x40000,	//Preprocessed read
-	    NotStored	= 0x80000	//Not stored and loaded - only dynamic
+	    NotStored	= 0x80000	//Not stored and loaded - only dynamically
 	};
 
 	// Link types

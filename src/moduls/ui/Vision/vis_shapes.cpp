@@ -1641,7 +1641,6 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 //************************************************
 //* Media view shape widget                      *
 //************************************************
-
 ShapeMedia::ShapeMedia( ) : WdgShape("Media")
 {
 
@@ -1888,6 +1887,14 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 
     if(reld_cfg && !w->allAttrLoad()) {
 	bool mk_new = false;
+
+	string sdata;
+	if(shD->mediaSrc.find("data:") == 0) {
+	    int offL = 0;
+	    string fLine = TSYS::strLine(shD->mediaSrc, 0, &offL);
+	    sdata = TSYS::strDecode(shD->mediaSrc.substr(offL), TSYS::base64);
+	} else sdata = w->resGet(shD->mediaSrc);
+
 	switch(shD->mediaType) {
 	    case FM_IMG: {
 		QImage img;
@@ -1899,7 +1906,6 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		lab = dynamic_cast<QLabel*>(shD->addrWdg);
 		if(!lab) break;
 		lab->setAlignment(Qt::AlignCenter);
-		string sdata = w->resGet(shD->mediaSrc);
 		if(!sdata.empty() && img.loadFromData((const uchar*)sdata.data(),sdata.size())) {
 		    lab->setPixmap(QPixmap::fromImage(img.scaled(
 			(int)((float)img.width()*w->xScale(true)),
@@ -1919,7 +1925,6 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		lab = dynamic_cast<QLabel*>(shD->addrWdg);
 		if(!lab) break;
 		lab->setAlignment(Qt::AlignCenter);
-		string sdata = w->resGet(shD->mediaSrc);
 		if(sdata.size()) {
 		    QBuffer *buf = new QBuffer(w);
 		    buf->setData(sdata.data(), sdata.size());
@@ -1988,7 +1993,6 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 			player->mediaStatus() == QMediaPlayer::NoMedia)
 #  endif
 		{
-		    string sdata = w->resGet(shD->mediaSrc);
 		    if(sdata.size()) {
 			shD->tfile = TSYS::path2sepstr(w->id(), '_');
 			int tfid = open(shD->tfile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles());
@@ -2038,7 +2042,6 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		    mSrc = MediaSource(QUrl(shD->mediaSrc.substr(7).c_str()));
 		//Try remote VCAEngine resource at last
 		if(shD->mediaSrc.size() && (mSrc.type() == MediaSource::Invalid || mSrc.type() == MediaSource::Empty)) {
-		    string sdata = w->resGet(shD->mediaSrc);
 		    if(sdata.size()) {
 			shD->tfile = TSYS::path2sepstr(w->id(), '_');
 			int tfid = open(shD->tfile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles());

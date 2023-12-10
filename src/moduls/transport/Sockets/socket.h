@@ -170,6 +170,7 @@ class TSocketIn: public TTransportIn
 	map<string, int> clS;			//Clients (senders) counters
 
 	// Status atributes
+	string		connAddr;
 	uint64_t	trIn, trOut;		// Traffic in and out counter
 	float		prcTm, prcTmMax, clntDetchCnt;
 	int		connNumb, connTm, clsConnByLim;	// Connections number
@@ -256,6 +257,8 @@ class TTransSock: public TTypeTransport
 
 	TTransportIn  *In( const string &name, const string &idb );
 	TTransportOut *Out( const string &name, const string &idb );
+
+	static string getAddr( const sockaddr_storage &addr );
 
 	string outAddrHelp( );
 	static string outTimingsHelp( bool noAdd = false );
