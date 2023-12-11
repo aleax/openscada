@@ -919,11 +919,11 @@ INSERT INTO Transport_in VALUES('testOPC','Sockets','','','*:4841','OPC_UA',1,5,
 ');
 INSERT INTO Transport_in VALUES('testModem','Serial','Test Modem',' ','/dev/ttyUSB0:115200:8N1::1','UserProtocol.test',0,0,'','Тест модему',' ','Тест модема','','<prms TMS="0.95:48" MdmPreInit="0.5" MdmPostInit="1" MdmInitStr1="ATZ" MdmInitStr2="" MdmInitResp="OK" MdmRingReq="RING" MdmRingAnswer="ATA" MdmRingAnswerResp="CONNECT" MdmHangUp="+++ATH" MdmHangUpResp="OK"/>
 ');
-INSERT INTO Transport_in VALUES('testRelease','Sockets','','','localhost:10001','UserProtocol.test',1,'','','','','','','<prms MSS="0" MaxQueue="10" MaxClients="20" MaxClientsPerHost="0" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
+INSERT INTO Transport_in VALUES('testRelease','Sockets','','','localhost:10001','UserProtocol.test',0,'','','','','','','<prms MSS="0" MaxQueue="10" MaxClients="20" MaxClientsPerHost="0" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
 ');
-INSERT INTO Transport_in VALUES('testRelease1','Sockets','','','UDP:localhost:10001','UserProtocol.test',1,'','','','','','','<prms MSS="0" MaxQueue="10" MaxClients="20" MaxClientsPerHost="0" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
+INSERT INTO Transport_in VALUES('testRelease1','Sockets','','','UDP:localhost:10001','UserProtocol.test',0,'','','','','','','<prms MSS="0" MaxQueue="10" MaxClients="20" MaxClientsPerHost="0" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
 ');
-INSERT INTO Transport_in VALUES('testRelease2','Sockets','','','UNIX:testRelease.socket','UserProtocol.test',1,'','','','','','','<prms MSS="0" MaxQueue="10" MaxClients="20" MaxClientsPerHost="0" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
+INSERT INTO Transport_in VALUES('testRelease2','Sockets','','','UNIX:testRelease.socket','UserProtocol.test',0,'','','','','','','<prms MSS="0" MaxQueue="10" MaxClients="20" MaxClientsPerHost="0" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
 ');
 INSERT INTO Transport_in VALUES('testRelease','SSL','','','127.0.0.1:10041','UserProtocol.test',1,'','','','','','','<prms MaxClients="20" MaxClientsPerHost="0" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" PKeyPass="123456">
 <CertKey>

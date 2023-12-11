@@ -146,7 +146,7 @@ string TTransSock::getAddr( const sockaddr_storage &addr )
     if(((sockaddr*)&addr)->sa_family == AF_INET6) {
 	char aBuf[INET6_ADDRSTRLEN];
 	getnameinfo((sockaddr*)&addr, sizeof(addr), aBuf, sizeof(aBuf), 0, 0, NI_NUMERICHOST);
-	return string(aBuf) + ":" + i2s(htons(((sockaddr_in6*)&addr)->sin6_port));
+	return string("[") + aBuf + "]:" + i2s(htons(((sockaddr_in6*)&addr)->sin6_port));
     }
     return string(inet_ntoa(((sockaddr_in*)&addr)->sin_addr)) + ":" + i2s(htons(((sockaddr_in*)&addr)->sin_port));
 }

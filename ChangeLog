@@ -1,3 +1,10 @@
+2023-12-11 Roman (stable)
+- data/ModelsDB/AGLKS/St.db: Sockets.{testRelease,testRelease1,testRelease2} disabled by default.
+- data/{oscada_plc.xml,oscada_server.xml,oscada_start.xml,ModelsDB/{AGLKS/oscada_AGLKS.xml,Boiler/oscada_Boiler.xml}}:
+    The default port range changed to 10002,10003,10004 for WEB and 10005,10006,10007 for CNTR, that is to the historisch ports.
+- Transport.Sockets: The IP6 address took in the square brackets.
+
+
 2023-12-10 Roman (stable)
 - FIX:LibsDB.OscadaLibs: tmplib_base.fileServerHTTP: Type of the IO "fSzSolidLim" changed to Real.
     Translated to Ukrainian and documented.
