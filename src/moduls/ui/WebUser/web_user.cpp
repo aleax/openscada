@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.6.11"
+#define MOD_VER		"1.6.12"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -794,7 +794,7 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 		    if(nId)	nId->childAdd("el")->setText(func()->io(id)->id());
 		    if(nNm)	nNm->childAdd("el")->setText(trD(func()->io(id)->name()));
 		    if(nType)	nType->childAdd("el")->setText(i2s(func()->io(id)->type()));
-		    if(nVal)	nVal->childAdd("el")->setText(getS(id));
+		    if(nVal)	nVal->childAdd("el")->setText((func()->io(id)->type()==IO::Real) ? r2s(getR(id), 6) : getS(id));
 		}
 	    }
 	    if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR)) {

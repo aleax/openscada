@@ -1,3 +1,14 @@
+2023-12-18 Roman (stable)
+- Archive: The error messages about starting the value archive changed to the warning level, since the source can appear later.
+- !!!:FIX:SYS,DB: TMess::translGet() fixed in detecting the system prestored messages at setting empty translation messages.
+    !!:DB: TTable::fieldSQLSet() Adapted to clearing the message base and all translations at zeroing a translation,
+	for clear messages edition in the dynamic translation mode and from non base language.
+- DAQ,Protocol.UserProtocol,UI.WebUser: Constants in configuration the DAQ-Templates of real type appended
+    by limiting the visual precision in 6 digits.
+- UI.QTCfg: Commented for QDoubleValidator to the real form fields on Qt <5 also.
+- UI.WebVision: The text edition fields appended of renewing the activity status per 30 seconds, for edition big texts.
+
+
 2023-12-11 Roman (stable)
 - data/ModelsDB/AGLKS/St.db: Sockets.{testRelease,testRelease1,testRelease2} disabled by default.
 - data/{oscada_plc.xml,oscada_server.xml,oscada_start.xml,ModelsDB/{AGLKS/oscada_AGLKS.xml,Boiler/oscada_Boiler.xml}}:

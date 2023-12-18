@@ -294,9 +294,10 @@ void TMess::setTranslEnMan( bool vl, bool passive )
 
 string TMess::translGet( const string &ibase )
 {
-    string base = ibase;
-    //Getting the real base for the system prestored messages
-    if(TSYS::strParse(base,0,string(1,0)) != base && TSYS::strParse(base,2,string(1,0)).empty()) base = Mess->I18N(base);
+    string base = ibase, tVl;
+    //True checking for "{base}\000{cat}" of the system prestored messages
+    if((tVl=TSYS::strParse(base,0,string(1,0))) != base && (tVl+string(1,0)+TSYS::strParse(base,1,string(1,0))) == base)
+	base = Mess->I18N(base);
 
     if(!translDyn()) return base;
 
@@ -323,7 +324,6 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
 	if(lang.size() >= 2) trLang = lang;
 	if(trLang == langCodeBase() && !isUAPI) return base;
 	cKey = trLang+"#"+cKey;
-
     } else if(!isUAPI) return base;
 
     //Requesting the cache at the first
@@ -428,8 +428,11 @@ string TMess::translGetLU( const string &base, const string &lang, const string 
 string TMess::translSet( const string &ibase, const string &mess )
 {
     //Getting the real base for the system prestored messages
-    string base = ibase;
-    if(TSYS::strParse(base,0,string(1,0)) != base && TSYS::strParse(base,2,string(1,0)).empty()) base = Mess->I18N(base);
+    string base = ibase, tVl;
+
+    //True checking for "{base}\000{cat}" of the system prestored messages
+    if((tVl=TSYS::strParse(base,0,string(1,0))) != base && (tVl+string(1,0)+TSYS::strParse(base,1,string(1,0))) == base)
+	base = Mess->I18N(base);
 
     if(!translDyn()) return mess;
 
@@ -446,8 +449,8 @@ string TMess::translSet( const string &base, const string &lang, const string &m
     if(!needReload) {
 	if(!translDyn() || lang == langCodeBase() /*|| base.empty()*/) return mess;	//!!!! base.empty() can be for new values
 
-	//Implementing the combained storing in "{base}\000{lang}\000{mess}"
-	return TSYS::strParse(base,0,string(1,0)) + string(1,0) + trLang + string(1,0) + mess;
+	//Implementing the combined storing in "{base}\000{lang}\000{mess}"
+	return mess.size() ? TSYS::strParse(base,0,string(1,0)) + string(1,0) + trLang + string(1,0) + mess : "";
     }
 
     if(base.empty() && mess.size()) trLang = langCodeBase();

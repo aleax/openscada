@@ -351,8 +351,8 @@ void TArchiveS::subStart( )
 	if(aval.at().toStart())
 	    try { aval.at().start(); }
 	    catch(TError &err) {
-		mess_err(err.cat.c_str(), "%s", err.mess.c_str());
-		mess_sys(TMess::Error, _("Error starting the value archive '%s'."), oLst[iO].c_str());
+		mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
+		mess_sys(TMess::Warning, _("Error starting the value archive '%s'."), oLst[iO].c_str());
 	    }
     }
 

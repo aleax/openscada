@@ -1677,7 +1677,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
     }
 
     //Update present record
-    bool toWarnReload = false;
+    bool toWarn = false;
     if(isForceUpdt) {
 	for(unsigned iEl = 0; iEl < cf_el.size(); iEl++) {
 	    TCfg &u_cfg = cfg.cfg(cf_el[iEl]);
@@ -1741,9 +1741,9 @@ void TTable::fieldSQLSet( TConfig &cfg )
 			    isPresent = true; fPos = iFld;
 			}
 			else if(isTransl && tbl[0][iFld] == cf_el[iEl])
-			    isTrAsBase  = (tbl[1][iFld] == svalRAW);
+			    isTrAsBase = (tbl[1][iFld] == svalRAW);
 
-		    if((isChanged || !isPresent) && (isEmpty || !isTrAsBase || isDynSet)) {
+		    if(!isTrAsBase || ((isChanged || !isPresent) && (isEmpty || isDynSet))) {
 			unsigned mess_TrModifMarkLen = strlen(mess_TrModifMark);
 
 			// The same field
@@ -1756,8 +1756,16 @@ void TTable::fieldSQLSet( TConfig &cfg )
 				trCacheUpd.push_back(u_cfg.name()+string(1,0)+tbl[1][iFld]+string(1,0)+svalRAW+(isTransl?string(1,0)+toLang:""));
 
 			    //  clearing the translation at not empty base message
-			    if(isTransl && tbl[0][iFld] == cf_el[iEl] && svalRAW.empty() && tbl[1][iFld].size())
-				toWarnReload = true;
+			    //if(isTransl && tbl[0][iFld] == cf_el[iEl] && svalRAW.empty() && tbl[1][iFld].size())
+			    //	toWarn = true;
+			    //  clearing all translation and the base at clearing the current translation
+			    if(isTransl && svalRAW.empty() && (!isEmpty || !isTrAsBase) && tbl[1][iFld].size() &&
+				    (tbl[0][iFld] == cf_el[iEl] ||
+				    (tbl[0][iFld].size() > 3 && TSYS::strParse(tbl[0][iFld],1,"#") == cf_el[iEl] && TSYS::strParse(tbl[0][iFld],0,"#") != toLang)))
+			    {
+				ls += (ls.size()?", \"":"\"") + TSYS::strEncode(tbl[0][iFld],TSYS::SQL,"\"") + "\"=" + sval;
+				toWarn = true;
+			    }
 			    //  the translation message for mark the base one
 			    else if(isTransl && tbl[0][iFld] == cf_el[iEl] && svalRAW.size()) {
 				if(tbl[1][iFld].empty()) {	//double the empty base for the setting translation
@@ -1765,7 +1773,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
 
 				    if(Mess->translDyn()) trCacheUpd.push_back(u_cfg.name()+string(1,0)+""+string(1,0)+svalRAW);
 				}
-				else if(!isTrAsBase && !Mess->translDyn()) {	//!!!! Do not mark the base modified for the dynamic translation
+				else if(isChanged && !isTrAsBase && !Mess->translDyn()) {	//!!!! Do not mark the base modified for the dynamic translation
 				    //if(Mess->translDyn())
 				    //	trCacheUpd.push_back(u_cfg.name()+string(1,0)+tbl[1][iFld]+string(1,0)+svalRAW+string(1,0)+toLang);
 
@@ -1781,7 +1789,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
 				}
 			    }
 			    //  the base message for mark the translation ones
-			    else if(!isTransl && tbl[0][iFld].size() > 3 && TSYS::strParse(tbl[0][iFld],1,"#") == sid && TSYS::strParse(tbl[0][iFld],0,"#") != Mess->langCodeBase() &&
+			    else if(isChanged && !isTransl && tbl[0][iFld].size() > 3 && TSYS::strParse(tbl[0][iFld],1,"#") == sid && TSYS::strParse(tbl[0][iFld],0,"#") != Mess->langCodeBase() &&
 				    (svalRAW.empty() || fPos < 0 || tbl[1][fPos].size() <= mess_TrModifMarkLen || tbl[1][fPos].rfind(mess_TrModifMark) != (tbl[1][fPos].size()-mess_TrModifMarkLen)) &&
 				    tbl[1][iFld].size() &&
 				    (svalRAW.empty() || tbl[1][iFld].size() <= mess_TrModifMarkLen || tbl[1][iFld].rfind(mess_TrModifMark) != (tbl[1][iFld].size()-mess_TrModifMarkLen)))
@@ -1821,8 +1829,9 @@ void TTable::fieldSQLSet( TConfig &cfg )
 			TSYS::strParse(trCacheUpd[iTr],2,string(1,0)),
 			"db:"+fullDBName()+"#"+TSYS::strParse(trCacheUpd[iTr],0,string(1,0)));
 
-    if(toWarnReload)
-	throw err_sys(TError::DB_TrRemoved, _("Translation removed! Reload the base message."));
+    if(toWarn)
+	//throw err_sys(TError::Core_CntrError, _("Translation removed! Reload the base message."));
+	throw err_sys(TError::Core_CntrWarning, _("A message completely cleaned for the base and all translations!"));
 }
 
 void TTable::fieldSQLDel( TConfig &cfg )
