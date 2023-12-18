@@ -1,4 +1,14 @@
 2023-12-18 Roman (stable)
+- !!:FIX:LibsDB.vcaBase: wlb_Main.storeHouse: Improved in going to the item form and such icons.
+    Elements of the item form appended by the ordered keyboard tab.
+    Elements of the item report restored in the left marging for non texts.
+- data/ModelsDB/AGLKS/St.db: The input SSL transports set by the port group 10042,10043,10044 for WEB and 10045,10046,10047 for CNTR.
+-!!:SYS,UI.{VCAEngine,Vision}: Improved for messaging the warnings at saving. Removed for the error TError::DB_TrRemoved.
+- !!:Transport.SSL: Appended for support by groups of the ports in the input transports, that is connection to any free.
+- Transport.Sockets: Some improved in support the input port range.
+
+
+2023-12-18 Roman (stable)
 - Archive: The error messages about starting the value archive changed to the warning level, since the source can appear later.
 - !!!:FIX:SYS,DB: TMess::translGet() fixed in detecting the system prestored messages at setting empty translation messages.
     !!:DB: TTable::fieldSQLSet() Adapted to clearing the message base and all translations at zeroing a translation,

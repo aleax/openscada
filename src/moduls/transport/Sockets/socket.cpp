@@ -73,7 +73,7 @@
 #define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.8.0"
+#define MOD_VER		"4.8.1"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov(2014)")
 #define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -265,7 +265,7 @@ void TSocketIn::start( )
     connNumb = connTm = clsConnByLim = 0;
     connAddr = "";
 
-    int aOff = 0, tOff = 0;
+    int aOff = 0;
 
     //Socket init
     string s_type = TSYS::strParse(addr(), 0, ":", &aOff);
@@ -285,7 +285,7 @@ void TSocketIn::start( )
     if(type == S_TCP || type == S_UDP) {
 	if(addr()[aOff] != '[') host = TSYS::strParse(addr(), 0, ":", &aOff);
 	else { aOff++; host = TSYS::strParse(addr(), 0, "]:", &aOff); } //Get IPv6
-	port	= TSYS::strParse(addr(), 0, ":", &aOff);
+	string port_ = TSYS::strParse(addr(), 0, ":", &aOff);
 
 	struct addrinfo hints, *res;
 	memset(&hints, 0, sizeof(hints));
@@ -297,9 +297,8 @@ void TSocketIn::start( )
 
 	MtxAlloc aRes(*SYS->commonLock("getaddrinfo"), true);
 	vector<sockaddr_storage> addrs;
-	tOff = 0; string portIt = TSYS::strParse(port, 0, ",", &tOff);
-	while(true) {
-	    if((error=getaddrinfo(((host.size() && host != "*")?host.c_str():NULL),(portIt.size()?portIt.c_str():DEF_PORT),&hints,&res)))
+	for(int pCnt = 0, tOff = 0; (port=TSYS::strParse(port_,0,",",&tOff)).size() || pCnt == 0; ++pCnt) {
+	    if((error=getaddrinfo(((host.size() && host != "*")?host.c_str():NULL),(port.size()?port.c_str():DEF_PORT),&hints,&res)))
 		throw TError(nodePath().c_str(), _("Error the address '%s': '%s (%d)'"), addr().c_str(), gai_strerror(error), error);
 
 	    for(struct addrinfo *iAddr = res; iAddr != NULL; iAddr = iAddr->ai_next) {
@@ -310,8 +309,6 @@ void TSocketIn::start( )
 	    }
 
 	    freeaddrinfo(res);
-
-	    if((portIt=TSYS::strParse(port,0,",",&tOff)).empty()) break;
 	}
 	aRes.unlock();
 
@@ -503,7 +500,7 @@ void TSocketIn::check( )
 	    int error = 0;
 	    socklen_t slen = sizeof(error);
 	    int fRes = getsockopt(oSockFd, SOL_SOCKET, SO_ERROR, &error, &slen);
-	    printf("TEST 01: fRes=%d; error=%d\n", fRes, error);
+	    printf("fRes=%d; error=%d\n", fRes, error);
 	}*/
     } catch(...) { }
 }
@@ -1015,13 +1012,17 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld", opt, -1, "/prm/cfg/ADDR", EVAL_STR, startStat()?R_R_R_:RWRWR_, "root", STR_ID, 1, "help",
 	    _("Socket's input transport has the address format:\n"
 	    "  [TCP:]{addr}[:{port}[,{port2}[,{portN}]][:{mode}[:{IDmess}]]] - TCP socket:\n"
-	    "    addr - address for socket to be opened, empty or \"*\" address opens socket for all interfaces; there may be as the symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
-	    "    port, port2, portN - network ports on which the socket is sequential opened (at busy the first ones), indication of the character name of the port, according to /etc/services is available;\n"
+	    "    addr - address for socket to be opened, empty or \"*\" address opens socket for all interfaces; "
+	    "there may be as the symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
+	    "    port, port2, portN - network ports on which the socket is sequential opened (at busy the first ones), "
+	    "indication of the character name of the port, according to /etc/services is available;\n"
 	    "    mode - mode of operation: 0 - break connections; 1(default) - keep alive; 2 - initiative connections;\n"
 	    "    IDmess - identification message of the initiative connection - the mode 2.\n"
 	    "  UDP:{addr}:{port} - UDP socket:\n"
-	    "    addr - address for socket to be opened, empty or \"*\" address opens socket for all interfaces; there may be as the symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
-	    "    port - network port on which the socket is opened, indication of the character name of the port, according to /etc/services is available.\n"
+	    "    addr - address for socket to be opened, empty or \"*\" address opens socket for all interfaces; "
+	    "there may be as the symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
+	    "    port - network port on which the socket is opened, indication of the character name of the port, "
+	    "according to /etc/services is available.\n"
 	    "  RAWCAN:{if}:{mask}:{id} - CAN socket:\n"
 	    "    if - interface name;\n"
 	    "    mask - CAN mask;\n"
@@ -1538,7 +1539,7 @@ repeate:
 		    }
 		    TSYS::sysSleep(1e-3);
 		}
-		if(stZero && iB > 0)	printf("TEST 00: Have waited after zero for %d.\n", iB);*/
+		if(stZero && iB > 0)	printf("Have waited after zero for %d.\n", iB);*/
 
 		// * Force errors
 		// * Retry if any data was wrote but no a reply there in the request mode

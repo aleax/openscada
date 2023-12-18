@@ -1083,7 +1083,8 @@ Additional flags to the object <a href="#TFld">#TFld</a> (enum TVal::AttrFlag):
 <li> <i>void setFld( TFld &amp;fld );</i> — Initialization as the repository of dynamic data.</li>
 <li> <i>void setCfg( TCfg &amp;cfg );</i> — Initialization as the reflection of static data (DB).</li>
 <li> <i>string name( );</i> — Attribute's name.</li>
-<li> <i>int64_t time( );</i> — Time marker of the the last/current value (10<sup>-6</sup>s).</li>
+<li> <i>int64_t time( );</i> — Timestamp of the the last/current value (10<sup>-6</sup>s).</li>
+<li> <i>void setTime( int64_t vl );</i> — Setting the timestamp outside the value setting.</li>
 <li> <i>bool isCfg( );</i> — Sign of the value object created in base of a configuration element.</li>
 <li> <i>bool dataActive( );</i> — Activity (updatable) flag of data.</li>
 <li> <i>string getSEL( long long *tm = NULL, bool sys = false );</i> — Request of the selected type value for the specified time <i>tm</i>. If NULL then it will be returned the last value.</li>
@@ -4076,7 +4077,7 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 <li> <i>void modifClr( bool save = false );</i> — Clearing the modification sign or the saving sign <i>save</i> of the node.</li>
 <li> <i>void modifGClr( );</i> — Clearing the modification sign of the node branch.</li>
 <li> <i>void load( TConfig *cfg = NULL, string *errs = NULL );</i> — Load the dynamic tree node for ready configuration <i>cfg</i>. The loading errors place to <i>errs</i> by lines.</li>
-<li> <i>void save( unsigned lev = 0, string *errs = NULL );</i> — Saving the dynamic tree node, on nesting level <i>lev</i> (service). The saving errors place to <i>errs</i> by lines.</li>
+<li> <i>void save( unsigned lev = 0, string *errs = NULL, int *errL = NULL );</i> — Saving the dynamic tree node, on nesting level <i>lev</i> (service). The saving errors place to <i>errs</i> by lines and maximum level <i>errL</i>.</li>
 <li> <i>virtual void AHDConnect( );</i> — Connection to the node (capture of the resource).</li>
 <li> <i>virtual bool AHDDisConnect( );</i> — Disсonnection from the node (release of the resource). Resource will remove on zero result.</li>
 <li> <i>void mess_sys( int8_t level, const char *fmt,  ... );</i> — The system message forms for the node path as the category, the <i>level</i>, the formatted message <i>fmt</i> appended by the node location and followed arguments.</li>
@@ -4261,7 +4262,6 @@ Error codes (enum — TError::Codes):
 <li> <i>TError::Tr_ErrDevice (14)</i> — transport level, device error;</li>
 <li> <i>TError::DB_SQL_Connect (20)</i> — DB level, error the SQL-connection;</li>
 <li> <i>TError::DB_SQL_Query (21)</i> — DB level, error the SQL-query;</li>
-<li> <i>TError::DB_TrRemoved (22)</i> — DB level, translation removed;</li>
 <li> <i>TError::DB_ReadOnly (23)</i> — DB in the Read Only mode;</li>
 <li> <i>TError::Arch_Val_OldBufVl (30)</i> — archives level, old value placing to the value buffer;</li>
 <li> <i>TError::Arch_Val_DblVSrc (31)</i> — double value source setting try;</li>

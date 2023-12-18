@@ -774,19 +774,19 @@ void LWidget::save_( )
 {
     if(enableByNeed)	return;
 
-    string db  = ownerLib().DB();
-    string tbl = ownerLib().tbl();
+    string  db  = ownerLib().DB(),
+	    tbl = ownerLib().tbl(), errors, warnings;
 
     mTimeStamp = SYS->sysTm();
 
     //Saving the generic data and attributes
     if(SYS->cfgCtx() && SYS->cfgCtx()->attr("srcTbl").empty())
 	SYS->cfgCtx()->setAttr("srcTbl", tbl);
-    cfg("ATTRS").setS(mod->attrsSave(*this, db+"."+tbl, id(), "", true));
+    cfg("ATTRS").setS(mod->attrsSave(*this,db+"."+tbl,id(),"",true,&errors,&warnings));
     TBDS::dataSet(db+"."+tbl, mod->nodePath()+tbl, *this);
 
     //Save widget's attributes
-    saveIO();
+    if(enable()) mod->attrsSave(*this, ownerLib().DB()+"."+ownerLib().tbl(), id(), "", false, &errors, &warnings);
 
     //Updation/saving here the removing mark "<deleted>" of the included widgets since the storage can be changed
     if(!parent().freeStat()) {
@@ -804,14 +804,9 @@ void LWidget::save_( )
 	    TBDS::dataSet(db+"."+tbl, mod->nodePath()+tbl, cEl);
 	}
     }
-}
 
-void LWidget::saveIO( )
-{
-    if(!enable()) return;
-
-    //Save widget's attributes
-    mod->attrsSave(*this, ownerLib().DB()+"."+ownerLib().tbl(), id(), "");
+    if(errors.size())		throw TError(TError::Core_CntrError, nodePath(), errors);
+    else if(warnings.size())	throw TError(TError::Core_CntrWarning, nodePath(), warnings);
 }
 
 void LWidget::wClear( )
@@ -1125,26 +1120,22 @@ void CWidget::loadIO( )
 
 void CWidget::save_( )
 {
-    string db  = ownerLWdg().ownerLib().DB();
-    string tbl = ownerLWdg().ownerLib().tbl();
+    string  db  = ownerLWdg().ownerLib().DB(),
+	    tbl = ownerLWdg().ownerLib().tbl(), errors, warnings;
 
     //Save generic attributes
     if(SYS->cfgCtx() && SYS->cfgCtx()->attr("srcTbl").empty() && SYS->cfgCtx()->attr("srcW").empty())
 	SYS->cfgCtx()->setAttr("srcW", ownerLWdg().id());
-    cfg("ATTRS").setS(mod->attrsSave(*this,db+"."+tbl,ownerLWdg().id(),id(),true));
+    cfg("ATTRS").setS(mod->attrsSave(*this,db+"."+tbl,ownerLWdg().id(),id(),true,&errors,&warnings));
 
     //Save generic widget's data
     TBDS::dataSet(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this);
 
     //Save widget's attributes
-    saveIO();
-}
+    if(enable()) mod->attrsSave(*this, ownerLWdg().ownerLib().DB()+"."+ownerLWdg().ownerLib().tbl(), ownerLWdg().id(), id(), false, &errors, &warnings);
 
-void CWidget::saveIO( )
-{
-    if(!enable()) return;
-
-    mod->attrsSave(*this, ownerLWdg().ownerLib().DB()+"."+ownerLWdg().ownerLib().tbl(), ownerLWdg().id(), id());
+    if(errors.size())		throw TError(TError::Core_CntrError, nodePath(), errors);
+    else if(warnings.size())	throw TError(TError::Core_CntrWarning, nodePath(), warnings);
 }
 
 void CWidget::wClear( )

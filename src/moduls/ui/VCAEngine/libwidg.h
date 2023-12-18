@@ -150,7 +150,6 @@ class LWidget : public Widget, public TConfig
 
 	// Storing
 	void loadIO( );
-	void saveIO( );
 
 	// Data access
 	void resourceList( vector<string> &ls );
@@ -219,7 +218,6 @@ class CWidget : public Widget, public TConfig
 
 	// Storing
 	void loadIO( );
-	void saveIO( );
 
 	// Data access
 	void resourceList( vector<string> &ls );

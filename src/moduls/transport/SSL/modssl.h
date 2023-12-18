@@ -166,6 +166,7 @@ class TSocketIn: public TTransportIn
 	map<string, int> clS;			//Clients (senders) counters
 
 	// Status atributes
+	string		connAddr;
 	string		stErrMD5;		//Last error messages or certificate file MD5
 	uint64_t	trIn, trOut;		//Traffic in and out counter
 	float		prcTm, prcTmMax;
@@ -248,6 +249,8 @@ class TTransSock: public TTypeTransport
 
 	TTransportIn  *In( const string &name, const string &idb );
 	TTransportOut *Out( const string &name, const string &idb );
+
+	static string getAddr( const sockaddr_storage &addr );
 
 	string outAddrHelp( );
 	string outTimingsHelp( bool noAdd = false );

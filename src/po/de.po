@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-10 10:39+0200\n"
+"POT-Creation-Date: 2023-12-17 23:10+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -383,7 +383,9 @@ msgstr "Fordert %d Datensätze für Zeit %s."
 msgid ""
 "Number of the copying items achieved the limit %d for time range [%lld:%lld]"
 "(%lld)!"
-msgstr "Die Anzahl der kopierten Elemente hat den Grenzwert %d für den Zeitraum [%lld:%lld] (%lld) erreicht!"
+msgstr ""
+"Die Anzahl der kopierten Elemente hat den Grenzwert %d für den Zeitraum "
+"[%lld:%lld] (%lld) erreicht!"
 
 #, c-format
 msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
@@ -551,7 +553,9 @@ msgstr "Letzte Lesepuffer"
 
 #, c-format
 msgid "Number of the setting items achieved the limit %d for time range [%lld:%lld]!"
-msgstr "Die Anzahl der Einstellungselemente hat den Grenzwert %d für den Zeitraum [%lld:%lld] erreicht!"
+msgstr ""
+"Die Anzahl der Einstellungselemente hat den Grenzwert %d für den Zeitraum "
+"[%lld:%lld] erreicht!"
 
 msgid "DB type (module)"
 msgstr "Typ der Datenbank (Modul)"
@@ -711,8 +715,8 @@ msgstr "Datensatz \"%s\" ist nicht vorhanden. Sind Sie das Objekt gespeichert?"
 msgid "The DB is in the Read only mode."
 msgstr "Die DB befindet sich im Read-Only-Modus."
 
-msgid "Translation removed! Reload the base message."
-msgstr "Übersetzung entfernt! Laden Sie die Basisnachricht neu."
+msgid "A message completely cleaned for the base and all translations!"
+msgstr "Eine Nachricht wird für die Basis und alle Übersetzungen komplett bereinigt!"
 
 #, c-format
 msgid "Field id = %s(%s) is missing!"
@@ -835,10 +839,18 @@ msgstr ""
 
 #, c-format
 msgid ""
+"Warning saving:\n"
+"%s"
+msgstr ""
+"Achtung Sparen:\n"
+"%s"
+
+#, c-format
+msgid ""
 "Error saving:\n"
 "%s"
 msgstr ""
-"Fehler beim Speichern\n"
+"Fehler beim Speichern:\n"
 "%s"
 
 msgid "[TableName]"

@@ -56,7 +56,7 @@
 #define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.4.0"
+#define MOD_VER		"4.5.0"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and supported SSL-TLS depending on the library version.")
@@ -244,6 +244,16 @@ TTransportIn *TTransSock::In( const string &name, const string &idb )	{ return n
 
 TTransportOut *TTransSock::Out( const string &name, const string &idb )	{ return new TSocketOut(name, idb, &owner().outEl()); }
 
+string TTransSock::getAddr( const sockaddr_storage &addr )
+{
+    if(((sockaddr*)&addr)->sa_family == AF_INET6) {
+	char aBuf[INET6_ADDRSTRLEN];
+	getnameinfo((sockaddr*)&addr, sizeof(addr), aBuf, sizeof(aBuf), 0, 0, NI_NUMERICHOST);
+	return string("[") + aBuf + "]:" + i2s(htons(((sockaddr_in6*)&addr)->sin6_port));
+    }
+    return string(inet_ntoa(((sockaddr_in*)&addr)->sin_addr)) + ":" + i2s(htons(((sockaddr_in*)&addr)->sin_port));
+}
+
 string TTransSock::outAddrHelp( )
 {
     return string(_("SSL output transport has the address format \"{addr}[,{addrN}]:{port}\", where:\n"
@@ -316,6 +326,9 @@ string TSocketIn::getStatus( )
 
     if(!startStat() && !stErrMD5.empty())	rez += _("Error connecting: ") + stErrMD5;
     else if(startStat()) {
+	if(connAddr.size())
+	    rez += TSYS::strMess(_("The host address '%s'. "), connAddr.c_str());
+
 	rez += TSYS::strMess(_("Connections %d, opened %d, last %s, closed by the limit %d. "),
 	    connNumb, (protocols().empty()?associateTrs().size():clId.size()), atm2s(lastConn()).c_str(), clsConnByLim);
 
@@ -390,6 +403,7 @@ void TSocketIn::start( )
     stErrMD5 = "";
     trIn = trOut = prcTm = prcTmMax = 0;
     connNumb = clsConnByLim = 0;
+    connAddr = "";
 
     //Mode of the initiative connection
     if(mode() == M_Initiative) {
@@ -416,80 +430,88 @@ void TSocketIn::start( )
 	if(addr()[aOff] != '[') ssl_host = TSYS::strParse(addr(), 0, ":", &aOff);
 	else { aOff++; ssl_host = "["+TSYS::strParse(addr(),0,"]:",&aOff)+"]"; }	//Get IPv6
 	if(ssl_host.empty()) ssl_host = "*";
-	string ssl_port = TSYS::strParse(addr(), 0, ":", &aOff);
+	string ssl_port_ = TSYS::strParse(addr(), 0, ":", &aOff), ssl_port;
+	string aErr;
 
-	try {
-	    char err[255];
+	for(int pCnt = 0, tOff = 0; (ssl_port=TSYS::strParse(ssl_port_,0,",",&tOff)).size() || pCnt == 0; ++pCnt) {
+	    try {
+		char err[255];
 
-	    //Try the external PEM-file of the certificates and the private key
-	    if(certKeyFile().size()) stErrMD5 = mod->MD5(cfile=certKeyFile());
-	    //Write certificate and private key to temorary file
-	    else {
+		//Try the external PEM-file of the certificates and the private key
+		if(certKeyFile().size()) stErrMD5 = mod->MD5(cfile=certKeyFile());
+		//Write certificate and private key to temorary file
+		else {
 #if defined(__ANDROID__)
-		cfile = MOD_TYPE "_" MOD_ID "_" + id() + "_" + i2s(rand()) + ".tmp";
+		    cfile = MOD_TYPE "_" MOD_ID "_" + id() + "_" + i2s(rand()) + ".tmp";
 #else
-		cfile = tmpnam(err);
+		    cfile = tmpnam(err);
 #endif
-		int icfile = open(cfile.c_str(), O_EXCL|O_CREAT|O_WRONLY, 0600);
-		if(icfile < 0) throw TError(nodePath().c_str(), _("Error opening the temporary file '%s': '%s'"), cfile.c_str(), strerror(errno));
-		bool fOK = (write(icfile,certKey().data(),certKey().size()) == (int)certKey().size());
-		if(close(icfile) != 0)
-		    mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), icfile, strerror(errno), errno);
-		if(!fOK) throw TError(nodePath().c_str(), _("Error writing the file '%s'."), cfile.c_str());
+		    int icfile = open(cfile.c_str(), O_EXCL|O_CREAT|O_WRONLY, 0600);
+		    if(icfile < 0) throw TError(nodePath().c_str(), _("Error opening the temporary file '%s': '%s'"), cfile.c_str(), strerror(errno));
+		    bool fOK = (write(icfile,certKey().data(),certKey().size()) == (int)certKey().size());
+		    if(close(icfile) != 0)
+			mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), icfile, strerror(errno), errno);
+		    if(!fOK) throw TError(nodePath().c_str(), _("Error writing the file '%s'."), cfile.c_str());
+		}
+
+		// Set private key password
+		SSL_CTX_set_default_passwd_cb_userdata(mod->ctxIn, (char*)pKeyPass().c_str());
+		// Load certificate
+		if(SSL_CTX_use_certificate_chain_file(mod->ctxIn,cfile.c_str()) != 1) {
+		    ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
+		    if(certKeyFile().empty() && certKey().empty())
+			throw TError(nodePath().c_str(), _("Specify a certificate file or directly the certificates and private key with password!"), err);
+		    else throw TError(nodePath().c_str(), "SSL_CTX_use_certificate_chain_file: %s.", err);
+		}
+		// Load private key
+		if(SSL_CTX_use_PrivateKey_file(mod->ctxIn,cfile.c_str(),SSL_FILETYPE_PEM) != 1) {
+		    ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
+		    throw TError(nodePath().c_str(), "SSL_CTX_use_PrivateKey_file: %s", err);
+		}
+
+		//Remove temporary certificate file
+		if(certKeyFile().empty()) remove(cfile.c_str());
+		cfile = "";
+
+		//Create BIO object
+		if((bio=BIO_new_ssl(mod->ctxIn,0)) == NULL) {
+		    ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
+		    throw TError(nodePath().c_str(), "BIO_new_ssl: %s", err);
+		}
+		BIO_get_ssl(bio, &ssl);
+		SSL_set_mode(ssl, SSL_MODE_AUTO_RETRY);
+
+		MtxAlloc aRes(*SYS->commonLock("getaddrinfo"), true);
+		abio = BIO_new_accept((char*)(ssl_host+":"+ssl_port).c_str());
+
+		//BIO_ctrl(abio,BIO_C_SET_ACCEPT,1,(void*)"a");
+		//BIO_set_nbio(abio,1);
+		BIO_set_accept_bios(abio, bio);
+		BIO_set_bind_mode(abio, BIO_BIND_REUSEADDR);
+
+		//Set up to accept BIO
+		if(BIO_do_accept(abio) <= 0) {
+		    ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
+		    throw TError(nodePath().c_str(), "BIO_do_accept: %s", err);
+		}
+		aRes.unlock();
+
+		sockFd = BIO_get_fd(abio, NULL);
+
+		connAddr = ssl_host + ":" + ssl_port;
+	    } catch(TError &err) {
+		//Free context
+		if(abio)	{ BIO_reset(abio); abio = NULL; }
+		if(bio)	{ BIO_free_all(bio); bio = NULL; }
+		ssl = NULL;
+
+		if(!cfile.empty() && certKeyFile().empty()) remove(cfile.c_str());
+		aErr = err.mess;
+		continue;	//Try next
 	    }
-
-	    // Set private key password
-	    SSL_CTX_set_default_passwd_cb_userdata(mod->ctxIn, (char*)pKeyPass().c_str());
-	    // Load certificate
-	    if(SSL_CTX_use_certificate_chain_file(mod->ctxIn,cfile.c_str()) != 1) {
-		ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
-		if(certKeyFile().empty() && certKey().empty())
-		    throw TError(nodePath().c_str(), _("Specify a certificate file or directly the certificates and private key with password!"), err);
-		else throw TError(nodePath().c_str(), "SSL_CTX_use_certificate_chain_file: %s.", err);
-	    }
-	    // Load private key
-	    if(SSL_CTX_use_PrivateKey_file(mod->ctxIn,cfile.c_str(),SSL_FILETYPE_PEM) != 1) {
-		ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
-		throw TError(nodePath().c_str(), "SSL_CTX_use_PrivateKey_file: %s", err);
-	    }
-
-	    //Remove temporary certificate file
-	    if(certKeyFile().empty()) remove(cfile.c_str());
-	    cfile = "";
-
-	    //Create BIO object
-	    if((bio=BIO_new_ssl(mod->ctxIn,0)) == NULL) {
-		ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
-		throw TError(nodePath().c_str(), "BIO_new_ssl: %s", err);
-	    }
-	    BIO_get_ssl(bio, &ssl);
-	    SSL_set_mode(ssl, SSL_MODE_AUTO_RETRY);
-
-	    MtxAlloc aRes(*SYS->commonLock("getaddrinfo"), true);
-	    abio = BIO_new_accept((char*)(ssl_host+":"+ssl_port).c_str());
-
-	    //BIO_ctrl(abio,BIO_C_SET_ACCEPT,1,(void*)"a");
-	    //BIO_set_nbio(abio,1);
-	    BIO_set_accept_bios(abio, bio);
-	    BIO_set_bind_mode(abio, BIO_BIND_REUSEADDR);
-
-	    //Set up to accept BIO
-	    if(BIO_do_accept(abio) <= 0) {
-		ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
-		throw TError(nodePath().c_str(), "BIO_do_accept: %s", err);
-	    }
-	    aRes.unlock();
-
-	    sockFd = BIO_get_fd(abio, NULL);
-	} catch(TError &err) {
-	    //Free context
-	    if(abio)	{ BIO_reset(abio); abio = NULL; }
-	    if(bio)	{ BIO_free_all(bio); bio = NULL; }
-	    ssl = NULL;
-
-	    if(!cfile.empty() && certKeyFile().empty()) remove(cfile.c_str());
-	    throw;
+	    break;	//OK
 	}
+	if(!ssl) throw TError(nodePath(), aErr);
 
 	SYS->taskCreate(nodePath('.',true), taskPrior(), Task, this);
     }
@@ -942,10 +964,11 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    if(ssl) ctrMkNode("fld",opt,-1,"/prm/st/ciphers",_("Supported ciphers"),R_R_R_,"root",STR_ID,3,"tp","str", "cols","90", "rows","3");
 	}
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID,1,"help",
-	    _("SSL input transport has the address format \"{addr}:{port}[:{mode}[:{IDmess}]]\", where:\n"
+	    _("SSL input transport has the address format \"{addr}[:{port}[,{port2}[,{portN}]][:{mode}[:{IDmess}]]]\", where:\n"
 	    "    addr - address to open SSL, it must be one of the addresses of the host; empty or \"*\" address opens SSL for all interfaces; "
 	    "there may be as the symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
-	    "    port - network port on which the SSL is opened, indication of the character name of the port, according to /etc/services is available;\n"
+	    "    port, port2, portN - network ports on which SSL is sequential opened (at busy the first ones), "
+	    "indication of the character name of the port, according to /etc/services is available;\n"
 	    "    mode - mode of operation: 0(default) - ordinal connection; 2 - initiative connection;\n"
 	    "    IDmess - identification message of the initiative connection - the mode 2."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID);
@@ -1074,7 +1097,7 @@ string TSocketOut::getStatus( )
     string rez = TTransportOut::getStatus();
 
     if(startStat()) {
-	rez += TSYS::strMess(_("To the host '%s'. "), connAddr.c_str());
+	rez += TSYS::strMess(_("To the host address '%s'. "), connAddr.c_str());
 	rez += TSYS::strMess(_("Traffic in %s, out %s. "), TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str());
 
 	if(mess_lev() == TMess::Debug && respTmMax)
@@ -1252,12 +1275,7 @@ string TSocketOut::connectSSL( const string &addr, SSL **ssl, BIO **conn,
 
 		fcntl(sockFd, F_SETFL, flags|O_NONBLOCK);
 
-		//Get the connected address
-		if(((sockaddr*)&addrs[iA])->sa_family == AF_INET6) {
-		    char aBuf[INET6_ADDRSTRLEN];
-		    getnameinfo((sockaddr*)&addrs[iA], sizeof(addrs[iA]), aBuf, sizeof(aBuf), 0, 0, NI_NUMERICHOST);
-		    connAddr = aBuf;
-		} else connAddr = inet_ntoa(((sockaddr_in*)&addrs[iA])->sin_addr);
+		connAddr = TTransSock::getAddr(addrs[iA]);
 
 	    } catch(TError &err) {
 		aErr = err.mess;

@@ -1127,22 +1127,22 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	    // Properties form create
 	    vector<string> list_a;
 	    src->attrList(list_a);
-	    for(unsigned i_el = 0; i_el < list_a.size(); i_el++) {
-		AutoHD<Attr> attr = src->attrAt(list_a[i_el]);
+	    for(unsigned iEl = 0; iEl < list_a.size(); iEl++) {
+		AutoHD<Attr> attr = src->attrAt(list_a[iEl]);
 		XMLNode *el = attr.at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
 		if(el) {
 		    el->setAttr("len","")->setAttr("wdgFlg",i2s(attr.at().flgGlob()))->
 			setAttr("modif",u2s(attr.at().aModif()))->setAttr("p",attr.at().fld().reserve());
-		    if(list_a[i_el] == "path")		el->setAttr("help",_("Path to the widget."));
-		    else if(list_a[i_el] == "parent")	el->setAttr("help",_("Path to the parent widget."));
-		    else if(list_a[i_el] == "owner")	el->setAttr("help",_("Owner and groups (separated by ',') of the widget in the form \"{owner}:{groups}\"."));
-		    else if(list_a[i_el] == "perm")
+		    if(list_a[iEl] == "path")		el->setAttr("help",_("Path to the widget."));
+		    else if(list_a[iEl] == "parent")	el->setAttr("help",_("Path to the parent widget."));
+		    else if(list_a[iEl] == "owner")	el->setAttr("help",_("Owner and groups (separated by ',') of the widget in the form \"{owner}:{groups}\"."));
+		    else if(list_a[iEl] == "perm")
 			el->setAttr("help",_("Widget permission in the form \"{user}{group}{other}\".\n"
 					     "Where, \"user\", \"group\" and \"other\" is:\n"
 					     "  \"__\" - no access;\n"
 					     "  \"R_\" - read only;\n"
 					     "  \"RW\" - read and write."));
-		    else if(list_a[i_el] == "evProc")
+		    else if(list_a[iEl] == "evProc")
 			el->setAttr("SnthHgl","1")->
 			    setAttr("help",_("Direct events processing for manipulating pages in the form:\n"
 					     "      \"{event}:{evSrc}:{com}:{prm}\". Where:\n"
@@ -1172,7 +1172,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			    break;
 		    }
 		    if(attr.at().type() == TFld::String && attr.at().flgGlob()&Attr::Image)
-			el->setAttr("dest","sel_ed")->setAttr("select","/attrImg/sel_"+list_a[i_el]);
+			el->setAttr("dest","sel_ed")->setAttr("select","/attrImg/sel_"+list_a[iEl]);
 		}
 	    }
 	}
@@ -1181,7 +1181,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path.compare(0,6,"/attr/") == 0) {
+    if(a_path.find("/attr/") == 0) {
 	AutoHD<Attr> attr = src->attrAt(TSYS::pathLev(a_path,1));
 	if(ctrChkNode(opt,"get",(attr.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SUI_ID,SEC_RD))
 	    opt->setText(attr.at().isTransl()?trD(attr.at().getS()):attr.at().getS());
@@ -1200,18 +1200,18 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	    opt->childAdd("rule")->setAttr("expr","^[^:]*:")->setAttr("color","darkorange");
 	}
     }
-    else if(a_path.compare(0,13,"/attrImg/sel_") == 0 && ctrChkNode(opt)) {
+    else if(a_path.find("/attrImg/sel_") == 0 && ctrChkNode(opt)) {
 	string a_val = src->attrAt(a_path.substr(13)).at().getS();
 	if(a_val == "res:") {
 	    vector<string> ls;
 	    src->resourceList(ls);
-	    for(unsigned i_t = 0; i_t < ls.size(); i_t++)
-		opt->childAdd("el")->setText("res:"+ls[i_t]);
+	    for(unsigned iT = 0; iT < ls.size(); iT++)
+		opt->childAdd("el")->setText("res:"+ls[iT]);
 	}
-	else if(a_val.compare(0,5,"file:") == 0) {
+	else if(a_val.find("file:") == 0) {
 	    TSYS::ctrListFS(opt, a_val.substr(5), "png;jpeg;jpg;gif;pcx;mng;svg;mp3;ogg;wav;avi;mov;mpg4;ogv;mp4");
-	    for(unsigned i_t = 0; i_t < opt->childSize(); i_t++)
-		opt->childGet(i_t)->setText("file:"+opt->childGet(i_t)->text());
+	    for(unsigned iT = 0; iT < opt->childSize(); iT++)
+		opt->childGet(iT)->setText("file:"+opt->childGet(iT)->text());
 	}
 	opt->childIns(0,"el")->setText("res:");
 	opt->childIns(1,"el")->setText("file:");
@@ -1564,22 +1564,22 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    AutoHD<Widget> wdg = (wattr==".")?AutoHD<Widget>(this):wdgAt(wattr);
 	    vector<string> lst;
 	    wdg.at().attrList(lst);
-	    for(unsigned i_el = 0; i_el < lst.size(); i_el++) {
-		if(n_id)	n_id->childAdd("el")->setText(lst[i_el]);
-		if(n_name)	n_name->childAdd("el")->setText(trD(wdg.at().attrAt(lst[i_el]).at().name()));
+	    for(unsigned iEl = 0; iEl < lst.size(); iEl++) {
+		if(n_id)	n_id->childAdd("el")->setText(lst[iEl]);
+		if(n_name)	n_name->childAdd("el")->setText(trD(wdg.at().attrAt(lst[iEl]).at().name()));
 		if(n_type) {
-		    if(wdg.at().attrAt(lst[i_el]).at().fld().flg()&TFld::Selectable)
-			n_type->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[i_el]).at().fld().type()+
-				    ((wdg.at().attrAt(lst[i_el]).at().fld().flg()&(TFld::Selectable))<<4)));
+		    if(wdg.at().attrAt(lst[iEl]).at().fld().flg()&TFld::Selectable)
+			n_type->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[iEl]).at().fld().type()+
+				    ((wdg.at().attrAt(lst[iEl]).at().fld().flg()&(TFld::Selectable))<<4)));
 		    else
-			n_type->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[i_el]).at().fld().type()+
-				    ((wdg.at().attrAt(lst[i_el]).at().fld().flg()&(TFld::FullText|TFld::TransltText|Attr::Color|Attr::Image|Attr::Font|Attr::Address))<<4)));
+			n_type->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[iEl]).at().fld().type()+
+				    ((wdg.at().attrAt(lst[iEl]).at().fld().flg()&(TFld::FullText|TFld::TransltText|Attr::Color|Attr::Image|Attr::Font|Attr::Address))<<4)));
 		}
-		if(n_wa)	n_wa->childAdd("el")->setText( wdg.at().attrAt(lst[i_el]).at().fld().values()+"|"+
-							    wdg.at().attrAt(lst[i_el]).at().fld().selNames());
-		if(n_proc)	n_proc->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[i_el]).at().flgSelf()&Attr::ProcAttr));
-		if(n_cfg)	n_cfg->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[i_el]).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst|Attr::FromStyle)));
-		if(n_cfgtmpl)	n_cfgtmpl->childAdd("el")->setText(trD(wdg.at().attrAt(lst[i_el]).at().cfgTempl()));
+		if(n_wa)	n_wa->childAdd("el")->setText( wdg.at().attrAt(lst[iEl]).at().fld().values()+"|"+
+							    wdg.at().attrAt(lst[iEl]).at().fld().selNames());
+		if(n_proc)	n_proc->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[iEl]).at().flgSelf()&Attr::ProcAttr));
+		if(n_cfg)	n_cfg->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[iEl]).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst|Attr::FromStyle)));
+		if(n_cfgtmpl)	n_cfgtmpl->childAdd("el")->setText(trD(wdg.at().attrAt(lst[iEl]).at().cfgTempl()));
 	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {

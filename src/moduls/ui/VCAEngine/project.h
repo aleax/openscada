@@ -212,7 +212,6 @@ class Page : public Widget, public TConfig
 
 	// Storing
 	void loadIO( );
-	void saveIO( );
 
 	void setEnable( bool val, bool force = false );
 
@@ -303,7 +302,6 @@ class PageWdg : public Widget, public TConfig
 
 	// Storing
 	void loadIO( );
-	void saveIO( );
 
 	// Data access
 	void resourceList( vector<string> &ls );

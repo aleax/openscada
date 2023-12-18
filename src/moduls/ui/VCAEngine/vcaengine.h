@@ -98,7 +98,7 @@ class Engine : public TUI
 
 	// Attributes process functions
 	void attrsLoad( Widget &w, const string &fullDB, const string &idw, const string &idc, const string &attrs, bool ldGen = false );
-	string attrsSave( Widget &w, const string &fullDB, const string &idw, const string &idc, bool ldGen = false );
+	string attrsSave( Widget &w, const string &fullDB, const string &idw, const string &idc, bool ldGen = false, string *errors = NULL, string *warnings = NULL );
 
 	// DB structures
 	TElem &elWdgLib( )	{ return lbwdg_el; }

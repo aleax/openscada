@@ -1237,10 +1237,14 @@ void VisDevelop::itDBSave( )
 	if(dlg.exec() == QDialog::Accepted) {
 	    string cur_wdg;
 	    for(int iOff = 0; (cur_wdg=TSYS::strSepParse(own_wdg,0,';',&iOff)).size(); ) {
-		// Send load request
+		// Sending the saving request
 		XMLNode req("save");
 		req.setAttr("path", cur_wdg+"/%2fobj")->setAttr("force", (sender()==actDBSaveF)?"1":"");
-		if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
+		if(cntrIfCmd(req)) {
+		    if(req.attr("mtxt").size())
+			mod->postMess(req.attr("mcat").c_str(), req.attr("mtxt").c_str(), TVision::Warning, this);
+		    else mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
+		}
 	    }
 	}
     }

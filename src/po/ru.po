@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-10 10:39+0200\n"
+"POT-Creation-Date: 2023-12-17 23:10+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -186,7 +186,8 @@ msgid "Redundancy"
 msgstr "Резервирование"
 
 msgid "Overtime of the reserve history reload at start, days"
-msgstr "Глубина принудительной перезагрузки истории резерва при запуске, в сутках."
+msgstr ""
+"Глубина принудительной перезагрузки истории резерва при запуске, в сутках."
 
 msgid "Message archivers"
 msgstr "Архиваторы сообщений"
@@ -379,7 +380,8 @@ msgid ""
 msgstr ""
 
 #, c-format
-msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
+msgid ""
+"The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
 "Режим привязки к сетке не поддерживает вставку очень старых значений %lld "
 "(%lld-%lld)."
@@ -546,7 +548,8 @@ msgid "Last read buffer"
 msgstr "Последнее чтение буфера"
 
 #, c-format
-msgid "Number of the setting items achieved the limit %d for time range [%lld:%lld]!"
+msgid ""
+"Number of the setting items achieved the limit %d for time range [%lld:%lld]!"
 msgstr ""
 
 msgid "DB type (module)"
@@ -646,7 +649,8 @@ msgstr "Таблицы которые в БД, но не открыты на д�
 msgid "Load the program from this DB"
 msgstr "Загрузить программу из этой БД"
 
-msgid "Codepage of data in the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
+msgid ""
+"Codepage of data in the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr "Кодировка данных в БД. Для примера: UTF-8, KOI8-R, KOI8-U ... ."
 
 msgid ""
@@ -704,8 +708,8 @@ msgstr "Запись \"%s\" отсутствует. Вы сохраняли эт
 msgid "The DB is in the Read only mode."
 msgstr "БД в режиме Только для Чтения."
 
-msgid "Translation removed! Reload the base message."
-msgstr "Перевод удалён! Перегрузите базовое сообщение."
+msgid "A message completely cleaned for the base and all translations!"
+msgstr ""
 
 #, c-format
 msgid "Field id = %s(%s) is missing!"
@@ -824,6 +828,14 @@ msgid ""
 "%s"
 msgstr ""
 "Ошибка загрузки:\n"
+"%s"
+
+#, fuzzy, c-format
+msgid ""
+"Warning saving:\n"
+"%s"
+msgstr ""
+"Ошибка сохранения:\n"
 "%s"
 
 #, c-format
@@ -1188,7 +1200,8 @@ msgid "Configuration File"
 msgstr "Конфигурационный файл"
 
 #, fuzzy
-msgid "Storage address in the format \"{DB module}.{DB name}\" or the common ones."
+msgid ""
+"Storage address in the format \"{DB module}.{DB name}\" or the common ones."
 msgstr "Адрес хранилища в формате \"{Модуль БД}.{Имя БД}\"."
 
 #, c-format
@@ -1446,7 +1459,8 @@ msgstr "2:Сбор остановлен."
 msgid "Parameter: "
 msgstr "Параметр: "
 
-msgid "The type changing leads to lose some data of the specific configurations."
+msgid ""
+"The type changing leads to lose some data of the specific configurations."
 msgstr "Смена типа повлечёт за собой потерю данных специфических конфигураций."
 
 msgid "Inclusion"
@@ -2015,8 +2029,10 @@ msgid "Error writing the configuration file '%s': %s"
 msgstr "Ошибка записи в конфигурационный файл '%s': %s"
 
 #, c-format
-msgid "Impossible to hold the project lock! Seems the project '%s' already running."
-msgstr "Невозможно захватить замок проекта! Похоже проект '%s' уже исполняется."
+msgid ""
+"Impossible to hold the project lock! Seems the project '%s' already running."
+msgstr ""
+"Невозможно захватить замок проекта! Похоже проект '%s' уже исполняется."
 
 msgid "Loading."
 msgstr "Загрузка."
@@ -3055,3 +3071,5 @@ msgstr "Имя проекта установлено в:"
 msgid "already started."
 msgstr "уже запущен."
 
+#~ msgid "Translation removed! Reload the base message."
+#~ msgstr "Перевод удалён! Перегрузите базовое сообщение."

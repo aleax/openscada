@@ -3690,7 +3690,7 @@ QPainterPath ShapeElFigure::painterPathSimple( int type, double ang, QPointF pBe
 	    double arc_a = length(pCntr3, pCntr1), arc_b = length(pCntr1, pCntr2),
 		   tt_start = aT.x(), tt_end = aT.y();
 	    QPointF rotArc;// = rotate(arc(tt_start,arc_a,arc_b), ang);
-	    //printf("TEST 00 Arc: ang=%g; tt_start=%g; tt_end=%g; pCntr1=[%g:%g]; pCntr2=[%g:%g]; pCntr3=[%g:%g]; arc_a=%g; arc_b=%g\n",
+	    //printf("Arc: ang=%g; tt_start=%g; tt_end=%g; pCntr1=[%g:%g]; pCntr2=[%g:%g]; pCntr3=[%g:%g]; arc_a=%g; arc_b=%g\n",
 	    //	ang, tt_start, tt_end, pCntr1.x(), pCntr1.y(), pCntr2.x(), pCntr2.y(), pCntr3.x(), pCntr3.y(), arc_a, arc_b);
 	    for(double t = tt_start; true; t += ARC_STEP) {
 		rotArc = rotate(arc(vmin(t,tt_end),arc_a,arc_b), ang);

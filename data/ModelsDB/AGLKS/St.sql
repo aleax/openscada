@@ -986,7 +986,7 @@ fdfa9weotHT55KrlRp06LxgUqckwoHoGjKDwR8bCk7s0QobgxuFufjEqUZg44VXw
 ');
 INSERT INTO Transport_in VALUES('testRelease','Serial','','/dev/pts/7:115200:8N1','/dev/pts/6:115200:8N1','UserProtocol.test',0,'','','','','','','<prms TMS="2.86:48" TaskPrior="0" MdmTm="20" MdmPreInit="0.5" MdmPostInit="1" MdmInitStr1="ATZ" MdmInitResp="OK" MdmRingReq="RING" MdmRingAnswer="ATA" MdmRingAnswerResp="CONNECT" />
 ');
-INSERT INTO Transport_in VALUES('CNTR','SSL','OpenSCADA control interface','','*:10045','SelfSystem',1,'','','','','','','<prms MaxClients="20" MaxClientsPerHost="5" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" PKeyPass="openscada">
+INSERT INTO Transport_in VALUES('CNTR','SSL','OpenSCADA control interface','','*:10045,10046,10047','SelfSystem',1,'','','','','','','<prms MaxClients="20" MaxClientsPerHost="5" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" PKeyPass="openscada">
 <CertKey>
 -----BEGIN CERTIFICATE-----
 MIIEBzCCAu+gAwIBAgIUKUZH4W3IoHMvFLOk0TScTE9pBn0wDQYJKoZIhvcNAQEL
@@ -1045,7 +1045,7 @@ ENOyP4AoXrjpowZOVNk0ee8xM7X/2EUJKEaiu7BQUarvpLrTkZBlXUfRg4xl915J
 </CertKey>
 </prms>
 ');
-INSERT INTO Transport_in VALUES('WEB','SSL','WWW-interface','The WEB-interfaces transport.','*:10042','HTTP',1,'','','','Транспорт WEB-інтерфейсів.','','Транспорт WEB-интерфейсов.','<prms MaxClients="100" MaxClientsPerHost="25" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" PKeyPass="openscada">
+INSERT INTO Transport_in VALUES('WEB','SSL','WWW-interface','The WEB-interfaces transport.','*:10042,10043,10044','HTTP',1,'','','','Транспорт WEB-інтерфейсів.','','Транспорт WEB-интерфейсов.','<prms MaxClients="100" MaxClientsPerHost="25" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" PKeyPass="openscada">
 <CertKey>
 -----BEGIN CERTIFICATE-----
 MIIEBzCCAu+gAwIBAgIUKUZH4W3IoHMvFLOk0TScTE9pBn0wDQYJKoZIhvcNAQEL

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-10 10:39+0200\n"
+"POT-Creation-Date: 2023-12-17 23:10+0200\n"
 "PO-Revision-Date: 2020-10-25 10:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team:  <uk@li.org>\n"
@@ -380,8 +380,8 @@ msgid ""
 "Number of the copying items achieved the limit %d for time range [%lld:%lld]"
 "(%lld)!"
 msgstr ""
-"Кількість копійованих елементів досягнула обмеження %d для діапазону [%lld:%lld]"
-"(%lld)!"
+"Кількість копійованих елементів досягнула обмеження %d для діапазону [%lld:"
+"%lld](%lld)!"
 
 #, c-format
 msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
@@ -551,7 +551,9 @@ msgstr "Останнє читання буферу"
 
 #, c-format
 msgid "Number of the setting items achieved the limit %d for time range [%lld:%lld]!"
-msgstr "Кількість встановлюваних елементів досягнула обмеження %d для діапазону [%lld:%lld]!"
+msgstr ""
+"Кількість встановлюваних елементів досягнула обмеження %d для діапазону "
+"[%lld:%lld]!"
 
 msgid "DB type (module)"
 msgstr "Тип БД (модуль)"
@@ -707,8 +709,8 @@ msgstr "Запис \"%s\" відсутній. Ви зберігали цей о�
 msgid "The DB is in the Read only mode."
 msgstr "БД у режимі Тільки для Читання."
 
-msgid "Translation removed! Reload the base message."
-msgstr "Переклад видалено! Перевантажте базове повідомлення."
+msgid "A message completely cleaned for the base and all translations!"
+msgstr "Повідомлення цілком очищено щодо бази і всіх перекладів!"
 
 #, c-format
 msgid "Field id = %s(%s) is missing!"
@@ -827,6 +829,14 @@ msgid ""
 "%s"
 msgstr ""
 "Помилка завантаження:\n"
+"%s"
+
+#, c-format
+msgid ""
+"Warning saving:\n"
+"%s"
+msgstr ""
+"Попередження збереження:\n"
 "%s"
 
 #, c-format

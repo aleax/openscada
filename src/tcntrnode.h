@@ -182,7 +182,7 @@ class TCntrNode
 	void modifClr( bool save = false );		//Clear Modified the node
 	void modifGClr( );				//Clear Modified the node branch
 	void load( TConfig *cfg = NULL, string *errs = NULL );	//Load node, if modified
-	void save( unsigned lev = 0, string *errs = NULL );	//Save node, if modified
+	void save( unsigned lev = 0, string *errs = NULL, int *errL = NULL );	//Save node, if modified
 
 	// Connections counter
 	virtual void AHDConnect( );

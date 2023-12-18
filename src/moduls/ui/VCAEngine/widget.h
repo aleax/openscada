@@ -218,7 +218,6 @@ class Widget : public TCntrNode
 
 	// Storing
 	virtual void loadIO( )		{ }			//Load widget's IO
-	virtual void saveIO( )		{ }			//Save widget's IO
 	virtual void wClear( );					//Widget's changes clear
 	virtual string wChDown( const string &ia = "" );	//Widget's changes put down
 

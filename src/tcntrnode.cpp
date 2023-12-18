@@ -832,7 +832,7 @@ void TCntrNode::load( TConfig *cfg, string *errs )
     if(loadOwn) load__();
 }
 
-void TCntrNode::save( unsigned lev, string *errs )
+void TCntrNode::save( unsigned lev, string *errs, int *errL )
 {
     MtxAlloc res(SYS->cfgLoadSaveM(), true);
 
@@ -851,10 +851,13 @@ void TCntrNode::save( unsigned lev, string *errs )
 	    }
 	}
     } catch(TError &err) {
-	if(errs && err.cat.size()) (*errs) += nodePath('.')+": "+err.mess+"\n";
+	if(errs && err.cat.size()) {
+	    (*errs) += nodePath('.')+": "+err.mess+"\n";
+	    if(errL) (*errL) = vmax(*errL, err.cod);
+	}
 	/*mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	mess_sys(TMess::Error, _("Error node saving: %s"), err.mess.c_str());*/
-	isError = true;
+	isError = (err.cod != TError::Core_CntrWarning);
     }
 
     //Childs save process
@@ -1099,9 +1102,11 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	    if(s2i(opt->attr("ctx")))	{ res.lock(); SYS->setCfgCtx(opt); }
 
 	    string errs;
-	    save(0, &errs);
+	    int errL = 0;
+	    save(0, &errs, &errL);
 	    if(SYS->cfgCtx())	SYS->setCfgCtx(NULL);
-	    if(errs.size()) throw err_sys(_("Error saving:\n%s"), errs.c_str());
+	    if(errs.size())
+		throw err_sys(errL, (errL==TError::Core_CntrWarning) ? _("Warning saving:\n%s") : _("Error saving:\n%s"), errs.c_str());
 	}
 	// Copy the node
 	else if(ctrChkNode(opt,"copy",RWRWRW,"root","root",SEC_WR))

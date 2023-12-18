@@ -1302,18 +1302,18 @@ void Page::loadIO( )
 
 void Page::save_( )
 {
-    string db  = ownerProj()->DB();
-    string tbl = ownerProj()->tbl();
+    string  db  = ownerProj()->DB(),
+	    tbl = ownerProj()->tbl(), errors, warnings;
 
     //Save generic attributes
-    cfg("ATTRS").setS(mod->attrsSave(*this, db+"."+tbl, addr(), "", true));
+    cfg("ATTRS").setS(mod->attrsSave(*this,db+"."+tbl,addr(),"",true,&errors,&warnings));
 
     //Save generic widget's data
     mTimeStamp = SYS->sysTm();
     TBDS::dataSet(db+"."+tbl, mod->nodePath()+tbl, *this);
 
     //Save widget's attributes
-    saveIO();
+    if(enable()) mod->attrsSave(*this, ownerProj()->DB()+"."+ownerProj()->tbl(), addr(), "", false, &errors, &warnings);
 
     //Updation/saving here the removing mark "<deleted>" of the included widgets since the storage can be changed
     if(!parent().freeStat()) {
@@ -1331,14 +1331,9 @@ void Page::save_( )
 	    TBDS::dataSet(db+"."+tbl, mod->nodePath()+tbl, cEl);
 	}
     }
-}
 
-void Page::saveIO( )
-{
-    if(!enable()) return;
-
-    //Save widget's attributes
-    mod->attrsSave(*this, ownerProj()->DB()+"."+ownerProj()->tbl(), addr(), "");
+    if(errors.size())		throw TError(TError::Core_CntrError, nodePath(), errors);
+    else if(warnings.size())	throw TError(TError::Core_CntrWarning, nodePath(), warnings);
 }
 
 void Page::wClear( )
@@ -1981,25 +1976,20 @@ void PageWdg::loadIO( )
 
 void PageWdg::save_( )
 {
-    string db  = ownerPage().ownerProj()->DB();
-    string tbl = ownerPage().ownerProj()->tbl();
+    string db  = ownerPage().ownerProj()->DB(),
+	   tbl = ownerPage().ownerProj()->tbl(), errors, warnings;
 
     //Save generic attributes
-    cfg("ATTRS").setS(mod->attrsSave(*this, db+"."+tbl, ownerPage().addr(), id(), true));
+    cfg("ATTRS").setS(mod->attrsSave(*this,db+"."+tbl,ownerPage().addr(),id(),true,&errors,&warnings));
 
     //Save generic widget's data
     TBDS::dataSet(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this);
 
     //Save widget's attributes
-    saveIO();
-}
+    if(enable()) mod->attrsSave(*this, ownerPage().ownerProj()->DB()+"."+ownerPage().ownerProj()->tbl(), ownerPage().addr(), id(), false, &errors, &warnings);
 
-void PageWdg::saveIO( )
-{
-    if(!enable()) return;
-
-    //Save widget's attributes
-    mod->attrsSave(*this, ownerPage().ownerProj()->DB()+"."+ownerPage().ownerProj()->tbl(), ownerPage().addr(), id());
+    if(errors.size())		throw TError(TError::Core_CntrError, nodePath(), errors);
+    else if(warnings.size())	throw TError(TError::Core_CntrWarning, nodePath(), warnings);
 }
 
 void PageWdg::wClear( )

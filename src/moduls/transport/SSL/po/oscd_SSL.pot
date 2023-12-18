@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-23 15:38+0300\n"
+"POT-Creation-Date: 2023-12-17 23:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,6 +61,10 @@ msgid "Closing the file %d error '%s (%d)'!"
 msgstr ""
 
 msgid "Error connecting: "
+msgstr ""
+
+#, c-format
+msgid "The host address '%s'. "
 msgstr ""
 
 #, c-format
@@ -187,9 +191,9 @@ msgid "Supported ciphers"
 msgstr ""
 
 msgid ""
-"SSL input transport has the address format \"{addr}:{port}[:{mode}[:{IDmess}]]\", where:\n"
+"SSL input transport has the address format \"{addr}[:{port}[,{port2}[,{portN}]][:{mode}[:{IDmess}]]]\", where:\n"
 "    addr - address to open SSL, it must be one of the addresses of the host; empty or \"*\" address opens SSL for all interfaces; there may be as the symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
-"    port - network port on which the SSL is opened, indication of the character name of the port, according to /etc/services is available;\n"
+"    port, port2, portN - network ports on which SSL is sequential opened (at busy the first ones), indication of the character name of the port, according to /etc/services is available;\n"
 "    mode - mode of operation: 0(default) - ordinal connection; 2 - initiative connection;\n"
 "    IDmess - identification message of the initiative connection - the mode 2."
 msgstr ""
@@ -258,7 +262,7 @@ msgid "processing time %s[%s]; "
 msgstr ""
 
 #, c-format
-msgid "To the host '%s'. "
+msgid "To the host address '%s'. "
 msgstr ""
 
 #, c-format
@@ -277,7 +281,7 @@ msgid "Error creating TCP socket: %s!"
 msgstr ""
 
 #, c-format
-msgid "Error connecting to the internet socket '%s:%s' during the timeout, it seems in down or inaccessible: '%s (%d)'!"
+msgid "Error connecting to the internet socket '%s:%s' during the time %s, it seems in down or inaccessible: '%s (%d)'!"
 msgstr ""
 
 #, c-format
