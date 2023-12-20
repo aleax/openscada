@@ -1039,7 +1039,7 @@ msgstr ""
 "Zielpunkt '%1' ist bereits vorhanden!\n"
 "Jeder Weg eine Paste auf?"
 
-msgid "Attempting to copy/move yourself for \"%1/%1\"!"
+msgid "Attempting to copy/move itself for \"%1/%1\"!"
 msgstr "Versuch, dich selbst zu kopieren/zu bewegen \"%1/%1\"!"
 
 msgid "Properties of the widgets library"

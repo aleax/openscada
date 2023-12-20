@@ -55,7 +55,7 @@ msgid "Parameter reflection"
 msgstr "Віддзеркалення параметру"
 
 msgid "Source parameter"
-msgstr "Вихідний параметр"
+msgstr "Параметр-джерело"
 
 msgid "Calculation. "
 msgstr "Обчислення. "

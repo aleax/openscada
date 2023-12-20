@@ -157,7 +157,7 @@ msgstr ""
 msgid "Configuration"
 msgstr "Конфигурация"
 
-msgid "Procedure language or the DAQ-template"
+msgid "Procedure language or DAQ-template"
 msgstr "Язык процедуры или DAQ-шаблон"
 
 msgid "IO"

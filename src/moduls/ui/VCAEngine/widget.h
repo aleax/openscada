@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: widget.h
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,6 +24,8 @@
 #include <tcntrnode.h>
 #include <tvariant.h>
 #include <tconfig.h>
+
+#define PERM_INHER	01000
 
 #define ATTR_OI_DEPTH	10	//Order index field depth = real limit to attributes
 #define ATTR_CON_DEPTH	6	//Connection counter depth = simultaneously connections to single attribute

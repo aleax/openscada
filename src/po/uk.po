@@ -376,6 +376,14 @@ msgid "Requested %d records for time %s."
 msgstr "Запитано %d записів протягом %s."
 
 #, c-format
+msgid ""
+"Number of the copying items achieved the limit %d for time range [%lld:%lld]"
+"(%lld)!"
+msgstr ""
+"Кількість копійованих елементів досягнула обмеження %d для діапазону [%lld:%lld]"
+"(%lld)!"
+
+#, c-format
 msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
 "Не підтримується вставка дуже старих повідомлень у режимі прив'язки до сітки "
@@ -543,6 +551,10 @@ msgstr "Розмір буферу"
 
 msgid "Last read buffer"
 msgstr "Останнє читання буферу"
+
+#, c-format
+msgid "Number of the setting items achieved the limit %d for time range [%lld:%lld]!"
+msgstr "Кількість встановлюваних елементів досягнула обмеження %d для діапазону [%lld:%lld]!"
 
 msgid "DB type (module)"
 msgstr "Тип БД (модуль)"
@@ -1630,13 +1642,13 @@ msgstr "Помилка пошуку та створення нових груп 
 msgid "Administrator"
 msgstr "Адміністратор"
 
-msgid "Simple user"
-msgstr "Простий користувач"
+msgid "User"
+msgstr "Користувач"
 
-msgid "Administrators group"
+msgid "Administrator group"
 msgstr "Група адміністраторів"
 
-msgid "Users group"
+msgid "User group"
 msgstr "Група користувачів"
 
 msgid ""
@@ -1645,9 +1657,6 @@ msgid ""
 msgstr ""
 "======================== Опції підсистеми \"Безпеки\" =====================\n"
 "\n"
-
-msgid "User"
-msgstr "Користувач"
 
 msgid "Group"
 msgstr "Група"
@@ -2204,9 +2213,9 @@ msgid ""
 "But it is inconvinient in the development mode, all time reminding for the "
 "saving need."
 msgstr ""
-"Особливо підхоже для робочих систем разом із попередніми конфігураційними "
-"властивостями, для збереження контексту обчислення.\n"
-"Але незручно у режимі розробки, постійно нагадуючи про необхідність "
+"Особливо дієве у робочих системах разом із попередніми конфігураційними "
+"властивостями для збереження контексту обчислення.\n"
+"Але незручне у режимі розробки, постійно нагадуючи про необхідність "
 "збереження."
 
 msgid "Least messages level which is procesed by the program."

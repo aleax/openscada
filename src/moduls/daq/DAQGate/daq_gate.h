@@ -205,6 +205,7 @@ class TMdContr: public TController
 		syncForce,			//Force sync in the task
 		endrunReq;			//Request to stop of the Process task
 	map<string, StHd> mStatWork;		//Work stations and it status
+	int64_t	mStatTm;			//Time of the work station, from the value data
 
 	vector< AutoHD<TMdPrm> > pHd;
 

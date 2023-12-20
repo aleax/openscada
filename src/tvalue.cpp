@@ -215,9 +215,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 
 		AutoHD<TVArchive> arch = vl.at().arch();
 		int64_t vper = arch.at().period(ARCH_BUF);
-		int64_t reqBeg = s2ll(aNd->attr("tm"));	//!!!! Some spare request of the last requested value
-							//     to prevent EVAL here at the connection lose
-				//(s2ll(aNd->attr("tm"))/vper+1)*vper;
+		int64_t reqBeg = s2ll(aNd->attr("tm"));
 		int64_t vBufBeg = arch.at().begin(ARCH_BUF);
 		int64_t vbeg = vmax(reqBeg, vBufBeg);
 		int64_t vend = arch.at().end(ARCH_BUF);
@@ -226,14 +224,18 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		if(vbeg == vBufBeg) {
 		    vector<string> archLs;
 		    arch.at().archivatorList(archLs);
+		    int64_t tVl;
 		    for(unsigned iA1 = 0; iA1 < archLs.size(); iA1++)
-			if(arch.at().period(archLs[iA1]) == vper)
-			    vbeg = vmax(reqBeg, arch.at().begin(archLs[iA1]));
+			if(arch.at().period(archLs[iA1]) == vper && (tVl=arch.at().begin(archLs[iA1])))
+			    vbeg = vmin(tVl, vbeg);
+		    vbeg = vmax(reqBeg, vbeg);
 		}
+
 		aNd->setAttr("tm", ll2s(vbeg))->setAttr("per", ll2s(vper));
 
 		TValBuf buf(arch.at().valType(), 0, 0, false, true);
-		arch.at().getVals(buf, vbeg, vend, "", (vend-vbeg)/vper, true);
+		vend = vmin(vbeg + vper*limUserIts_N, vend);	//!!!! Limiting of number the processing items in limUserIts_N
+		arch.at().getVals(buf, vbeg, vend, "", ((vend-vbeg)/vper)+1, true);
 
 		bool firstVal = true;
 		string vl;
@@ -417,6 +419,8 @@ TVal::~TVal( )
 }
 
 string TVal::objName( )	{ return TCntrNode::objName()+":TVal"; }
+
+void TVal::setTime( int64_t vl ){ mTime = vl ? vl : TSYS::curTime(); }
 
 string TVal::DAQPath( )	{ return owner().DAQPath()+"."+TSYS::strEncode(name(),TSYS::Custom,". "); }
 

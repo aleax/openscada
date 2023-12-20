@@ -186,8 +186,7 @@ msgid "Redundancy"
 msgstr "Резервирование"
 
 msgid "Overtime of the reserve history reload at start, days"
-msgstr ""
-"Глубина принудительной перезагрузки истории резерва при запуске, в сутках."
+msgstr "Глубина принудительной перезагрузки истории резерва при запуске, в сутках."
 
 msgid "Message archivers"
 msgstr "Архиваторы сообщений"
@@ -375,7 +374,12 @@ msgstr "Запрошено %d записей в течении %s."
 
 #, c-format
 msgid ""
-"The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
+"Number of the copying items achieved the limit %d for time range [%lld:%lld]"
+"(%lld)!"
+msgstr ""
+
+#, c-format
+msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
 "Режим привязки к сетке не поддерживает вставку очень старых значений %lld "
 "(%lld-%lld)."
@@ -544,6 +548,10 @@ msgstr "Размер буфера"
 msgid "Last read buffer"
 msgstr "Последнее чтение буфера"
 
+#, c-format
+msgid "Number of the setting items achieved the limit %d for time range [%lld:%lld]!"
+msgstr ""
+
 msgid "DB type (module)"
 msgstr "Тип БД (модуль)"
 
@@ -641,8 +649,7 @@ msgstr "Таблицы которые в БД, но не открыты на д�
 msgid "Load the program from this DB"
 msgstr "Загрузить программу из этой БД"
 
-msgid ""
-"Codepage of data in the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
+msgid "Codepage of data in the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr "Кодировка данных в БД. Для примера: UTF-8, KOI8-R, KOI8-U ... ."
 
 msgid ""
@@ -1436,8 +1443,7 @@ msgstr "2:Сбор остановлен."
 msgid "Parameter: "
 msgstr "Параметр: "
 
-msgid ""
-"The type changing leads to lose some data of the specific configurations."
+msgid "The type changing leads to lose some data of the specific configurations."
 msgstr "Смена типа повлечёт за собой потерю данных специфических конфигураций."
 
 msgid "Inclusion"
@@ -1623,13 +1629,13 @@ msgstr "Ошибка поиска и создания новых групп по
 msgid "Administrator"
 msgstr "Администратор"
 
-msgid "Simple user"
-msgstr "Простой пользователь"
+msgid "User"
+msgstr "Пользователь"
 
-msgid "Administrators group"
+msgid "Administrator group"
 msgstr "Группа администраторов"
 
-msgid "Users group"
+msgid "User group"
 msgstr "Группа пользователей"
 
 msgid ""
@@ -1638,9 +1644,6 @@ msgid ""
 msgstr ""
 "==================== Опции подсистемы \"Безопасности\" ====================\n"
 "\n"
-
-msgid "User"
-msgstr "Пользователь"
 
 msgid "Group"
 msgstr "Группа"
@@ -2014,10 +2017,8 @@ msgid "Error writing the configuration file '%s': %s"
 msgstr "Ошибка записи в конфигурационный файл '%s': %s"
 
 #, c-format
-msgid ""
-"Impossible to hold the project lock! Seems the project '%s' already running."
-msgstr ""
-"Невозможно захватить замок проекта! Похоже проект '%s' уже исполняется."
+msgid "Impossible to hold the project lock! Seems the project '%s' already running."
+msgstr "Невозможно захватить замок проекта! Похоже проект '%s' уже исполняется."
 
 msgid "Loading."
 msgstr "Загрузка."
@@ -3048,34 +3049,3 @@ msgstr "Имя проекта установлено в:"
 
 msgid "already started."
 msgstr "уже запущен."
-
-#~ msgid "Archiving period, seconds"
-#~ msgstr "Период архивирования, секунд"
-
-#~ msgid "<<<Unmatched sources>>>\n"
-#~ msgstr "<<<Несовпадение источников!!!>>>\n"
-
-#~ msgid "Table is empty."
-#~ msgstr "Таблица пуста."
-
-#, c-format
-#~ msgid "<<<Translation changed>>>\n"
-#~ msgstr "<<<Перевод изменён>>>\n"
-
-#~ msgid "Station name"
-#~ msgstr "Имя станции"
-
-#~ msgid "Version"
-#~ msgstr "Версия"
-
-#~ msgid "Operation system"
-#~ msgstr "Операционная система"
-
-#~ msgid "Main CPUs set"
-#~ msgstr "Основной набор процессоров"
-
-#~ msgid "Period the program saving"
-#~ msgstr "Период сохранения программы"
-
-#~ msgid "Least level"
-#~ msgstr "Наименьший уровень"

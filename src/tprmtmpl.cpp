@@ -804,7 +804,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 		    opt->setText(opt->text()+" (+)");
 	    }
 	    else if(func()->io(iIO)->flg()&TPrmTempl::CfgConst)
-		opt->setText(getS(iIO));
+		opt->setText((func()->io(iIO)->type()==IO::Real) ? r2s(getR(iIO), 6) : getS(iIO));
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    int iIO = s2i(a_path.substr(8));

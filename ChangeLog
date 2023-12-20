@@ -1,3 +1,71 @@
+2023-12-20 Roman 0.9.6.4
+- FIX:ModelsDB.AGLKS.St: WebUser.test restored in the text before unification the translation.
+- !!!:FIX:SYS,DB: TMess::translGet() fixed in detecting the system prestored messages at setting empty translation messages.
+    !!:DB: TTable::fieldSQLSet() Adapted to clearing the message base and all translations at zeroing a translation,
+	for clear messages edition in the dynamic translation mode and from non base language.
+- !!:FIX:SYS: The TCfg::setS() function appended of locking the critical sections at accessing the container TVariant.
+    !:FIX: The TCfg::setS() function in a variant with RqFlg appended by notification,
+	only on the data stages and without the returning back.
+    !: TValFunc::calc() appended by notification of the calc errors on the Warning Level.
+    FIX: Fixed in mark the WorkDB configuration field as modified one at changing and its changes saving in the configuration file.
+- Security: Simplified in description the system users and groups.
+- FIX:DB: Allowed in true writing of user changes in the Dynamic Translation Mode on non Base Language,
+    by early checking for dynamic data.
+- DAQ,Protocol.UserProtocol,UI.WebUser: Constants in configuration the DAQ-Templates of real type appended
+    by limiting the visual precision in 6 digits.
+- DAQ: The TVal object appended by the function setTime().
+- !!:FIX:DAQ.DAQGate: Time of the requesting archive increased for 1 microsecond to prevent of spare values requesting
+	and their direct rewriting to the archives.
+    !!: Improved in work with remote host without the time sync:
+	- the values can be in future up to one hour;
+	- the remote host timestamp always used at the archive presence even in the tag "<vl>";
+	- appended of detection the remote host time for its display and using in timestamp the changed values;
+	- appended for definition hasArch() to resB1() and hasArchReq() to resB2(),
+	    when hasArchReq() used for the tag "ael" hiding at missing the archive remotely;
+	- appended for the flags hasArch() and hasArchReq() reseting at new archives assignement;
+	- appended by detection of the remote archive presence for hiding the spare requesting tag "<vl>".
+    FIX: Prevented of the foreign packages processing in the response by checking for the "lcPs" presence.
+- !!:FIX:DAQ.JavaLikeCalc: The strings concatenation operation appended by the limit checking on limUserFile_SZ(10M).
+    !:FIX: The exceptions processing with catch(...) replaced by catch(TError&) for true detecting of places of STL exceptions.
+- !:FIX:DAQ.LogicLev: Fixed and unified in calculation the execution time per parameter object.
+    !!: Significant improving the Parameter Reflection mode in:
+	- dynamic creation and removing attributes;
+	- disabling at the error enabling with missing the source parameter with removing all attributes;
+	- the selection changed to not editable;
+	- measuring the processing time.
+- FIX:Archive,Archive.FSArch: The values archiving appended by limiting the writing operations at limUserIts_N (1e6) entries
+    for tracing of consuming all memory in some cases.
+- !!:FIX:Archive: The requests TVArchEl::getVals() and "TValue:get:/serv/attr" appended of limiting the requesting depth
+	in limUserIts_N (1e6) items, to prevent for big memory consumption.
+    !!:FIX: The Control Interface request "TValue:get:/serv/attr" fixed in longing to equivalent archivators
+	and the limit calculation of the function getVals().
+    !!:FIX: The message archivers are prevented from reseting the buffer position of the last read message
+	since we get doubling the messages at each updating the subsystem, which is often for updation the value archive connections,
+	and especially at missing the resource lock.
+    TVArchEl::setVals() allowed for processing the data from future not more at one hour, for DAQ.DAQGate mostly.
+    The error messages about starting the value archive changed to the warning level, since the source can appear later.
+- Protocol.HTTP: The messages "The authentication session for the user '%s' is expired." moved in the debugging space.
+- !!:FIX:UI.VCAEngine: Prevented from connection the attribute "focus" of any included widget to the calculation IOs
+	and appended by processing the exceptions of accessing those IOs for missing included widgets.
+    !:FIX: Attr::setS() improved in the critical section processing.
+    !:FIX: Fixed in processing the inheritance of the "owner" attribute from the widgets level
+	and up to the projects level after copy some widget on the widgets level.
+    Appended by definition PERM_INHER(01000) fot the inheritance flag.
+- !:FIX:UI.Vision: Prevented from crash at accessing to not initiated yet shD->addrWdg during setting the attribute "en"
+	in some remote connections.
+    Improved for some original messages.
+- !:FIX:UI.WebUser: Fixed in translation the page name in the index.
+    FIX: Appended by freeing of very big data in the "page" attribute.
+    The selection control item of the "procedure language or the DAQ-template" changed to noneditable combobox.
+- !:UI.QTCfg: Expanded in favorites for saving also the opened tab.
+    Commented for QDoubleValidator to the real form fields on Qt <5 also.
+- FIX:UI.WebCfgD: Fixed in processing the selected value of the editable combobox on FireFox.
+- FIX:UI.WebVision: The textarea edition appended of an early applying to prevent of indication the false modification.
+    FIX: The resources getting code through HTTP appended of force switching to the Partial Mode at achieving size in limUserIts_N (1e6).
+    FIX: Fixed in dynamic translation the user name on the index page.
+    The text edition fields appended of renewing the activity status per 30 seconds, for edition big texts.
+
+
 2023-09-13 Roman 0.9.6.3
 - LibsDB.OscadaLibs: tmplib_LowDevLib.RDTech: Nondouble commands set to send the command tvicely for stable applying by the device,
     postcommand delay set to 0.2 and moved in common.

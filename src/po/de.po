@@ -380,6 +380,12 @@ msgid "Requested %d records for time %s."
 msgstr "Fordert %d Datensätze für Zeit %s."
 
 #, c-format
+msgid ""
+"Number of the copying items achieved the limit %d for time range [%lld:%lld]"
+"(%lld)!"
+msgstr "Die Anzahl der kopierten Elemente hat den Grenzwert %d für den Zeitraum [%lld:%lld] (%lld) erreicht!"
+
+#, c-format
 msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr "Gittermodus unterstützt nicht das Einfügen sehr alter Werte %lld (%lld-%lld)."
 
@@ -545,6 +551,10 @@ msgstr "Speichergrösse"
 
 msgid "Last read buffer"
 msgstr "Letzte Lesepuffer"
+
+#, c-format
+msgid "Number of the setting items achieved the limit %d for time range [%lld:%lld]!"
+msgstr "Die Anzahl der Einstellungselemente hat den Grenzwert %d für den Zeitraum [%lld:%lld] erreicht!"
 
 msgid "DB type (module)"
 msgstr "Typ der Datenbank (Modul)"
@@ -1639,13 +1649,13 @@ msgstr "Fehler beim Suchen und Erstellen neuer Benutzergruppen."
 msgid "Administrator"
 msgstr "Administrator"
 
-msgid "Simple user"
-msgstr "Normaler Benutzer"
+msgid "User"
+msgstr "Benutzer"
 
-msgid "Administrators group"
+msgid "Administrator group"
 msgstr "Gruppe von Administratoren"
 
-msgid "Users group"
+msgid "User group"
 msgstr "Gruppe von Benutzern"
 
 msgid ""
@@ -1654,9 +1664,6 @@ msgid ""
 msgstr ""
 "================== Optionen des Subsystems \"Sicherheit\" =================\n"
 "\n"
-
-msgid "User"
-msgstr "Benutzer"
 
 msgid "Group"
 msgstr "Gruppe"

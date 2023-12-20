@@ -202,26 +202,26 @@ void TSecurity::load_( )
 	usrAt("root").at().modifClr();
     }
     usrAt("root").at().setSysItem(true);
-    // Simple user
+    // User
     if(!usrPresent("user")) {
 	usrAdd("user", "");
-	usrAt("user").at().setDescr(trS("Simple user"));
+	usrAt("user").at().setDescr(trS("User"));
 	usrAt("user").at().setPass("user");
 	usrAt("user").at().modifClr();
     }
     usrAt("user").at().setSysItem(true);
-    // Administrators group
+    // Administrator group
     if(!grpPresent("root")) {
 	grpAdd("root", "");
-	grpAt("root").at().setDescr(trS("Administrators group"));
+	grpAt("root").at().setDescr(trS("Administrator group"));
 	grpAt("root").at().userAdd("root");
 	grpAt("root").at().modifClr();
     }
     grpAt("root").at().setSysItem(true);
-    // Simple users group
+    // User group
     if(!grpPresent("users")) {
 	grpAdd("users", "");
-	grpAt("users").at().setDescr(trS("Users group"));
+	grpAt("users").at().setDescr(trS("User group"));
 	grpAt("users").at().userAdd("user");
 	grpAt("users").at().modifClr();
     }

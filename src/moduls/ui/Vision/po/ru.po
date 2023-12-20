@@ -1024,7 +1024,7 @@ msgstr ""
 "Целевой элемент '%1' уже присутствует!\n"
 "Всёравно вставить в него?"
 
-msgid "Attempting to copy/move yourself for \"%1/%1\"!"
+msgid "Attempting to copy/move itself for \"%1/%1\"!"
 msgstr "Попытка копирования/перемещения самого в себя для \"%1/%1\"!"
 
 msgid "Properties of the widgets library"

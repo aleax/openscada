@@ -1759,7 +1759,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	    //  Make copy
 	    else {
 		if(d_elp == s_elp && d_el == s_el) {
-		    mod->postMess(mod->nodePath().c_str(),QString(_("Attempting to copy/move yourself for \"%1/%1\"!")).
+		    mod->postMess(mod->nodePath().c_str(),QString(_("Attempting to copy/move itself for \"%1/%1\"!")).
 			arg(d_elp.c_str()).arg(d_el.c_str()),TVision::Error,this);
 		    return;
 		}

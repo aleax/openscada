@@ -39,7 +39,7 @@
 #define MOD_NAME	trS("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.7.4"
+#define MOD_VER		"2.8.0"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -214,23 +214,15 @@ void *TMdContr::Task( void *icntr )
 
     bool isStart = true;
     bool isStop  = false;
-    int64_t tCnt1 = 0, tCnt2 = 0;
 
     while(true) {
 	//Update controller's data
 	if(!cntr.redntUse()) {
-	    if(cntr.messLev() == TMess::Debug) tCnt1 = TSYS::curTime();
 	    cntr.enRes.lock();
 	    for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
 		try {
 		    cntr.pHd[iP].at().calc(isStart, isStop,
 			(isStart||isStop) ? DAQ_APER_FRQ : (tsk.period()?(1/tsk.period()):1e9/vmax(1e9/DAQ_APER_FRQ,cntr.period())));
-		    if(cntr.messLev() == TMess::Debug) {
-			tCnt2 = TSYS::curTime();
-			cntr.pHd[iP].at().tmCalc = 1e-6*(tCnt2-tCnt1);
-			cntr.pHd[iP].at().tmCalcMax = vmax(cntr.pHd[iP].at().tmCalcMax, cntr.pHd[iP].at().tmCalc);
-			tCnt1 = tCnt2;
-		    }
 		} catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 	    isStart = false;
 	    cntr.enRes.unlock();
@@ -306,7 +298,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) :
     TParamContr(name,tp_prm), tmCalc(0), tmCalcMax(0), prmRefl(NULL), pEl("w_attr"), chkLnkNeed(false),
-    idFreq(-1), idStart(-1), idStop(-1), idErr(-1), idSh(-1), idNm(-1), idDscr(-1)
+    idFreq(-1), idStart(-1), idStop(-1), idErr(-1), idSh(-1), idNm(-1), idDscr(-1), lastCheckUpd(0)
 {
     setType(type().name);
 }
@@ -377,29 +369,28 @@ void TMdPrm::enable( )
     tmCalc = tmCalcMax = 0;
     bool isProc = false, isFullEn = !enableStat();
     if(isFullEn) TParamContr::enable();
+    TError errPrc;
 
     vector<string> als;
     try {
 	if(isPRefl()) {
-	    vector<string> list;
-	    if(prmRefl->freeStat()) *prmRefl = SYS->daq().at().prmAt(cfg("PSRC").getS(), '.', true);
-	    if(!prmRefl->freeStat()) {
-		prmRefl->at().vlList(list);
-		for(unsigned iL = 0; iL < list.size(); iL++) {
-		    if(!vlPresent(list[iL])) {
-			pEl.fldAdd(new TFld(prmRefl->at().vlAt(list[iL]).at().fld()));
-			AutoHD<TVal> pVal = vlAt(list[iL]);
-			pVal.at().fld().setFlg(pVal.at().fld().flg()|TVal::DirWrite|TVal::DirRead);
-		    }
-		    als.push_back(list[iL]);
-		}
-		if(!AutoHD<TParamContr>(*prmRefl).at().enableStat()) prmRefl->free();
+	    if(prmRefl->freeStat()) *prmRefl = SYS->daq().at().prmAt(cfg("PSRC").getS(), '.');
 
-		isProc = true;
+	    vector<string> list;
+	    prmRefl->at().vlList(list);
+	    for(unsigned iL = 0; iL < list.size(); iL++) {
+		if(!vlPresent(list[iL])) {
+		    pEl.fldAdd(new TFld(prmRefl->at().vlAt(list[iL]).at().fld()));
+		    AutoHD<TVal> pVal = vlAt(list[iL]);
+		    pVal.at().fld().setFlg(pVal.at().fld().flg()|TVal::DirWrite|TVal::DirRead);
+		}
+		als.push_back(list[iL]);
 	    }
+	    if(!AutoHD<TParamContr>(*prmRefl).at().enableStat()) prmRefl->free();
+
+	    isProc = true;
 	}
 	else if(isStd() && !tmpl->func()) {
-	    //unsigned fId = 0;
 	    string prm = cfg("PRM").getS();
 	    if(!tmpl->func() && prm.size()) {
 		tmpl->setFunc(&SYS->daq().at().tmplLibAt(TSYS::strSepParse(prm,0,'.')).at().
@@ -429,10 +420,10 @@ void TMdPrm::enable( )
 		isProc = true;
 	    }
 	}
-    } catch(...) { disable(); throw; }
+    } catch(TError &err) { disable(); errPrc = err; }
 
-    //Check for delete DAQ parameter's attributes
-    for(int iP = 0; isPRefl() && isProc && iP < (int)pEl.fldSize(); iP++) {
+    //Checking for delete attributes of the DAQ parameter
+    for(int iP = 0; (errPrc.mess.size() || (isPRefl() && isProc)) && iP < (int)pEl.fldSize(); iP++) {
 	unsigned iL;
 	for(iL = 0; iL < als.size(); iL++)
 	    if(pEl.fldAt(iP).name() == als[iL])
@@ -441,6 +432,8 @@ void TMdPrm::enable( )
 	    try{ pEl.fldDel(iP); iP--; }
 	    catch(TError &err) { mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }
     }
+
+    if(errPrc.mess.size()) throw errPrc;
 
     if(isStd() && isFullEn && owner().startStat()) calc(true, false, DAQ_APER_FRQ);
     if(isFullEn) owner().prmEn(this, true);
@@ -636,50 +629,85 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 
 void TMdPrm::calc( bool first, bool last, double frq )
 {
-    if(isPRefl()) {
-	if(prmRefl->freeStat()) enable();
-	if(!prmRefl->freeStat()) {
-	    AutoHD<TVal> pVal;
-	    vector<string> ls;
-	    prmRefl->at().vlList(ls);
-	    for(unsigned iEl = 0; iEl < ls.size(); iEl++)
-		try {
-		    if((pVal=vlAt(ls[iEl])).at().isCfg()) continue;
-		    pVal.at().set(prmRefl->at().vlAt(ls[iEl]).at().get(), 0, true);
-		} catch(TError&) { }
-	}
-    }
-
-    if(!isStd() || !tmpl->func()) return;
     try {
-	//ResAlloc cres(calcRes, true);
-	if(chkLnkNeed) chkLnkNeed = tmpl->initLnks();
+	int64_t stTm = 0;
+	if(owner().messLev() == TMess::Debug) stTm = TSYS::curTime();
 
-	//Set fixed system attributes
-	if(idFreq >= 0)	tmpl->setR(idFreq, frq);
-	if(idStart >= 0)tmpl->setB(idStart, tmpl->isChangedProg(true) || first);
-	if(idStop >= 0)	tmpl->setB(idStop, last);
-	if(idSh >= 0)	tmpl->setS(idSh, id());
-	if(idNm >= 0)	tmpl->setS(idNm, name());
-	if(idDscr >= 0)	tmpl->setS(idDscr, descr());
+	if(isPRefl()) {
+	    if(prmRefl->freeStat()) enable();
+	    if(!prmRefl->freeStat()) {
+		//Reading the remote attributes
+		AutoHD<TVal> pVal, pValRem;
+		vector<string> ls;
+		prmRefl->at().vlList(ls);
+		for(unsigned iEl = 0; iEl < ls.size(); ++iEl)
+		    try {
+			pValRem = prmRefl->at().vlAt(ls[iEl]);
 
-	//Get input links
-	tmpl->inputLinks();
+			//Tracing the dynamic attributes appearance
+			if(!vlPresent(ls[iEl])) {
+			    MtxAlloc res(pEl.resEl(), true);
+			    pEl.fldAdd(new TFld(pValRem.at().fld()));
+			    pVal = vlAt(ls[iEl]);
+			    pVal.at().fld().setFlg(pVal.at().fld().flg()|TVal::DirWrite|TVal::DirRead);
+			} else pVal = vlAt(ls[iEl]);
 
-	//Calc template
-	tmpl->setMdfChk(true);
-	tmpl->calc();
-	if(SYS->modifCalc()) modif();
+			if(pVal.at().isCfg()) continue;
 
-	//Put output links
-	tmpl->outputLinks();
+			pVal.at().set(pValRem.at().get(), 0, true);
+		    } catch(TError&) { }
+		pVal.free(); pValRem.free();
 
-	//Put values to the attributes and archives in the passive archiving mode
-	tmpl->archAttrs(this);
+		//Tracing the dynamic attributes disappearance
+		if((SYS->sysTm()-lastCheckUpd) > prmServTask_PER) {
+		    lastCheckUpd = SYS->sysTm();
 
-	//Put fixed system attributes
-	if(idNm >= 0 && tmpl->ioMdf(idNm))	setName(tmpl->getS(idNm));
-	if(idDscr >= 0 && tmpl->ioMdf(idDscr))	setDescr(tmpl->getS(idDscr));
+		    MtxAlloc res(pEl.resEl(), true);
+		    vector<string> lsLoc;
+		    pEl.fldList(lsLoc);
+		    for(unsigned iEl = 0; iEl < lsLoc.size(); ++iEl)
+			if(std::find(ls.begin(),ls.end(),lsLoc[iEl]) == ls.end()) {
+			    unsigned aId = pEl.fldId(lsLoc[iEl], true);
+			    if(aId != pEl.fldSize())
+				try { pEl.fldDel(aId); } catch(TError&) { }
+			}
+		}
+	    }
+	}
+	else if(isStd() && tmpl->func()) {
+	    //ResAlloc cres(calcRes, true);
+	    if(chkLnkNeed) chkLnkNeed = tmpl->initLnks();
+
+	    //Set fixed system attributes
+	    if(idFreq >= 0)	tmpl->setR(idFreq, frq);
+	    if(idStart >= 0)	tmpl->setB(idStart, tmpl->isChangedProg(true) || first);
+	    if(idStop >= 0)	tmpl->setB(idStop, last);
+	    if(idSh >= 0)	tmpl->setS(idSh, id());
+	    if(idNm >= 0)	tmpl->setS(idNm, name());
+	    if(idDscr >= 0)	tmpl->setS(idDscr, descr());
+
+	    //Get input links
+	    tmpl->inputLinks();
+
+	    //Calc template
+	    tmpl->setMdfChk(true);
+	    tmpl->calc();
+	    if(SYS->modifCalc()) modif();
+
+	    //Put output links
+	    tmpl->outputLinks();
+
+	    //Put values to the attributes and archives in the passive archiving mode
+	    tmpl->archAttrs(this);
+
+	    //Put fixed system attributes
+	    if(idNm >= 0 && tmpl->ioMdf(idNm))	setName(tmpl->getS(idNm));
+	    if(idDscr >= 0 && tmpl->ioMdf(idDscr))	setDescr(tmpl->getS(idDscr));
+	}
+
+	if(owner().messLev() == TMess::Debug && stTm)
+	    tmCalc = 1e-6*(TSYS::curTime()-stTm), tmCalcMax = vmax(tmCalcMax, tmCalc);
+
     } catch(TError &err) {
 	mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
 	mess_warning(nodePath().c_str(), _("Error calculating template."));
@@ -714,7 +742,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
 	if(isPRefl()) ctrMkNode("fld",opt,-1,"/prm/cfg/PSRC",EVAL_STR,RWRW__,"root",SDAQ_ID,3,
-				"tp","str", "dest","sel_ed", "select","/prm/cfg/prmp_lst");
+				"tp","str", "dest","select", "select","/prm/cfg/prmpLst");
 	else if(isStd()) ctrMkNode("fld",opt,-1,"/prm/cfg/PRM",EVAL_STR,RWRW__,"root",SDAQ_ID,3,
 				    "tp","str", "dest","select", "select","/prm/tmplList");
 	if(isStd() && tmpl->func())	tmpl->TPrmTempl::Impl::cntrCmdProc(opt);
@@ -746,7 +774,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		cfg("PRM").setS(opt->text());
 	    } catch(...) { disable(); throw; }
     }
-    else if(a_path == "/prm/cfg/prmp_lst" && ctrChkNode(opt))	SYS->daq().at().ctrListPrmAttr(opt, cfg("PSRC").getS(), true, '.');
+    else if((a_path == "/prm/cfg/prmp_lst" || a_path == "/prm/cfg/prmpLst") && ctrChkNode(opt))
+	SYS->daq().at().ctrListPrmAttr(opt, cfg("PSRC").getS(), true, '.');
     else if(isStd() && tmpl->func() && tmpl->TPrmTempl::Impl::cntrCmdProc(opt))	;
     else TParamContr::cntrCmdProc(opt);
 }

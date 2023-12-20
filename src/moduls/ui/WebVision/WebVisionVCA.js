@@ -1511,10 +1511,17 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    formObj.wdgLnk = this;
 		    formObj.appendChild(this.place.ownerDocument.createTextNode(this.attrs['value']));
 		    formObj.onkeyup = function(e) {
-			e.stopImmediatePropagation();
+			// For renew the activity status per 30 seconds
+			curTime = (new Date()).getTime()/1000;
+			if(this.lastTm == null || (curTime-this.lastTm) > 30) this.lastTm = curTime;
+			else e.stopImmediatePropagation();
+
 			if(this.saveVal != this.value) this.setModify(true);
 			if(this.modify()) {
-			    if(e.keyCode == 13 && e.ctrlKey) this.nextSibling.onclick();
+			    if(e.keyCode == 13 && e.ctrlKey) {
+				this.saveVal = this.value;	//!!!! Must be early applied to prevent of indication the false modification
+				this.nextSibling.onclick();
+			    }
 			    if(e.keyCode == 27) this.nextSibling.nextSibling.onclick();
 			}
 			return true;

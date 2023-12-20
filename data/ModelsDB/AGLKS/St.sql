@@ -1126,13 +1126,35 @@ INSERT INTO Transport_out VALUES('OPCUAtest','Sockets','','OPC UA automatic crea
 INSERT INTO Transport_out VALUES('sys_UPS','Sockets','UPS','','localhost:3493',0,'','','','ДБЖ','','ИБП','','<prms tms="3:0.1" />
 ');
 CREATE TABLE IF NOT EXISTS 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-CREATE TABLE IF NOT EXISTS 'WebUser_uPg' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"PROG" TEXT DEFAULT '' ,"uk#PROG" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#PROG" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO WebUser_uPg VALUES('test','','','','',1,'JavaLikeCalc.JavaScript
-SYS.messDebug("TESTWWW","HTTPreq: "+HTTPreq+". URL: "+url+". Sender: "+sender+". User: "+user);
-SYS.messDebug("TESTWWW","User-Agent: "+HTTPvars["User-Agent"]);
-SYS.messDebug("TESTWWW","Page: "+page);
+CREATE TABLE IF NOT EXISTS 'WebUser_uPg' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"PROG" TEXT DEFAULT '' ,"uk#PROG" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#PROG" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO WebUser_uPg VALUES('FlowTec.txt','','',1,'JavaLikeCalc.JavaScript
+//SYS.messDebug("TESTWWW","HTTPreq: "+HTTPreq+". URL: "+url+". Sender: "+sender+". User: "+user);
+//for( var i in HTTPvars ) SYS.messDebug("test","Prop ''"+i+"'' = "+HTTPvars[i]);
+if( cnts.length )
+{
+  //SYS.messDebug("TESTWWW","Content-Disposition:  "+cnts[0].attr("Content-Disposition"));
+  //SYS.messDebug("TESTWWW","Content-Type:  "+cnts[0].attr("Content-Type"));
+  dataBlk = cnts[0].text();
+  if( dataBlk.length )
+  {
+    SYS.messDebug("TESTWWW","Text: "+dataBlk);
+    SYS.messDebug("TESTWWW","Object: ''"+dataBlk.parse(0,"\r\n")+"''");
+    for( i = 2; (sc=dataBlk.parse(i,"\r\n")).length; i++ )
+    {
+      if( sc.slice(0,1) == "v" ) SYS.messDebug("TESTWWW","Calc: ''"+sc+"''");
+      else if( sc.slice(0,2) == " n" )
+      {
+        nd = dataBlk.parse(++i,"\r\n");
+        SYS.messDebug("TESTWWW",
+                "Node: ''"+sc.slice(1)+"'': "+nd.parse(0," ",2,true)+" "+nd.parse(1," ",2,true)+" = "+nd.parse(3," ",2,true));
+        SYS.DAQ.LogicLev.experiment.F3.ed.set(nd.parse(3," ",2,true));
+      }
+    }
+  }
+}
+//SYS.messDebug("TESTWWW","Page: "+page);
 page = "TEST 00";','','','','');
-INSERT INTO WebUser_uPg VALUES('FlowTec.txt','','','','',1,'JavaLikeCalc.JavaScript
+INSERT INTO WebUser_uPg VALUES('test','','',1,'JavaLikeCalc.JavaScript
 SYS.messDebug("TESTWWW","HTTPreq: "+HTTPreq+". URL: "+url+". Sender: "+sender+". User: "+user);
 SYS.messDebug("TESTWWW","User-Agent: "+HTTPvars["User-Agent"]);
 SYS.messDebug("TESTWWW","Page: "+page);

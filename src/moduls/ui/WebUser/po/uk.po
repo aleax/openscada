@@ -157,7 +157,7 @@ msgstr "Видалити із'%s'"
 msgid "Configuration"
 msgstr "Конфігурація"
 
-msgid "Procedure language or the DAQ-template"
+msgid "Procedure language or DAQ-template"
 msgstr "Мова процедури або DAQ-шаблон"
 
 msgid "IO"

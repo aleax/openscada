@@ -1544,15 +1544,15 @@ TVariant Page::vlGet( Attr &a )
     if(a.owner() == this) {
 	if(a.id() == "owner") {
 	    short perm = attrAt("perm").at().getI(true);
-	    if(!(perm&01000)) return a.getS(true);
+	    if(!(perm&PERM_INHER)) return a.getS(true);
 	    Page *oP = ownerPage();
 	    return oP ? oP->attrAt("owner").at().getS() : ownerProj()->owner()+":"+ownerProj()->grp();
 	}
 	else if(a.id() == "perm") {
 	    short perm = a.getI(true);
-	    if(!(perm&01000)) return perm;
+	    if(!(perm&PERM_INHER)) return perm;
 	    Page *oP = ownerPage();
-	    return (oP?oP->attrAt("perm").at().getI():ownerProj()->permit())|01000;
+	    return (oP?oP->attrAt("perm").at().getI():ownerProj()->permit())|PERM_INHER;
 	}
     }
     return Widget::vlGet(a);

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-29 08:21+0300\n"
+"POT-Creation-Date: 2023-10-08 09:48+0300\n"
 "PO-Revision-Date: 2009-08-17 12:07+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -103,6 +103,10 @@ msgstr "Erwerb nächsten durch cron '%s'. "
 #, c-format
 msgid "Spent time %s[%s]. "
 msgstr "Verbrauchte Zeit %s[%s]. "
+
+#, c-format
+msgid "Remote time %s. "
+msgstr "Remote-Zeit %s. "
 
 #, c-format
 msgid "Station '%s' - ERROR, restoring in %.3g s. "

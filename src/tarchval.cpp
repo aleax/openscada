@@ -380,29 +380,38 @@ void TValBuf::getVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 	t_step = buf.period();
 	ibeg = (ibeg/t_step)*t_step;
     }
+    //!!!! Limited for limUserIts_N entries
+    int itCnt = 0;
     switch(valType()) {
 	case TFld::Boolean: {
 	    char vl;
-	    for( ; ibeg <= iend; ibeg += t_step) { vl = getB(&ibeg, true); buf.setB(vl, ibeg); }
+	    for( ; ibeg <= iend && itCnt < limUserIts_N; ibeg += t_step, ++itCnt)
+		vl = getB(&ibeg, true), buf.setB(vl, ibeg);
 	    break;
 	}
 	case TFld::Integer: {
 	    int64_t vl;
-	    for( ; ibeg <= iend; ibeg += t_step) { vl = getI(&ibeg, true); buf.setI(vl, ibeg); }
+	    for( ; ibeg <= iend && itCnt < limUserIts_N; ibeg += t_step, ++itCnt)
+		vl = getI(&ibeg, true), buf.setI(vl, ibeg);
 	    break;
 	}
 	case TFld::Real: {
 	    double vl;
-	    for( ; ibeg <= iend; ibeg += t_step) { vl = getR(&ibeg, true); buf.setR(vl, ibeg); }
+	    for( ; ibeg <= iend && itCnt < limUserIts_N; ibeg += t_step, ++itCnt)
+		vl = getR(&ibeg, true), buf.setR(vl, ibeg);
 	    break;
 	}
 	case TFld::String: {
 	    string vl;
-	    for( ; ibeg <= iend; ibeg += t_step) { vl = getS(&ibeg, true); buf.setS(vl, ibeg); }
+	    for( ; ibeg <= iend && itCnt < limUserIts_N; ibeg += t_step, ++itCnt)
+		vl = getS(&ibeg, true), buf.setS(vl, ibeg);
 	    break;
 	}
 	default: break;
     }
+    if(itCnt >= limUserIts_N)
+	mess_warning("TValBuf", _("Number of the copying items achieved the limit %d for time range [%lld:%lld](%lld)!"),
+	    limUserIts_N, ibeg, iend, t_step);
 }
 
 void TValBuf::setVals( TValBuf &ibuf, int64_t ibeg, int64_t iend )	{ ibuf.getVals(*this, ibeg, iend); }
@@ -489,14 +498,14 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( int64_t *itm, bool up_or
     if((up_ord && tm > end) || (!up_ord && tm < beg))	return eval;	//throw TError("ValBuf", _("No value."));
 
     tm = up_ord ? vmax(tm, beg) : vmin(tm, end);
-    //Process hard grid buffer
+    //Processing the hard grid buffer
     if(hrdGrd) {
 	int npos = up_ord ? (end-tm)/per : (int64_t)buf.grid->size()-1-(tm-beg)/per;
 	if(npos < 0 || npos >= (int)buf.grid->size()) { if(itm) *itm = 0; return eval; }
 	if(itm)	*itm = end-npos*per;
 	return (*buf.grid)[((cur-npos-1)>=0)?(cur-npos-1):(buf.grid->size()+(cur-npos-1))];
     }
-    //Process soft grid buffer
+    //Processing the soft grid buffer
     else if(per) {
 	int npos = (up_ord?(end-tm):(tm-beg))/per;
 	if(hgResTm) {
@@ -509,7 +518,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( int64_t *itm, bool up_or
 		if(c_cnext < 0) c_cnext += buf.tmHigh->size();
 		if(tm/per < (*buf.tmHigh)[c_cnext].tm/per) c_end = c_cnext;
 	    }
-	    // Proving
+	    // Providing
 	    do {
 		int w_pos = up_ord ? (end/per-(*buf.tmHigh)[c_end].tm/per) :
 				     ((*buf.tmHigh)[c_end].tm/per-beg/per);
@@ -537,7 +546,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( int64_t *itm, bool up_or
 		if(c_cnext < 0) c_cnext += buf.tmLow->size();
 		if(tm/per < (int64_t)(*buf.tmLow)[c_cnext].tm*1000000/per) c_end=c_cnext;
 	    }
-	    // Proving
+	    // Providing
 	    do {
 		int w_pos = up_ord ? (end/per-(int64_t)(*buf.tmLow)[c_end].tm*1000000/per) :
 				     ((int64_t)(*buf.tmLow)[c_end].tm*1000000/per-beg/per);
@@ -550,13 +559,13 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( int64_t *itm, bool up_or
 		    return (*buf.tmLow)[c_end].val;
 		}
 		if(--c_end < 0) c_end = buf.tmLow->size()-1;
-	    }while(c_end != c_cur);
+	    } while(c_end != c_cur);
 
 	    if(itm) *itm = 0;
 	    return eval;
 	}
     }
-    //Process the flow buffer
+    //Processing the flow buffer
     else {
 	if(hgResTm) {
 	    int c_end = buf.tmHigh->size()-1;
@@ -565,7 +574,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( int64_t *itm, bool up_or
 		if(!((!up_ord && tm >= (*buf.tmHigh)[c_end-d_win].tm) ||
 			(up_ord && tm <= (*buf.tmHigh)[buf.tmHigh->size()-(c_end-d_win)-1].tm)))
 		    c_end -= d_win;
-	    // Scan last window
+	    // Scanning the last window
 	    while(c_end >= 0) {
 		if(!up_ord && tm >= (*buf.tmHigh)[c_end].tm) {
 		    if(itm) *itm = (*buf.tmHigh)[c_end].tm;
@@ -1250,12 +1259,12 @@ void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
 
 void TVArchive::setVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string &arch )
 {
-    //Check for put to buffer
+    //Checking for putting to the buffer
     if(((arch.empty() && TValBuf::end()) || arch == ARCH_BUF) && iend > TValBuf::begin()) {
-	bool onlyBuf = (ibeg >= TValBuf::end()) &&
-	    (iend-ibeg)/TValBuf::period() <= TValBuf::size();	//!!!! Allow of writing new data blocks for the redundancy and DAQGate
+	bool onlyBuf = (ibeg >= TValBuf::end() &&
+	    (iend-ibeg)/TValBuf::period() <= TValBuf::size());	//!!!! Allow of writing new data blocks for the redundancy and DAQGate
 	TValBuf::setVals(buf, vmax(ibeg,iend-TValBuf::size()*TValBuf::period()), iend);
-	if(arch == ARCH_BUF || onlyBuf) return;	//To prevent spare writings direct to the archivers
+	if(arch == ARCH_BUF || onlyBuf) return;	//To prevent spare writings directly to the archivers
     }
 
     //Put to the archivers
@@ -1470,7 +1479,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 		}
 	}
 
-	getVals(buf, h_min, h_max, rarch, 1000000);	// ! More than 1000000 is notable slow
+	getVals(buf, h_min, h_max, rarch, 1000000);	//!!!! More than 1000000 is notable slow
 	if(!buf.end() || !buf.begin()) {
 #if HAVE_GD_FORCE
 	    gdImageDestroy(im);
@@ -2439,7 +2448,7 @@ void *TVArchivator::Task( void *param )
 	    if(isLast) break;
 
 	    TSYS::taskSleep((int64_t)(1e9*arch.archPeriod()));
-	} catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str() ); }
+	} catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
     arch.runSt = false;
 
@@ -2556,7 +2565,7 @@ TVariant TVArchEl::getVal( int64_t *tm, bool up_ord, bool onlyLocal )
 		setAttr("tm", ll2s(*tm))->
 		setAttr("arch", archivator().workId());
 	    reqCall:
-	    lstStat = SYS->daq().at().rdStRequest(sPrm.at().owner().workId(),req,lstStat,false);
+	    lstStat = SYS->daq().at().rdStRequest(sPrm.at().owner().workId(), req, lstStat, false);
 	    if(!lstStat.empty() && !s2i(req.attr("rez"))) {
 		remTm = s2ll(req.attr("tm"));
 		vl.setS(req.text());
@@ -2582,6 +2591,8 @@ TVariant TVArchEl::getValProc( int64_t *tm, bool up_ord )
 
 void TVArchEl::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, bool onlyLocal )
 {
+    iend = vmin(ibeg + (int64_t)(1e6*archivator().valPeriod())*limUserIts_N, iend);	//!!!! Limiting of number the processing items in limUserIts_N
+
     //Get local archive data
     unsigned int ecnt = buf.evalCnt();
     getValsProc(buf, ibeg, iend);
@@ -2683,15 +2694,14 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end, bool toAccum )
 
     if(!beg || !end) { beg = ibuf.begin(); end = ibuf.end(); }
     beg = vmax((beg/a_per)*a_per, ibuf.begin());
-    end = vmin(end, vmin(ibuf.end(),TSYS::curTime()));	//!!!! Prevents also writing in the future
-
+    end = vmin(end, vmin(ibuf.end(),TSYS::curTime()+3600ll*1000000));	//!!!! Prevents also writing in very future, one hour
     if(!beg || !end || beg/a_per > end/a_per) return;
 
-    //Check for put to the buffer
+    //Checking for putting to the buffer
     if(&archive() != &ibuf && archivator().archPeriod() && mLastGet && end > mLastGet && ((end-mLastGet)/archive().period()) < archive().size())
     { archive().TValBuf::setVals(ibuf,vmax(archive().end(),beg),end); return; }
 
-    //Put direct to archive
+    //Putting directly to the archive
     int64_t wPrevTm = 0, s_k, n_k;
     double wPrevVal = EVAL_REAL;
 
@@ -2702,7 +2712,8 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end, bool toAccum )
     int64_t setOK = 0;
     if(&archive() == &ibuf && a_per > ibuf.period()) {
 	TValBuf obuf(ibuf.valType(true), 0, a_per, true, true);
-	for(int64_t c_tm = beg; c_tm <= end; ) {
+	int itCnt = 0;
+	for(int64_t c_tm = beg; c_tm <= end && itCnt < limUserIts_N; ++itCnt) {	//!!!! Limited for limUserIts_N entries
 	    switch(ibuf.valType()) {
 		case TFld::Boolean: {
 		    double c_val = ibuf.getR(&c_tm, true);
@@ -2765,6 +2776,11 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end, bool toAccum )
 		default: break;
 	    }
 	}
+
+	if(itCnt >= limUserIts_N)
+	    mess_warning(archive().nodePath().c_str(), _("Number of the setting items achieved the limit %d for time range [%lld:%lld]!"),
+		limUserIts_N, beg, end);
+
 	setOK = setValsProc(obuf, obuf.begin(), obuf.end()/*end*/, toAccum);	//Or possible vmax(obuf.end(),end)
     }
     else setOK = setValsProc(ibuf, beg, end, toAccum);

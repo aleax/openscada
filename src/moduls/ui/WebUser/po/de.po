@@ -160,7 +160,7 @@ msgstr "Entfernen von '%s'"
 msgid "Configuration"
 msgstr "Konfiguration"
 
-msgid "Procedure language or the DAQ-template"
+msgid "Procedure language or DAQ-template"
 msgstr "Verfahrenssprache oder die DAQ-Vorlage"
 
 msgid "IO"
