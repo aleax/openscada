@@ -90,13 +90,6 @@ class TTransportIn : public TCntrNode, public TConfig
 	vector<AutoHD<TTransportOut> > associateTrs( bool checkForCleanDisabled = false );	//Associated output transports
 	AutoHD<TTransportOut> associateTr( const string &id );	//Getting the associated output transport at that connection ID
 
-	// IO log
-	int logLen( )	{ return mLogLen; }
-	int logItLim( )	{ return mLogItLim; }
-	void setLogLen( int vl );
-	void setLogItLim( int vl )	{ mLogItLim = vl; }
-	void pushLogMess( const string &vl, const string &data = "", int dataDir = 0 );
-
 	TTypeTransport &owner( ) const;
 
     protected:
@@ -121,6 +114,11 @@ class TTransportIn : public TCntrNode, public TConfig
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
+	// IO log
+	int logLen( )	{ return mLogLen; }
+	void setLogLen( int vl );
+	void pushLogMess( const string &vl, const string &data = "", int dataDir = 0 );
+
 	//Attributes
 	bool	runSt;
 
@@ -141,8 +139,12 @@ class TTransportIn : public TCntrNode, public TConfig
 	map<string, TVariant>	mConPrms;
 
 	// IO log
-	int		mLogLen, mLogItLim, mLogLstDt, mLogTp, mLogFHD;
-	time_t		mLogLstDtTm;
+	int	mLogLen		:15;
+	int	mLogItLim	:21;
+	int	mLogTp		:3;
+	int	mLogAgrTm	:4;
+	int	mLogLstDt, mLogFHD;
+	time_t	mLogLstDtTm;
 	deque<string>	mLog;
 };
 
@@ -197,13 +199,6 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	void messProtIO( XMLNode &io, const string &prot );
 
-	// IO log
-	int logLen( )	{ return mLogLen; }
-	int logItLim( )	{ return mLogItLim; }
-	void setLogLen( int vl );
-	void setLogItLim( int vl )	{ mLogItLim = vl; }
-	void pushLogMess( const string &vl, const string &data = "", int dataDir = 0 );
-
 	TTypeTransport &owner( ) const;
 
 	ResMtx &reqRes( )		{ return mReqRes; }
@@ -216,11 +211,16 @@ class TTransportOut : public TCntrNode, public TConfig
 	void postDisable( int flag );		//Delete all DB if flag 1
 	bool cfgChange( TCfg &co, const TVariant &pc );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
-
 	void load_( TConfig *cfg );
 	void load_( )			{ }
 	void save_( );
+
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
+
+	// IO log
+	int logLen( )	{ return mLogLen; }
+	void setLogLen( int vl );
+	void pushLogMess( const string &vl, const string &data = "", int dataDir = 0 );
 
 	//Attributes
 	bool	runSt,
@@ -243,8 +243,12 @@ class TTransportOut : public TCntrNode, public TConfig
 	AutoHD<TTransportIn>	mAssociateSrcO;
 
 	// IO log
-	int		mLogLen, mLogItLim, mLogLstDt, mLogTp, mLogFHD;
-	time_t		mLogLstDtTm;
+	int	mLogLen		:15;
+	int	mLogItLim	:21;
+	int	mLogTp		:3;
+	int	mLogAgrTm	:4;
+	int	mLogLstDt, mLogFHD;
+	time_t	mLogLstDtTm;
 	deque<string>	mLog;
 };
 

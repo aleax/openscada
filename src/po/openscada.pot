@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-17 23:10+0200\n"
+"POT-Creation-Date: 2023-12-31 09:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2270,13 +2270,16 @@ msgstr ""
 msgid "IO log"
 msgstr ""
 
-msgid "Log length, block limit, type"
+msgid "Log length, block limit, type, aggregation time"
 msgstr ""
 
 msgid "Use zero (0) for the log disabling, -1 for writing to a file."
 msgstr ""
 
 msgid "Binary & Text;Binary;Text"
+msgstr ""
+
+msgid "Aggregation time in seconds and zero disables its."
 msgstr ""
 
 msgid "Log"

@@ -893,7 +893,7 @@ void TTypeTransport::perSYSCall( unsigned int cnt )
 //************************************************
 TTransportIn::TTransportIn( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), runSt(false), mId(cfg("ID")), mStart(cfg("START").getBd()), mDB(idb), associateTrRes(true),
-    mLogLen(0), mLogItLim(1000), mLogLstDt(0), mLogLstDtTm(0), mLogTp(TTransportS::LTP_BinaryText), mLogFHD(-1)
+    mLogLen(0), mLogItLim(1000), mLogTp(TTransportS::LTP_BinaryText), mLogAgrTm(prmWait_TM), mLogLstDt(0), mLogLstDtTm(0), mLogFHD(-1)
 {
     mId = iid;
 }
@@ -1092,7 +1092,7 @@ void TTransportIn::pushLogMess( const string &vl, const string &data, int dataDi
     //Writing to the file
     if(mLogFHD >= 0) {
 	int64_t itTm = TSYS::curTime();
-	string  resLog = TSYS::strMess("[%s.%06d] ",atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S").c_str(),itTm%1000000) + vl;
+	string  resLog = TSYS::strMess("[%s.%06d] ",atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S").c_str(),(int)itTm%1000000) + vl;
 	if(mLogTp == TTransportS::LTP_Binary || mLogTp == TTransportS::LTP_BinaryText)
 		resLog += TSYS::strDecode(data,TSYS::Bin,(mLogTp==TTransportS::LTP_Binary)?" ":"<text>") + "\n\n";
 	else if(mLogTp == TTransportS::LTP_Text)
@@ -1108,7 +1108,7 @@ void TTransportIn::pushLogMess( const string &vl, const string &data, int dataDi
     }
 
     //Writing to the buffer
-    if(mLog.size() && dataDir && dataDir == mLogLstDt && (SYS->sysTm()-mLogLstDtTm) < prmWait_TM)
+    if(mLog.size() && dataDir && dataDir == mLogLstDt && mLogAgrTm && (SYS->sysTm()-mLogLstDtTm) < mLogAgrTm)
 	mLog[0] += data;
     else {
 	mLog.push_front(ll2s(TSYS::curTime()) + "\n" + vl + data);
@@ -1262,13 +1262,16 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	    if(cfg("A_PRMS").getS().size()) ctrMkNode("comm",opt,-1,"/aprm/acfgReset",_("Reset"),RWRW__,"root",STR_ID);
 	}
 	if(ctrMkNode("area",opt,-1,"/log",_("IO log"),R_R___,"root",STR_ID)) {
-	    ctrMkNode("fld",opt,-1,"/log/logLen",_("Log length, block limit, type"),RWRW__,"root",STR_ID,4,"tp","dec", "min","-1", "max","10000",
+	    ctrMkNode("fld",opt,-1,"/log/logLen",_("Log length, block limit, type, aggregation time"),RWRW__,"root",STR_ID,4,
+		"tp","dec", "min","-1", "max","10000",
 		"help",_("Use zero (0) for the log disabling, -1 for writing to a file."));
 	    ctrMkNode("fld",opt,-1,"/log/logItLim","",RWRW__,"root",STR_ID,3,"tp","dec", "min","100", "max","1000000");
 	    ctrMkNode("fld",opt,-1,"/log/logTp","",RWRW__,"root",STR_ID,4,"tp","dec",
 		"dest","select",
 		"sel_id",TSYS::strMess("%d;%d;%d",TTransportS::LTP_BinaryText,TTransportS::LTP_Binary,TTransportS::LTP_Text).c_str(),
 		"sel_list",_("Binary & Text;Binary;Text"));
+	    ctrMkNode("fld",opt,-1,"/log/logAgrTm","",RWRW__,"root",STR_ID,4,"tp","dec", "min","0", "max","10",
+		"help",_("Aggregation time in seconds and zero disables its."));
 	    if(logLen() > 0)
 		ctrMkNode("fld",opt,-1,"/log/log",_("Log"),R_R___,"root",STR_ID,4,"tp","str", "rows","20", "cols","100", "SnthHgl","1");
 	}
@@ -1330,12 +1333,16 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setLogLen(s2i(opt->text()));
     }
     else if(a_path == "/log/logItLim") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(i2s(logItLim()));
-	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setLogItLim(s2i(opt->text()));
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(i2s(mLogItLim));
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	mLogItLim = s2i(opt->text());
     }
     else if(a_path == "/log/logTp") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(i2s(mLogTp));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	mLogTp = s2i(opt->text());
+    }
+    else if(a_path == "/log/logAgrTm") {
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(i2s(mLogAgrTm));
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	mLogAgrTm = s2i(opt->text());
     }
     else if(a_path == "/log/log") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD)) {
@@ -1346,13 +1353,13 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);
-		resLog += TSYS::strMess("[%s.%06d] ",atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S").c_str(),itTm%1000000) + itDscr;
+		resLog += TSYS::strMess("[%s.%06d] ",atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S").c_str(),(int)itTm%1000000) + itDscr;
 		if(mLogTp == TTransportS::LTP_Binary || mLogTp == TTransportS::LTP_BinaryText)
-		    resLog += ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off,logItLim()),TSYS::Bin,(mLogTp==TTransportS::LTP_Binary)?" ":"<text>"):"")
-			   + (((mLog[iL].size()-off)>logItLim())?(string("\n...<")+_("CUT")+" "+TSYS::cpct2str(mLog[iL].size()-off-logItLim())+">"):string("")) + "\n\n";
+		    resLog += ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off,mLogItLim),TSYS::Bin,(mLogTp==TTransportS::LTP_Binary)?" ":"<text>"):"")
+			   + (((mLog[iL].size()-off)>mLogItLim)?(string("\n...<")+_("CUT")+" "+TSYS::cpct2str(mLog[iL].size()-off-mLogItLim)+">"):string("")) + "\n\n";
 		else if(mLogTp == TTransportS::LTP_Text)
-		    resLog += ((off<(int)mLog[iL].size())?"\n"+mLog[iL].substr(off,logItLim()):"")
-			   + (((mLog[iL].size()-off)>logItLim())?(string("\n...<")+_("CUT")+" "+TSYS::cpct2str(mLog[iL].size()-off-logItLim())+">"):string("")) + "\n\n";
+		    resLog += ((off<(int)mLog[iL].size())?"\n"+mLog[iL].substr(off,mLogItLim):"")
+			   + (((mLog[iL].size()-off)>mLogItLim)?(string("\n...<")+_("CUT")+" "+TSYS::cpct2str(mLog[iL].size()-off-mLogItLim)+">"):string("")) + "\n\n";
 	    }
 	    opt->setText(resLog);
 	}
@@ -1371,7 +1378,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 //************************************************
 TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), runSt(false), mDefTimeouts(true), mLstReqTm(0), mId(cfg("ID")), mDB(idb), mStartTm(0), mReqRes(true),
-    mLogLen(0), mLogItLim(1000), mLogLstDt(0), mLogLstDtTm(0), mLogTp(TTransportS::LTP_BinaryText), mLogFHD(-1)
+    mLogLen(0), mLogItLim(1000), mLogTp(TTransportS::LTP_BinaryText), mLogAgrTm(prmWait_TM), mLogLstDt(0), mLogLstDtTm(0), mLogFHD(-1)
 {
     mId = iid;
 }
@@ -1531,7 +1538,7 @@ void TTransportOut::pushLogMess( const string &vl, const string &data, int dataD
     //Writing to the file
     if(mLogFHD >= 0) {
 	int64_t itTm = TSYS::curTime();
-	string  resLog = TSYS::strMess("[%s.%06d] ",atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S").c_str(),itTm%1000000) + vl;
+	string  resLog = TSYS::strMess("[%s.%06d] ",atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S").c_str(),(int)itTm%1000000) + vl;
 	if(mLogTp == TTransportS::LTP_Binary || mLogTp == TTransportS::LTP_BinaryText)
 		resLog += TSYS::strDecode(data,TSYS::Bin,(mLogTp==TTransportS::LTP_Binary)?" ":"<text>") + "\n\n";
 	else if(mLogTp == TTransportS::LTP_Text)
@@ -1546,7 +1553,7 @@ void TTransportOut::pushLogMess( const string &vl, const string &data, int dataD
 	return;
     }
 
-    if(mLog.size() && dataDir && dataDir == mLogLstDt && (SYS->sysTm()-mLogLstDtTm) < prmWait_TM)
+    if(mLog.size() && dataDir && dataDir == mLogLstDt && mLogAgrTm && (SYS->sysTm()-mLogLstDtTm) < mLogAgrTm)
 	mLog[0] += data;
     else {
 	mLog.push_front(ll2s(TSYS::curTime()) + "\n" + vl + data);
@@ -1690,13 +1697,16 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/req/answ",_("Answer"),RWRW__,"root",STR_ID,4,"tp","str","cols","90","rows","5","SnthHgl","1");
 	}
 	if(ctrMkNode("area",opt,-1,"/log",_("IO log"),R_R___,"root",STR_ID)) {
-	    ctrMkNode("fld",opt,-1,"/log/logLen",_("Log length, block limit, type"),RWRW__,"root",STR_ID,4,"tp","dec", "min","-1", "max","10000",
+	    ctrMkNode("fld",opt,-1,"/log/logLen",_("Log length, block limit, type, aggregation time"),RWRW__,"root",STR_ID,4,
+		"tp","dec", "min","-1", "max","10000",
 		"help",_("Use zero (0) for the log disabling, -1 for writing to a file."));
 	    ctrMkNode("fld",opt,-1,"/log/logItLim","",RWRW__,"root",STR_ID,3,"tp","dec", "min","100", "max","1000000");
 	    ctrMkNode("fld",opt,-1,"/log/logTp","",RWRW__,"root",STR_ID,4,"tp","dec",
 		"dest","select",
 		"sel_id",TSYS::strMess("%d;%d;%d",TTransportS::LTP_BinaryText,TTransportS::LTP_Binary,TTransportS::LTP_Text).c_str(),
 		"sel_list",_("Binary & Text;Binary;Text"));
+	    ctrMkNode("fld",opt,-1,"/log/logAgrTm","",RWRW__,"root",STR_ID,4,"tp","dec", "min","0", "max","10",
+		"help",_("Aggregation time in seconds and zero disables its."));
 	    if(logLen() > 0)
 		ctrMkNode("fld",opt,-1,"/log/log",_("Log"),R_R___,"root",STR_ID,4,"tp","str", "rows","20", "cols","100", "SnthHgl","1");
 	}
@@ -1825,12 +1835,16 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setLogLen(s2i(opt->text()));
     }
     else if(a_path == "/log/logItLim") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(i2s(logItLim()));
-	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setLogItLim(s2i(opt->text()));
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(i2s(mLogItLim));
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	mLogItLim = s2i(opt->text());
     }
     else if(a_path == "/log/logTp") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(i2s(mLogTp));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	mLogTp = s2i(opt->text());
+    }
+    else if(a_path == "/log/logAgrTm") {
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(i2s(mLogAgrTm));
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	mLogAgrTm = s2i(opt->text());
     }
     else if(a_path == "/log/log") {
 	if(ctrChkNode(opt,"get",R_R___,"root",STR_ID,SEC_RD)) {
@@ -1841,15 +1855,15 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);
-		resLog += TSYS::strMess("[%s.%06d] ",atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S").c_str(),itTm%1000000) + itDscr;
+		resLog += TSYS::strMess("[%s.%06d] ",atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S").c_str(),(int)itTm%1000000) + itDscr;
 		if(mLogTp == TTransportS::LTP_Binary || mLogTp == TTransportS::LTP_BinaryText)
-		    resLog += ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off,logItLim()),TSYS::Bin,(mLogTp==TTransportS::LTP_Binary)?" ":"<text>"):"")
-			   + (((mLog[iL].size()-off)>logItLim())?(string("\n...<")+_("CUT")+" "+TSYS::cpct2str(mLog[iL].size()-off-logItLim())+">"):string("")) + "\n\n";
+		    resLog += ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off,mLogItLim),TSYS::Bin,(mLogTp==TTransportS::LTP_Binary)?" ":"<text>"):"")
+			   + (((mLog[iL].size()-off)>mLogItLim)?(string("\n...<")+_("CUT")+" "+TSYS::cpct2str(mLog[iL].size()-off-mLogItLim)+">"):string("")) + "\n\n";
 		else if(mLogTp == TTransportS::LTP_Text)
-		    resLog += ((off<(int)mLog[iL].size())?"\n"+mLog[iL].substr(off,logItLim()):"")
-			   + (((mLog[iL].size()-off)>logItLim())?(string("\n...<")+_("CUT")+" "+TSYS::cpct2str(mLog[iL].size()-off-logItLim())+">"):string("")) + "\n\n";
-		    //itDscr + ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off,logItLim()),TSYS::Bin,"<text>"):"")
-		    //	   + (((mLog[iL].size()-off)>logItLim())?(string("\n...<")+_("CUT")+" "+TSYS::cpct2str(mLog[iL].size()-off-logItLim())+">"):string("")) + "\n\n";
+		    resLog += ((off<(int)mLog[iL].size())?"\n"+mLog[iL].substr(off,mLogItLim):"")
+			   + (((mLog[iL].size()-off)>mLogItLim)?(string("\n...<")+_("CUT")+" "+TSYS::cpct2str(mLog[iL].size()-off-mLogItLim)+">"):string("")) + "\n\n";
+		    //itDscr + ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off,mLogItLim),TSYS::Bin,"<text>"):"")
+		    //	   + (((mLog[iL].size()-off)>mLogItLim)?(string("\n...<")+_("CUT")+" "+TSYS::cpct2str(mLog[iL].size()-off-mLogItLim)+">"):string("")) + "\n\n";
 	    }
 	    opt->setText(resLog);
 	}

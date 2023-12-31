@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-17 23:10+0200\n"
+"POT-Creation-Date: 2023-12-31 09:51+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -2740,7 +2740,7 @@ msgid "IO log"
 msgstr "Лог ВВ"
 
 #, fuzzy
-msgid "Log length, block limit, type"
+msgid "Log length, block limit, type, aggregation time"
 msgstr "Длина лога и ограничение блока"
 
 #, fuzzy
@@ -2748,6 +2748,9 @@ msgid "Use zero (0) for the log disabling, -1 for writing to a file."
 msgstr "Используйте ноль для отключения лога."
 
 msgid "Binary & Text;Binary;Text"
+msgstr ""
+
+msgid "Aggregation time in seconds and zero disables its."
 msgstr ""
 
 msgid "Log"

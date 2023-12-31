@@ -79,7 +79,7 @@ void Sensors::getVal( TMdPrm *prm )
 	    while((main_feature=sensors_get_features(name, &nr1))) {
 		switch(main_feature->type) {
 		    case SENSORS_FEATURE_IN:
-			feature = sensors_get_subfeature(name,main_feature,SENSORS_SUBFEATURE_IN_INPUT);
+			feature = sensors_get_subfeature(name, main_feature, SENSORS_SUBFEATURE_IN_INPUT);
 			break;
 		    case SENSORS_FEATURE_FAN:
 			feature = sensors_get_subfeature(name, main_feature, SENSORS_SUBFEATURE_FAN_INPUT);
