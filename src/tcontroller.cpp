@@ -648,7 +648,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(runSt?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	s2i(opt->text()) ? start() : stop();
     }
-    else if(a_path.substr(0,9) == "/cntr/cfg") {
+    else if(a_path.find("/cntr/cfg") == 0) {
 	TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SDAQ_ID, RWRWR_);
 	if(ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR))
 	    for(unsigned iT = 0; iT < owner().tpPrmSize(); iT++)

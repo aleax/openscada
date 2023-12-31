@@ -1465,7 +1465,7 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 			for(unsigned iAl = 0; iAl < sAtrLs.size(); iAl++) {
 			    AutoHD<Attr> attr = src.at().attrAt(sAtrLs[iAl]);
 			    if(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
-				attr.at().cfgVal().size() > 4 && attr.at().cfgVal().substr(0,4) == "prm:" && !SYS->daq().at().attrAt(attr.at().cfgVal().substr(4),0,true).freeStat())
+				attr.at().cfgVal().find("prm:") == 0 && !SYS->daq().at().attrAt(attr.at().cfgVal().substr(4),0,true).freeStat())
 			    {
 				prmLnk = attr.at().cfgVal().substr(4);
 				break;

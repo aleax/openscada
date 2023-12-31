@@ -327,8 +327,8 @@ void da_LP_8x::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &p
     tval *ePrm = (tval*)p->extPrms;
 
     if(p->modTp.getS() == "I-8017") {	//Individual I-8017 processing
-	bool ha = (vo.name().substr(0,2) == "ha");
-	bool la = (vo.name().substr(0,2) == "la");
+	bool ha = (vo.name().find("ha") == 0);
+	bool la = (vo.name().find("la") == 0);
 	if(!(ha||la) || !ePrm->init) return;
 
 	//Create previous value
@@ -442,7 +442,7 @@ bool da_LP_8x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 	    if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 		p->setModPrm("fastPer", ePrm ? r2s(ePrm->fastPer = s2r(opt->text()),5) : opt->text());
 	}
-	else if(a_path.substr(0,12) == "/cfg/mode/in") {
+	else if(a_path.find("/cfg/mode/in") == 0) {
 	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 		opt->setText(ePrm?i2s(ePrm->cnlMode[s2i(a_path.substr(12))]):p->modPrm("cnl:"+a_path.substr(12),"0"));
 	    if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))

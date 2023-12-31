@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("Diamond DAQ boards")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.24"
+#define MOD_VER		"2.1.25"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides an access to \"Diamond Systems\" DAQ boards. Includes main support for all generic boards.")
 #define LICENSE		"GPL2"
@@ -869,7 +869,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
     //Service commands process
     string a_path = opt->attr("path");
-    if(a_path.substr(0,6) == "/serv/")	{ TParamContr::cntrCmdProc(opt); return; }
+    if(a_path.find("/serv/") == 0)	{ TParamContr::cntrCmdProc(opt); return; }
 
     DevFeature tdev = mod->devs[mTP];
 

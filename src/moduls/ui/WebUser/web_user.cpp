@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.6.12"
+#define MOD_VER		"1.6.13"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -780,7 +780,7 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 		opt->childAdd("el")->setText(lls[iL]+"."+ls[iT]);
 	}
     }
-    else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SUI_ID, RWRWR_);
+    else if(a_path.find("/up/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SUI_ID, RWRWR_);
     else if(a_path.find("/prgm") == 0) {
 	ResAlloc res(cfgRes, false);
 	if(func() && a_path == "/prgm/io") {

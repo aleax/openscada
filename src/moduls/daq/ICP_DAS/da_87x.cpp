@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ICP_DAS file: da_87x.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2017 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2012-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -259,8 +259,8 @@ void da_87x::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &pvl
     /*
     if(p->modTp.getS() == "I-87019")
     {
-	bool ha = (vo.name().substr(0,2) == "ha");
-	bool la = (vo.name().substr(0,2) == "la");
+	bool ha = (vo.name().find("ha") == 0);
+	bool la = (vo.name().find("la") == 0);
 	if(!(ha||la)) return;
 
 	//> Create previous value

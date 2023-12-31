@@ -1756,7 +1756,7 @@ RunWdgView *VisRun::findOpenWidget( const string &wdg )
     int woff = 0;
     for(int off = 0; true; woff = off) {
 	string sel = TSYS::pathLev(wdg, 0, true, &off);
-	if(sel.empty() || sel.substr(0,4) == "wdg_")	break;
+	if(sel.empty() || sel.find("wdg_") == 0) break;
     }
     RunPageView *rpg = findOpenPage(wdg.substr(0,woff));
     if(!rpg)	return NULL;

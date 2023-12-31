@@ -1716,7 +1716,7 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	if(nattr.size()) srcwdg = wdgAt(nwdg);
 	else nattr = nwdg;
 
-	bool is_pl = (a_path.substr(0,14) == "/links/lnk/pl_");
+	bool is_pl = (a_path.find("/links/lnk/pl_") == 0);
 	if(!(srcwdg.at().attrAt(nattr).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut))) {
 	    if(!is_pl) throw TError(nodePath(), _("The variable is not a link"));
 	    vector<string> a_ls;

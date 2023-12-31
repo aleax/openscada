@@ -49,8 +49,8 @@ RunWdgView::RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidge
     size_t endElSt = iwid.rfind("/");
     if(endElSt == string::npos) return;
     string lstEl = iwid.substr(endElSt+1);
-    if(lstEl.size() > 4 && lstEl.substr(0,4) == "wdg_") setObjectName(lstEl.substr(4).c_str());
-    if(lstEl.size() > 3 && lstEl.substr(0,3) == "pg_")  setObjectName(lstEl.substr(3).c_str());
+    if(lstEl.find("wdg_") == 0) setObjectName(lstEl.substr(4).c_str());
+    if(lstEl.find("pg_") == 0)  setObjectName(lstEl.substr(3).c_str());
 
     if(mess_lev() == TMess::Debug) SYS->cntrIter("UI:Vision:RunWdgView", 1);
 }

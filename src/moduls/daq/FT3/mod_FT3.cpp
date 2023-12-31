@@ -1802,7 +1802,7 @@ string TMdPrm::typeDBName()
 void TMdPrm::cntrCmdProc(XMLNode *opt)
 {
     string a_path = opt->attr("path");
-    if(a_path.substr(0, 6) == "/serv/") {
+    if(a_path.find("/serv/") == 0) {
 	TParamContr::cntrCmdProc(opt);
 	return;
     }
@@ -1825,7 +1825,7 @@ void TMdPrm::cntrCmdProc(XMLNode *opt)
 
 	return;
     }
-    if(a_path.substr(0, 12) == "/cfg/prm/pr_") {
+    if(a_path.find("/cfg/prm/pr_") == 0) {
 	if(ctrChkNode(opt, "get", RWRWR_, "root", SDAQ_ID, SEC_RD)) {
 	    string lnk_val = mDA->lnk(mDA->lnkId((a_path.substr(12)))).prmAttr;
 	    if(!SYS->daq().at().attrAt(lnk_val, '.', true).freeStat()) {

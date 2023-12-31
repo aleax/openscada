@@ -36,7 +36,7 @@
 #define MOD_NAME	_("Fastwel IO")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.24"
+#define MOD_VER		"0.1.25"
 #define AUTHORS		_("Maxim Kochetkov")
 #define DESCRIPTION	_("Fastwel IO FBUS client implementation")
 #define LICENSE		"GPL2"
@@ -1025,7 +1025,7 @@ void TMdPrm::cntrCmdProc(XMLNode * opt)
 {
 //> Service commands process
     string a_path = opt->attr("path");
-    if(a_path.substr(0, 6) == "/serv/") {
+    if(a_path.find("/serv/") == 0) {
 	TParamContr::cntrCmdProc(opt);
 	return;
     }

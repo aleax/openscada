@@ -517,13 +517,13 @@ void Block::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"showHide",DEF_showHide,opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"showHide",opt->text(),opt->attr("user"));
     }
-    else if(a_path.substr(0,7) == "/lio/io" && enable()) {
+    else if(a_path.find("/lio/io") == 0 && enable()) {
 	int id = ioId(TSYS::pathLev(a_path,2));
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	    opt->setText((ioType(id)==IO::Real) ? r2s(getR(id),6) : getS(id));
 	if(!linkActive(id) && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) { setS(id,opt->text()); modif(); }
     }
-    else if(a_path.substr(0,7) == "/lnk/io" && enable()) {
+    else if(a_path.find("/lnk/io") == 0 && enable()) {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    vector<string> list;
 	    char lev = TSYS::pathLev(a_path,2)[0];

@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.6.5"
+#define MOD_VER		"1.6.6"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -776,7 +776,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	}
 	opt->childAdd("el")->setText("");
     }
-    else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SPRT_ID, RWRWR_);
+    else if(a_path.find("/up/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SPRT_ID, RWRWR_);
     else if(a_path == "/in/WaitReqTm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(waitReqTm()));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))	setWaitReqTm(s2i(opt->text()));

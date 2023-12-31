@@ -47,7 +47,7 @@
 #define MOD_NAME	trS("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.9.15"
+#define MOD_VER		"0.9.16"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides an implementation of the client of SNMP-service.")
 #define LICENSE		"GPL2"
@@ -663,7 +663,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
     //Service commands process
     string a_path = opt->attr("path");
-    if(a_path.substr(0,6) == "/serv/")	{ TParamContr::cntrCmdProc(opt); return; }
+    if(a_path.find("/serv/") == 0)	{ TParamContr::cntrCmdProc(opt); return; }
 
     //Get page info
     if(opt->name() == "info") {

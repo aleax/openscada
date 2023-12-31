@@ -1,4 +1,14 @@
 2023-12-31 Roman (stable)
+- !!!!:LibsDB.OscadaLibs: The library tmplib_LowDevLib appended by the templates:
+    - from VPF: Incubator, VSE002;
+    - from Blue Star Group: "Goboy 1M (Goboy1M)", "AutoPILOT PRO Flow Computers (AutoPILOT)", "AutoPILOT OLD Flow Computers (AutoPILOT_old)",
+	"Corrector BK (CorBK)", "Tancy Data (TDS)", "TUF-2000 (TUF)", "UltraMag", "Enron, Daniel (enronDaniel)".
+- !!:SYS,DAQ.{BlockCalc,Comedi,DiamondBoards,FT3,Fastwel,ICP_DAS,SNMP},Protocol.{ModBus,UserProtocol},UI.{VCAEngine,Vision,WebCfg,WebCfgD,WebUser}:
+    std::string::substr() replaced by std::string::find() in places with static obtaining data for comparing,
+	what is clearer, safer and mostly faster for short strings.
+
+
+2023-12-31 Roman (stable)
 - FIX:Transports: Fixed in the milliseconds part of the log messages on some devices like to RPiZero (ARMv6).
     The log properties moved to the protected section for global and only methods for internal,
 	appended by a property of the aggregation time and some of them limited by the bits size.

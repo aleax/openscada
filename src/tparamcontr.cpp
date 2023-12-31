@@ -456,7 +456,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
 
     //Service commands process
-    if(a_path.substr(0,6) == "/serv/")	{ TValue::cntrCmdProc(opt); return; }
+    if(a_path.find("/serv/") == 0)	{ TValue::cntrCmdProc(opt); return; }
 
     //Get page info
     if(opt->name() == "info") {

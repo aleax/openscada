@@ -37,7 +37,7 @@
 #define MOD_NAME	trS("DAQ boards by Comedi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.23"
+#define MOD_VER		"1.0.24"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org).")
 #define LICENSE		"GPL2"
@@ -449,7 +449,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
     //Service commands process
     string a_path = opt->attr("path");
-    if(a_path.substr(0,6) == "/serv/")	{ TParamContr::cntrCmdProc(opt); return; }
+    if(a_path.find("/serv/") == 0)	{ TParamContr::cntrCmdProc(opt); return; }
 
     //Get page info
     if(opt->name() == "info") {

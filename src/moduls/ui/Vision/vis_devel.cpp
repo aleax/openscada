@@ -1103,8 +1103,8 @@ void VisDevelop::applyWorkWdg( )
     string sel2 = TSYS::pathLev(cur_wdg, 1);
     string sel3 = TSYS::pathLev(cur_wdg, 2);
 
-    bool isProj = (sel1.substr(0,4)=="prj_");
-    bool isLib  = (sel1.substr(0,4)=="wlb_");
+    bool isProj = (sel1.find("prj_") == 0);
+    bool isLib  = (sel1.find("wlb_") == 0);
 
     //Process main actions
     actPrjRun->setEnabled(isProj);
@@ -1572,7 +1572,7 @@ void VisDevelop::visualItClear( const string &elWa )
 	    if(workAttr.size()) workWdgLoc += "/" + workAttr;
 	    workAttr = work_tmp;
 	}
-	if(workAttr.size() > 2 && workAttr.substr(0,2) == "a_") workAttr = workAttr.substr(2);
+	if(workAttr.find("a_") == 0) workAttr = workAttr.substr(2);
 	else { workWdgLoc += "/"+workAttr; workAttr = ""; }
     }
 
@@ -1604,7 +1604,7 @@ void VisDevelop::visualItDownParent( const string &elWa )
 	    if(workAttr.size()) workWdgLoc += "/" + workAttr;
 	    workAttr = work_tmp;
 	}
-	if(workAttr.size() > 2 && workAttr.substr(0,2) == "a_") workAttr = workAttr.substr(2);
+	if(workAttr.find("a_") == 0) workAttr = workAttr.substr(2);
 	else { workWdgLoc += "/"+workAttr; workAttr = ""; }
     }
 
@@ -1739,7 +1739,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	dlg.setMess(t_el.c_str());
 	dlg.setId(t1_el.c_str());
 	// Add Link flag for copy operation
-	if(copy_buf_w[0] != '1' && d_el != "prj_" && d_el != "wlb_" && d_el_.substr(0,4) != "wdg_") {
+	if(copy_buf_w[0] != '1' && d_el != "prj_" && d_el != "wlb_" && d_el_.find("wdg_") != 0) {
 	    dlg.edLay()->addWidget(new QLabel(_("Inherit:"),&dlg), 3, 0);
 	    wInher = new QCheckBox(&dlg);
 	    dlg.edLay()->addWidget(wInher, 3, 1);
@@ -1783,7 +1783,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 		if(!err || err == 1) {	//Not errors or warnings
 		    if(it_nm.size()) {
 			req.clear()->setName("set")->setText(it_nm);
-			if(d_el.substr(0,4) == "prj_" || d_el.substr(0,4) == "wlb_")
+			if(d_el.find("prj_") == 0 || d_el.find("wlb_") == 0)
 			    req.setAttr("path",d_elp+"/"+d_el+"/%2fobj%2fcfg%2fname");
 			else req.setAttr("path",d_elp+"/"+d_el+"/%2fwdg%2fcfg%2fname");
 			cntrIfCmd(req);
