@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.DAQGate file: daq_gate.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.13.4"
+#define MOD_VER		"2.13.5"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -140,9 +140,10 @@ string TMdContr::getStatus( )
 {
     string val = TController::getStatus();
 
+    if(startStat() && (!redntUse() || syncForce) && syncSt)
+	val += TSYS::strMess(_("Sync. "));
     if(startStat() && !redntUse()) {
-	if(syncSt)	val += TSYS::strMess(_("Sync. "));
-	else {
+	if(!syncSt) {
 	    if(callSt)	val += TSYS::strMess(_("Acquisition. "));
 	    if(period())	val += TSYS::strMess(_("Acquisition with the period %s. "),tm2s(1e-9*period()).c_str());
 	    else val += TSYS::strMess(_("Next acquisition by the cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
@@ -557,9 +558,22 @@ void *TMdContr::Task( void *icntr )
 
     for(unsigned int itCnt = 0; !cntr.endrunReq; itCnt++) {
 	if(cntr.redntUse()) {
-	    if(cntr.syncForce)
-		try { cntr.sync(); cntr.syncForce = false; }
-		catch(TError &err) { }
+	    if(cntr.syncForce) {
+		tCnt = TSYS::curTime();
+
+		// Checking the connection
+		bool isAccess = false;
+		for(map<string,StHd>::iterator st = cntr.mStatWork.begin(); st != cntr.mStatWork.end(); ++st) {
+		    if(st->second.cntr > 0) st->second.cntr = vmax(0, st->second.cntr-1e-6*(tCnt-tPrev));
+		    if(st->second.cntr <= 0) isAccess = true;
+		}
+
+		if(isAccess)	//Repeat the direct syncing up to success.
+		    try { cntr.sync(); cntr.syncForce = false; }
+		    catch(TError &err) { }
+
+		tPrev = tCnt;
+	    }
 
 	    //Just using the standard message archives redundancy
 	    TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());

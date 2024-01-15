@@ -1,3 +1,8 @@
+2024-01-15 Roman (stable)
+- FIX:Transports: Fixed in the milliseconds part of the log messages on MIPS also.
+- !:FIX:DAQ.DAQGate: Set to resync in the redundant mode up to successful.
+
+
 2023-12-31 Roman (stable)
 - !!!!:LibsDB.OscadaLibs: The library tmplib_LowDevLib appended by the templates:
     - from VPF: Incubator, VSE002;
