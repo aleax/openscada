@@ -20,6 +20,7 @@
 
 #include <unistd.h>
 #include <stddef.h>
+#include <errno.h>
 #include <dirent.h>
 #include <algorithm>
 

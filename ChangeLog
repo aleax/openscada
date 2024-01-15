@@ -1,4 +1,8 @@
 2024-01-15 Roman (stable)
+- FIX:DAQ.System: Fixed in building Proc>DA on old systems.
+
+
+2024-01-15 Roman (stable)
 - !!!!:FIX:DAQ.System: Appended by a new data source of Linux processes "Process (proc)".
     !!: Sensors>DA appended by support of the directly accessible sensors "/sys/devices/virtual/thermal/*/temp"
 	and /sys/devices/virtual/hwmon/*/temp*
