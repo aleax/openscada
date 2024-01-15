@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da.cpp
 /***************************************************************************
- *   Copyright (C) 2023 by Roman Savochenko, <roman@oscada.org>            *
+ *   Copyright (C) 2023-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -81,7 +81,7 @@ void DA::makeActiveDA( TMdContr *aCntr, const string &dIdPref, const string &dNm
 	unsigned iP;
 	for(iP = 0; iP < pLs.size(); ++iP) {
 	    AutoHD<TMdPrm> p = aCntr->at(pLs[iP]);
-	    if(p.at().cfg("TYPE").getS() == id())	break;
+	    if(p.at().cfg("TYPE").getS() == id()) break;
 	}
 	if(iP >= pLs.size()) {
 	    string itprm = dIdPref.size() ? dIdPref : "Sys";

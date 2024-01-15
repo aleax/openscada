@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_sensors.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,6 +20,9 @@
 
 #include <sys/times.h>
 #include <errno.h>
+#include <unistd.h>
+#include <stddef.h>
+#include <dirent.h>
 
 #include <tsys.h>
 
@@ -64,12 +67,50 @@ Sensors::~Sensors( )
 void Sensors::getVal( TMdPrm *prm )
 {
     bool devOK = false;
+    string	s_id, s_val;
+
+    //Using directly the Linux sensors
+    // reading /sys/devices/virtual/thermal/*/temp
+    DIR *IdDir = NULL;
+    dirent *scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
+    if((IdDir=opendir(DIR_VDEV "thermal"))) {
+	for(dirent *sRez = NULL; readdir_r(IdDir,scan_dirent,&sRez) == 0 && sRez; )
+	    if((s_val=devRead(string("thermal")+"/"+sRez->d_name+"/temp")) != EVAL_STR) {
+		if(!prm->vlPresent((s_id=string(sRez->d_name)+"_temp")))
+		    fldAdd(new TFld(s_id.c_str(),string(sRez->d_name)+" temp",TFld::Real,TFld::NoWrite));
+		prm->vlAt(s_id).at().setR(1e-3*s2r(s_val), 0, true);
+	    }
+
+	closedir(IdDir);
+    }
+    //  reading /sys/devices/virtual/hwmon/*/temp*
+    if((IdDir=opendir(DIR_VDEV "hwmon"))) {
+	dirent	*scan_dirent2 = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
+	for(dirent *sRez = NULL; readdir_r(IdDir,scan_dirent,&sRez) == 0 && sRez; ) {
+	    if(!devChkAccess(string("hwmon")+"/"+sRez->d_name+"/temp1_input")) continue;
+	    DIR *IdDir2 = opendir((string(DIR_VDEV "hwmon")+"/"+sRez->d_name).c_str());
+	    if(IdDir2) {
+		for(dirent *sRez2 = NULL; readdir_r(IdDir2,scan_dirent2,&sRez2) == 0 && sRez2; ) {
+		    if(string(sRez2->d_name).find("temp") == 0 && (s_val=devRead(string("hwmon")+"/"+sRez->d_name+"/"+sRez2->d_name)) != EVAL_STR) {
+			if(!prm->vlPresent((s_id=string(sRez->d_name)+"_"+sRez2->d_name)))
+			    fldAdd(new TFld(s_id.c_str(),string(sRez->d_name)+" "+sRez2->d_name,TFld::Real,TFld::NoWrite));
+			prm->vlAt(s_id).at().setR(1e-3*s2r(s_val), 0, true);
+		    }
+		}
+		closedir(IdDir2);
+	    }
+	}
+
+	closedir(IdDir);
+	free(scan_dirent2);
+    }
+    free(scan_dirent);
+
     //Using libsensor
     if(libsensor_ok) {
 #if HAVE_SENSORS_SENSORS_H
 	int nr = 0;
 	double	val;
-	string	s_id;
 	const sensors_chip_name	*name;
 #if SENSORS_API_VERSION >= 0x400
 	while((name=sensors_get_detected_chips(NULL,&nr))) {
@@ -114,7 +155,7 @@ void Sensors::getVal( TMdPrm *prm )
 #endif
 #endif
     }
-    //Use mbmon
+    //Using mbmon
     else {
 	char buf[100], name[31];
 	float val;
@@ -151,6 +192,25 @@ void Sensors::makeActiveDA( TMdContr *aCntr, const string &dIdPref, const string
 
     //Checking for the sensors presence
     bool sens_allow = false;
+
+    // ... directly the Linux sensors
+    //  Testing /sys/devices/virtual/thermal/*/temp
+    DIR *IdDir = NULL;
+    dirent *scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
+    if((IdDir=opendir(DIR_VDEV "thermal"))) {
+	for(dirent *sRez = NULL; !sens_allow && readdir_r(IdDir,scan_dirent,&sRez) == 0 && sRez; )
+	    sens_allow = (devChkAccess(string("thermal")+"/"+sRez->d_name+"/temp"));
+
+	closedir(IdDir);
+    }
+    //  Testing /sys/devices/virtual/hwmon/*/temp*
+    if(!sens_allow && (IdDir=opendir(DIR_VDEV "hwmon"))) {
+	for(dirent *sRez = NULL; !sens_allow && readdir_r(IdDir,scan_dirent,&sRez) == 0 && sRez; )
+	    sens_allow = (devChkAccess(string("hwmon")+"/"+sRez->d_name+"/temp1_input"));
+
+	closedir(IdDir);
+    }
+    free(scan_dirent);
 
     // ... libsensor
     if(libsensor_ok) {
@@ -205,4 +265,28 @@ void Sensors::makeActiveDA( TMdContr *aCntr, const string &dIdPref, const string
 
     //Sensor parameter creating
     if(sens_allow) DA::makeActiveDA(aCntr, "Sensors", _("Sensors"));
+}
+
+bool Sensors::devChkAccess( const string &file, const string &acs )
+{
+    FILE *f = fopen(TSYS::strMess(DIR_VDEV "%s",file.c_str()).c_str(), acs.c_str());
+    bool rez = f;
+    if(f && fclose(f) != 0) mess_warning(mod->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
+
+    return rez;
+}
+
+string Sensors::devRead( const string &file )
+{
+    char buf[256];
+    string rez = EVAL_STR;
+    FILE *f = fopen(TSYS::strMess(DIR_VDEV "%s",file.c_str()).c_str(), "r");
+    if(f) {
+	rez = "";
+	while(fgets(buf,sizeof(buf),f) != NULL) rez.append(buf);
+	if(rez.size() && rez[rez.size()-1] == '\n') rez.erase(rez.size()-1, 1);
+	if(fclose(f) != 0) mess_warning(mod->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
+    }
+
+    return rez;
 }

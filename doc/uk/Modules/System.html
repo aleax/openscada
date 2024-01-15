@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/Система</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSystem&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/System" title="Modules/System">Modules/System</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/System.html" title="Modules/System (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../../ru/Modules/System.html" title="Модули/Система (13% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSystem&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/System" title="Modules/System">Modules/System</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/System.html" title="Modules/System (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../../ru/Modules/System.html" title="Модули/Система (12% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/System.html" title="Special:MyLanguage/Modules/System">System</a> </td>
 <td> Збір даних ОС
 </td>
-<td> 3.0 </td>
+<td> 3.2 </td>
 <td> GPL2 </td>
 <td> daq_System.so </td>
 <td> en,uk,ru,de </td>
@@ -41,7 +41,7 @@
 <td> Роман Савоченко </td>
 <td> Надає збір даних із Операційної Системи. Підтримуються джерела даних ОС Linux: ЦП, Пам'ять, Сенсори, SMART Диску, Статистика Диску, Файлова Система, Мережа, Живлення, ДБЖ, Час Дії та інше.
 <ul><li> <b><a href="../../en/To_do.html" title="Special:MyLanguage/Works/To do">Завдання (To Do)</a>:</b></li></ul>
-<dl><dd> - додати вимірювання споживання пам'яті за процесами або групами процесів.</dd></dl>
+<dl><dd> + додати вимірювання споживання пам'яті за процесами або групами процесів.</dd></dl>
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
@@ -119,7 +119,32 @@
 <td> Сенсори (sensors)<br />"<b>Sensors</b>" </td>
 <td> Не використовується. </td>
 <td> Визначаються сенсорами, які доступні на обладнані. Для кожного сенсора створюється унікальний атрибут. </td>
-<td> Використовується бібліотека <b>libsensors</b> або програма <b>mbmon</b>. Найбільший пріоритет використання надається бібліотеці <b>libsensors</b> оскільки <b>mbmon</b> має проблеми на багатоядерних архітектурах і переважно застаріле.
+<td> Використовується бібліотека <b>libsensors</b> або програма <b>mbmon</b>, так само як сенсори прямо у "/sys/devices/virtual/hwmon/*/temp" і /sys/devices/virtual/hwmon/*/temp*". Найбільший пріоритет використання надається бібліотеці <b>libsensors</b> оскільки <b>mbmon</b> має проблеми на багатоядерних архітектурах і переважно застаріле.
+</td></tr>
+<tr>
+<td> Процес (proc) </td>
+<td> Перелік команд процесів із можливістю визначення регулярного виразу до повного командного рядка у вигляді "<b>/{RE}/</b>". </td>
+<td>
+<ul><li> "Поточна кількість слотів файлових дескрипторів" (<b>FDSize</b>[integer])</li>
+<li> "Піковий розмір віртуальної пам'яті (КіБ)" (<b>VmPeak</b>[integer])</li>
+<li> "Розмір віртуальної пам'яті (КіБ)" (<b>VmSize</b>[integer])</li>
+<li> "Розмір заблокованої пам'яті (КіБ)" (<b>VmLck</b>[integer])</li>
+<li> "Розмір закріпленої пам'яті (КіБ)" (<b>VmPin</b>[integer])</li>
+<li> "Піковий розмір резидентного набору (КіБ)" (<b>VmHWM</b>[integer])</li>
+<li> "Розмір резидентного набору (КіБ)" (<b>VmRSS</b>[integer])</li>
+<li> "Розмір резидентної анонімної пам'яті (КіБ)" (<b>RssAnon</b>[integer])</li>
+<li> "Розмір резидентних файлових мапувань (КіБ)" (<b>RssFile</b>[integer])</li>
+<li> "Розмір резидентної спільної пам'яті (КіБ)" (<b>RssShmem</b>[integer])</li>
+<li> "Розмір сегменту даних (КіБ)" (<b>VmData</b>[integer])</li>
+<li> "Розмір сегменту стеку (КіБ)" (<b>VmStk</b>[integer])</li>
+<li> "Розмір сегменту тексту (КіБ)" (<b>VmExe</b>[integer])</li>
+<li> "Розмір коду спільних бібліотек (КіБ)" (<b>VmLib</b>[integer])</li>
+<li> "Розмір таблиці записів (КіБ)" (<b>VmPTE</b>[integer])</li>
+<li> "Розмір віртуальної пам'яті, вилучений анонімними приватними сторінками (КіБ)" (<b>VmSwap</b>[integer])</li>
+<li> "Розмір порцій пам'яті hugetlb (КіБ)" (<b>HugetlbPages</b>[integer])</li>
+<li> "Кількість потоків у процесі" (<b>Threads</b>[integer])</li></ul>
+</td>
+<td> У якості джерела використано "/proc/{PID}/status".
 </td></tr>
 <tr>
 <td> Сенсор Qt (QSensor)<br />"<b>{OrigName}</b>" </td>
@@ -238,5 +263,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/System/uk">Modules/System/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2936</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/System/uk">Modules/System/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2946</td></tr></table></body>
 </html>

@@ -1,7 +1,7 @@
 
-//OpenSCADA module DAQ.System file: da_ups.h
+//OpenSCADA module DAQ.System file: da_proc.h
 /***************************************************************************
- *   Copyright (C) 2014-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2024 by Roman Savochenko, <roman@oscada.org>            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,53 +18,55 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef DA_UPS_H
-#define DA_UPS_H
+#ifndef DA_PROC_H
+#define DA_PROC_H
 
 #include "da.h"
+
+#define SELF_PROC	"<SELF>"
+#define PIDS_CACHE_UPD_TM 60
 
 namespace SystemCntr
 {
 
 //*************************************************
-//* NUT                                           *
+//* Proc                                          *
 //*************************************************
-class UPS: public DA
+class Proc: public DA
 {
     public:
+	//Data
+	// Cache object of the processed PIDs
+	struct tval {
+	    tval( ) : tmUpd(0)	{ }
+
+	    time_t	tmUpd;
+	    vector<int>	prcCache;
+	};
+
 	//Methods
-	UPS( );
-	~UPS( );
+	Proc( );
 
-	bool isDynamic( ) { return true; }
-	bool isSlow( )	{ return true; }
-
-	string id( )	{ return "ups"; }
-	string name( )	{ return _("UPS"); }
+	string id( )	{ return "proc"; }
+	string name( )	{ return _("Process"); }
 
 	void init( TMdPrm *prm, bool update = false );
 	void deInit( TMdPrm *prm );
 
-	bool cntrCmdProc( TMdPrm *prm, XMLNode *opt );
 	void cfgChange( TMdPrm *prm, TCfg &co, const TVariant &pc );
 
 	void getVal( TMdPrm *prm );
-	void vlSet( TMdPrm *prm, TVal &vo, const TVariant &vl, const TVariant &pvl );
 
 	void dList( vector<string> &list, TMdPrm *prm = NULL );
 	void makeActiveDA( TMdContr *aCntr, const string &dIdPref = "", const string &dNmPref = "" )
-	{ DA::makeActiveDA(aCntr, "UPS", name()); }
+	{ }						//!!!! Don't create automatically
+	//{ DA::makeActiveDA(aCntr, id(), name()); }
 
     private:
 	//Methods
-	string reqUPS( const string &addr, const string &req, const string &debCat = "" );
-	string upsList( const string &addr );
-
-	//Attributes
-	string	tTr, nTr;
-	ResMtx	reqRes;
+	string devRead( const string &file );
 };
 
 } //End namespace
 
-#endif //DA_UPS_H
+#endif //DA_PROC_H

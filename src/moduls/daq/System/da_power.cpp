@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_power.cpp
 /***************************************************************************
- *   Copyright (C) 2023 by Roman Savochenko, <roman@oscada.org>            *
+ *   Copyright (C) 2023-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -117,18 +117,17 @@ void Power::getVal( TMdPrm *prm )
 	DIR *IdDir = opendir((DIR_PS+trg).c_str());
 	if(IdDir) {
 	    struct stat file_stat;
-	    dirent  *scan_rez = NULL,
-	    *scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
-	    while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez) {
-		if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0 ||
-			strcmp(scan_rez->d_name,"alarm") == 0 || strcmp(scan_rez->d_name,"uevent") == 0 ||
-			prm->vlPresent(scan_rez->d_name))
+	    dirent *scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
+	    for(dirent *sRez = NULL; readdir_r(IdDir,scan_dirent,&sRez) == 0 && sRez; ) {
+		if(strcmp(sRez->d_name,"..") == 0 || strcmp(sRez->d_name,".") == 0 ||
+			strcmp(sRez->d_name,"alarm") == 0 || strcmp(sRez->d_name,"uevent") == 0 ||
+			prm->vlPresent(sRez->d_name))
 		    continue;
-		stat((DIR_PS+trg+"/"+scan_rez->d_name).c_str(), &file_stat);
-		if((file_stat.st_mode&S_IFMT) != S_IFREG || !devChkAccess(trg,scan_rez->d_name)) continue;
+		stat((DIR_PS+trg+"/"+sRez->d_name).c_str(), &file_stat);
+		if((file_stat.st_mode&S_IFMT) != S_IFREG || !devChkAccess(trg,sRez->d_name)) continue;
 
-		((TElem*)prm->daData)->fldAdd(new TFld(scan_rez->d_name,scan_rez->d_name,TFld::String,
-		    devChkAccess(trg,scan_rez->d_name,"w")?unsigned(TVal::DirWrite|TVal::NoSave):unsigned(TFld::NoWrite|TVal::DirRead)));
+		((TElem*)prm->daData)->fldAdd(new TFld(sRez->d_name,sRez->d_name,TFld::String,
+		    devChkAccess(trg,sRez->d_name,"w")?unsigned(TVal::DirWrite|TVal::NoSave):unsigned(TFld::NoWrite|TVal::DirRead)));
 	    }
 
 	    free(scan_dirent);
@@ -189,11 +188,10 @@ void Power::dList( vector<string> &list, TMdPrm *prm )
     DIR *IdDir = opendir(DIR_PS);
     if(IdDir == NULL) return;
 
-    dirent  *scan_rez = NULL,
-	    *scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
-    while(readdir_r(IdDir,scan_dirent,&scan_rez) == 0 && scan_rez)
-	if(strcmp(scan_rez->d_name,"..") && strcmp(scan_rez->d_name,".") && devChkAccess(string(scan_rez->d_name),"type"))
-	    list.push_back(scan_rez->d_name);
+    dirent *scan_dirent = (dirent*)malloc(offsetof(dirent,d_name) + NAME_MAX + 1);
+    for(dirent *sRez = NULL; readdir_r(IdDir,scan_dirent,&sRez) == 0 && sRez; )
+	if(strcmp(sRez->d_name,"..") && strcmp(sRez->d_name,".") && devChkAccess(string(sRez->d_name),"type"))
+	    list.push_back(sRez->d_name);
 
     free(scan_dirent);
     closedir(IdDir);

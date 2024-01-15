@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: os_contr.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,6 +43,7 @@
 #include "da_fs.h"
 #include "da_qsensor.h"
 #include "da_power.h"
+#include "da_proc.h"
 #include "os_contr.h"
 
 //*************************************************
@@ -51,7 +52,7 @@
 #define MOD_NAME	trS("System DA")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"3.0.4"
+#define MOD_VER		"3.2.4"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides data acquisition from Operation System. Supported OS Linux data sources: CPU, Memory,\
  Sensors, Disk SMART, Disk Statistic, File System, Network, Power, UPS, Up Time etc.")
@@ -125,6 +126,7 @@ void TTpContr::postEnable( int flag )
     daReg(new FS());
     daReg(new QSensor());
     daReg(new Power());
+    daReg(new Proc());
 
     //Controler's bd structure
     fldAdd(new TFld("AUTO_FILL",trS("Auto create active data sources"),TFld::Integer,TFld::Selectable,"1","0","0;1;2;3",_("Manual;Fast sources;Slow sources;All sources")));
@@ -513,7 +515,7 @@ bool TMdPrm::cfgChange( TCfg &co, const TVariant &pc )
 {
     //Change TYPE parameter
     if(co.name() == "TYPE") { setType(co.getS()); return true; }
-    if(mDA) mDA->cfgChange(co, pc);
+    if(mDA) mDA->cfgChange(this, co, pc);
     if(!autoC()) modif();
     return true;
 }

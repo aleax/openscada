@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_ups.cpp
 /***************************************************************************
- *   Copyright (C) 2014-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2014-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -52,7 +52,7 @@ void UPS::deInit( TMdPrm *prm )
     cSubt.fld().setFlg(cSubt.fld().flg()&~(TFld::SelEdit));
 }
 
-void UPS::cfgChange( TCfg &co, const TVariant &pc )
+void UPS::cfgChange( TMdPrm *prm, TCfg &co, const TVariant &pc )
 {
     if(co.name() == "SUBT") {
 	string dls = upsList(co.getS());
@@ -125,7 +125,7 @@ void UPS::getVal( TMdPrm *prm )
 			    flg |= TFld::Selectable;
 			}
 			// Create
-			((tval*)prm->daData)->els.fldAdd(new TFld(aid.c_str(),descr.c_str(),TFld::String,flg,vLen.c_str(),"",selLs.c_str(),selLs.c_str(),vid.c_str()));
+			((TElem*)prm->daData)->fldAdd(new TFld(aid.c_str(),descr.c_str(),TFld::String,flg,vLen.c_str(),"",selLs.c_str(),selLs.c_str(),vid.c_str()));
 		    }
 		    prm->vlAt(aid).at().setS(aVal, 0, true);
 		    als.push_back(aid);
@@ -147,7 +147,7 @@ void UPS::getVal( TMdPrm *prm )
 			    descr = vVal;
 			else descr = var;
 			// Create
-			((tval*)prm->daData)->els.fldAdd(new TFld(aid.c_str(),descr.c_str(),TFld::Boolean,TVal::DirWrite|TVal::NoSave,"","","","",vid.c_str()));
+			((TElem*)prm->daData)->fldAdd(new TFld(aid.c_str(),descr.c_str(),TFld::Boolean,TVal::DirWrite|TVal::NoSave,"","","","",vid.c_str()));
 		    }
 		    prm->vlAt(aid).at().setB(false, 0, true);
 		    als.push_back(aid);

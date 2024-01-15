@@ -1,4 +1,14 @@
 2024-01-15 Roman (stable)
+- !!!!:FIX:DAQ.System: Appended by a new data source of Linux processes "Process (proc)".
+    !!: Sensors>DA appended by support of the directly accessible sensors "/sys/devices/virtual/thermal/*/temp"
+	and /sys/devices/virtual/hwmon/*/temp*
+    FIX: Mem>DA some improved in the productivity and fixed in closing "/proc/meminfo" after its unsuccessful opening.
+    FIX: HddSmart>DA, UPS>DA removed for spare own object-structure "tval".
+    Power>DA some improved in code of scanning the data device files.
+    DA::cfgChange() appended by the "TMdPrm *prm" argument.
+
+
+2024-01-15 Roman (stable)
 - FIX:Transports: Fixed in the milliseconds part of the log messages on MIPS also.
 - !:FIX:DAQ.DAQGate: Set to resync in the redundant mode up to successful.
 

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-10 11:30+0300\n"
+"POT-Creation-Date: 2024-01-15 14:32+0200\n"
 "PO-Revision-Date: 2009-08-18 09:59+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -246,6 +246,60 @@ msgstr "Ladeschwelle Start, Stopp"
 msgid "Charge control threshold start, end"
 msgstr "Ladekontrollschwelle Anfang, Ende"
 
+msgid "Number of file descriptor slots currently"
+msgstr "Anzahl der aktuellen Dateideskriptor-Slots"
+
+msgid "Peak virtual memory size (KiB)"
+msgstr "Spitzengröße des virtuellen Speichers (KiB)"
+
+msgid "Virtual memory size (KiB)"
+msgstr "Größe des virtuellen Speichers (KiB)"
+
+msgid "Locked memory size (KiB)"
+msgstr "Größe des gesperrten Speichers (KiB)"
+
+msgid "Pinned memory size (KiB)"
+msgstr "Größe des angehefteten Speichers (KiB)"
+
+msgid "Peak resident set size (KiB)"
+msgstr "Spitzengröße der Residentmenge (KiB)"
+
+msgid "Resident set size (KiB)"
+msgstr "Größe des Resident-Sets (KiB)"
+
+msgid "Size of resident anonymous memory (KiB)"
+msgstr "Größe des residenten anonymen Speichers (KiB)"
+
+msgid "Size of resident file mappings (KiB)"
+msgstr "Größe der residenten Dateizuordnungen (KiB)"
+
+msgid "Size of resident shared memory (KiB)"
+msgstr "Größe des residenten Shared Memory (KiB)"
+
+msgid "Size of data segment (KiB)"
+msgstr "Größe des Datensegments (KiB)"
+
+msgid "Size of stack segment (KiB)"
+msgstr "Größe des Stapelsegments (KiB)"
+
+msgid "Size of text segment (KiB)"
+msgstr "Größe des Textsegments (KiB)"
+
+msgid "Shared library code size (KiB)"
+msgstr "Größe des Shared-Library-Codes (KiB)"
+
+msgid "Page table entries size (KiB)"
+msgstr "Größe der Seitentabelleneinträge (KiB)"
+
+msgid "Swapped-out virtual memory size by anonymous private pages (KiB)"
+msgstr "Größe des ausgelagerten virtuellen Speichers nach anonymen privaten Seiten (KiB)"
+
+msgid "Size of hugetlb memory portions (KiB)"
+msgstr "Größe der Hugetlb-Speicherportionen (KiB)"
+
+msgid "Number of threads in process"
+msgstr "Anzahl der Threads in Bearbeitung"
+
 msgid "State"
 msgstr "Zustand"
 
@@ -309,8 +363,8 @@ msgid ""
 "sources: CPU, Memory, Sensors, Disk SMART, Disk Statistic, File System, "
 "Network, Power, UPS, Up Time etc."
 msgstr ""
-"Bietet Datenerfassung vom Betriebssystem. Unterstützte Betriebssystem- "
-"Linux-Datenquellen: CPU, Speicher, Sensoren, Disk SMART, Festplattenstatistik, "
+"Bietet Datenerfassung vom Betriebssystem. Unterstützte Betriebssystem- Linux-"
+"Datenquellen: CPU, Speicher, Sensoren, Disk SMART, Festplattenstatistik, "
 "Dateisystem, Netzwerk, Strom, USV, Betriebszeit usw."
 
 msgid "Auto create active data sources"
@@ -385,6 +439,9 @@ msgstr "Netzwerk"
 
 msgid "Power"
 msgstr "Leistung"
+
+msgid "Process"
+msgstr "Prozess"
 
 msgid "Qt sensor"
 msgstr "Qt-Sensor"

@@ -14,7 +14,7 @@ endif
 
 daq_System_la_LDFLAGS += $(LIB_SENSORS)
 daq_System_la_SOURCES = os_contr.cpp da.cpp da_cpu.cpp da_mem.cpp da_uptime.cpp da_hddtemp.cpp da_sensors.cpp da_smart.cpp da_hddstat.cpp \
-    da_netstat.cpp da_ups.cpp da_fs.cpp da_qsensor.cpp da_power.cpp
+    da_netstat.cpp da_ups.cpp da_fs.cpp da_qsensor.cpp da_power.cpp da_proc.cpp
 
 I18N_mod = $(oscd_modulpref)System
 include ../../../../I18N.mk

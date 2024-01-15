@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da.h
 /***************************************************************************
- *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -65,7 +65,7 @@ class DA: public TElem
 	virtual void vlSet( TMdPrm *prm, TVal &vo, const TVariant &vl, const TVariant &pvl )	{ }
 
 	virtual bool cntrCmdProc( TMdPrm *prm, XMLNode *opt )	{ return false; }
-	virtual void cfgChange( TCfg &co, const TVariant &pc )	{ }
+	virtual void cfgChange( TMdPrm *prm, TCfg &co, const TVariant &pc )	{ }
 };
 
 } //End namespace

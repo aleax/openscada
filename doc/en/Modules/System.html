@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/System</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../../ru/Modules/System.html" title="Модули/Система (13% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/System.html" title="Модулі/Система (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../../ru/Modules/System.html" title="Модули/Система (12% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/System.html" title="Модулі/Система (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/System.html" title="Special:MyLanguage/Modules/System">System</a> </td>
 <td> System DA
 </td>
-<td> 3.0 </td>
+<td> 3.2 </td>
 <td> GPL2 </td>
 <td> daq_System.so </td>
 <td> en,uk,ru,de </td>
@@ -41,7 +41,7 @@
 <td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — the page translation</i></font> </td>
 <td> Provides data acquisition from Operation System. Supported OS Linux data sources: CPU, Memory, Sensors, Disk SMART, Disk Statistic, File System, Network, Power, UPS, Up Time etc.
 <ul><li> <b><a href="../To_do.html" title="Special:MyLanguage/Works/To do">To Do</a>:</b></li></ul>
-<dl><dd> - append measuring of the system memory consumption per process or group of the processes.</dd></dl>
+<dl><dd> + append measuring of the system memory consumption per process or group of the processes.</dd></dl>
 </td></tr></table>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
@@ -119,7 +119,32 @@
 <td> Sensors (sensors)<br />"<b>Sensors</b>" </td>
 <td> Not used. </td>
 <td> Defined by sensors those are available on the hardware. For each sensor the unique attribute is created. </td>
-<td> The library <b>libsensors</b> or the program <b>mbmon</b> is used. Higher priority in use is given to the library <b>libsensors</b> since <b>mbmon</b> has problems on multicore architectures and deprecated mostly.
+<td> The library <b>libsensors</b> or the program <b>mbmon</b> is used also as the direct sensors in "/sys/devices/virtual/hwmon/*/temp" and /sys/devices/virtual/hwmon/*/temp*". Higher priority in use is given to the library <b>libsensors</b> since <b>mbmon</b> has problems on multi-core architectures and it is deprecated mostly.
+</td></tr>
+<tr>
+<td> Process (proc) </td>
+<td> List of commands of the processes with the possibility to specify the regular expression to the whole command-line in view "<b>/{RE}/</b>". </td>
+<td>
+<ul><li> "Number of file descriptor slots currently" (<b>FDSize</b>[integer])</li>
+<li> "Peak virtual memory size (KiB)" (<b>VmPeak</b>[integer])</li>
+<li> "Virtual memory size (KiB)" (<b>VmSize</b>[integer])</li>
+<li> "Locked memory size (KiB)" (<b>VmLck</b>[integer])</li>
+<li> "Pinned memory size (KiB)" (<b>VmPin</b>[integer])</li>
+<li> "Peak resident set size (KiB)" (<b>VmHWM</b>[integer])</li>
+<li> "Resident set size (KiB)" (<b>VmRSS</b>[integer])</li>
+<li> "Size of resident anonymous memory (KiB)" (<b>RssAnon</b>[integer])</li>
+<li> "Size of resident file mappings (KiB)" (<b>RssFile</b>[integer])</li>
+<li> "Size of resident shared memory (KiB)" (<b>RssShmem</b>[integer])</li>
+<li> "Size of data segment (KiB)" (<b>VmData</b>[integer])</li>
+<li> "Size of stack segment (KiB)" (<b>VmStk</b>[integer])</li>
+<li> "Size of text segment (KiB)" (<b>VmExe</b>[integer])</li>
+<li> "Shared library code size (KiB)" (<b>VmLib</b>[integer])</li>
+<li> "Page table entries size (KiB)" (<b>VmPTE</b>[integer])</li>
+<li> "Swapped-out virtual memory size by anonymous private pages (KiB)" (<b>VmSwap</b>[integer])</li>
+<li> "Size of hugetlb memory portions (KiB)" (<b>HugetlbPages</b>[integer])</li>
+<li> "Number of threads in process" (<b>Threads</b>[integer])</li></ul>
+</td>
+<td> As the source there used "/proc/{PID}/status".
 </td></tr>
 <tr>
 <td> Qt sensor (QSensor)<br />"<b>{OrigName}</b>" </td>
@@ -238,5 +263,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/System/en">Modules/System/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2023</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2936</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/System/en">Modules/System/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2946</td></tr></table></body>
 </html>

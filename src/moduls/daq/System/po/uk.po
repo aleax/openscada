@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-10 11:30+0300\n"
+"POT-Creation-Date: 2024-01-15 14:32+0200\n"
 "PO-Revision-Date: 2007-10-29 11:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: LANGUAGE <uk@li.org>\n"
@@ -241,6 +241,60 @@ msgstr "Поріг зарядження початок, зупинка"
 msgid "Charge control threshold start, end"
 msgstr "Поріг контролю зарядження початок, кінець"
 
+msgid "Number of file descriptor slots currently"
+msgstr "Поточна кількість слотів файлових дескрипторів"
+
+msgid "Peak virtual memory size (KiB)"
+msgstr "Піковий розмір віртуальної пам'яті (КіБ)"
+
+msgid "Virtual memory size (KiB)"
+msgstr "Розмір віртуальної пам'яті (КіБ)"
+
+msgid "Locked memory size (KiB)"
+msgstr "Розмір заблокованої пам'яті (КіБ)"
+
+msgid "Pinned memory size (KiB)"
+msgstr "Розмір закріпленої пам'яті (КіБ)"
+
+msgid "Peak resident set size (KiB)"
+msgstr "Піковий розмір резидентного набору (КіБ)"
+
+msgid "Resident set size (KiB)"
+msgstr "Розмір резидентного набору (КіБ)"
+
+msgid "Size of resident anonymous memory (KiB)"
+msgstr "Розмір резидентної анонімної пам'яті (КіБ)"
+
+msgid "Size of resident file mappings (KiB)"
+msgstr "Розмір резидентних файлових мапувань (КіБ)"
+
+msgid "Size of resident shared memory (KiB)"
+msgstr "Розмір резидентної спільної пам'яті (КіБ)"
+
+msgid "Size of data segment (KiB)"
+msgstr "Розмір сегменту даних (КіБ)"
+
+msgid "Size of stack segment (KiB)"
+msgstr "Розмір сегменту стеку (КіБ)"
+
+msgid "Size of text segment (KiB)"
+msgstr "Розмір сегменту тексту (КіБ)"
+
+msgid "Shared library code size (KiB)"
+msgstr "Розмір коду спільних бібліотек (КіБ)"
+
+msgid "Page table entries size (KiB)"
+msgstr "Розмір таблиці записів (КіБ)"
+
+msgid "Swapped-out virtual memory size by anonymous private pages (KiB)"
+msgstr "Розмір віртуальної пам'яті, вилучений анонімними приватними сторінками (КіБ)"
+
+msgid "Size of hugetlb memory portions (KiB)"
+msgstr "Розмір порцій пам'яті hugetlb (КіБ)"
+
+msgid "Number of threads in process"
+msgstr "Кількість потоків у процесі"
+
 msgid "State"
 msgstr "Стан"
 
@@ -304,9 +358,9 @@ msgid ""
 "sources: CPU, Memory, Sensors, Disk SMART, Disk Statistic, File System, "
 "Network, Power, UPS, Up Time etc."
 msgstr ""
-"Надає збір даних із Операційної Системи. Підтримуються джерела даних "
-"ОС Linux: ЦП, Пам'ять, Сенсори, SMART Диску, Статистика Диску, Файлова "
-"Система, Мережа, Живлення, ДБЖ, Час Дії та інше."
+"Надає збір даних із Операційної Системи. Підтримуються джерела даних ОС "
+"Linux: ЦП, Пам'ять, Сенсори, SMART Диску, Статистика Диску, Файлова Система, "
+"Мережа, Живлення, ДБЖ, Час Дії та інше."
 
 msgid "Auto create active data sources"
 msgstr "Авт. створювати активні джерела даних"
@@ -380,6 +434,9 @@ msgstr "Мережа"
 
 msgid "Power"
 msgstr "Живлення"
+
+msgid "Process"
+msgstr "Процес"
 
 msgid "Qt sensor"
 msgstr "Сенсор Qt"

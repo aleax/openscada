@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_smart.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -59,7 +59,7 @@ void HddSmart::getVal( TMdPrm *prm )
 	if(sscanf(buf,"%d %30s %*x %*d %*d %*d %*s %*s %*s %lu\n",&id,name,&val) != 3) continue;
 	string sId = i2s(id);
 	if(!prm->vlPresent(sId))
-	    ((tval*)prm->daData)->els.fldAdd(new TFld(sId.c_str(),(string(name)+" ("+sId+")").c_str(),TFld::Integer,TFld::NoWrite));
+	    ((TElem*)prm->daData)->fldAdd(new TFld(sId.c_str(),(string(name)+" ("+sId+")").c_str(),TFld::Integer,TFld::NoWrite));
 	prm->vlAt(sId).at().setI(val,0,true);
 	devOK = true;
     }

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-10 11:30+0300\n"
+"POT-Creation-Date: 2024-01-15 14:32+0200\n"
 "PO-Revision-Date: OpenSCADA.DAQ.System 1.2.0\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: LANGUAGE <ru@li.org>\n"
@@ -225,6 +225,60 @@ msgstr ""
 msgid "Charge control threshold start, end"
 msgstr ""
 
+msgid "Number of file descriptor slots currently"
+msgstr ""
+
+msgid "Peak virtual memory size (KiB)"
+msgstr ""
+
+msgid "Virtual memory size (KiB)"
+msgstr ""
+
+msgid "Locked memory size (KiB)"
+msgstr ""
+
+msgid "Pinned memory size (KiB)"
+msgstr ""
+
+msgid "Peak resident set size (KiB)"
+msgstr ""
+
+msgid "Resident set size (KiB)"
+msgstr ""
+
+msgid "Size of resident anonymous memory (KiB)"
+msgstr ""
+
+msgid "Size of resident file mappings (KiB)"
+msgstr ""
+
+msgid "Size of resident shared memory (KiB)"
+msgstr ""
+
+msgid "Size of data segment (KiB)"
+msgstr ""
+
+msgid "Size of stack segment (KiB)"
+msgstr ""
+
+msgid "Size of text segment (KiB)"
+msgstr ""
+
+msgid "Shared library code size (KiB)"
+msgstr ""
+
+msgid "Page table entries size (KiB)"
+msgstr ""
+
+msgid "Swapped-out virtual memory size by anonymous private pages (KiB)"
+msgstr ""
+
+msgid "Size of hugetlb memory portions (KiB)"
+msgstr ""
+
+msgid "Number of threads in process"
+msgstr ""
+
 msgid "State"
 msgstr "Состояние"
 
@@ -366,6 +420,9 @@ msgid "Network"
 msgstr ""
 
 msgid "Power"
+msgstr ""
+
+msgid "Process"
 msgstr ""
 
 #, fuzzy
