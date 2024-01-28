@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/LogicLev</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/LogicLev.html" title="Модули/Логический уровень (88% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/LogicLev.html" title="Модулі/Логічний рівень (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--high" href="../../ru/Modules/LogicLev.html" title="Модули/Логический уровень (79% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/LogicLev.html" title="Модулі/Логічний рівень (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a> </td>
 <td> Logical level
 </td>
-<td> 2.8 </td>
+<td> 2.9 </td>
 <td> GPL2 </td>
 <td> daq_LogicLev.so </td>
 <td> en,uk,ru,de </td>
@@ -50,8 +50,8 @@
 <li class="toclevel-1 tocsection-1"><a href="#Controller_object"><span class="tocnumber">1</span> <span class="toctext">Controller object</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#Parameters"><span class="tocnumber">2</span> <span class="toctext">Parameters</span></a>
 <ul>
-<li class="toclevel-2 tocsection-3"><a href="#Logical_.28std.29"><span class="tocnumber">2.1</span> <span class="toctext">Logical (std)</span></a></li>
-<li class="toclevel-2 tocsection-4"><a href="#Parameter_reflection_.28pRef.29"><span class="tocnumber">2.2</span> <span class="toctext">Parameter reflection (pRef)</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Logical_.28Prm.29"><span class="tocnumber">2.1</span> <span class="toctext">Logical (Prm)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Parameter_reflection_.28PrmRefl.29"><span class="tocnumber">2.2</span> <span class="toctext">Parameter reflection (PrmRefl)</span></a></li>
 </ul>
 </li>
 <li class="toclevel-1 tocsection-5"><a href="#User_programming_API"><span class="tocnumber">3</span> <span class="toctext">User programming API</span></a></li>
@@ -62,23 +62,22 @@
 <h2><span class="mw-headline" id="Controller_object"><span class="mw-headline-number">1</span> Controller object</span></h2>
 <p>To add a data source of the logical level parameters, a controller object of OpenSCADA is created and configured. An example of the configuration tab for a controller object of this type is shown in Figure 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_cntr.png"><img class="thumbimage" height="674" src="../files/LogicLev_cntr.png" width="773" /></a>  <div class="thumbcaption">Fig.1. Configuration tab of a controller object.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:783px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_cntr.png"><img class="thumbimage" height="619" src="../files/LogicLev_cntr.png" width="781" /></a>  <div class="thumbcaption">Fig.1. Configuration tab of a controller object.</div></div></div></div>
 <p>With this tab you can set:
 </p>
 <ul><li> State of the controller object, as follows: status, "Enabled", "Running" and the database name containing the configuration.</li>
 <li> Identifier, name and description of the controller.</li>
 <li> The state "Enabled" and "Running", in which the controller object must be translated at start up.</li>
-<li> Name of tables to store the parameters configuration, based on the templates and direct reflection the DAQ external parameter.</li>
 <li> Policy of scheduling and priority of the data acquisition task.</li></ul>
 <h2><span class="mw-headline" id="Parameters"><span class="mw-headline-number">2</span> Parameters</span></h2>
-<p>The module provides two types of parameters: "Logical (std)" and "Reflection parameter (pRefl)". The additional configuration fields of the parameters of this module (Fig. 2) are:
+<p>The module provides two types of parameters: "Logical (Prm)" and "Reflection parameter (PrmRefl)". The additional configuration fields of the parameters of this module (Fig. 2) are:
 </p>
-<ul><li> <i><b>Logical (std)</b></i>:
+<ul><li> <i><b>Logical (Prm)</b></i>, with the parameters table name "LogLev{TypeId}_{CntrId}":
 <ul><li> <i>Parameter template</i> — address of the DAQ parameter template.</li></ul></li>
-<li> <i><b>Reflection parameter (pRefl)</b></i>:
+<li> <i><b>Reflection parameter (PrmRefl)</b></i>, with the parameters table name "LogLev{TypeId}_{CntrId}":
 <ul><li> <i>Source parameter</i> — address of the source of the reflecting parameter.</li></ul></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:809px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_prm.png"><img class="thumbimage" height="581" src="../files/LogicLev_prm.png" width="807" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of a parameter.</div></div></div></div>
-<h3><span class="mw-headline" id="Logical_.28std.29"><span class="mw-headline-number">2.1</span> Logical (std)</span></h3>
+<h3><span class="mw-headline" id="Logical_.28Prm.29"><span class="mw-headline-number">2.1</span> Logical (Prm)</span></h3>
 <p>When forming a template of the logical type of the parameter of this module, the specific of the link format of the template must be taken into account. The link should be written as: <b>{Parameter}|{identifier}</b>, where:
 </p>
 <ul><li> <i>{Parameter}</i> — string, characterizing the parameter;</li>
@@ -101,7 +100,7 @@
 <p>In accordance with the template underlying the parameter, we obtain a set of attributes of the parameter as in Figure 5.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_prm_attr.png"><img class="thumbimage" height="483" src="../files/LogicLev_prm_attr.png" width="773" /></a>  <div class="thumbcaption">Fig.5. Tab of attributes of a parameter.</div></div></div></div>
-<h3><span class="mw-headline" id="Parameter_reflection_.28pRef.29"><span class="mw-headline-number">2.2</span> Parameter reflection (pRef)</span></h3>
+<h3><span class="mw-headline" id="Parameter_reflection_.28PrmRefl.29"><span class="mw-headline-number">2.2</span> Parameter reflection (PrmRefl)</span></h3>
 <p>All attributes of the parameter specified in the reflection simply become available in this parameter, thereby performing the proxying function, for example, to bring the parameters of other sources into one — the export object of the controller (for the PLC).
 </p>
 <h2><span class="mw-headline" id="User_programming_API"><span class="mw-headline-number">3</span> User programming API</span></h2>

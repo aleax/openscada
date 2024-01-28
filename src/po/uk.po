@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-31 09:51+0200\n"
+"POT-Creation-Date: 2024-01-28 11:07+0200\n"
 "PO-Revision-Date: 2020-10-25 10:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team:  <uk@li.org>\n"
@@ -719,6 +719,92 @@ msgstr "Поле id = %s(%s) відсутнє!"
 #, c-format
 msgid "%s:%s:> Error in the control item '%s'!"
 msgstr "%s:%s:> Помилка елементу керування '%s'."
+
+#, c-format
+msgid "set the cell ['%s':%s] to '%s'."
+msgstr "встановлення комірки ['%s':%s] у '%s'."
+
+msgid "command with arguments:"
+msgstr "команда із аргументами:"
+
+#, c-format
+msgid "set to '%s'."
+msgstr "встановлення у '%s'."
+
+#, c-format
+msgid "add item '%s (%s)'."
+msgstr "додання елементу '%s (%s)'."
+
+#, c-format
+msgid "add item '%s'."
+msgstr "додання елементу '%s'."
+
+msgid "add item."
+msgstr "додання елементу."
+
+#, c-format
+msgid "insert item '%s (%s)' to position of item '%s'."
+msgstr "вставка елементу '%s (%s)' до позиції елементу '%s'."
+
+#, c-format
+msgid "insert item '%s' to position %s."
+msgstr "вставка елементу '%s' до позиції %s."
+
+#, c-format
+msgid "insert row '%s' to position of row %s."
+msgstr "вставка рядку '%s' до позиції рядку %s."
+
+#, c-format
+msgid "delete item in position %s."
+msgstr "видалення елементу у позиції %s."
+
+#, c-format
+msgid "delete item '%s'."
+msgstr "видалення елементу '%s'."
+
+#, c-format
+msgid "delete row '%s'."
+msgstr "видалення рядка '%s'."
+
+#, c-format
+msgid "edit item in position %s to '%s'."
+msgstr "редагування елементу у позиції %s в '%s'."
+
+#, c-format
+msgid "edit item '%s' to '%s (%s)'."
+msgstr "редагування елементу '%s' в '%s (%s)'."
+
+#, c-format
+msgid "edit item '%s' to '%s'."
+msgstr "редагування елементу '%s' в '%s'."
+
+#, c-format
+msgid "move item in position %s to %s."
+msgstr "пересування елементу у позиції %s в %s."
+
+#, c-format
+msgid "move row in position %s to %s."
+msgstr "пересування рядку у позиції %s в %s."
+
+#, c-format
+msgid "load with forcibility %d."
+msgstr "завантаження із примусовістю %d."
+
+#, c-format
+msgid "save with forcibility %d."
+msgstr "збереження із примусовістю %d."
+
+#, c-format
+msgid "copy from '%s' to '%s'."
+msgstr "копіювання із '%s' до '%s'."
+
+#, c-format
+msgid "user command '%s' to row '%s'."
+msgstr "користувацька команда '%s' до рядку '%s'."
+
+#, c-format
+msgid "other command '%s'."
+msgstr "інша команда '%s'."
 
 msgid "The node is already being processed!"
 msgstr "Вузол вже обробляється!"

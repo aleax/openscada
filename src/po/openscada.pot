@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-31 09:51+0200\n"
+"POT-Creation-Date: 2024-01-28 11:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -625,6 +625,92 @@ msgstr ""
 
 #, c-format
 msgid "%s:%s:> Error in the control item '%s'!"
+msgstr ""
+
+#, c-format
+msgid "set the cell ['%s':%s] to '%s'."
+msgstr ""
+
+msgid "command with arguments:"
+msgstr ""
+
+#, c-format
+msgid "set to '%s'."
+msgstr ""
+
+#, c-format
+msgid "add item '%s (%s)'."
+msgstr ""
+
+#, c-format
+msgid "add item '%s'."
+msgstr ""
+
+msgid "add item."
+msgstr ""
+
+#, c-format
+msgid "insert item '%s (%s)' to position of item '%s'."
+msgstr ""
+
+#, c-format
+msgid "insert item '%s' to position %s."
+msgstr ""
+
+#, c-format
+msgid "insert row '%s' to position of row %s."
+msgstr ""
+
+#, c-format
+msgid "delete item in position %s."
+msgstr ""
+
+#, c-format
+msgid "delete item '%s'."
+msgstr ""
+
+#, c-format
+msgid "delete row '%s'."
+msgstr ""
+
+#, c-format
+msgid "edit item in position %s to '%s'."
+msgstr ""
+
+#, c-format
+msgid "edit item '%s' to '%s (%s)'."
+msgstr ""
+
+#, c-format
+msgid "edit item '%s' to '%s'."
+msgstr ""
+
+#, c-format
+msgid "move item in position %s to %s."
+msgstr ""
+
+#, c-format
+msgid "move row in position %s to %s."
+msgstr ""
+
+#, c-format
+msgid "load with forcibility %d."
+msgstr ""
+
+#, c-format
+msgid "save with forcibility %d."
+msgstr ""
+
+#, c-format
+msgid "copy from '%s' to '%s'."
+msgstr ""
+
+#, c-format
+msgid "user command '%s' to row '%s'."
+msgstr ""
+
+#, c-format
+msgid "other command '%s'."
 msgstr ""
 
 msgid "The node is already being processed!"

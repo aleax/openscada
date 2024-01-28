@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tparamcontr.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -259,7 +259,7 @@ void TParamContr::postDisable( int flag )
     if(flag&NodeRemove) {
 	//Delete the parameter from DB
 	cfg("OWNER") = ownerPath();
-	TBDS::dataDel(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this, TBDS::UseAllKeys);
+	TBDS::dataDel(owner().DB()+"."+owner().tbl(type()), owner().owner().nodePath()+owner().tbl(type()), *this, TBDS::UseAllKeys);
     }
 }
 
@@ -279,7 +279,7 @@ void TParamContr::load_( TConfig *icfg )
 
 	//cfgViewAll(true);
 	cfg("OWNER") = ownerPath();
-	TBDS::dataGet(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this);
+	TBDS::dataGet(owner().DB()+"."+owner().tbl(type()), owner().owner().nodePath()+owner().tbl(type()), *this);
     }
 
     LoadParmCfg();
@@ -289,7 +289,7 @@ void TParamContr::save_( )
 {
     cfg("OWNER") = ownerPath();
     cfg("TIMESTAMP") = (int64_t)SYS->sysTm();
-    TBDS::dataSet(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this);
+    TBDS::dataSet(owner().DB()+"."+owner().tbl(type()), owner().owner().nodePath()+owner().tbl(type()), *this);
     if(SYS->cfgCtx(true)) SYS->cfgCtx(true)->setAttr("prmTp", type().name);
 
     //Save archives

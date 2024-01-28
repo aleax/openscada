@@ -1,4 +1,12 @@
 2024-01-28 Roman (stable)
+- !!:SYS: The TCntrNode::cntrCmd() in processing the primary commands of the Control Interface appended by their generic logging.
+- !!!!:DAQ,DAQ.{LogicLev,ModBus,OPC_UA,Siemens}: The DAQ sources moved to fixing table names of different type parameters,
+	that is the configuration fields are hidden now when their are standard ones and it scheduled to be cleaned in whole in v1.0.
+    !!: The module version of the subsystem "DAQ" rose to 21.
+    !!:DAQ.{LogicLev,ModBus,OPC_UA,Siemens}: Adapted to the unified parameter type conception.
+
+
+2024-01-28 Roman (stable)
 - FIX:LibsDB.vcaBase: Main.alarmsSt: Fixed in the alarms_focus variable accessing after removing of forcing the "focus" attribute,
 	which replaced by this.alarms.attr("focus").
     FIX: Main.storeHouse: Prevented of <EVAL> for <NULL> cells in the item report.

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcntrnode.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -212,20 +212,112 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	    TError terr;
 	    try{ cntrCmdProc(opt); } catch(TError &ierr) { terr = ierr; }
 
+	    string aNm = opt->name(), logMess;
 	    if(s2i(opt->attr("rez")) != TError::NoError)
-		throw TError("ContrItfc", _("%s:%s:> Error in the control item '%s'!"), opt->name().c_str(), (nodePath()+path).c_str(), s_br.c_str());
+		throw TError("ContrItfc", _("%s:%s:> Error in the control item '%s'!"),
+		    opt->name().c_str(), (nodePath()+path).c_str(), s_br.c_str());
+	    // Fixing in the log
+	    else if(s_br.find("/serv/") == 0)	;	//!!!! Service requests are not primary ones
+	    else if(aNm == "set") {
+		if(opt->attr("col").size()) {
+		    string rowV = opt->attr("row");
+		    if(rowV.empty()) {
+			vector<string> als;
+			opt->attrList(als);
+			for(vector<string>::iterator iA = als.begin(); rowV.empty() && iA != als.end(); ++iA)
+			    if(iA->find("key_") == 0)
+				rowV = iA->substr(4)+"="+opt->attr(*iA);
+		    }
+		    logMess = TSYS::strMess(_("set the cell ['%s':%s] to '%s'."), rowV.c_str(), opt->attr("col").c_str(), opt->text().c_str());
+		}
+		else if(opt->childSize() && opt->childGet(0)->name() == "fld") {
+		    logMess = _("command with arguments:");
+		    for(unsigned iCh = 0; iCh < opt->childSize(); ++iCh)
+			logMess += " " + opt->childGet(iCh)->attr("id") + "='" + opt->childGet(iCh)->text() + "',";
+		    logMess += ".";
+		}
+		else logMess = TSYS::strMess(_("set to '%s'."), TSYS::strEncode(opt->text(),TSYS::Limit,"100").c_str());
+	    }
+	    else if(aNm == "add") {
+		if(opt->attr("id").size()) logMess = TSYS::strMess(_("add item '%s (%s)'."), opt->text().c_str(), opt->attr("id").c_str());
+		else if(opt->text().size())logMess = TSYS::strMess(_("add item '%s'."), opt->text().c_str());
+		else logMess = _("add item.");
+	    }
+	    else if(aNm == "ins") {
+		if(opt->attr("id").size())
+		    logMess = TSYS::strMess(_("insert item '%s (%s)' to position of item '%s'."),
+			opt->text().c_str(), opt->attr("id").c_str(), opt->attr("p_id").c_str());
+		else if(opt->attr("pos").size())
+		    logMess = TSYS::strMess(_("insert item '%s' to position %s."), opt->text().c_str(), opt->attr("pos").c_str());
+		else if(opt->attr("row").size())
+		    logMess = TSYS::strMess(_("insert row '%s' to position of row %s."), opt->text().c_str(), opt->attr("row").c_str());
+	    }
+	    else if(aNm == "del") {
+		if(opt->attr("pos").size())	logMess = TSYS::strMess(_("delete item in position %s."), opt->attr("pos").c_str());
+		else if(opt->attr("id").size())	logMess = TSYS::strMess(_("delete item '%s'."), opt->attr("id").c_str());
+		else if(opt->text().size())	logMess = TSYS::strMess(_("delete item '%s'."), opt->text().c_str());
+		else if(opt->attr("row").size())logMess = TSYS::strMess(_("delete row '%s'."), opt->attr("row").c_str());
+		else {
+		    vector<string> als;
+		    opt->attrList(als);
+		    for(vector<string>::iterator iA = als.begin(); iA != als.end(); ++iA) {
+			if(iA->find("key_") != 0) continue;
+			logMess = TSYS::strMess(_("delete row '%s'."), (iA->substr(4)+"="+opt->attr(*iA)).c_str());
+			break;
+		    }
+		}
+	    }
+	    else if(aNm == "edit") {
+		if(opt->attr("pos").size())
+		    logMess = TSYS::strMess(_("edit item in position %s to '%s'."), opt->attr("pos").c_str(), opt->text().c_str());
+		else if(opt->attr("id").size())
+		    logMess = TSYS::strMess(_("edit item '%s' to '%s (%s)'."),
+			opt->attr("id").c_str(), opt->text().c_str(), opt->attr("p_id").c_str());
+		else logMess = TSYS::strMess(_("edit item '%s' to '%s'."), opt->attr("p_id").c_str(), opt->text().c_str());
+	    }
+	    else if(aNm == "move") {
+		if(opt->attr("pos").size())
+		    logMess = TSYS::strMess(_("move item in position %s to %s."), opt->attr("pos").c_str(), opt->attr("to").c_str());
+		else if(opt->attr("row").size())
+		    logMess = TSYS::strMess(_("move row in position %s to %s."), opt->attr("row").c_str(), opt->attr("to").c_str());
+	    }
+	    else if(aNm == "load") logMess = TSYS::strMess(_("load with forcibility %d."), s2i(opt->attr("force")));
+	    else if(aNm == "save") logMess = TSYS::strMess(_("save with forcibility %d."), s2i(opt->attr("force")));
+	    else if(aNm == "copy") logMess = TSYS::strMess(_("copy from '%s' to '%s'."), opt->attr("src").c_str(), opt->attr("dst").c_str());
+	    else if(s2i(opt->attr("primaryCmd"))) {
+		string rowV = opt->attr("row");
+		if(rowV.empty()) {
+		    vector<string> als;
+		    opt->attrList(als);
+		    for(vector<string>::iterator iA = als.begin(); rowV.empty() && iA != als.end(); ++iA)
+			if(iA->find("key_") == 0)
+			    rowV = iA->substr(4)+"="+opt->attr(*iA);
+		}
+		if(rowV.size()) logMess = TSYS::strMess(_("user command '%s' to row '%s'."), aNm.c_str(), rowV.c_str());
+		else logMess = TSYS::strMess(_("other command '%s'."), opt->save().c_str());
+	    }
+	    //  Same logging as note
+	    if(logMess.size()) {
+		if(opt->attr("remoteSrcAddr").size())
+		    mess_note(nodePath().c_str(), "%s@%s| '%s' %s", opt->attr("user").c_str(), opt->attr("remoteSrcAddr").c_str(),
+			TSYS::strEncode(s_br,TSYS::PathEl).c_str(), logMess.c_str());
+		else mess_note(nodePath().c_str(), "%s| '%s' %s", opt->attr("user").c_str(),
+			TSYS::strEncode(s_br,TSYS::PathEl).c_str(), logMess.c_str());
+	    }
 
-	    // Check and put the command to the redundant stations
-	    string aNm = opt->name();
+	    // Checking and putting the command to the redundant stations
 	    if(SYS->rdPrimCmdTr() && SYS->rdEnable() && SYS->rdActive() && !s2i(opt->attr("reforwardRedundReq")) && !s2i(opt->attr("reforwardRedundOff")) &&
 		    (terr.cat.empty() || terr.cod == TError::Core_CntrWarning || aNm == "save") &&	//!!!! Warnings and the "save" commands can be processed on redundant
 													//     station even at errors on the initiate one
+		    //s_br.find("/serv/") != 0 &&							//Service requests are not primary ones
 		    (s2i(opt->attr("primaryCmd")) ||
 			aNm == "set" || aNm == "add" || aNm == "ins" || aNm == "del" || aNm == "move" ||
 			aNm == "load" || (aNm == "save" && !s2i(opt->attr("ctx"))) || aNm == "copy"))
 	    {
 		string lstStat;
-		opt->setAttr("path", nodePath()+"/"+TSYS::strEncode(s_br,TSYS::PathEl))->setAttr("primaryCmd", "")->setAttr("reforwardRedundReq", "1");
+		opt->setAttr("path", nodePath()+"/"+TSYS::strEncode(s_br,TSYS::PathEl))->
+		     setAttr("primaryCmd", "")->
+		     setAttr("reforwardRedundReq", "1");
 		try{ while((lstStat=SYS->rdStRequest(*opt,lstStat,true)).size()) ; }
 		catch(TError &) { }
 

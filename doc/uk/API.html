@@ -410,7 +410,7 @@ Information variables of the program:
 <li> <i>static string strEncode( const string &amp;in, Code tp, const string &amp;opt = "" );</i> — Encoding of the string by the specified rule <i>tp</i> and the option <i>opt</i> (symbols by "Custom").</li>
 <li> <i>static string strDecode( const string &amp;in, Code tp = Custom, const string &amp;opt = "" );</i> — Decoding of the string <i>in</i> by the specified rule <i>tp</i> and the option <i>opt</i> (separator or "&lt;text&gt;" for "Bin").</li>
 <li> <i>static string strMess( const char *fmt, ... );</i> — Formation of the string by the template <i>fmt</i> and arguments. It is implemented on the basis of "printf".</li>
-<li> <i>static string strLabEnum( const string &amp;base );</i> — Individual string labels from <i>base</i> forming by increment at end. Supported numbering into decimal, hexadecimal (prefix "0x") or octal (prefix "0") notation.</li>
+<li> <i>static string strLabEnum( const string &amp;base, bool onlyDec = true );</i> — Individual string labels from <i>base</i> forming by increment at end. Supported numbering into decimal, hexadecimal (prefix "0x") or octal (prefix "0") notation and <i>onlyDec</i> for simple enumerating one digit, found the first from the string end.</li>
 <li> <i>string strCompr( const string &amp;in, int lev=-1);</i> — Compression of the string <i>in</i> with the compression level <i>lev</i>.</li>
 <li> <i>string strUncompr( const string &amp;in );</i> — Decompression of the string <i>in</i>.</li>
 <li> <i>static inline uint16_t getUnalign16( const void *p ); static inline uint32_t getUnalign32( const void *p ); static inline uint64_t getUnalign64( const void *p );</i> — Unaligned read for unsigned </li>
@@ -911,14 +911,15 @@ Redundancy modes (enum TController::Redundant):
 </p>
 <ul><li> <i>TController( const string &amp;name_c, const string &amp;daq_db, TElem *cfgelem );</i> — Initializing constructor of the controller.</li>
 <li> <i>string DAQPath( );</i> — Getting for DAQ-address of the element.</li>
-<li> <i>string id( );</i> — Controller ID.</li>
+<li> <i>string id( ) const;</i> — Controller ID.</li>
 <li> <i>string workId( );</i> — Work ID of the controller, including the ID of the module.</li>
 <li> <i>string name( );</i> — Controller's name.</li>
 <li> <i>string descr( );</i> — Controller's description.</li>
 <li> <i>int64_t timeStamp( );</i> — Timestamp of the object changing as maximum of timestamps of the included parameter objects.</li>
 <li> <i>virtual string getStatus( );</i> — Request function of the controller status.</li>
 <li> <i>string DB( bool qTop = false ) const;</i> — Storage name of the controller's instance, <i>qTop</i> for the storage queue top.</li>
-<li> <i>string tbl( ) const;</i> — The name of the table of DB of the controller's instance.</li>
+<li> <i>string tbl( ) const;</i> — Name of the table of DB of the controller's instance.</li>
+<li> <i>virtual string tbl( const TTypeParam &amp;tP ) const;</i> — Name of the table of DB of the parameter's instance for the parameter type <i>tP</i>.</li>
 <li> <i>string fullDB( bool qTop = false ) const;</i> — The full name of the table of storage of the controller's instance, <i>qTop</i> for the storage queue top.</li>
 <li> <i>void setName( const string &amp;nm );</i> — Set the controller's name.</li>
 <li> <i>void setDescr( const string &amp;dscr );</i> — Set the controller's description.</li>
@@ -971,9 +972,11 @@ Redundancy modes (enum TController::Redundant):
 <ul><li> <i>TTypeParam( const char *iid, const char *iname, const char *idb = "", bool i_isPrmCntr = false );</i> — Initializing constructor.</li>
 <li> <i>virtual void create( TParamContr *prm );</i> — Create or set the parameter <i>prm</i> type.</li>
 <li> <i>virtual void destroy( TParamContr *prm );</i> — Remove or clean the parameter <i>prm</i> type.</li>
-<li> <i>virtual string DB( TController *cntr );</i> — Get table name of the parameters of the controller <i>cntr</i>.</li>
-<li> <i>void setDB( TController *cntr, const string &amp;vl );</i> — Set the table name of the parameters of the controller <i>cntr</i>.</li>
-<li> <i>virtual void enable( TParamContr *prm );</i> — To enable the parameter <i>prm</i>.</li>
+<li> <i>virtual string DB( const TController *cntr ) const;</i> — Get table name of the parameters of the controller <i>cntr</i>.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Will be removed in v1.0, use <a href="#TController">TController</a>::tbl() instead.</dd></dl>
+<ul><li> <i>void setDB( TController *cntr, const string &amp;vl );</i> — Set the table name of the parameters of the controller <i>cntr</i>.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Will be removed in v1.0.</dd></dl>
+<ul><li> <i>virtual void enable( TParamContr *prm );</i> — To enable the parameter <i>prm</i>.</li>
 <li> <i>virtual void disable( TParamContr *prm );</i> — To disable the parameter <i>prm</i>.</li>
 <li> <i>virtual bool cfgChange( TParamContr *prm, TCfg &amp;cfg );</i> — The configuration filed <i>cfg</i> of the parameter <i>prm</i> change.</li>
 <li> <i>virtual void vlGet( TParamContr *prm, TVal &amp;vo );</i> — Predicting function of the value getting, through the parameter <i>prm</i>. It is used for direct (synchronous) reading.</li>

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcontroller.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -101,8 +101,8 @@ void TController::postDisable( int flag )
 
 	//Delete parameter tables
 	for(unsigned iTp = 0; iTp < owner().tpPrmSize(); iTp++)
-	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+owner().tpPrmAt(iTp).DB(this),
-				owner().nodePath()+owner().tpPrmAt(iTp).DB(this));
+	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+tbl(owner().tpPrmAt(iTp)),
+				owner().nodePath()+tbl(owner().tpPrmAt(iTp)));
 
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
@@ -132,7 +132,11 @@ int64_t TController::timeStamp( )
     return mTimeStamp;
 }
 
-string TController::tbl( ) const	{ return owner().owner().subId()+"_"+owner().modId(); }
+string TController::tbl( ) const			{ return owner().owner().subId()+"_"+owner().modId(); }
+
+string TController::tbl( const TTypeParam &tP ) const	{ return tP.DB(this); }
+
+string TController::tblStd( const TTypeParam &tP ) const{ return owner().modId()+tP.name+"_"+id(); }
 
 string TController::getStatus( )
 {
@@ -560,9 +564,12 @@ void TController::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/cntr/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/cntr/cfg",0,"root",SDAQ_ID,RWRWR_);
-		ctrRemoveNode(opt,"/cntr/cfg/MESS_LEV");
-		ctrRemoveNode(opt,"/cntr/cfg/REDNT");
-		ctrRemoveNode(opt,"/cntr/cfg/REDNT_RUN");
+		for(unsigned iTpP = 0; iTpP < owner().tpPrmSize(); ++iTpP)
+		    if(isStdStorAddr(owner().tpPrmAt(iTpP)))
+			ctrRemoveNode(opt, ("/cntr/cfg/"+owner().tpPrmAt(iTpP).mDB).c_str());
+		ctrRemoveNode(opt, "/cntr/cfg/MESS_LEV");
+		ctrRemoveNode(opt, "/cntr/cfg/REDNT");
+		ctrRemoveNode(opt, "/cntr/cfg/REDNT_RUN");
 	    }
 	}
 	if(owner().tpPrmSize()) {

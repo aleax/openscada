@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttypedaq.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -190,6 +190,6 @@ TTypeParam::TTypeParam( const char *iid, const char *iname, const char *idb, boo
     fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec|TCfg::NoVal));
 }
 
-string TTypeParam::DB( TController *cntr )	{ return mDB.size() ? cntr->cfg(mDB).getS() : ""; }
+string TTypeParam::DB( const TController *cntr ) const	{ return mDB.size() ? cntr->cfg(mDB).getS() : ""; }
 
 void TTypeParam::setDB( TController *cntr, const string &vl )	{ if(mDB.size()) cntr->cfg(mDB).setS(vl); }

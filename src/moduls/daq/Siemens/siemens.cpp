@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.Siemens file: siemens.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,7 +43,7 @@
 #define MOD_NAME	trS("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"4.4.17"
+#define MOD_VER		"4.5.0"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -71,7 +71,7 @@ using namespace Siemens;
 //************************************************
 //* TTpContr                                     *
 //************************************************
-TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID), drvCIF_OK(false)
+TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID), tPrmId(-1), tPrmSId(-1), drvCIF_OK(false)
 {
     mod = this;
 
@@ -90,8 +90,8 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable(flag);
 
     //Controler's DB structure
-    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("PRM_BD_S",trS("Simple parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));		//????[v1.0] Remove
+    fldAdd(new TFld("PRM_BD_S",trS("Simple parameters table"),TFld::String,TFld::NoFlag,"30",""));	//????[v1.0] Remove
     fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("TM_REST",trS("Restore timeout, seconds"),TFld::Integer,TFld::NoFlag,"4","30","1;3600"));
@@ -107,15 +107,15 @@ void TTpContr::postEnable( int flag )
 
     //Parameter type DB structure
     // Logical parameter type by the DAQ parameter template
-    int t_prm = tpParmAdd("logic", "PRM_BD", _("Logical"), true);
-    tpPrmAt(t_prm).fldAdd(new TFld("TMPL",trS("Parameter template"),TFld::String,TCfg::NoVal,"50",""));
+    tPrmId = tpParmAdd("Prm", "PRM_BD", _("Logical"), true);
+    tpPrmAt(tPrmId).fldAdd(new TFld("TMPL",trS("Parameter template"),TFld::String,TCfg::NoVal,"50",""));
     // Parameter template IO DB structure
     elPrmIO.fldAdd(new TFld("PRM_ID",trS("Parameter ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
     elPrmIO.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ*1.5).c_str()));
     elPrmIO.fldAdd(new TFld("VALUE",trS("Value"),TFld::String,TFld::NoFlag,"200"));
     // Simple parameter type by the attributes list
-    t_prm = tpParmAdd("simple", "PRM_BD_S", _("Simple"), true);
-    tpPrmAt(t_prm).fldAdd(new TFld("ATTR_LS",trS("Attributes list"),TFld::String,TFld::FullText|/*TFld::TransltText|*/TCfg::NoVal,"100000",""));
+    tPrmSId = tpParmAdd("PrmS", "PRM_BD_S", _("Simple"), true);
+    tpPrmAt(tPrmSId).fldAdd(new TFld("ATTR_LS",trS("Attributes list"),TFld::String,TFld::FullText|/*TFld::TransltText|*/TCfg::NoVal,"100000",""));
 
     //CIF devices DB structure
     elCifDev.fldAdd(new TFld("ID",trS("Identifier"),TFld::Integer,TCfg::Key,"1"));
@@ -460,6 +460,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) :
 	mPer(1e9), prcSt(false), callSt(false), endrunReq(false), isInitiated(false), alSt(-1), conErr(dataRes()), mInvokeID(-1),
 	di(NULL), dc(NULL), enRes(true), numR(0), numW(0), numErr(0), tmDelay(0)
 {
+    //????[v1.0] Remove
     cfg("PRM_BD").setS("SiemensPrm_"+id());
     cfg("PRM_BD_S").setS("SiemensPrmS_"+id());
 }
@@ -473,8 +474,8 @@ void TMdContr::postDisable( int flag )
 {
     try {
 	if(flag&(NodeRemove|NodeRemoveOnlyStor))
-	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+cfg("PRM_BD").getS()+"_io",
-				owner().nodePath()+cfg("PRM_BD").getS()+"_io");
+	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+tbl(owner().tpPrmAt(mod->tPrmId))+"_io",
+				owner().nodePath()+tbl(owner().tpPrmAt(mod->tPrmId))+"_io");
     } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     TController::postDisable(flag);
@@ -1720,10 +1721,10 @@ void TMdPrm::postDisable( int flag )
     TParamContr::postDisable(flag);
 
     if(flag&NodeRemove && isLogic()) {
-	string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
+	string io_bd = owner().DB()+"."+owner().tbl(type())+"_io";
 	TConfig cfg(&mod->prmIOE());
 	cfg.cfg("PRM_ID").setS(id(), true);
-	TBDS::dataDel(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
+	TBDS::dataDel(io_bd, owner().owner().nodePath()+owner().tbl(type())+"_io", cfg);
     }
 }
 
@@ -1746,9 +1747,9 @@ TCntrNode &TMdPrm::operator=( const TCntrNode &node )
     return *this;
 }
 
-bool TMdPrm::isSimple( ) const		{ return (type().name == "simple"); }
+bool TMdPrm::isSimple( ) const		{ return (type().name == "PrmS"); }
 
-bool TMdPrm::isLogic( ) const		{ return (type().name == "logic"); }
+bool TMdPrm::isLogic( ) const		{ return (type().name == "Prm"); }
 
 void TMdPrm::setType( const string &tpId )
 {
@@ -1918,12 +1919,12 @@ void TMdPrm::loadIO( )
     TConfig cfg(&mod->prmIOE());
     cfg.cfg("PRM_ID").setS(ownerPath(true));
     cfg.cfg("VALUE").setExtVal(true);
-    string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
+    string io_bd = owner().DB()+"."+owner().tbl(type())+"_io";
 
     //IO values loading and links set, by seek
     for(int iIO = 0; iIO < lCtx->ioSize(); iIO++) {
 	cfg.cfg("ID").setS(lCtx->func()->io(iIO)->id());
-	if(!TBDS::dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,TBDS::NoException)) continue;
+	if(!TBDS::dataGet(io_bd,owner().owner().nodePath()+owner().tbl(type())+"_io",cfg,TBDS::NoException)) continue;
 	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
 	    lCtx->lnkAddrSet(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force to no translation
 	else if(lCtx->func()->io(iIO)->type() != IO::String || !(lCtx->func()->io(iIO)->flg()&IO::TransltText))
@@ -1946,7 +1947,7 @@ void TMdPrm::saveIO( )
     //Save IO and init links
     TConfig cfg(&mod->prmIOE());
     cfg.cfg("PRM_ID").setS(ownerPath(true));
-    string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
+    string io_bd = owner().DB()+"."+owner().tbl(type())+"_io";
     for(int iIO = 0; iIO < lCtx->func()->ioSize(); iIO++) {
 	cfg.cfg("ID").setS(lCtx->func()->io(iIO)->id());
 	cfg.cfg("VALUE").setNoTransl(!(lCtx->func()->io(iIO)->type() == IO::String &&
@@ -1954,7 +1955,7 @@ void TMdPrm::saveIO( )
 	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
 	    cfg.cfg("VALUE").setS(lCtx->lnkAddr(iIO));
 	else cfg.cfg("VALUE").setS(lCtx->getS(iIO));
-	TBDS::dataSet(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
+	TBDS::dataSet(io_bd, owner().owner().nodePath()+owner().tbl(type())+"_io", cfg);
     }
 }
 

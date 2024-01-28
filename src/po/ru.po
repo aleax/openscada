@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-31 09:51+0200\n"
+"POT-Creation-Date: 2024-01-28 11:07+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -718,6 +718,92 @@ msgstr "Поле id = %s(%s) отсутствует!"
 #, c-format
 msgid "%s:%s:> Error in the control item '%s'!"
 msgstr "%s:%s:> Ошибка элемента управления '%s'!"
+
+#, c-format
+msgid "set the cell ['%s':%s] to '%s'."
+msgstr ""
+
+msgid "command with arguments:"
+msgstr ""
+
+#, c-format
+msgid "set to '%s'."
+msgstr ""
+
+#, c-format
+msgid "add item '%s (%s)'."
+msgstr ""
+
+#, c-format
+msgid "add item '%s'."
+msgstr ""
+
+msgid "add item."
+msgstr ""
+
+#, c-format
+msgid "insert item '%s (%s)' to position of item '%s'."
+msgstr ""
+
+#, c-format
+msgid "insert item '%s' to position %s."
+msgstr ""
+
+#, c-format
+msgid "insert row '%s' to position of row %s."
+msgstr ""
+
+#, c-format
+msgid "delete item in position %s."
+msgstr ""
+
+#, c-format
+msgid "delete item '%s'."
+msgstr ""
+
+#, fuzzy, c-format
+msgid "delete row '%s'."
+msgstr "Удалить из '%s'"
+
+#, c-format
+msgid "edit item in position %s to '%s'."
+msgstr ""
+
+#, fuzzy, c-format
+msgid "edit item '%s' to '%s (%s)'."
+msgstr "2:Ошибка открытия файла '%s': %s"
+
+#, c-format
+msgid "edit item '%s' to '%s'."
+msgstr ""
+
+#, c-format
+msgid "move item in position %s to %s."
+msgstr ""
+
+#, c-format
+msgid "move row in position %s to %s."
+msgstr ""
+
+#, c-format
+msgid "load with forcibility %d."
+msgstr ""
+
+#, c-format
+msgid "save with forcibility %d."
+msgstr ""
+
+#, fuzzy, c-format
+msgid "copy from '%s' to '%s'."
+msgstr "Копирование из '%s' в '%s' невозможно."
+
+#, c-format
+msgid "user command '%s' to row '%s'."
+msgstr ""
+
+#, c-format
+msgid "other command '%s'."
+msgstr ""
 
 msgid "The node is already being processed!"
 msgstr "Узел уже обрабатывается!"

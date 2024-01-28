@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-31 09:51+0200\n"
+"POT-Creation-Date: 2024-01-28 11:07+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -725,6 +725,92 @@ msgstr "Feld id = %s(%s) ist nicht vorhanden!"
 #, c-format
 msgid "%s:%s:> Error in the control item '%s'!"
 msgstr "%s:%s:> Fehler des Kontrollelements '%s'!"
+
+#, c-format
+msgid "set the cell ['%s':%s] to '%s'."
+msgstr "setze die Zelle ['%s':%s] auf '%s'."
+
+msgid "command with arguments:"
+msgstr "Befehl mit Argumenten:"
+
+#, c-format
+msgid "set to '%s'."
+msgstr "auf '%s' gesetzt."
+
+#, c-format
+msgid "add item '%s (%s)'."
+msgstr "Element hinzufügen '%s (%s)'."
+
+#, c-format
+msgid "add item '%s'."
+msgstr "Element hinzufügen '%s'."
+
+msgid "add item."
+msgstr "Element hinzufügen."
+
+#, c-format
+msgid "insert item '%s (%s)' to position of item '%s'."
+msgstr "Element '%s (%s)' an Position von Element '%s' einfügen."
+
+#, c-format
+msgid "insert item '%s' to position %s."
+msgstr "Element '%s' an Position %s einfügen."
+
+#, c-format
+msgid "insert row '%s' to position of row %s."
+msgstr "Zeile '%s' an Position von Zeile %s einfügen."
+
+#, c-format
+msgid "delete item in position %s."
+msgstr "Element an Position %s löschen."
+
+#, c-format
+msgid "delete item '%s'."
+msgstr "Element '%s' löschen."
+
+#, c-format
+msgid "delete row '%s'."
+msgstr "Zeile '%s' löschen."
+
+#, c-format
+msgid "edit item in position %s to '%s'."
+msgstr "Element an Position %s zu '%s' bearbeiten."
+
+#, c-format
+msgid "edit item '%s' to '%s (%s)'."
+msgstr "Element '%s' zu '%s (%s)' bearbeiten."
+
+#, c-format
+msgid "edit item '%s' to '%s'."
+msgstr "Element '%s' zu '%s' bearbeiten."
+
+#, c-format
+msgid "move item in position %s to %s."
+msgstr "Element an Position %s nach %s verschieben."
+
+#, c-format
+msgid "move row in position %s to %s."
+msgstr "Zeile an Position %s nach %s verschieben."
+
+#, c-format
+msgid "load with forcibility %d."
+msgstr "Laden mit Gewalt %d."
+
+#, c-format
+msgid "save with forcibility %d."
+msgstr "Speichern Sie mit Gewalt %d."
+
+#, c-format
+msgid "copy from '%s' to '%s'."
+msgstr "Kopieren von '%s' nach '%s'."
+
+#, c-format
+msgid "user command '%s' to row '%s'."
+msgstr "Benutzerbefehl '%s' in Zeile '%s'."
+
+#, c-format
+msgid "other command '%s'."
+msgstr "anderer Befehl '%s'."
 
 msgid "The node is already being processed!"
 msgstr "Der Knoten wird bereits bearbeitet!"

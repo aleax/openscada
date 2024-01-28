@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.LogicLev file: logiclev.h
 /***************************************************************************
- *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -116,6 +116,8 @@ class TMdContr: public TController
 	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
 	~TMdContr( );
 
+	string tblStd( const TTypeParam &tP ) const;
+
 	string	getStatus( );
 	double	period( )			{ return mPer; }
 	string	cron( )				{ return cfg("SCHEDULE").getS(); }
@@ -163,6 +165,9 @@ class TTpContr: public TTypeDAQ
 	~TTpContr( );
 
 	TElem	&prmIOE( )	{ return elPrmIO; }
+
+	//Attributes
+	int8_t	tPrmId, tPrmReflId;
 
     protected:
 	//Methods

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.Siemens file: siemens.h
 /***************************************************************************
- *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -314,6 +314,8 @@ class TTpContr: public TTypeDAQ
 	void getLifeListPB( unsigned board, string &buffer );
 
 	//Attributes
+	int8_t	tPrmId, tPrmSId;
+
 	ResRW	resAPI;
 
     protected:

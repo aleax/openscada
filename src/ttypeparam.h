@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttypeparam.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -48,8 +48,8 @@ class TTypeParam : public TElem
 	virtual void create( TParamContr *prm )			{ }
 	virtual void destroy( TParamContr *prm )		{ }
 
-	virtual string DB( TController *cntr );
-	void setDB( TController *cntr, const string &vl );
+	virtual string DB( const TController *cntr ) const;	//????[v1.0] Remove
+	void setDB( TController *cntr, const string &vl );	//????[v1.0] Remove
 
 	virtual void enable( TParamContr *prm )			{ }
 	virtual void disable( TParamContr *prm )		{ }
@@ -66,8 +66,8 @@ class TTypeParam : public TElem
 	//Attributes
 	string	name;
 	string	descr;
-	string	mDB;
-	bool	isPrmCntr;	//The parameter type also container for other parameters
+	string	mDB;		//????[v1.0] Remove
+	bool	isPrmCntr;	//The parameter type is container for other parameters also
 };
 
 }

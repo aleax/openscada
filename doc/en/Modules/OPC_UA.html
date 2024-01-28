@@ -30,7 +30,7 @@
 <td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
 <td> Client OPC-UA
 </td>
-<td> 2.6 </td>
+<td> 2.7 </td>
 <td> GPL2 </td>
 <td> daq_OPC_UA.so </td>
 <td> en,uk,ru,de </td>
@@ -123,8 +123,8 @@
 <li class="toclevel-2 tocsection-5"><a href="#Controller_object"><span class="tocnumber">3.1</span> <span class="toctext">Controller object</span></a></li>
 <li class="toclevel-2 tocsection-6"><a href="#Parameters"><span class="tocnumber">3.2</span> <span class="toctext">Parameters</span></a>
 <ul>
-<li class="toclevel-3 tocsection-7"><a href="#Standard_.28std.29"><span class="tocnumber">3.2.1</span> <span class="toctext">Standard (std)</span></a></li>
-<li class="toclevel-3 tocsection-8"><a href="#Logical_.28logic.29"><span class="tocnumber">3.2.2</span> <span class="toctext">Logical (logic)</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#Standard_.28_Prm.29"><span class="tocnumber">3.2.1</span> <span class="toctext">Standard (_Prm)</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#Logical_.28_PrmL.29"><span class="tocnumber">3.2.2</span> <span class="toctext">Logical (_PrmL)</span></a></li>
 </ul>
 </li>
 <li class="toclevel-2 tocsection-9"><a href="#User_programming_API"><span class="tocnumber">3.3</span> <span class="toctext"><span>User programming API</span></span></a></li>
@@ -227,14 +227,13 @@
 <h3><span class="mw-headline" id="Controller_object"><span class="mw-headline-number">3.1</span> Controller object</span></h3>
 <p>To append the OPC-UA data source the controller's object into OpenSCADA is created and configured. An example of the configuration tab of the controller's object is shown in Figure 4.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:907px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_main.png"><img class="thumbimage" height="847" src="../files/OPC-UA_cntr_main.png" width="905" /></a>  <div class="thumbcaption">Fig.4. Configuration tab of the OPC-UA controller object.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:778px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_main.png"><img class="thumbimage" height="802" src="../files/OPC-UA_cntr_main.png" width="776" /></a>  <div class="thumbcaption">Fig.4. Configuration tab of the OPC-UA controller object.</div></div></div></div>
 <p>From this tab you can set:
 </p>
 <ul><li> The state of the controller object, as follows: Status, "Enabled", "Running" and the name of the database containing the configuration.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Manual restart of the enabled controller object causes the force reformation of the monitored items list.</dd></dl>
 <ul><li> Identifier, name and description of the controller.</li>
 <li> The state "Enabled" and "Running", in which the controller object must be translated at boot.</li>
-<li> Names of tables of storing the configuration of the parameters of the controller object for standard and logical types.</li>
 <li> Scheduling policy and priority of the task of the data acquisition.</li>
 <li> Period of synchronization of the configuration of attributes of the parameters with the remote station, and try time for the connection restore.</li>
 <li> URL of the endpoint node of the remote station — OPC-UA server. In begin, the address you can point as "<b>opc.tcp://{IP|name}:{port}</b>", after that, at the controller's object enable and allowing the pointed OPC-UA node, there will be emerged to select the refined address.</li></ul>
@@ -248,13 +247,13 @@
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_browse.png"><img class="thumbimage" height="672" src="../files/OPC-UA_cntr_browse.png" width="687" /></a>  <div class="thumbcaption">Fig.5. The "Server nodes browser" tab of the OPC-UA controller object page.</div></div></div></div>
 <h3><span class="mw-headline" id="Parameters"><span class="mw-headline-number">3.2</span> Parameters</span></h3>
-<p>The data acquisition module provides two types of parameter: "Standard (std)" and "Logical (logic)". Additional configuration fields of the parameters of this module are:
+<p>The data acquisition module provides two types of parameter: "Standard (_Prm)" and "Logical (_PrmL)". Additional configuration fields of the parameters of this module are:
 </p>
-<ul><li> <i><b>Standard (std)</b></i>:
+<ul><li> <i><b>Standard (_Prm)</b></i>:
 <ul><li> <i>Attributes list</i> — contains a structured list of configuration for the attributes ModBUS.</li></ul></li>
-<li> <i><b>Logical (logic)</b></i>:
+<li> <i><b>Logical (_PrmL)</b></i>:
 <ul><li> <i>Parameter template</i> — address of the DAQ-parameter template.</li></ul></li></ul>
-<h4><span class="mw-headline" id="Standard_.28std.29"><span class="mw-headline-number">3.2.1</span> Standard (std)</span></h4>
+<h4><span class="mw-headline" id="Standard_.28_Prm.29"><span class="mw-headline-number">3.2.1</span> Standard (_Prm)</span></h4>
 <p>Additional configuration field of the type parameter (Fig.6) is the list of OPC-UA nodes and the field of navigation by OPC-UA nodes in single line, for the selected nodes of the type "Variable" insertion to the defined list. Attribute in this list is written as "<b>{ns}:{id}[|[{flg}][|{id}[|{name}]]]</b>".<br />
 Where:
 </p>
@@ -274,7 +273,7 @@ Where:
 </p><p>In accordance with the specified list of nodes there performs acquisition and creation of the parameter's attributes (Fig.7).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:678px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_atr.png"><img class="thumbimage" height="562" src="../files/OPC-UA_prm_atr.png" width="676" /></a>  <div class="thumbcaption">Fig.7. Tab of attributes of the parameter.</div></div></div></div>
-<h4><span class="mw-headline" id="Logical_.28logic.29"><span class="mw-headline-number">3.2.2</span> Logical (logic)</span></h4>
+<h4><span class="mw-headline" id="Logical_.28_PrmL.29"><span class="mw-headline-number">3.2.2</span> Logical (_PrmL)</span></h4>
 <p>Main page of configuration parameters of the logical type is shown in Figure 8.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:760px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UALog_prm.png"><img class="thumbimage" height="595" src="../files/OPC-UALog_prm.png" width="758" /></a>  <div class="thumbcaption">Рис.8. Configuration tab of the logical parameter type.</div></div></div></div>

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tdaqs.h
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,7 +21,7 @@
 #ifndef TDAQS_H
 #define TDAQS_H
 
-#define SDAQ_VER	20	//ControllerS type modules version
+#define SDAQ_VER	21	//ControllerS type modules version
 #define SDAQ_ID		"DAQ"
 
 #include <string>

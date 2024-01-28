@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcontroller.h
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -69,7 +69,7 @@ class TController : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( const TCntrNode &node );
 
-	string id( )		{ return mId; }
+	string id( ) const		{ return mId; }
 	string workId( );
 	string name( );
 	string descr( );
@@ -78,6 +78,8 @@ class TController : public TCntrNode, public TConfig
 
 	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
 	string tbl( ) const;
+	virtual string tbl( const TTypeParam &tP ) const;				//????[v1.0] Replace by tblStd()
+
 	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &nm );
@@ -121,9 +123,6 @@ class TController : public TCntrNode, public TConfig
 	TTypeDAQ &owner( ) const;
 
     protected:
-	//Protected attributes
-	bool	enSt, runSt;
-
 	//Methods
 	// User methods
 	void load_( TConfig *cfg );
@@ -143,6 +142,12 @@ class TController : public TCntrNode, public TConfig
 	void postDisable( int flag );		//Delete all DB if flag 1
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
+
+	bool isStdStorAddr( const TTypeParam &tP ) const	{ return (tbl(tP) == tblStd(tP)); }	//????[v1.0] Remove
+	virtual string tblStd( const TTypeParam &tP ) const;			//????[v1.0] Rename to tbl()
+
+	//Protected attributes
+	bool	enSt, runSt;
 
     private:
 	//Private methods

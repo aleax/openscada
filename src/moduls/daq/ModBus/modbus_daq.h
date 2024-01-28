@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ModBus file: modbus_daq.h
 /***************************************************************************
- *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -45,7 +45,7 @@ using namespace OSCADA;
 #define DAQ_NAME	trS("Client ModBus")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"3.7.2"
+#define DAQ_MVER	"3.8.0"
 #define DAQ_AUTHORS	trS("Roman Savochenko")
 #define DAQ_DESCR	trS("Provides implementation of the client ModBus service. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define DAQ_LICENSE	"GPL2"
@@ -255,6 +255,9 @@ class TTpContr: public TTypeDAQ
 	~TTpContr( );
 
 	TElem	&prmIOE( )	{ return elPrmIO; }
+
+	//Attributes
+	int8_t	tPrmId, tPrmLId;
 
     protected:
 	//Methods
