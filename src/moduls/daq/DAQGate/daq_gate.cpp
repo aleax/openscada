@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.13.5"
+#define MOD_VER		"2.13.6"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -128,7 +128,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     mAsynchWr(cfg("WR_ASYNCH").getBd()), mAllowToDelPrmAttr(cfg("ALLOW_DEL_PA").getBd()), mPlaceCntrToVirtPrm(cfg("CNTR_TO_VPRM").getBd()),
     prcSt(false), callSt(false), syncSt(false), syncForce(false), endrunReq(false), mStatTm(0), curPat(dataRes()), mPer(1e9)
 {
-    cfg("PRM_BD").setS(MOD_ID"Prm_"+name_c);
+    cfg("PRM_BD").setS(MOD_ID "Prm_"+id());
 }
 
 TMdContr::~TMdContr( )

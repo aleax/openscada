@@ -1,3 +1,16 @@
+2024-01-28 Roman (stable)
+- FIX:LibsDB.vcaBase: Main.alarmsSt: Fixed in the alarms_focus variable accessing after removing of forcing the "focus" attribute,
+	which replaced by this.alarms.attr("focus").
+    FIX: Main.storeHouse: Prevented of <EVAL> for <NULL> cells in the item report.
+- SYS: TSYS::strLabEnum() appended by an argument "onlyDec" (set by default) for enumerating one digit, found the first from the string end.
+    The UserAPI functions fileSize(), fileRead(), fileWrite() expanded for support big size files.
+- FIX:UI.WebVision: Appended of setting the CSS property "pointer-events" to "all" also at presence "toolTips" or "tipStatus",
+	for show the tip helps.
+    For URLs opening in "vs_goHttpUrl" used the command window.open().
+    Editing the table cells are allowed for words selection at twice mouse click with preventing the changes loss.
+- UI.{QTCfg,WebCfgD}: All the command requests appended by setting the "primaryCmd" attribute to mark their force for processing.
+
+
 2024-01-15 Roman (stable)
 - FIX:DAQ.System: Fixed in building Proc>DA on old systems.
 

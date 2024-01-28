@@ -49,7 +49,6 @@ class WidgetLib : public TCntrNode, public TConfig
 	string ico( ) const	{ string sval = cfg("ICO").getS(); return sval.size() ? sval : SYS->ico(); }	//Icon
 	string getStatus( );
 
-	bool isStdStorAddr( ) const		{ return (tbl() == ("wlb_"+id())); }	//????[v1.0] Remove
 	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
 	string tbl( ) const	{ return cfg("DB_TBL").getS().empty() ? ("wlb_"+id()) : cfg("DB_TBL").getS(); }
 	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
@@ -99,6 +98,9 @@ class WidgetLib : public TCntrNode, public TConfig
 	int	mWdg;
 
     private:
+	//Methods
+	bool isStdStorAddr( ) const		{ return (tbl() == ("wlb_"+id())); }	//????[v1.0] Remove
+
 	//Attributes
 	TCfg	&mId;
 	string	mDB,

@@ -69,7 +69,6 @@ class Project : public TCntrNode, public TConfig
 	bool	toEnByNeed( )	{ return cfg("EN_BY_NEED").getB(); } //To enable the project by need
 	string	getStatus( );
 
-	bool isStdStorAddr( ) const		{ return (tbl() == ("prj_"+id())); }	//????[v1.0] Remove
 	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
 	string tbl( ) const	{ return cfg("DB_TBL").getS().empty() ? ("prj_"+id()) : cfg("DB_TBL").getS(); }
 	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
@@ -146,6 +145,9 @@ class Project : public TCntrNode, public TConfig
 	int	mPage;
 
     private:
+	//Methods
+	bool isStdStorAddr( ) const		{ return (tbl() == ("prj_"+id())); }	//????[v1.0] Remove
+
 	//Attributes
 	TCfg	&mId;		//Identifier
 	string	mDB,		//Work DB

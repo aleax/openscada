@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.MMS file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2013-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,7 +37,7 @@
 #define MOD_NAME	trS("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.4.13"
+#define MOD_VER		"1.4.14"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
@@ -119,7 +119,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) : TC
     mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mRestTm(cfg("TM_REST")), mSync(cfg("SYNCPER")), mAddr(cfg("ADDR")), mVarsRdReq(cfg("VARS_RD_REQ")),
     mPer(1e9), prcSt(false), callSt(false), isReload(false), alSt(-1), acq_err(dataRes()), tmDelay(0)
 {
-    cfg("PRM_BD").setS("MMSPrm_"+name_c);
+    cfg("PRM_BD").setS(MOD_ID "Prm_"+id());
 
     //ParameterCBB
     string prms;

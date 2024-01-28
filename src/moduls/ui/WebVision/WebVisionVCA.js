@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -645,7 +645,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	}
 	elStyle += 'position: '+((this==masterPage || this.window)?'relative':'absolute')+'; '+
 		   'left: '+realRound(geomX)+'px; top: '+realRound(geomY)+'px; '+
-		   'pointer-events: '+((elWr||this == masterPage)?'all':'none')+'; ';
+		   'pointer-events: '+((elWr||this == masterPage||
+					    (this.attrs['tipTool']&&this.attrs['tipTool'].length)||
+					    (this.attrs['tipStatus']&&this.attrs['tipStatus'].length))?'all':'none')+'; ';
 
 	// Calculation of the main window/page scale
 	if(this == masterPage) {
@@ -1637,7 +1639,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			this.place.btUp = function( ) {
 			    if(this.checkable) return;
 			    this.childNodes[0].classList.remove("pressed");
-			    if(this.wdgLnk.attrs["vs_goHttpUrl"]) window.location = this.wdgLnk.attrs["vs_goHttpUrl"];
+			    if(this.wdgLnk.attrs["vs_goHttpUrl"]) window.open(this.wdgLnk.attrs["vs_goHttpUrl"]);
 			    setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease');
 			}
 			formObj.onkeydown = function(e)	{ if(e.keyCode == 13 || e.keyCode == 32) this.parentNode.btDown(); }
@@ -1907,10 +1909,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    setFocus(elTbl.wdgLnk.addr, false, null, true);
 
 			    if(this.nodeName == "TABLE" || !(elTbl=this.offsetParent) || !elTbl.elWr || !this.isEdit) return true;
-			    if(this.isEnter) {
+			    if(this.isEnter) return false;	//!!!! To allow for words selection and to prevent the changes loss
+			    /*if(this.isEnter) {
 				this.innerHTML = this.svInnerHTML;
 				this.isEnter = false; elTbl.edIt = null;
-			    }
+			    }*/
 			    else {
 				if(elTbl.edIt) { elTbl.edIt.innerHTML = elTbl.edIt.svInnerHTML; elTbl.edIt.isEnter = false; }
 				this.isEnter = true; elTbl.edIt = this;

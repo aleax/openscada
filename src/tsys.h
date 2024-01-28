@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.h
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -344,7 +344,7 @@ class TSYS : public TCntrNode
 	static string strEncode( const string &in, Code tp, const string &opt = "" );
 	static string strDecode( const string &in, Code tp = Custom, const string &opt = "" );
 	static string strMess( const char *fmt, ... );
-	static string strLabEnum( const string &base );
+	static string strLabEnum( const string &base, bool onlyDec = true );
 
 	static string strCompr( const string &in, int lev = -1 );
 	static string strUncompr( const string &in );

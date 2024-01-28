@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: qtcfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2023 by Roman Savochenko, <roman@oscada.org>      *
+ *   Copyright (C) 2004-2024 by Roman Savochenko, <roman@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -632,7 +632,7 @@ bool ConfApp::exitModifChk( )
 		_("Some changes were made!\nSave the changes to the DB before exiting?"),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Yes);
 	    switch(ret) {
 		case QMessageBox::Yes:
-		    req.clear()->setName("save")->setAttr("path","/"+SYS->id()+"/%2fobj");
+		    req.clear()->setName("save")->setAttr("path","/"+SYS->id()+"/%2fobj")->setAttr("primaryCmd", "1");
 		    cntrIfCmd(req);
 		    return true;
 		case QMessageBox::No:
@@ -738,14 +738,16 @@ void ConfApp::pageNext( )
 
 void ConfApp::itDBLoad( )
 {
-    XMLNode req("load"); req.setAttr("path", selPath+"/%2fobj")->setAttr("force", (sender()==actDBLoadF)?"1":"");
+    XMLNode req("load");
+    req.setAttr("path", selPath+"/%2fobj")->setAttr("primaryCmd", "1")->setAttr("force", (sender()==actDBLoadF)?"1":"");
     if(cntrIfCmd(req)) mod->postMessCntr(req, this);
     pageRefresh();	//Any time but warnings in the deep
 }
 
 void ConfApp::itDBSave( )
 {
-    XMLNode req("save"); req.setAttr("path",selPath+"/%2fobj")->setAttr("force", (sender()==actDBSaveF)?"1":"");
+    XMLNode req("save");
+    req.setAttr("path",selPath+"/%2fobj")->setAttr("primaryCmd", "1")->setAttr("force", (sender()==actDBSaveF)?"1":"");
     if(cntrIfCmd(req)) mod->postMessCntr(req, this);
     else pageRefresh();
 }
@@ -978,7 +980,7 @@ void ConfApp::itPaste( )
 		    throw TError(s2i(req.attr("rez")), req.attr("mcat"), req.text());
 
 		//Load context of the source node to the destination one
-		req.setName("load")->setAttr("path", "/"+statNm+dstNm+"/%2fobj")->attrDel("ctx")->attrDel("rez");
+		req.setName("load")->setAttr("path", "/"+statNm+dstNm+"/%2fobj")->setAttr("primaryCmd", "1")->attrDel("ctx")->attrDel("rez");
 		if(cntrIfCmd(req))
 		    throw TError(s2i(req.attr("rez")), req.attr("mcat"), req.text());
 	    }
@@ -2982,7 +2984,7 @@ void ConfApp::checkBoxStChange( int stat )
 	    if(req.text() == val) return;
 	    mess_info(mod->nodePath().c_str(), _("%s| Set '%s' to '%s'!"), user().c_str(), (selPath+"/"+path).c_str(), val.c_str());
 
-	    req.setName("set")->setText(val);
+	    req.setName("set")->setAttr("primaryCmd", "1")->setText(val);
 	    if(cntrIfCmd(req))	mod->postMessCntr(req, this);
 	}
     } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
@@ -3008,7 +3010,7 @@ void ConfApp::buttonClicked( )
 	    return;
 	}
 	else {
-	    XMLNode req("set"); req.setAttr("path", selPath+"/"+button->objectName().toStdString());
+	    XMLNode req("set"); req.setAttr("path", selPath+"/"+button->objectName().toStdString())->setAttr("primaryCmd", "1");
 	    //Copy parameters
 	    for(unsigned iCh = 0; iCh < n_el->childSize(); iCh++)
 		//*(req.childAdd()) = *(n_el->childGet(iCh));
@@ -3075,7 +3077,7 @@ void ConfApp::combBoxActivate( int ival )
 	    mess_info(mod->nodePath().c_str(),_("%s| Changed '%s' from '%s' to '%s'!"),
 		    user().c_str(), (selPath+"/"+path).c_str(), req.text().c_str(), val.c_str());
 
-	    req.setName("set")->setText(val);
+	    req.setName("set")->setAttr("primaryCmd", "1")->setText(val);
 	    if(cntrIfCmd(req)) mod->postMessCntr(req, this);
 	}
     } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
@@ -3321,7 +3323,7 @@ void ConfApp::tablePopup( const QPoint &pos )
 	    else if(rez == actFind || rez == actFindNext) return;
 
 	    XMLNode n_el1;
-	    n_el1.setAttr("path",el_path);
+	    n_el1.setAttr("path", el_path)->setAttr("primaryCmd", "1");
 	    if(rez == actAdd) {
 		n_el1.setName("add");
 		mess_info(mod->nodePath().c_str(), _("%s| '%s' add by a record."),
@@ -3474,14 +3476,14 @@ void ConfApp::imgPopup( const QPoint &pos )
 
 		//Send image to system
 		XMLNode n_el1("set");
-		n_el1.setAttr("path",el_path)->setText(TSYS::strEncode(rez,TSYS::base64));
+		n_el1.setAttr("path",el_path)->setAttr("primaryCmd", "1")->setText(TSYS::strEncode(rez,TSYS::base64));
 		mess_info(mod->nodePath().c_str(), _("%s| '%s' uploaded by the picture '%s'."),
 		    user().c_str(), el_path.c_str(), fileName.toStdString().c_str());
 		if(cntrIfCmd(n_el1)) { mod->postMessCntr(n_el1, this); return; }
 	    }
 	    else if(rez == clear_img) {
 		XMLNode n_el1("set");
-		n_el1.setAttr("path", el_path)->setText("");
+		n_el1.setAttr("path", el_path)->setAttr("primaryCmd", "1")->setText("");
 		mess_info(mod->nodePath().c_str(), _("%s| '%s' cleared."), user().c_str(), el_path.c_str());
 		if(cntrIfCmd(n_el1)) { mod->postMessCntr(n_el1, this); return; }
 		img->setImage("");
@@ -3539,16 +3541,16 @@ void ConfApp::tableSet( int row, int col )
 	else value = val.toString().toStdString();
 
 	//Prepare request
-	XMLNode n_el1("set"); n_el1.setAttr("path",el_path)->setText(value);
+	XMLNode n_el1("set"); n_el1.setAttr("path",el_path)->setAttr("primaryCmd", "1")->setText(value);
 	// Get current column id
 	for(unsigned iEl = 0; iEl < n_el->childSize(); iEl++)
 	    if(tbl->horizontalHeaderItem(col)->data(Qt::DisplayRole).toString() == n_el->childGet(iEl)->attr("dscr").c_str())
-	    { n_el1.setAttr("col",n_el->childGet(iEl)->attr("id")); break; }
+	    { n_el1.setAttr("col", n_el->childGet(iEl)->attr("id")); break; }
 	// Get row position
 	string row_addr;
 	if(!n_el->attr("key").size()) {
 	    row_addr = i2s(row);
-	    n_el1.setAttr("row",row_addr);
+	    n_el1.setAttr("row", row_addr);
 	}
 	else {
 	    // Get Key columns
@@ -3644,7 +3646,7 @@ void ConfApp::applyButton( )
 		user().c_str(), (selPath+"/"+path).c_str(), sval.c_str());
 
 	XMLNode n_el("set");
-	n_el.setAttr("path", selPath+"/"+path)->setText(sval);
+	n_el.setAttr("path", selPath+"/"+path)->setAttr("primaryCmd", "1")->setText(sval);
 	if(cntrIfCmd(n_el)) mod->postMessCntr(n_el, this);
     } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 

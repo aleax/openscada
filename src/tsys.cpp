@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -532,15 +532,20 @@ string TSYS::strMess( const char *fmt, ... )
     return str;
 }
 
-string TSYS::strLabEnum( const string &base )
+string TSYS::strLabEnum( const string &base, bool onlyDec )
 {
     //Get number from end
     unsigned numbDig = base.size(), numbXDig = base.size();
     bool noDig = false;
-    for(int i_c = base.size()-1; i_c >= 0; i_c--) {
-	if(!noDig && isdigit(base[i_c])) numbDig = i_c; else noDig = true;
-	if(!(isxdigit(base[i_c]) || (i_c && strncasecmp(base.c_str()+i_c-1,"0x",2) == 0))) break;
-	else if(!isxdigit(base[i_c])) { numbXDig = i_c-1; break; }
+    for(int iC = base.size()-1; iC >= 0; iC--) {
+	if(onlyDec) {
+	    if(isdigit(base[iC]))
+		return base.substr(0, iC) + i2s(s2i(base.substr(iC,1))+1) + base.substr(iC+1);
+	    else continue;
+	}
+	if(!noDig && isdigit(base[iC])) numbDig = iC; else noDig = true;
+	if(!(isxdigit(base[iC]) || (iC && strncasecmp(base.c_str()+iC-1,"0x",2) == 0))) break;
+	else if(!isxdigit(base[iC])) { numbXDig = iC-1; break; }
     }
 
     //Process number and increment
@@ -2838,7 +2843,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     // int fileSize( string file ) - Return the <file> size.
     if(iid == "fileSize" && prms.size() >= 1) {
 	int hd = open(prms[0].getS().c_str(), O_RDONLY);
-	int rez = -1;
+	int64_t rez = -1;
 	if(hd >= 0) {
 	    rez = lseek(hd, 0, SEEK_END);
 	    if(close(hd) != 0)
@@ -2853,12 +2858,12 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	int hd = open(prms[0].getS().c_str(), O_RDONLY);
 	if(hd >= 0) {
 	    if(prms.size() >= 2) lseek(hd, prms[1].getI(), SEEK_SET);
-	    int sz = (prms.size() >= 3) ? prms[2].getI() : -1;
+	    int64_t sz = (prms.size() >= 3) ? prms[2].getI() : -1;
 	    if(sz < 0)
-		for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; )
+		for(int64_t len = 0; (len=read(hd,buf,sizeof(buf))) > 0; )
 		    rez.append(buf, len);
 	    else
-		for(int len = 0, rLen = 0; rLen < sz && (len=read(hd,buf,fmin(sz-rLen,(int)sizeof(buf)))) > 0; rLen += len)
+		for(int64_t len = 0, rLen = 0; rLen < sz && (len=read(hd,buf,fmin(sz-rLen,(int64_t)sizeof(buf)))) > 0; rLen += len)
 		    rez.append(buf, len);
 	    if(close(hd) != 0)
 		mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
@@ -2868,7 +2873,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     // int fileWrite( string file, string str, bool append = false ) - Write <str> to <file>, remove presented or <append>.
     //	  Return wrote bytes count.
     if(iid == "fileWrite" && prms.size() >= 2) {
-	int wcnt = 0, wflags = O_WRONLY|O_CREAT|O_TRUNC;
+	int wflags = O_WRONLY|O_CREAT|O_TRUNC;
+	int64_t wcnt = 0;
 	string val = prms[1].getS();
 	if(prms.size() >= 3 && prms[2].getB()) wflags = O_WRONLY|O_CREAT|O_APPEND;
 	int hd = open(prms[0].getS().c_str(), wflags, permCrtFiles());

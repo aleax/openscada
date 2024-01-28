@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: selfwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2004-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -635,10 +635,9 @@ bool CfgTable::event( QEvent *e )
 		XMLNode *n_el = SYS->ctrId(mainW->root, TSYS::strDecode(objectName().toStdString(),TSYS::PathEl));
 		if(n_el->attr("s_com").find("move") != string::npos && r_new >= 0 && r_new < rowCount()) {
 		    string el_path = mainW->selPath + "/" + objectName().toStdString();
-		    XMLNode n_el1;
-		    n_el1.setAttr("path", el_path);
-		    n_el1.setName("move");
-		    n_el1.setAttr("row", i2s(row))->setAttr("to", i2s(r_new));
+		    XMLNode n_el1("move");
+		    n_el1.setAttr("path", el_path)->setAttr("primaryCmd", "1")->
+			  setAttr("row", i2s(row))->setAttr("to", i2s(r_new));
 		    mess_info(mod->nodePath().c_str(), _("%s| '%s' moved for the record %d to %d."),
 			mainW->user().c_str(), el_path.c_str(), row, r_new);
 		    if(mainW->cntrIfCmd(n_el1)) throw TError(n_el1.attr("mcat").c_str(), n_el1.text().c_str());
