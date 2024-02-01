@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -564,44 +564,54 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &ivl, int ro
 	    req.setAttr("path",swdg+"/%2fattr%2f"+nattr)->setText(val);
 	    DevelWdgView *dw = mainWin()->work_space->findChild<DevelWdgView*>(swdg.c_str());
 	    if(dw) {
-		chCtx.clear();
-		chCtx.setAttr("id",nattr)->setAttr("prev",it->data().toString().toStdString())->setText(val);
+		chCtx.clear()->setAttr("id",nattr)->setAttr("prev",it->data().toString().toStdString());
 		if(it->flag()&Item::Active) dw->chLoadCtx(chCtx, "", nattr);
 		//Load previous value for group
 		if(isGrp) {
-		    reqPrev.setAttr("path",swdg+"/%2fattr%2f"+nattr);
+		    reqPrev.clear()->setAttr("path",swdg+"/%2fattr%2f"+nattr);
 		    if(!mainWin()->cntrIfCmd(reqPrev)) chCtx.setAttr("prev",reqPrev.text());
 		}
 	    }
 
-	    string reqVal = req.text();
 	    int reqRez = 0;
 	    if((reqRez=mainWin()->cntrIfCmd(req)))
 		mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), (reqRez==TError::Core_CntrWarning)?TVision::Warning:TVision::Error, mainWin());
 
 	    if(reqRez == TError::NoError || reqRez == TError::Core_CntrWarning) {
-		//Send change request to opened to edit widget
-		if(dw)	dw->chRecord(chCtx);
+		string reqVal = req.text();
 
-		// List check
+		//Requesting back the set value to control limits of the single setting
+		if(!isGrp) {
+		    req.setName("get")->clear()->setAttr("path",swdg+"/%2fattr%2f"+nattr);
+		    mainWin()->cntrIfCmd(req); reqVal = req.text();
+		    switch(it->data().typeId()) {
+			case QVariant::Bool:	value = (bool)s2i(reqVal);break;
+			case QVariant::Int:	value = s2i(reqVal);	break;
+			case QVariant::Double:	value = s2r(reqVal);	break;
+			default:		value = reqVal.c_str();	break;
+		    }
+		    if(value == it->data()) return true;
+		}
+
+		//Sending the change request to opened widget for editing
+		if(dw)	{ chCtx.setText(reqVal); dw->chRecord(chCtx); }
+
+		//Checking the list
 		for(int iIt = 0; iIt < it->dataEdit1().toStringList().size() && iIt < it->dataEdit().toStringList().size(); iIt++)
 		    if(it->dataEdit1().toStringList()[iIt] == value) { value = it->dataEdit().toStringList()[iIt]; break; }
 
-		//Local update
-		switch(it->data().typeId()) {
-		    case QVariant::Bool:	it->setData((bool)s2i(reqVal));	break;
-		    case QVariant::Int:		it->setData(s2i(reqVal));	break;
-		    case QVariant::Double:	it->setData(s2r(reqVal));	break;
-		    default:			it->setData(reqVal.c_str());	break;
-		}
+		//Locally update
+		it->setData(value);
 
+		//Notifying
 		it->setModify(true);
 		emit modified(swdg+"/a_"+nattr);
 		emit dataChanged(index, index);
 		if(it->flag()&(Item::Active|Item::Select|Item::SelEd)) toSetWdg = true;
 	    }
 	}
-	if(toSetWdg || (TSYS::strSepParse(cur_wdg,1,';').size() && (isGrp || nwdg == TSYS::strSepParse(cur_wdg,0,';')))) setWdg(cur_wdg);
+	if(toSetWdg || (TSYS::strSepParse(cur_wdg,1,';').size() && (isGrp || nwdg == TSYS::strSepParse(cur_wdg,0,';'))))
+	    setWdg(cur_wdg);
     } catch(...) { return false; }
 
     return true;

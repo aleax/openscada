@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tprmtmpl.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -622,7 +622,7 @@ void TPrmTempl::Impl::addLinksAttrs( TElem *attrsCntr )
 	    }
 
 	    if(!attrsCntr->fldPresent(func()->io(iIO)->id()))
-		attrsCntr->fldAdd(new TFld(func()->io(iIO)->id().c_str(),func()->io(iIO)->name().c_str(),tp,flg,"","",selVals.c_str(),selNms.c_str()));
+		attrsCntr->fldAdd(new TFld(func()->io(iIO)->id().c_str(),func()->io(iIO)->name().c_str(),tp,flg,"","",selVals,selNms));
 
 	    als[func()->io(iIO)->id()] = true;
 	}
@@ -687,6 +687,8 @@ void TPrmTempl::Impl::archAttrs( TValue *vl )
 
 bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 {
+    XMLNode *selA = NULL;
+
     MtxAlloc res(lnkRes, true);
     //Get page info
     if(opt->name() == "info" && ctrMkNode("area",opt,-1,pref.c_str(),_("Template configuration"))) {
@@ -694,6 +696,16 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 	ctrMkNode("fld",opt,-1,(pref+"/attr_only").c_str(),_("Show attributes"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	if(ctrMkNode("area",opt,-1,(pref+"/prm").c_str(),_("Parameters")))
 	    for(int iIO = 0; iIO < ioSize(); iIO++) {
+		//Updating the selection items in the dynamic translation mode
+		if(func()->io(iIO)->flg()&IO::Selectable && Mess->translDyn() &&
+		    (selA=ctrId(opt->childGet(0),"/val/"+func()->io(iIO)->id(),true)))
+		{
+		    string def = trD(func()->io(iIO)->def()), selVals = TSYS::strLine(def, 1), selNms = TSYS::strLine(def, 2);
+		    if(selNms.empty())	selA->setAttr("sel_list", selVals);
+		    else selA->setAttr("sel_id", selVals)->setAttr("sel_list", selNms);
+		}
+
+		//Same template properties
 		if(!(func()->io(iIO)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgConst)))
 		    continue;
 		// Check the selected param

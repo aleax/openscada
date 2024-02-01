@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvalue.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -162,8 +162,8 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		    setAttr("nm", trD(attr.at().fld().descr()))->
 		    setAttr("flg", i2s(attr.at().fld().flg()))->
 		    setAttr("tp", i2s(attr.at().fld().type()))->
-		    setAttr("vals", attr.at().fld().values())->
-		    setAttr("names", attr.at().fld().selNames());
+		    setAttr("vals", trD(attr.at().fld().values()))->
+		    setAttr("names", trD(attr.at().fld().selNames()));
 	    }
 	}
 	if(ctrChkNode(opt,"get",RWRWRW,"root",SDAQ_ID,SEC_RD)) {	//All attributes values
@@ -187,7 +187,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		if(!vl.at().isCfg() && (vl.at().fld().flg()&TVal::Dynamic) && vl.at().fld().len() >= prcTm)
 		    opt->childAdd("del")->setAttr("id", vLs[iEl])->setAttr("name", trD(vl.at().fld().descr()))->
 				setAttr("type", i2s(vl.at().fld().type()))->setAttr("flg", i2s(vl.at().fld().flg()))->
-				setAttr("values", vl.at().fld().values())->setAttr("selNames", vl.at().fld().selNames());
+				setAttr("values", trD(vl.at().fld().values()))->setAttr("selNames", trD(vl.at().fld().selNames()));
 	    }
 
 	    //Archives requests process
@@ -289,10 +289,10 @@ void TValue::cntrCmdProc( XMLNode *opt )
 			    "  Timestamp: %s"),
 			    vl.at().fld().name().c_str(),TSYS::strLine(trD(vl.at().fld().descr()),0).c_str(),
 			    sType.c_str(),(vl.at().fld().flg()&TFld::NoWrite)?1:0, TSYS::atime2str(vl.at().time()/1000000).c_str()));
-		    if(vl.at().fld().values().size())
-			nE->setAttr("help",nE->attr("help")+_("\n  Values: ")+vl.at().fld().values());
-		    if(vl.at().fld().selNames().size())
-			nE->setAttr("help",nE->attr("help")+_("\n  Names for selection: ")+vl.at().fld().selNames());
+		    if(trD(vl.at().fld().values()).size())
+			nE->setAttr("help",nE->attr("help")+_("\n  Values: ")+trD(vl.at().fld().values()));
+		    if(trD(vl.at().fld().selNames()).size())
+			nE->setAttr("help",nE->attr("help")+_("\n  Names for selection: ")+trD(vl.at().fld().selNames()));
 		}
 	    }
 	}
@@ -317,12 +317,6 @@ void TValue::cntrCmdProc( XMLNode *opt )
 
     // Commands processing to the page
     if(a_path.find("/val") == 0) {
-	if(a_path.find("/val/sel_") == 0 && ctrChkNode(opt)) {
-	    AutoHD<TVal> vl = vlAt(TSYS::pathLev(a_path,1).substr(4));
-	    for(unsigned iA = 0; iA < vl.at().fld().selNm().size(); iA++)
-		opt->childAdd("el")->setText(vl.at().fld().selNm()[iA]);
-	    return;
-	}
 	AutoHD<TVal> vl = vlAt(TSYS::pathLev(a_path,1));
 	if(ctrChkNode(opt,"get",(vl.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SDAQ_ID,SEC_RD))
 	    opt->setText((vl.at().fld().type()==TFld::Real) ?
@@ -522,20 +516,6 @@ string TVal::setArch( const string &nm )
     return rez_nm;
 }
 
-string TVal::getSEL( int64_t *tm, bool sys )
-{
-    if(!(fld().flg()&TFld::Selectable))	throw TError("Val", _("Not selective type!"));
-    switch(fld().type()) {
-	case TFld::String:	return fld().selVl2Nm(getS(tm,sys));
-	case TFld::Integer:	return fld().selVl2Nm(getI(tm,sys));
-	case TFld::Real:	return fld().selVl2Nm(getR(tm,sys));
-	case TFld::Boolean:	return fld().selVl2Nm(getB(tm,sys));
-	default: break;
-    }
-
-    return EVAL_STR;
-}
-
 TVariant TVal::get( int64_t *tm, bool sys )
 {
     switch(fld().type()) {
@@ -680,18 +660,6 @@ AutoHD<TVarObj> TVal::getO( int64_t *tm, bool sys )
     return rez;
 }
 
-void TVal::setSEL( const string &value, int64_t tm, bool sys )
-{
-    if(!(fld().flg()&TFld::Selectable))	throw TError("Val", _("Not selective type!"));
-    switch(fld().type()) {
-	case TFld::String:	setS(fld().selNm2VlS(value), tm, sys);	break;
-	case TFld::Integer:	setI(fld().selNm2VlI(value), tm, sys);	break;
-	case TFld::Real:	setR(fld().selNm2VlR(value), tm, sys);	break;
-	case TFld::Boolean:	setB(fld().selNm2VlB(value), tm, sys);	break;
-	default: break;
-    }
-}
-
 void TVal::set( const TVariant &value, int64_t tm, bool sys )
 {
     switch(fld().type()) {
@@ -752,9 +720,11 @@ void TVal::setI( int64_t value, int64_t tm, bool sys )
 	    //Check to write
 	    if(!sys && fld().flg()&TFld::NoWrite) return;
 	    //Set current value and time
-	    if(!(fld().flg()&TFld::Selectable) && fld().selValI()[1] > fld().selValI()[0] && value != EVAL_INT)
-		value = vmin(fld().selValI()[1], vmax(fld().selValI()[0],value));
-	    int pvl = val.i; val.i = value;
+	    int64_t pvl, minV, maxV;
+	    if(!(fld().flg()&TFld::Selectable) && value != EVAL_INT && fld().values().size() &&
+		    (minV=s2ll(TSYS::strParse(fld().values(),0,";"))) < (maxV=s2ll(TSYS::strParse(fld().values(),1,";"))))
+		value = vmin(maxV, vmax(minV,value));
+	    pvl = val.i; val.i = value;
 	    mTime = tm;
 	    if(!mTime) mTime = TSYS::curTime();
 	    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, value, pvl);
@@ -785,9 +755,11 @@ void TVal::setR( double value, int64_t tm, bool sys )
 	    //Check to write
 	    if(!sys && fld().flg()&TFld::NoWrite) return;
 	    //Set current value and time
-	    if(!(fld().flg()&TFld::Selectable) && fld().selValR()[1] > fld().selValR()[0] && value != EVAL_REAL)
-		value = vmin(fld().selValR()[1], vmax(fld().selValR()[0],value));
-	    double pvl = val.r; val.r = value;
+	    double pvl, minV, maxV;
+	    if(!(fld().flg()&TFld::Selectable) && value != EVAL_REAL && fld().values().size() &&
+		    (minV=s2r(TSYS::strParse(fld().values(),0,";"))) < (maxV=s2r(TSYS::strParse(fld().values(),1,";"))))
+		value = vmin(maxV, vmax(minV,value));
+	    pvl = val.r; val.r = value;
 	    mTime = tm;
 	    if(!mTime) mTime = TSYS::curTime();
 	    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, value, pvl);
@@ -915,9 +887,9 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     // string def() - default value
     if(iid == "def")	return fld().def();
     // string values() - allowed values list or range
-    if(iid == "values")	return fld().values();
+    if(iid == "values")	return trD_LU(fld().values(), TSYS::strLine(user_lang,1), TSYS::strLine(user_lang,0));
     // string selNames() - names of allowed values list
-    if(iid == "selNames")	return fld().selNames();
+    if(iid == "selNames")return trD_LU(fld().selNames(), TSYS::strLine(user_lang,1), TSYS::strLine(user_lang,0));
     // string reserve() - reserve string property value
     if(iid == "reserve")return fld().reserve();
     // bool isCfg() - check to a configuration field

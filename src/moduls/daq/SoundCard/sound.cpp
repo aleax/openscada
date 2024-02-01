@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SoundCard file: sound.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_NAME	trS("Sound card")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.8.11"
+#define MOD_VER		"0.8.12"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides an access to the sound card.")
 #define LICENSE		"GPL2"
@@ -88,7 +88,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("CARD",trS("Card device"),TFld::String,0,"100","<default>"));
     fldAdd(new TFld("SMPL_RATE",trS("Card sample rate (Hz)"),TFld::Integer,0,"5","8000","1;200000"));
     fldAdd(new TFld("SMPL_TYPE",trS("Card sample type"),TFld::Integer,TFld::Selectable,"5",i2s(paFloat32).c_str(),
-	TSYS::strMess("%d;%d;%d",paFloat32,paInt32,paInt16).c_str(),_("Float 32;Int 32;Int 16")));
+	TSYS::strMess("%d;%d;%d",paFloat32,paInt32,paInt16),trS("Float 32;Int 32;Int 16")));
     fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
 
     //Parameter type bd structure

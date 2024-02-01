@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: widget.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -139,8 +139,8 @@ void Widget::postEnable( int flag )
 		0,R_____,R_R___,R_R_R_,RW____,RWR___,RWR_R_,RWRW__,RWRWR_,RWRWRW,
 		PERM_INHER,PERM_INHER|R_____,PERM_INHER|R_R___,PERM_INHER|R_R_R_,
 		PERM_INHER|RW____,PERM_INHER|RWR___,PERM_INHER|RWR_R_,
-		PERM_INHER|RWRW__,PERM_INHER|RWRWR_,PERM_INHER|RWRWRW).c_str(),
-	    _("No access;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW;"
+		PERM_INHER|RWRW__,PERM_INHER|RWRWR_,PERM_INHER|RWRWRW),
+	    trS("No access;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW;"
 	      "Inheritance;Inherit.(R_____);Inherit.(R_R___);Inherit.(R_R_R_);Inherit.(RW____);"
 	      "Inherit.(RWR___);Inherit.(RWR_R_);Inherit.(RWRW__);Inherit.(RWRWR_);Inherit.(RWRWRW)")));
 	attrAdd(new TFld("root",trS("Root"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic,"","","","",i2s(A_ROOT).c_str()));
@@ -148,10 +148,10 @@ void Widget::postEnable( int flag )
 	attrAdd(new TFld("dscr",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Generic));
 	attrAdd(new TFld("en",trS("Enabled"),TFld::Boolean,Attr::Generic,"","1","","",i2s(A_EN).c_str()));
 	attrAdd(new TFld("active",trS("Active"),TFld::Boolean,Attr::Active,"","0","","",i2s(A_ACTIVE).c_str()));
-	attrAdd(new TFld("geomX",trS("Geometry: x"),TFld::Real,Attr::Generic,"","0",(i2s(A_GEOM_MIN)+";"+i2s(A_GEOM_MAX)).c_str(),"",i2s(A_GEOM_X).c_str()));
-	attrAdd(new TFld("geomY",trS("Geometry: y"),TFld::Real,Attr::Generic,"","0",(i2s(A_GEOM_MIN)+";"+i2s(A_GEOM_MAX)).c_str(),"",i2s(A_GEOM_Y).c_str()));
-	attrAdd(new TFld("geomW",trS("Geometry: width"),TFld::Real,Attr::Generic,"","100",(i2s(0)+";"+i2s(A_GEOM_MAX)).c_str(),"",i2s(A_GEOM_W).c_str()));
-	attrAdd(new TFld("geomH",trS("Geometry: height"),TFld::Real,Attr::Generic,"","100",(i2s(0)+";"+i2s(A_GEOM_MAX)).c_str(),"",i2s(A_GEOM_H).c_str()));
+	attrAdd(new TFld("geomX",trS("Geometry: x"),TFld::Real,Attr::Generic,"","0",i2s(A_GEOM_MIN)+";"+i2s(A_GEOM_MAX),"",i2s(A_GEOM_X).c_str()));
+	attrAdd(new TFld("geomY",trS("Geometry: y"),TFld::Real,Attr::Generic,"","0",i2s(A_GEOM_MIN)+";"+i2s(A_GEOM_MAX),"",i2s(A_GEOM_Y).c_str()));
+	attrAdd(new TFld("geomW",trS("Geometry: width"),TFld::Real,Attr::Generic,"","100",i2s(0)+";"+i2s(A_GEOM_MAX),"",i2s(A_GEOM_W).c_str()));
+	attrAdd(new TFld("geomH",trS("Geometry: height"),TFld::Real,Attr::Generic,"","100",i2s(0)+";"+i2s(A_GEOM_MAX),"",i2s(A_GEOM_H).c_str()));
 	attrAdd(new TFld("geomXsc",trS("Geometry: x scale"),TFld::Real,Attr::Generic,"","1","0.01;100","",i2s(A_GEOM_X_SC).c_str()));
 	attrAdd(new TFld("geomYsc",trS("Geometry: y scale"),TFld::Real,Attr::Generic,"","1","0.01;100","",i2s(A_GEOM_Y_SC).c_str()));
 	attrAdd(new TFld("geomZ",trS("Geometry: z"),TFld::Integer,Attr::Generic,"","0","-1000000;1000000","",i2s(A_GEOM_Z).c_str()));
@@ -1575,8 +1575,8 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 			n_type->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[iEl]).at().fld().type()+
 				    ((wdg.at().attrAt(lst[iEl]).at().fld().flg()&(TFld::FullText|TFld::TransltText|Attr::Color|Attr::Image|Attr::Font|Attr::Address))<<4)));
 		}
-		if(n_wa)	n_wa->childAdd("el")->setText( wdg.at().attrAt(lst[iEl]).at().fld().values()+"|"+
-							    wdg.at().attrAt(lst[iEl]).at().fld().selNames());
+		if(n_wa)	n_wa->childAdd("el")->setText(trD(wdg.at().attrAt(lst[iEl]).at().fld().values())+"|"+
+							    trD(wdg.at().attrAt(lst[iEl]).at().fld().selNames()));
 		if(n_proc)	n_proc->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[iEl]).at().flgSelf()&Attr::ProcAttr));
 		if(n_cfg)	n_cfg->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[iEl]).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst|Attr::FromStyle)));
 		if(n_cfgtmpl)	n_cfgtmpl->childAdd("el")->setText(trD(wdg.at().attrAt(lst[iEl]).at().cfgTempl()));
@@ -1636,7 +1636,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		    tflg = tflg^((tflg^((s2i(opt->text())>>4)|Attr::IsUser))&(TFld::FullText|TFld::TransltText|TFld::Selectable|Attr::Color|Attr::Image|Attr::Font|Attr::Address));
 		}
 		wdg.at().attrDel(idattr);
-		wdg.at().attrAdd(new TFld(tid.c_str(),tnm,ttp,tflg,"","",tvals.c_str(),tsels.c_str()), -1, false, false, true);
+		wdg.at().attrAdd(new TFld(tid.c_str(),tnm,ttp,tflg,"","",tvals,tsels), -1, false, false, true);
 		wdg.at().attrAt(tid).at().setS(tvl);
 		wdg.at().attrAt(tid).at().setFlgSelf((Attr::SelfAttrFlgs)((sflgs&(~Attr::VizerSpec))|(wdg.at().attrAt(tid).at().flgSelf()&Attr::VizerSpec)));
 		wdg.at().attrAt(tid).at().setCfgVal(cfgval);
@@ -1650,8 +1650,8 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		    wdg.at().attrAt(idattr).at().fld().setDescr(trDSet(wdg.at().attrAt(idattr).at().name(),opt->text()));
 		}
 		else if(idcol == "wa") {
-		    wdg.at().attrAt(idattr).at().fld().setValues(TSYS::strSepParse(opt->text(),0,'|'));
-		    wdg.at().attrAt(idattr).at().fld().setSelNames(TSYS::strSepParse(opt->text(),1,'|'));
+		    wdg.at().attrAt(idattr).at().fld().setValues(TSYS::strSepParse(trDSet(wdg.at().attrAt(idattr).at().fld().values(),opt->text()),0,'|'));
+		    wdg.at().attrAt(idattr).at().fld().setSelNames(TSYS::strSepParse(trDSet(wdg.at().attrAt(idattr).at().fld().selNames(),opt->text()),1,'|'));
 		}
 		else if(idcol == "proc") {
 		    Attr::SelfAttrFlgs sflg =  wdg.at().attrAt(idattr).at().flgSelf();
@@ -1801,19 +1801,6 @@ TFld::Type Attr::type( )	{ return fld().type(); }
 
 int Attr::flgGlob( )		{ return fld().flg(); }
 
-string Attr::getSEL( bool sys )
-{
-    if(!(fld().flg()&TFld::Selectable)) throw TError("Cfg", _("Element type is not selective!"));
-    switch(fld().type()) {
-	case TFld::String:	return fld().selVl2Nm(getS(sys));
-	case TFld::Integer:	return fld().selVl2Nm(getI(sys));
-	case TFld::Real:	return fld().selVl2Nm(getR(sys));
-	case TFld::Boolean:	return fld().selVl2Nm(getB(sys));
-	default: break;
-    }
-    return EVAL_STR;
-}
-
 TVariant Attr::get( bool sys )
 {
     switch(fld().type()) {
@@ -1905,19 +1892,6 @@ AutoHD<TVarObj> Attr::getO( bool sys )
     return tvl;
 }
 
-void Attr::setSEL( const string &val, bool strongPrev, bool sys )
-{
-    if(flgGlob()&Attr::OnlyRead) return;
-    if(!(fld().flg()&TFld::Selectable)) throw TError("Cfg",_("Element type is not selective!"));
-    switch(fld().type()) {
-	case TFld::String:	setS(fld().selNm2VlS(val), strongPrev, sys);	break;
-	case TFld::Integer:	setI(fld().selNm2VlI(val), strongPrev, sys);	break;
-	case TFld::Real:	setR(fld().selNm2VlR(val), strongPrev, sys);	break;
-	case TFld::Boolean:	setB(fld().selNm2VlB(val), strongPrev, sys);	break;
-	default: break;
-    }
-}
-
 void Attr::set( const TVariant &val, bool strongPrev, bool sys )
 {
     if(flgGlob()&Attr::OnlyRead) return;
@@ -1970,11 +1944,13 @@ void Attr::setI( int64_t val, bool strongPrev, bool sys )
 	case TFld::Boolean:	setB((val!=EVAL_INT) ? (bool)val : EVAL_BOOL, strongPrev, sys);		break;
 	case TFld::Object:	if(val == EVAL_INT) setO(new TEValObj(), strongPrev, sys);	break;
 	case TFld::Integer: {
-	    if(!(fld().flg()&TFld::Selectable) && fld().selValI()[0] < fld().selValI()[1])
-		val = vmin(fld().selValI()[1],vmax(fld().selValI()[0],val));
+	    int64_t t_val, minV, maxV;
+	    if(!(fld().flg()&TFld::Selectable) && fld().values().size() &&
+		    (minV=s2ll(TSYS::strParse(fld().values(),0,";"))) < (maxV=s2ll(TSYS::strParse(fld().values(),1,";"))))
+		val = vmin(maxV, vmax(minV,val));
 	    if((!strongPrev && mVal.i == val) ||
 		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull()))	break;
-	    int64_t t_val = mVal.i;
+	    t_val = mVal.i;
 	    mVal.i = val;
 	    if(!sys && !owner()->attrChange(*this,TVariant(t_val)))	mVal.i = t_val;
 	    else setAModif();
@@ -1993,11 +1969,13 @@ void Attr::setR( double val, bool strongPrev, bool sys )
 	case TFld::Boolean:	setB((val!=EVAL_REAL) ? (bool)val : EVAL_BOOL, strongPrev, sys);break;
 	case TFld::Object:	if(val == EVAL_REAL) setO(new TEValObj(), strongPrev, sys);	break;
 	case TFld::Real: {
-	    if(!(fld().flg()&TFld::Selectable) && fld().selValR()[0] < fld().selValR()[1])
-		val = vmin(fld().selValR()[1],vmax(fld().selValR()[0],val));
+	    double t_val, minV, maxV;
+	    if(!(fld().flg()&TFld::Selectable) && fld().values().size() &&
+		    (minV=s2r(TSYS::strParse(fld().values(),0,";"))) < (maxV=s2r(TSYS::strParse(fld().values(),1,";"))))
+		val = vmin(maxV, vmax(minV,val));
 	    if((!strongPrev && mVal.r == val) ||
 		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull()))		break;
-	    double t_val = mVal.r;
+	    t_val = mVal.r;
 	    mVal.r = val;
 	    if(!sys && !owner()->attrChange(*this,TVariant(t_val)))	mVal.r = t_val;
 	    else setAModif();

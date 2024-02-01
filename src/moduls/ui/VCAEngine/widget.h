@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: widget.h
 /***************************************************************************
- *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -108,7 +108,6 @@ class Attr
 	void setCfgVal( const string &vl );
 
 	// Get value
-	string getSEL( bool sys = false );
 	TVariant get( bool sys = false );
 	string getS( bool sys = false );
 	double getR( bool sys = false );
@@ -117,7 +116,6 @@ class Attr
 	AutoHD<TVarObj> getO( bool sys = false );
 
 	// Set value
-	void setSEL( const string &val, bool strongPrev = false, bool sys = false );
 	void set( const TVariant &val, bool strongPrev = false, bool sys = false );
 	void setS( const string &val, bool strongPrev = false, bool sys = false );
 	void setR( double val, bool strongPrev = false, bool sys = false );

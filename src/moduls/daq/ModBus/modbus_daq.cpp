@@ -61,7 +61,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRM_BD_L",trS("Logical parameters table"),TFld::String,TFld::NoFlag,"30",""));	//????[v1.0] Remove
     fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("PROT",trS("ModBus protocol"),TFld::String,TFld::Selectable,"5","TCP","TCP;RTU;ASCII","TCP/IP;RTU;ASCII"));
+    fldAdd(new TFld("PROT",trS("ModBus protocol"),TFld::String,TFld::Selectable,"5","TCP","TCP;RTU;ASCII"));
     fldAdd(new TFld("ADDR",trS("Transport address"),TFld::String,TFld::NoFlag,"41",""));
     fldAdd(new TFld("NODE",trS("Destination node"),TFld::Integer,TFld::NoFlag,"20","1","0;255"));
     fldAdd(new TFld("FRAG_MERGE",trS("Merging of the data fragments"),TFld::Boolean,TFld::NoFlag,"1","0"));
@@ -1459,8 +1459,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	    elem().fldAt(aId).setLen(SYS->sysTm());
 	}
 	else if(!vlPresent(prms[0].getS()))
-	    elem().fldAdd(new TFld(prms[0].getS().c_str(),prms[(prms.size()>=2)?1:0].getS().c_str(),tp,flg,
-				    i2s(SYS->sysTm()).c_str(),"",sVals.c_str(),sNms.c_str()));
+	    elem().fldAdd(new TFld(prms[0].getS().c_str(),prms[(prms.size()>=2)?1:0].getS(),tp,flg,i2s(SYS->sysTm()).c_str(),"",sVals,sNms));
 	return true;
     }
     //bool attrDel( string id ) - attribute <id> remove.

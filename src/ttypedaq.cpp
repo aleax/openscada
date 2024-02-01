@@ -72,8 +72,8 @@ void TTypeDAQ::postEnable( int flag )
 
     if(redntAllow()) {
 	fldAdd(new TFld("REDNT",trS("Redundant"),TFld::Integer,TFld::Selectable,"1","0",
-	    (i2s(TController::Off)+";"+i2s(TController::Asymmetric)/*+";"+i2s(TController::Symmetric)*/).c_str(),
-	    _("Off;Asymmetric"/*;Symmetric"*/)));
+	    i2s(TController::Off)+";"+i2s(TController::Asymmetric)/*+";"+i2s(TController::Symmetric)*/,
+	    trS("Off;Asymmetric"/*;Symmetric"*/)));
 	fldAdd(new TFld("REDNT_RUN",trS("Preference for running"),TFld::String,0,"20","<high>"));
     }
 }

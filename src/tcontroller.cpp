@@ -413,7 +413,7 @@ void TController::redntDataUpdate( )
 		    TFld::Type tp = (TFld::Type)s2i(aNd->attr("type"));
 		    unsigned flg = s2i(aNd->attr("flg"));
 		    if(vl.freeStat()) prm.at().dynElCntr()->fldAdd(new TFld(aNd->attr("id").c_str(),aNd->attr("name").c_str(),tp,flg,"","",
-									    aNd->attr("values").c_str(),aNd->attr("selNames").c_str()));
+									    aNd->attr("values"),aNd->attr("selNames")));
 		    else {
 			unsigned aId = prm.at().dynElCntr()->fldId(aNd->attr("id"), true);
 			prm.at().dynElCntr()->fldAt(aId).setDescr(aNd->attr("name"));

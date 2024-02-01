@@ -63,9 +63,10 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("TM_REST",trS("Restore timeout, seconds"),TFld::Integer,TFld::NoFlag,"4","10","1;3600"));
     fldAdd(new TFld("SYNCPER",trS("Sync inter remote station period, seconds"),TFld::Integer,TFld::NoFlag,"4","60","0;1000"));
     fldAdd(new TFld("EndPoint",trS("End point"),TFld::String,TFld::NoFlag,"50","opc.tcp://localhost"));
-    fldAdd(new TFld("SecPolicy",trS("Security policy"),TFld::String,TFld::Selectable,"20","None","None;Basic128Rsa15;Basic256",_("None;Basic128Rsa15;Basic256")));
+    fldAdd(new TFld("SecPolicy",trS("Security policy"),TFld::String,TFld::Selectable,"20","None",
+	"None;Basic128Rsa15;Basic256",trS("None;Basic128Rsa15;Basic256")));
     fldAdd(new TFld("SecMessMode",trS("Message security mode"),TFld::Integer,TFld::Selectable,"1","1",
-	TSYS::strMess("%d;%d;%d",MS_None,MS_Sign,MS_SignAndEncrypt).c_str(),_("None;Sign;Sign&Encrypt")));
+	TSYS::strMess("%d;%d;%d",MS_None,MS_Sign,MS_SignAndEncrypt),trS("None;Sign;Sign&Encrypt")));
     fldAdd(new TFld("Cert",trS("Certificate (PEM)"),TFld::String,TFld::FullText,"10000"));
     fldAdd(new TFld("PvKey",trS("Private key (PEM)"),TFld::String,TFld::FullText,"10000"));
     fldAdd(new TFld("AuthUser",trS("Auth: user"),TFld::String,TFld::NoFlag,"20"));
@@ -1172,8 +1173,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	    elem().fldAt(aId).setLen(SYS->sysTm());
 	}
 	else if(!vlPresent(prms[0].getS()))
-	    elem().fldAdd(new TFld(prms[0].getS().c_str(),prms[(prms.size()>=2)?1:0].getS().c_str(),tp,flg,
-				    i2s(SYS->sysTm()).c_str(),"",sVals.c_str(),sNms.c_str()));
+	    elem().fldAdd(new TFld(prms[0].getS().c_str(),prms[(prms.size()>=2)?1:0].getS(),tp,flg,i2s(SYS->sysTm()).c_str(),"",sVals,sNms));
 	return true;
     }
     //bool attrDel( string id ) - attribute <id> remove.

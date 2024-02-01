@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tconfig.h
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -85,7 +85,6 @@ class TCfg : public TVariant
 	TFld	&fld( ) const		{ return *mFld; }
 
 	// Universal access
-	string	getSEL( );
 	string	getS( ) const;
 	string	getS( uint8_t RqFlg );
 	operator bool( )		{ return getB(); }
@@ -96,7 +95,6 @@ class TCfg : public TVariant
 	int64_t	&getId( );
 	char	&getBd( );
 
-	void	setSEL( const string &val, uint8_t RqFlg = 0 );
 	void	setS( const string &val );
 	void	setS( const string &val, uint8_t RqFlg );
 	void	setR( double val );

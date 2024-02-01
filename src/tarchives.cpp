@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchives.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -66,7 +66,7 @@ TArchiveS::TArchiveS( ) :
     elMess.fldAdd(new TFld("START",trS("To start"),TFld::Boolean,0,"1"));
     elMess.fldAdd(new TFld("CATEG",trS("Messages categories"),TFld::String,0,"100"));
     elMess.fldAdd(new TFld("LEVEL",trS("Messages level"),TFld::Integer,TFld::Selectable,"1","0",
-	"0;1;2;3;4;5;6;7",_("Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X])")));
+	"0;1;2;3;4;5;6;7",trS("Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X])")));
     elMess.fldAdd(new TFld("ADDR",trS("Address"),TFld::String,0,"100"));
     elMess.fldAdd(new TFld("REDNT",trS("Redundant"),TFld::Boolean,0,"1","0"));
     elMess.fldAdd(new TFld("REDNT_RUN",trS("Preferable run"),TFld::String,0,"20","<high>"));
@@ -88,15 +88,15 @@ TArchiveS::TArchiveS( ) :
     elAval.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
     elAval.fldAdd(new TFld("START",trS("To start"),TFld::Boolean,0,"1","0"));
     elAval.fldAdd(new TFld("SrcMode",trS("Source"),TFld::Integer,TFld::Selectable,"1","0",
-	TSYS::strMess("%d;%d;%d",TVArchive::Passive,TVArchive::DAQAttr,TVArchive::ActiveAttr).c_str(),
-	_("Passive;DAQ Attribute;Active DAQ Attribute (DEPRECATED)")));
+	TSYS::strMess("%d;%d;%d",TVArchive::Passive,TVArchive::DAQAttr,TVArchive::ActiveAttr),
+	trS("Passive;DAQ Attribute;Active DAQ Attribute (DEPRECATED)")));
     elAval.fldAdd(new TFld("Source",trS("Source"),TFld::String,0,"100"));
     elAval.fldAdd(new TFld("CombMode",trS("Data combining mode"),TFld::Integer,TFld::Selectable,"1","0",
-	TSYS::strMess("%d;%d;%d;%d",TVArchive::MovAver,TVArchive::LastVal,TVArchive::MinVal,TVArchive::MaxVal).c_str(),
-	_("Moving average;Single;Minimum;Maximum")));
+	TSYS::strMess("%d;%d;%d;%d",TVArchive::MovAver,TVArchive::LastVal,TVArchive::MinVal,TVArchive::MaxVal),
+	trS("Moving average;Single;Minimum;Maximum")));
     elAval.fldAdd(new TFld("VTYPE",trS("Value type"),TFld::Integer,TFld::Selectable,"1","0",
-	TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d",TFld::Boolean,TFld::Integer,TFld::Real,TFld::String,TFld::Int16,TFld::Int32,TFld::Int64,TFld::Float,TFld::Double).c_str(),
-	_("Boolean;Integer;Real;String;Int16;Int32;Int64;Real(Float);Real(Double)")));
+	TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d",TFld::Boolean,TFld::Integer,TFld::Real,TFld::String,TFld::Int16,TFld::Int32,TFld::Int64,TFld::Float,TFld::Double),
+	trS("Boolean;Integer;Real;String;Int16;Int32;Int64;Real(Float);Real(Double)")));
     elAval.fldAdd(new TFld("BPER",trS("Buffer period, seconds"),TFld::Real,0,"9.6","1","0;10000"));
     elAval.fldAdd(new TFld("BSIZE",trS("Buffer size, items"),TFld::Integer,0,"8","100","10;10000000"));
     elAval.fldAdd(new TFld("BHGRD",trS("Buffer in the hard time grid"),TFld::Boolean,0,"1","1"));

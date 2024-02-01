@@ -1,7 +1,7 @@
 
 //OpenSCADA file: telem.h
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,7 +38,6 @@ namespace OSCADA
 //*************************************************
 class XMLNode;
 
-//#pragma pack(push,1)
 class TFld
 {
     public:
@@ -78,7 +77,7 @@ class TFld
 	TFld( const TFld &ifld, const char *name = NULL );
 	TFld( const char *name, const string &descr, Type type, unsigned flg,
 	    const char *valLen = "", const char *valDef = "",
-	    const char *vals = "", const char *nSel = "", const char *res = "" );
+	    const string &vals = "", const string &nSel = "", const char *res = "" );
 	~TFld( );
 
 	TFld &operator=( const TFld &fld );
@@ -94,8 +93,8 @@ class TFld
 	IO::Type typeIO( ) const;				//Type to IO
 	unsigned flg( ) const		{ return mFlg; }	//Flags
 	const string &def( ) const	{ return mDef; }	//Default value
-	string values( ) const;					//Values range or values list
-	string selNames( ) const;				//Select names list
+	string values( ) const	{ return mVals ? *mVals : ""; }	//Values range or values list
+	string selNames( ) const{ return mSels ? *mSels : ""; }	//Select names list
 	const string &reserve( ) const	{ return mRes; }	//Reserve field
 
 	void setDescr( const string &idscr )	{ mDescr = idscr; }
@@ -107,32 +106,13 @@ class TFld
 	void setSelNames( const string &slnms );
 	void setReserve( const string &ires )	{ mRes = ires; }
 
-	// Selected
-	const vector<string>	&selValS( ) const;
-	const vector<int>	&selValI( ) const;
-	const vector<double>	&selValR( ) const;
-	const vector<bool>	&selValB( ) const;
-	// selectable element's name
-	const vector<string>	&selNm( ) const;
-
-	string selVl2Nm( const string &val );
-	string selVl2Nm( int64_t val );
-	string selVl2Nm( double val );
-	string selVl2Nm( bool val );
-	string selVl2Nm( char val )	{ return selVl2Nm(val); }
-
-	string	selNm2VlS( const string &name );
-	int64_t	selNm2VlI( const string &name );
-	double	selNm2VlR( const string &name );
-	bool	selNm2VlB( const string &name );
-
 	// Addition
 	XMLNode *cntrCmdMake( XMLNode *opt, const string &path, int pos,
 				const string &user = "root", const string &grp = "root", int perm = 0664 );
 
     private:
 	//Attributes
-	string		mName;		// Name of element (name column into BD);
+	string		mName;		// Name of the element (name column in BD);
 	string		mDescr;		// Description of element;
 	int		mLen;		// field len
 	short int	mDec	:5;	// field dec (for real)
@@ -140,16 +120,8 @@ class TFld
 	unsigned	mFlg;		// element flags (Selected, SelfFld ...);
 	string		mDef;		// default value;
 	string		mRes;		// reserve attribut
-
-	union {
-	    vector<string>	*s;
-	    vector<double>	*r;
-	    vector<int>		*i;
-	    vector<bool>	*b;
-	}mVal;
-	vector<string>	*mSel;
+	string		*mVals, *mSels;	// optional lists of values and their names
 };
-//#pragma pack(pop)
 
 //*************************************************
 //* TElem                                         *

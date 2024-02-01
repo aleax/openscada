@@ -125,7 +125,7 @@ void UPS::getVal( TMdPrm *prm )
 			    flg |= TFld::Selectable;
 			}
 			// Create
-			((TElem*)prm->daData)->fldAdd(new TFld(aid.c_str(),descr.c_str(),TFld::String,flg,vLen.c_str(),"",selLs.c_str(),selLs.c_str(),vid.c_str()));
+			((TElem*)prm->daData)->fldAdd(new TFld(aid.c_str(),descr,TFld::String,flg,vLen.c_str(),"",selLs,selLs,vid.c_str()));
 		    }
 		    prm->vlAt(aid).at().setS(aVal, 0, true);
 		    als.push_back(aid);

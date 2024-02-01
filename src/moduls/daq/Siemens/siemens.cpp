@@ -43,7 +43,7 @@
 #define MOD_NAME	trS("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"4.5.0"
+#define MOD_VER		"4.5.1"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -97,7 +97,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("TM_REST",trS("Restore timeout, seconds"),TFld::Integer,TFld::NoFlag,"4","30","1;3600"));
     fldAdd(new TFld("ASINC_WR",trS("Asynchronous write mode"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fldAdd(new TFld("TYPE",trS("Connection type"),TFld::Integer,TFld::Selectable,"1","0",
-	TSYS::strMess("%d;%d;%d;%d;%d",TMdContr::CIF_PB,TMdContr::ISO_TCP,TMdContr::ISO_TCP243,TMdContr::ADS,TMdContr::SELF_ISO_TCP).c_str(),
+	TSYS::strMess("%d;%d;%d;%d;%d",TMdContr::CIF_PB,TMdContr::ISO_TCP,TMdContr::ISO_TCP243,TMdContr::ADS,TMdContr::SELF_ISO_TCP),
 	"CIF_PB;ISO_TCP (LibnoDave);ISO_TCP243 (LibnoDave);ADS;ISO_TCP"));
     fldAdd(new TFld("ADDR",trS("Remote controller address"),TFld::String,TFld::NoFlag,"100","10"));
     fldAdd(new TFld("ADDR_TR",trS("Output transport"),TFld::String,TFld::NoFlag,"40"));
@@ -2057,8 +2057,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	    elem().fldAt(aId).setLen(SYS->sysTm());
 	}
 	else if(!vlPresent(prms[0].getS()))
-	    elem().fldAdd(new TFld(prms[0].getS().c_str(),prms[(prms.size()>=2)?1:0].getS().c_str(),tp,flg,
-				    i2s(SYS->sysTm()).c_str(),"",sVals.c_str(),sNms.c_str()));
+	    elem().fldAdd(new TFld(prms[0].getS().c_str(),prms[(prms.size()>=2)?1:0].getS(),tp,flg,i2s(SYS->sysTm()).c_str(),"",sVals,sNms));
 	return true;
     }
     //bool attrDel( string id ) - attribute <id> remove.

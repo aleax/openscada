@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: session.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -2632,8 +2632,8 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	string tStr = TSYS::pathLev(a_path, 2);
 	//Visualizer specific attributes creation at the request
 	if(!attrPresent(tStr) && opt->attr("aNm").size()) {
-	    parent().at().attrAdd(new TFld(tStr.c_str(),opt->attr("aNm").c_str(),(TFld::Type)s2i(opt->attr("aTp")),
-			s2i(opt->attr("aFlg"))|Attr::IsUser,"",opt->text().c_str(),opt->attr("aVls").c_str(),opt->attr("aNms").c_str()));
+	    parent().at().attrAdd(new TFld(tStr.c_str(),opt->attr("aNm"),(TFld::Type)s2i(opt->attr("aTp")),
+			s2i(opt->attr("aFlg"))|Attr::IsUser,"",opt->text().c_str(),opt->attr("aVls"),opt->attr("aNms")));
 	    parent().at().attrAt(tStr).at().setAModif_(1);
 	    parent().at().modif();
 	}

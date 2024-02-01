@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.ModBus file: modbus_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -51,9 +51,9 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
     mNodeEl.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,0,"1","0"));
     mNodeEl.fldAdd(new TFld("ADDR",trS("Address"),TFld::Integer,0,"3","1","1;247"));
     mNodeEl.fldAdd(new TFld("InTR",trS("Input transport"),TFld::String,0,i2s(limObjID_SZ).c_str(),"*"));
-    mNodeEl.fldAdd(new TFld("PRT",trS("Protocol"),TFld::String,TFld::Selectable,"5","*","RTU;ASCII;TCP;*",_("RTU;ASCII;TCP/IP;All")));
+    mNodeEl.fldAdd(new TFld("PRT",trS("Protocol"),TFld::String,TFld::Selectable,"5","*","RTU;ASCII;TCP;*",trS("RTU;ASCII;TCP/IP;All")));
     mNodeEl.fldAdd(new TFld("MODE",trS("Mode"),TFld::Integer,TFld::Selectable,"1","0",
-	TSYS::strMess("%d;%d;%d",Node::MD_DATA,Node::MD_GT_ND,Node::MD_GT_NET).c_str(),_("Data;Gateway node;Gateway net")));
+	TSYS::strMess("%d;%d;%d",Node::MD_DATA,Node::MD_GT_ND,Node::MD_GT_NET),trS("Data;Gateway node;Gateway net")));
     mNodeEl.fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec));
     // For "Data" mode
     mNodeEl.fldAdd(new TFld("DT_PER",trS("Period of the data calculation, seconds"),TFld::Real,0,"5.3","1","0.001;99"));
@@ -61,7 +61,7 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
     mNodeEl.fldAdd(new TFld("DT_PROG",trS("Procedure"),TFld::String,TFld::TransltText,"1000000"));
     // For "Gateway" mode
     mNodeEl.fldAdd(new TFld("TO_TR",trS("To output transport"),TFld::String,0,i2s(limObjID_SZ).c_str()));
-    mNodeEl.fldAdd(new TFld("TO_PRT",trS("To protocol"),TFld::String,TFld::Selectable,"5","RTU","RTU;ASCII;TCP","RTU;ASCII;TCP/IP"));
+    mNodeEl.fldAdd(new TFld("TO_PRT",trS("To protocol"),TFld::String,TFld::Selectable,"5","RTU","RTU;ASCII;TCP"));
     mNodeEl.fldAdd(new TFld("TO_ADDR",trS("To address"),TFld::Integer,0,"3","1","1;247"));
 
     //Node data IO DB structure

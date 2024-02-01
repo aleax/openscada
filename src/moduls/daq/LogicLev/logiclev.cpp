@@ -39,7 +39,7 @@
 #define MOD_NAME	trS("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.9.0"
+#define MOD_VER		"2.9.1"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -617,8 +617,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	    pEl.fldAt(aId).setLen(SYS->sysTm());
 	}
 	else if(!vlPresent(prms[0].getS()))
-	    pEl.fldAdd(new TFld(prms[0].getS().c_str(),prms[(prms.size()>=2)?1:0].getS().c_str(),tp,flg,
-				i2s(SYS->sysTm()).c_str(),"",sVals.c_str(),sNms.c_str()));
+	    pEl.fldAdd(new TFld(prms[0].getS().c_str(),prms[(prms.size()>=2)?1:0].getS(),tp,flg,i2s(SYS->sysTm()).c_str(),"",sVals,sNms));
 	return true;
     }
     //bool attrDel( string id ) - attribute <id> remove.

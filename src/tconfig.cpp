@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tconfig.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -193,12 +193,6 @@ void TConfig::cntrCmdMake( XMLNode *opt, const string &path, int pos, const stri
 
 void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user, const string &grp, int perm )
 {
-    if(elem.find("sel_") == 0 && TCntrNode::ctrChkNode(opt)) {
-	TFld &n_e_fld = cfg(elem.substr(4)).fld();
-	for(unsigned iA = 0; iA < n_e_fld.selNm().size(); iA++)
-	    opt->childAdd("el")->setText(n_e_fld.selNm()[iA]);
-	return;
-    }
     TCfg &cel = cfg(elem);
     if(TCntrNode::ctrChkNode(opt,"get",(cel.fld().flg()&TFld::NoWrite)?(perm&~_W_W_W):perm,user.c_str(),grp.c_str(),SEC_RD)) {
 	if(cel.fld().type() == TFld::String && (cel.fld().flg()&TFld::TransltText))
@@ -355,19 +349,6 @@ void TCfg::toDefault( bool notSetType )
     }
 }
 
-string TCfg::getSEL( )
-{
-    if(!(mFld->flg()&TFld::Selectable))	throw TError("Cfg", _("Element type is not selective!"));
-    switch(type()) {
-	case TVariant::String:	return mFld->selVl2Nm(getS());
-	case TVariant::Integer:	return mFld->selVl2Nm(getI());
-	case TVariant::Real:	return mFld->selVl2Nm(getR());
-	case TVariant::Boolean:	return mFld->selVl2Nm(getB());
-	default: break;
-    }
-    return "";
-}
-
 string TCfg::getS( ) const
 {
     mOwner.mRes.lock();
@@ -468,9 +449,11 @@ void TCfg::setR( double ival )
 	case TVariant::Integer:	setI((ival==EVAL_REAL) ? EVAL_INT : (int64_t)ival);	break;
 	case TVariant::Boolean:	setB((ival==EVAL_REAL) ? EVAL_BOOL : (bool)ival);	break;
 	case TVariant::Real: {
-	    if(!(mFld->flg()&TFld::Selectable) && mFld->selValR()[0] < mFld->selValR()[1])
-		ival = vmin(mFld->selValR()[1], vmax(mFld->selValR()[0],ival));
-	    double tVal = TVariant::getR();
+	    double tVal, tMinV, tMaxV;
+	    if(!(mFld->flg()&TFld::Selectable) && mFld->values().size() &&
+		    (tMinV=s2r(TSYS::strParse(mFld->values(),0,";"))) < (tMaxV=s2r(TSYS::strParse(mFld->values(),1,";"))))
+		ival = vmin(tMaxV, vmax(tMinV,ival));
+	    tVal = TVariant::getR();
 	    TVariant::setR(ival);
 	    bool mInCfgCh_ = mInCfgCh;
 	    try {
@@ -496,9 +479,11 @@ void TCfg::setI( int64_t ival )
 	case TVariant::Real:	setR((ival==EVAL_INT) ? EVAL_REAL : ival);	break;
 	case TVariant::Boolean:	setB((ival==EVAL_INT) ? EVAL_BOOL : (bool)ival);break;
 	case TVariant::Integer: {
-	    if(!(mFld->flg()&TFld::Selectable) && mFld->selValI()[0] < mFld->selValI()[1])
-		ival = vmin(mFld->selValI()[1], vmax(mFld->selValI()[0],ival));
-	    int tVal = TVariant::getI();
+	    int64_t tVal, tMinV, tMaxV;
+	    if(!(mFld->flg()&TFld::Selectable) && mFld->values().size() &&
+		    (tMinV=s2ll(TSYS::strParse(mFld->values(),0,";"))) < (tMaxV=s2ll(TSYS::strParse(mFld->values(),1,";"))))
+		ival = vmin(tMaxV, vmax(tMinV,ival));
+	    tVal = TVariant::getI();
 	    TVariant::setI(ival);
 	    bool mInCfgCh_ = mInCfgCh;
 	    try {
@@ -539,18 +524,6 @@ void TCfg::setB( char ival )
 	    }
 	    break;
 	}
-	default: break;
-    }
-}
-
-void TCfg::setSEL( const string &ival, uint8_t RqFlg )
-{
-    if(!(mFld->flg()&TFld::Selectable)) throw TError("Cfg", _("Element type is not selective!"));
-    switch(type()) {
-	case TVariant::String:	setS(mFld->selNm2VlS(ival), RqFlg);	break;
-	case TVariant::Integer:	setI(mFld->selNm2VlI(ival), RqFlg);	break;
-	case TVariant::Real:	setR(mFld->selNm2VlR(ival), RqFlg);	break;
-	case TVariant::Boolean:	setB(mFld->selNm2VlB(ival), RqFlg);	break;
 	default: break;
     }
 }
