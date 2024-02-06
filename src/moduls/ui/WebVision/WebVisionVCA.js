@@ -25,8 +25,9 @@ var isOpera = navigator.appName.indexOf('Opera') != -1;
 var isKonq = navigator.userAgent.indexOf('Konqueror') != -1;
 var mainTmId = 0;
 var gPrms = window.location.search || '';
-var tmClearEdit = 10;			//Clear time of line edit fields, seconds
-var tmFullUpd = 5;			//Full tree updating time,seconds
+var tmClearEdit = 10;			//Time of clearing the line edit fields, seconds
+var tmConfirmEdit = 2;			//Time of confirming the line edit fields, seconds
+var tmFullUpd = 5;			//Full tree updating time, seconds
 var tmAlrmUpd = 0.5;			//Alarms updating time, seconds
 var limTblItmCnt = 300;			//Limit of the table item content
 var tblCurClr = "lightblue";		//Table cursor color
@@ -231,7 +232,7 @@ function servGet( adr, prm, callBack, callBackPrm )
 	req.onreadystatechange = function( ) {
 	    if(this.readyState != 4) return;
 	    if(this.status != 200) window.location.reload();
-	    else if(this.responseXML && this.responseXML.childNodes.length) {
+	    else if(this.responseXML && this.responseXML.childNodes && this.responseXML.childNodes.length) {
 		this.responseXML.childNodes[0].callBackPrm = this.callBackPrm;
 		this.callBack(this.responseXML.childNodes[0]);
 	    }
@@ -682,6 +683,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 		if(toCrtStBar) {
 		    stBar = "<table width='100%'><TR><td id='StatusBar' width='100%'/>";
+		    stBar += "<td id='st_man' title='###Field of getting the project manual.###'>"+
+				"<a href='"+location.pathname+"?com=manual' target='_blank'>"+
+				    "<img height='"+(masterPage.status.height-2)+"px' src='/"+MOD_ID+"/img_manual'/></a></td>";
 		    stBar += "<td id='st_export' title='###Field for printing and exporting data.###'>"+
 			     "<img onclick='printElData(event)' height='"+(masterPage.status.height-2)+"px' src='/"+MOD_ID+"/img_print' style='cursor: pointer;'/>"+
 			     "<img onclick='exportElData(event)' height='"+(masterPage.status.height-2)+"px' src='/"+MOD_ID+"/img_export' style='cursor: pointer;'/></td>";
@@ -1042,6 +1046,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    var toInit = !this.place.childNodes.length;
 		    var formObj = toInit ? this.place.ownerDocument.createElement('input') : this.place.childNodes[0];
 		    this.place.view = parseInt(this.attrs['view']);
+		    this.place.confirm = parseInt(this.attrs['confirm']);
 
 		    if(toInit || comElMdf || this.attrsMdf['geomH'] || this.attrsMdf['geomW'] || this.attrsMdf['font']) {
 			brdW = (bordStyle?parseInt(bordStyle):1) + 1;
@@ -1068,6 +1073,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(!toInit) break;
 		    formObj.wdgLnk = this;
 		    formObj.disabled = !elWr;
+
 		    this.place.appendChild(formObj);
 		    if(elWr) {
 			switch(this.place.view) {
@@ -1259,7 +1265,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				}
 				break;
 			}
-			formObj.onmousedown = function(e) { this.setModify(true); }
+			formObj.onmousedown = function(e) { if(this.parentNode.confirm) this.setModify(true); }
 			formObj.onkeyup = function(e) {
 			    e.stopImmediatePropagation();
 			    if(this.modify() && e.keyCode == 13) this.chApply();
@@ -1267,29 +1273,37 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    if(this.saveVal != this.value) this.setModify(true);
 			    return true;
 			}
-			formObj.onkeydown = function(e) { e.stopImmediatePropagation(); return true; }
+			formObj.onkeydown = function(e)	{ e.stopImmediatePropagation(); return true; }
 			formObj.oncontextmenu = function(e) { e.stopImmediatePropagation(); return true; }
-			formObj.modify = function( )
-			{ return (this.parentNode.children[this.parentNode.children.length-1].style.visibility == 'visible'); }
+			formObj.modify = function( )	{ return this.parentNode.isModify; }
 			formObj.setModify = function(on) {
-			    if(on && this.tmClearEdit) this.tmClearEdit = tmClearEdit;
+			    if(on && this.tmClearEdit)
+				this.tmClearEdit = this.parentNode.confirm ? tmClearEdit : tmConfirmEdit;
 			    if(this.modify() == on) return;
 			    var posOkImg = this.parentNode.children.length-1;
 			    var okImg = this.parentNode.children[posOkImg];
 			    if(on) {
-				this.style.width = (parseInt(this.style.width)-applySz)+'px';
-				if(posOkImg == 2)
-				    this.parentNode.children[1].style.left = (parseInt(this.parentNode.children[1].style.left)-applySz)+'px';
-				okImg.style.visibility = 'visible';
-				this.wdgLnk.perUpdtEn(true); this.tmClearEdit = tmClearEdit;
+				if(this.parentNode.confirm) {
+				    this.style.width = (parseInt(this.style.width)-applySz)+'px';
+				    if(posOkImg == 2)
+					this.parentNode.children[1].style.left = (parseInt(this.parentNode.children[1].style.left)-applySz)+'px';
+				    okImg.style.visibility = 'visible';
+				}
+				else { this.style.borderBottomColor = "red"; this.style.borderBottomWidth = "3px"; }
+
+				this.wdgLnk.perUpdtEn(true); this.tmClearEdit = this.parentNode.confirm ? tmClearEdit : tmConfirmEdit;
 			    }
 			    else {
-				this.style.width = (parseInt(this.style.width)+applySz)+'px';
-				if(posOkImg == 2)
-				    this.parentNode.children[1].style.left = (parseInt(this.parentNode.children[1].style.left)+applySz)+'px';
-				okImg.style.visibility = 'hidden';
+				if(this.parentNode.confirm) {
+				    this.style.width = (parseInt(this.style.width)+applySz)+'px';
+				    if(posOkImg == 2)
+					this.parentNode.children[1].style.left = (parseInt(this.parentNode.children[1].style.left)+applySz)+'px';
+				    okImg.style.visibility = 'hidden';
+				    if(this.cldrDlg) this.cldrDlg.style.visibility = 'hidden';
+				}
+				else { this.style.borderBottomColor = this.style.borderTopColor; this.style.borderBottomWidth = this.style.borderTopWidth; }
+
 				this.wdgLnk.perUpdtEn(false); this.tmClearEdit = 0;
-				if(this.cldrDlg) this.cldrDlg.style.visibility = 'hidden';
 			    }
 			    this.parentNode.isModify = on;
 			}
@@ -1536,37 +1550,36 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    formObj.modify = function( ) { return (this.parentNode.childNodes[1].style.visibility == 'visible'); }
 		    formObj.setModify = function(on) {
 			if(this.modify() == on) return;
+
+			if((this.nextSibling.offsetWidth+this.nextSibling.nextSibling.offsetWidth) > this.offsetWidth)
+			    this.nextSibling.nextSibling.setText('');
+			if(this.nextSibling.offsetWidth > this.offsetWidth)
+			    this.nextSibling.lastChild.setText('');
+
 			if(on) {
-			    this.style.height = (parseInt(this.style.height)-applySz)+'px';
-			    this.parentNode.childNodes[1].style.visibility = this.parentNode.childNodes[2].style.visibility = 'visible';
+			    this.style.height = (parseInt(this.style.height)-this.nextSibling.offsetHeight)+'px';
+			    this.nextSibling.style.visibility = this.nextSibling.nextSibling.style.visibility = 'visible';
 			}
 			else {
-			    this.style.height = (parseInt(this.style.height)+applySz)+'px';
-			    this.parentNode.childNodes[1].style.visibility = this.parentNode.childNodes[2].style.visibility = 'hidden';
+			    this.style.height = (parseInt(this.style.height)+this.nextSibling.offsetHeight)+'px';
+			    this.nextSibling.style.visibility = this.nextSibling.nextSibling.style.visibility = 'hidden';
 			}
 		    }
-		    var okImg = this.place.ownerDocument.createElement('img');
-		    okImg.src = '/'+MOD_ID+'/img_button_ok';
-		    okImg.style.cssText = 'visibility: hidden; position: absolute; left: '+(geomW-2*applySz)+'px; '+
-					  'top: '+(geomH-applySz)+'px; width: '+applySz+'px; height: '+applySz+'px; cursor: pointer;';
-		    okImg.onclick = function( ) {
-			var attrs = new Object();
-			attrs.value = this.parentNode.childNodes[0].value; attrs.event = 'ws_TxtAccept';
-			setWAttrs(this.parentNode.childNodes[0].wdgLnk.addr,attrs);
-			this.parentNode.childNodes[0].setModify(false);
-			return false;
-		    };
-		    var cancelImg = this.place.ownerDocument.createElement('img');
-		    cancelImg.src = '/'+MOD_ID+'/img_button_cancel';
-		    cancelImg.style.cssText = 'visibility: hidden; position: absolute; left: '+(geomW-applySz)+'px; top: '+(geomH-applySz)+'px; width: '+applySz+'px; height: '+applySz+'px; cursor: pointer;';
-		    cancelImg.onclick = function( ) {
-			this.parentNode.childNodes[0].value = this.parentNode.childNodes[0].saveVal;
-			this.parentNode.childNodes[0].setModify(false);
-			return false;
-		    };
 		    this.place.appendChild(formObj);
-		    this.place.appendChild(okImg);
-		    this.place.appendChild(cancelImg);
+		    this.place.appendChild(getButton('img_button_ok','###Apply###',applySz));
+		    this.place.appendChild(getButton('img_button_cancel','###Cancel###',applySz));
+		    formObj.nextSibling.onclick = function( ) {
+			var attrs = new Object();
+			attrs.value = this.parentNode.firstChild.value; attrs.event = 'ws_TxtAccept';
+			setWAttrs(this.parentNode.firstChild.wdgLnk.addr,attrs);
+			this.parentNode.firstChild.setModify(false);
+			return false;
+		    };
+		    formObj.nextSibling.nextSibling.onclick = function( ) {
+			this.parentNode.firstChild.value = this.parentNode.firstChild.saveVal;
+			this.parentNode.firstChild.setModify(false);
+			return false;
+		    };
 		    break;
 		case 2:	//Chek box
 		    this.place.classList.add("vertalign");
@@ -2784,8 +2797,10 @@ function perUpdt( )
 
 	    this.place.onscroll(null, true);
 	}
-	else if(this.place.childNodes.length && this.place.childNodes[0].tmClearEdit && (this.place.childNodes[0].tmClearEdit-=prcTm) <= 0)
-	    this.place.childNodes[0].chEscape();
+	else if(this.place.childNodes.length && this.place.firstChild.tmClearEdit && (this.place.firstChild.tmClearEdit-=prcTm) <= 0) {
+	    if(this.place.confirm) this.place.firstChild.chEscape();
+	    else this.place.firstChild.chApply();
+	}
     }
     else if(this.attrs['root'] == 'Diagram' && (this.updCntr-=prcTm) <= 0) {
 	this.updCntr = parseInt(this.attrs['trcPer']);
@@ -3123,6 +3138,29 @@ function getTree( )
     }
 
     return formObj;
+}
+
+/**************************************************
+ * getButton - Get button with an image           *
+ **************************************************/
+function getButton( imgFile, textLab, bHeight )
+{
+    var butObj = document.createElement('button');
+    butObj.style.cssText = 'visibility: hidden; height: auto; width: auto; cursor: pointer; text-align: left; float: right;';
+    var imgObj = document.createElement('img');
+    imgObj.src = '/'+MOD_ID+'/'+imgFile;
+    if(bHeight) imgObj.height = bHeight-4;
+    imgObj.style.cssText = 'float: left;';
+    butObj.appendChild(imgObj);
+    var spanObj = document.createElement('span');
+    spanObj.innerText = textLab;
+    butObj.appendChild(spanObj);
+
+    butObj.onmouseup = function(e) { this.classList.remove("pressed"); }
+    butObj.onmousedown = function(e) { this.classList.add("pressed"); }
+    butObj.setText = function(tVal) { this.lastChild.innerText = tVal; }
+
+    return butObj;
 }
 
 /***************************************************

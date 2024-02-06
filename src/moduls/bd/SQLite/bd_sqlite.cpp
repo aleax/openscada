@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.SQLite file: bd_sqlite.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"4.0.11"
+#define MOD_VER		"4.0.12"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -130,7 +130,7 @@ void MBD::enable( )
     }
 
     string fnm = TSYS::strSepParse(addr(), 0, ';');
-    remove((fnm+"-journal").c_str());
+    //remove((fnm+"-journal").c_str());	//!!!! There can be several processes-services who open the file and create journal
 
     cd_pg = codePage().size() ? codePage() : Mess->charset();
     int rc = sqlite3_open(fnm.c_str(), &m_db);

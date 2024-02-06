@@ -1372,7 +1372,8 @@ void TMdPrm::upValStd( )
     elem().fldList(ls);
     for(unsigned iEl = 0; iEl < ls.size(); iEl++) {
 	pVal = vlAt(ls[iEl]);
-	if(!(pVal.at().fld().flg()&TVal::DirRead) || (pVal.at().fld().flg()&TVal::Dynamic) || owner().inWr(pVal.at().fld().reserve())) continue;
+	if(!(pVal.at().fld().flg()&TVal::DirRead) || (pVal.at().fld().flg()&TVal::Dynamic) || owner().inWr(pVal.at().fld().reserve()))
+	    continue;
 	pVal.at().set(owner().getVal(pVal.at().fld().reserve(),w_err), 0, true);
     }
 

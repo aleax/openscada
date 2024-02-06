@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/OPC UA</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FOPC+UA&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/OPC_UA" title="Modules/OPC UA">Modules/OPC UA</a> and the translation is 99% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/OPC_UA.html" title="Modules/OPC UA (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/OPC_UA.html" title="Модулі/OPC UA (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FOPC+UA&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/OPC_UA" title="Modules/OPC UA">Modules/OPC UA</a> and the translation is 98% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/OPC_UA.html" title="Modules/OPC UA (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/OPC_UA.html" title="Модулі/OPC UA (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
 <td> Клиент OPC-UA
 </td>
-<td> 2.7 </td>
+<td> 2.8 </td>
 <td> GPL2 </td>
 <td> daq_OPC_UA.so </td>
 <td> en,uk,ru,de </td>
@@ -227,22 +227,24 @@
 <h3><span class="mw-headline" id=".D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="mw-headline-number">3.1</span> Объект контроллера</span></h3>
 <p>Для добавления источника данных OPC-UA создаётся и конфигурируется объект контроллера в OpenSCADA. Пример вкладки конфигурации объекта контроллера данного типа изображен на рисунке 4.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:778px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_main.png"><img class="thumbimage" height="802" src="../../en/files/OPC-UA_cntr_main.png" width="776" /></a>  <div class="thumbcaption">Рис.4. Вкладка конфигурации объекта контроллера OPC-UA.</div></div></div></div>
-<p>С помощью этой вкладки можно установить:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:804px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_main.png"><img class="thumbimage" height="817" src="../../en/files/OPC-UA_cntr_main.png" width="802" /></a>  <div class="thumbcaption">Рис.4. Вкладка конфигурации объекта контроллера OPC-UA.</div></div></div></div>
+<p>From this tab you can set:
 </p>
-<ul><li> Состояние объекта контроллера, а именно: Статус, "Включен", "Выполняется" и имя БД, содержащей конфигурацию.</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Ручной перезапуск включенного объекта контроллера вызывает принудительное переформирование перечня элементов мониторинга.</dd></dl>
-<ul><li> Идентификатор, имя и описание контроллера.</li>
-<li> Состояние "Включен" и "Выполняется", в которое переводить объект контроллера при загрузке.</li>
-<li> Политика планирования и приоритет задачи сбора данных.</li>
-<li> Период синхронизации конфигурации атрибутов параметров с удалённой станцией, а также время повтора попыток восстановления подключения.</li>
-<li> URL конечного узла удалённой станции — сервера OPC-UA. Вначале этот адрес можно указать в виде "<b>opc.tcp://{IP|name}:{port}</b>", после чего, в случае включения объекта контроллера и наличия указанного OPC-UA узла, появится возможность выбрать уточнённый адрес.</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Часто встречается ситуация, когда уточнённый адрес является символьным, который в этой сети не резолвится, из-за некорректной настройки сервера. В таких случаях нужно оставить исходный IP-адрес или имя которое резолвится в IP правильно.</dd></dl>
-<ul><li> Политика безопасности и режим безопасности сообщения.</li>
-<li> Сертификат клиента и приватный ключ в формате PEM.</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Спрятано в состоянии исполнения.</dd></dl>
-<ul><li> Пользователь и пароль для аутентификации на сервере, пустое значение включает анонимный доступ.</li>
-<li> Использовать функцию "Read", иначе активируется и используется сервис сбора данных Publish (асинхронный) протокола OPC-UA.</li></ul>
+<ul><li> The state of the controller object, as follows: Status, "Enabled", "Running" and the name of the database containing the configuration.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Manual restart of the enabled controller object causes the force reformation of the monitored items list.</dd></dl>
+<ul><li> Identifier, name and description of the controller.</li>
+<li> The state "Enabled" and "Running", in which the controller object must be translated at boot.</li>
+<li> Scheduling policy and priority of the task of the data acquisition.</li>
+<li> Period of synchronization of the configuration of attributes of the parameters with the remote station, and try time for the connection restore.</li>
+<li> URL of the endpoint node of the remote station — OPC-UA server. In begin, the address you can point as "<b>opc.tcp://{IP|name}:{port}</b>", after that, at the controller's object enable and allowing the pointed OPC-UA node, there will be emerged to select the refined address.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Often there meets a situation when the refined address is symbolic which does not resolve into the network by the server incorrect configuration. In this cases you need to keep the original IP-address or the name which resolved to the correct IP.</dd></dl>
+<ul><li> Security policy and mode of the messaging security.</li>
+<li> Client certificate and private key in the PEM format.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Hidden in the running state.</dd></dl>
+<ul><li> User and password to authenticate on the server, empty value here enable the anonymous access.</li>
+<li> Asynchronous write. Enables asynchronously writing of the changes to the controller, in the general acquisition cycle and after the data acquisition itself, blocking of reading the written values on one cycle (before the writing buffer clearing).</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> This mode also prevents for loss the writing data at the connection loss and the wrote data will be transmitted just the connection will be restored.</dd></dl>
+<ul><li> Use the "Read" function, otherwise there is activated and used the Publish (asynchronous) data acquisition service of the OPC-UA protocol.</li></ul>
 <p>С целью облегчения идентификации узлов на удалённой станции, а также выбора их для вставки в объекте параметра контроллера, в самом объекте контроллера предусмотрена вкладка навигации по узлам удалённой станции "Обзор узлов сервера", где можно пройти по дереву объектов и ознакомится с их атрибутами (рис.5).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:729px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_browse_ru.png"><img class="thumbimage" height="671" src="../files/OPC-UA_cntr_browse_ru.png" width="727" /></a>  <div class="thumbcaption">Рис.5. Вкладка "Обзор узлов сервера" страницы объекта контроллера OPC-UA.</div></div></div></div>
@@ -973,5 +975,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/ru">Modules/OPC_UA/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2946</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/ru">Modules/OPC_UA/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2951</td></tr></table></body>
 </html>

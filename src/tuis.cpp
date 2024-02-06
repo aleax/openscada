@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tuis.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -201,6 +201,7 @@ string TUIS::mimeGet( const string &inm, const string &fDt, const string &orig )
     else if(strcasecmp(tvl,"vcs") == 0)					prc = "text/vcalendar";
     else if(strcasecmp(tvl,"vcf") == 0 || strcasecmp(tvl,"vct") == 0)	prc = "text/vcard";
     else if(strcasecmp(tvl,"pdf") == 0)					prc = "application/pdf";
+    else if(strcasecmp(tvl,"odt") == 0)					prc = "application/vnd.oasis.opendocument.text";
     // Images
     else if(strcasecmp(tvl,"png") == 0)					prc = "image/png";
     else if(strcasecmp(tvl,"jpg") == 0 || strcasecmp(tvl,"jpeg") == 0)	prc = "image/jpg";

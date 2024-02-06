@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Works/To do</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint nomobile" dir="ltr" lang="en">This page contains <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Works/To_do&amp;oldid=82586&amp;diff=82649" rel="nofollow noreferrer noopener" target="_blank">changes</a></span> which are not marked for translation.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span></div></div>
 <p>On this page you can get a "To Do" list and a tasks pool of the project. The "To Do" list is not connected to the time ranks, but it is structured by subsystems. The "To Do" list and pool are provided to represent the general development picture, and to post notes for the developers' examination. The developers can append, apply and note the tasks for themselves.
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -118,7 +118,7 @@
 <tr>
 <td>
 <h3><span class="mw-headline" id="Testing.2C_optimization_and_fixing"><span class="mw-headline-number">4</span> <span id="TestOptFix" title="#TestOptFix">Testing, optimization and fixing</span></span></h3>
-<ul><li> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> [TESTING] Implement the asynchronous writing with a function of preventing the data loss on the time of the connection missing for the key DAQ-modules of the OpenSCADA internal procedures: <a href="Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a>, <a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DCON</a>. The function is currently tested on the module <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> and preventing the data loss must be expanded here for the synchronous writing also.</li>
+<ul><li> (+) Implement the asynchronous writing with a function of preventing the data loss on the time of the connection missing for the key DAQ-modules of the OpenSCADA internal procedures.</li>
 <li> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> [TESTING] Expanding the <a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">output transport generic obtaining from the unified address</a> often without separate creation the output transport object. The function is currently tested on the module <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>.</li>
 <li> <i>UI.{Vision,WebVision}</i>: Complete revision of the primitive "ElFigure" implementation, what needs:</li></ul>
 <dl><dd>- BUG: selecting multiple figures at hold the key "Ctrl";</dd>
@@ -135,6 +135,7 @@
 <dl><dd> - develop a mechanism for tracking the irrelevance of messages in the table "Trs"
 <dl><dd>&nbsp;?&gt; it is possible to add to the table "Trs" a field of options where to specify time of update-registration and at compilation or execution, accordingly to clear too old and updated-registered at compilation</dd></dl></dd></dl>
 <ul><li> (+) Develop the text highlighting rules building in the comments of the custom text rules.</li>
+<li> Expand dimension of the internal time from microseconds and up to nanoseconds. Previously append support for PicoScope 2000.</li>
 <li> Work out for developing, using, integration to solutions, concept of the OpenSCADA project support. Expand the community by targeting on the implementation control of:
 <ul><li> tasks: tasks pool, fund and fundraising; developers register, ranks for participate into the tasks.</li>
 <li> solutions: register a task of the solution implementation (by consumer), set demands to the task and performer, set the price limit; each performer propose self price; consumer select a performer. Commission from the order price to the project is 10%.</li></ul></li>
@@ -143,7 +144,8 @@
 <dd>- update the building environment to Android 10, unify and archive the old environments (the first try in the chroot Android_5_TRY.txz), append the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automatic_Builder_of_OpenSCADA" title="Special:MyLanguage/Sub-projects/Automatic Builder of OpenSCADA">building procedures</a> by targets of automatic building the Android packages;</dd>
 <dd>- build Qt6 with WebEngine and Multimedia support;</dd>
 <dd>- append all external windows of the runtime mode of the module Vision for items of their closing and for centring.</dd></dl>
-<ul><li> Adapt to the software platform QNX:</li></ul>
+<ul><li> Move completely from GD2 to SVG on Web, that is: the Diagram primitive, the ElFig primitive with complete refactoring.</li>
+<li> Adapt to the software platform QNX:</li></ul>
 <dl><dd>+ get for some QNX platform representation =&gt; due to the deep closing, but yet using OpenSource, this OS is not allowed in free and there was bought a used hardware based on BlackBerry, that is "BB PlayBook", that is not actual already due to the main supporting resources are <span style="color: red">DEAD</span>;</dd>
 <dd>- start an adaption subproject and place here <a class="external text" href="http://oscada.org/ua/forum/posts/raznoe/popytka_adaptacii_openscada_k_qnx_65/" rel="nofollow noreferrer noopener" target="_blank">the preadaption achievements</a> from Sergey Doroshka;</dd>
 <dd>- build the pure console program;</dd>
@@ -241,7 +243,7 @@
 <dd> + expand the view "Table" of the primitive "FormEl" for user sorting by the selected column;</dd>
 <dd> * expand the status-bar, with the functions:
 <dl><dd> + export;</dd>
-<dd> - call of the project documents;</dd>
+<dd> + call of the project documents;</dd>
 <dd> + alarming-notification by sound and speech.</dd></dl></dd>
 <dd> - ElFigure,Diagram: enable or make the anti aliasing, for the library GD;</dd>
 <dd> - implement the primitives "Diagram", "ElFigure" in the tag "SVG";</dd>
@@ -268,5 +270,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Works/To_do/en">Works/To_do/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2946</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Works/To_do/en">Works/To_do/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2951</td></tr></table></body>
 </html>

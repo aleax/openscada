@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.AMRDevs file: da_Kontar.h
 /***************************************************************************
- *   Copyright (C) 2014-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2014-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -73,7 +73,7 @@ class Kontar: public TTypeParam
 	Kontar( );
 	~Kontar( );
 
-	string DB( TController *cntr )	{ return mod->modId()+"KontarPrm_"+cntr->id(); }
+	string DB( const TController *cntr ) const	{ return mod->modId()+"KontarPrm_"+cntr->id(); }
 
 	void create( TParamContr *prm );
 	void destroy( TParamContr *prm );

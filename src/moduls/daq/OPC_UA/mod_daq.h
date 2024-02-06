@@ -46,7 +46,7 @@ using namespace OPC;
 #define DAQ_NAME	trS("Client OPC-UA")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"2.7.1"
+#define DAQ_MVER	"2.8.0"
 #define DAQ_AUTOR	trS("Roman Savochenko")
 #define DAQ_DESCR	trS("Provides OPC-UA client service implementation.")
 #define DAQ_LICENSE	"GPL2"
@@ -197,7 +197,7 @@ class TMdContr: public TController, public Client
 
 	// Values processing
 	TVariant getVal( const string &iaddr, MtxString &err );
-	bool setVal( const TVariant &ivl, const string &iaddr, MtxString &err );
+	bool setVal( const TVariant &ivl, const string &iaddr, MtxString &err, bool isGeneric = false );
 
     protected:
 	//Methods
@@ -209,6 +209,8 @@ class TMdContr: public TController, public Client
 
 	bool cfgChange( TCfg &co, const TVariant &pc );
 	void prmEn( TMdPrm *prm, bool val );
+
+	bool inWr( const string &addr );
 
 	// Service
 	void postDisable( int flag );		//Delete all DB if flag 1
@@ -222,7 +224,7 @@ class TMdContr: public TController, public Client
 	void setCntrDelay( const string &err );
 
 	//Attributes
-	ResMtx	enRes;
+	ResMtx	enRes, aWrRes;
 	ResRW	resOPC;		//Request and API-stack resource
 	TCfg	&mSched,	//Schedule
 		&mPrior,	//Process task priority
@@ -234,7 +236,8 @@ class TMdContr: public TController, public Client
 		&mPvKey,	//Client certificate's private key
 		&mAuthUser, &mAuthPass;	//Auth user and password
 	int64_t	&restTm;	//Restore timeout in seconds
-	char	&mUseRead;	//Use Read function
+	char	&mAsynchWr,	//Asynchronous write
+		&mUseRead;	//Use Read function
 	int64_t	mPer;
 
 	bool	prcSt,		//Process task active
@@ -248,6 +251,7 @@ class TMdContr: public TController, public Client
 
 	MtxString	acqErr;
 	map<string, SecuritySetting> epLst;
+	map<string, string> asynchWrs;	//Asynchronous writers list
 
 	float		tmDelay;	//Delay time for next try connect
 

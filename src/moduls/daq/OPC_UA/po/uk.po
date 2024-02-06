@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-24 16:23+0300\n"
+"POT-Creation-Date: 2024-02-06 08:32+0200\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -59,6 +59,9 @@ msgstr "Аутентиф.: користувач"
 
 msgid "Auth: password"
 msgstr "Аутентиф.: пароль"
+
+msgid "Asynchronous write"
+msgstr "Асинхронний запис"
 
 msgid "Use the \"Read\" function"
 msgstr "Використовувати функцію \"Read\""
@@ -112,6 +115,10 @@ msgstr "Наступний збір за cron '%s'. "
 #, c-format
 msgid "Spent time %s[%s], requests %.6g. "
 msgstr "Витрачено часу %s[%s], запитів %.6g. "
+
+#, c-format
+msgid "To write %d. "
+msgstr "До запису %d. "
 
 #, c-format
 msgid ""

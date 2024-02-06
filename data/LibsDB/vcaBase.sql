@@ -14028,7 +14028,8 @@ if(f_start || toUpdate) {
 					else {
 						nwO = this.wdgAdd("fItVal"+itVlId, "", "/wlb_originals/wdg_FormEl");
 						nwO.attrSet("geomX", itEdFormX+tVl2).attrSet("geomW", itEdFormW - tVl2)
-							.attrSet("geomY", itEdFormOff).attrSet("geomH", itEdFormLineHigh).attrSet("geomZ", geomZoff++).attrSet("active", 1);
+							.attrSet("geomY", itEdFormOff).attrSet("geomH", itEdFormLineHigh).attrSet("geomZ", geomZoff++)
+							.attrSet("active", 1).attrSet("confirm", 0);
 						itEdFormOff += itEdFormLineHigh;
 						//this.messInfo("TEST 00: "+itVlId+" > "+celO.tp);
 						if(celO.tp.search("bool","i") >= 0)
@@ -24121,7 +24122,7 @@ The frame provides currently and in future for next features:
   - detailed control panel-form of the selected item with the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.4.6
+Version: 1.4.7
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -24135,7 +24136,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - деталізована панель-форма керування обраним елементом зі специфічними полями.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.4.6
+Версія: 1.4.7
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');

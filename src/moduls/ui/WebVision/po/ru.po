@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-23 19:45+0200\n"
+"POT-Creation-Date: 2024-02-06 08:35+0200\n"
 "PO-Revision-Date: 2007-12-03 11:05+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -17,6 +17,9 @@ msgstr ""
 
 #, c-format
 msgid "Closing the file %d error '%s (%d)'!"
+msgstr ""
+
+msgid "The project manual was not found!"
 msgstr ""
 
 msgid "Resource not found"
@@ -100,8 +103,17 @@ msgstr ""
 "Рабочий пользовательский интерфейс, основанный на WEB - внешний интерфейс к "
 "движку СВУ."
 
+msgid "Apply"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
 msgid "Date and time"
 msgstr "Дата и время"
+
+msgid "View access is not permitted."
+msgstr "Отсутствует доступ для просмотра."
 
 msgid "Level"
 msgstr "Уровень"
@@ -120,9 +132,6 @@ msgstr "Готов"
 
 msgid "Page"
 msgstr "Страница"
-
-msgid "View access is not permitted."
-msgstr "Отсутствует доступ для просмотра."
 
 msgid "Today"
 msgstr "Сегодня"
@@ -197,6 +206,9 @@ msgid "Notificator %1"
 msgstr "Уведомитель %1"
 
 msgid "Field for printing and exporting data."
+msgstr ""
+
+msgid "Field of getting the project manual."
 msgstr ""
 
 #, fuzzy

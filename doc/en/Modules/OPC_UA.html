@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/OPC UA</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/OPC_UA.html" title="Модули/OPC UA (99% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/OPC_UA.html" title="Модулі/OPC UA (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/OPC_UA.html" title="Модули/OPC UA (98% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/OPC_UA.html" title="Модулі/OPC UA (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
 <td> Client OPC-UA
 </td>
-<td> 2.7 </td>
+<td> 2.8 </td>
 <td> GPL2 </td>
 <td> daq_OPC_UA.so </td>
 <td> en,uk,ru,de </td>
@@ -227,7 +227,7 @@
 <h3><span class="mw-headline" id="Controller_object"><span class="mw-headline-number">3.1</span> Controller object</span></h3>
 <p>To append the OPC-UA data source the controller's object into OpenSCADA is created and configured. An example of the configuration tab of the controller's object is shown in Figure 4.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:778px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_main.png"><img class="thumbimage" height="802" src="../files/OPC-UA_cntr_main.png" width="776" /></a>  <div class="thumbcaption">Fig.4. Configuration tab of the OPC-UA controller object.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:804px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_main.png"><img class="thumbimage" height="817" src="../files/OPC-UA_cntr_main.png" width="802" /></a>  <div class="thumbcaption">Fig.4. Configuration tab of the OPC-UA controller object.</div></div></div></div>
 <p>From this tab you can set:
 </p>
 <ul><li> The state of the controller object, as follows: Status, "Enabled", "Running" and the name of the database containing the configuration.</li></ul>
@@ -242,7 +242,9 @@
 <li> Client certificate and private key in the PEM format.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Hidden in the running state.</dd></dl>
 <ul><li> User and password to authenticate on the server, empty value here enable the anonymous access.</li>
-<li> Use the "Read" function, otherwise there is activated and used the Publish (asynchronous) data acquisition service of the OPC-UA protocol.</li></ul>
+<li> Asynchronous write. Enables asynchronously writing of the changes to the controller, in the general acquisition cycle and after the data acquisition itself, blocking of reading the written values on one cycle (before the writing buffer clearing).</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> This mode also prevents for loss the writing data at the connection loss and the wrote data will be transmitted just the connection will be restored.</dd></dl>
+<ul><li> Use the "Read" function, otherwise there is activated and used the Publish (asynchronous) data acquisition service of the OPC-UA protocol.</li></ul>
 <p>To facilitate the identification of nodes on the remote station, as well as their choice to be inserted in the parameter of the controller, in the controller's object it is provided the tab "Server nodes browser" of navigation on the remote station's nodes, where you can walk through the tree of objects and familiar with their attributes (Fig.5).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_browse.png"><img class="thumbimage" height="672" src="../files/OPC-UA_cntr_browse.png" width="687" /></a>  <div class="thumbcaption">Fig.5. The "Server nodes browser" tab of the OPC-UA controller object page.</div></div></div></div>
@@ -973,5 +975,5 @@ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./OPC-UA_openssl.c
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/en">Modules/OPC_UA/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2946</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/en">Modules/OPC_UA/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2951</td></tr></table></body>
 </html>

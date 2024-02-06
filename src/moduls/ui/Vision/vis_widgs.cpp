@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -867,7 +867,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     edFld->addAction(actFindNext);
 
     if(!prev_dis) {
-	butBox = new QDialogButtonBox(QDialogButtonBox::Apply|QDialogButtonBox::Cancel,Qt::Horizontal,this);
+	butBox = new QDialogButtonBox(QDialogButtonBox::Apply|QDialogButtonBox::Cancel, Qt::Horizontal, this);
 	QImage ico_t;
 	butBox->button(QDialogButtonBox::Apply)->setText("");
 	if(!ico_t.load(TUIS::icoGet("button_ok",NULL,true).c_str())) ico_t.load(":/images/button_ok.png");
@@ -932,8 +932,9 @@ void TextEdit::changed( )
 	butBox->setEnabled(true);
 
 	string labApply = _("Apply"), labCncl = _("Cancel");
-	bool noLab = (QFontMetrics(butBox->font()).size(Qt::TextSingleLine,(labApply+labCncl).c_str()).width()+30) > width();
+	bool noLab = (QFontMetrics(butBox->font()).size(Qt::TextSingleLine,(labApply).c_str()).width()+30) > width();
 	butBox->button(QDialogButtonBox::Apply)->setText(noLab?"":labApply.c_str());
+	noLab = (QFontMetrics(butBox->font()).size(Qt::TextSingleLine,(labApply+labCncl).c_str()).width()+30) > width();
 	butBox->button(QDialogButtonBox::Cancel)->setText(noLab?"":labCncl.c_str());
     }
 

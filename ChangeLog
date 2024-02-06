@@ -1,3 +1,19 @@
+2024-02-05 Roman (stable)
+- LibsDB.vcaBase: wlb_Main.storeHouse: The Line Edit fields of the form switched to use non confirming mode.
+- FIX:DB.SQLite: Prevented in removing the "*-journal" files before the DB enabling, since there can be several
+    processes-services who open the file and create journal especially at at reopen.
+- FIX:DAQ.{GPIO,AMRDevs}: Restored in their work after the DAQ sources moving to fixing table names
+    with changing the function TTypeParam::DB() prototype and before their adaption.
+- !!:DAQ.OPC_UA: Appended by support the asynchronous writing like to DAQ.ModBus.
+- UI: The function TUIS::mimeGet() appended of the mime "application/vnd.oasis.opendocument.text" for ODT.
+- UI.{Vision,WebVision}: The view "Text Edit" of the FormEl primitive appended by adaptive text labels visibility
+    to the Apply/Cancel buttons depending the field width.
+- FIX:UI.WebVision: Prevented of accessing null this.responseXML.childNodes.
+    Appended in the system part of the status line for button of invoking the project's manual.
+    Appended for implementation the non confirming mode of the Line Edit view of the primitive Form Element.
+    Appended for unification the UI buttons with its using in the view "Text Edit" of the FormEl primitive.
+
+
 2024-01-31 Roman (stable)
 - !!!!:SYS,DAQ.{DAQGate,DCON,DiamondBoards,ICP_DAS,LogicLev,ModBus,OPC_UA,Siemens,SoundCard,System},Protocol.{ModBus,OPC_UA},UI.VCAEngine:
     Simplified significantly in support the selectable types, making that optional and with support the dynamic translation.
@@ -7,7 +23,7 @@
 
 2024-01-28 Roman (stable)
 - !!:SYS: The TCntrNode::cntrCmd() in processing the primary commands of the Control Interface appended by their generic logging.
-- !!!!:DAQ,DAQ.{LogicLev,ModBus,OPC_UA,Siemens}: The DAQ sources moved to fixing table names of different type parameters,
+- !!!!:DAQ,DAQ.{LogicLev,ModBus,OPC_UA,Siemens}: Moved in the DAQ sources to fixing table names of different type parameters,
 	that is the configuration fields are hidden now when their are standard ones and it scheduled to be cleaned in whole in v1.0.
     !!: The module version of the subsystem "DAQ" rose to 21.
     !!:DAQ.{LogicLev,ModBus,OPC_UA,Siemens}: Adapted to the unified parameter type conception.

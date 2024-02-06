@@ -71,6 +71,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PvKey",trS("Private key (PEM)"),TFld::String,TFld::FullText,"10000"));
     fldAdd(new TFld("AuthUser",trS("Auth: user"),TFld::String,TFld::NoFlag,"20"));
     fldAdd(new TFld("AuthPass",trS("Auth: password"),TFld::String,TFld::NoFlag,"20"));
+    fldAdd(new TFld("WR_ASYNCH",trS("Asynchronous write"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fldAdd(new TFld("UseRead",trS("Use the \"Read\" function"),TFld::Boolean,TFld::NoFlag,"1","1"));
 
     //Parameter type bd structure
@@ -93,7 +94,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) : TController(name_c,daq_db,cfgelem), enRes(true),
     mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mSync(cfg("SYNCPER")),
     mEndP(cfg("EndPoint")), mSecPol(cfg("SecPolicy")), mSecMessMode(cfg("SecMessMode")), mCert(cfg("Cert")), mPvKey(cfg("PvKey")),
-    mAuthUser(cfg("AuthUser")), mAuthPass(cfg("AuthPass")), restTm(cfg("TM_REST").getId()), mUseRead(cfg("UseRead").getBd()),
+    mAuthUser(cfg("AuthUser")), mAuthPass(cfg("AuthPass")), restTm(cfg("TM_REST").getId()), mAsynchWr(cfg("WR_ASYNCH").getBd()), mUseRead(cfg("UseRead").getBd()),
     mPer(1e9), prcSt(false), callSt(false), alSt(-1), mBrwsVar(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder)),
     acqErr(dataRes()), tmDelay(0), servSt(0)
 {
@@ -134,6 +135,7 @@ string TMdContr::getStatus( )
 	    else rez += TSYS::strMess(_("Next acquisition by the cron '%s'. "), atm2s(TSYS::cron(cron()), "%d-%m-%Y %R").c_str());
 	    rez += TSYS::strMess(_("Spent time %s[%s], requests %.6g. "),
 		tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str(), -tmDelay);
+	    if(mAsynchWr || asynchWrs.size()) rez += TSYS::strMess(_("To write %d. "), asynchWrs.size());
 	    OPCAlloc res(mtxData, true);
 	    rez += TSYS::strMess(_("Secure channel %u, token %u, lifetime %s; Request ID %u, handle %u; Session %s. "),
 		sess.secChnl, sess.secToken, tm2s(1e-3*sess.secLifeTime-1e-6*(curTime()-sess.secChnlOpenTm)).c_str(), sess.sqReqId, sess.reqHndl, sess.sesId.c_str());
@@ -176,6 +178,9 @@ void TMdContr::enable_( )
 
 void TMdContr::disable_( )
 {
+    // Asynchronous writings buffer clean up
+    aWrRes.lock(); asynchWrs.clear(); aWrRes.unlock();
+
     sess.mSubScr.clear();
 
     tr.free();
@@ -275,6 +280,18 @@ void TMdContr::prmEn( TMdPrm *prm, bool val )
 
     if(val && iPrm >= pHd.size())	pHd.push_back(prm);
     if(!val && iPrm < pHd.size())	pHd.erase(pHd.begin()+iPrm);
+}
+
+bool TMdContr::inWr( const string &addr )
+{
+    aWrRes.lock();
+
+    //At presence in the writing buffer
+    bool rez = (asynchWrs.find(addr) != asynchWrs.end());
+
+    aWrRes.unlock();
+
+    return rez;
 }
 
 bool TMdContr::connect( int8_t est )
@@ -388,8 +405,15 @@ TVariant TMdContr::getVal( const string &iaddr, MtxString &err )
     return rez;
 }
 
-bool TMdContr::setVal( const TVariant &vl, const string &iaddr, MtxString &err )
+bool TMdContr::setVal( const TVariant &vl, const string &addr, MtxString &err, bool isGeneric )
 {
+    //Registering for the later common writing in the asynchronous mode and pass updating the just writed values
+    if(isGeneric && mAsynchWr) {
+	aWrRes.lock(); asynchWrs[addr] = vl.getS(); aWrRes.unlock();
+	return true;
+    }
+
+    //For direct writing we need the good connection in any event
     if(tmDelay > 0) {
 	if(err.getVal().empty()) err = TSYS::strMess("%d:%s", TError::Tr_Connect, acqErr.getVal().c_str());
 	return false;
@@ -404,9 +428,9 @@ bool TMdContr::setVal( const TVariant &vl, const string &iaddr, MtxString &err )
 	for(size_t iA = 0; iA < arr.at().arSize(); iA++) wrVl += arr.at().arGet(iA).getS() + "\n";
     else wrVl = vl.getS();
     req.setAttr("id", "Write")->
-	childAdd("node")->setAttr("nodeId", TSYS::strLine(iaddr,0))->
+	childAdd("node")->setAttr("nodeId", TSYS::strLine(addr,0))->
 			  setAttr("attributeId", i2s(AId_Value))->
-			  setAttr("VarTp", TSYS::strLine(iaddr,1))->
+			  setAttr("VarTp", TSYS::strLine(addr,1))->
 			  setText(wrVl);
     reqService(req);
     if(!req.attr("err").empty()) { if(err.getVal().empty()) err = req.attr("err"); return false; }
@@ -504,6 +528,20 @@ void *TMdContr::Task( void *icntr )
 	    isStart = false;
 	    prmRes.unlock();
 
+	    //Writing the asynchronous writings' buffer
+	    MtxAlloc resAsWr(cntr.aWrRes, true);
+	    map<string,string> aWrs = cntr.asynchWrs;
+	    cntr.asynchWrs.clear();
+	    resAsWr.unlock();
+	    if(cntr.mAsynchWr) {
+		MtxString asWrErr(cntr.dataRes());
+		for(map<string,string>::iterator iw = aWrs.begin(); !isStart && !isStop && iw != aWrs.end(); ++iw) {
+		    if(asWrErr.size() && cntr.asynchWrs.find(iw->first) == cntr.asynchWrs.end()) cntr.asynchWrs[iw->first] = iw->second;
+		    if(!asWrErr.size() && !cntr.setVal(iw->second,iw->first,asWrErr)) { cntr.setCntrDelay(asWrErr); resAsWr.lock(); }
+		}
+		resAsWr.unlock();
+	    }
+
 	    //Generic acquisition alarm generate
 	    if(cntr.tmDelay <= 0 && !TSYS::taskEndRun()) {
 		if(cntr.alSt != 0) {
@@ -588,6 +626,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/cntr/st/runSt" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR) && s2i(opt->text()) && enableStat()) {
+	// Asynchronous writings buffer clean up
+	aWrRes.lock(); asynchWrs.clear(); aWrRes.unlock();
+
 	// Deactivate the main session to reset/clear the monitored items
 	if(sess.mSubScr.size() && sess.mSubScr[0].isActivated())
 	    sess.mSubScr[0].activate(false);
@@ -1086,7 +1127,8 @@ void TMdPrm::upValStd( )
     elem().fldList(ls);
     for(unsigned iEl = 0; iEl < ls.size(); iEl++) {
 	pVal = vlAt(ls[iEl]);
-	if(!(pVal.at().fld().flg()&TVal::DirRead) || (pVal.at().fld().flg()&TVal::Dynamic)) continue;
+	if(!(pVal.at().fld().flg()&TVal::DirRead) || (pVal.at().fld().flg()&TVal::Dynamic) || owner().inWr(pVal.at().fld().reserve()))
+	    continue;
 	pVal.at().set(owner().getVal(pVal.at().fld().reserve(),w_err), 0, true);
     }
 
@@ -1236,7 +1278,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     bool wrRez = false;
     // Standard type request
     if(isStd() && !isRdnt)
-	wrRez = owner().setVal(vl, vo.fld().reserve(), acqErr);
+	wrRez = owner().setVal(vl, vo.fld().reserve(), acqErr, true);
     // Logical type request
     else if(isLogic()) {
 	int id_lnk = lCtx->lnkId(vo.name());
@@ -1446,7 +1488,7 @@ bool TMdPrm::TLogCtx::lnkOutput( int num, const TVariant &vl )
     string addrSpec = it->second.addrSpec;
     res.unlock();
 
-    if(addrSpec.size()) ((TMdPrm*)obj)->owner().setVal(vl, addrSpec, ((TMdPrm*)obj)->acqErr);
+    if(addrSpec.size()) ((TMdPrm*)obj)->owner().setVal(vl, addrSpec, ((TMdPrm*)obj)->acqErr, true);
     else return TPrmTempl::Impl::lnkOutput(num, vl);
 
     return true;

@@ -274,7 +274,7 @@ class TMdContr: public TController
 	MtxString conErr;		//Connection error
 	vector< AutoHD<TMdPrm> > pHd;	//Parameter's process list
 	vector< SDataRec > acqBlks;	//Acquisition data blocks
-	vector< SDataRec > writeBlks;	//Data block for write to a data source, for asynchronous write mode
+	vector< SDataRec > writeBlks;	//Data block for write to the data source, for asynchronous write mode
 	AutoHD<TTransportOut>	tr;	//OpenSCADA output transport, for ADS and SELF_ISO_TCP
 
 	uint16_t mInvokeID;
