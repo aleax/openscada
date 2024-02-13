@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.BFN file: mod_BFN.h
 /***************************************************************************
- *   Copyright (C) 2010-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -93,6 +93,8 @@ class TMdContr: public TController
 	//Methods
 	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~TMdContr( );
+
+	string tblStd( const TTypeParam &tP ) const	{ return ""; }	//!!!! To disable the parameters storing
 
 	string getStatus( );
 

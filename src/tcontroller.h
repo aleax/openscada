@@ -78,7 +78,8 @@ class TController : public TCntrNode, public TConfig
 
 	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
 	string tbl( ) const;
-	virtual string tbl( const TTypeParam &tP ) const;				//????[v1.0] Replace by tblStd()
+	virtual string tbl( const TTypeParam &tP ) const;	//????[v1.0] Replace by tblStd()
+	virtual string tblStd( const TTypeParam &tP ) const;	//????[v1.0] Rename to tbl()
 
 	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
 
@@ -142,9 +143,6 @@ class TController : public TCntrNode, public TConfig
 	void postDisable( int flag );		//Delete all DB if flag 1
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
-
-	bool isStdStorAddr( const TTypeParam &tP ) const	{ return (tbl(tP) == tblStd(tP)); }	//????[v1.0] Remove
-	virtual string tblStd( const TTypeParam &tP ) const;			//????[v1.0] Rename to tbl()
 
 	//Protected attributes
 	bool	enSt, runSt;

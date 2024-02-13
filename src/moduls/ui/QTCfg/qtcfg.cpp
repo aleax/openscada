@@ -3242,7 +3242,7 @@ void ConfApp::tablePopup( const QPoint &pos )
     QTableWidget *tbl = (QTableWidget *)sender();
     string el_path = selPath+"/"+tbl->objectName().toStdString();
 
-    QAction *last_it, *actAdd, *actIns, *actDel, *actMoveUp, *actMoveDown, *actCopy, *actFind, *actFindNext;
+    QAction *last_it, *actAdd, *actIns, *actDel, *actMoveUp, *actMoveDown, *actCopy, *actCopyForMWiki, *actFind, *actFindNext;
     last_it = actAdd = actIns = actDel = actMoveUp = actMoveDown = actCopy = actFind = actFindNext = NULL;
 
     int row = tbl->currentRow();
@@ -3287,6 +3287,8 @@ void ConfApp::tablePopup( const QPoint &pos )
 	    popup.addSeparator();
 	    actCopy = last_it = new QAction(_("Copy"), this);
 	    popup.addAction(actCopy);
+	    actCopyForMWiki = last_it = new QAction(_("Copy for MediaWiki"), this);
+	    popup.addAction(actCopyForMWiki);
 	}
 	if(tbl->rowCount()) {
 	    popup.addSeparator();
@@ -3302,16 +3304,17 @@ void ConfApp::tablePopup( const QPoint &pos )
 	    QAction *rez = popup.exec(QCursor::pos());
 	    if(!rez)	{ popup.clear(); return; }
 
-	    if(rez == actCopy) {
+	    if(rez == actCopy || rez == actCopyForMWiki) {
 		QString cbRez;
-		bool firstRow = false, firstClm = false;
+		bool firstRow = false, firstClm = false, forMWiki = (rez == actCopyForMWiki);
 		for(int iR = 0; iR < tbl->rowCount(); iR++) {
 		    //if(firstRow && firstClm) cbRez += "\n";
 		    firstClm = false;
 		    for(int iC = 0; iC < tbl->columnCount(); iC++) {
 			if(!tbl->item(iR,iC)->isSelected()) continue;
-			if(firstClm) cbRez += "\t";
+			if(firstClm) cbRez += forMWiki ? " || " : "\t";
 			if(!firstClm && firstRow) cbRez += "\n";
+			if(!firstClm && forMWiki) cbRez += "|-\n| ";
 			cbRez += tbl->item(iR,iC)->text();
 			firstClm = firstRow = true;
 		    }

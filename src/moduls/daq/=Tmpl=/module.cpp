@@ -93,13 +93,12 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable(flag);
 
     //DB structure of the controller object
-    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     //???? Append here the PLC specific configuration fields stored in DB
 
     //Parameter types and them DB structures
-    int tPrm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
+    int tPrm = tpParmAdd("std", "", _("Standard"), true);
     tpPrmAt(tPrm).fldAdd(new TFld("OID_LS",trS("OID list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100",""));
     //???? Append here the parameter type specific configuration fields stored in DB
 
@@ -114,7 +113,7 @@ TController *TTpContr::ContrAttach( const string &id, const string &daq_db )	{ r
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
     TController(name_c,daq_db,cfgelem), mPrior(cfg("PRIOR").getId()), mPer(1e9), prcSt(false), callSt(false), tmGath(0)
 {
-    cfg("PRM_BD").setS("TmplPrm_"+name_c);
+
 }
 
 TMdContr::~TMdContr( )

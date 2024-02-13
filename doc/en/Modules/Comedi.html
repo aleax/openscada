@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/Comedi</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/Comedi.html" title="Модули/Comedi (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Comedi.html" title="Модулі/Comedi (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/Comedi.html" title="Модули/Comedi (94% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Comedi.html" title="Модулі/Comedi (100% translated)">Українська</a></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
@@ -63,14 +63,13 @@
 <h2><span class="mw-headline" id="Controller_object"><span class="mw-headline-number">1</span> Controller object</span></h2>
 <p>DAQ—boards by library <b>Comedi</b> into OpenSCADA configured with new controller object creation (Fig.1), the container parameters' objects — DAQ boards.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:726px;"><a class="image" href="http://oscada.org/wiki/File:Comedi_cntr.png"><img class="thumbimage" height="585" src="../files/Comedi_cntr.png" width="724" /></a>  <div class="thumbcaption">Fig.1. Configuration tab of a controller object.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:Comedi_cntr.png"><img class="thumbimage" height="616" src="../files/Comedi_cntr.png" width="773" /></a>  <div class="thumbcaption">Fig.1. Configuration tab of a controller object.</div></div></div></div>
 <p>From this tab you can set:
 </p>
-<ul><li> The state of the controller, as follows: Status, "Enable", "Run" and the name of the database containing the configuration.</li>
-<li> Id, name and description of the controller.</li>
-<li> The state, in which the controller must be translated at boot: "To enable" and "To start".</li>
-<li> Name of table to store the configuration of the parameters of the controller. </li>
-<li> The acquisition schedule policy and the priority of the task of data acquisition. </li></ul>
+<ul><li> State of the controller object, as follows: status, "Enabled", "Running" and the storage name containing the configuration.</li>
+<li> Identifier, name and description of the controller.</li>
+<li> The state "Enabled" and "Running", in which the controller object must be translated at start up.</li>
+<li> Policy of scheduling and priority of the data acquisition task.</li></ul>
 <p>It should be noted that the acquisition data is mainly done in synchronous mode, but for some modules of analog inputs (AI-ADC) that would be optimal asynchronous mode, due to the length of time for value setting after switching a multiplexor channel. For board Advantech PCL-813B the time is 5ms.
 </p>
 <h2><span class="mw-headline" id="The_controller.27s_parameter_object"><span class="mw-headline-number">2</span> The controller's parameter object</span></h2>

@@ -1,3 +1,15 @@
+2024-02-13 Roman (stable)
+- !!!!:LibsDB.OscadaLibs: tmplib_LowDevLib: Documenting the new templates with some correction:
+	FF_LE, ergomera625, Incubator, VSE002, Goboy1M, AutoPILOT, AutoPILOT_old, CorBK, TDS, UltraMag, enronDaniel, FlowGAS.
+    Removing templates: TUF.
+    Appending templates: FlowGAS.
+- !!!!:FIX:DAQ: Finish the moving in the DAQ sources to fixing table names,
+	when empty tbl() value also used to disable the parameters storing.
+    !!:DAQ.{=Tmpl=,AMRDevs,BFN,BlockCalc,Comedi,DAQGate,DCON,DiamondBoards,FT3,Fastwel,GPIO,ICP_DAS,JavaLikeCalc,MMS,SMH2Gi,SNMP,SoundCard,System}:
+	Adapted to the unified parameter type conception.
+- UI.QTCfg: The Table felds appended by the context item "Copy for MediaWiki".
+
+
 2024-02-05 Roman (stable)
 - LibsDB.vcaBase: wlb_Main.storeHouse: The Line Edit fields of the form switched to use non confirming mode.
 - FIX:DB.SQLite: Prevented in removing the "*-journal" files before the DB enabling, since there can be several

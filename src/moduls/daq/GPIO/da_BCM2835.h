@@ -84,8 +84,6 @@ class BCM2835 : public TTypeParam
     BCM2835( );
     //~BCM2835( );
 
-    string DB( const TController *cntr ) const	{ return mod->modId()+"BCM2835Prm_"+cntr->id(); }
-
     void create( TParamContr *prm );
     void destroy( TParamContr *prm );
 

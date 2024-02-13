@@ -39,7 +39,7 @@
 #define MOD_NAME	trS("AMR devices")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.8.1"
+#define MOD_VER		"0.8.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides access to automatic meter reading devices. Supported devices: Kontar (http://www.mzta.ru).")
 #define LICENSE		"GPL2"

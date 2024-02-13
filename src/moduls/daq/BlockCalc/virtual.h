@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.BlockCalc file: virtual.h
 /***************************************************************************
- *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -92,6 +92,10 @@ class Contr: public TController
 	//Public methods
 	Contr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~Contr( );
+
+	string tblStd( const TTypeParam &tP ) const;
+	string tblBlks( ) const		{ return cfg("BLOCK_SH").getS(); }	//????[v1.0] Replace by tblBlksStd()
+	string tblBlksStd( ) const	{ return "BlckCalcBlcks_"+id(); }	//????[v1.0] Rename to tblBlks()
 
 	TCntrNode &operator=( const TCntrNode &node );
 

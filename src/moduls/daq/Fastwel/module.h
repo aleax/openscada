@@ -110,6 +110,8 @@ namespace ModFastwel {
 	TMdContr(string name_c, const string & daq_db,::TElem * cfgelem);
 	 ~TMdContr();
 
+	string tblStd( const TTypeParam &tP ) const;
+
 	string getStatus();
 
 	int64_t period() {

@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/Шлюз сбора данных</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FDAQGate&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/DAQGate" title="Modules/DAQGate">Modules/DAQGate</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/DAQGate.html" title="Modules/DAQGate (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/DAQGate.html" title="Модулі/Шлюз збору даних (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FDAQGate&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/DAQGate" title="Modules/DAQGate">Modules/DAQGate</a> and the translation is 93% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/DAQGate.html" title="Modules/DAQGate (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/DAQGate.html" title="Модулі/Шлюз збору даних (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -76,27 +76,26 @@
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="mw-headline-number">1</span> Объект контроллера</span></h2>
 <p>Для добавления источника данных создаётся и конфигурируется объект контроллера OpenSCADA. Пример вкладки конфигурации объекта контроллера данного типа изображен на рисунке 2.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1006px;"><a class="image" href="http://oscada.org/wiki/File:DAQGate_tr_cntr.png"><img class="thumbimage" height="1029" src="../../en/files/DAQGate_tr_cntr.png" width="1004" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфигурации объекта контроллера.</div></div></div></div>
-<p>С помощью этой вкладки можно установить:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:917px;"><a class="image" href="http://oscada.org/wiki/File:DAQGate_tr_cntr.png"><img class="thumbimage" height="922" src="../../en/files/DAQGate_tr_cntr.png" width="915" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфигурации объекта контроллера.</div></div></div></div>
+<p>With this tab you can set:
 </p>
-<ul><li> Состояние объекта контроллера, а именно: статус, "Включен", "Выполняется" и имя БД, содержащей конфигурацию.</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Ручной перезапуск включенного объекта контроллера вызывает принудительную пересинхронизацию при периоде синхронизации &gt;= 0.</dd></dl>
-<ul><li> Идентификатор, имя и описание контроллера.</li>
-<li> Состояние "Включен" и "Выполняется" в которое переводить объект контроллера при запуске.</li>
-<li> Таблица хранения кеша параметров, которые создаются даже при недоступности источника данных.</li>
-<li> Политика планирования и приоритет задачи сбора данных.</li>
-<li> Интервал времени повторения попытки восстановления связи с потерянной станцией, в секундах.</li>
-<li> Максимальная глубина данных архива значений и сообщений для восстановления при запуске, в часах. Ноль для отключения доступа к удалённому архиву.</li>
-<li> Асинхронная запись. Включает запись в общем цикле опроса для буфера накопленных значений, одним запросом.</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Полезно для медленных и ненадёжных сетей-подключений поскольку сохраняет данные до восстановления подключения и реальной записи.</dd></dl>
-<ul><li> Уровень запрашиваемых сообщений источников данных. Также включает передачу DAQ-сообщений <a href="../User_API.html#SYS.DAQ" title="Special:MyLanguage/Documents/User API">функции API Пользователя messSet()</a> на низшие станции.</li>
-<li> Периодичность синхронизации с удалённой станцией в секундах. Ноль для отключения периодической синхронизации и -1 также для отключения синхронизации при запуске.</li>
-<li> Удалённая станция отражаемых данных. Несколько станций в списке включают механизм вертикального резервирования.</li>
-<li> Список отражаемых объектов контроллеров и параметров. В списке можно указывать как только объекты контроллеров, для отражения всех их параметров, так и отдельно взятые параметры.</li>
-<li> Команда перехода к конфигурации <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">перечня удалённых станций OpenSCADA</a>.</li>
-<li> Осуществлять автоматическое удаление параметров и атрибутов для актуализации к текущему состоянию.</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> В производственном режиме лучше эту опцию отключать!</dd></dl>
-<ul><li> Помещение различных контроллеров в отдельные виртуальные параметры.</li></ul>
+<ul><li> State of the controller object, that is: status, "Enabled", "Running" and the storage name containing the configuration.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Manual restart of the enabled controller object causes the force resync at the sync period &gt;= 0.</dd></dl>
+<ul><li> Identifier, name and description of the controller.</li>
+<li> The state "Enabled" and "Running" in which the controller object must be translated at start up.</li>
+<li> Acquisition schedule policy and priority of the data acquisition task. </li>
+<li> Time interval of repetition attempts to restore communication with the lost station, in seconds.</li>
+<li> Maximum depth of data of the archive values and messages to restore when start, in the hours. Zero for disable the remote archive access.</li>
+<li> Asynchronous writing. Enables of writing in the common acquisition cycle for the buffer of accumulated values, by one request.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Useful for slow and not reliable networks-connections since the writing buffer stores data before the connection restore and the real writing.</dd></dl>
+<ul><li> Level of requested messages of the data sources. Also enables the DAQ-messages of <a href="../User_API.html#SYS.DAQ" title="Special:MyLanguage/Documents/User API">the User API function messSet()</a> transferring to the lower stations.</li>
+<li> Synchronization time with the remote station in seconds. Zero to disable the periodic sync and -1 for the sync disabling at the start also.</li>
+<li> Remote OpenSCADA station of the reflected data. Several stations in the list enable the vertical redundancy mechanism.</li>
+<li> List of the reflected controller objects and parameters. The list can be used as for controller objects for the reflection of all their parameters, and for individual parameters too.</li>
+<li> Command to go to configuration of the <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">OpenSCADA remote stations list</a>.</li>
+<li> Allow the automatic removal of parameters and attributes to update to the actual state.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> In the production mode, it's better to turn this off!</dd></dl>
+<ul><li> Placing different controllers to the different virtual parameters.</li></ul>
 <h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B"><span class="mw-headline-number">2</span> Параметры</span></h2>
 <p>Модуль хотя и предоставляет возможность создания параметров вручную, однако это лишено смысла, поскольку такой параметр, при отсутствии его на удалённой станции, будет пустым. Все параметры создаются автоматически с учётом списка отражаемых объектов контроллеров и параметров. Параметры могут быть сохранёны в кеш для последующего их создания даже при отсутствии связи с удалённой станцией. Пример отраженного параметра приведён на рисунке 3.
 </p>

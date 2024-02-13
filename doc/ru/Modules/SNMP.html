@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/SNMP</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSNMP&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/SNMP" title="Modules/SNMP">Modules/SNMP</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/SNMP.html" title="Modules/SNMP (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/SNMP.html" title="Модулі/SNMP (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSNMP&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/SNMP" title="Modules/SNMP">Modules/SNMP</a> and the translation is 95% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/SNMP.html" title="Modules/SNMP (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/SNMP.html" title="Модулі/SNMP (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -107,23 +107,22 @@
 <h3><span class="mw-headline" id=".D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="mw-headline-number">2.1</span> Объект контроллера</span></h3>
 <p>Для добавления источников данных SNMP в OpenSCADA создаются и конфигурируются объекты контроллера. Пример вкладки конфигурации объекта контроллера данного типа изображен на рисунке 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:922px;"><a class="image" href="http://oscada.org/wiki/File:SNMP_cntr_ru.png"><img class="thumbimage" height="719" src="../files/SNMP_cntr_ru.png" width="920" /></a>  <div class="thumbcaption">Рис.1. Вкладка конфигурации объектов контроллера.</div></div></div></div>
-<p>С помощью этой вкладки можно установить:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:776px;"><a class="image" href="http://oscada.org/wiki/File:SNMP_cntr.png"><img class="thumbimage" height="714" src="../../en/files/SNMP_cntr.png" width="774" /></a>  <div class="thumbcaption">Рис.1. Вкладка конфигурации объектов контроллера.</div></div></div></div>
+<p>From this tab you can set:
 </p>
-<ul><li> Состояние объекта контроллера, а именно: Статус, "Включен", "Исполняется" и имя БД, содержащей конфигурацию.</li>
-<li> Идентификатор, имя и описание объекта контроллера.</li>
-<li> Состояние в которое переводить объект контроллера при загрузке: "Включать" и "Запускать".</li>
-<li> Имя таблицы для хранения конфигурации параметров объекта контроллера.</li>
-<li> Политика планирования и приоритет задачи сбора данных.</li>
-<li> Адрес удалённого хоста агента. </li>
-<li> Количество попыток отправки запросов.</li>
-<li> Время ожидания ответов, в секундах.</li>
-<li> Используемую версию протокола SNMP.</li>
-<li> Сообщество или пользователя подключения.</li>
-<li> Ограничение на количество атрибутов в одном параметре.</li>
-<li> Уровень безопасности для v3 (Нет авториз./Нет приватн.; Авториз./Нет приватн.; Авториз./Приватн.).</li>
-<li> Метод кодирования (MD5, SHA) и пароль аутентификации для v3.</li>
-<li> Метод кодирования (DES, AES) и приватность аутентификации для v3.</li></ul>
+<ul><li> State of the controller object, as follows: status, "Enabled", "Running" and the storage name containing the configuration.</li>
+<li> Identifier, name and description of the controller.</li>
+<li> The state "Enabled" and "Running", in which the controller object must be translated at start up.</li>
+<li> Policy of scheduling and priority of the data acquisition task.</li>
+<li> Remote host address of the agent.</li>
+<li> Number of retries of the requests.</li>
+<li> Responds timeout, in seconds.</li>
+<li> Used SNMP version.</li>
+<li> Community or user for connections establishing.</li>
+<li> Limit of the attributes number per one parameter object.</li>
+<li> Security level for v3 (No auth/No privacy; Auth/No privacy; Auth/Privacy).</li>
+<li> Encryption method (MD5, SHA) and user's password of the authentication for v3.</li>
+<li> Encryption method (DES, AES) and privacy of the authentication for v3.</li></ul>
 <h3><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80_.D0.BE.D0.B1.D1.8A.D0.B5.D0.BA.D1.82.D0.B0_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="mw-headline-number">2.2</span> Параметр объекта контроллера</span></h3>
 <p>Модуль <i>SNMP</i> предоставляет только один тип параметров — "Стандарт". Дополнительным конфигурационным полем параметра данного модуля (рис.2) является список MIB-параметров, ветви или отдельные элементы (скаляры) которых подлежат считыванию.
 </p>

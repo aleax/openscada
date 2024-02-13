@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/Siemens</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSiemens&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Siemens" title="Modules/Siemens">Modules/Siemens</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Siemens.html" title="Modules/Siemens (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Siemens.html" title="Модулі/Siemens (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSiemens&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Siemens" title="Modules/Siemens">Modules/Siemens</a> and the translation is 98% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Siemens.html" title="Modules/Siemens (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Siemens.html" title="Модулі/Siemens (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -89,29 +89,29 @@
 <p>Для добавления источника данных создаётся и конфигурируется объект контроллера OpenSCADA. Пример вкладки конфигурации объекта контроллера данного типа изображен на рисунке 3.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:779px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_cntr.png"><img class="thumbimage" height="775" src="../../en/files/Siemens_cntr.png" width="777" /></a>  <div class="thumbcaption">Рис.3. Вкладка конфигурации объекта контроллера.</div></div></div></div>
-<p>С помощью этой вкладки можно установить:
+<p>Using this tab you can set:
 </p>
-<ul><li> Состояние объекта контроллера, а именно: Статус, "Включен", "Выполняется" и имя БД, содержащей конфигурацию.</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Ручной перезапуск включенного объекта контроллера вызывает принудительное переформирование блоков сбора.</dd></dl>
-<ul><li> Идентификатор, имя и описание контроллера.</li>
-<li> Состояние "Включен" и "Выполняется", в которое переводить объект контроллера при загрузке.</li>
-<li> Политика планирования и приоритет задачи сбора данных.</li>
-<li> Время восстановления подключения, в секундах, после потери связи.</li>
-<li> Режим асинхронной записи в удалённый контроллер.</li>
-<li> Тип соединения, поддерживаются:
-<ul><li> <i>CIF_PB</i> — подключение к контроллерам серии S7 фирмы Siemens посредством коммуникационного процессора CIF-50PB или похожего;</li>
-<li> <i>ISO_TCP</i>, <i>ISO_TCP243</i> — подключение к контроллерам серии S7 фирмы Siemens посредством сети Ethernet (TCP243 для CP243);</li>
-<li> <i>ADS</i> — TwinCAT ADS/AMS протокол для подключения к контроллерам фирмы Beckhoff.</li></ul></li>
-<li> Адрес удалённого контроллера, для соединений:
-<ul><li> <i>CIF_PB</i> — адрес контроллера в сети ProfiBus, цифра 0-255;</li>
-<li> <i>ISO_TCP</i>, <i>ISO_TCP243</i> — IP-адрес контроллера в сети Ethernet;</li>
-<li> <i>ADS</i> — сетевой идентификатор и порт целевого контроллера и исходной станции, в виде <b>{Target_AMSNetId}:{Target_AMSPort}|{Source_AMSNetId}:{Source_AMSPort}</b> (например: "192.168.0.1.1.1:801|82.207.88.73.1.1:801"), где:
-<ul><li> <i>AMSNetId</i> — сетевой идентификатор, записывается в виде шести цифр 0-255, например: "192.168.0.1.1.1";</li>
-<li> <i>AMSPort</i> — порт, записывается в виде числа 0-65535.</li></ul></li></ul></li>
-<li> Слот ЦП ПЛК в который установлен центральный процессор контроллера.</li>
-<li> CIF плата, используемая для доступа к промышленному контроллеру посредством CIF коммуникационных процессоров.</li>
-<li> <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">Выходной транспорт OpenSCADA</a> для протокола ADS (порт 48898, 801 для AMS) и ISO_TCP (порт 102) для отправки запросов.</li>
-<li> Максимальный размер блока запроса в байтах, полезен для контроллеров с таким ограничением.</li></ul>
+<ul><li> The state of the controller object, as follows: Status, "Enabled", "Running" and the name of the storage containing the configuration.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Manual restart of the enabled controller object causes the force reformation of the acquisition blocks.</dd></dl>
+<ul><li> Identifier, name and description of the controller.</li>
+<li> The state "Enabled" and "Running", in which the controller object must be translated at boot.</li>
+<li> Policy of scheduling and priority of the data acquisition task.</li>
+<li> Connection recovery time, in seconds, after lost connection.</li>
+<li> Mode of asynchronous writing to the remote controller.</li>
+<li> Connection type, supported ones:
+<ul><li> <i>CIF_PB</i> — connection to S7 controllers of the firm Siemens via CIF-50PB communication processor or similar;</li>
+<li> <i>ISO_TCP</i>, <i>ISO_TCP243</i> — connection to S7 controllers of the firm Siemens via the Ethernet network (TCP243 by CP243);</li>
+<li> <i>ADS</i> — TwinCAT ADS/AMS protocol for connecting to controllers of the firm Beckhoff.</li></ul></li>
+<li> Remote controller address, for the connections:
+<ul><li> <i>CIF_PB</i> — controller address in the ProfiBus network, one digit 0-255;</li>
+<li> <i>ISO_TCP</i>, <i>ISO_TCP243</i> — IP-address into the Ethernet network;</li>
+<li> <i>ADS</i> — network identifier and port for the target and source stations, in view <b>{Target_AMSNetId}:{Target_AMSPort}|{Source_AMSNetId}:{Source_AMSPort}</b> (for example: "192.168.0.1.1.1:801|82.207.88.73.1.1:801"), where:
+<ul><li> <i>AMSNetId</i> — network identifier, writes in view of six digits 0-255, for example: "192.168.0.1.1.1";</li>
+<li> <i>AMSPort</i> — port, writes in view of one digit 0-65535.</li></ul></li></ul></li>
+<li> CPU slot of the PLC in which the central processor of the controller is placed.</li>
+<li> CIF card used for access to the industrial controller through CIF communication processors.</li>
+<li> <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">OpenSCADA output transport</a> for the protocol ADS (port 48898, 801 for AMS) and ISO_TCP (port 102) for sending requests.</li>
+<li> Maximum size of the request block in bytes, useful for controllers with such limits.</li></ul>
 <h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B"><span class="mw-headline-number">3</span> <span id="Parameters" title="#Parameters">Параметры</span></span></h2>
 <p>Модуль сбора данных предоставляет два типа параметра: "Логический (Prm)" и "Простой (PrmS)". Дополнительными конфигурационными полями параметров данного модуля являются:
 </p>

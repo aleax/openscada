@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/BlockCalc</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/BlockCalc.html" title="Модули/Блоковый вычислитель (92% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/BlockCalc.html" title="Модулі/Блоковий обчислювач (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/BlockCalc.html" title="Модули/Блоковый вычислитель (89% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/BlockCalc.html" title="Модулі/Блоковий обчислювач (100% translated)">Українська</a></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
@@ -78,14 +78,13 @@
 <h2><span class="mw-headline" id="The_controller_of_the_module"><span class="mw-headline-number">1</span> The controller of the module</span></h2>
 <p>Each controller of this module contains the block circuit, which he computes with the specified period. In order to provide calculated data in the system OpenSCADA the parameters can be created in the controller. Example of the configuration tab of the controller of the given type depicted in Fig. 3.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:782px;"><a class="image" href="http://oscada.org/wiki/File:BlockCalc_cntr.png"><img class="thumbimage" height="659" src="../files/BlockCalc_cntr.png" width="780" /></a>  <div class="thumbcaption">Fig. 3. Configuration tab of a controller.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:784px;"><a class="image" href="http://oscada.org/wiki/File:BlockCalc_cntr.png"><img class="thumbimage" height="640" src="../files/BlockCalc_cntr.png" width="782" /></a>  <div class="thumbcaption">Fig. 3. Configuration tab of a controller.</div></div></div></div>
 <p>From this tab you can set:
 </p>
-<ul><li> The state controller, as follows: State, "Enable", "Run" and the name of the database containing the configuration.</li>
-<li> Id, name and description of the controller.</li>
-<li> The state, in which the controller is to be translated at boot time: "To enabled" and "To start".</li>
-<li> The names of tables to store the parameters and blocks of the controller.</li>
-<li> The calculation schedule policy, priority and number of iterations in one cycle of calculating task of the block scheme of the controller.</li></ul>
+<ul><li> State of the controller object, as follows: status, "Enabled", "Running" and the storage name containing the configuration.</li>
+<li> Identifier, name and description of the controller.</li>
+<li> The state "Enabled" and "Running", in which the controller object must be translated at start up.</li>
+<li> Policy of scheduling, priority of the data acquisition task and number of iterations in one cycle of calculating task of the block scheme of the controller.</li></ul>
 <h2><span class="mw-headline" id="The_block_scheme_of_the_controller"><span class="mw-headline-number">2</span> The block scheme of the controller</span></h2>
 <p>The block scheme is formed by means of the tab controller's blocks, configuration of the block (Figure 4) and its connections (Fig. 5).
 </p><p>Blocks of block scheme can connect both among themselves and to the attributes of the parameters. Blocks themselves do not contain the structure of input/output(IO), but contain values, based on the IO-structure of related function. Function for linking with a block is used from the object model of the system OpenSCADA.

@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/Вычислитель похожий на Java</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FJavaLikeCalc&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/JavaLikeCalc" title="Modules/JavaLikeCalc">Modules/JavaLikeCalc</a> and the translation is 92% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/JavaLikeCalc.html" title="Modules/JavaLikeCalc (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/JavaLikeCalc.html" title="Модулі/Обчислювач подібний до Java (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FJavaLikeCalc&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/JavaLikeCalc" title="Modules/JavaLikeCalc">Modules/JavaLikeCalc</a> and the translation is 90% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/JavaLikeCalc.html" title="Modules/JavaLikeCalc (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/JavaLikeCalc.html" title="Модулі/Обчислювач подібний до Java (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -365,15 +365,14 @@
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0_.D0.B8_.D0.B5.D0.B3.D0.BE_.D0.BA.D0.BE.D0.BD.D1.84.D0.B8.D0.B3.D1.83.D1.80.D0.B0.D1.86.D0.B8.D1.8F"><span class="mw-headline-number">2</span> <span id="Controller" title="#Controller">Объект контроллера и его конфигурация</span></span></h2>
 <p>Объект контроллера этого модуля, для обеспечения непосредственных вычислений, связывается с функциями из библиотек, построенных с его помощью, или с <a href="../DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">шаблоном сбора данных</a>. В случае с шаблоном сбора данных, добавляется возможность внешнего связывания, с другими параметрами и атрибутами подсистемы "Сбор данных". Для предоставления вычисленных данных в OpenSCADA, в объекте контроллера могут создаваться параметры. Пример вкладки конфигурации объекта контроллера данного типа изображен на рисунке 2.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:822px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_cntr_ru.png"><img class="thumbimage" height="658" src="../files/JavaLikeCalc_cntr_ru.png" width="820" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфигурации объекта контроллера.</div></div></div></div>
-<p>С помощью этой вкладки можно установить:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:776px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_cntr.png"><img class="thumbimage" height="691" src="../../en/files/JavaLikeCalc_cntr.png" width="774" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфигурации объекта контроллера.</div></div></div></div>
+<p>From this tab you can set:
 </p>
-<ul><li> Состояние объекта контроллера, а именно: Статус, "Включен", "Выполняется" и имя БД, содержащей конфигурацию.</li>
-<li> Идентификатор, имя и описание контроллера.</li>
-<li> Состояние, в которое переводить объект контроллера при запуске программы: "Включен" и "Выполняется".</li>
-<li> Имя таблицы для хранения параметров.</li>
-<li> Адрес вычислительной функции или <a href="../Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">шаблона сбора данных</a>.</li>
-<li> Политика планирования вычисления, приоритет и число итераций в одном цикле задачи вычисления.</li></ul>
+<ul><li> State of the controller object, as follows: status, "Enabled", "Running" and the storage name containing the configuration.</li>
+<li> Identifier, name and description of the controller.</li>
+<li> The state "Enabled" and "Running", in which the controller object must be translated at start up.</li>
+<li> Address of the computational function or <a href="../Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">the data acquisition template</a>.</li>
+<li> Policy of scheduling, priority of the data acquisition task and number of iterations in one cycle of calculation task.</li></ul>
 <p>Вкладка "Вычисления" объекта контроллера (Рис. 3) содержит параметры и текст программы, непосредственно выполняемой контроллером. Модулем предусмотрена обработка ряда специальных параметров, доступных в программе контроллера:
 </p>
 <ul><li> <i>f_frq</i> — частота вычисления программы контроллера, только чтение.</li>

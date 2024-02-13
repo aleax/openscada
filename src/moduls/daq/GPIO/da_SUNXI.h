@@ -83,8 +83,6 @@ class SUNXI : public TTypeParam
     SUNXI( );
     //~SUNXI( );
 
-    string DB( const TController *cntr ) const	{ return mod->modId()+"SUNXIPrm_"+cntr->id(); }
-
     void create( TParamContr *prm );
     void destroy( TParamContr *prm );
 

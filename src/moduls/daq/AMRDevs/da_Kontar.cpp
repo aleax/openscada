@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.AMRDevs file: da_Kontar.cpp
 /***************************************************************************
- *   Copyright (C) 2014-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2014-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@ using namespace AMRDevs;
 //*************************************************
 //* Kontar					  *
 //*************************************************
-Kontar::Kontar( ) : TTypeParam("kontar", _("Kontar"))
+Kontar::Kontar( ) : TTypeParam("KontarPrm", _("Kontar"))
 {
     fldAdd(new TFld("ADDR",trS("Input transport"),TFld::String,TCfg::NoVal,"30"));
     fldAdd(new TFld("PASS",trS("Master password"),TFld::String,TCfg::NoVal,"30","00 00 00 00 00 00 00 00"));

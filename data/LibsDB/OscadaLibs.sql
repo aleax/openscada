@@ -4964,7 +4964,7 @@ if(tErr.toInt()) {
 			this[itO.id].set(EVAL, 0, 0, true);
 		}
 }
-f_err = tErr;','','',1662904842);
+f_err = tErr;','','',1707471627);
 INSERT INTO tmplib_DevLib VALUES('SLOT','Slot LTD devices','','','The template implements support for counters and correctors of the "SLOT" LTD production. The devices protocol is flexible and uniform for implementation of reading all available archives also as setting the configuration fields, but currently there was need only for reading the hourly archives, so the template reads the daily and hourly archives and some set of the instantaneous parameters.
 
 The template includes also code for connect the counters through modems using the AT-commands.
@@ -5287,7 +5287,15 @@ else {
 	tErr += ((sched.length && !sched.isEVal())?"; "+tr("Next scheduled call")+" "+SYS.strftime(SYS.cron(sched,schedTrueTm)):"") + (prcSt.length?"; "+prcSt:"");
 }
 f_err = tErr;','','',1672837570);
-INSERT INTO tmplib_DevLib VALUES('FF_LE','FF LE-03MB CT','','','','','',240,0,'JavaLikeCalc.JavaScript
+INSERT INTO tmplib_DevLib VALUES('FF_LE','FF LE-03MB CT','','','The template implements support for counters of electricity bidirectional on 1-phase/3-phase with analyse the network parameters LE-03MB CT of the firm "F&F (http://www.fif.com.pl/)".
+
+Protocol of the counters doesn''t provide of reading the data history, so the template has to obtain instant values only with need periodicity related to the network quality. Data of the counters are completely static, that is all their representing attributes are provided by the template.
+
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 0.9 HD
+Sponsored by: Vinnica Poultry Farm
+Version: 1.0.0
+License: GPLv2','','',240,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(data, pref, respPref) {
 	if(data == EVAL)	data = "";
@@ -5408,8 +5416,16 @@ if(tErr.toInt()) {
 		CoefP = CoefP_1 = CoefP_2 = CoefP_3 = EVAL;
 	}
 }
-f_err = tErr;','','',1691152291);
-INSERT INTO tmplib_DevLib VALUES('ergomera625','Ergomera 625','','','','','',30,0,'JavaLikeCalc.JavaScript
+f_err = tErr;','','',1707747408);
+INSERT INTO tmplib_DevLib VALUES('ergomera625','Ergomera 625','','','The template implements support for Ergomera 625 Counters of electricity and it based on the common template "ModBus base (mbBase) (http://oscada.org/wiki/Libs/Devices#mbBase)" since protocol of the counters grounded on standard ModBus function in main parameters.
+
+!!! The template currently supports only reading the ModBus registers without accessing the history due to the device protocol has got common problems here.
+
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 0.3 HD
+Sponsored by: Vinnica Poultry Farm
+Version: 0.1.0
+License: GPLv2','','',30,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(PDU) {
 	// For placing into the module ModBus
@@ -5602,8 +5618,22 @@ if(tErr.toInt()) {
 			this[itO.id].set(EVAL, 0, 0, true);
 		}
 }
-f_err = tErr;','','',1681968337);
-INSERT INTO tmplib_DevLib VALUES('Incubator','Incubator','Incubator','','','','',240,0,'JavaLikeCalc.JavaScript
+f_err = tErr;','','',1707748061);
+INSERT INTO tmplib_DevLib VALUES('Incubator','Incubator','','','The template implements the data acquisition of the Incubator Machines of firm ? in active and passive modes according to the reverse-engineering.
+
+Data of the machines is static but due to implementing two modes — active and passive, their attributes are created dynamically. The active mode means direct data requesting in a corresponded machine, when the passive mode is filtered whole traffic in the RS422 network and is created child virtual parameters for each machine corresponding to the obtained data.
+
+The template implements the collection of statistics about the network in general and for each individual machine.
+
+General statistics include: the number of read and processed packages, and the time of the last one; the remaining time (seconds) before the restart-reconnection of the transport in the absence of traffic in the input channel from "Reconnection time, data missing for passive (tmCon)".
+
+The statistics of a separate machine include: the number of received and processed packages, and the time of the last one; the current data update periodicity with maximum; the number of machine shutdowns, i.e. setting the attributes of the machine parameters in EVAL due to the lack of packages data during the specified time "Time of missing the machine data to set EVAL (tmToEVAL)".
+
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 4.3 HD
+Sponsored by: Vinnica Poultry Farm
+Version: 1.0.0
+License: GPLv2','','',240,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(data, buf) {
 	if(data == EVAL)	data = "";
@@ -5870,8 +5900,16 @@ if(tErr.toInt()) {
 		SYS.messDebug("/INCB/"+this.cfg("SHIFR"), tr("Error")+": "+tErr);
 	if(stStr.length)	tErr += " " + stStr;
 } else if(stStr.length)	tErr += ":" + stStr;
-f_err = tErr;','','',1703577475);
-INSERT INTO tmplib_DevLib VALUES('VSE002','VSE002','VSE002','','','','',240,0,'JavaLikeCalc.JavaScript
+f_err = tErr;','','',1707747618);
+INSERT INTO tmplib_DevLib VALUES('VSE002','VSE002','','','The template implements for main data acquisition of the vibration sensors of the firm IFM(https://www.ifm.com/) according to the reverse-engineering. Development and testing was performed on base of the sensor VSE002 (https://www.ifm.com/gb/en/product/VSE002), so you can use the template in compatible devices.
+
+The main data are ones transferred by the packages with indexed parameters: B16 — two different and B20 — one with three additional. The parameters are specific for configuration the device, so their representative attributes are created dynamically at receiving the packages. The template provides also of creation the aliased attributes with user specified ID and some simple processing by their describing in the attribute "User signals (custSign)".
+
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 3.0 HD
+Sponsored by: Vinnica Poultry Farm
+Version: 1.0.0
+License: GPLv2','','',240,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(data, toWait) {
 	data = tr.messIO(data, data.length ? 0 : -1e-3);
@@ -6014,8 +6052,22 @@ if(tErr.toInt()) {
 		SYS.messDebug("/VSE002/"+this.cfg("SHIFR"), tr("Error")+": "+tErr);
 	if(stStr.length)	tErr += " " + stStr;
 } else if(stStr.length)	tErr += ":" + stStr;
-f_err = tErr;','','',1703577914);
-INSERT INTO tmplib_DevLib VALUES('Goboy1M','Goboy 1M','Goboy 1M','','','','',240,0,'JavaLikeCalc.JavaScript
+f_err = tErr;','','',1707747850);
+INSERT INTO tmplib_DevLib VALUES('Goboy1M','Goboy 1M','','','The template implements support for Goboy 1M Gas Counters.
+
+Communication protocol of the devices is based on ModBus but it implements only nonstandard functions.
+
+Parameters, provided by this protocol, are all static, that is the representative attributes are provided by the template. For archiving parameters (7) there are provided hourly, daily and month archives.
+
+The template works in two modes: initial and tracing. Where the initial mode means first reading all archives from hourly one and switching to the tracing mode after finish the reading, that is reading fresh archiving and current data.
+
+Status of the template is shown in the "Error (err)" attribute with information about the mode and position of the read data of the archives.
+
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 1.0 HD
+Ordered by: BLUE STAR GROUP Ltd
+Version: 1.0.0
+License: GPLv2','','',240,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(PDU) {
 	// For placing into the module ModBus
@@ -6256,8 +6308,22 @@ else {
 }
 
 if(!t_err.toInt() && aStStr.length)	t_err = "0:"+aStStr;
-f_err = t_err+arhSt;','','',1703578036);
-INSERT INTO tmplib_DevLib VALUES('AutoPILOT','AutoPILOT PRO Flow Computers','AutoPILOT PRO Flow Computers','','','','',120,0,'JavaLikeCalc.JavaScript
+f_err = t_err+arhSt;','','',1707747551);
+INSERT INTO tmplib_DevLib VALUES('AutoPILOT','AutoPILOT PRO Flow Computers','','','The template implements support for AutoPILOT PRO Flow Computers from Thermo Fisher Scientific (http://www.thermofisher.com/).
+
+Communication protocol of the devices is based on ModBus but it implements only nonstandard functions.
+
+Parameters, provided by this protocol, are mixed for static and dynamic, that is attributes for archiving parameters are provided by the template and settings from some table can be specified in the attribute "Read tables set" for dynamic creation the representative attributes. Table 128 also has named parameters. For archiving parameters (8) there are provided hourly and daily archives. Also there are provided alarms and audits archives.
+
+The template works in two modes: initial and tracing. Where the initial mode means first reading all archives from hourly one and switching to the tracing mode after finish the reading, that is reading fresh archiving and the specified tables of the settings.
+
+Status of the template is shown in the "Error (err)" attribute with information about the mode and position of the read data of the archives.
+
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 4.25 HD
+Ordered by: BLUE STAR GROUP Ltd
+Version: 1.0.0
+License: GPLv2','','',120,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(PDU) {
 	reqCntr++;
@@ -6574,8 +6640,22 @@ if(tErr.toInt()) {
 	}
 }
 else if(prcSt.length)	tErr += "; "+prcSt;
-f_err = tErr;','','',1703578040);
-INSERT INTO tmplib_DevLib VALUES('AutoPILOT_old','AutoPILOT OLD Flow Computers','AutoPILOT OLD Flow Computers','','','','',240,0,'JavaLikeCalc.JavaScript
+f_err = tErr;','','',1707748115);
+INSERT INTO tmplib_DevLib VALUES('AutoPILOT_old','AutoPILOT OLD Flow Computers','','','The template implements support for AutoPILOT Flow Gas Computers from Thermo Fisher Scientific (http://www.thermofisher.com/) known as old devices of the firm, when new-pro ones are here.
+
+Communication protocol of the devices is completely specific and also works on serial busses with the same CRC algorithm as in ModBus/RTU.
+
+Parameters, provided by this protocol, are all static, that is the representative attributes are provided by the template. For archiving parameters (6) there are provided hourly and daily archives.
+
+The template works in two modes: initial and tracing. Where the initial mode means first reading all archives from hourly one and switching to the tracing mode after finish the reading, that is reading fresh archiving, the instantaneous and calculated data.
+
+Status of the template is shown in the "Error (err)" attribute with information about the mode and position of the read data of the archives.
+
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 1.2 HD
+Ordered by: BLUE STAR GROUP Ltd
+Version: 1.0.0
+License: GPLv2','','',240,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(data) {
 	reqCntr++;
@@ -6628,7 +6708,7 @@ if(f_start) {
 }
 
 if(reset) {
-	reset = false, arhLastH = arhLastD = arhLastALRM = arhLastAUDIT = 0;
+	reset = false, arhLastH = arhLastD = 0;
 }
 if(f_start || f_stop) return;
 
@@ -6775,16 +6855,20 @@ if(tErr.toInt()) {
 	}
 }
 else if(prcSt.length)	tErr += "; "+prcSt;
-f_err = tErr;','','',1703578040);
-INSERT INTO tmplib_DevLib VALUES('CorBK','Corrector BK','Corrector BK','','Notes:
-- The controller object scheduling must be set in the period 10...60 seconds.
-- "Currents try period" — the reading period of current values and last archive values.
-- "Time limit of processing" (60) in each cycle — the archives will be read up to the time elapsing.
-- To apply any changing the archivers configuration you must reset also if you disable/enable the parameter.','Notes:
-- The controller object scheduling must be set in the period 10...60 seconds.
-- "Currents try period" — the reading period of current values and last archive values.
-- "Time limit of processing" (60) in each cycle — the archives will be read up to the time elapsing.
-- To apply any changing the archivers configuration you must reset also if you disable/enable the parameter.','',240,0,'JavaLikeCalc.JavaScript
+f_err = tErr;','','',1707748115);
+INSERT INTO tmplib_DevLib VALUES('CorBK','Corrector BK','','','The template implements support for BK Correctors of Gas Flow in most completed volume, that is it is the most complex and advanced template for this consumer.
+
+Parameters, provided by this protocol, are static, that is all their representing attributes are provided by the template. Part of these parameters have hourly (4 parameters), day (6 parameters) and month (4 parameters) history. Some part of the parameters are settings. And the protocol also provides reading of the alarm history. Archives reading enabled only for specified archivers in the proper configuration fields.
+
+The template works in two modes: initial and tracing. Where the initial mode means first reading all archives from hourly one and switching to the tracing mode after finish the reading, that is reading current values and the fresh archiving.
+
+Status of the template is shown in the "Error (err)" attribute with information about the mode and position of the read data of the archives. Due to the communication is slow and archives can be big, status of the read archive data saved at it change, that is you can stop the template or disable PC in whole but the template will continue the archives reading from saved position and not from the begin, which reset you can by the proper boolean attribute.
+
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 5.2 HD
+Ordered by: BLUE STAR GROUP Ltd
+Version: 1.0.0
+License: GPLv2','','',240,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(tr, fnc, data, noRespData) {
 	if(data == EVAL)	data = "";
@@ -7162,14 +7246,16 @@ else {
 }
 
 if(!t_err.toInt())	t_err = "0";
-f_err = t_err+arhSt;','','',1703578040);
-INSERT INTO tmplib_DevLib VALUES('TDS','Tancy Data','Tancy Data','','Protocol Tianxin V1 implementation.
+f_err = t_err+arhSt;','','',1707748116);
+INSERT INTO tmplib_DevLib VALUES('TDS','Tancy Data','','','The template implements support for Tianxin V1 protocol of Gas Correctors TC220 from GasElectro (http://www.gaselectro.ru/). Communication protocol of the devices is completely specific.
 
-Hints:
-- The transport symbol/next timeout must be big enough for archives reading but the response packages can come with the interval about 5 seconds.','Protocol Tianxin V1 implementation.
+Parameters, provided by this protocol, are all static, that is the representative attributes are provided by the template. For archiving parameters (4) there is provided only the hourly archive.
 
-Hints:
-- The transport symbol/next timeout must be big enough for archives reading but the response packages can come with the interval about 5 seconds.','',240,0,'JavaLikeCalc.JavaScript
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 0.95 HD
+Ordered by: BLUE STAR GROUP Ltd
+Version: 1.0.0
+License: GPLv2','','',240,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(fnc, data) {
 	if(data == EVAL)	data = "";
@@ -7279,209 +7365,29 @@ else if((tmCur-cTm) > tryPer) {
 }
 
 if(!t_err.toInt())	t_err = "0";
-f_err = t_err;','','',1703578092);
-INSERT INTO tmplib_DevLib VALUES('TUF','TUF-2000','TUF-2000','','','','',30,0,'JavaLikeCalc.JavaScript
+f_err = t_err;','','',1707747719);
+INSERT INTO tmplib_DevLib VALUES('UltraMag','Ultramag','','','The template implements support for Ultramag Gas Meters of the firm "EPO Signal" LTD.
+
+Communication protocol of the devices is based on ModBus but with support only function 4 (Read Input Registers) and 16 (Preset Multiple Registers). The protocol supports reading archives also, that is why it implemented as a different template.
+
+Parameters, provided by this protocol, are static, that is all their representing attributes are provided by the template. Part of these parameters have hourly (4 parameters), day (6 parameters) and month (4 parameters) history. Archives reading enabled only for specified archivers in the proper configuration fields.
+
+The template works in two modes: initial and tracing. Where the initial mode means first reading all archives from hourly one and switching to the tracing mode after finish the reading, that is reading current values and the fresh archiving.
+
+Status of the template is shown in the "Error (err)" attribute with information about the mode and position of the read data of the archives. Due to the communication is slow and archives can be big, status of the read archive data saved at it change, that is you can stop the template or disable PC in whole but the template will continue the archives reading from saved position and not from the begin, which reset you can by the proper boolean attribute.
+
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 1.0 HD
+Ordered by: BLUE STAR GROUP Ltd
+Version: 1.0.0
+License: GPLv2','','',240,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(PDU) {
 	// For placing into the module ModBus
 	if(!transport.length)	return this.cntr().messIO(PDU);
 
 	// For other logical level
-	reqO = SYS.XMLNode(mbType).setAttr("id","Goboy").setAttr("node",addr).setText(PDU);
-	if((rez=tr.messIO(reqO,"ModBus")).length)	return "10:"+rez;
-	PDU = reqO.text();
-
-	return reqO.attr("err");
-}
-
-if(f_start) {
-	transport_ = transport;
-	tr = EVAL;
-	dt = new Object();
-	items_ = "";
-}
-
-//Parse the items set and create user attributes
-if(items != items_) {
-	items_ = items;
-	// Mark for check to deletion needs
-	for(var iDt in dt)
-		if(iDt != "10000") dt[iDt].mark = false;
-	// Append/Update present ones
-	for(off = 0; (sIt=items.parseLine(0,off)).length; ) {
-		if(sIt[0] == "#")	continue;
-		off1 = 0;
-		itO = new Object();
-		itO.tp = sIt.parse(0, ":", off1);
-		tmpAddr = sIt.parse(0, ":", off1);
-		itO.addr = tmpAddr.toInt();
-		itO.md = sIt.parse(0, ":", off1);
-		itO.id = sIt.parse(0, ":", off1);
-		itO.nm = sIt.slice(off1);
-		dt[itO.addr.toString(16,5)] = itO;
-		if(itO.tp == "u" || itO.tp == "i" || itO.tp == "u2" || itO.tp == "i2")	{ wTp = "integer"; itO.sz = 2; }
-		else if(itO.tp == "u4" || itO.tp == "i4")	{ wTp = "integer"; itO.sz = 4; }
-		else if(itO.tp == "s")	{ wTp = "string"; itO.sz = 16; }
-		else { wTp = "real"; itO.sz = 4; }
-		itO.rd = (itO.md.indexOf("r") >= 0);
-		itO.wr = (itO.md.indexOf("w") >= 0);
-		itO.rev = (itO.md.indexOf("~") >= 0);
-		if(!itO.wr)	wTp += "|ro";
-		if(itO.rd || itO.wr) {
-			this.attrAdd(itO.id, itO.nm, wTp);
-			if(itO.wr)	itO.val = this[itO.id].get();
-			itO.mark = true;
-			//SYS.messInfo("/ED","itO="+itO.id+"; tmpAddr="+tmpAddr+"; addr="+itO.addr);
-		}
-	}
-	dt["10000"] = EVAL;
-	// Check, remove item and set to EVAL the attribute
-	for(var iDt in dt) {
-		if(iDt == "10000" || dt[iDt].mark)	continue;
-		this[dt[iDt].id].set(EVAL, 0, 0, true);
-		delete dt[iDt];
-	}
-}
-
-if(f_start || f_stop) return;
-
-tErr = "";
-
-//Checking for the transport change and connect
-if(tr.isEVal() || transport != transport_)	{
-	if(!transport.length) {
-		if(!((tVl=this.cntr().cfg("PROT")) == "RTU" || tVl == "ASCII" || tVl == "TCP")) {
-			tr = EVAL;
-			tErr = "1:"+tr("Output transport is empty and the controller object is not ModBus.");
-		}
-		else {
-			tr = new Object();
-			maxBlkSz = this.cntr().cfg("MAX_BLKSZ");
-			if(maxBlkSz.isEVal())	maxBlkSz = 12;
-			fragMerge = this.cntr().cfg("FRAG_MERGE");
-			if(fragMerge.isEVal())	fragMerge = false;
-		}
-	} else tr = SYS.Transport[transport.parse(0)]["out_"+transport.parse(1)];
-	maxBlkSz = max(10, min(200,maxBlkSz));
-	transport_ = transport;
-}
-if(tErr.toInt()) ;
-else if(tr.isEVal())
-	tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
-else if(addr < 0 || addr > 247)
-	tErr = "2:"+tr("Address ''%1'' out of range [0...247].").replace("%1",addr.toString());
-else {
-	//Check for changed attributes and perform writing
-	for(var iDt in dt) {
-		isEOL = (iDt == "10000");
-		itO = dt[iDt];
-		tVl = this[itO.id].get();
-		if(isEOL || !itO.wr || tVl.isEVal() || itO.val == tVl)	continue;
-		PDU = Special.FLibSYS.IO("", "", "b");
-		PDU.wr(16,"uint8").wr(itO.addr,"uint16").wr(floor(itO.sz/2),"uint16").wr(itO.sz,"uint8");
-		if(itO.tp == "u" || itO.tp == "u2")			PDU.wr(tVl,"uint16");
-		else if(itO.tp == "i" || itO.tp == "i2")	PDU.wr(tVl,"int16");
-		else if(itO.tp == "u4")	{
-			if(itO.rev)	PDU.wr(tVl>>16, "uint16").wr(tVl&0xFFFF, "uint16");
-			else	PDU.wr(tVl&0xFFFF, "uint16").wr(tVl>>16, "uint16");
-		}
-		else if(itO.tp == "i4") {
-			if(itO.rev)	PDU.wr(tVl>>16, "int16").wr(tVl&0xFFFF, "uint16");
-			else	PDU.wr(tVl&0xFFFF, "uint16").wr(tVl>>16, "int16");
-		}
-		else if(itO.tp == "s")		PDU.wr(tVl.slice(0,16),"char").wr(" ","char",16-min(16,tVl.length));
-		else {
-			w1 = w2 = 0;
-			if(itO.rev)	Special.FLibSYS.floatSplitWord(tVl, w2, w1);
-			else	Special.FLibSYS.floatSplitWord(tVl, w1, w2);
-			PDU.wr(w1, "uint16").wr(w2, "uint16");
-		}
-		//SYS.messInfo("/ED","reqPDU="+SYS.strDecode(PDU.string,"Bin"," "));
-		if(!req(PDU.string).toInt())	itO.val = tVl;
-		//SYS.messInfo("/ED","respPDU="+SYS.strDecode(PDU.string,"Bin"," "));
-	}
-
-	//Same requests for the data
-	blk = new Array();
-	for(var iDt in dt) {
-		isEOL = (iDt == "10000");
-		itO = dt[iDt];
-		//SYS.messInfo("/ED","iDt="+iDt+"; isEOL="+isEOL);
-		if(!isEOL && (!blk.length || (
-				(itO.addr-blk[0].addr+1+floor((itO.sz-2)/2)) <= floor(maxBlkSz/2) && (fragMerge || (itO.addr-blk[blk.length-1].addr-floor((blk[blk.length-1].sz-2)/2)) <= 1) ))) {
-			if(itO.rd) blk.push(itO);
-			continue;
-		}
-		//Send request for this block
-		if(blk.length) {
-			regN = (blk[blk.length-1].addr - blk[0].addr) + 1 + floor((blk[blk.length-1].sz-2)/2);
-			PDU = SYS.strFromCharCode(3, (blk[0].addr>>8)&0xFF, blk[0].addr&0xFF, 0, regN);
-			//SYS.messInfo("/ED","reqPDU="+SYS.strDecode(PDU,"Bin"," "));
-			if((tErr=req(PDU)).toInt()) break;
-			//SYS.messInfo("/ED","respPDU="+SYS.strDecode(PDU,"Bin"," "));
-			io = Special.FLibSYS.IO(PDU, "", "b");
-			rF = io.read("uint8", 1); rN = io.read("uint8", 1);
-			if(rF != 3 || (io.length-2) != rN) { tErr = "10:"+tr("Inconsistent respond''s length."); break; }
-			for(iB = 0; iB < blk.length; iB++) {
-				itO1 = blk[iB];
-				io.pos = 2 + (itO1.addr-blk[0].addr)*2;
-				if(itO1.tp == "u" || itO1.tp == "u2")			tVl = io.read("uint16", 1);
-				else if(itO1.tp == "i" || itO1.tp == "i2")	tVl = io.read("int16", 1);
-				else if(itO1.tp == "u4")
-					tVl = itO1.rev ? io.read("uint16", 1)*65536 + io.read("uint16", 1) :
-											io.read("uint16", 1) + io.read("uint16", 1)*65536;
-				else if(itO1.tp == "i4")
-					tVl = itO1.rev ? io.read("int16", 1)*65536 + io.read("uint16", 1) :
-											io.read("uint16", 1) + io.read("int16", 1)*65536;
-				else if(itO1.tp == "s")	tVl = io.read("char", blk[0].sz);
-				else {
-					w1 = io.read("uint16", 1); w2 = io.read("uint16", 1);
-					tVl = itO1.rev ? Special.FLibSYS.floatMergeWord(w2, w1) :
-											Special.FLibSYS.floatMergeWord(w1, w2);
-					//tVl = io.read("float", 1, "l");
-				}
-				if(itO1.wr && itO1.val != this[itO1.id].get())	{ itO1.val = tVl; continue; }
-				this[itO1.id].set(tVl, 0, 0, true);
-				itO1.val = tVl;
-			}
-			blk = new Array(); blk.push(itO);
-		}
-	}
-
-	//Specific functions processing
-	//....
-	// Getting the data pointer
-	PDU = SYS.strFromCharCode(3, 0, 162, 0, 1);
-	if(!tErr.toInt() && !(tErr=req(PDU)).toInt()) {
-		dayPnt = PDU.charCodeAt(2, "UTF-16BE");
-		SYS.messInfo("/TUF","dayPnt="+dayPnt);
-		// Requesting the day archive item
-		dataRegOff = 2817 + dayPnt*8;
-		PDU = SYS.strFromCharCode(3, (dataRegOff>>8)&0xFF, dataRegOff&0xFF, 0, 8);
-		if(!(tErr=req(PDU)).toInt())
-			SYS.messInfo("/TUF","respPDU="+SYS.strDecode(PDU,"Bin"," "));
-	}
-}
-
-if(!tErr.length)	tErr = "0";
-if(tErr.toInt()) {
-	if(!tr.isEVal() && tr.start()) tr.start(false);
-	if(f_err != tErr)
-		for(var iDt in dt) {
-			itO = dt[iDt];
-			if(iDt == "10000")	continue;
-			this[itO.id].set(EVAL, 0, 0, true);
-		}
-}
-f_err = tErr;','','',1703578130);
-INSERT INTO tmplib_DevLib VALUES('UltraMag','Ultramag','Ultramag','','','','',240,0,'JavaLikeCalc.JavaScript
-//Same request to the device
-function req(PDU) {
-	// For placing into the module ModBus
-	if(!transport.length)	return this.cntr().messIO(PDU);
-
-	// For other logical level
-	reqO = SYS.XMLNode("RTU").setAttr("id","Goboy").setAttr("node",addr).setText(PDU);
+	reqO = SYS.XMLNode("RTU").setAttr("id","Ultramag").setAttr("node",addr).setText(PDU);
 	if((rez=tr.messIO(reqO,"ModBus")).length)	return "10:"+rez;
 	PDU = reqO.text();
 
@@ -7693,15 +7599,25 @@ else {
 	arhs.tmPrev = tmCur;
 }
 
-f_err = t_err + arhSt;','','',1703578149);
-INSERT INTO tmplib_DevLib VALUES('enronDaniel','Enron, Daniel','Enron, Daniel','','','','',30,0,'JavaLikeCalc.JavaScript
+f_err = t_err + arhSt;','','',1707747778);
+INSERT INTO tmplib_DevLib VALUES('enronDaniel','Enron, Daniel','','','The template implements support for Enron, Daniel Gas Counters.
+
+Communication protocol of the devices is based on ModBus but with registers size 4 bytes instead standard 2 bytes, that is they cannot be polled by the standard OpenSCADA module DAQ.ModBus (http://oscada.org/wiki/Special:MyLanguage/Modules/ModBus). So, the template implements that protocol variant on the Logical Level (http://oscada.org/wiki/Special:MyLanguage/Documents/DAQ#LogicLev) and with main features of the DAQ.ModBus module, that is allows for free registers specifying. On ground the module later was created the "ModBus base (mbBase) (http://oscada.org/wiki/Libs/Devices#mbBase)" template as a base for further creation related to ModBus templates with standard functions and additional implementing only specific functions.
+
+For numbers need registers go to documentation of vendor the devices! The template provides only reading current values and has not got any archives due to missing such feature in the communication protocol.
+
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 0.6 HD
+Ordered by: BLUE STAR GROUP Ltd
+Version: 1.0.0
+License: GPLv2','','',30,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(PDU) {
 	// For placing into the module ModBus
 	if(!transport.length)	return this.cntr().messIO(PDU);
 
 	// For other logical level
-	reqO = SYS.XMLNode(mbType).setAttr("id","Goboy").setAttr("node",addr).setText(PDU);
+	reqO = SYS.XMLNode(mbType).setAttr("id","EnronDaniel").setAttr("node",addr).setText(PDU);
 	if((rez=tr.messIO(reqO,"ModBus")).length)	return "10:"+rez;
 	PDU = reqO.text();
 
@@ -7841,7 +7757,299 @@ else {
 	}
 }
 
-f_err = tErr.length ? tErr : "0";','','',1703578202);
+f_err = tErr.length ? tErr : "0";','','',1707747986);
+INSERT INTO tmplib_DevLib VALUES('FlowGAS','Flow GAS','','','The template implements support for FlowGas Gas Correctors of the firm "EPO Signal" LTD.
+
+Communication protocol of the devices is based on standard ModBus but with re-implementing function 16 for reading archives. So, the template became the first one used the template "ModBus base (mbBase)" in own ground.
+
+Parameters, provided by this protocol, are mixed for static and dynamic, that is attributes for archiving parameters are provided by the template and extra current ones can be specified in the attribute "Items set" for dynamic creation the representative attributes. For archiving parameters (4) there is provided only the hourly archive.
+
+The template works in two modes: initial and tracing. Where the initial mode means first reading all archives from hourly one and switching to the tracing mode after finish the reading, that is reading current values and the fresh archiving.
+
+Status of the template is shown in the "Error (err)" attribute with information about the mode and position of the read data of the archives. Due to the communication is slow and archives can be big, status of the read archive data saved at it change, that is you can stop the template or disable PC in whole but the template will continue the archives reading from saved position and not from the begin, which reset you can by the proper boolean attribute.
+
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 1.3 HD
+Ordered by: BLUE STAR GROUP Ltd
+Version: 1.0.0
+License: GPLv2','','',240,0,'JavaLikeCalc.JavaScript
+//Same request to the device
+function req(PDU) {
+	// For placing into the module ModBus
+	if(!transport.length)	return this.cntr().messIO(PDU);
+
+	// For other logical level
+	reqO = SYS.XMLNode(mbType).setAttr("id","FlowGAS").setAttr("node",addr).setText(PDU);
+	if((rez=tr.messIO(reqO,"ModBus")).length)	return "10:"+rez;
+	PDU = reqO.text();
+
+	return reqO.attr("err");
+}
+
+//Seting value to the archive
+function archSet(attr, vTm, arh, vl) {
+	SYS.messInfo("/FlowGAS/archSet","attr="+attr+"; vTm="+SYS.strftime(vTm)+"; arh="+arh+"; vl="+vl);
+	atrO = this[attr];
+	if(!atrO || atrO.isEVal()) return;
+	arguments[attr] = vl;	//Setting the current value
+	//if(vTm > atrO.time())	atrO.set(vl,vTm,0,true);
+	if(atrO.arch())	atrO.arch().setVal(vTm*1e6, vl, arh);
+}
+
+if(f_start) {
+	transport_ = transport;
+	tr = EVAL;
+	dt = new Object();
+	items_ = "";
+	arhSt = "";
+}
+
+if((f_start && typeof(arhs) != "array") || reset) {
+	reset = false;
+	//Archives init
+	arhs = new Array();
+	a = new Object();
+	a.id = "Hours"; a.func = 1; a.dtSz = 28; a.pos = 14400; a.per = 3600;
+	a.arh = arhH; a.attrs = new Array("p", "t", "vWork-d", "vResult-d");
+	arhs.push(a);
+	//...
+}
+if(f_start || f_stop) return;
+
+//Parse the items set and create user attributes
+if(items != items_) {
+	items_ = items;
+	// Mark for check to deletion needs
+	for(var iDt in dt)
+		if(iDt != "10000") dt[iDt].mark = false;
+	// Append/Update present ones
+	for(off = 0; (sIt=items.parseLine(0,off)).length; ) {
+		if(sIt[0] == "#")	continue;
+		off1 = 0;
+		itO = new Object();
+		itO.tp = sIt.parse(0, ":", off1);
+		tmpAddr = sIt.parse(0, ":", off1);
+		itO.addr = tmpAddr.toInt();
+		itO.md = sIt.parse(0, ":", off1);
+		itO.id = sIt.parse(0, ":", off1);
+		itO.nm = sIt.slice(off1);
+		dt[itO.addr.toString(16,5)] = itO;
+		if(itO.tp == "u" || itO.tp == "i" || itO.tp == "u2" || itO.tp == "i2")	{ wTp = "integer"; itO.sz = 2; }
+		else if(itO.tp == "u4" || itO.tp == "i4")	{ wTp = "integer"; itO.sz = 4; }
+		else if(itO.tp == "s")	{ wTp = "string"; itO.sz = 16; }
+		else if(itO.tp == "d")	{ wTp = "real"; itO.sz = 8; }
+		else { wTp = "real"; itO.sz = 4; }
+		itO.rd = (itO.md.indexOf("r") >= 0);
+		itO.wr = (itO.md.indexOf("w") >= 0);
+		itO.rev = (itO.md.indexOf("~") >= 0);
+		if(!itO.wr)	wTp += "|ro";
+		if(itO.rd || itO.wr) {
+			this.attrAdd(itO.id, itO.nm, wTp);
+			if(itO.wr)	itO.val = this[itO.id].get();
+			itO.mark = true;
+			//SYS.messInfo("/ED","itO="+itO.id+"; tmpAddr="+tmpAddr+"; addr="+itO.addr);
+		}
+	}
+	dt["10000"] = EVAL;
+	// Check, remove item and set to EVAL the attribute
+	for(var iDt in dt) {
+		if(iDt == "10000" || dt[iDt].mark)	continue;
+		this[dt[iDt].id].set(EVAL, 0, 0, true);
+		delete dt[iDt];
+	}
+}
+
+if(f_start || f_stop) return;
+
+tErr = "";
+
+//Checking for the transport change and connect
+if(tr.isEVal() || transport != transport_)	{
+	if(!transport.length) {
+		if(!((tVl=this.cntr().cfg("PROT")) == "RTU" || tVl == "ASCII" || tVl == "TCP")) {
+			tr = EVAL;
+			tErr = "1:"+tr("Output transport is empty and the controller object is not ModBus.");
+		}
+		else {
+			tr = new Object();
+			maxBlkSz = this.cntr().cfg("MAX_BLKSZ");
+			if(maxBlkSz.isEVal())	maxBlkSz = 12;
+		}
+	} else tr = SYS.Transport[transport.parse(0)]["out_"+transport.parse(1)];
+	maxBlkSz = max(10, min(200,maxBlkSz));
+	transport_ = transport;
+}
+if(tErr.toInt()) ;
+else if(tr.isEVal())
+	tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else if(addr < 0 || addr > 247)
+	tErr = "2:"+tr("Address ''%1'' out of range [0...247].").replace("%1",addr.toString());
+else {
+	//Check for changed attributes and perform writing
+	for(var iDt in dt) {
+		isEOL = (iDt == "10000");
+		itO = dt[iDt];
+		tVl = this[itO.id].get();
+		if(isEOL || !itO.wr || tVl.isEVal() || itO.val == tVl)	continue;
+		PDU = Special.FLibSYS.IO("", "", "b");
+		PDU.wr(16,"uint8").wr(itO.addr,"uint16").wr(floor(itO.sz/2),"uint16").wr(itO.sz,"uint8");
+		if(itO.tp == "u" || itO.tp == "u2")			PDU.wr(tVl,"uint16");
+		else if(itO.tp == "i" || itO.tp == "i2")	PDU.wr(tVl,"int16");
+		else if(itO.tp == "u4")	{
+			if(itO.rev)	PDU.wr(tVl>>16, "uint16").wr(tVl&0xFFFF, "uint16");
+			else	PDU.wr(tVl&0xFFFF, "uint16").wr(tVl>>16, "uint16");
+		}
+		else if(itO.tp == "i4") {
+			if(itO.rev)	PDU.wr(tVl>>16, "int16").wr(tVl&0xFFFF, "uint16");
+			else	PDU.wr(tVl&0xFFFF, "uint16").wr(tVl>>16, "int16");
+		}
+		else if(itO.tp == "s")		PDU.wr(tVl.slice(0,16),"char").wr(" ","char",16-min(16,tVl.length));
+		else {
+			w1 = w2 = 0;
+			if(itO.rev)	Special.FLibSYS.floatSplitWord(tVl, w2, w1);
+			else	Special.FLibSYS.floatSplitWord(tVl, w1, w2);
+			PDU.wr(w1, "uint16").wr(w2, "uint16");
+		}
+		//SYS.messInfo("/ED","reqPDU="+SYS.strDecode(PDU.string,"Bin"," "));
+		if(!req(PDU.string).toInt())	itO.val = tVl;
+		//SYS.messInfo("/ED","respPDU="+SYS.strDecode(PDU.string,"Bin"," "));
+	}
+
+	//Requesting for the operative data
+	blk = new Array();
+	for(var iDt in dt) {
+		isEOL = (iDt == "10000");
+		itO = dt[iDt];
+		//SYS.messInfo("/ED","iDt="+iDt+"; isEOL="+isEOL);
+		if(!isEOL && (!blk.length || (itO.addr-blk[0].addr+1+itO.sz) <= maxBlkSz)) {
+			if(itO.rd) blk.push(itO);
+			continue;
+		}
+		//Send request for this block
+		if(blk.length) {
+			regN = (blk[blk.length-1].addr - blk[0].addr) + 1 + blk[blk.length-1].sz;
+			PDU = SYS.strFromCharCode(4, (blk[0].addr>>8)&0xFF, blk[0].addr&0xFF, 0, regN/2);
+			//SYS.messInfo("/ED","reqPDU="+SYS.strDecode(PDU,"Bin"," "));
+			if((tErr=req(PDU)).toInt()) break;
+			//SYS.messInfo("/ED","respPDU="+SYS.strDecode(PDU,"Bin"," "));
+			io = Special.FLibSYS.IO(PDU, "", "b");
+			rF = io.read("uint8", 1); rN = io.read("uint8", 1);
+			if(rF != 4 || (io.length-2) != rN) { tErr = "10:"+tr("Inconsistent respond''s length."); break; }
+			for(iB = 0; iB < blk.length; iB++) {
+				itO1 = blk[iB];
+				io.pos = 2 + (itO1.addr-blk[0].addr);
+				if(itO1.tp == "u" || itO1.tp == "u2")			tVl = io.read("uint16", 1);
+				else if(itO1.tp == "i" || itO1.tp == "i2")	tVl = io.read("int16", 1);
+				else if(itO1.tp == "u4")
+					tVl = itO1.rev ? io.read("uint16", 1)*65536 + io.read("uint16", 1) :
+											io.read("uint16", 1) + io.read("uint16", 1)*65536;
+				else if(itO1.tp == "i4")
+					tVl = itO1.rev ? io.read("int16", 1)*65536 + io.read("uint16", 1) :
+											io.read("uint16", 1) + io.read("int16", 1)*65536;
+				else if(itO1.tp == "s")	tVl = io.read("char", blk[0].sz);
+				else if(itO1.tp == "d")	{
+					//SYS.messInfo("/FlowGAS", "itO1.addr="+itO1.addr+"Str="+SYS.strDecode(io.string)+"; pos="+io.pos);
+					tVl = io.read("double", 1, "b");
+				}
+				else {
+					w1 = io.read("uint16", 1); w2 = io.read("uint16", 1);
+					tVl = itO1.rev ? Special.FLibSYS.floatMergeWord(w2, w1) :
+											Special.FLibSYS.floatMergeWord(w1, w2);
+					//tVl = io.read("float", 1, "l");
+				}
+				if(itO1.wr && itO1.val != this[itO1.id].get())	{ itO1.val = tVl; continue; }
+				this[itO1.id].set(tVl, 0, 0, true);
+				itO1.val = tVl;
+			}
+			blk = new Array(); blk.push(itO);
+		}
+	}
+
+	//Archives array processing
+	tmCur = SYS.time();
+	arhSt = "";
+	for(iA = 0; iA < arhs.length; iA++) {
+		aO = arhs[iA];
+		//if(aO.tmLast.isEVal())	continue;
+		arhSt += (arhSt.length?"; ":"")+aO.id + ": ";
+		SYS.messDebug("/FlowGAS","Archive "+aO.id+"; arh="+aO.arh);
+		if(!aO.arh.length)	{ arhSt += tr("Disabled"); continue; }
+		if(tErr.toInt())		arhSt += tr("Missed by an error - ");
+		else {
+			// The archive selection
+			PDU = SYS.strFromCharCode(0x10, 0x01, 0x2f, 0, 1, 2, 0, aO.func);
+			if((tErr=req(PDU)).toInt())	arhSt += tr("Missed by an error - ");
+		}
+		while(!tErr.toInt() && (SYS.time()-tmCur) < arhTmLim) {
+			SYS.messDebug("/FlowGAS","Requesting "+aO.id+" for "+aO.pos);
+			// The need position selection
+			PDU = SYS.strFromCharCode(0x10, 0x01, 0x31, 0, 1, 2, aO.pos>>8, aO.pos&0xFF);
+			if((tErr=req(PDU)).toInt())	{ arhSt += tr("Missed by an error - "); continue; }
+			// The selected data reading
+			PDU = SYS.strFromCharCode(4, 0x01, 0x41, 0, aO.dtSz/2);
+			if((tErr=req(PDU)).toInt()) { arhSt += tr("Missed by an error - "); continue; }
+
+			io = Special.FLibSYS.IO(PDU, "", "b"); io.pos = 2;
+			dtD = io.read("uint8",1), dtM = io.read("uint8",1), dtY = io.read("uint8",1), dtH = io.read("uint8",1);
+			aO.tm = SYS.mktime(0, 0, dtH, dtD, dtM-1, 2000+dtY);
+			for(iA = 0; iA < aO.attrs.length; iA++)
+				archSet(aO.attrs[iA].parse(0,"-"), aO.tm, aO.arh, (aO.attrs[iA].parse(1,"-")=="d") ? io.read("double",1,"b") : io.read("float",1,"b"));
+			aO.pos = max(1, aO.pos-1);
+		}
+
+		if(aO.per > 24*3600)	dtForm = "%Y-%m";
+		else if(aO.per > 3600)	dtForm = "%Y-%m-%d";
+		else if(aO.per > 60)	dtForm = "%Y-%m-%d %H";
+		else									dtForm = "%Y-%m-%d %H %M";
+		if(aO.pos == 1) arhSt += tr("Trace for current time=%1").replace("%1",SYS.strftime(aO.tm,dtForm));
+		else arhSt += tr("Initial reading in pos=%1(%2)").replace("%1",aO.pos.toString()).replace("%2",SYS.strftime(aO.tm,dtForm));
+		SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
+	}
+
+	// Requesting the data
+	/*if(!tErr.toInt()) {
+		PDU = SYS.strFromCharCode(0x10, 0x01, 0x2f, 0, 1, 2, 0, 1);
+		//SYS.messInfo("/ED","reqPDU="+SYS.strDecode(PDU,"Bin"," "));
+		if(!(tErr=req(PDU)).toInt()) {
+			stTm = SYS.time();
+			for( ; iRec > 0 && (SYS.time()-stTm) < 20; iRec--) {
+				PDU = SYS.strFromCharCode(0x10, 0x01, 0x31, 0, 1, 2, iRec>>8, iRec&0xFF);
+				if(!(tErr=req(PDU)).toInt()) {
+					PDU = SYS.strFromCharCode(4, 0x01, 0x41, 0, 28/2);
+					if(!(tErr=req(PDU)).toInt()) {
+						io = Special.FLibSYS.IO(PDU, "", "b"); io.pos = 2;
+						SYS.messInfo("/FlowGAS",
+							"iRec="+iRec+"; "
+							"DateTm="+io.read("uint8",1)+"."+io.read("uint8",1)+"."+io.read("uint8",1)+"T"+io.read("uint8",1)+"; "
+							"P="+io.read("float",1,"b")+"; "
+							"T="+io.read("float",1,"b")+"; "
+							"AccWorkF="+io.read("double",1,"b")+"; "
+							"AccStdF="+io.read("double",1,"b"));
+//	01 04 1C
+//10 02 16 17	- 16.02.22 23
+//43 4B 10 5C - P
+//40 7F 2F F5 - T
+//41 0A 5D 88 00 00 00 00 - Overal accumulated work flow
+//41 2C 5E 69 8E 6C 20 A1 - Overal accumulated standard flow
+//45 01
+					}
+				}
+			}
+		}
+	}*/
+}
+
+if(!tErr.length)	tErr = "0";
+if(tErr.toInt()) {
+	if(!tr.isEVal() && tr.start()) tr.start(false);
+	if(f_err != tErr)
+		for(var iDt in dt) {
+			itO = dt[iDt];
+			if(iDt == "10000")	continue;
+			this[itO.id].set(EVAL, 0, 0, true);
+		}
+}
+f_err = tErr+(arhSt.length?": "+arhSt:"");','','',1707747484);
 CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_PrescrTempl VALUES('timer','Command — Timer','Команда — Таймер','Команда — Таймер','Template of a command of the prescription typical timer. The timer is only designed to hold time between other action steps and for example, so it only has one attribute, "Time" in seconds.
 
@@ -15277,6 +15485,77 @@ INSERT INTO Trs VALUES('Initial reading in time=%1','','','');
 INSERT INTO Trs VALUES('Hours: ','','','');
 INSERT INTO Trs VALUES('Next scheduled call','','','');
 INSERT INTO Trs VALUES('4:Error the address response','','','');
+INSERT INTO Trs VALUES('Output transport is empty and the controller object is not ModBus RTU.','','','');
+INSERT INTO Trs VALUES('No connection, next try after %1 seconds','','','');
+INSERT INTO Trs VALUES('Error function %1 response.','','','');
+INSERT INTO Trs VALUES('Hourly archive read item %1 from %2; ','','','');
+INSERT INTO Trs VALUES('Daily archive read item %1 from %2; ','','','');
+INSERT INTO Trs VALUES('ALARM archive read item %1 from %2; ','','','');
+INSERT INTO Trs VALUES('AUDIT archive read item %1 from %2; ','','','');
+INSERT INTO Trs VALUES('3:No response or the response is incompleted. ','','','');
+INSERT INTO Trs VALUES('4:Not acceptable response ''%1''.','','','');
+INSERT INTO Trs VALUES('3:No response or the response incompleted. ','','','');
+INSERT INTO Trs VALUES('Waiting for the full call','','','');
+INSERT INTO Trs VALUES('Address ''%1'' out of range [0...15].','','','');
+INSERT INTO Trs VALUES('Disabled','Вимкнено','Выключено','');
+INSERT INTO Trs VALUES('Missed by error - ','','','');
+INSERT INTO Trs VALUES('Trace for current in pos=%1, last=%2','','','');
+INSERT INTO Trs VALUES('Initial scan in pos=%1(%4), near pos=%2, time=%3','','','');
+INSERT INTO Trs VALUES('2:No data. ','','','');
+INSERT INTO Trs VALUES('3:Input package is inconsistent. ','','','');
+INSERT INTO Trs VALUES('4:Not correspond response address. ','','','');
+INSERT INTO Trs VALUES('5:Wrong package structure. ','','','');
+INSERT INTO Trs VALUES('Heating','','','');
+INSERT INTO Trs VALUES('Cooling','','','');
+INSERT INTO Trs VALUES('Data status','','','');
+INSERT INTO Trs VALUES('T1','','','');
+INSERT INTO Trs VALUES('T2','','','');
+INSERT INTO Trs VALUES('T3','','','');
+INSERT INTO Trs VALUES('T4','','','');
+INSERT INTO Trs VALUES('T5','','','');
+INSERT INTO Trs VALUES('T6','','','');
+INSERT INTO Trs VALUES('CO2','','','');
+INSERT INTO Trs VALUES('H2O','','','');
+INSERT INTO Trs VALUES('FAN','','','');
+INSERT INTO Trs VALUES('Voltage Heater 1','','','');
+INSERT INTO Trs VALUES('Voltage Heater 2','','','');
+INSERT INTO Trs VALUES('Voltage Heater 3','','','');
+INSERT INTO Trs VALUES('Voltage Heater 4','','','');
+INSERT INTO Trs VALUES('Voltage Heater 5','','','');
+INSERT INTO Trs VALUES('Voltage Heater 6','','','');
+INSERT INTO Trs VALUES('Humidify','','','');
+INSERT INTO Trs VALUES('Voltage Cooler 1','','','');
+INSERT INTO Trs VALUES('Voltage Cooler 2','','','');
+INSERT INTO Trs VALUES('Voltage Cooler 3','','','');
+INSERT INTO Trs VALUES('Voltage Cooler 4','','','');
+INSERT INTO Trs VALUES('Voltage Cooler 5','','','');
+INSERT INTO Trs VALUES('Voltage Cooler 6','','','');
+INSERT INTO Trs VALUES('Day','','','');
+INSERT INTO Trs VALUES('Hour','','','');
+INSERT INTO Trs VALUES('Minute','','','');
+INSERT INTO Trs VALUES('Status radiator 1','','','');
+INSERT INTO Trs VALUES('Status radiator 2','','','');
+INSERT INTO Trs VALUES('Status radiator 3','','','');
+INSERT INTO Trs VALUES('Status radiator 4','','','');
+INSERT INTO Trs VALUES('Status radiator 5','','','');
+INSERT INTO Trs VALUES('Status radiator 6','','','');
+INSERT INTO Trs VALUES('Set T1','','','');
+INSERT INTO Trs VALUES('Set T2','','','');
+INSERT INTO Trs VALUES('Set T3','','','');
+INSERT INTO Trs VALUES('Set T4','','','');
+INSERT INTO Trs VALUES('Set T5','','','');
+INSERT INTO Trs VALUES('Set T6','','','');
+INSERT INTO Trs VALUES('Set CO2 minimum','','','');
+INSERT INTO Trs VALUES('Set CO2 maximum','','','');
+INSERT INTO Trs VALUES('Set H2O minimum','','','');
+INSERT INTO Trs VALUES('Set H2O maximum','','','');
+INSERT INTO Trs VALUES('4:The response function is improper to the request one.','','','');
+INSERT INTO Trs VALUES('Initial reading in position %1, time=%2','','','');
+INSERT INTO Trs VALUES('3:No waiting sequence. ','','','');
+INSERT INTO Trs VALUES('No data, reconnection. Switch to the first screen of the device for the data receive!','','','');
+INSERT INTO Trs VALUES('Reconnects %1, left %2s.','','','');
+INSERT INTO Trs VALUES('Missed by an error - ','','','');
+INSERT INTO Trs VALUES('Initial reading in pos=%1(%2)','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_base_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_base_io VALUES('digAlarm','in','Input',3,144,'Input|in',2,'Вхід','','Вход','','');
 INSERT INTO tmplib_base_io VALUES('simleBoard','in','Input',2,128,'Parameter|var',0,'Вхід','','Вход','','');
@@ -15595,7 +15874,7 @@ INSERT INTO tmplib_base_io VALUES('pidUnifImp','alDelay','Violations delay, seco
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','log','Logarithmic scale',3,32,'0',22,'Логарифмічна шкала','','Логарифмическая шкала','','Логаритамска скала');
 INSERT INTO tmplib_base_io VALUES('anUnif','alNormForceStart','Force NORM violation at the start',3,32,'0',11,'Примусове порушення НОРМА при запуску','','Принудительное нарушение НОРМА при запуске','','');
 INSERT INTO tmplib_base_io VALUES('ntf','messCatExcl','Message exclusion category, in regular expression',0,64,'',5,'Категорія виключення повідомлень, у регулярному виразі','','','','');
-INSERT INTO tmplib_base_io VALUES('fileServerHTTP','rez','Result',0,0,'200 OK',0,'Результат','','','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','rez','Result',0,0,'200 OK',0,'Результат','','Результат','','');
 INSERT INTO tmplib_base_io VALUES('fileServerHTTP','HTTPreq','HTTP request',0,0,'',1,'HTTP запит','','','','');
 INSERT INTO tmplib_base_io VALUES('fileServerHTTP','url','URL',0,0,'',2,'','','','','');
 INSERT INTO tmplib_base_io VALUES('fileServerHTTP','page','WWW-page',0,1,'',3,'WWW-сторінка','','','','');
@@ -16142,9 +16421,9 @@ INSERT INTO tmplib_DevLib_io VALUES('MTP4D','P','Pressure',2,16,'',3,'Давле
 INSERT INTO tmplib_DevLib_io VALUES('MTP4D','tr','Output transport',4,0,'',6,'Выходной транспорт','','Вихідний транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('MTP4D','this','Object',4,0,'',7,'Объект','','Об''єкт','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','transport','Transport',0,64,'Sockets.mbbase',0,'Транспорт','','Транспорт','','');
-INSERT INTO tmplib_DevLib_io VALUES('mbBase','addr','Device address, [0...247]',1,64,'1',1,'Адрес устройства, [0...247]','','Адреса пристрою, [0...247]','','');
-INSERT INTO tmplib_DevLib_io VALUES('mbBase','mbType','ModBus type, [RTU|ASCII|TCP]',0,64,'RTU',2,'Тип ModBus, [RTU|ASCII|TCP]','','Тип ModBus, [RTU|ASCII|TCP]','','');
-INSERT INTO tmplib_DevLib_io VALUES('mbBase','maxBlkSz','ModBus maximum block size, [10...200]',1,64,'200',3,'Максимальный размер блока ModBus, [10...200]','','Максимальний розмір блоку ModBus, [10...200]','','');
+INSERT INTO tmplib_DevLib_io VALUES('mbBase','addr','Device address [0...247]',1,64,'1',1,'Адрес устройства [0...247]','','Адреса пристрою [0...247]','','');
+INSERT INTO tmplib_DevLib_io VALUES('mbBase','mbType','ModBus type [RTU|ASCII|TCP]',0,64,'RTU',2,'Тип ModBus [RTU|ASCII|TCP]','','Тип ModBus [RTU|ASCII|TCP]','','');
+INSERT INTO tmplib_DevLib_io VALUES('mbBase','maxBlkSz','ModBus maximum block size [10...200]',1,64,'200',3,'Максимальный размер блока ModBus [10...200]','','Максимальний розмір блоку ModBus [10...200]','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','fragMerge','ModBus blocks merging',3,64,'1',4,'Объединение блоков ModBus','','Поєднання блоків ModBus','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','items','Items set
 Rows in the form "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".',0,36,'#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr=":[rw~]*:" color="red"/><rule expr=":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)" color="blue"/><rule expr="^(u|i|u2|i2|u4|i4|r|s)" color="darkorange"/><rule expr="\\:" color="blue"/></SnthHgl>
@@ -16253,9 +16532,9 @@ INSERT INTO tmplib_DevLib_io VALUES('FF_LE','CoefP_2','CoefP 2',2,17,'',35,'',''
 INSERT INTO tmplib_DevLib_io VALUES('FF_LE','CoefP_3','CoefP 3',2,17,'',36,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('FF_LE','this','Object',4,0,'',37,'Объект','','Об''єкт','','');
 INSERT INTO tmplib_DevLib_io VALUES('ergomera625','transport','Transport',0,64,'Sockets.em625:10.39.170.4:5555',0,'Транспорт','','Транспорт','','');
-INSERT INTO tmplib_DevLib_io VALUES('ergomera625','addr','Device address, [0...247]',1,64,'1',1,'Адрес устройства, [0...247]','','Адреса пристрою, [0...247]','','');
-INSERT INTO tmplib_DevLib_io VALUES('ergomera625','mbType','ModBus type, [RTU|ASCII|TCP]',0,64,'RTU',2,'Тип ModBus, [RTU|ASCII|TCP]','','Тип ModBus, [RTU|ASCII|TCP]','','');
-INSERT INTO tmplib_DevLib_io VALUES('ergomera625','maxBlkSz','ModBus maximum block size, [10...200]',1,64,'200',3,'Максимальный размер блока ModBus, [10...200]','','Максимальний розмір блоку ModBus, [10...200]','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera625','addr','Device address [0...247]',1,64,'1',1,'Адрес устройства [0...247]','','Адреса пристрою [0...247]','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera625','mbType','ModBus type [RTU|ASCII|TCP]',0,64,'RTU',2,'Тип ModBus [RTU|ASCII|TCP]','','Тип ModBus [RTU|ASCII|TCP]','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera625','maxBlkSz','ModBus maximum block size [10...200]',1,64,'200',3,'Максимальный размер блока ModBus [10...200]','','Максимальний розмір блоку ModBus [10...200]','','');
 INSERT INTO tmplib_DevLib_io VALUES('ergomera625','fragMerge','ModBus blocks merging',3,64,'1',4,'Объединение блоков ModBus','','Поєднання блоків ModBus','','');
 INSERT INTO tmplib_DevLib_io VALUES('ergomera625','items','Items set
 Rows in the form "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".',0,36,'#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr=":[rw~]*:" color="red"/><rule expr=":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)" color="blue"/><rule expr="^(u|i|u2|i2|u4|i4|r|s)" color="darkorange"/><rule expr="\\:" color="blue"/></SnthHgl>
@@ -16265,218 +16544,219 @@ Rows in the form "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".',0,36,'#<Sn
 Рядки у форматі "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".','','');
 INSERT INTO tmplib_DevLib_io VALUES('ergomera625','tr','Output transport',4,0,'',6,'Выходной транспорт','','Вихідний транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('ergomera625','this','Object',4,0,'',7,'Объект','','Об''єкт','','');
-INSERT INTO tmplib_DevLib_io VALUES('Incubator','transport','Транспорт',0,64,'Sockets.LE:10.39.170.2:9761',0,'','','Транспорт','','');
-INSERT INTO tmplib_DevLib_io VALUES('Incubator','addr','Device address [0...255]<!>',1,64,'1',1,'','','Device address [0...255]<!>','','');
-INSERT INTO tmplib_DevLib_io VALUES('Incubator','tmCon','Reconnection time, data missing for passive, in seconds',1,64,'10',2,'','','Reconnection time, data missing for passive, in seconds','','');
-INSERT INTO tmplib_DevLib_io VALUES('Incubator','tmToEVAL','Time of missing the machine data to set EVAL',1,64,'120',3,'','','Time of missing the machine data to set EVAL','','');
-INSERT INTO tmplib_DevLib_io VALUES('Incubator','tr','Вихідний транспорт',4,1,'',4,'','','Вихідний транспорт','','');
-INSERT INTO tmplib_DevLib_io VALUES('Incubator','machs','Machines',4,1,'',5,'','','Machines','','');
-INSERT INTO tmplib_DevLib_io VALUES('Incubator','this','Об''єкт',4,0,'',6,'','','Об''єкт','','');
-INSERT INTO tmplib_DevLib_io VALUES('VSE002','transport','Транспорт',0,64,'Sockets.VSE:10.63.42.224:3321',0,'','','Транспорт','','');
-INSERT INTO tmplib_DevLib_io VALUES('VSE002','tmCon','Reconnection time, data missing for passive, in seconds',1,64,'10',1,'','','Reconnection time, data missing for passive, in seconds','','');
-INSERT INTO tmplib_DevLib_io VALUES('VSE002','custSign','Корист. сигнали
-У форматі — "{code}:{id}:{mult}"',0,36,'',2,'','','Корист. сигнали
+INSERT INTO tmplib_DevLib_io VALUES('Incubator','transport','Transport',0,64,'Sockets.LE:10.39.170.2:9761',0,'Транспорт','','Транспорт','','');
+INSERT INTO tmplib_DevLib_io VALUES('Incubator','addr','Device address [0...255], and -1 for the passive mode',1,64,'1',1,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Incubator','tmCon','Reconnection time, data missing for passive, in seconds',1,64,'10',2,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Incubator','tmToEVAL','Time of missing the machine data to set EVAL',1,64,'120',3,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Incubator','tr','Output transport',4,1,'',4,'Выходной транспорт','','Вихідний транспорт','','');
+INSERT INTO tmplib_DevLib_io VALUES('Incubator','machs','Machines',4,1,'',5,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Incubator','this','Object',4,0,'',6,'Объект','','Об''єкт','','');
+INSERT INTO tmplib_DevLib_io VALUES('VSE002','transport','Transport',0,64,'Sockets.VSE:10.63.42.224:3321',0,'Транспорт','','Транспорт','','');
+INSERT INTO tmplib_DevLib_io VALUES('VSE002','tmCon','Reconnection time, in seconds',1,64,'10',1,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VSE002','custSign','User signals
+in the format — "{code}:{id}:{mult}"',0,36,'',2,'','','Корист. сигнали
 У форматі — "{code}:{id}:{mult}"','','');
-INSERT INTO tmplib_DevLib_io VALUES('VSE002','tr','Вихідний транспорт',4,1,'',3,'','','Вихідний транспорт','','');
-INSERT INTO tmplib_DevLib_io VALUES('VSE002','custSignO','Об''єкт корист. сигналів',4,1,'',4,'','','Об''єкт корист. сигналів','','');
-INSERT INTO tmplib_DevLib_io VALUES('VSE002','this','Об''єкт',4,0,'',5,'','','Об''єкт','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','transport','Transport',0,64,'Serial.goboy',0,'','','Transport','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','addr','Device address [0...247]',1,64,'1',1,'','','Device address [0...247]','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',2,'','','OpenSCADA archiver for device''s archive of hours','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhD','OpenSCADA archiver for device''s archive of days',0,64,'',3,'','','OpenSCADA archiver for device''s archive of days','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhM','OpenSCADA archiver for device''s archive of months',0,64,'',4,'','','OpenSCADA archiver for device''s archive of months','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhTryPer','Currents try period, seconds',1,64,'3600',5,'','','Currents try period, seconds','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhTmLim','Time limit of processing the archiving, seconds',1,64,'40',6,'','','Time limit of processing the archiving, seconds','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','reset','Reset the archives reading and configuration',3,32,'',7,'','','Reset the archives reading and configuration','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','devManuf','Device manufacturer',0,16,'',8,'','','Device manufacturer','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','devNameVer','Device name and SW version',0,16,'',9,'','','Device name and SW version','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','devSN','Device SN',0,16,'',10,'','','Device SN','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','batV','Battery voltage',2,16,'',11,'','','Battery voltage','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','batMinV','Battery minimum voltage',2,16,'',12,'','','Battery minimum voltage','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','baseL','Base length, mm',2,16,'',13,'','','Base length, mm','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','baseD','Base diameter, mm',2,16,'',14,'','','Base diameter, mm','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','sndSpd','Sound speed, m/s',2,16,'',15,'','','Sound speed, m/s','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','flowSpd','Flow speed, m/s',2,16,'',16,'','','Flow speed, m/s','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','p','Gas P, kPa [arh]',2,16,'',17,'','','Gas P, kPa [arh]','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','t','Gas T, °С [arh]',2,16,'',18,'','','Gas T, °С [arh]','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','coefCompr','Coefficient of the compression',2,16,'',19,'','','Coefficient of the compression','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','notWorkTm','Not work time [arh]',1,16,'',20,'','','Not work time [arh]','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','curTm','Current time',0,32,'',21,'','','Current time','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhStart','Archive begin',0,16,'',22,'','','Archive begin','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhLastH','Archive last hour',0,16,'',23,'','','Archive last hour','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhLastD','Archive last day',0,16,'',24,'','','Archive last day','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhLastM','Archive last month',0,16,'',25,'','','Archive last month','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','cntH','Count hour',1,32,'',26,'','','Count hour','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','vWork','Volume: work, m3 [arh]',2,16,'',27,'','','Volume: work, m3 [arh]','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','vAccWork','Volume: accumulated work, m3 [arh]',2,16,'',28,'','','Volume: accumulated work, m3 [arh]','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','vResult','Volume: resume, m3 [arh]',2,16,'',29,'','','Volume: resume, m3 [arh]','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','vAccResult','Volume: accumulated resume, m3 [arh]',2,16,'',30,'','','Volume: accumulated resume, m3 [arh]','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','fWork','Flow: work, m3/h',2,16,'',31,'','','Flow: work, m3/h','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','fResult','Flow: resume, m3/h',2,16,'',32,'','','Flow: resume, m3/h','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhs','Archives object',4,1,'',33,'','','Archives object','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','tr','Output transport',4,1,'',34,'','','Output transport','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','this','Object of the parameter',4,0,'',35,'','','Object of the parameter','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','transport','Transport',0,64,'Sockets.pilot',0,'','','Transport','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','addr','Device address [0...255]',1,64,'1',1,'','','Device address [0...255]','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','tmConTry','Connection try time, seconds',1,64,'60',2,'','','Connection try time, seconds','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',3,'','','OpenSCADA archiver for device''s archive of hours','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','arhD','OpenSCADA archiver for device''s archive of days',0,64,'',4,'','','OpenSCADA archiver for device''s archive of days','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','arhALRM','OpenSCADA archiver for device''s archive of ALARMS',0,64,'',5,'','','OpenSCADA archiver for device''s archive of ALARMS','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','arhAUDIT','OpenSCADA archiver for device''s archive of AUDIT',0,64,'',6,'','','OpenSCADA archiver for device''s archive of AUDIT','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','tmZone','Archive time zone',1,64,'5',7,'','','Archive time zone','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','tmPoolEv','Poll events (ALARMS and AUDITS) time, seconds',1,64,'3600',8,'','','Poll events (ALARMS and AUDITS) time, seconds','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','rdTblsSet','Read tables set by: "{tblN}:{pgN}:{updPer}:{reqSubStr}"',0,36,'',9,'','','Read tables set by: "{tblN}:{pgN}:{updPer}:{reqSubStr}"','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','reset','Reset the archives reading',3,32,'',10,'','','Reset the archives reading','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','vAcc','Accumulated Volume',2,16,'',11,'','','Accumulated Volume','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','dp','Average Different Pressure',2,16,'',12,'','','Average Different Pressure','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','p','Average Static Pressure',2,16,'',13,'','','Average Static Pressure','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','t','Average Temperature',2,16,'',14,'','','Average Temperature','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','flowTm','Flow Time Minute',2,16,'',15,'','','Flow Time Minute','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','grav','Average Gravity',2,16,'',16,'','','Average Gravity','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','C','Average Carbon',2,16,'',17,'','','Average Carbon','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','N','Average Nitrogen',2,16,'',18,'','','Average Nitrogen','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','tr','Output transport',4,1,'',19,'','','Output transport','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','reqCntr','Counter of the requests and the reconnection waiting (negative)',2,0,'0',20,'','','Counter of the requests and the reconnection waiting (negative)','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','arhLastH','Hour archive last item',1,0,'0',21,'','','Hour archive last item','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','arhLastD','Daily archive last item',1,0,'0',22,'','','Daily archive last item','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','arhLastALRM','ALARM archive last item',1,0,'0',23,'','','ALARM archive last item','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','arhLastAUDIT','AUDIT archive last item',1,0,'0',24,'','','AUDIT archive last item','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','this','Object of the parameter',4,0,'',25,'','','Object of the parameter','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','transport','Transport',0,64,'Sockets.pilotOld',0,'','','Transport','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','addr','Device address [0...255]',1,64,'1',1,'','','Device address [0...255]','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','tmConTry','Connection try time, seconds',1,64,'60',2,'','','Connection try time, seconds','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',3,'','','OpenSCADA archiver for device''s archive of hours','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','arhD','OpenSCADA archiver for device''s archive of days',0,64,'',4,'','','OpenSCADA archiver for device''s archive of days','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','arhALRM','OpenSCADA archiver for device''s archive of ALARMS',0,64,'',5,'','','OpenSCADA archiver for device''s archive of ALARMS','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','arhAUDIT','OpenSCADA archiver for device''s archive of AUDIT',0,64,'',6,'','','OpenSCADA archiver for device''s archive of AUDIT','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','arhTmLim','Time limit of processing the archiving, seconds',1,64,'40',7,'','','Time limit of processing the archiving, seconds','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','tmPoolEv','Poll events (ALARMS and AUDITS) time, seconds',1,64,'3600',8,'','','Poll events (ALARMS and AUDITS) time, seconds','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','reset','Reset the archives reading',3,32,'',9,'','','Reset the archives reading','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','dtTm','Date and time',0,16,'',10,'','','Date and time','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','dp','[H] Average Different Pressure',2,16,'',11,'','','[H] Average Different Pressure','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','p','[H] Average Static Pressure',2,16,'',12,'','','[H] Average Static Pressure','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','t','[H] Average Temperature',2,16,'',13,'','','[H] Average Temperature','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','sqrRootExt','[H] Square Root Extension',2,16,'',14,'','','[H] Square Root Extension','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','f','Instantaneous Flow Rate',2,16,'',15,'','','Instantaneous Flow Rate','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','fTotal','[H] Current Day Flow Total',2,16,'',16,'','','[H] Current Day Flow Total','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','eTotal','[H] Current Day Energy Total',2,16,'',17,'','','[H] Current Day Energy Total','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','fAcc','Total Accumulated Flow',2,16,'',18,'','','Total Accumulated Flow','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','b','Beta',2,16,'',19,'','','Beta','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','supComprF','Supercompressibility Factor',2,16,'',20,'','','Supercompressibility Factor','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','Fr','Fr (Fn - 2530-92)',2,16,'',21,'','','Fr (Fn - 2530-92)','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','E_D','E_over_D (in Fr) (Fsl - 2530-92)',2,16,'',22,'','','E_over_D (in Fr) (Fsl - 2530-92)','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','K','K (in Fr) (Fc - 2530-92)',2,16,'',23,'','','K (in Fr) (Fc - 2530-92)','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','Fb','Fb (Red - 2530-92)',2,16,'',24,'','','Fb (Red - 2530-92)','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','Fg','Fg',2,16,'',25,'','','Fg','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','Fa','Fa (Y1 - 2530-92)',2,16,'',26,'','','Fa (Y1 - 2530-92)','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','Ftf','Ftf',2,16,'',27,'','','Ftf','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','Fpb','Fpb',2,16,'',28,'','','Fpb','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','Ftb','Ftb',2,16,'',29,'','','Ftb','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','extFY','Expansion Factor Y (Spare-2530-92)',2,16,'',30,'','','Expansion Factor Y (Spare-2530-92)','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','subFY','Y Subfactor (Spare-2530-92)',2,16,'',31,'','','Y Subfactor (Spare-2530-92)','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','yestDayTotal','Yesterday Total',2,16,'',32,'','','Yesterday Total','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','factFlowSt','Factor: Flow Status',1,16,'',33,'','','Factor: Flow Status','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','factFwv','Factor: Fwv',2,16,'',34,'','','Factor: Fwv','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','factWatCnt','Factor: Water Content',2,16,'',35,'','','Factor: Water Content','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','factWellStr','Factor: Well Stream',2,16,'',36,'','','Factor: Well Stream','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','factGasVeloc','Factor: Gas Velocity',2,16,'',37,'','','Factor: Gas Velocity','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','factLocGrav','Factor: Local Gravity',2,16,'',38,'','','Factor: Local Gravity','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','factCalbGrav','Factor: Calib. Gravity',2,16,'',39,'','','Factor: Calib. Gravity','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','tr','Output transport',4,1,'',40,'','','Output transport','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','reqCntr','Counter of the requests and the reconnection waiting (negative)',2,0,'0',41,'','','Counter of the requests and the reconnection waiting (negative)','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','arhLastH','Hour archive last item',1,0,'0',42,'','','Hour archive last item','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','arhLastD','Daily archive last item',1,0,'0',43,'','','Daily archive last item','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','arhLastALRM','ALARM archive last item',1,0,'0',44,'','','ALARM archive last item','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','arhLastAUDIT','AUDIT archive last item',1,0,'0',45,'','','AUDIT archive last item','','');
-INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','this','Object of the parameter',4,0,'',46,'','','Object of the parameter','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','transport','Transport',0,64,'Serial.out_BK',0,'','','Transport','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','addr','Device address [0...15]',1,64,'1',1,'','','Device address [0...15]','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','curRegul','Current values request in regular',3,64,'0',2,'','','Current values request in regular','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',3,'','','OpenSCADA archiver for device''s archive of hours','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','arhD','OpenSCADA archiver for device''s archive of days',0,64,'',4,'','','OpenSCADA archiver for device''s archive of days','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','arhM','OpenSCADA archiver for device''s archive of months',0,64,'',5,'','','OpenSCADA archiver for device''s archive of months','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','arhAlrm','OpenSCADA archiver for device''s archive of Alarms',0,64,'',6,'','','OpenSCADA archiver for device''s archive of Alarms','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','arhTryPer','Currents try period, seconds',1,64,'3600',7,'','','Currents try period, seconds','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','arhTmLim','Time limit of processing of archiving, seconds',1,64,'40',8,'','','Time limit of processing of archiving, seconds','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','reset','Reset the archives reading and configuration',3,32,'',9,'','','Reset the archives reading and configuration','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','dtTm','Date and time',0,17,'',10,'','','Date and time','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','devSt','Device state',0,17,'',11,'','','Device state','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','motoHours','Moto-hours',1,16,'',12,'','','Moto-hours','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','vWork','Volume: work',2,16,'',13,'','','Volume: work','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','vAccWork','Volume: accumulated work',2,16,'',14,'','','Volume: accumulated work','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','vResult','Volume: resume',2,16,'',15,'','','Volume: resume','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','vAccResult','Volume: accumulated resume',2,16,'',16,'','','Volume: accumulated resume','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','p','Pressure',2,16,'',17,'','','Pressure','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','t','Temperature',2,16,'',18,'','','Temperature','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','pFact','Pressing factor',2,16,'',19,'','','Pressing factor','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','fWork','Flow: work',2,16,'',20,'','','Flow: work','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','fResult','Flow: resume',2,16,'',21,'','','Flow: resume','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','stN2','Set: Concentration N2',2,33,'',22,'','','Set: Concentration N2','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','stCO2','Set: Concentration CO2',2,33,'',23,'','','Set: Concentration CO2','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','stQ','Set: Gas density, kg/m3',2,33,'',24,'','','Set: Gas density, kg/m3','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','stBP','Set: Barometric pressure, kgs/sm2',2,33,'',25,'','','Set: Barometric pressure, kgs/sm2','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','stSubPL','Set: Pressure substitution for lower border, kgs/sm2',2,33,'',26,'','','Set: Pressure substitution for lower border, kgs/sm2','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','stSubPH','Set: Pressure substitution for high border, kgs/sm3',2,33,'',27,'','','Set: Pressure substitution for high border, kgs/sm3','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','stSubT','Set: Temperature substitution, °С',2,33,'',28,'','','Set: Temperature substitution, °С','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','stFH','Set: Flow maximum, m3/h',2,33,'',29,'','','Set: Flow maximum, m3/h','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','stFL','Set: Flow minimum, m3/h',2,33,'',30,'','','Set: Flow minimum, m3/h','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','stSubFL','Set: Flow substitution for lower border, m3/h',2,33,'',31,'','','Set: Flow substitution for lower border, m3/h','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','stSubFH','Set: Flow substitution for high border, m3/h',2,33,'',32,'','','Set: Flow substitution for high border, m3/h','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','arhs','Archives object',4,1,'',33,'','','Archives object','','');
-INSERT INTO tmplib_DevLib_io VALUES('CorBK','this','Object of the parameter',4,0,'',34,'','','Object of the parameter','','');
-INSERT INTO tmplib_DevLib_io VALUES('TDS','transport','Transport',0,64,'Serial.out_TDS',0,'','','Transport','','');
-INSERT INTO tmplib_DevLib_io VALUES('TDS','addr','Device address [0...255]',1,64,'0',1,'','','Device address [0...255]','','');
-INSERT INTO tmplib_DevLib_io VALUES('TDS','tryPer','Currents try period, seconds',1,64,'600',2,'','','Currents try period, seconds','','');
-INSERT INTO tmplib_DevLib_io VALUES('TDS','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',3,'','','OpenSCADA archiver for device''s archive of hours','','');
-INSERT INTO tmplib_DevLib_io VALUES('TDS','dtTm','Date and time',0,17,'',4,'','','Date and time','','');
-INSERT INTO tmplib_DevLib_io VALUES('TDS','p','Pressure',2,16,'',5,'','','Pressure','','');
-INSERT INTO tmplib_DevLib_io VALUES('TDS','t','Temperature',2,16,'',6,'','','Temperature','','');
-INSERT INTO tmplib_DevLib_io VALUES('TDS','fWork','Flow: work',2,16,'',7,'','','Flow: work','','');
-INSERT INTO tmplib_DevLib_io VALUES('TDS','fResult','Flow: resume',2,16,'',8,'','','Flow: resume','','');
-INSERT INTO tmplib_DevLib_io VALUES('TDS','tr','Output transport',4,1,'',9,'','','Output transport','','');
-INSERT INTO tmplib_DevLib_io VALUES('TDS','this','Object of the parameter',4,0,'',10,'','','Object of the parameter','','');
-INSERT INTO tmplib_DevLib_io VALUES('TUF','transport','Transport',0,64,'Sockets.enron',0,'','','Transport','','');
-INSERT INTO tmplib_DevLib_io VALUES('TUF','addr','Device address [0...247]',1,64,'1',1,'','','Device address [0...247]','','');
-INSERT INTO tmplib_DevLib_io VALUES('TUF','mbType','ModBus type, [RTU|ASCII|TCP]',0,64,'RTU',2,'','','ModBus type, [RTU|ASCII|TCP]','','');
-INSERT INTO tmplib_DevLib_io VALUES('TUF','maxBlkSz','ModBus maximum block size, [10...200]',1,64,'200',3,'','','ModBus maximum block size, [10...200]','','');
-INSERT INTO tmplib_DevLib_io VALUES('TUF','fragMerge','ModBus blocks merging',3,64,'1',4,'','','ModBus blocks merging','','');
-INSERT INTO tmplib_DevLib_io VALUES('TUF','arhD','OpenSCADA archiver for device''s archive of days',0,64,'',5,'','','OpenSCADA archiver for device''s archive of days','','');
-INSERT INTO tmplib_DevLib_io VALUES('TUF','items','Items set "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"',0,36,'',6,'','','Items set "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"','','');
-INSERT INTO tmplib_DevLib_io VALUES('TUF','tr','Output transport',4,0,'',7,'','','Output transport','','');
-INSERT INTO tmplib_DevLib_io VALUES('TUF','this','Object',4,0,'',8,'','','Object','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','transport','Transport',0,64,'Serial.umag',0,'','','Transport','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','addr','Device address [0...247]',1,64,'1',1,'','','Device address [0...247]','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',2,'','','OpenSCADA archiver for device''s archive of hours','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','arhD','OpenSCADA archiver for device''s archive of days',0,64,'',3,'','','OpenSCADA archiver for device''s archive of days','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','arhM','OpenSCADA archiver for device''s archive of months',0,64,'',4,'','','OpenSCADA archiver for device''s archive of months','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','arhTryPer','Currents try period, seconds',1,64,'3600',5,'','','Currents try period, seconds','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','arhTmLim','Time limit of processing of archiving, seconds',1,64,'40',6,'','','Time limit of processing of archiving, seconds','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','reset','Reset the archives reading and configuration',3,32,'',7,'','','Reset the archives reading and configuration','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','devManuf','Device manufacturer',0,16,'',8,'','','Device manufacturer','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','devSN','Device SN',0,16,'',9,'','','Device SN','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','sensP_SN','Sensor P SN',0,16,'',10,'','','Sensor P SN','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','sensT_SN','Sensor T SN',0,16,'',11,'','','Sensor T SN','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','p','Gas P, kPa [arh]',2,16,'',12,'','','Gas P, kPa [arh]','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','t','Gas T, °С [arh]',2,16,'',13,'','','Gas T, °С [arh]','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','coefCor','Coefficient of the correction',2,16,'',14,'','','Coefficient of the correction','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','curTm','Current time',0,16,'',15,'','','Current time','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','vWork','Volume: work, m3 [arh]',2,16,'',16,'','','Volume: work, m3 [arh]','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','vAccWork','Volume: accumulated work [arh]',2,16,'',17,'','','Volume: accumulated work [arh]','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','vResult','Volume: standard, m3 [arh]',2,16,'',18,'','','Volume: standard, m3 [arh]','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','vAccResult','Volume: accumulated resume [arh]',2,16,'',19,'','','Volume: accumulated resume [arh]','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','fWork','Flow: work, m3/h',2,16,'',20,'','','Flow: work, m3/h','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','fResult','Flow: standard, m3/h',2,16,'',21,'','','Flow: standard, m3/h','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','arhs','Archives object',4,1,'',22,'','','Archives object','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','tr','Output transport',4,1,'',23,'','','Output transport','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','this','Object of the parameter',4,0,'',24,'','','Object of the parameter','','');
-INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','transport','Transport',0,64,'Sockets.enron',0,'','','Transport','','');
-INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','addr','Device address [0...247]',1,64,'1',1,'','','Device address [0...247]','','');
-INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','mbType','ModBus type, [RTU|ASCII|TCP]',0,64,'RTU',2,'','','ModBus type, [RTU|ASCII|TCP]','','');
-INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','maxBlkSz','ModBus maximum block size, [10...200]',1,64,'12',3,'','','ModBus maximum block size, [10...200]','','');
-INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','fragMerge','ModBus blocks merging',3,64,'0',4,'','','ModBus blocks merging','','');
-INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','items','Items set "[u|i|r|s]:{addr}:{w|r}:{id}:{nm}"',0,36,'',5,'','','Items set "[u|i|r|s]:{addr}:{w|r}:{id}:{nm}"','','');
-INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','tr','Output transport',4,0,'',6,'','','Output transport','','');
-INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','this','Object',4,0,'',7,'','','Object','','');
+INSERT INTO tmplib_DevLib_io VALUES('VSE002','tr','Output transport',4,1,'',3,'Выходной транспорт','','Вихідний транспорт','','');
+INSERT INTO tmplib_DevLib_io VALUES('VSE002','custSignO','Object of the user signals',4,1,'',4,'','','Об''єкт корист. сигналів','','');
+INSERT INTO tmplib_DevLib_io VALUES('VSE002','this','Object',4,0,'',5,'Объект','','Об''єкт','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','transport','Transport',0,64,'Serial.goboy',0,'Транспорт','','Transport','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','addr','Device address [0...247]',1,64,'1',1,'Адрес устройства [0...247]','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',2,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhD','OpenSCADA archiver for device''s archive of days',0,64,'',3,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhM','OpenSCADA archiver for device''s archive of months',0,64,'',4,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhTryPer','Currents try period, seconds',1,64,'3600',5,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhTmLim','Time limit of processing the archiving, seconds',1,64,'40',6,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','reset','Reset the archives reading and configuration',3,32,'',7,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','devManuf','Device manufacturer',0,16,'',8,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','devNameVer','Device name and SW version',0,16,'',9,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','devSN','Device SN',0,16,'',10,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','batV','Battery voltage',2,16,'',11,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','batMinV','Battery minimum voltage',2,16,'',12,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','baseL','Base length, mm',2,16,'',13,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','baseD','Base diameter, mm',2,16,'',14,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','sndSpd','Sound speed, m/s',2,16,'',15,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','flowSpd','Flow speed, m/s',2,16,'',16,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','p','Gas P, kPa [arh]',2,16,'',17,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','t','Gas T, °С [arh]',2,16,'',18,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','coefCompr','Coefficient of the compression',2,16,'',19,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','notWorkTm','Not work time [arh]',1,16,'',20,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','curTm','Current time',0,32,'',21,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhStart','Archive begin',0,16,'',22,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhLastH','Archive last hour',0,16,'',23,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhLastD','Archive last day',0,16,'',24,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhLastM','Archive last month',0,16,'',25,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','cntH','Count hour',1,32,'',26,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','vWork','Volume: work, m3 [arh]',2,16,'',27,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','vAccWork','Volume: accumulated work, m3 [arh]',2,16,'',28,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','vResult','Volume: resume, m3 [arh]',2,16,'',29,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','vAccResult','Volume: accumulated resume, m3 [arh]',2,16,'',30,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','fWork','Flow: work, m3/h',2,16,'',31,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','fResult','Flow: resume, m3/h',2,16,'',32,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhs','Archives object',4,1,'',33,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','tr','Output transport',4,1,'',34,'Выходной транспорт','','Output transport','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','this','Object of the parameter',4,0,'',35,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','transport','Transport',0,64,'Sockets.pilot',0,'Транспорт','','Transport','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','addr','Device address [0...255]',1,64,'1',1,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','tmConTry','Connection try time, seconds',1,64,'60',2,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',3,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','arhD','OpenSCADA archiver for device''s archive of days',0,64,'',4,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','arhALRM','OpenSCADA archiver for device''s archive of ALARMS',0,64,'',5,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','arhAUDIT','OpenSCADA archiver for device''s archive of AUDIT',0,64,'',6,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','tmZone','Archive time zone',1,64,'5',7,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','tmPoolEv','Poll events (ALARMS and AUDITS) time, seconds',1,64,'3600',8,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','rdTblsSet','Read tables set by: "{tblN}:{pgN}:{updPer}:{reqSubStr}"',0,36,'',9,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','reset','Reset the archives reading',3,32,'',10,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','vAcc','Accumulated Volume',2,16,'',11,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','dp','Average Different Pressure',2,16,'',12,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','p','Average Static Pressure',2,16,'',13,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','t','Average Temperature',2,16,'',14,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','flowTm','Flow Time Minute',2,16,'',15,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','grav','Average Gravity',2,16,'',16,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','C','Average Carbon',2,16,'',17,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','N','Average Nitrogen',2,16,'',18,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','tr','Output transport',4,1,'',19,'Выходной транспорт','','Output transport','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','reqCntr','Counter of the requests and the reconnection waiting (negative)',2,0,'0',20,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','arhLastH','Hour archive last item',1,0,'0',21,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','arhLastD','Daily archive last item',1,0,'0',22,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','arhLastALRM','ALARM archive last item',1,0,'0',23,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','arhLastAUDIT','AUDIT archive last item',1,0,'0',24,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT','this','Object of the parameter',4,0,'',25,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','transport','Transport',0,64,'Sockets.pilotOld',0,'Транспорт','','Transport','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','addr','Device address [0...255]',1,64,'1',1,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','tmConTry','Connection try time, seconds',1,64,'60',2,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',3,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','arhD','OpenSCADA archiver for device''s archive of days',0,64,'',4,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','arhTmLim','Time limit of processing the archiving, seconds',1,64,'40',5,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','reset','Reset the archives reading',3,32,'',6,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','dtTm','Date and time',0,16,'',7,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','dp','[H] Average Different Pressure',2,16,'',8,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','p','[H] Average Static Pressure',2,16,'',9,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','t','[H] Average Temperature',2,16,'',10,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','sqrRootExt','[H] Square Root Extension',2,16,'',11,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','f','Instantaneous Flow Rate',2,16,'',12,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','fTotal','[H] Current Day Flow Total',2,16,'',13,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','eTotal','[H] Current Day Energy Total',2,16,'',14,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','fAcc','Total Accumulated Flow',2,16,'',15,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','b','Beta',2,16,'',16,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','supComprF','Supercompressibility Factor',2,16,'',17,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','Fr','Fr (Fn - 2530-92)',2,16,'',18,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','E_D','E_over_D (in Fr) (Fsl - 2530-92)',2,16,'',19,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','K','K (in Fr) (Fc - 2530-92)',2,16,'',20,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','Fb','Fb (Red - 2530-92)',2,16,'',21,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','Fg','Fg',2,16,'',22,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','Fa','Fa (Y1 - 2530-92)',2,16,'',23,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','Ftf','Ftf',2,16,'',24,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','Fpb','Fpb',2,16,'',25,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','Ftb','Ftb',2,16,'',26,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','extFY','Expansion Factor Y (Spare-2530-92)',2,16,'',27,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','subFY','Y Subfactor (Spare-2530-92)',2,16,'',28,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','yestDayTotal','Yesterday Total',2,16,'',29,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','factFlowSt','Factor: Flow Status',1,16,'',30,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','factFwv','Factor: Fwv',2,16,'',31,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','factWatCnt','Factor: Water Content',2,16,'',32,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','factWellStr','Factor: Well Stream',2,16,'',33,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','factGasVeloc','Factor: Gas Velocity',2,16,'',34,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','factLocGrav','Factor: Local Gravity',2,16,'',35,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','factCalbGrav','Factor: Calib. Gravity',2,16,'',36,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','tr','Output transport',4,1,'',37,'Выходной транспорт','','Output transport','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','reqCntr','Counter of the requests and the reconnection waiting (negative)',2,0,'0',38,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','arhLastH','Hour archive last item',1,0,'0',39,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','arhLastD','Daily archive last item',1,0,'0',40,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('AutoPILOT_old','this','Object of the parameter',4,0,'',41,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','transport','Transport',0,64,'Serial.out_BK',0,'Транспорт','','Transport','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','addr','Device address [0...15]',1,64,'1',1,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','curRegul','Current values request in regular',3,64,'0',2,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',3,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','arhD','OpenSCADA archiver for device''s archive of days',0,64,'',4,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','arhM','OpenSCADA archiver for device''s archive of months',0,64,'',5,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','arhAlrm','OpenSCADA archiver for device''s archive of Alarms',0,64,'',6,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','arhTryPer','Currents try period, seconds',1,64,'3600',7,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','arhTmLim','Time limit of processing of archiving, seconds',1,64,'40',8,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','reset','Reset the archives reading and configuration',3,32,'',9,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','dtTm','Date and time',0,17,'',10,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','devSt','Device state',0,17,'',11,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','motoHours','Moto-hours',1,16,'',12,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','vWork','Volume: work',2,16,'',13,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','vAccWork','Volume: accumulated work',2,16,'',14,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','vResult','Volume: resume',2,16,'',15,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','vAccResult','Volume: accumulated resume',2,16,'',16,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','p','Pressure',2,16,'',17,'Давление','','Pressure','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','t','Temperature',2,16,'',18,'Температура','','Temperature','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','pFact','Pressing factor',2,16,'',19,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','fWork','Flow: work',2,16,'',20,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','fResult','Flow: resume',2,16,'',21,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','stN2','Set: Concentration N2',2,33,'',22,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','stCO2','Set: Concentration CO2',2,33,'',23,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','stQ','Set: Gas density, kg/m3',2,33,'',24,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','stBP','Set: Barometric pressure, kgs/sm2',2,33,'',25,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','stSubPL','Set: Pressure substitution for lower border, kgs/sm2',2,33,'',26,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','stSubPH','Set: Pressure substitution for high border, kgs/sm3',2,33,'',27,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','stSubT','Set: Temperature substitution, °С',2,33,'',28,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','stFH','Set: Flow maximum, m3/h',2,33,'',29,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','stFL','Set: Flow minimum, m3/h',2,33,'',30,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','stSubFL','Set: Flow substitution for lower border, m3/h',2,33,'',31,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','stSubFH','Set: Flow substitution for high border, m3/h',2,33,'',32,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','arhs','Archives object',4,1,'',33,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('CorBK','this','Object of the parameter',4,0,'',34,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('TDS','transport','Transport',0,64,'Serial.out_TDS',0,'Транспорт','','Transport','','');
+INSERT INTO tmplib_DevLib_io VALUES('TDS','addr','Device address [0...255]',1,64,'0',1,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('TDS','tryPer','Currents try period, seconds',1,64,'600',2,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('TDS','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',3,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('TDS','dtTm','Date and time',0,17,'',4,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('TDS','p','Pressure',2,16,'',5,'Давление','','Pressure','','');
+INSERT INTO tmplib_DevLib_io VALUES('TDS','t','Temperature',2,16,'',6,'Температура','','Temperature','','');
+INSERT INTO tmplib_DevLib_io VALUES('TDS','fWork','Flow: work',2,16,'',7,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('TDS','fResult','Flow: resume',2,16,'',8,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('TDS','tr','Output transport',4,1,'',9,'Выходной транспорт','','Output transport','','');
+INSERT INTO tmplib_DevLib_io VALUES('TDS','this','Object of the parameter',4,0,'',10,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','transport','Transport',0,64,'Serial.umag',0,'Транспорт','','Transport','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','addr','Device address [0...247]',1,64,'1',1,'Адрес устройства [0...247]','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',2,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','arhD','OpenSCADA archiver for device''s archive of days',0,64,'',3,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','arhM','OpenSCADA archiver for device''s archive of months',0,64,'',4,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','arhTryPer','Currents try period, seconds',1,64,'3600',5,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','arhTmLim','Time limit of processing of archiving, seconds',1,64,'40',6,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','reset','Reset the archives reading and configuration',3,32,'',7,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','devManuf','Device manufacturer',0,16,'',8,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','devSN','Device SN',0,16,'',9,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','sensP_SN','Sensor P SN',0,16,'',10,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','sensT_SN','Sensor T SN',0,16,'',11,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','p','Gas P, kPa [arh]',2,16,'',12,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','t','Gas T, °С [arh]',2,16,'',13,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','coefCor','Coefficient of the correction',2,16,'',14,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','curTm','Current time',0,16,'',15,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','vWork','Volume: work, m3 [arh]',2,16,'',16,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','vAccWork','Volume: accumulated work [arh]',2,16,'',17,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','vResult','Volume: standard, m3 [arh]',2,16,'',18,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','vAccResult','Volume: accumulated resume [arh]',2,16,'',19,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','fWork','Flow: work, m3/h',2,16,'',20,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','fResult','Flow: standard, m3/h',2,16,'',21,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','arhs','Archives object',4,1,'',22,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','tr','Output transport',4,1,'',23,'Выходной транспорт','','Output transport','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','this','Object of the parameter',4,0,'',24,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','transport','Transport',0,64,'Sockets.enron',0,'Транспорт','','Transport','','');
+INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','addr','Device address [0...247]',1,64,'1',1,'Адрес устройства [0...247]','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','mbType','ModBus type [RTU|ASCII|TCP]',0,64,'RTU',2,'Тип ModBus [RTU|ASCII|TCP]','','Тип ModBus [RTU|ASCII|TCP]','','');
+INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','maxBlkSz','ModBus maximum block size [10...200]',1,64,'12',3,'Максимальный размер блока ModBus [10...200]','','Максимальний розмір блоку ModBus [10...200]','','');
+INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','fragMerge','ModBus blocks merging',3,64,'0',4,'Объединение блоков ModBus','','ModBus blocks merging','','');
+INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','items','Items set "[u|i|r|s]:{addr}:{w|r}:{id}:{nm}"',0,36,'',5,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','tr','Output transport',4,0,'',6,'Выходной транспорт','','Output transport','','');
+INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','this','Object',4,0,'',7,'Объект','','Object','','');
+INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','transport','Transport',0,64,'Sockets.fgas',0,'Транспорт','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','addr','Device address [0...247]',1,64,'1',1,'Адрес устройства [0...247]','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','mbType','ModBus type [RTU|ASCII|TCP]',0,64,'RTU',2,'Тип ModBus [RTU|ASCII|TCP]','','Тип ModBus [RTU|ASCII|TCP]','','');
+INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','maxBlkSz','ModBus maximum block size [10...200]',1,64,'200',3,'Максимальный размер блока ModBus [10...200]','','Максимальний розмір блоку ModBus [10...200]','','');
+INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',4,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','arhTmLim','Time limit of processing the archiving, seconds',1,64,'40',5,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','items','Items set "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"',0,36,'',6,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','reset','Reset the archives reading and configuration',3,32,'',7,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','tr','Output transport',4,0,'',8,'Выходной транспорт','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','p','Pressure (history)',2,16,'',9,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','t','Temperature (history)',2,16,'',10,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','vWork','Volume: work (history)',2,16,'',11,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','vResult','Volume: resume (history)',2,16,'',12,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','arhs','Archives object',4,1,'',13,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','this','Object',4,0,'',14,'Объект','','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_LowDevLib_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '0' ,"FLAGS" INTEGER DEFAULT '0' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '0' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_LowDevLib_io VALUES('1602A','transport','Transport of the I2C, Serial (i2c) or
 GPIO address with function put(), mostly it''s BCM2835 (DAQ.BCM2835.pi.pi)',0,64,'i2c',0,'','','','','');
@@ -16598,18 +16878,18 @@ INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','grpClear','Group clear',3,32,''
 INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','dev','Device to bind
 Like to "98:D3:31:F8:52:29" for binding by "rfcomm bind {N} 98:D3:31:F8:52:29".',0,64,'',1,'Пристрій для зв''язування
 На кшталт "98:D3:31:F8:52:29" для зв''язування за допомогою "rfcomm bind {N} 98:D3:31:F8:52:29".','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','transport','Transport',0,64,'Serial.UC96:/dev/rfcomm0:9600||1000:40-20',0,'Транспорт','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','transport','Transport',0,64,'Serial.UC96:/dev/rfcomm0:9600||1000:40-20',0,'Транспорт','Транспорт','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','dev','Device to bind
 Like to "58:F4:04:33:D5:FD" for binding by "rfcomm bind {N} 58:F4:04:33:D5:FD".',0,64,'',1,'Пристрій для зв''язування
 На кшталт "58:F4:04:33:D5:FD" для зв''язування за допомогою "rfcomm bind {N} 58:F4:04:33:D5:FD".','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','V','Volts',2,16,'',3,'Вольти','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','A','Amperes',2,16,'',4,'Ампери','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','T','Temperature, °С',1,16,'',7,'Температура, °С','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','T','Temperature, °С',1,16,'',7,'Температура, °С','Температура, °С','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Ah','Capacity, Ah',2,16,'',8,'Ємність, Аг','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Wh','Capacity, Wh',2,16,'',9,'Ємність, ВтГ','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Tm','Time, seconds',1,16,'',10,'Час, секунди','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Tm','Time, seconds',1,16,'',10,'Час, секунди','Время, секунд','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','clear','Clear',3,32,'',11,'Очистити','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','this','Object',4,0,'',12,'Об''єкт','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','this','Object',4,0,'',12,'Об''єкт','Объект','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','W','Watts',2,16,'',5,'Вати','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','noDataTm','No data detection time, seconds',1,64,'60',2,'Час виявлення відсутності даних, секунд','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','R','Resistance, Om',2,16,'',6,'Опір, Ом','','','','');

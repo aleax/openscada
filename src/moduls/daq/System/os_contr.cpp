@@ -52,7 +52,7 @@
 #define MOD_NAME	trS("System DA")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"3.2.5"
+#define MOD_VER		"3.2.6"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides data acquisition from Operation System. Supported OS Linux data sources: CPU, Memory,\
  Sensors, Disk SMART, Disk Statistic, File System, Network, Power, UPS, Up Time etc.")
@@ -131,7 +131,7 @@ void TTpContr::postEnable( int flag )
     //Controler's bd structure
     fldAdd(new TFld("AUTO_FILL",trS("Auto create active data sources"),TFld::Integer,TFld::Selectable,"1","0",
 			"0;1;2;3",trS("Manual;Fast sources;Slow sources;All sources")));
-    fldAdd(new TFld("PRM_BD",trS("Table of system parameters"),TFld::String,TFld::NoFlag,"30","system"));
+    fldAdd(new TFld("PRM_BD",trS("Table of system parameters"),TFld::String,TFld::NoFlag,"30","system"));	//????[v1.0] Remove
     fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
 
@@ -181,12 +181,19 @@ TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem) : TCont
     mPrior(cfg("PRIOR").getId()),
     prcSt(false), callSt(false), endrunReq(false), mPer(1e9)
 {
+    //????[v1.0] Remove
     cfg("PRM_BD").setS("OSPrm_"+name_c);
 }
 
 TMdContr::~TMdContr( )
 {
     if(startStat()) stop();
+}
+
+string TMdContr::tblStd( const TTypeParam &tP ) const
+{
+    if(tP.name == "std") return "OSPrm_"+id();
+    else return TController::tblStd(tP);
 }
 
 string TMdContr::getStatus( )

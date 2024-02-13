@@ -39,7 +39,7 @@
 #define MOD_NAME	trS("DCON client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.3.17"
+#define MOD_VER		"1.3.18"
 #define AUTHORS		trS("Roman Savochenko, Almaz Karimov")
 #define DESCRIPTION	trS("Provides an implementation of DCON-client protocol. Supports I-7000 DCON protocol.")
 #define LICENSE		"GPL2"
@@ -92,14 +92,14 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable( flag );
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));	//????[v1.0] Remove
     fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("ADDR",trS("Transport"),TFld::String,TFld::NoFlag,"41",""));
     fldAdd(new TFld("REQ_TRY",trS("Request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;10"));
 
     //Parameter type bd structure
-    int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
+    int t_prm = tpParmAdd("Prm", "PRM_BD", _("Standard"), true);
     tpPrmAt(t_prm).fldAdd(new TFld("MOD_ADDR",trS("Module address"),TFld::Integer,TFld::NoFlag|TCfg::NoVal,"20","1","0;255"));
     tpPrmAt(t_prm).fldAdd(new TFld("CRC_CTRL",trS("CRC control"),TFld::Boolean,TFld::NoFlag|TCfg::NoVal,"1","1"));
     tpPrmAt(t_prm).fldAdd(new TFld("HOST_SIGNAL",trS("Host signal"),TFld::Integer,TFld::Selectable|TCfg::NoVal,"1","0",
@@ -149,6 +149,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
     mAddr(cfg("ADDR")), mPrior(cfg("PRIOR").getId()), connTry(cfg("REQ_TRY").getId()),
     prcSt(false), callSt(false), endrunReq(false), mPer(1e9), tmGath(0)
 {
+    //????[v1.0] Remove
     cfg("PRM_BD").setS("DCONPrm_"+name_c);
 }
 

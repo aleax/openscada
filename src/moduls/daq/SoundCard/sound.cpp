@@ -35,7 +35,7 @@
 #define MOD_NAME	trS("Sound card")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.8.12"
+#define MOD_VER		"0.8.13"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides an access to the sound card.")
 #define LICENSE		"GPL2"
@@ -84,7 +84,7 @@ void TTpContr::postEnable( int flag )
     if(err != paNoError) mess_err(nodePath().c_str(),"Pa_Initialize: %s",Pa_GetErrorText(err));
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD",trS("Table of parameters"),TFld::String,0,"30"));
+    fldAdd(new TFld("PRM_BD",trS("Table of parameters"),TFld::String,0,"30"));	//????[v1.0] Remove
     fldAdd(new TFld("CARD",trS("Card device"),TFld::String,0,"100","<default>"));
     fldAdd(new TFld("SMPL_RATE",trS("Card sample rate (Hz)"),TFld::Integer,0,"5","8000","1;200000"));
     fldAdd(new TFld("SMPL_TYPE",trS("Card sample type"),TFld::Integer,TFld::Selectable,"5",i2s(paFloat32).c_str(),
@@ -108,6 +108,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 {
     for(int iC = 0; iC < (int)(sizeof(curTm)/sizeof(time_t)); iC++) curTm[iC] = 0;
 
+    //????[v1.0] Remove
     cfg("PRM_BD").setS("SoundCard_"+name_c);
 
     pEl.fldAdd(new TFld("val",trS("Value"),((mSmplType==paFloat32)?TFld::Real:TFld::Integer),TFld::NoWrite,"",
@@ -120,6 +121,12 @@ TMdContr::~TMdContr( )
 }
 
 TTpContr &TMdContr::owner( ) const	{ return (TTpContr&)TController::owner(); }
+
+string TMdContr::tblStd( const TTypeParam &tP ) const
+{
+    if(tP.name == "std") return "SoundCard_"+id();
+    else return TController::tblStd(tP);
+}
 
 string TMdContr::getStatus( )
 {

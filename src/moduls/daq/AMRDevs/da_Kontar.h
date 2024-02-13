@@ -73,8 +73,6 @@ class Kontar: public TTypeParam
 	Kontar( );
 	~Kontar( );
 
-	string DB( const TController *cntr ) const	{ return mod->modId()+"KontarPrm_"+cntr->id(); }
-
 	void create( TParamContr *prm );
 	void destroy( TParamContr *prm );
 

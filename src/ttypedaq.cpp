@@ -190,6 +190,6 @@ TTypeParam::TTypeParam( const char *iid, const char *iname, const char *idb, boo
     fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec|TCfg::NoVal));
 }
 
-string TTypeParam::DB( const TController *cntr ) const	{ return mDB.size() ? cntr->cfg(mDB).getS() : ""; }
+string TTypeParam::DB( const TController *cntr ) const	{ return mDB.size() ? cntr->cfg(mDB).getS() : cntr->tblStd(*this); }
 
 void TTypeParam::setDB( TController *cntr, const string &vl )	{ if(mDB.size()) cntr->cfg(mDB).setS(vl); }

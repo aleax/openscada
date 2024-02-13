@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SMH2Gi file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2012-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,7 +42,7 @@
 #define MOD_NAME	trS("Segnetics SMH2Gi and SMH4")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.1.18"
+#define MOD_VER		"1.1.19"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Data acquisition and control by Segnetics SMH2Gi and SMH4 hardware interfaces and modules.")
 #define LICENSE		"GPL2"
@@ -95,8 +95,8 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable(flag);
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD_SHM",trS("Shared memory parameters"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("PRM_BD_MRC",trS("MR and MC bus parameters"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PRM_BD_SHM",trS("Shared memory parameters"),TFld::String,TFld::NoFlag,"30",""));	//????[v1.0] Remove
+    fldAdd(new TFld("PRM_BD_MRC",trS("MR and MC bus parameters"),TFld::String,TFld::NoFlag,"30",""));	//????[v1.0] Remove
     fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("SHM_VARS",trS("Shared memory variables file"),TFld::String,TFld::NoFlag,"255","/projects/load_files.srv"));
@@ -200,6 +200,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c,daq_db,cfgelem), smv(NULL), m_prior(cfg("PRIOR").getId()), connTry(cfg("REQ_TRY").getId()),
     mPer(1e9), prcSt(false), callSt(false), endrunReq(false), tmGath(0)
 {
+    //????[v1.0] Remove
     cfg("PRM_BD_SHM").setS("SMH2GiPrmSHM_"+name_c);
     cfg("PRM_BD_MRC").setS("SMH2GiPrmMRC_"+name_c);
 }
@@ -639,7 +640,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 //****************************************************
 //* SMH2Gi::SHMParam - shared memory parameter type  *
 //****************************************************
-SHMParam::SHMParam( ) : TTypeParam("SHM", _("Shared memory parameters"), "PRM_BD_SHM")
+SHMParam::SHMParam( ) : TTypeParam("PrmSHM", _("Shared memory parameters"), "PRM_BD_SHM")
 {
     fldAdd(new TFld("VAR_LS",trS("Variables list"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
 }
@@ -755,7 +756,7 @@ struct Inquired_t
     unsigned long	AlarmsInID:1;		// Alarms in the struct Alarms
 }__attribute__((packed));
 
-MRCParam::MRCParam( ) : TTypeParam("MRC", _("MR and MC bus parameters"), "PRM_BD_MRC")
+MRCParam::MRCParam( ) : TTypeParam("PrmMRC", _("MR and MC bus parameters"), "PRM_BD_MRC")
 {
     fldAdd(new TFld("MOD_TP",trS("Module type"),TFld::Integer,TCfg::NoVal,"10","0"));
     fldAdd(new TFld("MOD_SLOT",trS("Module slot/address"),TFld::Integer,TCfg::NoVal,"2","-1","-1;7"));

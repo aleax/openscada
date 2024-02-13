@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.Comedi file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2023 by Roman Savochenko                           *
+ *   Copyright (C) 2012-2024 by Roman Savochenko                           *
  *   roman@oscada.org                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -37,7 +37,7 @@
 #define MOD_NAME	trS("DAQ boards by Comedi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.24"
+#define MOD_VER		"1.0.25"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org).")
 #define LICENSE		"GPL2"
@@ -83,12 +83,12 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable(flag);
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));	//????[v1.0] Remove
     fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
 
     //Parameter type bd structure
-    int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
+    int t_prm = tpParmAdd("Prm","PRM_BD",_("Standard"));
     tpPrmAt(t_prm).fldAdd(new TFld("ADDR",trS("Board's device address"),TFld::String,TCfg::NoVal,"100",""));
     tpPrmAt(t_prm).fldAdd(new TFld("ASYNCH_RD",trS("Asynchronous read"),TFld::Boolean,TCfg::NoVal,"1","0"));
     tpPrmAt(t_prm).fldAdd(new TFld("PRMS",trS("Addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"1000"));
@@ -103,7 +103,8 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 	::TController(name_c,daq_db,cfgelem), mPrior(cfg("PRIOR").getId()), mSched(cfg("SCHEDULE")),
 	mPer(1e9), prcSt(false), call_st(false), endRunReq(false), tm_gath(0)
 {
-    cfg("PRM_BD").setS("ComediPrm_"+name_c);
+    //????[v1.0] Remove
+    cfg("PRM_BD").setS("ComediPrm_"+id());
 }
 
 TMdContr::~TMdContr( )

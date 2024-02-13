@@ -36,7 +36,7 @@
 #define MOD_NAME	_("Fastwel IO")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.25"
+#define MOD_VER		"0.1.26"
 #define AUTHORS		_("Maxim Kochetkov")
 #define DESCRIPTION	_("Fastwel IO FBUS client implementation")
 #define LICENSE		"GPL2"
@@ -212,14 +212,14 @@ void TTpContr::postEnable(int flag)
     TTypeDAQ::postEnable(flag);
 
     //> Controler's bd structure
-    fldAdd(new TFld("PRM_BD_DIM762", _("DIM762 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
-    fldAdd(new TFld("PRM_BD_DIM716", _("DIM716 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
-    fldAdd(new TFld("PRM_BD_DIM718", _("DIM718 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
-    fldAdd(new TFld("PRM_BD_AIM791", _("AIM791 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
-    fldAdd(new TFld("PRM_BD_AIM726", _("AIM726 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
-    fldAdd(new TFld("PRM_BD_AIM730", _("AIM730 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
-    fldAdd(new TFld("PRM_BD_AIM725", _("AIM725 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
-    fldAdd(new TFld("PRM_BD_DIM765", _("DIM765 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));
+    fldAdd(new TFld("PRM_BD_DIM762", _("DIM762 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));	//????[v1.0] Remove
+    fldAdd(new TFld("PRM_BD_DIM716", _("DIM716 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));	//????[v1.0] Remove
+    fldAdd(new TFld("PRM_BD_DIM718", _("DIM718 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));	//????[v1.0] Remove
+    fldAdd(new TFld("PRM_BD_AIM791", _("AIM791 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));	//????[v1.0] Remove
+    fldAdd(new TFld("PRM_BD_AIM726", _("AIM726 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));	//????[v1.0] Remove
+    fldAdd(new TFld("PRM_BD_AIM730", _("AIM730 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));	//????[v1.0] Remove
+    fldAdd(new TFld("PRM_BD_AIM725", _("AIM725 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));	//????[v1.0] Remove
+    fldAdd(new TFld("PRM_BD_DIM765", _("DIM765 Parameters table"), TFld::String, TFld::NoFlag, "30", ""));	//????[v1.0] Remove
 
     fldAdd(new TFld("SCHEDULE", _("Acquisition schedule"), TFld::String, TFld::NoFlag, "100", "1"));
     fldAdd(new TFld("PRIOR", _("Priority of the acquisition task"), TFld::Integer, TFld::NoFlag, "2", "0", "-1;199"));
@@ -266,6 +266,7 @@ void TTpContr::postEnable(int flag)
 		    _("PT50;PT100;PT200;PT500;PT1000;NI100;NI120;CU100;CU50;0-150 Ohm;0-300 Ohm;0-600 Ohm;0-1500 Ohm; 0-3000 Ohm")));
     tpPrmAt(t_prm).fldAdd(new TFld("AI_TYPE", _("Sensor type"), TFld::Integer, TFld::Selectable | TCfg::NoVal, "1", "0", "0;1", _("2-wire;3-wire")));
 
+    //> Parameter DIM765/766 bd structure
     t_prm = tpParmAdd("DIM765_766", "PRM_BD_DIM765", _("DIM765/766"));
     tpPrmAt(t_prm).fldAdd(new TFld("DEV_ID", _("Device address"), TFld::Integer, TCfg::NoVal, "2", "0", "0;63"));
     for(int i = 0; i < 8; i++) {
@@ -296,6 +297,7 @@ TMdContr::TMdContr(string name_c, const string & daq_db, ::TElem * cfgelem) :
 	::TController(name_c, daq_db, cfgelem), prcSt(false), callSt(false), endrunReq(false), tmGath(0), enRes(true), dataRes(true),
 	mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mNet(cfg("NET_ID")), mPer(1e9)
 {
+    //????[v1.0] Remove
     cfg("PRM_BD_DIM762").setS("FBUSPrmDIM762_" + name_c);
     cfg("PRM_BD_DIM716").setS("FBUSPrmDIM716_" + name_c);
     cfg("PRM_BD_DIM718").setS("FBUSPrmDIM718_" + name_c);
@@ -309,6 +311,19 @@ TMdContr::TMdContr(string name_c, const string & daq_db, ::TElem * cfgelem) :
 TMdContr::~TMdContr()
 {
     if(startStat()) stop();
+}
+
+string TMdContr::tblStd( const TTypeParam &tP ) const
+{
+    if(tP.name == "DIM762")		return "FBUSPrmDIM762_"+id();
+    else if(tP.name == "DIM716")	return "FBUSPrmDIM716_"+id();
+    else if(tP.name == "DIM718")	return "FBUSPrmDIM718_"+id();
+    else if(tP.name == "AIM791")	return "FBUSPrmAIM791_"+id();
+    else if(tP.name == "AIM726")	return "FBUSPrmAIM726_"+id();
+    else if(tP.name == "AIM730")	return "FBUSPrmAIM730_"+id();
+    else if(tP.name == "AIM725")	return "FBUSPrmAIM725_"+id();
+    else if(tP.name == "DIM765_766")	return "FBUSPrmDIM765_"+id();
+    else return TController::tblStd(tP);
 }
 
 void TMdContr::GetNodeDescription(int id, PFIO_MODULE_DESC modDesc)

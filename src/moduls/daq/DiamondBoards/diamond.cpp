@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("Diamond DAQ boards")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.26"
+#define MOD_VER		"2.1.27"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides an access to \"Diamond Systems\" DAQ boards. Includes main support for all generic boards.")
 #define LICENSE		"GPL2"
@@ -166,7 +166,7 @@ void TTpContr::postEnable( int flag )
     else mInit = true;
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));	//????[v1.0] Remove
     fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
 
@@ -191,12 +191,19 @@ TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
     TController(name_c,daq_db,cfgelem), mPrior(cfg("PRIOR").getId()), mSched(cfg("SCHEDULE")),
     mPer(1e9), prcSt(false), callSt(false)
 {
+    //????[v1.0] Remove
     cfg("PRM_BD").setS("DiamPrm_"+name_c);
 }
 
 TMdContr::~TMdContr( )
 {
     if(startStat()) stop();
+}
+
+string TMdContr::tblStd( const TTypeParam &tP ) const
+{
+    if(tP.name == "std") return "DiamPrm_"+id();
+    else return TController::tblStd(tP);
 }
 
 string TMdContr::getStatus( )

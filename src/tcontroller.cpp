@@ -58,7 +58,7 @@ TCntrNode &TController::operator=( const TCntrNode &node )
     const TController *src_n = dynamic_cast<const TController*>(&node);
     if(!src_n) return *this;
 
-    //Individual DB names store
+    //Individual DB names store - ????[v1.0] Remove
     vector<string> dbNms;
     for(unsigned iTp = 0; iTp < owner().tpPrmSize(); iTp++)
 	dbNms.push_back(owner().tpPrmAt(iTp).DB(this));
@@ -67,7 +67,7 @@ TCntrNode &TController::operator=( const TCntrNode &node )
     exclCopy(*src_n, "ID;");
     setDB(src_n->DB());
 
-    //Individual DB names restore
+    //Individual DB names restore - ????[v1.0] Remove
     for(unsigned iTp = 0; iTp < owner().tpPrmSize() && iTp < dbNms.size(); iTp++)
 	owner().tpPrmAt(iTp).setDB(this, dbNms[iTp]);
 
@@ -283,15 +283,15 @@ void TController::LoadParmCfg( )
 
     //Search and create new parameters
     for(unsigned iTp = 0; iTp < owner().tpPrmSize(); iTp++) {
-	if(owner().tpPrmAt(iTp).DB(this).empty()) continue;
+	if(tbl(owner().tpPrmAt(iTp)).empty()) continue;
 	try {
 	    TConfig cEl(&owner().tpPrmAt(iTp));
 	    //cEl.cfgViewAll(false);
 	    cEl.cfg("OWNER").setS("", TCfg::ForceUse);
 
 	    // Search new one in DB and Config-file
-	    for(int fldCnt = 0; TBDS::dataSeek(DB()+"."+owner().tpPrmAt(iTp).DB(this),
-					owner().nodePath()+owner().tpPrmAt(iTp).DB(this),fldCnt++,cEl,TBDS::UseCache); )
+	    for(int fldCnt = 0; TBDS::dataSeek(DB()+"."+tbl(owner().tpPrmAt(iTp)),
+					owner().nodePath()+tbl(owner().tpPrmAt(iTp)),fldCnt++,cEl,TBDS::UseCache); )
 	    {
 		try {
 		    string shfr = cEl.cfg("SHIFR").getS();
@@ -564,8 +564,8 @@ void TController::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/cntr/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/cntr/cfg",0,"root",SDAQ_ID,RWRWR_);
-		for(unsigned iTpP = 0; iTpP < owner().tpPrmSize(); ++iTpP)
-		    if(isStdStorAddr(owner().tpPrmAt(iTpP)))
+		for(unsigned iTpP = 0; iTpP < owner().tpPrmSize(); ++iTpP)	//????[v1.0] Remove
+		    if(owner().tpPrmAt(iTpP).mDB.size() && tbl(owner().tpPrmAt(iTpP)) == tblStd(owner().tpPrmAt(iTpP)))
 			ctrRemoveNode(opt, ("/cntr/cfg/"+owner().tpPrmAt(iTpP).mDB).c_str());
 		ctrRemoveNode(opt, "/cntr/cfg/MESS_LEV");
 		ctrRemoveNode(opt, "/cntr/cfg/REDNT");
@@ -657,7 +657,7 @@ void TController::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path.find("/cntr/cfg") == 0) {
 	TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SDAQ_ID, RWRWR_);
-	if(ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR))
+	if(ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR))	//????[v1.0] Remove
 	    for(unsigned iT = 0; iT < owner().tpPrmSize(); iT++)
 		if(owner().tpPrmAt(iT).mDB == TSYS::pathLev(a_path,2))
 		{ modifG(); break; }
