@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1083,7 +1083,7 @@ void VisDevelop::selectItem( const string &item, bool force )
     else work_wdgTimer->start();
 }
 
-void VisDevelop::applyWorkWdg( )
+void VisDevelop::applyWorkWdg( char inPrj )
 {
     if(winClose) return;
 
@@ -1103,8 +1103,8 @@ void VisDevelop::applyWorkWdg( )
     string sel2 = TSYS::pathLev(cur_wdg, 1);
     string sel3 = TSYS::pathLev(cur_wdg, 2);
 
-    bool isProj = (sel1.find("prj_") == 0);
-    bool isLib  = (sel1.find("wlb_") == 0);
+    bool isProj = (sel1.find("prj_") == 0 && inPrj != 0);
+    bool isLib  = (sel1.find("wlb_") == 0 && inPrj != 1);
 
     //Process main actions
     actPrjRun->setEnabled(isProj);
@@ -1112,8 +1112,8 @@ void VisDevelop::applyWorkWdg( )
     //Set visual item's actions
     actVisItAdd->setEnabled(isProj || (isLib&&sel3.empty()));
     // Process add actions of visual items
-    for(int i_a = 0; i_a < actGrpWdgAdd->actions().size(); i_a++)
-	actGrpWdgAdd->actions().at(i_a)->setEnabled(isProj || (isLib&&sel3.empty()));
+    for(int iA = 0; iA < actGrpWdgAdd->actions().size(); iA++)
+	actGrpWdgAdd->actions().at(iA)->setEnabled(isProj || (isLib&&sel3.empty()));
     //Process visual item actions
     actVisItDel->setEnabled(isProj || isLib);
     actVisItProp->setEnabled(isProj || isLib);

@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/ICP-DAS</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FICP+DAS&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/ICP_DAS" title="Modules/ICP DAS">Modules/ICP DAS</a> and the translation is 98% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/ICP_DAS.html" title="Modules/ICP DAS (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/ICP_DAS.html" title="Модулі/ICP-DAS (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FICP+DAS&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/ICP_DAS" title="Modules/ICP DAS">Modules/ICP DAS</a> and the translation is 95% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/ICP_DAS.html" title="Modules/ICP DAS (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/ICP_DAS.html" title="Модулі/ICP-DAS (100% translated)">Українська</a></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
@@ -57,7 +57,7 @@
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85"><span class="tocnumber">1</span> <span class="toctext">Контроллер данных</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B"><span class="tocnumber">2</span> <span class="toctext">Параметры</span></a>
+<li class="toclevel-1 tocsection-2"><a href="#Parameters"><span class="tocnumber">2</span> <span class="toctext">Parameters</span></a>
 <ul>
 <li class="toclevel-2 tocsection-3"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D0.B8_.D1.81.D0.B5.D1.80.D0.B8.D0.B8_I-8xxx"><span class="tocnumber">2.1</span> <span class="toctext">Модули серии I-8xxx</span></a>
 <ul>
@@ -94,12 +94,12 @@
 <li> Transport through which requests to the serial bus performed. It's allowed on field "Bus" set to "COM {X}". If set "&lt;ICP DAS&gt;" then used the serial requests API from "ICP DAS", by default.</li>
 <li> Data transfer rate for the serial interface. It is indicated for the not main bus and transport "&lt;ICP DAS&gt;".</li>
 <li> Serial request tries.</li></ul>
-<h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B"><span class="mw-headline-number">2</span> Параметры</span></h2>
-<p>Модуль предоставляет только один тип параметров — “Стандарт(std)” и три группы модулей/плат, доступные в зависимости от выбранной шины:
+<h2><span class="mw-headline" id="Parameters"><span class="mw-headline-number">2</span> Parameters</span></h2>
+<p>The module provides only one the "Standard (std)" type of the parameters with the parameters table name "ICPDASPrm_{CntrId}". There accessible three groups of modules/boards depending from selected bus:
 </p>
-<ul><li> <i>ISA</i> — платы на шине <i>ISA</i>;</li>
-<li> <i>I-87xxx</i> — модули на последовательной шине и с протоколом <i>DCON</i>, например в <i>LinPAC</i>;</li>
-<li> <i>I-8xxx</i> — модули на параллельной шине, например в <i>LinPAC</i>.</li></ul>
+<ul><li> <i>ISA</i> — boards on <i>ISA</i>;</li>
+<li> <i>I-87xxx</i> — modules on serial bus and with protocol <i>DCON</i>, for example into <i>LinPAC</i>;</li>
+<li> <i>I-8xxx</i> — modules on parallel bus, for example into <i>LinPAC</i>.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:738px;"><a class="image" href="http://oscada.org/wiki/File:ICP_prm_ru.png"><img class="thumbimage" height="547" src="../files/ICP_prm_ru.png" width="736" /></a>  <div class="thumbcaption">Рис.2. Вкладка конфигурации параметра.</div></div></div></div>
 <p>Вкладка конфигурации параметра (рис.2) в целом одинакова для всех групп модулей/плат и содержит:
 </p>
@@ -1065,6 +1065,8 @@ IXISA_8254CS
 </td>
 <td>
 </td></tr></table>
+<p><br />
+</p>
 <h2><span class="mw-headline" id=".D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="mw-headline-number">3</span> Ссылки</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:Lp8x81_2629rt_up.tgz" title="File:Lp8x81 2629rt up.tgz">Специальные модули ядра Linux 2.6.29-rt-up для контроллеров LP-8x81</a></li>
 <li> <a class="external" href="http://oscada.org/wiki/File:Lp8x81_2629rt1_up.tgz" title="File:Lp8x81 2629rt1 up.tgz">Специальные модули ядра Linux 2.6.29-rt1-up для контроллеров LP-8x81</a></li>

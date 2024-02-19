@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Works/To do</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint nomobile" dir="ltr" lang="en">This page contains <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Works/To_do&amp;oldid=84144&amp;diff=84168" rel="nofollow noreferrer noopener" target="_blank">changes</a></span> which are not marked for translation.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span></div></div>
 <p>On this page you can get a "To Do" list and a tasks pool of the project. The "To Do" list is not connected to the time ranks, but it is structured by subsystems. The "To Do" list and pool are provided to represent the general development picture, and to post notes for the developers' examination. The developers can append, apply and note the tasks for themselves.
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -135,12 +135,16 @@
 <dl><dd> - develop a mechanism for tracking the irrelevance of messages in the table "Trs"
 <dl><dd>&nbsp;?&gt; it is possible to add to the table "Trs" a field of options where to specify time of update-registration and at compilation or execution, accordingly to clear too old and updated-registered at compilation</dd></dl></dd></dl>
 <ul><li> (+) Develop the text highlighting rules building in the comments of the custom text rules.</li>
-<li> Expand dimension of the internal time from microseconds and up to nanoseconds. Previously append support for PicoScope 2000.</li>
+<li> Append user properties to the Control Node object by a pointer with its activation at use:</li></ul>
+<dl><dd>- switch TTransportOut::prm() and TTransportIn::prm() to TCntrNode::prm();</dd>
+<dd>- append a function of User API for TCntrNode::prm();</dd>
+<dd>- append for controlled registration of the Control Node connection-blocking at AutoHD() with using such information in notification the blocking.</dd></dl>
+<ul><li> Expand dimension of the internal time from microseconds and up to nanoseconds. Previously append support for PicoScope 2000.</li>
 <li> Work out for developing, using, integration to solutions, concept of the OpenSCADA project support. Expand the community by targeting on the implementation control of:
 <ul><li> tasks: tasks pool, fund and fundraising; developers register, ranks for participate into the tasks.</li>
 <li> solutions: register a task of the solution implementation (by consumer), set demands to the task and performer, set the price limit; each performer propose self price; consumer select a performer. Commission from the order price to the project is 10%.</li></ul></li>
 <li> <a class="external" href="http://oscada.org/wiki/Sub-projects/Adaption_to_Android" title="Sub-projects/Adaption to Android">Adapt to the software platform Android</a>:</li></ul>
-<dl><dd>- configure to use "/sdcard" as the user directory of the OpenSCADA projects;</dd>
+<dl><dd>+ configure to use "/sdcard" as the user directory of the OpenSCADA projects;</dd>
 <dd>- update the building environment to Android 10, unify and archive the old environments (the first try in the chroot Android_5_TRY.txz), append the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automatic_Builder_of_OpenSCADA" title="Special:MyLanguage/Sub-projects/Automatic Builder of OpenSCADA">building procedures</a> by targets of automatic building the Android packages;</dd>
 <dd>- build Qt6 with WebEngine and Multimedia support;</dd>
 <dd>- append all external windows of the runtime mode of the module Vision for items of their closing and for centring.</dd></dl>

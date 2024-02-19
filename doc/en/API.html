@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/API</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint nomobile" dir="ltr" lang="en">This page contains <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Documents/API&amp;oldid=83319&amp;diff=83357" rel="nofollow noreferrer noopener" target="_blank">changes</a></span> which are not marked for translation.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/API.html" title="Документы/API (2% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../uk/API.html" title="Документи/API (32% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/API.html" title="Документы/API (2% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../uk/API.html" title="Документи/API (32% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
@@ -4074,7 +4074,7 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 <li> <i>char nodeMode( ) const;</i> — Node's status.</li>
 <li> <i>unsigned nodeUse( bool selfOnly );</i> — Number of the connections to the node. <i>selfOnly</i> — only self connections, without childs.</li>
 <li> <i>unsigned nodePos( );</i> — The position of the node in the parent-node's container. It is valid only for ordered containers.</li>
-<li> <i>int isModify( int mflg = TCntrNode::All );</i> — Checking for the modification of the node or nodes' branch.</li>
+<li> <i>int isModify( int mflg = TCntrNode::All ) const;</i> — Checking for the modification of the node or nodes' branch.</li>
 <li> <i>void modif( bool save = false, bool forceLoad = false );</i> — Setting the modification sign of the node, with saving <i>save</i> the sign at the loading and marking for the force loading <i>forceLoad</i>.</li>
 <li> <i>void modifG( bool forceLoad = false );</i> — Setting the modification sign of the node branch, with marking for the force loading <i>forceLoad</i>.</li>
 <li> <i>void modifClr( bool save = false );</i> — Clearing the modification sign or the saving sign <i>save</i> of the node.</li>

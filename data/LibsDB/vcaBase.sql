@@ -442,207 +442,6 @@ INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_doc_pane
 INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_doc_panel','prev1','/wlb_Main/wdg_doc_panel/wdg_prev1','owner;value;');
 INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_doc_panel','size','/wlb_Main/wdg_doc_panel/wdg_size','owner;value;');
 INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_doc_panel','tmTp','/wlb_Main/wdg_doc_panel/wdg_tmTp','owner;');
-CREATE TABLE IF NOT EXISTS 'prj_tmplSO_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so','pgCont','/wlb_Main/wdg_RootPgSo/wdg_pgCont','pgGrp;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so','infoW','/wlb_Main/wdg_RootPgSo/wdg_infoW','pgGrp;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_doc_panel','date','/wlb_Main/wdg_doc_panel/wdg_date','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_doc_panel','size','/wlb_Main/wdg_doc_panel/wdg_size','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','k1','/wlb_Main/wdg_cntrRegul/wdg_k1','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','k2','/wlb_Main/wdg_cntrRegul/wdg_k2','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','k3','/wlb_Main/wdg_cntrRegul/wdg_k3','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','k4','/wlb_Main/wdg_cntrRegul/wdg_k4','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','kp','/wlb_Main/wdg_cntrRegul/wdg_kp','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','td','/wlb_Main/wdg_cntrRegul/wdg_td','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','ti','/wlb_Main/wdg_cntrRegul/wdg_ti','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','zn','/wlb_Main/wdg_cntrRegul/wdg_zn','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','tiMin','/wlb_Main/wdg_cntrRegul/wdg_tiMin','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','h1','/wlb_Main/wdg_cntrRegul/wdg_h1','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','h2','/wlb_Main/wdg_cntrRegul/wdg_h2','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_grph_panel','size','/wlb_Main/wdg_grph_panel/wdg_size','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_grph_panel','date','/wlb_Main/wdg_grph_panel/wdg_date','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','rfct','/wlb_Main/wdg_cntrRegul/wdg_rfct','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','tiPer','/wlb_Main/wdg_cntrRegul/wdg_tiPer','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','kd','/wlb_Main/wdg_cntrRegul/wdg_kd','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','ki','/wlb_Main/wdg_cntrRegul/wdg_ki','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','tzd','/wlb_Main/wdg_cntrRegul/wdg_tzd','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_treeSelect','apply','/wlb_Main/wdg_treeSelect/wdg_apply','value;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_treeSelect','cancel','/wlb_Main/wdg_treeSelect/wdg_cancel','value;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_grph_panel','selWin','/wlb_Main/wdg_grph_panel/wdg_selWin','value;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','data','/wlb_Main/wdg_cntrPaspExt/wdg_data','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','sel_data','/wlb_Main/wdg_cntrPaspExt/wdg_sel_data','owner;value;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','sel_trends','/wlb_Main/wdg_cntrPaspExt/wdg_sel_trends','owner;value;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','sel_view','/wlb_Main/wdg_cntrPaspExt/wdg_sel_view','owner;value;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','trends','/wlb_Main/wdg_cntrPaspExt/wdg_trends','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','trendsList','/wlb_Main/wdg_cntrPaspExt/wdg_trendsList','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','view','/wlb_Main/wdg_cntrPaspExt/wdg_view','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','viewLabSet','/wlb_Main/wdg_cntrPaspExt/wdg_viewLabSet','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','viewSet','/wlb_Main/wdg_cntrPaspExt/wdg_viewSet','owner;perm;value;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPaspOld','doc','/wlb_Main/wdg_cntrPasp/wdg_doc','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','ElFigureTests1','/wlb_test/wdg_mn_gen/wdg_ElFigureTests1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','FormEl','/wlb_test/wdg_mn_gen/wdg_FormEl','owner;perm;extValue;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','Pi_нд','/wlb_test/wdg_mn_gen/wdg_Pi_нд','owner;pErr;pModeA;pModeC;pName;pPrec;pVal;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','TextEl','/wlb_test/wdg_mn_gen/wdg_TextEl','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','Ti_нд','/wlb_test/wdg_mn_gen/wdg_Ti_нд','owner;pErr;pModeA;pModeC;pName;pPrec;pVal;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','diagTests','/wlb_test/wdg_mn_gen/wdg_diagTests','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','media','/wlb_test/wdg_mn_gen/wdg_media','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prescrRunSimple','/wlb_test/wdg_mn_gen/wdg_prescrRunSimple','owner;perm;dbDB;dbProgs;prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prt','/wlb_test/wdg_mn_gen/wdg_prt','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','ElFigure1','/wlb_Main/wdg_grpGraph/wdg_ElFigure1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','arh','/wlb_Main/wdg_grpGraph/wdg_arh','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el1','/wlb_Main/wdg_grpGraph/wdg_el1','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el2','/wlb_Main/wdg_grpGraph/wdg_el2','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el3','/wlb_Main/wdg_grpGraph/wdg_el3','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el4','/wlb_Main/wdg_grpGraph/wdg_el4','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el5','/wlb_Main/wdg_grpGraph/wdg_el5','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el6','/wlb_Main/wdg_grpGraph/wdg_el6','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el7','/wlb_Main/wdg_grpGraph/wdg_el7','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el8','/wlb_Main/wdg_grpGraph/wdg_el8','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','name','/wlb_Main/wdg_grpGraph/wdg_name','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','trnd1','/wlb_Main/wdg_grpGraph/wdg_trnd1','owner;curSek;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','ElFigure1','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_ElFigure1','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','arh','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_arh','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el1','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el1','owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el2','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el2','owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el3','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el3','owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el4','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el4','owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el5','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el5','owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el6','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el6','owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el7','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el7','owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el8','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el8','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','name','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_name','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','trnd1','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_trnd1','owner;curSek;sclWin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','ElFigure','/wlb_Main/wdg_grpCadr/wdg_ElFigure','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el1','/wlb_Main/wdg_grpCadr/wdg_el1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el2','/wlb_Main/wdg_grpCadr/wdg_el2','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el3','/wlb_Main/wdg_grpCadr/wdg_el3','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el4','/wlb_Main/wdg_grpCadr/wdg_el4','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el5','/wlb_Main/wdg_grpCadr/wdg_el5','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el6','/wlb_Main/wdg_grpCadr/wdg_el6','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el7','/wlb_Main/wdg_grpCadr/wdg_el7','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el8','/wlb_Main/wdg_grpCadr/wdg_el8','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','name','/wlb_Main/wdg_grpCadr/wdg_name','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','trnd1','/wlb_Main/wdg_grpCadr/wdg_trnd1','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','ElFigure','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_ElFigure','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el1','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el1','owner;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmCom;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStop;prmVar;prmWMax;prmWMin;prmAddr;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el2','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el2','owner;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmCom;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStop;prmVar;prmWMax;prmWMin;prmAddr;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el3','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el3','owner;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmCom;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStop;prmVar;prmWMax;prmWMin;prmAddr;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el4','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el4','owner;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmCom;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStop;prmVar;prmWMax;prmWMin;prmAddr;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el5','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el5','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el6','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el6','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el7','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el7','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el8','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el8','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','name','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_name','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','trnd1','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_trnd1','owner;curSek;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_1','/wlb_Main/wdg_ViewCadr/wdg_el1_1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_2','/wlb_Main/wdg_ViewCadr/wdg_el1_2','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_3','/wlb_Main/wdg_ViewCadr/wdg_el1_3','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_4','/wlb_Main/wdg_ViewCadr/wdg_el1_4','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_5','/wlb_Main/wdg_ViewCadr/wdg_el1_5','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_6','/wlb_Main/wdg_ViewCadr/wdg_el1_6','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_1','/wlb_Main/wdg_ViewCadr/wdg_el2_1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_2','/wlb_Main/wdg_ViewCadr/wdg_el2_2','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_3','/wlb_Main/wdg_ViewCadr/wdg_el2_3','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_4','/wlb_Main/wdg_ViewCadr/wdg_el2_4','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_5','/wlb_Main/wdg_ViewCadr/wdg_el2_5','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_6','/wlb_Main/wdg_ViewCadr/wdg_el2_6','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_1','/wlb_Main/wdg_ViewCadr/wdg_el3_1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_2','/wlb_Main/wdg_ViewCadr/wdg_el3_2','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_3','/wlb_Main/wdg_ViewCadr/wdg_el3_3','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_4','/wlb_Main/wdg_ViewCadr/wdg_el3_4','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_5','/wlb_Main/wdg_ViewCadr/wdg_el3_5','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_6','/wlb_Main/wdg_ViewCadr/wdg_el3_6','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_1','/wlb_Main/wdg_ViewCadr/wdg_el4_1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_2','/wlb_Main/wdg_ViewCadr/wdg_el4_2','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_3','/wlb_Main/wdg_ViewCadr/wdg_el4_3','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_4','/wlb_Main/wdg_ViewCadr/wdg_el4_4','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_5','/wlb_Main/wdg_ViewCadr/wdg_el4_5','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_6','/wlb_Main/wdg_ViewCadr/wdg_el4_6','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','name','/wlb_Main/wdg_ViewCadr/wdg_name','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_1','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_1','owner;name;addr;var;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_2','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_2','owner;name;addr;var;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_3','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_3','owner;name;addr;var;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_4','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_4','owner;name;addr;var;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_5','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_5','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_6','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_6','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_1','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_1','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_2','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_2','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_3','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_3','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_4','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_4','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_5','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_5','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_6','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_6','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_1','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_1','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_2','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_2','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_3','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_3','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_4','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_4','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_5','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_5','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_6','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_6','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_1','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_1','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_2','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_2','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_3','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_3','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_4','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_4','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_5','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_5','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_6','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_6','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','name','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_name','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view5/pg_1','doc','/wlb_doc/wdg_docAlarmsRep/wdg_doc','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view5/pg_2','doc','/wlb_doc/wdg_docUsersSet/wdg_doc','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','ElFigure1','/wlb_Main/wdg_grpGraph/wdg_ElFigure1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','arh','/wlb_Main/wdg_grpGraph/wdg_arh','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el1','/wlb_Main/wdg_grpGraph/wdg_el1','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el2','/wlb_Main/wdg_grpGraph/wdg_el2','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el3','/wlb_Main/wdg_grpGraph/wdg_el3','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el4','/wlb_Main/wdg_grpGraph/wdg_el4','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el5','/wlb_Main/wdg_grpGraph/wdg_el5','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el6','/wlb_Main/wdg_grpGraph/wdg_el6','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el7','/wlb_Main/wdg_grpGraph/wdg_el7','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el8','/wlb_Main/wdg_grpGraph/wdg_el8','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','name','/wlb_Main/wdg_grpGraph/wdg_name','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','trnd1','/wlb_Main/wdg_grpGraph/wdg_trnd1','owner;curSek;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','ElFigure1','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_ElFigure1','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','arh','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_arh','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el1','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el1','owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el2','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el2','owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el3','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el3','owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el4','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el4','owner;name;addr;ed;max;min;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el5','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el5','owner;name;addr;ed;max;min;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el6','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el6','owner;name;addr;ed;max;min;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el7','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el7','owner;name;addr;ed;max;min;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el8','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el8','owner;name;addr;ed;max;min;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','name','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_name','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','trnd1','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_trnd1','owner;curSek;sclWin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e1','/wlb_Main/wdg_ResultGraph/wdg_e1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e10','/wlb_Main/wdg_ResultGraph/wdg_e10','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e11','/wlb_Main/wdg_ResultGraph/wdg_e11','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e12','/wlb_Main/wdg_ResultGraph/wdg_e12','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e13','/wlb_Main/wdg_ResultGraph/wdg_e13','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e14','/wlb_Main/wdg_ResultGraph/wdg_e14','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e15','/wlb_Main/wdg_ResultGraph/wdg_e15','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e16','/wlb_Main/wdg_ResultGraph/wdg_e16','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e2','/wlb_Main/wdg_ResultGraph/wdg_e2','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e3','/wlb_Main/wdg_ResultGraph/wdg_e3','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e4','/wlb_Main/wdg_ResultGraph/wdg_e4','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e5','/wlb_Main/wdg_ResultGraph/wdg_e5','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e6','/wlb_Main/wdg_ResultGraph/wdg_e6','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e7','/wlb_Main/wdg_ResultGraph/wdg_e7','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e8','/wlb_Main/wdg_ResultGraph/wdg_e8','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e9','/wlb_Main/wdg_ResultGraph/wdg_e9','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','name','/wlb_Main/wdg_ResultGraph/wdg_name','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e1','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e1','owner;p1_addr;p1_clr;p1_max;p1_min;p1_name;p2_addr;p2_max;p2_min;p2_name;p3_addr;p3_max;p3_min;p3_name;p4_addr;p4_max;p4_min;p4_name;p5_addr;p5_max;p5_min;p5_name;title;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e10','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e10','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e11','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e11','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e12','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e12','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e13','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e13','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e14','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e14','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e15','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e15','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e16','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e16','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e2','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e2','owner;p1_addr;p1_max;p1_min;p1_name;p2_addr;p2_max;p2_min;p2_name;p3_addr;p3_max;p3_min;p3_name;p4_addr;p4_max;p4_min;p4_name;title;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e3','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e3','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e4','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e4','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e5','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e5','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e6','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e6','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e7','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e7','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e8','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e8','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e9','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e9','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','name','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_name','owner;','');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_Main_mime VALUES('pg_next','image/png;6.00684','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAAZiS0dEACwA
 RADxQFue7AAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9gDBQghJ2VBTzAAAAAddEVYdENv
@@ -10770,7 +10569,7 @@ if(f_start) {
 			this["wdg_e"+(3+4*(j-1))].attrSet("geomY", 30+142*yScale*(rows[0]+rows[1]));
 			this["wdg_e"+(4+4*(j-1))].attrSet("geomY", 30+142*yScale*(rows[0]+rows[1]+rows[2]));
 		}
-}','','',-1,'name;dscr;geomW;geomH;backColor;bordWidth;',1665334736);
+}','','',-1,'name;dscr;geomW;geomH;backColor;bordWidth;',1708341577);
 INSERT INTO wlb_Main VALUES('ResultGraphEl','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAoCAIAAADBrGu+AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 xUlEQVRYhdWYWW/bRhRG7ywkJZGUqFCKLC+J5TiIlwe3qQ3kB/RfB30uCkRNFQc2EnlRIsXWZpkU
 KZEccmb64CB2arSNVae0D/jCuRzgfOTgDjGo0Wjs7e0hhAzDgPvG3NwcPTw8fPnypeM4T548GQ6H
@@ -15682,7 +15481,7 @@ INSERT INTO prj_archBrowser VALUES('/archBrowser/so/1','doc','','root',0,'
 INSERT INTO prj_archBrowser VALUES('/archBrowser/so/1/doc','messRep','','/wlb_doc/wdg_docMessRep',0,'','','',-1,0,'owner;geomYsc;archLs;messCat;',1495719828);
 INSERT INTO prj_archBrowser VALUES('/archBrowser/control','graphCalc','','/wlb_Main/wdg_graphCalc',0,'','','',-1,0,'owner;',1563002360);
 CREATE TABLE IF NOT EXISTS 'prj_tmplSO' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO prj_tmplSO VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',0,'','','',-1,1,'pgOpen;',1634973676);
+INSERT INTO prj_tmplSO VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',0,'','','',-1,1,'pgOpen;',1708341698);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so','1','','root',1,'
 ','
 ','
@@ -15722,9 +15521,9 @@ INSERT INTO prj_tmplSO VALUES('/tmplSO/so/2','view1','','root',0,'
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/2','view2','','/wlb_Main/wdg_grpGraph',0,'','','',-1,2,'owner;perm;geomYsc;geomZ;pgGrp;',1615121472);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/2/view2','1','','..',0,'','','',-1,0,'owner;name;',1546704070);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so','view6','','root',0,'
-','','',-1,5,'owner;perm;name;geomZ;',1615121472);
-INSERT INTO prj_tmplSO VALUES('/tmplSO/so/view6','view6','','/wlb_Main/wdg_ResultGraph',0,'','','',-1,2,'owner;perm;geomYsc;geomZ;pgGrp;',1615121472);
-INSERT INTO prj_tmplSO VALUES('/tmplSO/so/view6/view6','1','','..',0,'','','',-1,0,'owner;name;grpName;',1554062066);
+','','',-1,5,'owner;perm;name;geomZ;',1708341698);
+INSERT INTO prj_tmplSO VALUES('/tmplSO/so/view6','view6','','/wlb_Main/wdg_ResultGraph',0,'','','',-1,2,'owner;perm;geomYsc;geomZ;pgGrp;',1708341698);
+INSERT INTO prj_tmplSO VALUES('/tmplSO/so/view6/view6','1','','..',0,'','','',-1,0,'owner;name;',1708341698);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/control','graphCalc','','/wlb_Main/wdg_graphCalc',0,'','','',-1,0,'owner;',1562746129);
 CREATE TABLE IF NOT EXISTS 'wlb_doc' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_doc VALUES('docRepDay','','/wlb_doc/wdg_doc',0,'JavaLikeCalc.JavaScript
@@ -16240,11 +16039,11 @@ if(toBuild) {
 CREATE TABLE IF NOT EXISTS 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"USER" TEXT DEFAULT 'root' ,"GRP" TEXT DEFAULT 'UI' ,"PERMIT" INTEGER DEFAULT '436' ,"PER" INTEGER DEFAULT '100' ,"STYLE" INTEGER DEFAULT '-1' ,"EN_BY_NEED" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO VCAPrjs VALUES('tmplSO','Signal groups (template)','Групи сигналізації (шаблон)','Группы сигнализаций (шаблон)','The projects'' template of visualisation based on signal groups.
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.2','Шаблон проекту візуалізації, який базовано на групах сигналізації.
+Version: 1.3.3','Шаблон проекту візуалізації, який базовано на групах сигналізації.
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.3.2','Шаблон проекта визуализации основанного на группах сигнализации.
+Версія: 1.3.3','Шаблон проекта визуализации основанного на группах сигнализации.
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.3.2','prj_tmplSO','','root','op',432,250,0,1);
+Версия: 1.3.3','prj_tmplSO','','root','op',432,250,0,1);
 INSERT INTO VCAPrjs VALUES('archBrowser','Archives browser','Огляд архівів','Обзор архивов','Project of value archives browsing.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -23638,7 +23437,7 @@ Summary the total number of displayed graphs in one frame reaches 80, and it is 
 The frame doesn''t support any control!
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.1
+Version: 1.1.2
 License: GPLv2',32,'','','','Елемент-кадр слугує для відображення групи поточних трендів параметрів (до 5) у окремих кадрах-віджетах кількістю до 16 одиниць (4x4), стосовно яких підтримується масштабування залежно від їх конфігурованої кількості. Кадри-віджети трендів параметрів реалізуються супутнім віджетом "Кадр зведених графіків".
 
 Разом загальна кількість відображуваних графіків на одному кадрі сягає 80 та він призначений для формування окремого виду відображення, що застосовується поза об''єктів сигналізації — глобально за всім проектом візуалізації.
@@ -23646,7 +23445,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для від�
 Кадр не підтримує ніякого керування!
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.1.1
+Версія: 1.1.2
 Ліцензія: GPLv2','','Элемент-кадр служит для отображения группы текущих трендов параметров (до 5) в отдельных кадрах-виджетах количеством до 16 единиц (4x4), относительно которых поддерживается масштабирование в зависимости от их конфигурируемого количества. Кадры-виджеты трендов параметров реализуются сопутствующим виджетом "Кадр сводных графиков".
 
 Суммарно общее количество отображаемых графиков на одном кадре достигает 80 и он предназначен для формирования отдельного вида отображения, который применяется за объектами сигнализации — глобально по всему проекту визуализации.
@@ -23654,7 +23453,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для від�
 Кадр не поддерживает никакого управления!
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.1.1
+Версия: 1.1.2
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('ResultGraphEl','dscr','The element-widget serves as the basis for the result graphics and is not usually used independently. The widget displays the name of the group and up to five trends, with their text labels, over a fixed period of time (10 minutes) to observe the current trend of the parameters.
 
@@ -28274,7 +28073,7 @@ INSERT INTO wlb_Main_uio VALUES('cntrRegul','NAME','Parameter: code',131077,NULL
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','sp','Parameter: set-point',131076,'<EVAL>|',10,'Parameter|sp','','','Параметр: завдання','','','Параметр: задание','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','sp_addr','Parameter: set-point address',196613,NULL,10,'Parameter|sp','','','Параметр: адреса завдання','','','Параметр: адрес задания','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p1_min','Parameter1: minimum',131076,'<EVAL>|',10,'Parameter 1|min','','','Параметр1: мінімум','','','Параметр1: минимум','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('ResultGraph','grpName','Group name',131077,NULL,9,'','','','Ім''я групи','','','Имя группы','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('ResultGraph','grpName','Group name',131333,NULL,9,'','','','Ім''я групи','','','Имя группы','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p2_addr','Parameter2: address',196613,NULL,10,'Parameter 2|var','','','Параметр2: адреса','','','Параметр2: адрес','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p2_name','Parameter2: name',131077,NULL,10,'Parameter 2|NAME','','','Параметр2: ім''я','','','Параметр2: имя','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p2_max','Parameter2: maximum',131076,'<EVAL>|',10,'Parameter 2|max','','','Параметр2: максимум','','','Параметр2: максимум','','','','','','');
@@ -30187,4 +29986,205 @@ INSERT INTO wlb_doc_incl VALUES('docRepYear','set_month','/wlb_originals/wdg_For
 INSERT INTO wlb_doc_incl VALUES('docRepYear','set_val','/wlb_originals/wdg_FormEl',-1,'owner;perm;active;geomX;geomY;geomW;geomH;geomZ;value;view;font;');
 INSERT INTO wlb_doc_incl VALUES('docRepYear','year','/wlb_originals/wdg_FormEl',-1,'active;geomX;geomY;geomH;geomZ;elType;value;items;font;');
 INSERT INTO wlb_doc_incl VALUES('docRepYear','doc','/wlb_doc/wdg_doc/wdg_doc',-1,'owner;perm;geomY;geomH;geomZ;tmpl;doc;bTime;time;process;n;');
+CREATE TABLE IF NOT EXISTS 'prj_tmplSO_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so','pgCont','/wlb_Main/wdg_RootPgSo/wdg_pgCont',-1,'pgGrp;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so','infoW','/wlb_Main/wdg_RootPgSo/wdg_infoW',-1,'pgGrp;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_doc_panel','date','/wlb_Main/wdg_doc_panel/wdg_date',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_doc_panel','size','/wlb_Main/wdg_doc_panel/wdg_size',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','k1','/wlb_Main/wdg_cntrRegul/wdg_k1',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','k2','/wlb_Main/wdg_cntrRegul/wdg_k2',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','k3','/wlb_Main/wdg_cntrRegul/wdg_k3',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','k4','/wlb_Main/wdg_cntrRegul/wdg_k4',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','kp','/wlb_Main/wdg_cntrRegul/wdg_kp',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','td','/wlb_Main/wdg_cntrRegul/wdg_td',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','ti','/wlb_Main/wdg_cntrRegul/wdg_ti',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','zn','/wlb_Main/wdg_cntrRegul/wdg_zn',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','tiMin','/wlb_Main/wdg_cntrRegul/wdg_tiMin',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','h1','/wlb_Main/wdg_cntrRegul/wdg_h1',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','h2','/wlb_Main/wdg_cntrRegul/wdg_h2',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_grph_panel','size','/wlb_Main/wdg_grph_panel/wdg_size',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_grph_panel','date','/wlb_Main/wdg_grph_panel/wdg_date',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','rfct','/wlb_Main/wdg_cntrRegul/wdg_rfct',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','tiPer','/wlb_Main/wdg_cntrRegul/wdg_tiPer',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','kd','/wlb_Main/wdg_cntrRegul/wdg_kd',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','ki','/wlb_Main/wdg_cntrRegul/wdg_ki',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','tzd','/wlb_Main/wdg_cntrRegul/wdg_tzd',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_treeSelect','apply','/wlb_Main/wdg_treeSelect/wdg_apply',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_treeSelect','cancel','/wlb_Main/wdg_treeSelect/wdg_cancel',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_grph_panel','selWin','/wlb_Main/wdg_grph_panel/wdg_selWin',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','data','/wlb_Main/wdg_cntrPaspExt/wdg_data',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','sel_data','/wlb_Main/wdg_cntrPaspExt/wdg_sel_data',-1,'owner;value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','sel_trends','/wlb_Main/wdg_cntrPaspExt/wdg_sel_trends',-1,'owner;value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','sel_view','/wlb_Main/wdg_cntrPaspExt/wdg_sel_view',-1,'owner;value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','trends','/wlb_Main/wdg_cntrPaspExt/wdg_trends',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','trendsList','/wlb_Main/wdg_cntrPaspExt/wdg_trendsList',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','view','/wlb_Main/wdg_cntrPaspExt/wdg_view',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','viewLabSet','/wlb_Main/wdg_cntrPaspExt/wdg_viewLabSet',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','viewSet','/wlb_Main/wdg_cntrPaspExt/wdg_viewSet',-1,'owner;perm;value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPaspOld','doc','/wlb_Main/wdg_cntrPasp/wdg_doc',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','ElFigureTests1','/wlb_test/wdg_mn_gen/wdg_ElFigureTests1',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','FormEl','/wlb_test/wdg_mn_gen/wdg_FormEl',-1,'owner;perm;extValue;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','Pi_нд','/wlb_test/wdg_mn_gen/wdg_Pi_нд',-1,'owner;pErr;pModeA;pModeC;pName;pPrec;pVal;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','TextEl','/wlb_test/wdg_mn_gen/wdg_TextEl',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','Ti_нд','/wlb_test/wdg_mn_gen/wdg_Ti_нд',-1,'owner;pErr;pModeA;pModeC;pName;pPrec;pVal;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','diagTests','/wlb_test/wdg_mn_gen/wdg_diagTests',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','media','/wlb_test/wdg_mn_gen/wdg_media',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prescrRunSimple','/wlb_test/wdg_mn_gen/wdg_prescrRunSimple',-1,'owner;perm;dbDB;dbProgs;prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prt','/wlb_test/wdg_mn_gen/wdg_prt',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','ElFigure1','/wlb_Main/wdg_grpGraph/wdg_ElFigure1',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','arh','/wlb_Main/wdg_grpGraph/wdg_arh',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el1','/wlb_Main/wdg_grpGraph/wdg_el1',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el2','/wlb_Main/wdg_grpGraph/wdg_el2',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el3','/wlb_Main/wdg_grpGraph/wdg_el3',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el4','/wlb_Main/wdg_grpGraph/wdg_el4',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el5','/wlb_Main/wdg_grpGraph/wdg_el5',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el6','/wlb_Main/wdg_grpGraph/wdg_el6',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el7','/wlb_Main/wdg_grpGraph/wdg_el7',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el8','/wlb_Main/wdg_grpGraph/wdg_el8',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','name','/wlb_Main/wdg_grpGraph/wdg_name',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','trnd1','/wlb_Main/wdg_grpGraph/wdg_trnd1',-1,'owner;curSek;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','ElFigure1','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_ElFigure1',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','arh','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_arh',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el1','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el1',-1,'owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el2','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el2',-1,'owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el3','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el3',-1,'owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el4','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el4',-1,'owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el5','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el5',-1,'owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el6','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el6',-1,'owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el7','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el7',-1,'owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el8','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el8',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','name','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_name',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','trnd1','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_trnd1',-1,'owner;curSek;sclWin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','ElFigure','/wlb_Main/wdg_grpCadr/wdg_ElFigure',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el1','/wlb_Main/wdg_grpCadr/wdg_el1',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el2','/wlb_Main/wdg_grpCadr/wdg_el2',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el3','/wlb_Main/wdg_grpCadr/wdg_el3',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el4','/wlb_Main/wdg_grpCadr/wdg_el4',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el5','/wlb_Main/wdg_grpCadr/wdg_el5',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el6','/wlb_Main/wdg_grpCadr/wdg_el6',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el7','/wlb_Main/wdg_grpCadr/wdg_el7',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el8','/wlb_Main/wdg_grpCadr/wdg_el8',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','name','/wlb_Main/wdg_grpCadr/wdg_name',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','trnd1','/wlb_Main/wdg_grpCadr/wdg_trnd1',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','ElFigure','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_ElFigure',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el1','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el1',-1,'owner;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmCom;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStop;prmVar;prmWMax;prmWMin;prmAddr;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el2','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el2',-1,'owner;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmCom;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStop;prmVar;prmWMax;prmWMin;prmAddr;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el3','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el3',-1,'owner;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmCom;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStop;prmVar;prmWMax;prmWMin;prmAddr;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el4','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el4',-1,'owner;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmCom;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStop;prmVar;prmWMax;prmWMin;prmAddr;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el5','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el5',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el6','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el6',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el7','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el7',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el8','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el8',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','name','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_name',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','trnd1','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_trnd1',-1,'owner;curSek;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_1','/wlb_Main/wdg_ViewCadr/wdg_el1_1',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_2','/wlb_Main/wdg_ViewCadr/wdg_el1_2',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_3','/wlb_Main/wdg_ViewCadr/wdg_el1_3',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_4','/wlb_Main/wdg_ViewCadr/wdg_el1_4',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_5','/wlb_Main/wdg_ViewCadr/wdg_el1_5',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_6','/wlb_Main/wdg_ViewCadr/wdg_el1_6',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_1','/wlb_Main/wdg_ViewCadr/wdg_el2_1',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_2','/wlb_Main/wdg_ViewCadr/wdg_el2_2',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_3','/wlb_Main/wdg_ViewCadr/wdg_el2_3',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_4','/wlb_Main/wdg_ViewCadr/wdg_el2_4',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_5','/wlb_Main/wdg_ViewCadr/wdg_el2_5',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_6','/wlb_Main/wdg_ViewCadr/wdg_el2_6',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_1','/wlb_Main/wdg_ViewCadr/wdg_el3_1',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_2','/wlb_Main/wdg_ViewCadr/wdg_el3_2',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_3','/wlb_Main/wdg_ViewCadr/wdg_el3_3',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_4','/wlb_Main/wdg_ViewCadr/wdg_el3_4',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_5','/wlb_Main/wdg_ViewCadr/wdg_el3_5',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_6','/wlb_Main/wdg_ViewCadr/wdg_el3_6',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_1','/wlb_Main/wdg_ViewCadr/wdg_el4_1',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_2','/wlb_Main/wdg_ViewCadr/wdg_el4_2',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_3','/wlb_Main/wdg_ViewCadr/wdg_el4_3',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_4','/wlb_Main/wdg_ViewCadr/wdg_el4_4',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_5','/wlb_Main/wdg_ViewCadr/wdg_el4_5',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_6','/wlb_Main/wdg_ViewCadr/wdg_el4_6',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','name','/wlb_Main/wdg_ViewCadr/wdg_name',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_1','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_1',-1,'owner;name;addr;var;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_2','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_2',-1,'owner;name;addr;var;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_3','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_3',-1,'owner;name;addr;var;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_4','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_4',-1,'owner;name;addr;var;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_5','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_5',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_6','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_6',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_1','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_1',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_2','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_2',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_3','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_3',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_4','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_4',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_5','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_5',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_6','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_6',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_1','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_1',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_2','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_2',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_3','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_3',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_4','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_4',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_5','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_5',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_6','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_6',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_1','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_1',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_2','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_2',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_3','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_3',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_4','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_4',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_5','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_5',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_6','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_6',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','name','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_name',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view5/pg_1','doc','/wlb_doc/wdg_docAlarmsRep/wdg_doc',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view5/pg_2','doc','/wlb_doc/wdg_docUsersSet/wdg_doc',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','ElFigure1','/wlb_Main/wdg_grpGraph/wdg_ElFigure1',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','arh','/wlb_Main/wdg_grpGraph/wdg_arh',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el1','/wlb_Main/wdg_grpGraph/wdg_el1',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el2','/wlb_Main/wdg_grpGraph/wdg_el2',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el3','/wlb_Main/wdg_grpGraph/wdg_el3',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el4','/wlb_Main/wdg_grpGraph/wdg_el4',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el5','/wlb_Main/wdg_grpGraph/wdg_el5',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el6','/wlb_Main/wdg_grpGraph/wdg_el6',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el7','/wlb_Main/wdg_grpGraph/wdg_el7',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el8','/wlb_Main/wdg_grpGraph/wdg_el8',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','name','/wlb_Main/wdg_grpGraph/wdg_name',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','trnd1','/wlb_Main/wdg_grpGraph/wdg_trnd1',-1,'owner;curSek;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','ElFigure1','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_ElFigure1',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','arh','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_arh',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el1','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el1',-1,'owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el2','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el2',-1,'owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el3','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el3',-1,'owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el4','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el4',-1,'owner;name;addr;ed;max;min;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el5','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el5',-1,'owner;name;addr;ed;max;min;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el6','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el6',-1,'owner;name;addr;ed;max;min;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el7','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el7',-1,'owner;name;addr;ed;max;min;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el8','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el8',-1,'owner;name;addr;ed;max;min;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','name','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_name',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','trnd1','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_trnd1',-1,'owner;curSek;sclWin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e1','/wlb_Main/wdg_ResultGraph/wdg_e1',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e10','/wlb_Main/wdg_ResultGraph/wdg_e10',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e11','/wlb_Main/wdg_ResultGraph/wdg_e11',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e12','/wlb_Main/wdg_ResultGraph/wdg_e12',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e13','/wlb_Main/wdg_ResultGraph/wdg_e13',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e14','/wlb_Main/wdg_ResultGraph/wdg_e14',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e15','/wlb_Main/wdg_ResultGraph/wdg_e15',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e16','/wlb_Main/wdg_ResultGraph/wdg_e16',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e2','/wlb_Main/wdg_ResultGraph/wdg_e2',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e3','/wlb_Main/wdg_ResultGraph/wdg_e3',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e4','/wlb_Main/wdg_ResultGraph/wdg_e4',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e5','/wlb_Main/wdg_ResultGraph/wdg_e5',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e6','/wlb_Main/wdg_ResultGraph/wdg_e6',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e7','/wlb_Main/wdg_ResultGraph/wdg_e7',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e8','/wlb_Main/wdg_ResultGraph/wdg_e8',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e9','/wlb_Main/wdg_ResultGraph/wdg_e9',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','name','/wlb_Main/wdg_ResultGraph/wdg_name',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e1','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e1',-1,'');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e10','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e10',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e11','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e11',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e12','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e12',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e13','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e13',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e14','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e14',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e15','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e15',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e16','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e16',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e2','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e2',-1,'');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e3','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e3',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e4','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e4',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e5','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e5',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e6','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e6',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e7','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e7',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e8','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e8',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e9','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e9',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','name','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_name',-1,'owner;');
 COMMIT;

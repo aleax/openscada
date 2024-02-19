@@ -370,7 +370,8 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    modif();
 	    switch(col) {
 		case 0:
-		    opt->setText(TSYS::strEncode(sTrm(opt->text()),TSYS::Limit,i2s(owner().owner().elTmplIO().fldAt(owner().owner().elTmplIO().fldId("ID")).len())));
+		    opt->setText(TSYS::strEncode(sTrm(opt->text()),TSYS::Limit,
+					i2s(owner().owner().elTmplIO().fldAt(owner().owner().elTmplIO().fldId("ID")).len())));
 		    io(row)->setId(opt->text());
 		    break;
 		case 1:	io(row)->setName(trDSet(io(row)->name(),sTrm(opt->text())));	break;

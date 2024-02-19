@@ -1,3 +1,18 @@
+2024-02-19 Roman (stable)
+- data/Android/AndroidManifest.xml: The user projects directory set to "/sdcard/.openscada"
+    to allow ready projects connection on most Android devices.
+- data/openscada-proj.in: Appended of copying system libraries to {User}/LibsDB at impossibility creation links here.
+- LibsDB.OscadaLibs: tmplib_LowDevLib.FF_LE: Appended in the description.
+- LibsDB.vcaBase: wlb_Main.ResultGraph: The attribute "grpName" set to the "String (translate)" type.
+    The tmplSO project some cleaned for items of the ResultGraph page.
+- SYS: TCntrNode::cntrCmd(): The generic logging message "set to '%s'." appended by "..." in the end of the limited values.
+    TCntrNode::isModify() set to constant.
+- FIX:Transports: Table of the OpenSCADA external hosts limited in ID of the hosts corresponding to the limit the field "ID".
+- DAQ: Table of the values tab "Archiving" appended of hide disabled archivers.
+- UI.Vision: The tooltip item "... from the Library" appended of its hide together with the "Add visual item" item
+    also as all their hide linked with selection on toolbar of the projects or widget libraries.
+
+
 2024-02-13 Roman (stable)
 - !!!!:LibsDB.OscadaLibs: tmplib_LowDevLib: Documenting the new templates with some correction:
 	FF_LE, ergomera625, Incubator, VSE002, Goboy1M, AutoPILOT, AutoPILOT_old, CorBK, TDS, UltraMag, enronDaniel, FlowGAS.

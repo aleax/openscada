@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/Блоковый вычислитель</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FBlockCalc&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/BlockCalc" title="Modules/BlockCalc">Modules/BlockCalc</a> and the translation is 89% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/BlockCalc.html" title="Modules/BlockCalc (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/BlockCalc.html" title="Модулі/Блоковий обчислювач (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FBlockCalc&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/BlockCalc" title="Modules/BlockCalc">Modules/BlockCalc</a> and the translation is 83% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/BlockCalc.html" title="Modules/BlockCalc (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/BlockCalc.html" title="Модулі/Блоковий обчислювач (100% translated)">Українська</a></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
@@ -66,8 +66,8 @@
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="tocnumber">1</span> <span class="toctext">Контроллер модуля</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#.D0.91.D0.BB.D0.BE.D1.87.D0.BD.D0.B0.D1.8F_.D1.81.D1.85.D0.B5.D0.BC.D0.B0_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="tocnumber">2</span> <span class="toctext">Блочная схема контроллера</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="tocnumber">3</span> <span class="toctext">Параметры контроллера</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#The_block_scheme_of_the_controller"><span class="tocnumber">2</span> <span class="toctext">The block scheme of the controller</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Parameters_of_the_controller"><span class="tocnumber">3</span> <span class="toctext">Parameters of the controller</span></a></li>
 <li class="toclevel-1 tocsection-4"><a href="#.D0.9A.D0.BE.D0.BF.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D0.B1.D0.BB.D0.BE.D1.87.D0.BD.D1.8B.D1.85_.D1.81.D1.85.D0.B5.D0.BC"><span class="tocnumber">4</span> <span class="toctext">Копирование блочных схем</span></a></li>
 <li class="toclevel-1 tocsection-5"><a href="#API_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F"><span class="tocnumber">5</span> <span class="toctext">API пользовательского программирования</span></a></li>
 <li class="toclevel-1 tocsection-6"><a href="#Service_commands-functions_of_the_Control_Interface"><span class="tocnumber">6</span> <span class="toctext">Service commands-functions of the Control Interface</span></a></li>
@@ -85,8 +85,8 @@
 <li> Identifier, name and description of the controller.</li>
 <li> The state "Enabled" and "Running", in which the controller object must be translated at start up.</li>
 <li> Policy of scheduling, priority of the data acquisition task and number of iterations in one cycle of calculating task of the block scheme of the controller.</li></ul>
-<h2><span class="mw-headline" id=".D0.91.D0.BB.D0.BE.D1.87.D0.BD.D0.B0.D1.8F_.D1.81.D1.85.D0.B5.D0.BC.D0.B0_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="mw-headline-number">2</span> Блочная схема контроллера</span></h2>
-<p>Блочная схема формируется посредством вкладки блоков контроллера, конфигурации блока (Рис.4) и его связей (Рис.5).
+<h2><span class="mw-headline" id="The_block_scheme_of_the_controller"><span class="mw-headline-number">2</span> The block scheme of the controller</span></h2>
+<p>The block scheme is formed by means of the tab controller's blocks, configuration of the block (Figure 4) and its connections (Fig. 5). The blocks are stored in a table with the name "BlckCalcBlcks_{CntrId}".
 </p><p>Блоки блочной схемы могут связываться как между собой, так и подключаться к атрибутам параметров. Сами блоки при этом не содержат структуры входов/выходов(IO), а содержат значения, исходя из структуры IO связанной функции. Функции для связывания с блоком используются из объектной модели системы OpenSCADA.
 </p><p>Любой блок может в любой момент быть исключён из обработки и переконфигурирован после чего может быть опять включен в обработку. Связи между блоками могут конфигурироваться без исключения блоков из обработки и остановки контроллера. Значения всех IO, не охваченных связями могут быть изменены в процессе обработки.
 </p><p>С помощью вкладки блоков можно:
@@ -119,8 +119,8 @@
 <li> <i>f_start</i> — Флаг первого выполнения блока, запуск, только чтение.</li>
 <li> <i>f_stop</i> — Флаг последнего выполнения блока, останов, только чтение.</li>
 <li> <i>this</i> — Объект данного блока.</li></ul>
-<h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="mw-headline-number">3</span> Параметры контроллера</span></h2>
-<p>Модуль предоставляет только один тип параметров “Стандартный”. Параметр служит для отражения вычисленных в блоках данных на атрибуты параметров контроллера. Пример вкладки конфигурации параметра приведен на Рис.7.
+<h2><span class="mw-headline" id="Parameters_of_the_controller"><span class="mw-headline-number">3</span> Parameters of the controller</span></h2>
+<p>The module provides only one the "Standard (std)" type of the parameters with the parameters table name "BlckCalcPrm_{CntrId}". The parameter used to reflect the data, calculated in the blocks, on the attributes of the controller's parameters. Example of the configuration tab of the parameter is shown in Fig.7.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:684px;"><a class="image" href="http://oscada.org/wiki/File:BlockCalc_prm_ru.png"><img class="thumbimage" height="638" src="../files/BlockCalc_prm_ru.png" width="682" /></a>  <div class="thumbcaption">Рис. 7. Вкладка конфигурации значений параметров контроллера.</div></div></div></div>
 <p>С помощью этой вкладки можно установить:

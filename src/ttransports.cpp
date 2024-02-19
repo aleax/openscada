@@ -755,6 +755,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 	    string col   = opt->attr("col");
 	    ExtHost host = extHostGet(u, opt->attr("key_id"), sysHostAcs);
 	    if(col == "id") {
+		opt->setText(TSYS::strEncode(sTrm(opt->text()),TSYS::Limit,i2s(elExt.fldAt(elExt.fldId("ID")).len())));
 		if(extHostGet(u,opt->text(),sysHostAcs).id.size())
 		    throw err_sys(_("The host '%s' is presented already!"), opt->text().c_str());
 		host.id = opt->text();

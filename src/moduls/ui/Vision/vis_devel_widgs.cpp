@@ -1741,12 +1741,14 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 
 void WdgTree::ctrTreePopup( )
 {
-    QMenu popup;
+    owner()->applyWorkWdg(0);
 
+    QMenu popup;
     //Add actions
     popup.addAction(owner()->actLibNew);
     popup.addAction(owner()->actVisItAdd);
     QMenu *forLib = popup.addMenu(owner()->actVisItAdd->icon(), _("... from the Library"));
+    forLib->setEnabled(owner()->actVisItAdd->isEnabled());
     for(unsigned iLm = 0; iLm < owner()->lb_menu.size(); iLm++)
 	forLib->addMenu(owner()->lb_menu[iLm]);
     popup.addAction(owner()->actVisItDel);
@@ -1999,14 +2001,16 @@ void ProjTree::updateTree( const string &vca_it )
 
 void ProjTree::ctrTreePopup( )
 {
-    QMenu popup;
+    owner()->applyWorkWdg(1);
 
+    QMenu popup;
     //Add actions
     popup.addAction(owner()->actPrjRun);
     popup.addSeparator();
     popup.addAction(owner()->actPrjNew);
     popup.addAction(owner()->actVisItAdd);
     QMenu *forLib = popup.addMenu(owner()->actVisItAdd->icon(), _("... from the Library"));
+    forLib->setEnabled(owner()->actVisItAdd->isEnabled());
     for(unsigned iLm = 0; iLm < owner()->lb_menu.size(); iLm++)
 	forLib->addMenu(owner()->lb_menu[iLm]);
     popup.addAction(owner()->actVisItDel);

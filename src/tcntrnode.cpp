@@ -236,7 +236,8 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 			logMess += " " + opt->childGet(iCh)->attr("id") + "='" + opt->childGet(iCh)->text() + "',";
 		    logMess += ".";
 		}
-		else logMess = TSYS::strMess(_("set to '%s'."), TSYS::strEncode(opt->text(),TSYS::Limit,"100").c_str());
+		else logMess = TSYS::strMess(_("set to '%s'."),
+			(((logMess=TSYS::strEncode(opt->text(),TSYS::Limit,"100"))==opt->text())?logMess:logMess+"...").c_str());
 	    }
 	    else if(aNm == "add") {
 		if(opt->attr("id").size()) logMess = TSYS::strMess(_("add item '%s (%s)'."), opt->text().c_str(), opt->attr("id").c_str());
@@ -813,15 +814,15 @@ AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const strin
     return chN;
 }
 
-int TCntrNode::isModify( int f )
+int TCntrNode::isModify( int f ) const
 {
     int rflg = 0;
-    MtxAlloc res1(dataRes(), true);
+    MtxAlloc res1(const_cast<TCntrNode*>(this)->dataRes(), true);
     if(f&Self && mFlg&Modified) rflg |= Self;
     if(f&Child) {
 	res1.unlock();
 
-	MtxAlloc res2(mChM, true);
+	MtxAlloc res2(const_cast<TCntrNode*>(this)->mChM, true);
 	for(unsigned iG = 0, iN; chGrp && iG < chGrp->size(); iG++) {
 	    vector<string> chLs;
 	    TMap::iterator p;

@@ -5287,9 +5287,11 @@ else {
 	tErr += ((sched.length && !sched.isEVal())?"; "+tr("Next scheduled call")+" "+SYS.strftime(SYS.cron(sched,schedTrueTm)):"") + (prcSt.length?"; "+prcSt:"");
 }
 f_err = tErr;','','',1672837570);
-INSERT INTO tmplib_DevLib VALUES('FF_LE','FF LE-03MB CT','','','The template implements support for counters of electricity bidirectional on 1-phase/3-phase with analyse the network parameters LE-03MB CT of the firm "F&F (http://www.fif.com.pl/)".
+INSERT INTO tmplib_DevLib VALUES('FF_LE','FF LE-03MB CT','','','The template implements support for counters of electricity bidirectional on 1-phase/3-phase with analyse the network parameters LE-03MB CT (https://www.fif.com.pl/en/usage-electric-power-meters/639-electric-energy-meter-le-03mb-ct.html) of the firm "F&F (http://www.fif.com.pl/)".
 
-Protocol of the counters doesn''t provide of reading the data history, so the template has to obtain instant values only with need periodicity related to the network quality. Data of the counters are completely static, that is all their representing attributes are provided by the template.
+Protocol of the counters is M-bus (https://en.wikipedia.org/wiki/Meter-Bus) and it doesn''t provide of reading the data history, so the template has to obtain instant values only with need periodicity related to the network quality. Data of the counters are completely static, that is all their representing attributes are provided by the template.
+
+!!! Coefficients for P (in 100) and P_{N} (in 1000) was set at demands of the end user, so that is no an error.
 
 Author: Roman Savochenko <roman@oscada.org>
 Total complexity: 0.9 HD
@@ -5416,7 +5418,7 @@ if(tErr.toInt()) {
 		CoefP = CoefP_1 = CoefP_2 = CoefP_3 = EVAL;
 	}
 }
-f_err = tErr;','','',1707747408);
+f_err = tErr;','','',1707892136);
 INSERT INTO tmplib_DevLib VALUES('ergomera625','Ergomera 625','','','The template implements support for Ergomera 625 Counters of electricity and it based on the common template "ModBus base (mbBase) (http://oscada.org/wiki/Libs/Devices#mbBase)" since protocol of the counters grounded on standard ModBus function in main parameters.
 
 !!! The template currently supports only reading the ModBus registers without accessing the history due to the device protocol has got common problems here.

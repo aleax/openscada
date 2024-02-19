@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcntrnode.h
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -176,7 +176,7 @@ class TCntrNode
 	unsigned nodePos( )		{ return mOi; }
 
 	// Modify process methods
-	int  isModify( int mflg = TCntrNode::All );	//Check for modify want
+	int  isModify( int mflg = TCntrNode::All ) const;	//Check for modify want
 	void modif( bool save = false, bool forceLoad = false );//Set Modified the node
 	void modifG( bool forceLoad = false );		//Set Modified the node branch
 	void modifClr( bool save = false );		//Clear Modified the node

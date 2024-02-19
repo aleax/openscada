@@ -1090,14 +1090,12 @@ Additional flags to the object <a href="#TFld">#TFld</a> (enum TVal::AttrFlag):
 <li> <i>void setTime( int64_t vl );</i> — Setting the timestamp outside the value setting.</li>
 <li> <i>bool isCfg( );</i> — Sign of the value object created in base of a configuration element.</li>
 <li> <i>bool dataActive( );</i> — Activity (updatable) flag of data.</li>
-<li> <i>string getSEL( long long *tm = NULL, bool sys = false );</i> — Request of the selected type value for the specified time <i>tm</i>. If NULL then it will be returned the last value.</li>
 <li> <i>TVariant get( long long *tm = NULL, bool sys = false );</i> — Request of the value for the specified time <i>tm</i>. If NULL then it will be returned the last value.</li>
 <li> <i>string getS( long long *tm = NULL, bool sys = false );</i> — Request of the string type value for the specified time <i>tm</i>. If NULL then it will be returned the last value.</li>
 <li> <i>double getR( long long *tm = NULL, bool sys = false );</i> — Request of the real type value for the specified time <i>tm</i>. If NULL then it will be returned the last value.</li>
 <li> <i>int64_t getI( long long *tm = NULL, bool sys = false );</i> — Request of the integer type value for the specified time <i>tm</i>. If NULL then it will be returned the last value.</li>
 <li> <i>char getB( long long *tm = NULL, bool sys = false );</i> — Request of the boolean type value for the specified time <i>tm</i>. If NULL then it will be returned the last value.</li>
 <li> <i>AutoHD&lt;TVarObj&gt; getO( int64_t *tm = NULL, bool sys = false );</i> — Request of the object type value.</li>
-<li> <i>void setSEL( const string &amp;value, long long tm = 0, bool sys = false );</i> — Setting of the selected type value <i>value</i>.</li>
 <li> <i>void set( const TVariant &amp;value, long long tm = 0, bool sys = false );</i> — Setting of the value <i>value</i>.</li>
 <li> <i>void setS( const string &amp;value, long long tm = 0, bool sys = false );</i> — Setting of the string type value <i>value</i>.</li>
 <li> <i>void setR( double value, long long tm = 0, bool sys = false );</i> — Setting of the real type value <i>value</i>.</li>
@@ -2268,13 +2266,11 @@ Additional flags to <a href="#TFld">#TFld</a> (enum — TCfg::AttrFlg):
 <li> <i>void setIsSet( bool vl );</i> — Setting the setting element sign.</li>
 <li> <i>void toDefault( bool notSetType = false );</i> — Setting the field value to the default one, and without setting the field type at <i>notSetType</i>.</li>
 <li> <i>TFld &amp;fld( ) const;</i> —  Configuration of the cell.</li>
-<li> <i>string getSEL( );</i> — Get the value of the selectable type.</li>
 <li> <i>string getS( ) const; string getS( uint8_t RqFlg );</i> — Get the value of the string type with the request flags <i>RqFlg</i>.</li>
 <li> <i>const char *getSd( );</i> — Get the direct access to the string type value.</li>
 <li> <i>double &amp;getRd( );</i> — Get the direct access to the real type value.</li>
 <li> <i>int64_t &amp;getId( );</i> — Get the direct access to the integer type value.</li>
 <li> <i>char &amp;getBd( );</i> — Get the direct access to the boolean type value.</li>
-<li> <i>void setSEL( const string &amp;val, uint8_t RqFlg = 0 );</i> — Set the value of the selectable type to the <i>val</i> with the request flags <i>RqFlg</i>.</li>
 <li> <i>void setS( const string &amp;val ); TCfg &amp;operator=( const string &amp;vl ); TCfg &amp;operator=( const char *vl ); void setS( const string &amp;val, uint8_t RqFlg );</i> — Set the value of the string type to the <i>val</i> with the request flags <i>RqFlg</i>.</li>
 <li> <i>void setR( double val ); TCfg &amp;operator=( double vl ); void setR( double val, uint8_t RqFlg );</i> — Set the value of the real type to the <i>val</i> with the request flags <i>RqFlg</i>.</li>
 <li> <i>void setI( int64_t val ); TCfg &amp;operator=( int64_t vl ); void setI( int64_t val, uint8_t RqFlg );</i> — Set the value of the integer type to the <i>val</i> with the request flags <i>RqFlg</i>.</li>
@@ -2335,7 +2331,7 @@ Cell's type (enum – TFld::Type):
 </p>
 <ul><li> <i>TFld( );</i> — Initialization by default.</li>
 <li> <i>TFld( const TFld &amp;ifld, const char *name = NULL );</i> — Copying constructor, with possibility for individual <i>name</i> set.</li>
-<li> <i>TFld( const char *name, const string &amp;descr, Type type, unsigned char flg, const char *valLen = "", const char *valDef = "", const char *vals = "", const char *nSel = "", const char *res = "" );</i> —  Initialization with the specified configuration.</li>
+<li> <i>TFld( const char *name, const string &amp;descr, Type type, unsigned flg, const char *valLen = "", const char *valDef = "", const string &amp;vals = "", const string &amp;nSel = "", const char *res = "" );</i> —  Initialization with the specified configuration.</li>
 <li> <i>TFld &amp;operator=( const TFld &amp;fld );</i> — Copy of the cell from <i>fld</i>.</li>
 <li> <i>const string &amp;name( ) const;</i> — Cell's name.</li>
 <li> <i>string descr( ) const;</i> — Cell's description.</li>
@@ -2358,19 +2354,6 @@ Cell's type (enum – TFld::Type):
 <li> <i>void setValues( const string &amp;vls );</i> — Set the working range of value or the list of possible values for the selectable type (as — "vl1;vl2;vl3") to the <i>vls</i>.</li>
 <li> <i>void setSelNames( const string &amp;slnms );</i> — Set the list of values' names for the selectable type (as — "Value 1;Value 2;Value 3") to the <i>slnms</i>.</li>
 <li> <i>void setReserve( const string &amp;ires );</i> — Set of the reserve parameter to <i>res</i>.</li>
-<li> <i>const vector&lt;string&gt; &amp;selValS() const;</i> — List of values' variants for the string type.</li>
-<li> <i>const vector&lt;int&gt;    &amp;selValI() const;</i> — List of values' variants for the integer type.</li>
-<li> <i>const vector&lt;double&gt; &amp;selValR() const;</i> — List of values' variants for the real type</li>
-<li> <i>const vector&lt;bool&gt;   &amp;selValB() const;</i> — List of values' variants for the boolean type</li>
-<li> <i>const vector&lt;string&gt; &amp;selNm() const;</i> — List of the names of values' variants.</li>
-<li> <i>string selVl2Nm( const string &amp;val );</i> — Get the selectable name from the value <i>val</i> of the string type.</li>
-<li> <i>string selVl2Nm( int64_t val );</i> — Get the selectable name from the value <i>val</i> of the integer type.</li>
-<li> <i>string selVl2Nm( double val );</i> — Get the selectable name from the value <i>val</i> of the real type.</li>
-<li> <i>string selVl2Nm( bool val ); string selVl2Nm( char val );</i> — Get the selectable name from the value <i>val</i>of the Boolean type.</li>
-<li> <i>string selNm2VlS( const string &amp;name );</i> — Get the value of string type from the selectable name <i>name</i>.</li>
-<li> <i>int64_t selNm2VlI( const string &amp;name );</i> — Get the value of integer type from the selectable name <i>name</i>.</li>
-<li> <i>double selNm2VlR( const string &amp;name );</i> — Get the value of real type from the selectable name <i>name</i>.</li>
-<li> <i>bool selNm2VlB( const string &amp;name );</i> — Get the value of boolean type from the selectable name <i>name</i>.</li>
 <li> <i>XMLNode *cntrCmdMake( XMLNode *opt, const string &amp;path, int pos, const string &amp;user = "root", const string &amp;grp = "root", int perm = 0664 );</i> — Create a form element in accordance with the parameters of the cell.</li></ul>
 <h3><span class="mw-headline" id="The_object_which_preacts_about_changing_of_the_structure_.28TValElem.29"><span class="mw-headline-number">13.6</span> <span id="TValElem" title="#TValElem">The object which preacts about changing of the structure (TValElem)</span></span></h3>
 <table class="wikitable">
@@ -4076,7 +4059,7 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 <li> <i>char nodeMode( ) const;</i> — Node's status.</li>
 <li> <i>unsigned nodeUse( bool selfOnly );</i> — Number of the connections to the node. <i>selfOnly</i> — only self connections, without childs.</li>
 <li> <i>unsigned nodePos( );</i> — The position of the node in the parent-node's container. It is valid only for ordered containers.</li>
-<li> <i>int isModify( int mflg = TCntrNode::All );</i> — Checking for the modification of the node or nodes' branch.</li>
+<li> <i>int isModify( int mflg = TCntrNode::All ) const;</i> — Checking for the modification of the node or nodes' branch.</li>
 <li> <i>void modif( bool save = false, bool forceLoad = false );</i> — Setting the modification sign of the node, with saving <i>save</i> the sign at the loading and marking for the force loading <i>forceLoad</i>.</li>
 <li> <i>void modifG( bool forceLoad = false );</i> — Setting the modification sign of the node branch, with marking for the force loading <i>forceLoad</i>.</li>
 <li> <i>void modifClr( bool save = false );</i> — Clearing the modification sign or the saving sign <i>save</i> of the node.</li>

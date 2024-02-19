@@ -300,12 +300,13 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    //  Archiving
 	    if(ctrMkNode("table",opt,-1,"/arch/arch",_("Archiving"),RWRWR_,"root",SARH_ID,1,"key","atr")) {
 		vector<string> vLs2;
-		ctrMkNode("list", opt, -1, "/arch/arch/atr", _("Attribute"), R_R_R_, "root", SARH_ID, 1, "tp", "str");
-		ctrMkNode("list", opt, -1, "/arch/arch/prc", _("Archiving"), RWRWR_, "root", SARH_ID, 1, "tp", "bool");
+		ctrMkNode("list",opt,-1,"/arch/arch/atr",_("Attribute"),R_R_R_,"root",SARH_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/arch/arch/prc",_("Archiving"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 		SYS->archive().at().modList(vLs);
 		for(unsigned iTa = 0; iTa < vLs.size(); iTa++) {
 		    SYS->archive().at().at(vLs[iTa]).at().valList(vLs2);
 		    for(unsigned iA = 0; iA < vLs2.size(); iA++) {
+			if(!SYS->archive().at().at(vLs[iTa]).at().valAt(vLs2[iA]).at().startStat()) continue;
 			string a_id = SYS->archive().at().at(vLs[iTa]).at().valAt(vLs2[iA]).at().workId();
 			ctrMkNode("list",opt,-1,("/arch/arch/"+a_id).c_str(),a_id,RWRWR_,"root",SARH_ID,1,"tp","bool");
 		    }
@@ -334,25 +335,27 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD)) {
 	    vector<string> vLs2;
 	    // Prepare headers
-	    ctrMkNode("list", opt, -1, "/arch/arch/atr", "", R_R_R_);
-	    ctrMkNode("list", opt, -1, "/arch/arch/prc", "", RWRWR_);
+	    ctrMkNode("list",opt,-1,"/arch/arch/atr","",R_R_R_);
+	    ctrMkNode("list",opt,-1,"/arch/arch/prc","",RWRWR_);
 	    SYS->archive().at().modList(vLs);
 	    for(unsigned iTa = 0; iTa < vLs.size(); iTa++) {
 		SYS->archive().at().at(vLs[iTa]).at().valList(vLs2);
-		for(unsigned iA = 0; iA < vLs2.size(); iA++)
-		    ctrMkNode("list", opt, -1,
-			("/arch/arch/"+SYS->archive().at().at(vLs[iTa]).at().valAt(vLs2[iA]).at().workId()).c_str(), "", RWRWR_);
+		for(unsigned iA = 0; iA < vLs2.size(); iA++) {
+		    if(!SYS->archive().at().at(vLs[iTa]).at().valAt(vLs2[iA]).at().startStat())	continue;
+		    string a_id = SYS->archive().at().at(vLs[iTa]).at().valAt(vLs2[iA]).at().workId();
+		    ctrMkNode("list",opt,-1,("/arch/arch/"+a_id).c_str(),a_id,RWRWR_,"root",SARH_ID,1,"tp","bool");
+		}
 	    }
 	    // Fill table
 	    vlList(vLs);
-	    for(unsigned i_v = 0; i_v < vLs.size(); i_v++)
+	    for(unsigned iV = 0; iV < vLs.size(); iV++)
 		for(unsigned iA = 0; iA < opt->childSize(); iA++) {
 		    XMLNode *chld = opt->childGet(iA);
 		    string c_id = chld->attr("id");
-		    if(c_id=="atr")		chld->childAdd("el")->setText(vLs[i_v]);
-		    else if(c_id=="prc")	chld->childAdd("el")->setText(vlAt(vLs[i_v]).at().arch().freeStat()?"0":"1");
+		    if(c_id == "atr")		chld->childAdd("el")->setText(vLs[iV]);
+		    else if(c_id == "prc")	chld->childAdd("el")->setText(vlAt(vLs[iV]).at().arch().freeStat()?"0":"1");
 		    else chld->childAdd("el")->
-			setText(vlAt(vLs[i_v]).at().arch().freeStat() ? "0" : (vlAt(vLs[i_v]).at().arch().at().archivatorPresent(c_id)?"1":"0"));
+			setText(vlAt(vLs[iV]).at().arch().freeStat() ? "0" : (vlAt(vLs[iV]).at().arch().at().archivatorPresent(c_id)?"1":"0"));
 		}
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR)) {

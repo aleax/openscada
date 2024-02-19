@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/DiamondBoards</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/DiamondBoards.html" title="Модули/Платы Diamond Systems (95% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/DiamondBoards.html" title="Модулі/Плати Diamond Systems (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/DiamondBoards.html" title="Модули/Платы Diamond Systems (90% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/DiamondBoards.html" title="Модулі/Плати Diamond Systems (100% translated)">Українська</a></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
@@ -73,7 +73,8 @@
 <li> The state "Enabled" and "Running", in which the controller object must be translated at start up.</li>
 <li> Policy of scheduling and priority of the data acquisition task.</li></ul>
 <h2><span class="mw-headline" id="Parameter-board.27s_object"><span class="mw-headline-number">2</span> Parameter-board's object</span></h2>
-<p>Parameter-board's object same has a configuration of concrete board and provides available on the board data by attributes. Example of the tab "Parameter", configuration of the parameter-board at all, shown on Figure 2, and the tab "Configuration", signals properties, shown on Figure 3.
+<p>The module provides only one the "Standard (std)" type of the parameters with the parameters table name "DiamPrm_{CntrId}".
+</p><p>Parameter-board's object same has a configuration of concrete board and provides available on the board data by attributes. Example of the tab "Parameter", configuration of the parameter-board at all, shown on Figure 2, and the tab "Configuration", signals properties, shown on Figure 3.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:769px;"><a class="image" href="http://oscada.org/wiki/File:DiamondBoards_prm.png"><img class="thumbimage" height="629" src="../files/DiamondBoards_prm.png" width="767" /></a>  <div class="thumbcaption">Fig.2. Configuration tab "Parameter" of a parameter-board at all.</div></div></div></div>
 <p>In assistance with the tab you can set:
@@ -318,6 +319,8 @@
 <td> 0 </td>
 <td>
 </td></tr></table>
+<p><br />
+</p>
 <h2><span class="mw-headline" id="Notes"><span class="mw-headline-number">3</span> Notes</span></h2>
 <p>Specific in an operation by the AI acquisition by interrupts is the channels switching sync; measuring by different, external, counter and using FIFO for intermediate measuring buffer. Sure, this measuring counter will different to some value from the real-time clock and the FIFO need to have time to it reading. Course it is needs to adjust-calibrate the data receipts with the real-time clock. At all here implemented next compensation mechanisms of the counters walk difference and other effects:
 </p>
