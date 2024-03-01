@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Документація/API користувача</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FUser+API&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/User_API" title="Documents/User API">Documents/User API</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/User_API.html" title="Documents/User API (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/User_API.html" title="Документация/API пользователя (90% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FUser+API&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/User_API" title="Documents/User API">Documents/User API</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/User_API.html" title="Documents/User API (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/User_API.html" title="Документация/API пользователя (86% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Автор:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a></li>
 <li> <b>Початково створено:</b> у <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual" rel="nofollow noreferrer noopener" target="_blank">старій Wiki</a> </li></ul>
@@ -379,7 +379,7 @@
 <li> <i>XMLNodeObj setName( string vl )</i> — встановлює ім'я вузла у <i>vl</i>. Повертає поточний вузол.</li>
 <li> <i>XMLNodeObj setText( string vl )</i> — встановлює текст вузла у <i>vl</i>. Повертає поточний вузол.</li>
 <li> <i>XMLNodeObj setAttr( string id, string vl )</i> — встановлює атрибут <i>id</i> у значення <i>vl</i>. Повертає поточний вузол.</li>
-<li> <i>XMLNodeObj clear( bool full = false )</i> — очищує вузол, видаленням дочірніх вузлів, очищує текст та атрибути, для <i>full</i>.</li>
+<li> <i>XMLNodeObj clear( bool full = false )</i> — очищує вузол видаленням дочірніх вузлів, очищує текст та атрибути для <i>full</i>.</li>
 <li> <i>int childSize( )</i> — кількість вкладених вузлів.</li>
 <li> <i>XMLNodeObj childAdd( ElTp no = XMLNodeObj ); XMLNodeObj childAdd(string no)</i> — додає об'єкт <i>no</i> як вкладений. <i>no</i> може бути як безпосередньо об'єктом-результатом функції "SYS.XMLNode()", так і рядком з ім'ям нового тегу. Повертається вкладений вузол.</li>
 <li> <i>XMLNodeObj childIns( int id, ElTp no = XMLNodeObj ); XMLNodeObj childIns(int id, string no)</i> — вставляє об'єкт <i>no</i> як вкладений, у позицію <i>id</i>. <i>no</i> може бути як безпосередньо об'єктом-результатом функції "SYS.XMLNode()", так і рядком з ім'ям нового тегу. Повертається вкладений вузол.</li>
@@ -502,7 +502,7 @@
 <h2><span class="mw-headline" id=".D0.91.D1.83.D0.B4.D1.8C_.D1.8F.D0.BA.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.28TCntrNode.29_.D0.B4.D0.B5.D1.80.D0.B5.D0.B2.D0.B0_OpenSCADA_.28SYS..2A.29"><span class="mw-headline-number">4</span> <span id="TCntrNode" title="#TCntrNode">Будь який об'єкт (TCntrNode) дерева OpenSCADA (SYS.*)</span></span></h2>
 <p>Функції об'єкту:
 </p>
-<ul><li> <i>TArrayObj nodeList( string grp = "", string path = "" );</i> — повертає перелік ідентифікаторів дочірніх вузлів для групи <i>grp</i> та вузла за шляхом <i>path</i>. Якщо <i>grp</i> порожнє то повертаються вузли всіх груп.</li>
+<ul><li> <i>TArrayObj nodeList( string grp = "", string path = "" );</i> — повертає перелік повних ідентифікаторів дочірніх вузлів для групи <i>grp</i> та вузла за шляхом <i>path</i>. Якщо <i>grp</i> порожня то повертаються вузли всіх груп. Повний ідентифікатор, це "{grp}{nID}".</li>
 <li> <i>TCntrNodeObj nodeAt( string path, string sep = "" );</i> — під'єднує до вузла <i>path</i> у дереві об'єктів OpenSCADA (рис.1). Якщо вказується роздільник у <i>sep</i> то шлях обробляється як рядок з роздільником. Для відсутніх та некоректних вузлів ця функція повертатиме "false", тоді як коректний вузол, при перетворені у BOOLEAN, повертатиме "true".</li>
 <li> <i>TCntrNodeObj nodePrev( );</i> — повертає попередній-батьківський вузол.</li>
 <li> <i>string nodePath( string sep = "", bool from_root = true );</i> — повертає шлях до поточного вузла у дереві об'єктів OpenSCADA (рис.1). Символ роздільника вказується у <i>sep</i>, для отримання шляху через роздільник, наприклад — "DAQ.ModBus.PLC1.P1.var", інакше — "/DAQ/ModBus/PLC1/P1/var". <i>from_root</i> вказує на необхідність формувати шлях від кореня та без вказання ідентифікатору станції.</li>
@@ -749,7 +749,9 @@
 <li> <i>string addr( string vl = "" )</i> — адреса транспорту, встановлює у непорожнє значення <i>vl</i>.</li>
 <li> <i>string writeTo( string sender, string mess )</i> — відправляє повідомлення <i>mess</i> відправнику <i>sender</i>, як відповідь.</li>
 <li> <i>TArrayObj associateTrsList( )</i> — перелік асоційованих вихідних транспортів із цим вхідним.</li>
-<li> <i>TCntrNodeObj associateTr( string id )</i> — отримання асоційованого транспорту за підключенням <i>id</i>.</li></ul>
+<li> <i>TCntrNodeObj associateTr( string id )</i> — отримання асоційованого транспорту за підключенням <i>id</i>.</li>
+<li> <i>ElTp conPrm( string id, ElTp val = EVAL, string cfg = "" )</i> — загальне поводження із параметром часу підключення <i>id</i> з встановленням у значення <i>val</i> за наявності; запит конфігураційного параметру часу підключення із реєстрацією конфігурації <i>cfg</i> у форматі "{SRC}\n{NAME}\n{HELP}" вперше.</li>
+<li> <i>bool setConPrm( string id, ElTp val )</i> — встановлення параметру часу підключення <i>id</i> у значення <i>val</i>, лише для сумісності.</li></ul>
 <p>Функції об'єкту вихідного транспорту (SYS.Transport["Modul"]["out_Transp"]):
 </p>
 <ul>
@@ -761,8 +763,8 @@
 <li><i>string addr( string vl = "" )</i> — адреса транспорту, встановлює у непорожнє значення <i>vl</i>.</li>
 <li><i>string timings( string vl = "", isDef = true )</i> — таймінги транспорту, встановлює у непорожнє значення <i>vl</i> та по замовченню для <i>isDef</i>. </li>
 <li><i>int attempts( int vl = EVAL )</i> — спроб підключень транспорту, встановлює у не-EVAL значення <i>vl</i>.</li>
-<li><i>ElTp conPrm( string nm )</i> — отримання параметру підключення <i>nm</i>.</li>
-<li><i>bool setConPrm( string nm, ElTp val )</i> — встановлення параметру підключення <i>nm</i> у <i>val</i>.</li>
+<li><i>ElTp conPrm( string id, ElTp val = EVAL, string cfg = "" )</i> — загальне поводження із параметром часу підключення <i>id</i> з встановленням у значення <i>val</i> за наявності; запит конфігураційного параметру часу підключення із реєстрацією конфігурації <i>cfg</i> у форматі "{SRC}\n{NAME}\n{HELP}" вперше.</li>
+<li><i>bool setConPrm( string id, ElTp val )</i> — встановлення параметру часу підключення <i>id</i> у значення <i>val</i>, лише для сумісності.</li>
 <li><i>string messIO( string mess, real timeOut = 0, int inBufLen = -1 );</i> — відправляє повідомлення <i>mess</i> через транспорт з таймаутом очікування відповіді <i>timeOut</i> (у секундах) та читає відповідь (буфер) розміром <i>inBufLen</i> байт. У випадку нульового таймауту цей час береться з налаштувань вихідного транспорту. Негативний час <i>timeOut</i> (&lt; -1e-3) вимикає роботу транспорту у режимі запит/відповідь та дозволяє незалежно читати/писати у буфер ВВ, з таймаутом читання <i>timeOut</i>, у абсолютному значенні. Для негативного <i>inBufLen</i> розмір буферу встановлюється у STR_BUF_LEN(10000), а "0" вимикає читання взагалі.<br />
 <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Якщо Ваш транспорт у відповідь на запит передбачає отримання даних частинами тоді використовуйте цю функцію у одному потоці для декількох пристроїв на одній шині-транспорті оскільки тут не існує способу блокування транспорту з користувацького API. Один потік це об'єкт контролеру підсистеми "Збір даних", а <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">модуль "Протокол користувача"</a> блокує транспорт всередині, перед виконанням своїх користувацьких процедур.
 <div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">rez</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">Transport</span><span class="p">.</span><span class="nx">Serial</span><span class="p">.</span><span class="nx">out_ttyUSB0</span><span class="p">.</span><span class="nx">messIO</span><span class="p">(</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">strFromCharCode</span><span class="p">(</span><span class="mh">0x4B</span><span class="p">,</span><span class="mh">0x00</span><span class="p">,</span><span class="mh">0x37</span><span class="p">,</span><span class="mh">0x40</span><span class="p">),</span><span class="mf">0.2</span><span class="p">);</span>
@@ -784,16 +786,16 @@
 <ul><li> <i>user</i> — користувач для зміни.</li></ul></li>
 <li> <i>bool pgAccess(string URL)</i> — перевіряє доступність сторінки, визначеної у <i>URL</i>.
 <ul><li> <i>URL</i> — URL сторінки, що перевіряється.</li></ul></li>
-<li> <i>string pgCreator(string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}", string htmlHeadEls = "", string forceTmplFile = "", string lang = "" )</i> — формує сторінку або ресурс із вмістом <i>cnt</i>, загорнутим у HTTP з результатом <i>rcode</i>, із додатковими атрибутами HTTP <i>httpattrs</i>, додатковим елементом заголовку HTML <i>htmlHeadEls</i> та використанням файлу шаблону <i>forceTmplFile</i> та для мови <i>lang</i>.
+<li> <i>string pgCreator(string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}", string htmlHeadEls = "", string forceTmplFile = "")</i> — формує сторінку або ресурс із вмістом <i>cnt</i>, загорнутим у HTTP з результатом <i>rcode</i>, із додатковими атрибутами HTTP <i>httpattrs</i>, додатковим елементом заголовку HTML <i>htmlHeadEls</i> та використанням файлу шаблону <i>forceTmplFile</i> та для мови <i>lang</i>.
 <ul><li> <i>cnt</i> — вміст сторінки або ресурсу (зображення, XML, CSS, JavaScript, ...);</li>
 <li> <i>rcode</i> — результуючий код HTTP, на кшталт "200 OK"; порожнє значення вимикає додання HTTP заголовку;</li>
 <li> <i>httpattrs</i> — додаткові атрибути HTTP, переважно це "Content-Type" із значенням по замовченню "text/html;charset={SYS}"; тільки для "Content-Type: text/html" буде здійснюватися загортання у внутрішній/сервісний, або визначений <i>forceTmplFile</i>, HTML-шаблон;</li>
 <li> <i>htmlHeadEls</i> — додатковий тег заголовку HTML, переважно це META з "Refresh" для вказаного URL;</li>
-<li> <i>forceTmplFile</i> — файл прямо визначеного шаблону для перекриття внутрішнього/сервісного або головної сторінки.</li>
-<li> <i>lang</i> — мова інтерфейсу, що формується.</li></ul></li></ul>
+<li> <i>forceTmplFile</i> — файл прямо визначеного шаблону для перекриття внутрішнього/сервісного або головної сторінки.</li></ul></li></ul>
 <p><br />
 </p>
 <h2><span class="mw-headline" id=".D0.9F.D1.96.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.9A.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D1.96_.D1.96.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D0.B8.22_.28SYS.UI.29"><span class="mw-headline-number">11</span> <span id="SYSUI" title="#SYSUI">Підсистема "Користувацькі інтерфейси" (SYS.UI)</span></span></h2>
+<ul><li> <i>string mimeGet(string fnm);</i> — отримання типу MIME за назвою файлу <i>fnm</i>.</li></ul>
 <h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_QTStarter"><span class="mw-headline-number">11.1</span> Модуль <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">QTStarter</a></span></h3>
 <p><b>Об'єкт модуля (SYS.UI.QTStarter)</b>
 </p>
@@ -887,7 +889,7 @@
 <tr>
 <td> <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">Основна бібліотека</a>
 </td>
-<td> 2.0 </td>
+<td> 2.1 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_base </td>
 <td> en, uk, ru
@@ -896,7 +898,7 @@
 <tr>
 <td> <a href="Libs_Devices.html" title="Special:MyLanguage/Libs/Devices">Бібліотека промислових пристроїв</a>
 </td>
-<td> 2.5 </td>
+<td> 3.0 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_DevLib
 </td>
@@ -906,7 +908,7 @@
 <tr>
 <td> <a href="Libs_LowLevelDevices.html" title="Special:MyLanguage/Libs/LowLevelDevices">Бібліотека низькорівневих сенсорів та чипів</a>
 </td>
-<td> 1.5 </td>
+<td> 1.6 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_LowDevLib </td>
 <td> en, uk, ru
@@ -1013,5 +1015,5 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/uk">Documents/User_API/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/uk">Documents/User_API/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

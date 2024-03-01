@@ -8,7 +8,7 @@ else
 oscd_modul_LTLIBRARIES = bd_PostgreSQL.la
 bd_PostgreSQL_la_CXXFLAGS =
 bd_PostgreSQL_la_LIBTOOLFLAGS = --tag=disable-static
-bd_PostgreSQL_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+bd_PostgreSQL_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 bd_PostgreSQL_la_CXXFLAGS += $(POSTGRESQL_CFLAGS)

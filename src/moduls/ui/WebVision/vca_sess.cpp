@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebVision file: vca_sess.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>	   *
+ *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>	   *
  *		   2007-2012 by Lysenko Maxim, <mlisenko@oscada.org>	   *
  *		   2007-2008 by Yashina Kseniya, <ksu@oscada.org>	   *
  *									   *
@@ -126,6 +126,12 @@ void VCASess::getReq( SSess &ses )
 	mod->cntrIfCmd(req, ses);
 	ses.page = TSYS::strDecode(req.text(), TSYS::base64);
 	ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: image/png");
+    }
+    //Session/projects manual
+    else if(wp_com == "manual") {
+	string fTp, fDoc = TUIS::docGet(proj()+"\n"+ses.lang, &fTp, TUIS::GetContent);
+	if(fDoc.size())	ses.page = mod->pgCreator(ses.prt, fDoc, "200 OK", "Content-Type: "+TUIS::mimeGet("."+fTp,""));
+	else ses.page = mod->pgCreator(ses.prt, mod->messPost(nodePath(), _("The project manual was not found!"),TWEB::Error), "404 Not Found");
     }
     //Get open pages list
     else if(wp_com == "pgOpenList" && first_lev.empty()) {

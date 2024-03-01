@@ -7,7 +7,7 @@ else
 oscd_modul_LTLIBRARIES = ui_QTCfg.la
 ui_QTCfg_la_CXXFLAGS =
 ui_QTCfg_la_LIBTOOLFLAGS = --tag=disable-static
-ui_QTCfg_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+ui_QTCfg_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 ui_QTCfg_la_CXXFLAGS += $(QtGui_CFLAGS)

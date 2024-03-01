@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/OPC UA</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FOPC+UA&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/OPC_UA" title="Modules/OPC UA">Modules/OPC UA</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/OPC_UA.html" title="Modules/OPC UA (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/OPC_UA.html" title="Модули/OPC UA (99% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FOPC+UA&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/OPC_UA" title="Modules/OPC UA">Modules/OPC UA</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/OPC_UA.html" title="Modules/OPC UA (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/OPC_UA.html" title="Модули/OPC UA (98% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
 <td> Клієнт OPC-UA
 </td>
-<td> 2.6 </td>
+<td> 2.8 </td>
 <td> GPL2 </td>
 <td> daq_OPC_UA.so </td>
 <td> en,uk,ru,de </td>
@@ -70,7 +70,7 @@
 <td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
 <td> Бібліотека реалізації OPC-UA у OpenSCADA
 </td>
-<td> 2.1 </td>
+<td> 2.2 </td>
 <td> LGPL3 </td>
 <td> libOPC_UA.{h,cpp} </td>
 <td> en </td>
@@ -91,9 +91,7 @@
 <li> <b>Спонсорування, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Release_0.9/Update4#OPC_UA" title="Special:MyLanguage/Documents/Release 0.9/Update4">роботу з UAExpert 1.5, реалізації клієнтського Publish та Chunks, значної уніфікації</a>, підтримки Логічного Рівня та цілковитої ревізії документу на 10.4 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Fund" title="Special:MyLanguage/Fund">Фонд</a></li>
 <li> <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/module_opc_ua_functions_extending/" rel="nofollow noreferrer noopener" target="_blank">Задача розширення модуля</a></li>
 <li> <b><a href="../../en/To_do.html" title="Special:MyLanguage/Works/To do">Завдання (To Do)</a>:</b></li></ul>
-<dl><dd> + відревізувати представницьку сторінку документації;</dd>
-<dd> - вирішити суперечність у <i>Client::messIO()</i> стосовно змішування режиму чистого запиту із режимом вільного читання/запису та часу очікування тут відповіді без прямої передачі таймауту підключення;</dd>
-<dd> + доповнити вбудованим Логічним Режимом DAQ-Параметрів;</dd>
+<dl><dd> - вирішити суперечність у <i>Client::messIO()</i> стосовно змішування режиму чистого запиту із режимом вільного читання/запису та часу очікування тут відповіді без прямої передачі таймауту підключення;</dd>
 <dd> - додати підтримку автентифікації до вхідної-серверної частини протоколу;</dd>
 <dd> - додати автоматичне створення вхідних транспортів та їх пре-конфігурацію із властивостей об'єкту КінцевогоВузла;</dd>
 <dd> + реалізувати запит-сервіс "Publish" та "шматки" у клієнтській частині;</dd>
@@ -123,8 +121,8 @@
 <li class="toclevel-2 tocsection-5"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83"><span class="tocnumber">3.1</span> <span class="toctext">Об'єкт контролеру</span></a></li>
 <li class="toclevel-2 tocsection-6"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="tocnumber">3.2</span> <span class="toctext">Параметри</span></a>
 <ul>
-<li class="toclevel-3 tocsection-7"><a href="#.D0.A1.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D0.B8.D0.B9_.28std.29"><span class="tocnumber">3.2.1</span> <span class="toctext">Стандартний (std)</span></a></li>
-<li class="toclevel-3 tocsection-8"><a href="#.D0.9B.D0.BE.D0.B3.D1.96.D1.87.D0.BD.D0.B8.D0.B9_.28logic.29"><span class="tocnumber">3.2.2</span> <span class="toctext">Логічний (logic)</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#.D0.A1.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D0.B8.D0.B9_.28_Prm.29"><span class="tocnumber">3.2.1</span> <span class="toctext">Стандартний (_Prm)</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#.D0.9B.D0.BE.D0.B3.D1.96.D1.87.D0.BD.D0.B8.D0.B9_.28_PrmL.29"><span class="tocnumber">3.2.2</span> <span class="toctext">Логічний (_PrmL)</span></a></li>
 </ul>
 </li>
 <li class="toclevel-2 tocsection-9"><a href="#API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">3.3</span> <span class="toctext"><span>API користувацького програмування</span></span></a></li>
@@ -227,14 +225,13 @@
 <h3><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83"><span class="mw-headline-number">3.1</span> Об'єкт контролеру</span></h3>
 <p>Для додання джерела даних OPC-UA створюється та конфігурується об'єкт контролеру в OpenSCADA. Приклад вкладки конфігурації об'єкту контролеру даного типу зображено на рисунку 4.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:928px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_main_uk.png"><img class="thumbimage" height="851" src="../files/OPC-UA_cntr_main_uk.png" width="926" /></a>  <div class="thumbcaption">Рис.4. Вкладка конфігурації об'єкту контролера OPC-UA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:838px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_main_uk.png"><img class="thumbimage" height="821" src="../files/OPC-UA_cntr_main_uk.png" width="836" /></a>  <div class="thumbcaption">Рис.4. Вкладка конфігурації об'єкту контролера OPC-UA.</div></div></div></div>
 <p>За допомогою цієї вкладки можна встановити:
 </p>
-<ul><li> Стан об'єкту контролеру, а саме: Статус, "Ввімкнено", "Виконується" та ім'я БД, яка містить конфігурацію.</li></ul>
+<ul><li> Стан об'єкту контролеру, а саме: Статус, "Ввімкнено", "Виконується" та ім'я сховища, яке містить конфігурацію.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Ручний перезапуск ввімкненого об'єкту контролеру викликає примусове переформування переліку елементів моніторингу.</dd></dl>
 <ul><li> Ідентифікатор, ім'я та опис контролеру.</li>
 <li> Стан "Ввімкнено" та "Виконується", у який переводити об'єкт контролеру при завантажені.</li>
-<li> Ім'я таблиць зберігання конфігурації параметрів контролеру стандартного та логічного типу.</li>
 <li> Політика планування та пріоритет задачі збору даних.</li>
 <li> Період синхронізації конфігурації атрибутів параметрів з віддаленою станцією, а також час повтору спроб відновлення підключення.</li>
 <li> URL кінцевого вузла віддаленої станції — сервера OPC-UA. На початку цю адресу можна вказати у вигляді "<b>opc.tcp://{IP|name}:{port}</b>", після чого, у випадку включення об'єкту контролера та наявності вказаного OPC-UA вузла, з'явиться можливість обрати уточнену адресу.</li></ul>
@@ -243,18 +240,20 @@
 <li> Сертифікат клієнту та приватний ключ у форматі PEM.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Приховано у стані виконання.</dd></dl>
 <ul><li> Користувач та пароль для аутентифікації на сервері, порожнє значення включає анонімний доступ.</li>
-<li> Використовувати функцію "Read", інакше активується та використовується сервіс збору даних Publish (асинхронний) протоколу OPC-UA.</li></ul>
+<li> Асинхронний запис. Вмикає асинхронний запис змін до контролеру, у загальному циклі опитування та після самого опитування даних, блокуючи читання записаних значень на один цикл (до очищення буферу запису).</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Цей режим також запобігає втраті записаних даних за втрати підключення та записані дані будуть передані щойно підключення буде відновлено.</dd></dl>
+<ul><li> Використовувати функцію "Read", інакше активується та використовується сервіс збору даних Publish (асинхронний) протоколу OPC-UA.</li></ul>
 <p>З метою полегшення ідентифікації вузлів на віддаленій станції, а також вибору їх для вставки у об'єкті параметру контролеру, в самому об'єкті контролеру передбачено вкладку навігації за вузлами віддаленої станції "Огляд вузлів серверу", де можна пройти за деревом об'єктів та ознайомитися з їх атрибутами (рис.5).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:719px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_browse_uk.png"><img class="thumbimage" height="690" src="../files/OPC-UA_cntr_browse_uk.png" width="717" /></a>  <div class="thumbcaption">Рис.5. Вкладка "Огляд вузлів серверу" сторінки об'єкту контролеру OPC-UA.</div></div></div></div>
 <h3><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="mw-headline-number">3.2</span> Параметри</span></h3>
-<p>Модуль збору даних надає два типи параметру: "Стандартний (std)" та "Логічний (logic)". Додатковими конфігураційними полями параметрів цього модуля є:
+<p>Модуль збору даних надає два типи параметру: "Стандартний (_Prm)" та "Логічний (_PrmL)". Додатковими конфігураційними полями параметрів цього модуля є:
 </p>
-<ul><li> <i><b>Стандартний (std)</b></i>:
+<ul><li> <i><b>Стандартний (_Prm)</b></i>:
 <ul><li> <i>Перелік атрибутів</i> — містить структурований перелік конфігурації атрибутів ModBUS.</li></ul></li>
-<li> <i><b>Логічний (logic)</b></i>:
+<li> <i><b>Логічний (_PrmL)</b></i>:
 <ul><li> <i>Шаблон параметру</i> — адреса шаблону параметру DAQ.</li></ul></li></ul>
-<h4><span class="mw-headline" id=".D0.A1.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D0.B8.D0.B9_.28std.29"><span class="mw-headline-number">3.2.1</span> Стандартний (std)</span></h4>
+<h4><span class="mw-headline" id=".D0.A1.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D0.B8.D0.B9_.28_Prm.29"><span class="mw-headline-number">3.2.1</span> Стандартний (_Prm)</span></h4>
 <p>Додатковим конфігураційним полем параметру даного модуля (рис.6) є перелік вузлів OPC-UA та поле навігації за вузлами OPC-UA у один рядок для вставки обраних вузлів типу "Змінна" до визначеного переліку. Атрибут у цьому переліку записується як "<b>{ns}:{id}[|[{flg}][|{id}[|{name}]]]</b>".<br />
 Де:
 </p>
@@ -274,7 +273,7 @@
 </p><p>Відповідно до вказаного переліку вузлів виконується опитування та створення атрибутів параметру (рис.7).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_atr_uk.png"><img class="thumbimage" height="591" src="../files/OPC-UA_prm_atr_uk.png" width="687" /></a>  <div class="thumbcaption">Рис.7. Вкладка атрибутів параметру.</div></div></div></div>
-<h4><span class="mw-headline" id=".D0.9B.D0.BE.D0.B3.D1.96.D1.87.D0.BD.D0.B8.D0.B9_.28logic.29"><span class="mw-headline-number">3.2.2</span> Логічний (logic)</span></h4>
+<h4><span class="mw-headline" id=".D0.9B.D0.BE.D0.B3.D1.96.D1.87.D0.BD.D0.B8.D0.B9_.28_PrmL.29"><span class="mw-headline-number">3.2.2</span> Логічний (_PrmL)</span></h4>
 <p>Головну сторінку конфігурації параметру логічного типу представлено на рисунку 8.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:784px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UALog_prm_uk.png"><img class="thumbimage" height="591" src="../files/OPC-UALog_prm_uk.png" width="782" /></a>  <div class="thumbcaption">Рис.8. Вкладка конфігурації параметру логічного типа.</div></div></div></div>
@@ -975,5 +974,5 @@ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./OPC-UA_openssl.c
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/uk">Modules/OPC_UA/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/uk">Modules/OPC_UA/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

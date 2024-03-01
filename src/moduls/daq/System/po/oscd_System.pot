@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-15 20:40+0300\n"
+"POT-Creation-Date: 2024-01-15 14:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,32 +17,52 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Load (%)"
+msgid "System"
 msgstr ""
 
-msgid "System (%)"
-msgstr ""
-
-msgid "User (%)"
-msgstr ""
-
-msgid "Idle (%)"
-msgstr ""
-
-msgid "General"
+msgid ""
+"Load whole, system, user, idle\n"
+"In %"
 msgstr ""
 
 #, c-format
 msgid "Closing the file %p error '%s (%d)'!"
 msgstr ""
 
-msgid "10:Device is not available."
+msgid "Frequency: driver"
 msgstr ""
 
-msgid "Full CPU Load"
+msgid "Frequency: governor"
 msgstr ""
 
-msgid "CPU Load: "
+msgid ""
+"Frequency: current\n"
+"In MHz"
+msgstr ""
+
+msgid ""
+"Frequency: minimum, set\n"
+"In MHz"
+msgstr ""
+
+msgid ""
+"Frequency: maximum, set\n"
+"In MHz"
+msgstr ""
+
+msgid "Model name"
+msgstr ""
+
+msgid "MHz"
+msgstr ""
+
+msgid "BogoMIPS"
+msgstr ""
+
+msgid "MHz at rdtsc"
+msgstr ""
+
+msgid "General"
 msgstr ""
 
 msgid "Total (GB)"
@@ -63,14 +83,7 @@ msgstr ""
 msgid "Free file nodes"
 msgstr ""
 
-msgid "Mount point"
-msgstr ""
-
 msgid "10:Mountpoint isn't available."
-msgstr ""
-
-#, c-format
-msgid "File system: '%s'"
 msgstr ""
 
 msgid "Read (B)"
@@ -85,10 +98,7 @@ msgstr ""
 msgid "Write speed (B/s)"
 msgstr ""
 
-msgid "Disk(part)"
-msgstr ""
-
-msgid "HD statistic: "
+msgid "10:Device is not available."
 msgstr ""
 
 msgid "Name"
@@ -100,13 +110,7 @@ msgstr ""
 msgid "Temperature"
 msgstr ""
 
-msgid "Disk"
-msgstr ""
-
 msgid "Parameter Hddtemp"
-msgstr ""
-
-msgid "HD temperature: "
 msgstr ""
 
 msgid "Free (KiB)"
@@ -133,9 +137,6 @@ msgstr ""
 msgid "Swap used (KiB)"
 msgstr ""
 
-msgid "Memory info"
-msgstr ""
-
 msgid "Received (B)"
 msgstr ""
 
@@ -148,10 +149,134 @@ msgstr ""
 msgid "Transmit speed (B/s)"
 msgstr ""
 
-msgid "Interface"
+msgid "Type"
 msgstr ""
 
-msgid "Interface statistic: "
+msgid "Technology"
+msgstr ""
+
+msgid "Scope"
+msgstr ""
+
+msgid "Present"
+msgstr ""
+
+msgid "Manufacturer, model, SN"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Online"
+msgstr ""
+
+msgid "Health"
+msgstr ""
+
+msgid "Capacity"
+msgstr ""
+
+msgid "Capacity level"
+msgstr ""
+
+msgid ""
+"Charge now, full, design\n"
+"In Ah"
+msgstr ""
+
+msgid ""
+"Energy now, full, design\n"
+"In Ah"
+msgstr ""
+
+msgid "Voltage"
+msgstr ""
+
+msgid "Voltage minimum"
+msgstr ""
+
+msgid "Cycle count"
+msgstr ""
+
+msgid ""
+"Power\n"
+"In Watts"
+msgstr ""
+
+msgid ""
+"Current\n"
+"In mAmpers"
+msgstr ""
+
+msgid ""
+"Temperature\n"
+"In degC"
+msgstr ""
+
+msgid "Time to empty now, average"
+msgstr ""
+
+msgid "Time to full"
+msgstr ""
+
+msgid "Charge threshold start, stop"
+msgstr ""
+
+msgid "Charge control threshold start, end"
+msgstr ""
+
+msgid "Number of file descriptor slots currently"
+msgstr ""
+
+msgid "Peak virtual memory size (KiB)"
+msgstr ""
+
+msgid "Virtual memory size (KiB)"
+msgstr ""
+
+msgid "Locked memory size (KiB)"
+msgstr ""
+
+msgid "Pinned memory size (KiB)"
+msgstr ""
+
+msgid "Peak resident set size (KiB)"
+msgstr ""
+
+msgid "Resident set size (KiB)"
+msgstr ""
+
+msgid "Size of resident anonymous memory (KiB)"
+msgstr ""
+
+msgid "Size of resident file mappings (KiB)"
+msgstr ""
+
+msgid "Size of resident shared memory (KiB)"
+msgstr ""
+
+msgid "Size of data segment (KiB)"
+msgstr ""
+
+msgid "Size of stack segment (KiB)"
+msgstr ""
+
+msgid "Size of text segment (KiB)"
+msgstr ""
+
+msgid "Shared library code size (KiB)"
+msgstr ""
+
+msgid "Page table entries size (KiB)"
+msgstr ""
+
+msgid "Swapped-out virtual memory size by anonymous private pages (KiB)"
+msgstr ""
+
+msgid "Size of hugetlb memory portions (KiB)"
+msgstr ""
+
+msgid "Number of threads in process"
 msgstr ""
 
 msgid "State"
@@ -168,10 +293,7 @@ msgstr ""
 msgid "Closing the pipe %p error '%s (%d)'!"
 msgstr ""
 
-msgid "Data sensors"
-msgstr ""
-
-msgid "HDD SMART: "
+msgid "Sensors"
 msgstr ""
 
 msgid "UPS"
@@ -191,9 +313,6 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-msgid "UPS: "
-msgstr ""
-
 msgid "Full seconds"
 msgstr ""
 
@@ -209,16 +328,7 @@ msgstr ""
 msgid "Days"
 msgstr ""
 
-msgid "System"
-msgstr ""
-
 msgid "Station"
-msgstr ""
-
-msgid "System up time"
-msgstr ""
-
-msgid "Station up time"
 msgstr ""
 
 msgid "System DA"
@@ -227,7 +337,7 @@ msgstr ""
 msgid "Roman Savochenko"
 msgstr ""
 
-msgid "Provides data acquisition from the OS. Supported OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc."
+msgid "Provides data acquisition from Operation System. Supported OS Linux data sources: CPU, Memory, Sensors, Disk SMART, Disk Statistic, File System, Network, Power, UPS, Up Time etc."
 msgstr ""
 
 msgid "Auto create active data sources"
@@ -282,29 +392,35 @@ msgstr ""
 msgid "CPU"
 msgstr ""
 
-msgid "File Systems"
+msgid "File System"
 msgstr ""
 
-msgid "HDD statistic"
+msgid "Disk Statistic"
 msgstr ""
 
 msgid "HDD temperature"
 msgstr ""
 
+msgid "HD temperature"
+msgstr ""
+
 msgid "Memory"
 msgstr ""
 
-msgid "Network statistic"
+msgid "Network"
 msgstr ""
 
-msgid "Qt sensors"
+msgid "Power"
 msgstr ""
 
-msgid "Sensors"
+msgid "Process"
 msgstr ""
 
-msgid "UPS (NUT)"
+msgid "Qt sensor"
 msgstr ""
 
-msgid "Up time"
+msgid "Disk SMART"
+msgstr ""
+
+msgid "Up Time"
 msgstr ""

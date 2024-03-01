@@ -43,11 +43,11 @@
 #ifdef HAVE_ICONV_H
 #include <iconv.h>
 #endif
-#ifdef HAVE_LIBINTL_H
+#if HAVE_LIBINTL_H
 #include <libintl.h>
 #endif
 
-#ifdef HAVE_LIBINTL_H
+#if HAVE_LIBINTL_H
 extern int _nl_msg_cat_cntr;	//Detection counter of an environment of language changes of gettext
 #endif
 
@@ -78,7 +78,7 @@ TMess::TMess( ) : IOCharSet(DEF_IOCharSet), mMessLevel(DEF_MessLev), mLogDir(DEF
     IOCharSet = nl_langinfo(CODESET);
 #endif
 
-#ifdef HAVE_LIBINTL_H
+#if HAVE_LIBINTL_H
     bindtextdomain(PACKAGE, localedir_full);
     textdomain(PACKAGE);
 #endif
@@ -86,7 +86,7 @@ TMess::TMess( ) : IOCharSet(DEF_IOCharSet), mMessLevel(DEF_MessLev), mLogDir(DEF
     string tLng = lang();
     mLangCode = tLng;
     if(mLangCode.size() < 2 || mLangCode.getVal() == "POSIX" || mLangCode.getVal() == "C") mLangCode = "en";
-    else mLangCode = mLangCode.getVal().substr(0,2);
+    else mLangCode = TSYS::strParse(mLangCode.getVal(), 0, "_");	//!!!! First part of locale in the form "{lng}_{CNTR}.{CODE}"
     mIsUTF8 = (IOCharSet == "UTF-8" || IOCharSet == "UTF8" || IOCharSet == "utf8");
 
     if(tLng == "C" || (mLangCode.getVal() == "en" && (IOCharSet == "ISO-8859-1" || IOCharSet == "ANSI_X3.4-1968" || IOCharSet == "ASCII" || IOCharSet == "US-ASCII")))
@@ -252,7 +252,7 @@ void TMess::setLangBase( const string &vl )
     //Setting to the translation languages by default
     string lLs, lIt;
     for(int off = 0, pos = 0; (lIt=TSYS::strParse(langBase(),0,";",&off)).size(); ++pos)
-	if(pos) lLs += (lLs.size()?";":"") + lIt.substr(0,2);
+	if(pos) lLs += (lLs.size()?";":"") + TSYS::strParse(lIt, 0, "_");	//!!!! First part of locale in the form "{lng}_{CNTR}.{CODE}"
     setTranslLangs(lLs);
 }
 
@@ -321,7 +321,7 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
 	isDUAPI = (src.find("duapi:") == 0);
 
     if(translDyn()) {
-	if(lang.size() >= 2) trLang = lang.substr(0,2);
+	if(lang.size() >= 2) trLang = lang;
 	if(trLang == langCodeBase() && !isUAPI) return base;
 	cKey = trLang+"#"+cKey;
     } else if(!isUAPI) return base;
@@ -395,7 +395,7 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
 		// Create new record in the translation table of the data source
 		else if((iA+1) == addrs.rend() /*&& langCodeBase().size()*/) {
 		    //  Removeing the translation column for the SINGLE translation mode and the base language
-		    if(!langCodeBase().size() || trLang == langCodeBase())
+		    if(langCodeBase().empty() || trLang == langCodeBase())
 			req.elem().fldDel(req.elem().fldId(tStrVl.c_str()));
 		    //  Trying the translation record presence in whole and creating when it missing
 		    if(!TBDS::dataGet(*iA+"." mess_TrUApiTbl,"/" mess_TrUApiTbl,req,TBDS::NoException)) {
@@ -762,7 +762,7 @@ string TMess::langCode( const string &user, bool onlyUser )
 		    (toLang=SYS->security().at().usrAt(user).at().lang()).size())
 	    translCacheSet(user+string(1,0)+"user", toLang);
 	if(onlyUser || toLang.size())
-	    return (toLang.size() > 2) ? toLang.substr(0,2) : toLang;
+	    return TSYS::strParse(toLang, 0, "_");	//!!!! First part of locale in the form "{lng}_{CNTR}.{CODE}"
     }
 
     return mLangCode;
@@ -883,7 +883,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 
 string TMess::I18N( const string &imess, const char *mLang, const char *d_name )
 {
-#ifdef HAVE_LIBINTL_H
+#if HAVE_LIBINTL_H
     if(imess.empty() || (TSYS::strParse(imess,0,string(1,0)).empty() && TSYS::strParse(imess,1,string(1,0)).empty()))
 	return "";
     if(TSYS::strParse(imess,2,string(1,0)).size()) return imess;	//That is a dynamic data changing message - pass
@@ -993,16 +993,29 @@ void TMess::save( )
     }
 }
 
-string TMess::labStor( bool nogen )
+string TMess::labStorFromCode( const string &code )
 {
-    return string(_("Storage address in the format \"{DB module}.{DB name}\".")) +
-	(nogen?string(""):string("\n")+_("Set '*.*' to use the Generic Storage."));
+    if(code == DB_GEN)		return _("Generic Storage");
+    else if(code == DB_CFG)	return _("Configuration File");
+    else return code;
 }
 
-string TMess::labStorRemGenStor( )
+string TMess::labStor( )
 {
-    return TSYS::strMess(_("Please note that removing from the Generic Storage (*.*) "
-	"will cause the data removing both from the Configuration File (<cfg>) and the Work DB (%s)!"),SYS->workDB().c_str());
+    return _("Storage address in the format \"{DB module}.{DB name}\" or the common ones.");
+}
+
+string TMess::labStorRem( const string &cnt )
+{
+    string cnt_, tVl;
+    for(int off = 0; (tVl=TSYS::strLine(cnt,0,&off)).size(); )
+	cnt_ += (cnt_.size()?", ":"") + labStorFromCode(tVl);
+
+    return TSYS::strMess(_("Whole list of the object storages is: %s."), cnt_.c_str()) +
+	((SYS->storage(cnt,true) == DB_GEN && SYS->workDB() != DB_CFG)
+	    ? "\n" + TSYS::strMess(_("Please note that removing from \"%s (%s)\" will cause the data removing both from \"%s (%s)\" and \"Work DB (%s)\"!"),
+		    labStorFromCode(DB_GEN).c_str(),DB_GEN,labStorFromCode(DB_CFG).c_str(),DB_CFG,SYS->workDB().c_str())
+	    : "");
 }
 
 string TMess::labSecCRON( )

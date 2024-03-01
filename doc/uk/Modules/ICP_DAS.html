@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/ICP-DAS</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FICP+DAS&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/ICP_DAS" title="Modules/ICP DAS">Modules/ICP DAS</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/ICP_DAS.html" title="Modules/ICP DAS (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/ICP_DAS.html" title="Модули/ICP-DAS (100% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FICP+DAS&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/ICP_DAS" title="Modules/ICP DAS">Modules/ICP DAS</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/ICP_DAS.html" title="Modules/ICP DAS (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/ICP_DAS.html" title="Модули/ICP-DAS (95% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
@@ -86,17 +86,16 @@
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:843px;"><a class="image" href="http://oscada.org/wiki/File:ICP_cntr_uk.png"><img class="thumbimage" height="668" src="../files/ICP_cntr_uk.png" width="841" /></a>  <div class="thumbcaption">Рис.1. Вкладка конфігурації контролеру.</div></div></div></div>
 <p>За допомогою цієї вкладки можна встановити:
 </p>
-<ul><li> Стан контролеру, а саме: статус, стан "Включено" та Запущено" та ім'я БД, яка містить конфігурацію.</li>
+<ul><li> Стан об'єкту контролеру, а саме: статус, "Ввімкнено", "Виконується" та ім'я сховища, яке містить конфігурацію.</li>
 <li> Ідентифікатор, ім'я та опис контролеру.</li>
-<li> Стан, в який переводити контролер при завантажені: "Включено" та "Запущено".</li>
-<li> Ім'я таблиці для зберігання конфігурації параметрів контролеру.</li>
-<li> Політику планування викликів та пріоритет завдання збору даних.</li>
-<li> Шина на якій розташовано модулі/плати. Якщо вказано послідовний інтерфейс (COM {X}), то доступ здійснюється за протоколом <i>DCON</i>. У випадку вказання майстра шини контролеру <i>LP-8xxx</i> доступ здійснюється через API паралельної шини або змішано. Вказання <i>ISA</i> шини дозволяє обирати плати для шини ISA, із переліку сконфігурованих плат.</li>
+<li> Стан "Ввімкнено" та "Виконується", у який переводити об'єкт контролеру при запуску.</li>
+<li> Планування обчислення та пріоритет задачі опитування джерел даних.</li>
+<li> Шина, на якій розташовано модулі/плати. Якщо вказано послідовний інтерфейс (COM {X}), то доступ здійснюється за протоколом <i>DCON</i>. У випадку вказання майстра шини контролеру <i>LP-8xxx</i> доступ здійснюється через API паралельної шини або змішано. Вказання <i>ISA</i> шини дозволяє обирати плати для шини ISA, із переліку сконфігурованих плат.</li>
 <li> Транспорт, через який здійснюються запити до послідовної шини. Доступний при встановлені поля "Шина" у "COM {X}". Якщо вказано "&lt;ICP DAS&gt;" то використовується API послідовних запитів від "ICP DAS", по замовченню.</li>
 <li> Швидкість передачі даних для послідовного інтерфейсу, вказується для неголовної послідовної шини та транспорту "&lt;ICP DAS&gt;".</li>
 <li> Кількість спроб послідовних запитів.</li></ul>
 <h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="mw-headline-number">2</span> Параметри</span></h2>
-<p>Модуль надає тільки один тип параметрів — "Стандарт(std)" та три групи модулів/плат, доступні у залежності від обраної шини:
+<p>Модуль надає тільки один "Стандартний (std)" тип параметрів із назвою таблиці параметрів "ICPDASPrm_{CntrId}". Тут доступні три групи модулів/плат залежно від обраної шини:
 </p>
 <ul><li> <i>ISA</i> — плати на шині <i>ISA</i>;</li>
 <li> <i>I-87xxx</i> — модулі на послідовній шині та з протоколом <i>DCON</i>, наприклад у <i>LinPAC</i>;</li>
@@ -1066,6 +1065,8 @@ IXISA_8254CS
 </td>
 <td>
 </td></tr></table>
+<p><br />
+</p>
 <h2><span class="mw-headline" id=".D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">3</span> Посилання</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:Lp8x81_2629rt_up.tgz" title="File:Lp8x81 2629rt up.tgz">Спеціальні модулі ядра Linux 2.6.29-rt-up для контролерів LP-8x81</a></li>
 <li> <a class="external" href="http://oscada.org/wiki/File:Lp8x81_2629rt1_up.tgz" title="File:Lp8x81 2629rt1 up.tgz">Специальні модулі ядра Linux 2.6.29-rt1-up для контролерів LP-8x81</a></li>
@@ -1079,5 +1080,5 @@ IXISA_8254CS
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ICP_DAS/uk">Modules/ICP_DAS/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ICP_DAS/uk">Modules/ICP_DAS/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

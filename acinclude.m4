@@ -45,7 +45,7 @@
 AC_DEFUN([AX_LIB_MYSQL],
 [
     AC_ARG_WITH([mysql],
-        AC_HELP_STRING([--with-mysql=@<:@ARG@:>@],
+        AS_HELP_STRING([--with-mysql=@<:@ARG@:>@],
             [use MySQL client library @<:@default=yes@:>@, optionally specify path to mysql_config]
         ),
         [
@@ -185,7 +185,7 @@ AC_DEFUN([AX_LIB_MYSQL],
 AC_DEFUN([AX_LIB_FIREBIRD],
 [
     AC_ARG_WITH([firebird],
-	AC_HELP_STRING(
+	AS_HELP_STRING(
 	    [--with-firebird=@<:@ARG@:>@],
 	    [use Firebird client library @<:@default=yes@:>@, optionally specify the prefix for firebird library]
 	),
@@ -344,7 +344,7 @@ AC_DEFUN([AX_LIB_FIREBIRD],
 AC_DEFUN([AX_LIB_SQLITE3],
 [
     AC_ARG_WITH([sqlite3],
-        AC_HELP_STRING(
+        AS_HELP_STRING(
             [--with-sqlite3=@<:@ARG@:>@],
             [use SQLite 3 library @<:@default=yes@:>@, optionally specify the prefix for sqlite3 library]
         ),
@@ -1375,9 +1375,9 @@ AC_DEFUN([AX_LIB_OpenSSL], [
     if test "x${OpenSSLuse}" = "x"; then
 	AC_CHECK_HEADERS([openssl/ssl.h openssl/err.h openssl/bio.h openssl/md5.h], [],
 	    AC_MSG_ERROR([Some OpenSSL headers aren't found. Install or check the OpenSSL developing package!]))
-	AC_CHECK_LIB(crypto, MD5_Init, [],
+	AC_CHECK_LIB(crypto, BIO_new, [],
 	    AC_MSG_ERROR([OpenSSL libcrypto isn't found. Install or check the OpenSSL installation!]))
-	AC_CHECK_LIB(ssl, SSL_free, [],
+	AC_CHECK_LIB(ssl, SSL_new, [],
 	    AC_MSG_ERROR([OpenSSL libssl isn't found. Install or check the OpenSSL installation!]))
 	LIB_OpenSSL="-lssl -lcrypto"
 	AC_SUBST(LIB_OpenSSL)
@@ -1387,7 +1387,7 @@ AC_DEFUN([AX_LIB_OpenSSL], [
 AC_DEFUN([AX_LIB_OpenSSL_opt], [
     if test "x${OpenSSLuse}" = "x"; then
 	AC_CHECK_HEADERS([openssl/ssl.h openssl/err.h openssl/bio.h openssl/md5.h],
-	    AC_CHECK_LIB(crypto, MD5_Init, [
+	    AC_CHECK_LIB(crypto, BIO_new, [
 		LIB_OpenSSL="-lssl -lcrypto"
 		AC_SUBST(LIB_OpenSSL)
 		OpenSSLuse=true
@@ -1456,16 +1456,21 @@ AC_DEFUN([AX_LIB_FFTW3], [
 #     PKG_CHECK_MODULES([QtGui],[QtGui > 4.3.0])
 #     PKG_CHECK_MODULES([Qt5Widgets],[Qt5Widgets > 5.1.0]
 #     PKG_CHECK_MODULES([Qt5PrintSupport],[Qt5PrintSupport > 5.1.0]
+#     PKG_CHECK_MODULES([Qt6Widgets],[Qt6Widgets > 6.1.0]
+#     PKG_CHECK_MODULES([Qt6PrintSupport],[Qt6PrintSupport > 6.1.0]
 #     AC_SUBST(Qt_MOC)
 #     AC_SUBST(Qt_RCC)
 #
 #   And sets:
 #
 #     Qt_use=true
+#     Qt4_use=true
+#     Qt5_use=true
+#     Qt6_use=true
 #
 # LICENSE
 #
-#   Copyright (c) 2011-2017 Roman Savochenko <roman@oscada.org>
+#   Copyright (c) 2011-2023 Roman Savochenko <roman@oscada.org>
 #
 #   Copying and distribution of this file, with or without modification, are
 #   permitted in any medium without royalty provided the copyright notice
@@ -1473,27 +1478,58 @@ AC_DEFUN([AX_LIB_FFTW3], [
 #   warranty.
 AC_DEFUN([AX_LIB_Qt],
 [
-    AC_ARG_WITH([qt5],AS_HELP_STRING([--with-qt5=@<:@ARG@:>@],[Force check and use Qt5 @<:@default=no@:>@, else Qt4 will be checked firstly]), [], [withval="no"])
+    Qt_check=4
+    AC_ARG_WITH([qt5],AS_HELP_STRING([--with-qt5=@<:@ARG@:>@],[Force check and use Qt5 @<:@default=no@:>@, else Qt4 will be checked firstly]), [Qt_check=5])
+    AC_ARG_WITH([qt6],AS_HELP_STRING([--with-qt6=@<:@ARG@:>@],[Force check and use Qt6 @<:@default=no@:>@, else Qt5 will be checked firstly]), [Qt_check=6])
 
-    if test "x${Qt_use}" = "x"; then
-	if test "$withval" = "no"; then
-	    PKG_CHECK_MODULES([QtGui], [QtGui > 4.3.0], [Qt_use=true; QtGui=QtGui;], AC_MSG_NOTICE([Qt4 isn't found.]));
-	fi
-	if test "x${Qt_use}" = "x"; then
-	    PKG_CHECK_MODULES([Qt5Widgets],[Qt5Widgets > 5.1.0],[],AC_MSG_ERROR([Neither QT4 or Qt5 library QtGui is not found! Install development packages of Qt4 or Qt5 library.]))
-	    PKG_CHECK_MODULES([Qt5PrintSupport],[Qt5PrintSupport > 5.1.0],[],AC_MSG_ERROR([Library Qt5PrintSupport of Qt5 is not found! Install development packages of Qt5 library.]))
-	    QtGui_CFLAGS="$Qt5Widgets_CFLAGS $Qt5PrintSupport_CFLAGS"
-	    QtGui_LIBS="$Qt5Widgets_LIBS $Qt5PrintSupport_LIBS"
-	    QtGui=Qt5Widgets
-	    Qt5_use=true
-	fi
+    if test "x$Qt_use" = "x"; then
 	AC_SUBST(Qt_MOC)
 	AC_SUBST(Qt_RCC)
-	Qt_MOC="$($PKG_CONFIG --variable=moc_location ${QtGui})"
-	Qt_RCC="$($PKG_CONFIG --variable=rcc_location ${QtGui})";
-	if test "x${Qt_MOC}" = "x" -o ! -x "${Qt_MOC}"; then Qt_MOC="$($PKG_CONFIG --variable=prefix ${QtGui})/bin/moc"; fi
-	if test "x${Qt_RCC}" = "x" -o ! -x "${Qt_RCC}"; then Qt_RCC="$($PKG_CONFIG --variable=prefix ${QtGui})/bin/rcc"; fi
-	Qt_use=true
+
+	# Qt4 detection
+	if test $Qt_check = 4; then
+	    PKG_CHECK_MODULES([QtGui], [QtGui > 4.3.0], [
+		Qt_MOC="$($PKG_CONFIG --variable=moc_location QtGui)"
+		Qt_RCC="$($PKG_CONFIG --variable=rcc_location QtGui)"
+		Qt_prefix="$($PKG_CONFIG --variable=prefix QtGui)"
+		Qt_use=true
+		Qt4_use=true
+	    ], AC_MSG_NOTICE([[Qt4 is not found.]]))
+	fi
+
+	# Qt5 detection
+	if test "x${Qt_use}" = "x" -a $Qt_check != 6; then
+	    PKG_CHECK_MODULES([Qt5Widgets],[Qt5Widgets > 5.1.0], [
+		PKG_CHECK_MODULES([Qt5PrintSupport],[Qt5PrintSupport > 5.1.0],[],AC_MSG_NOTICE([[Qt5PrintSupport is not found - printing disabled.]]))
+		QtGui_CFLAGS="$Qt5Widgets_CFLAGS $Qt5PrintSupport_CFLAGS"
+		QtGui_LIBS="$Qt5Widgets_LIBS $Qt5PrintSupport_LIBS"
+		Qt_MOC="$($PKG_CONFIG --variable=host_bins Qt5Core)/moc"
+		Qt_RCC="$($PKG_CONFIG --variable=host_bins Qt5Core)/rcc"
+		Qt_prefix="$($PKG_CONFIG --variable=prefix Qt5Core)"
+		Qt_use=true
+		Qt5_use=true
+	    ], AC_MSG_NOTICE([[Qt5 isn't found.]]))
+	fi
+
+	# Qt6 detection
+	if test "x${Qt_use}" = "x"; then
+	    PKG_CHECK_MODULES([Qt6Widgets],[Qt6Widgets > 6.1.0], [
+		PKG_CHECK_MODULES([Qt6PrintSupport],[Qt6PrintSupport > 6.1.0],[],AC_MSG_NOTICE([[Qt6PrintSupport is not found - printing disabled.]]))
+		QtGui_CFLAGS="$Qt6Widgets_CFLAGS $Qt6PrintSupport_CFLAGS"
+		QtGui_LIBS="$Qt6Widgets_LIBS $Qt6PrintSupport_LIBS"
+		Qt_MOC="$($PKG_CONFIG --variable=libexecdir Qt6Gui)/moc"
+		Qt_RCC="$($PKG_CONFIG --variable=libexecdir Qt6Gui)/rcc"
+		Qt_prefix="$($PKG_CONFIG --variable=prefix Qt6Gui)"
+		Qt_use=true
+		Qt6_use=true
+	    ], AC_MSG_ERROR([[Qt6 isn't found. Install development packages of the Qt4, Qt5 or Qt6 library.]]))
+	fi
+
+	# Final MOC and RCC checking
+	if test "x${Qt_use}" != "x"; then
+	    if test "x${Qt_MOC}" = "x" -o ! -x "${Qt_MOC}"; then Qt_MOC="${Qt_prefix}/bin/moc"; fi
+	    if test "x${Qt_RCC}" = "x" -o ! -x "${Qt_RCC}"; then Qt_RCC="${Qt_prefix}/bin/rcc"; fi
+	fi
     fi
 ])
 
@@ -1520,7 +1556,7 @@ AC_DEFUN([AX_LIB_Qt],
 #   This macro calls:
 #
 #     AC_ARG_ENABLE()
-#     AC_HELP_STRING()
+#     AS_HELP_STRING()
 #     AM_CONDITIONAL()
 #     AS_IF()
 #
@@ -1539,7 +1575,7 @@ AC_DEFUN([AX_LIB_Qt],
 
 AC_DEFUN([AX_MOD_EN],
 [
-    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],
+    AC_ARG_ENABLE([$1],AS_HELP_STRING([--$3-$1],[$2]),[ ],
     [
 	if test "x$3" = "xdisable"; then
 	    if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
@@ -1555,7 +1591,7 @@ AC_DEFUN([AX_MOD_EN],
 
 AC_DEFUN([AX_MOD_DB_EN],
 [
-    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],[
+    AC_ARG_ENABLE([$1],AS_HELP_STRING([--$3-$1],[$2]),[ ],[
 	    if test "x$3" = "xdisable"; then
 		if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
 		else enable_$1=yes; fi
@@ -1567,7 +1603,7 @@ AC_DEFUN([AX_MOD_DB_EN],
     if test $enable_AllModuls = dist; then enable_$1=$enable_AllModuls; fi
     AM_CONDITIONAL([$1Incl],[test "x$4" = "xincl" -a $enable_$1 = incl])
     AS_IF([test $enable_$1 = yes || test $enable_$1 = dist || test "x$4" = "xincl" -a $enable_$1 = incl],[
-	    AC_MSG_RESULT(Build module: DB.$1)
+	    AC_MSG_RESULT(Building module: DB.$1)
 	    AC_CONFIG_FILES(src/moduls/bd/$1/Makefile)
 	    DBSub_mod="${DBSub_mod}$1 "
 	    if test $enable_$1 = incl; then
@@ -1582,7 +1618,7 @@ AC_DEFUN([AX_MOD_DB_EN],
 
 AC_DEFUN([AX_MOD_DAQ_EN],
 [
-    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],[
+    AC_ARG_ENABLE([$1],AS_HELP_STRING([--$3-$1],[$2]),[ ],[
 	    if test "x$3" = "xdisable"; then
 		if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
 		else enable_$1=yes; fi
@@ -1594,7 +1630,7 @@ AC_DEFUN([AX_MOD_DAQ_EN],
     if test $enable_AllModuls = dist; then enable_$1=$enable_AllModuls; fi
     AM_CONDITIONAL([$1Incl],[test "x$4" = "xincl" -a $enable_$1 = incl])
     AS_IF([test $enable_$1 = yes || test $enable_$1 = dist || test "x$4" = "xincl" -a $enable_$1 = incl],[
-	    AC_MSG_RESULT(Build module: DAQ.$1)
+	    AC_MSG_RESULT(Building module: DAQ.$1)
 	    AC_CONFIG_FILES(src/moduls/daq/$1/Makefile)
 	    DAQSub_mod="${DAQSub_mod}$1 "
 	    if test $enable_$1 = incl; then
@@ -1609,7 +1645,7 @@ AC_DEFUN([AX_MOD_DAQ_EN],
 
 AC_DEFUN([AX_MOD_Archive_EN],
 [
-    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],[
+    AC_ARG_ENABLE([$1],AS_HELP_STRING([--$3-$1],[$2]),[ ],[
 	    if test "x$3" = "xdisable"; then
 		if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
 		else enable_$1=yes; fi
@@ -1621,7 +1657,7 @@ AC_DEFUN([AX_MOD_Archive_EN],
     if test $enable_AllModuls = dist; then enable_$1=$enable_AllModuls; fi
     AM_CONDITIONAL([$1Incl],[test "x$4" = "xincl" -a $enable_$1 = incl])
     AS_IF([test $enable_$1 = yes || test $enable_$1 = dist || test "x$4" = "xincl" -a $enable_$1 = incl],[
-	    AC_MSG_RESULT(Build module: Archive.$1)
+	    AC_MSG_RESULT(Building module: Archive.$1)
 	    AC_CONFIG_FILES(src/moduls/arhiv/$1/Makefile)
 	    ArchSub_mod="${ArchSub_mod}$1 "
 	    if test $enable_$1 = incl; then
@@ -1636,7 +1672,7 @@ AC_DEFUN([AX_MOD_Archive_EN],
 
 AC_DEFUN([AX_MOD_Transport_EN],
 [
-    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],[
+    AC_ARG_ENABLE([$1],AS_HELP_STRING([--$3-$1],[$2]),[ ],[
 	    if test "x$3" = "xdisable"; then
 		if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
 		else enable_$1=yes; fi
@@ -1648,7 +1684,7 @@ AC_DEFUN([AX_MOD_Transport_EN],
     if test $enable_AllModuls = dist; then enable_$1=$enable_AllModuls; fi
     AM_CONDITIONAL([$1Incl],[test "x$4" = "xincl" -a $enable_$1 = incl])
     AS_IF([test $enable_$1 = yes || test $enable_$1 = dist || test "x$4" = "xincl" -a $enable_$1 = incl],[
-	    AC_MSG_RESULT(Build module: Transport.$1)
+	    AC_MSG_RESULT(Building module: Transport.$1)
 	    AC_CONFIG_FILES(src/moduls/transport/$1/Makefile)
 	    TranspSub_mod="${TranspSub_mod}$1 "
 	    if test $enable_$1 = incl; then
@@ -1663,7 +1699,7 @@ AC_DEFUN([AX_MOD_Transport_EN],
 
 AC_DEFUN([AX_MOD_TrProt_EN],
 [
-    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],[
+    AC_ARG_ENABLE([$1],AS_HELP_STRING([--$3-$1],[$2]),[ ],[
 	    if test "x$3" = "xdisable"; then
 		if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
 		else enable_$1=yes; fi
@@ -1675,7 +1711,7 @@ AC_DEFUN([AX_MOD_TrProt_EN],
     if test $enable_AllModuls = dist; then enable_$1=$enable_AllModuls; fi
     AM_CONDITIONAL([$1Incl],[test "x$4" = "xincl" -a $enable_$1 = incl])
     AS_IF([test $enable_$1 = yes || test $enable_$1 = dist || test "x$4" = "xincl" -a $enable_$1 = incl],[
-	    AC_MSG_RESULT(Build module: Protocol.$1)
+	    AC_MSG_RESULT(Building module: Protocol.$1)
 	    AC_CONFIG_FILES(src/moduls/protocol/$1/Makefile)
 	    ProtSub_mod="${ProtSub_mod}$1 "
 	    if test $enable_$1 = incl; then
@@ -1690,7 +1726,7 @@ AC_DEFUN([AX_MOD_TrProt_EN],
 
 AC_DEFUN([AX_MOD_UI_EN],
 [
-    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],[
+    AC_ARG_ENABLE([$1],AS_HELP_STRING([--$3-$1],[$2]),[ ],[
 	    if test "x$3" = "xdisable"; then
 		if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
 		else enable_$1=yes; fi
@@ -1702,7 +1738,7 @@ AC_DEFUN([AX_MOD_UI_EN],
     if test $enable_AllModuls = dist; then enable_$1=$enable_AllModuls; fi
     AM_CONDITIONAL([$1Incl],[test "x$4" = "xincl" -a $enable_$1 = incl])
     AS_IF([test $enable_$1 = yes || test $enable_$1 = dist || test "x$4" = "xincl" -a $enable_$1 = incl],[
-	    AC_MSG_RESULT(Build module: UI.$1)
+	    AC_MSG_RESULT(Building module: UI.$1)
 	    AC_CONFIG_FILES(src/moduls/ui/$1/Makefile)
 	    UISub_mod="${UISub_mod}$1 "
 	    if test $enable_$1 = incl; then
@@ -1717,7 +1753,7 @@ AC_DEFUN([AX_MOD_UI_EN],
 
 AC_DEFUN([AX_MOD_Special_EN],
 [
-    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],[
+    AC_ARG_ENABLE([$1],AS_HELP_STRING([--$3-$1],[$2]),[ ],[
 	    if test "x$3" = "xdisable"; then
 		if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
 		else enable_$1=yes; fi
@@ -1729,7 +1765,7 @@ AC_DEFUN([AX_MOD_Special_EN],
     if test $enable_AllModuls = dist; then enable_$1=$enable_AllModuls; fi
     AM_CONDITIONAL([$1Incl],[test "x$4" = "xincl" -a $enable_$1 = incl])
     AS_IF([test $enable_$1 = yes || test $enable_$1 = dist || test "x$4" = "xincl" -a $enable_$1 = incl],[
-	    AC_MSG_RESULT(Build module: Special.$1)
+	    AC_MSG_RESULT(Building module: Special.$1)
 	    AC_CONFIG_FILES(src/moduls/special/$1/Makefile)
 	    SpecSub_mod="${SpecSub_mod}$1 "
 	    if test $enable_$1 = incl; then

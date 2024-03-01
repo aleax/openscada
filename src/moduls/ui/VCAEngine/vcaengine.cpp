@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: vcaengine.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.11.10"
+#define MOD_VER		"7.13.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -564,7 +564,7 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
     }
 }
 
-string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, const string &idc, bool ldGen )
+string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, const string &idc, bool ldGen, string *errors, string *warnings )
 {
     string tbl = TSYS::strParseEnd(fullDB, 0, ".");
     string m_attrs = "";
@@ -575,7 +575,8 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
     cEl.cfg("IDC").setS(idc, true);
     TConfig cElu(&mod->elWdgUIO()); cElu.cfg("IDW").setS(idw, true);
     cElu.cfg("IDC").setS(idc, true);
-    for(unsigned iA = 0; iA < als.size(); iA++) {
+    for(unsigned iA = 0; iA < als.size(); iA++)
+    try {
 	AutoHD<Attr> attr = w.attrAt(als[iA]);
 	if(!attr.at().aModif()) continue;
 	if(!(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser)) m_attrs += als[iA]+";";
@@ -597,7 +598,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	    cEl.cfg("CFG_VAL").setNoTransl(!(attr.at().isTransl(true) && (attr.at().flgSelf()&Attr::CfgConst ||
 						(attr.at().flgSelf()&Attr::CfgLnkIn && attr.at().cfgVal().compare(0,4,"val:") == 0))));
 	    cEl.cfg("CFG_VAL").setS(attr.at().cfgVal());
-	    TBDS::dataSet(fullDB+"_io", nodePath()+tbl+"_io", cEl, TBDS::NoException);
+	    TBDS::dataSet(fullDB+"_io", nodePath()+tbl+"_io", cEl);
 	}
 	//User attributes storing
 	else if(!ldGen) {
@@ -617,12 +618,15 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	    cElu.cfg("CFG_VAL").setNoTransl(!(attr.at().isTransl(true) && (attr.at().flgSelf()&Attr::CfgConst ||
 						(attr.at().flgSelf()&Attr::CfgLnkIn && attr.at().cfgVal().compare(0,4,"val:") == 0))));
 	    cElu.cfg("CFG_VAL").setS(attr.at().cfgVal());
-	    TBDS::dataSet(fullDB+"_uio", nodePath()+tbl+"_uio", cElu, TBDS::NoException);
+	    TBDS::dataSet(fullDB+"_uio", nodePath()+tbl+"_uio", cElu);
 	}
+    } catch(TError &err) {
+	if(errors && err.cod != TError::Core_CntrWarning) (*errors) += err.mess + "\n";
+	else if(warnings && err.cod == TError::Core_CntrWarning) (*warnings) += err.mess + "\n";
     }
 
     if(!ldGen && !SYS->cfgCtx()) {
-	//Clearing no present IO for main io table
+	//Cleaning no present IO for main io table
 	cEl.cfgViewAll(false);
 	for(int fldCnt = 0; TBDS::dataSeek(fullDB+"_io",nodePath()+tbl+"_io",fldCnt++,cEl); ) {
 	    string sid = cEl.cfg("ID").getS();
@@ -632,7 +636,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	    fldCnt--;
 	}
 
-	//Clear no present IO for user io table
+	//Cleaning no present IO for user io table
 	cElu.cfgViewAll(false);
 	for(int fldCnt = 0; TBDS::dataSeek(fullDB+"_uio",nodePath()+tbl+"_uio",fldCnt++,cElu); ) {
 	    string sid = cElu.cfg("ID").getS();

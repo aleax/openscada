@@ -29,6 +29,14 @@
 #include <tsys.h>
 #include "lib_qtgen.h"
 
+#if QT_VERSION >= 0x050000
+# include <QScreen>
+#endif
+
+#if QT_VERSION < 0x060000
+# define typeId()	type()
+#endif
+
 int OSCADA_QT::icoSize( float mult )	{ return (int)(mult * QFontMetrics(qApp->font()).height()); }
 
 QColor OSCADA_QT::colorAdjToBack( const QColor &clr, const QColor &backClr )
@@ -59,7 +67,7 @@ QFont OSCADA_QT::getFont( const string &val, float fsc, bool pixSize, const QFon
     char family[101]; family[0] = 0; //strcpy(family,"Arial");
     int size = -1, bold = -1, italic = -1, underline = -1, strike = -1;
     sscanf(val.c_str(), "%100s %d %d %d %d %d", family, &size, &bold, &italic, &underline, &strike);
-    if(strlen(family)) rez.setFamily(QString(family).replace(QRegExp("_")," "));
+    if(strlen(family)) rez.setFamily(TRegExp(" ").replace(family,"_").c_str());
     if(size >= 0) {
 	if(pixSize) rez.setPixelSize((int)(fsc*(float)size));
 	else rez.setPointSize((int)(fsc*(float)size));
@@ -82,6 +90,14 @@ QColor OSCADA_QT::getColor( const string &val )
 	res_color.setAlpha(s2i(val.substr(fPs+1)));
     }
     return res_color;
+}
+
+void OSCADA_QT::winFit( QWidget &w )
+{
+#if defined(__ANDROID__)
+    QRect ws = qApp->screens().size() ? qApp->screens()[0]->availableGeometry() : QRect();
+    if(!ws.isNull()) w.move((ws.width()-w.width())/2, (ws.height()-w.height())/2);
+#endif
 }
 
 using namespace OSCADA;
@@ -115,6 +131,7 @@ QSize TableDelegate::sizeHint( const QStyleOptionViewItem &option, const QModelI
 	    i2s(index.data(TextLimRole).isValid()?index.data(TextLimRole).toInt():LIM_TEXT_DEF)).c_str()).size();
 }
 
+
 void TableDelegate::paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     QStyleOptionViewItem opt = setOptions(index, option);
@@ -127,7 +144,7 @@ void TableDelegate::paint( QPainter *painter, const QStyleOptionViewItem &option
     painter->setPen(opt.palette.brush(QPalette::Text).color());
 
     QVariant value = index.data(Qt::DisplayRole);
-    switch(value.type()) {
+    switch(value.typeId()) {
 	case QVariant::Bool:
 	    if(value.toBool()) {
 		QImage img = QImage(":/images/button_ok.png").scaled(icoSize(), icoSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -162,7 +179,7 @@ QWidget *TableDelegate::createEditor( QWidget *parent, const QStyleOptionViewIte
     QVariant val_user = index.data(SelectRole);
 
     if(val_user.isValid()) wDel = new QComboBox(parent);
-    else if(value.type() == QVariant::String && !index.data(OneLineString).toBool()) {
+    else if(value.typeId() == QVariant::String && !index.data(OneLineString).toBool()) {
 	wDel = new QTextEdit(parent);
 #if QT_VERSION >= 0x050A00
 	((QTextEdit*)wDel)->setTabStopDistance(40);
@@ -174,10 +191,10 @@ QWidget *TableDelegate::createEditor( QWidget *parent, const QStyleOptionViewIte
 	((QTextEdit*)wDel)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	//((QTextEdit*)wDel)->resize(parent->width(), ((QTextEdit*)wDel)->height());
     }
-    else if(value.type() == QVariant::Double) wDel = new QLineEdit(parent);
+    else if(value.typeId() == QVariant::Double) wDel = new QLineEdit(parent);
     else {
 	QItemEditorFactory factory;
-	wDel = factory.createEditor(value.type(), parent);
+	wDel = factory.createEditor(value.typeId(), parent);
     }
     wDel->installEventFilter(const_cast<TableDelegate*>(this));
 
@@ -191,7 +208,7 @@ void TableDelegate::setEditorData( QWidget *editor, const QModelIndex &index ) c
 
     if(dynamic_cast<QComboBox*>(editor)) {
 	QComboBox *comb = dynamic_cast<QComboBox*>(editor);
-	if(value.type() == QVariant::Bool) comb->setCurrentIndex(value.toBool());
+	if(value.typeId() == QVariant::Bool) comb->setCurrentIndex(value.toBool());
 	else if(val_user.isValid()) {
 	    comb->clear();
 	    comb->addItems(val_user.toStringList());
@@ -214,7 +231,7 @@ void TableDelegate::setModelData( QWidget *editor, QAbstractItemModel *model, co
     }
     else if(dynamic_cast<QTextEdit*>(editor))	model->setData(index, ((QTextEdit*)editor)->toPlainText(), Qt::EditRole);
     else if(dynamic_cast<QLineEdit*>(editor))
-	switch(index.data(Qt::DisplayRole).type()) {
+	switch(index.data(Qt::DisplayRole).typeId()) {
 	    case QVariant::Int: case QVariant::UInt: case QVariant::LongLong: case QVariant::ULongLong:
 		model->setData(index, ((QLineEdit*)editor)->text().toLongLong(), Qt::EditRole);
 		break;
@@ -319,8 +336,12 @@ void SnthHgl::rule( XMLNode *irl, const QString &text, int off, char lev )
     TRegExp expr("", "", TRegExp::MD_WCHAR);	//Richer and faster in 5 times !!!!
     bool useQT = (expr.mode() == TRegExp::MD_8);
     std::wstring textW = text.toStdWString(), patW;
+#if QT_VERSION < 0x060000
     QRegExp exprQ;
     if(useQT) exprQ.setPatternSyntax(QRegExp::RegExp2);
+#else
+    QRegularExpression exprQ;
+#endif
 
     if(lev > 3) return;
 
@@ -356,8 +377,13 @@ void SnthHgl::rule( XMLNode *irl, const QString &text, int off, char lev )
 	    if(!useQT)
 		rul_pos[iCh] = expr.search(string((const char*)textW.data(),textW.size()*sizeof(wchar_t)), iT, &matchedLength[iCh]);
 	    else {
+#if QT_VERSION < 0x060000
 		exprQ.setMinimal(s2i(rl->attr("min")));
 		rul_pos[iCh] = exprQ.indexIn(text, iT); matchedLength[iCh] = exprQ.matchedLength();
+#else
+		QRegularExpressionMatch m = exprQ.match(text, iT);
+		rul_pos[iCh] = m.capturedStart(), matchedLength[iCh] = m.capturedLength();
+#endif
 	    }
 
 	    if(matchedLength[iCh] <= 0) continue;
@@ -391,8 +417,13 @@ void SnthHgl::rule( XMLNode *irl, const QString &text, int off, char lev )
 	    }
 	    else {
 		exprQ.setPattern(rl->attr("end").c_str());
+#if QT_VERSION < 0x060000
 		exprQ.setMinimal(s2i(rl->attr("min")));
 		endIndex = exprQ.indexIn(text, startBlk); matchedLength[minRule] = exprQ.matchedLength();
+#else
+		QRegularExpressionMatch m = exprQ.match(text, startBlk);
+		endIndex = m.capturedStart(), matchedLength[minRule] = m.capturedLength();
+#endif
 	    }
 
 	    if(endIndex == -1 || matchedLength[minRule] <= 0) {

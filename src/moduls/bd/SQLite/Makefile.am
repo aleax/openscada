@@ -9,7 +9,7 @@ else
 oscd_modul_LTLIBRARIES = bd_SQLite.la
 bd_SQLite_la_CXXFLAGS =
 bd_SQLite_la_LIBTOOLFLAGS = --tag=disable-static
-bd_SQLite_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+bd_SQLite_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 bd_SQLite_la_CXXFLAGS += $(sqlite3_CFLAGS)

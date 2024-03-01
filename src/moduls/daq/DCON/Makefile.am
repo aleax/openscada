@@ -8,7 +8,7 @@ daq_DCON_la_LDFLAGS = -module
 else
 oscd_modul_LTLIBRARIES = daq_DCON.la
 daq_DCON_la_LIBTOOLFLAGS = --tag=disable-static
-daq_DCON_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+daq_DCON_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 daq_DCON_la_SOURCES = DCON_client.cpp

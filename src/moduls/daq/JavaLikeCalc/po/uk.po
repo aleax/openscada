@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-19 14:23+0200\n"
+"POT-Creation-Date: 2023-11-21 13:37+0200\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -30,8 +30,7 @@ msgid "Operation code %d is not supported."
 msgstr "Код виконання %d не підтримується."
 
 #, c-format
-msgid ""
-"Number of external functions reached the limit of %d on the function '%s'"
+msgid "Number of external functions reached the limit of %d on the function '%s'"
 msgstr "Кількість зовнішніх функцій досягло ліміту у %d на функції '%s'"
 
 #, c-format
@@ -113,10 +112,8 @@ msgstr "Рядки ім'я після першого опрацьовуютьс�
 msgid "Type"
 msgstr "Тип"
 
-msgid ""
-"Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object"
-msgstr ""
-"Реальний;Цілий;Логічний;Рядок;Рядок (переклад);Текст;Текст (переклад);Об'єкт"
+msgid "Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object"
+msgstr "Реальний;Цілий;Логічний;Рядок;Рядок (переклад);Текст;Текст (переклад);Об'єкт"
 
 msgid "Mode"
 msgstr "Режим"
@@ -159,15 +156,19 @@ msgstr "Стан"
 msgid "Accessible"
 msgstr "Доступний"
 
+msgid "Storage"
+msgstr "Сховище"
+
 msgid "Library DB"
 msgstr "БД бібліотеки"
 
+#, c-format
 msgid ""
 "Storage address in the format \"{DB module}.{DB name}.{Table name}\".\n"
-"To use the Generic Storage, set '*.*.{Table name}'."
+"To use %s, set '%s.{Table name}'."
 msgstr ""
 "Адреса сховища у форматі \"{Модуль БД}.{Ім'я БД}.{Ім'я Таблиці}\".\n"
-"Встановити '*.*.{Ім'я Таблиці}' для використання Загального Сховища."
+"Для використання %s встановити '%s.{Ім'я Таблиці}' ."
 
 #, c-format
 msgid "Remove from '%s'"
@@ -415,3 +416,4 @@ msgstr "Помилка символу, "
 
 msgid "Object's properties too long, "
 msgstr "Властивості об'єкту дуже довгі, "
+

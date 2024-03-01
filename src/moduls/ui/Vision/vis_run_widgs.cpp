@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_run_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,12 +25,15 @@
 #include <QPainter>
 #include <QComboBox>
 #include <QStatusBar>
-#include <QDesktopWidget>
 #include <QScrollBar>
 
 #include "vis_run.h"
 #include "vis_run_widgs.h"
 #include "vis_shapes.h"
+
+#if QT_VERSION < 0x060000
+# define MiddleButton	MidButton
+#endif
 
 #undef _
 #define _(mess) mod->I18N(mess, mainWin()->lang().c_str()).c_str()
@@ -46,8 +49,8 @@ RunWdgView::RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidge
     size_t endElSt = iwid.rfind("/");
     if(endElSt == string::npos) return;
     string lstEl = iwid.substr(endElSt+1);
-    if(lstEl.size() > 4 && lstEl.substr(0,4) == "wdg_") setObjectName(lstEl.substr(4).c_str());
-    if(lstEl.size() > 3 && lstEl.substr(0,3) == "pg_")  setObjectName(lstEl.substr(3).c_str());
+    if(lstEl.find("wdg_") == 0) setObjectName(lstEl.substr(4).c_str());
+    if(lstEl.find("pg_") == 0)  setObjectName(lstEl.substr(3).c_str());
 
     if(mess_lev() == TMess::Debug) SYS->cntrIter("UI:Vision:RunWdgView", 1);
 }
@@ -511,7 +514,7 @@ bool RunWdgView::event( QEvent *event )
 	    switch(((QMouseEvent*)event)->button()) {
 		case Qt::LeftButton:	mod_ev += "Left";	break;
 		case Qt::RightButton:	mod_ev += "Right";	break;
-		case Qt::MidButton:	mod_ev += "Midle";	break;
+		case Qt::MiddleButton:	mod_ev += "Midle";	break;
 		default: break;
 	    }
 	    if(isVisible(mapFromGlobal(cursor().pos()))) {
@@ -806,7 +809,7 @@ bool UserItStBar::event( QEvent *event )
 	    switch(((QMouseEvent*)event)->button()) {
 		case Qt::LeftButton:	mod_ev += "Left";	break;
 		case Qt::RightButton:	mod_ev += "Right";	break;
-		case Qt::MidButton:	mod_ev += "Midle";	break;
+		case Qt::MiddleButton:	mod_ev += "Midle";	break;
 		default: break;
 	    }
 	    if(w && w->masterPg()) { w->masterPg()->attrSet("event", mod_ev+":/stIt_"+objId, A_NO_ID, true); return true; }

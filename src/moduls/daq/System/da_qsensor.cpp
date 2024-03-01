@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_qsensor.cpp
 /***************************************************************************
- *   Copyright (C) 2018-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2018-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,50 +31,13 @@ using std::map;
 //*************************************************
 //* QSensor                                        *
 //*************************************************
-QSensor::QSensor( )
-{
+QSensor::QSensor( )	{ }
 
-}
-
-QSensor::~QSensor( )
-{
-
-}
-
-void QSensor::init( TMdPrm *prm, bool update )
-{
-    if(!update) {
-	prm->daData = new TElem();
-	prm->vlElemAtt((TElem*)prm->daData);
-    }
-
-    //Create config
-    TCfg &c_subt = prm->cfg("SUBT");
-    if(!update) c_subt.fld().setDescr("");
-
-    TVariant sens = getSensors(prm->owner());
-    string ifls;
-    for(int iP = 0; iP < sens.getO().at().propGet("length").getI(); ++iP)
-	ifls += sens.getO().at().propGet(i2s(iP)).getO().at().propGet("type").getS()+";";
-    MtxAlloc res(prm->dataRes(), true);
-    c_subt.fld().setValues(ifls);
-    c_subt.fld().setSelNames(ifls);
-    res.unlock();
-
-    if(!update && ifls.size() && !TRegExp("(^|;)"+c_subt.getS()+";").test(ifls))
-	c_subt.setS(TSYS::strParse(ifls,0,";"));
-}
-
-void QSensor::deInit( TMdPrm *prm )
-{
-    prm->vlElemDet((TElem*)prm->daData);
-    delete (TElem*)prm->daData;
-    prm->daData = NULL;
-}
+QSensor::~QSensor( )	{ }
 
 void QSensor::getVal( TMdPrm *prm )
 {
-    TVariant sens = getSensors(prm->owner());
+    TVariant sens = getSensors();
     if(sens.type() != TVariant::Object)	return;
 
     TVariant s;
@@ -107,7 +70,16 @@ void QSensor::getVal( TMdPrm *prm )
     }
 }
 
-TVariant QSensor::getSensors( TMdContr &cntr )
+void QSensor::dList( vector<string> &list, TMdPrm *prm )
+{
+    TVariant sens = getSensors();
+    if(sens.type() != TVariant::Object)	return;
+
+    for(int iP = 0; iP < sens.getO().at().propGet("length").getI(); ++iP)
+	list.push_back(sens.getO().at().propGet(i2s(iP)).getO().at().propGet("type").getS());
+}
+
+TVariant QSensor::getSensors( )
 {
     if(sens.type() == TVariant::Object)	return sens;
 
@@ -119,34 +91,4 @@ TVariant QSensor::getSensors( TMdContr &cntr )
     }
 
     return sens;
-}
-
-void QSensor::makeActiveDA( TMdContr *aCntr )
-{
-    TVariant sens = getSensors(*aCntr);
-    if(sens.type() != TVariant::Object)	return;
-
-    map<string, int>	tSens;
-    for(int iS = 0; iS < sens.getO().at().propGet("length").getI(); iS++)
-	tSens[sens.getO().at().propGet(i2s(iS)).getO().at().propGet("type").getS()] = iS;
-
-    vector<string> pLs;
-    aCntr->list(pLs);
-    for(unsigned iP = 0; iP < pLs.size(); iP++) {
-	AutoHD<TMdPrm> p = aCntr->at(pLs[iP]);
-	if(p.at().cfg("TYPE").getS() == id() && tSens.find(p.at().cfg("SUBT").getS()) != tSens.end())
-	    tSens.erase(p.at().cfg("SUBT").getS());
-    }
-
-    for(map<string,int>::iterator iS = tSens.begin(); iS != tSens.end(); ++iS) {
-	aCntr->add(iS->first, 0);
-	AutoHD<TMdPrm> dprm = aCntr->at(iS->first);
-	dprm.at().setName("QSensor: "+sens.getO().at().propGet(i2s(iS->second)).getO().at().propGet("identifier").getS());
-	dprm.at().setDescr(sens.getO().at().propGet(i2s(iS->second)).getO().at().propGet("description").getS());
-	dprm.at().autoC(true);
-	dprm.at().cfg("TYPE").setS(id());
-	dprm.at().cfg("SUBT").setS(iS->first);
-	dprm.at().cfg("EN").setB(true);
-	if(aCntr->enableStat()) dprm.at().enable();
-    }
 }

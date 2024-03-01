@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: os_contr.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,6 +42,8 @@
 #include "da_ups.h"
 #include "da_fs.h"
 #include "da_qsensor.h"
+#include "da_power.h"
+#include "da_proc.h"
 #include "os_contr.h"
 
 //*************************************************
@@ -50,9 +52,10 @@
 #define MOD_NAME	trS("System DA")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.4.10"
+#define MOD_VER		"3.2.6"
 #define AUTHORS		trS("Roman Savochenko")
-#define DESCRIPTION	trS("Provides data acquisition from the OS. Supported OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc.")
+#define DESCRIPTION	trS("Provides data acquisition from Operation System. Supported OS Linux data sources: CPU, Memory,\
+ Sensors, Disk SMART, Disk Statistic, File System, Network, Power, UPS, Up Time etc.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -122,10 +125,13 @@ void TTpContr::postEnable( int flag )
     daReg(new UPS());
     daReg(new FS());
     daReg(new QSensor());
+    daReg(new Power());
+    daReg(new Proc());
 
     //Controler's bd structure
-    fldAdd(new TFld("AUTO_FILL",trS("Auto create active data sources"),TFld::Integer,TFld::Selectable,"1","0","0;1;2;3",_("Manual;Fast sources;Slow sources;All sources")));
-    fldAdd(new TFld("PRM_BD",trS("Table of system parameters"),TFld::String,TFld::NoFlag,"30","system"));
+    fldAdd(new TFld("AUTO_FILL",trS("Auto create active data sources"),TFld::Integer,TFld::Selectable,"1","0",
+			"0;1;2;3",trS("Manual;Fast sources;Slow sources;All sources")));
+    fldAdd(new TFld("PRM_BD",trS("Table of system parameters"),TFld::String,TFld::NoFlag,"30","system"));	//????[v1.0] Remove
     fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
 
@@ -162,6 +168,10 @@ void TTpContr::perSYSCall( unsigned int cnt )
     list(clist);
     for(unsigned iC = 0; iC < clist.size(); iC++)
 	at(clist[iC]).at().devUpdate();
+
+    //Generic update the Data Sources
+    for(unsigned iDA = 0; iDA < mDA.size(); iDA++)
+	mDA[iDA]->updGen();
 }
 
 //*************************************************
@@ -171,12 +181,19 @@ TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem) : TCont
     mPrior(cfg("PRIOR").getId()),
     prcSt(false), callSt(false), endrunReq(false), mPer(1e9)
 {
+    //????[v1.0] Remove
     cfg("PRM_BD").setS("OSPrm_"+name_c);
 }
 
 TMdContr::~TMdContr( )
 {
     if(startStat()) stop();
+}
+
+string TMdContr::tblStd( const TTypeParam &tP ) const
+{
+    if(tP.name == "std") return "OSPrm_"+id();
+    else return TController::tblStd(tP);
 }
 
 string TMdContr::getStatus( )
@@ -250,13 +267,20 @@ void TMdContr::prmEn( const string &id, bool val )
 void *TMdContr::Task( void *icntr )
 {
     TMdContr &cntr = *(TMdContr *)icntr;
+    vector<string> daL;
 
     cntr.endrunReq = false;
     cntr.prcSt = true;
 
+    mod->daList(daL);
+
     while(!cntr.endrunReq) {
 	if(!cntr.redntUse()) {
-	    //Update controller's data
+	    //Generic update the Data Sources
+	    for(unsigned iLs = 0; iLs < daL.size(); iLs++)
+		mod->daGet(daL[iLs])->updGen(true);
+
+	    //Parameters update
 	    cntr.enRes.resRequestR();
 	    cntr.callSt = true;
 	    for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
@@ -311,9 +335,9 @@ void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
 
-    vector<string> list;
-    mod->daList(list);
-    if(list.size())	cfg("TYPE").setS(list[0]);
+    //vector<string> list;
+    //mod->daList(list);
+    //if(list.size())	cfg("TYPE").setS(list[0]);
 }
 
 TMdPrm::~TMdPrm( )
@@ -358,6 +382,16 @@ void TMdPrm::save_( )
 	    vlAt(aLs[iA]).at().arch().at().save();
 }
 
+AutoHD<TVal> TMdPrm::vlAt( const string &name, bool noex ) const
+{
+    if(!TValue::vlPresent(name) && noex) return AutoHD<TVal>();
+
+    try { return TValue::vlAt(name); }
+    catch(TError&) { if(!noex) throw;  }
+
+    return AutoHD<TVal>();
+}
+
 void TMdPrm::vlGet( TVal &val )
 {
     if(val.name() == "err") {
@@ -366,6 +400,8 @@ void TMdPrm::vlGet( TVal &val )
 	else if(daErr.size())	val.setS(daErr, 0, true);
 	else val.setS("0", 0, true);
     }
+    else if(!enableStat() || !owner().startStat()) { val.setR(EVAL_REAL, 0, true); return; }
+    else if(mDA) mDA->vlGet(this, val);
 }
 
 void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
@@ -452,9 +488,9 @@ string TMdPrm::addPrm( const string &prm, const string &def )
 	string sobj = TSYS::strParse(prm,0,":"), sa = TSYS::strParse(prm,1,":");
 	if(!sa.size())	return (rez=prmNd.attr(prm)).empty() ? def : rez;
 	//Internal node
-	for(unsigned i_n = 0; i_n < prmNd.childSize(); i_n++)
-	    if(prmNd.childGet(i_n)->name() == sobj)
-		return (rez=prmNd.childGet(i_n)->attr(sa)).empty() ? def : rez;
+	for(unsigned iN = 0; iN < prmNd.childSize(); iN++)
+	    if(prmNd.childGet(iN)->name() == sobj)
+		return (rez=prmNd.childGet(iN)->attr(sa)).empty() ? def : rez;
     } catch(...) { }
 
     return def;
@@ -471,11 +507,11 @@ void TMdPrm::setAddPrm( const string &prm, const string &val )
 
     //Internal node
     else {
-	unsigned i_n;
-	for(i_n = 0; i_n < prmNd.childSize(); i_n++)
-	    if(prmNd.childGet(i_n)->name() == sobj)
-	    { prmNd.childGet(i_n)->setAttr(sa,val); break; }
-	if(i_n >= prmNd.childSize())
+	unsigned iN;
+	for(iN = 0; iN < prmNd.childSize(); iN++)
+	    if(prmNd.childGet(iN)->name() == sobj)
+	    { prmNd.childGet(iN)->setAttr(sa,val); break; }
+	if(iN >= prmNd.childSize())
 	    prmNd.childAdd(sobj)->setAttr(sa,val);
     }
 
@@ -487,7 +523,7 @@ bool TMdPrm::cfgChange( TCfg &co, const TVariant &pc )
 {
     //Change TYPE parameter
     if(co.name() == "TYPE") { setType(co.getS()); return true; }
-    if(mDA) mDA->cfgChange(co, pc);
+    if(mDA) mDA->cfgChange(this, co, pc);
     if(!autoC()) modif();
     return true;
 }

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.GPIO file: da_BCM2835.cpp
 /***************************************************************************
- *   Copyright (C) 2018-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2018-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,7 +34,7 @@ using namespace ModGPIO;
 //*************************************************
 //* BCM2835					  *
 //*************************************************
-BCM2835::BCM2835( ) : TTypeParam("BCM2835", _("BCM2835 and newer")), use(false)
+BCM2835::BCM2835( ) : TTypeParam("BCM2835Prm", _("BCM2835 and newer")), use(false)
 {
     fldAdd(new TFld("MOD_PRMS",trS("Module addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"100000"));
 }

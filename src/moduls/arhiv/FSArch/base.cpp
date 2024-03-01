@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.FSArch file: base.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -112,7 +112,7 @@ string ModArch::packArch( const string &anm, bool replace )
 
 string ModArch::unPackArch( const string &anm, bool replace )
 {
-    string rez_nm = anm.substr(0,anm.size()-3);
+    string rez_nm = anm.substr(0, anm.size()-3);
 
     //sighandler_t prevs = signal(SIGCHLD,SIG_DFL);
     int sysres = system((string("gzip -cd \"")+anm+"\" > \""+rez_nm+"\"").c_str());

@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.SSL file: modssl.h
 /***************************************************************************
- *   Copyright (C) 2008-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,6 +33,9 @@
 #undef trS
 #define trS(mess) mod->I18N(mess,mess_PreSave)
 
+#define S_NM_SOCKET	"SOCKET"
+
+
 struct CRYPTO_dynlock_value
 {
     pthread_mutex_t mutex;
@@ -51,8 +54,8 @@ class TSocketIn;
 class SSockIn
 {
     public:
-	SSockIn( TSocketIn *is, BIO *ibio, const string &isender ) :
-	    pid(0), bio(ibio), sock(0), sender(isender), tmCreate(time(NULL)), tmReq(time(NULL)), trIn(0), trOut(0), s(is) { }
+	SSockIn( TSocketIn *is, BIO *ibio, const string &isender, bool iisCon = false ) :
+	    pid(0), bio(ibio), sock(0), sender(isender), tmCreate(time(NULL)), tmReq(time(NULL)), trIn(0), trOut(0), s(is), isCon(iisCon) { }
 
 	pthread_t pid;
 	BIO	*bio;
@@ -61,6 +64,7 @@ class SSockIn
 	time_t	tmCreate, tmReq;
 	uint64_t trIn, trOut;	//Traffic in and out counters
 	float	prcTm, prcTmMax;
+	bool	isCon;		//Is an initiative connection
 
 	TSocketIn	*s;
 };
@@ -71,13 +75,20 @@ class SSockIn
 class TSocketIn: public TTransportIn
 {
     public:
+	//Data
+	// Modes
+	enum TRModes { M_Ordinal = 0, M_Initiative = 2 };
+
+	//Methods
 	TSocketIn( string name, const string &idb, TElem *el );
 	~TSocketIn( );
 
 	string getStatus( );
 
 	int lastConn( )		{ return connTm; }
-	unsigned bufLen( )	{ return mBufLen; }
+	unsigned mode( )	{ return mMode; }
+	unsigned inBufLen( )	{ return mInBufLen; }
+	unsigned MSS( )		{ return mMSS; }
 	unsigned maxFork( )	{ return mMaxFork; }
 	unsigned maxForkPerHost( ) { return mMaxForkPerHost; }
 	unsigned keepAliveReqs( )  { return mKeepAliveReqs; }
@@ -86,8 +97,10 @@ class TSocketIn: public TTransportIn
 	string certKeyFile( )	{ return mCertKeyFile; }
 	string certKey( )	{ return mCertKey; }
 	string pKeyPass( )	{ return mKeyPass; }
+	string initAssocPrms( )	{ return mInitAssocPrms; }
 
-	void setBufLen( unsigned vl )		{ mBufLen = vmax(1,vmin(1024,vl)); modif(); }
+	void setInBufLen( unsigned vl )		{ mInBufLen = vl ? vmax(4,vmin(10240,vl)) : 0; modif(); }
+	void setMSS( unsigned vl )		{ mMSS = vl ? vmax(100,vmin(65535,vl)) : 0; modif(); }
 	void setMaxFork( unsigned vl )		{ mMaxFork = vmax(1,vmin(1000,vl)); modif(); }
 	void setMaxForkPerHost( unsigned vl )	{ mMaxForkPerHost = vmin(1000,vl); modif(); }
 	void setKeepAliveReqs( unsigned vl )	{ mKeepAliveReqs = vl; modif(); }
@@ -96,6 +109,7 @@ class TSocketIn: public TTransportIn
 	void setCertKeyFile( const string &val ){ mCertKeyFile = val; modif(); }
 	void setCertKey( const string &val )	{ mCertKey = val; modif(); }
 	void setPKeyPass( const string &val )	{ mKeyPass = val; modif(); }
+	void setInitAssocPrms( const string &tms ) { mInitAssocPrms = tms; modif(); }
 
 	void start( );
 	void stop( );
@@ -106,6 +120,8 @@ class TSocketIn: public TTransportIn
 
     protected:
 	//Methods
+	bool cfgChange( TCfg &co, const TVariant &pc );
+
 	void load_( );
 	void save_( );
 
@@ -124,19 +140,25 @@ class TSocketIn: public TTransportIn
 
 	//Attributes
 	ResMtx		sockRes;
-	SSL_CTX		*ctx;
+	SSL		*ssl;
+	BIO		*bio, *abio;
+	int		sockFd;			//For the initiative mode
 
 	bool		endrun;			//Command for stop task
 	bool		endrunCl;		//Command for stop client tasks
 
-	unsigned short	mMaxFork,		//Maximum forking (opened SSL)
+	unsigned short	mMode,			//Mode of SSL:
+						//  0 - ordinal, 2 - initiative connection
+			mInBufLen,		//Input buffer length
+			mMSS,			//MSS
+			mMaxFork,		//Maximum forking (opened SSL)
 			mMaxForkPerHost,	//Maximum forking (opened sockets), per host
-			mBufLen,		//Input buffer length
 			mKeepAliveReqs,		//KeepAlive connections
 			mKeepAliveTm;		//KeepAlive timeout
 	int		mTaskPrior;		//Requests processing task prioritet
 	string		mCertKeyFile, mCertKey,	//SSL certificate file and PEM-text
-			mKeyPass;		//SSL private key password
+			mKeyPass,		//SSL private key password
+			addon, mInitAssocPrms;
 
 	bool		clFree;			//Clients stopped
 	//vector<pthread_t>	clId;		//Client's pids
@@ -144,6 +166,7 @@ class TSocketIn: public TTransportIn
 	map<string, int> clS;			//Clients (senders) counters
 
 	// Status atributes
+	string		connAddr;
 	string		stErrMD5;		//Last error messages or certificate file MD5
 	uint64_t	trIn, trOut;		//Traffic in and out counter
 	float		prcTm, prcTmMax;
@@ -155,6 +178,8 @@ class TSocketIn: public TTransportIn
 //************************************************
 class TSocketOut: public TTransportOut
 {
+    friend class TSocketIn;
+
     public:
 	TSocketOut( string name, const string &idb, TElem *el );
 	~TSocketOut( );
@@ -166,12 +191,18 @@ class TSocketOut: public TTransportOut
 	string pKeyPass( )	{ return mKeyPass; }
 	string timings( )	{ return mTimings; }
 	unsigned short attempts( )	{ return mAttemts; }
+	unsigned MSS( )		{ return mMSS; }
 
 	void setCertKeyFile( const string &val ){ mCertKeyFile = val; modif(); }
 	void setCertKey( const string &val )	{ mCertKey = val; modif(); }
 	void setPKeyPass( const string &val )	{ mKeyPass = val; modif(); }
 	void setTimings( const string &vl, bool isDef = false );
 	void setAttempts( unsigned short vl );
+	void setMSS( unsigned vl )	{ mMSS = vl ? vmax(100,vmin(65535,vl)) : 0; modif(); }
+
+	static string connectSSL( const string &addr, SSL **ssl, BIO **conn,
+	    int tmCon, const string &certKey, const string &pKeyPass, const string &certKeyFile );
+	static void disconnectSSL( SSL **ssl, BIO **conn );
 
 	void start( int time = 0 );
 	void stop( );
@@ -192,12 +223,12 @@ class TSocketOut: public TTransportOut
 			mKeyPass;		//SSL private key password
 	string		mTimings;
 	unsigned short	mAttemts,
+			mMSS,			//MSS
 			mTmCon,
 			mTmNext;
 
-	SSL_CTX		*ctx;
-	BIO		*conn;
 	SSL		*ssl;
+	BIO		*conn;
 
 	// Status atributes
 	string		connAddr;
@@ -219,19 +250,25 @@ class TTransSock: public TTypeTransport
 	TTransportIn  *In( const string &name, const string &idb );
 	TTransportOut *Out( const string &name, const string &idb );
 
+	static string getAddr( const sockaddr_storage &addr );
+
 	string outAddrHelp( );
-	string outTimingsHelp( );
-	string outAttemptsHelp( );
+	string outTimingsHelp( bool noAdd = false );
+	string outAttemptsHelp( bool noAdd = false );
 
 	string MD5( const string &file );
+
+	//Attributes
+	SSL_CTX		*ctxIn, *ctxOut;
 
     protected:
 	void load_( );
 
     private:
 	//Methods
-	void postEnable( int flag );
 	void preDisable( int flag );
+
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	static unsigned long id_function( );
 	static void locking_function( int mode, int n, const char * file, int line );

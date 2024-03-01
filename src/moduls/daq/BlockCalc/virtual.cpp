@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.BlockCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,7 +42,7 @@
 #define MOD_NAME	trS("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.12.14"
+#define MOD_VER		"1.12.17"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides a block based calculator.")
 #define LICENSE		"GPL2"
@@ -102,8 +102,8 @@ void TpContr::postEnable( int flag )
     TTypeDAQ::postEnable( flag );
 
     //Controllers BD structure
-    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30","system"));
-    fldAdd(new TFld("BLOCK_SH",trS("Block's table"),TFld::String,TFld::NoFlag,"30","block"));
+    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30","system"));		//????[v1.0] Remove
+    fldAdd(new TFld("BLOCK_SH",trS("Block's table"),TFld::String,TFld::NoFlag,"30","block"));		//????[v1.0] Remove
     fldAdd(new TFld("SCHEDULE",trS("Schedule of the calculation"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",trS("Calculate task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("ITER",trS("Iteration number in a calculation period"),TFld::Integer,TFld::NoFlag,"2","1","0;99"));
@@ -152,8 +152,10 @@ Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()),
     mPer(1e9), calcRes(true)
 {
+    //????[v1.0] Remove
     cfg("PRM_BD").setS("BlckCalcPrm_"+name_c);
     cfg("BLOCK_SH").setS("BlckCalcBlcks_"+name_c);
+
     mBl = grpAdd("blk_");
 }
 
@@ -162,9 +164,15 @@ Contr::~Contr( )
 
 }
 
+string Contr::tblStd( const TTypeParam &tP ) const
+{
+    if(tP.name == "std")	return "BlckCalcPrm_"+id();
+    else return TController::tblStd(tP);
+}
+
 TCntrNode &Contr::operator=( const TCntrNode &node )
 {
-    string storBlkShTbl = cfg("BLOCK_SH");
+    string storBlkShTbl = cfg("BLOCK_SH");	//????[v1.0] Remove
     const Contr *src_n = dynamic_cast<const Contr*>(&node);
     if(src_n) {
 	//Blocks copy
@@ -184,7 +192,7 @@ TCntrNode &Contr::operator=( const TCntrNode &node )
     TController::operator=(node);
 
     //Blocks DB table propose instead copy
-    cfg("BLOCK_SH") = storBlkShTbl;
+    cfg("BLOCK_SH") = storBlkShTbl;	//????[v1.0] Remove
 
     return *this;
 }
@@ -208,10 +216,8 @@ void Contr::postDisable( int flag )
     try {
 	if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
 	    //Delete parameter tables
-	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+cfg("BLOCK_SH").getS(),
-				mod->nodePath()+cfg("BLOCK_SH").getS());
-	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+cfg("BLOCK_SH").getS()+"_io",
-				mod->nodePath()+cfg("BLOCK_SH").getS()+"_io");
+	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+tblBlks(), mod->nodePath()+tblBlks());
+	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+tblBlks()+"_io", mod->nodePath()+tblBlks()+"_io");
 	}
     } catch(TError &err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
 
@@ -229,10 +235,10 @@ void Contr::load_( )
     //Load block's configuration
     TConfig cEl(&mod->blockE());
     //cEl.cfgViewAll(false);
-    string bd = DB()+"."+cfg("BLOCK_SH").getS();
+    string bd = DB()+"."+tblBlks();
     map<string, bool>	itReg;
 
-    for(int fldCnt = 0; TBDS::dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fldCnt++,cEl,TBDS::UseCache); ) {
+    for(int fldCnt = 0; TBDS::dataSeek(bd,mod->nodePath()+tblBlks(),fldCnt++,cEl,TBDS::UseCache); ) {
 	string id = cEl.cfg("ID").getS();
 	if(!chldPresent(mBl,id)) {
 	    blkAdd(id);
@@ -448,6 +454,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
 	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel().c_str(),"help",TMess::labSecCRON().c_str());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior().c_str());
+	if(tblBlks() == tblBlksStd()) ctrRemoveNode(opt,"/cntr/cfg/BLOCK_SH");
 	if(ctrMkNode("area",opt,-1,"/scheme",_("Blocks scheme"))) {
 	    ctrMkNode("fld",opt,-1,"/scheme/nmb",_("Number"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/scheme/sch",_("Blocks"),RWRWR_,"root",SDAQ_ID,5,

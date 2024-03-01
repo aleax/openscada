@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcntrnode.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -162,9 +162,9 @@ XMLNode *TCntrNode::ctrId( XMLNode *inf, const string &name_id, bool noex )
 	s_el = TSYS::pathLev(name_id, 0, true, &l_off);
 	if(s_el.empty()) return t_node;
 	bool ok = false;
-	for(unsigned i_f = 0; i_f < t_node->childSize(); i_f++)
-	    if(t_node->childGet(i_f)->attr("id") == s_el) {
-		t_node = t_node->childGet(i_f);
+	for(unsigned iF = 0; iF < t_node->childSize(); iF++)
+	    if(t_node->childGet(iF)->attr("id") == s_el) {
+		t_node = t_node->childGet(iF);
 		ok = true;
 		break;
 	    }
@@ -212,20 +212,113 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	    TError terr;
 	    try{ cntrCmdProc(opt); } catch(TError &ierr) { terr = ierr; }
 
+	    string aNm = opt->name(), logMess;
 	    if(s2i(opt->attr("rez")) != TError::NoError)
-		throw TError("ContrItfc", _("%s:%s:> Error in the control item '%s'!"), opt->name().c_str(), (nodePath()+path).c_str(), s_br.c_str());
+		throw TError("ContrItfc", _("%s:%s:> Error in the control item '%s'!"),
+		    opt->name().c_str(), (nodePath()+path).c_str(), s_br.c_str());
+	    // Fixing in the log
+	    else if(s_br.find("/serv/") == 0)	;	//!!!! Service requests are not primary ones
+	    else if(aNm == "set") {
+		if(opt->attr("col").size()) {
+		    string rowV = opt->attr("row");
+		    if(rowV.empty()) {
+			vector<string> als;
+			opt->attrList(als);
+			for(vector<string>::iterator iA = als.begin(); rowV.empty() && iA != als.end(); ++iA)
+			    if(iA->find("key_") == 0)
+				rowV = iA->substr(4)+"="+opt->attr(*iA);
+		    }
+		    logMess = TSYS::strMess(_("set the cell ['%s':%s] to '%s'."), rowV.c_str(), opt->attr("col").c_str(), opt->text().c_str());
+		}
+		else if(opt->childSize() && opt->childGet(0)->name() == "fld") {
+		    logMess = _("command with arguments:");
+		    for(unsigned iCh = 0; iCh < opt->childSize(); ++iCh)
+			logMess += " " + opt->childGet(iCh)->attr("id") + "='" + opt->childGet(iCh)->text() + "',";
+		    logMess += ".";
+		}
+		else logMess = TSYS::strMess(_("set to '%s'."),
+			(((logMess=TSYS::strEncode(opt->text(),TSYS::Limit,"100"))==opt->text())?logMess:logMess+"...").c_str());
+	    }
+	    else if(aNm == "add") {
+		if(opt->attr("id").size()) logMess = TSYS::strMess(_("add item '%s (%s)'."), opt->text().c_str(), opt->attr("id").c_str());
+		else if(opt->text().size())logMess = TSYS::strMess(_("add item '%s'."), opt->text().c_str());
+		else logMess = _("add item.");
+	    }
+	    else if(aNm == "ins") {
+		if(opt->attr("id").size())
+		    logMess = TSYS::strMess(_("insert item '%s (%s)' to position of item '%s'."),
+			opt->text().c_str(), opt->attr("id").c_str(), opt->attr("p_id").c_str());
+		else if(opt->attr("pos").size())
+		    logMess = TSYS::strMess(_("insert item '%s' to position %s."), opt->text().c_str(), opt->attr("pos").c_str());
+		else if(opt->attr("row").size())
+		    logMess = TSYS::strMess(_("insert row '%s' to position of row %s."), opt->text().c_str(), opt->attr("row").c_str());
+	    }
+	    else if(aNm == "del") {
+		if(opt->attr("pos").size())	logMess = TSYS::strMess(_("delete item in position %s."), opt->attr("pos").c_str());
+		else if(opt->attr("id").size())	logMess = TSYS::strMess(_("delete item '%s'."), opt->attr("id").c_str());
+		else if(opt->text().size())	logMess = TSYS::strMess(_("delete item '%s'."), opt->text().c_str());
+		else if(opt->attr("row").size())logMess = TSYS::strMess(_("delete row '%s'."), opt->attr("row").c_str());
+		else {
+		    vector<string> als;
+		    opt->attrList(als);
+		    for(vector<string>::iterator iA = als.begin(); iA != als.end(); ++iA) {
+			if(iA->find("key_") != 0) continue;
+			logMess = TSYS::strMess(_("delete row '%s'."), (iA->substr(4)+"="+opt->attr(*iA)).c_str());
+			break;
+		    }
+		}
+	    }
+	    else if(aNm == "edit") {
+		if(opt->attr("pos").size())
+		    logMess = TSYS::strMess(_("edit item in position %s to '%s'."), opt->attr("pos").c_str(), opt->text().c_str());
+		else if(opt->attr("id").size())
+		    logMess = TSYS::strMess(_("edit item '%s' to '%s (%s)'."),
+			opt->attr("id").c_str(), opt->text().c_str(), opt->attr("p_id").c_str());
+		else logMess = TSYS::strMess(_("edit item '%s' to '%s'."), opt->attr("p_id").c_str(), opt->text().c_str());
+	    }
+	    else if(aNm == "move") {
+		if(opt->attr("pos").size())
+		    logMess = TSYS::strMess(_("move item in position %s to %s."), opt->attr("pos").c_str(), opt->attr("to").c_str());
+		else if(opt->attr("row").size())
+		    logMess = TSYS::strMess(_("move row in position %s to %s."), opt->attr("row").c_str(), opt->attr("to").c_str());
+	    }
+	    else if(aNm == "load") logMess = TSYS::strMess(_("load with forcibility %d."), s2i(opt->attr("force")));
+	    else if(aNm == "save") logMess = TSYS::strMess(_("save with forcibility %d."), s2i(opt->attr("force")));
+	    else if(aNm == "copy") logMess = TSYS::strMess(_("copy from '%s' to '%s'."), opt->attr("src").c_str(), opt->attr("dst").c_str());
+	    else if(s2i(opt->attr("primaryCmd"))) {
+		string rowV = opt->attr("row");
+		if(rowV.empty()) {
+		    vector<string> als;
+		    opt->attrList(als);
+		    for(vector<string>::iterator iA = als.begin(); rowV.empty() && iA != als.end(); ++iA)
+			if(iA->find("key_") == 0)
+			    rowV = iA->substr(4)+"="+opt->attr(*iA);
+		}
+		if(rowV.size()) logMess = TSYS::strMess(_("user command '%s' to row '%s'."), aNm.c_str(), rowV.c_str());
+		else logMess = TSYS::strMess(_("other command '%s'."), opt->save().c_str());
+	    }
+	    //  Same logging as note
+	    if(logMess.size()) {
+		if(opt->attr("remoteSrcAddr").size())
+		    mess_note(nodePath().c_str(), "%s@%s| '%s' %s", opt->attr("user").c_str(), opt->attr("remoteSrcAddr").c_str(),
+			TSYS::strEncode(s_br,TSYS::PathEl).c_str(), logMess.c_str());
+		else mess_note(nodePath().c_str(), "%s| '%s' %s", opt->attr("user").c_str(),
+			TSYS::strEncode(s_br,TSYS::PathEl).c_str(), logMess.c_str());
+	    }
 
-	    // Check and put the command to the redundant stations
-	    string aNm = opt->name();
+	    // Checking and putting the command to the redundant stations
 	    if(SYS->rdPrimCmdTr() && SYS->rdEnable() && SYS->rdActive() && !s2i(opt->attr("reforwardRedundReq")) && !s2i(opt->attr("reforwardRedundOff")) &&
 		    (terr.cat.empty() || terr.cod == TError::Core_CntrWarning || aNm == "save") &&	//!!!! Warnings and the "save" commands can be processed on redundant
 													//     station even at errors on the initiate one
+		    //s_br.find("/serv/") != 0 &&							//Service requests are not primary ones
 		    (s2i(opt->attr("primaryCmd")) ||
 			aNm == "set" || aNm == "add" || aNm == "ins" || aNm == "del" || aNm == "move" ||
 			aNm == "load" || (aNm == "save" && !s2i(opt->attr("ctx"))) || aNm == "copy"))
 	    {
 		string lstStat;
-		opt->setAttr("path", nodePath()+"/"+TSYS::strEncode(s_br,TSYS::PathEl))->setAttr("primaryCmd", "")->setAttr("reforwardRedundReq", "1");
+		opt->setAttr("path", nodePath()+"/"+TSYS::strEncode(s_br,TSYS::PathEl))->
+		     setAttr("primaryCmd", "")->
+		     setAttr("reforwardRedundReq", "1");
 		try{ while((lstStat=SYS->rdStRequest(*opt,lstStat,true)).size()) ; }
 		catch(TError &) { }
 
@@ -613,8 +706,8 @@ string TCntrNode::storage( const string &cnt, bool forQueueOfData ) const
     //The queue
     string work = TSYS::strLine(prcS, 0), tLn;
     for(int pos = 1 /*queue start*/; (tLn=TSYS::strLine(prcS,pos)).size(); ++pos)
-	if((work == "*.*" && (tLn == DB_CFG || tLn == SYS->workDB())) ||
-		(tLn == "*.*" && (work == DB_CFG || work == SYS->workDB())))
+	if((work == DB_GEN && (tLn == DB_CFG || tLn == SYS->workDB())) ||
+		(tLn == DB_GEN && (work == DB_CFG || work == SYS->workDB())))
 	    continue;
 	else if(tLn != work) return tLn;
 
@@ -628,7 +721,7 @@ void TCntrNode::setStorage( string &cnt, const string &vl, bool forQueueOfData )
     string prcS = cnt, prcS_, tLn;
     dataRes().unlock();
 
-    bool freeGenStorParts = (forQueueOfData && vl == "*.*");
+    bool freeGenStorParts = (forQueueOfData && vl == DB_GEN);
     string genStorSplitTo;
     if(!freeGenStorParts && forQueueOfData) {
 	if(vl == DB_CFG) genStorSplitTo = SYS->workDB();
@@ -649,7 +742,7 @@ void TCntrNode::setStorage( string &cnt, const string &vl, bool forQueueOfData )
 	if((forQueueOfData && tLn == vl) || (freeGenStorParts && (tLn == DB_CFG || tLn == SYS->workDB()))) continue;
 	// Pass for removing first not work item
 	if(forQueueOfData && vl.empty() && !isFound && tLn != work) { isFound = true; continue; }
-	prcS_ += ((genStorSplitTo.size() && tLn == "*.*") ? genStorSplitTo : tLn) + "\n";
+	prcS_ += ((genStorSplitTo.size() && tLn == DB_GEN) ? genStorSplitTo : tLn) + "\n";
     }
 
     dataRes().lock();
@@ -721,15 +814,15 @@ AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const strin
     return chN;
 }
 
-int TCntrNode::isModify( int f )
+int TCntrNode::isModify( int f ) const
 {
     int rflg = 0;
-    MtxAlloc res1(dataRes(), true);
+    MtxAlloc res1(const_cast<TCntrNode*>(this)->dataRes(), true);
     if(f&Self && mFlg&Modified) rflg |= Self;
     if(f&Child) {
 	res1.unlock();
 
-	MtxAlloc res2(mChM, true);
+	MtxAlloc res2(const_cast<TCntrNode*>(this)->mChM, true);
 	for(unsigned iG = 0, iN; chGrp && iG < chGrp->size(); iG++) {
 	    vector<string> chLs;
 	    TMap::iterator p;
@@ -832,7 +925,7 @@ void TCntrNode::load( TConfig *cfg, string *errs )
     if(loadOwn) load__();
 }
 
-void TCntrNode::save( unsigned lev, string *errs )
+void TCntrNode::save( unsigned lev, string *errs, int *errL )
 {
     MtxAlloc res(SYS->cfgLoadSaveM(), true);
 
@@ -851,10 +944,13 @@ void TCntrNode::save( unsigned lev, string *errs )
 	    }
 	}
     } catch(TError &err) {
-	if(errs && err.cat.size()) (*errs) += nodePath('.')+": "+err.mess+"\n";
+	if(errs && err.cat.size()) {
+	    (*errs) += nodePath('.')+": "+err.mess+"\n";
+	    if(errL) (*errL) = vmax(*errL, err.cod);
+	}
 	/*mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	mess_sys(TMess::Error, _("Error node saving: %s"), err.mess.c_str());*/
-	isError = true;
+	isError = (err.cod != TError::Core_CntrWarning);
     }
 
     //Childs save process
@@ -1099,9 +1195,11 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	    if(s2i(opt->attr("ctx")))	{ res.lock(); SYS->setCfgCtx(opt); }
 
 	    string errs;
-	    save(0, &errs);
+	    int errL = 0;
+	    save(0, &errs, &errL);
 	    if(SYS->cfgCtx())	SYS->setCfgCtx(NULL);
-	    if(errs.size()) throw err_sys(_("Error saving:\n%s"), errs.c_str());
+	    if(errs.size())
+		throw err_sys(errL, (errL==TError::Core_CntrWarning) ? _("Warning saving:\n%s") : _("Error saving:\n%s"), errs.c_str());
 	}
 	// Copy the node
 	else if(ctrChkNode(opt,"copy",RWRWRW,"root","root",SEC_WR))
@@ -1140,16 +1238,23 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
     }
     else if((a_path.find("/db/list") == 0 || a_path.find("/db/tblList") == 0) && ctrChkNode(opt)) {
 	string tblList = "";
-	if(a_path.find("/db/tblList") == 0)
-	    if(!(tblList=TSYS::strParse(a_path,1,":")).size())	tblList = _("[TableName]");
+	if(a_path.find("/db/tblList") == 0 && !(tblList=TSYS::strParse(a_path,1,":")).size())
+	    tblList = _("[TableName]");
 	vector<string> c_list;
 	TBDS::dbList(c_list);
 	if(TSYS::strParse(a_path,1,":").find("onlydb") == string::npos) {
-	    if(nodePath() != "/") opt->childAdd("el")->setText(tblList.size() ? ("*.*."+tblList) : "*.*");
-	    opt->childAdd("el")->setText(tblList.size() ? (DB_CFG"."+tblList) : DB_CFG);
+	    if(tblList.size()) {
+		if(nodePath() != "/") opt->childAdd("el")->setText(DB_GEN "." + tblList);
+		opt->childAdd("el")->setText(DB_CFG "." + tblList);
+	    }
+	    else {
+		if(nodePath() != "/") opt->childAdd("el")->setAttr("id",DB_GEN)->setText(TMess::labStorFromCode(DB_GEN));
+		opt->childAdd("el")->setAttr("id",DB_CFG)->setText(TMess::labStorFromCode(DB_CFG));
+	    }
 	}
 	for(unsigned iDB = 0; iDB < c_list.size(); iDB++)
-	    opt->childAdd("el")->setText(tblList.size() ? c_list[iDB]+"."+tblList : c_list[iDB]);
+	    if(tblList.size()) opt->childAdd("el")->setText(c_list[iDB]+"."+tblList);
+	    else opt->childAdd("el")->setAttr("id",c_list[iDB])->setText(TMess::labStorFromCode(c_list[iDB]));
     }
     else if(a_path == "/plang/list" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setText("");

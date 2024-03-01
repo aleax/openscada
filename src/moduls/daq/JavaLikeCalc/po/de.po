@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-19 14:23+0200\n"
+"POT-Creation-Date: 2023-11-21 13:37+0200\n"
 "PO-Revision-Date: 2010-10-09 23:16+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -35,10 +35,8 @@ msgid "Operation code %d is not supported."
 msgstr "Operationscode %d wird nicht unterstützt."
 
 #, c-format
-msgid ""
-"Number of external functions reached the limit of %d on the function '%s'"
-msgstr ""
-"Externe Funktionen Anzahl überschrittene Grenzen bis %d bei Funktion '%s'"
+msgid "Number of external functions reached the limit of %d on the function '%s'"
+msgstr "Externe Funktionen Anzahl überschrittene Grenzen bis %d bei Funktion '%s'"
 
 #, c-format
 msgid "More than %d(%d) parameters are specified for the function '%s'"
@@ -70,8 +68,7 @@ msgstr "Ausnahme beim Erstellen von %d Elementen des Arrays."
 
 #, c-format
 msgid "Type %d, which is not supported by the 'Add' operation."
-msgstr ""
-"Geben Sie %d ein, das von der Operation 'Hinzufügen' nicht unterstützt wird."
+msgstr "Geben Sie %d ein, das von der Operation 'Hinzufügen' nicht unterstützt wird."
 
 #, c-format
 msgid "String size achieved the limit %d."
@@ -120,8 +117,7 @@ msgstr "Die Namenszeilen nach der ersten behandeln als Hilfe."
 msgid "Type"
 msgstr "Typ"
 
-msgid ""
-"Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object"
+msgid "Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object"
 msgstr ""
 "Reellezahl;Ganzzahl;Logisch;Saite;Saite (übersetzen);Text;Text (übersetzen);"
 "Objekt"
@@ -167,15 +163,19 @@ msgstr "Zustand"
 msgid "Accessible"
 msgstr "Zugänglich"
 
+msgid "Storage"
+msgstr "Lagerung"
+
 msgid "Library DB"
 msgstr "Datenbank der Bibliothek"
 
+#, c-format
 msgid ""
 "Storage address in the format \"{DB module}.{DB name}.{Table name}\".\n"
-"To use the Generic Storage, set '*.*.{Table name}'."
+"To use %s, set '%s.{Table name}'."
 msgstr ""
-"Speicheradresse im Format \"{DB-Modul}.{DB-Name}.{Table name}\".\n"
-"Um den generischen Speicher zu verwenden, legen Sie '*.*.{Table name}' fest."
+"Lagerung Adresse im Format \"{DB-Modul}.{DB-Name}.{Tabellenname}\".\n"
+"Um %s zu verwenden, legen Sie \"%s.{Tabellenname}\" fest."
 
 #, c-format
 msgid "Remove from '%s'"
@@ -424,3 +424,4 @@ msgstr "Symbolfehler, "
 
 msgid "Object's properties too long, "
 msgstr "Eigenschaften des Objekts zu lang,"
+

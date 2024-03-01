@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tprmtmpl.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -370,7 +370,8 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    modif();
 	    switch(col) {
 		case 0:
-		    opt->setText(TSYS::strEncode(sTrm(opt->text()),TSYS::Limit,i2s(owner().owner().elTmplIO().fldAt(owner().owner().elTmplIO().fldId("ID")).len())));
+		    opt->setText(TSYS::strEncode(sTrm(opt->text()),TSYS::Limit,
+					i2s(owner().owner().elTmplIO().fldAt(owner().owner().elTmplIO().fldId("ID")).len())));
 		    io(row)->setId(opt->text());
 		    break;
 		case 1:	io(row)->setName(trDSet(io(row)->name(),sTrm(opt->text())));	break;
@@ -622,7 +623,7 @@ void TPrmTempl::Impl::addLinksAttrs( TElem *attrsCntr )
 	    }
 
 	    if(!attrsCntr->fldPresent(func()->io(iIO)->id()))
-		attrsCntr->fldAdd(new TFld(func()->io(iIO)->id().c_str(),func()->io(iIO)->name().c_str(),tp,flg,"","",selVals.c_str(),selNms.c_str()));
+		attrsCntr->fldAdd(new TFld(func()->io(iIO)->id().c_str(),func()->io(iIO)->name().c_str(),tp,flg,"","",selVals,selNms));
 
 	    als[func()->io(iIO)->id()] = true;
 	}
@@ -687,6 +688,8 @@ void TPrmTempl::Impl::archAttrs( TValue *vl )
 
 bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 {
+    XMLNode *selA = NULL;
+
     MtxAlloc res(lnkRes, true);
     //Get page info
     if(opt->name() == "info" && ctrMkNode("area",opt,-1,pref.c_str(),_("Template configuration"))) {
@@ -694,6 +697,16 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 	ctrMkNode("fld",opt,-1,(pref+"/attr_only").c_str(),_("Show attributes"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	if(ctrMkNode("area",opt,-1,(pref+"/prm").c_str(),_("Parameters")))
 	    for(int iIO = 0; iIO < ioSize(); iIO++) {
+		//Updating the selection items in the dynamic translation mode
+		if(func()->io(iIO)->flg()&IO::Selectable && Mess->translDyn() &&
+		    (selA=ctrId(opt->childGet(0),"/val/"+func()->io(iIO)->id(),true)))
+		{
+		    string def = trD(func()->io(iIO)->def()), selVals = TSYS::strLine(def, 1), selNms = TSYS::strLine(def, 2);
+		    if(selNms.empty())	selA->setAttr("sel_list", selVals);
+		    else selA->setAttr("sel_id", selVals)->setAttr("sel_list", selNms);
+		}
+
+		//Same template properties
 		if(!(func()->io(iIO)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgConst)))
 		    continue;
 		// Check the selected param
@@ -995,14 +1008,15 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessible"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		if(isStdStorAddr())
-		    ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
+		    ctrMkNode("fld",opt,-1,"/lib/st/db",_("Storage"),RWRWR_,"root",SDAQ_ID,4,
 			"tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 		else ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
 			"tp","str","dest","sel_ed","select",("/db/tblList:tmplib_"+id()).c_str(),
-			"help",_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the Generic Storage, set '*.*.{Table name}'."));
+			"help",TSYS::strMess(_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use %s, set '%s.{Table name}'."),
+					TMess::labStorFromCode(DB_GEN).c_str(),DB_GEN).c_str());
 		if(DB(true).size())
-		    ctrMkNode("comm",opt,-1,"/lib/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SDAQ_ID,
-			1,"help",(DB(true)=="*.*")?TMess::labStorRemGenStor().c_str():"");
+		    ctrMkNode("comm",opt,-1,"/lib/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),
+			TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",SDAQ_ID,1,"help",TMess::labStorRem(mDB).c_str());
 		ctrMkNode("fld",opt,-1,"/lib/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Configuration"))) {

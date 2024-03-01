@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/Comedi</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FComedi&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Comedi" title="Modules/Comedi">Modules/Comedi</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Comedi.html" title="Modules/Comedi (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/Comedi.html" title="Модули/Comedi (100% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FComedi&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Comedi" title="Modules/Comedi">Modules/Comedi</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Comedi.html" title="Modules/Comedi (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/Comedi.html" title="Модули/Comedi (94% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
@@ -63,14 +63,13 @@
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83"><span class="mw-headline-number">1</span> Об'єкт контролеру</span></h2>
 <p>DAQ—плати посередництвом бібліотеки <b>Comedi</b> у OpenSCADA конфігуруються шляхом створення об'єкту контролера (рис.1), як контейнеру об'єктів параметрів — плат DAQ.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:781px;"><a class="image" href="http://oscada.org/wiki/File:Comedi_cntr_uk.png"><img class="thumbimage" height="621" src="../files/Comedi_cntr_uk.png" width="779" /></a>  <div class="thumbcaption">Рис.1. Вкладка конфігурації об'єкту контролера.</div></div></div></div>
-<p>За допомогою цієї форми можна встановити:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:Comedi_cntr_uk.png"><img class="thumbimage" height="616" src="../files/Comedi_cntr_uk.png" width="773" /></a>  <div class="thumbcaption">Рис.1. Вкладка конфігурації об'єкту контролера.</div></div></div></div>
+<p>За допомогою цієї вкладки можна встановити:
 </p>
-<ul><li> Стан контролеру, а саме: Статус, "Включено", "Запущено" та ім'я БД, яка містить конфігурацію.</li>
+<ul><li> Стан об'єкту контролеру, а саме: статус, "Ввімкнено", "Виконується" та ім'я сховища, яке містить конфігурацію.</li>
 <li> Ідентифікатор, ім'я та опис контролеру.</li>
-<li> Стан, у який переводити контролер при завантажені: "Включено" та "Запущено".</li>
-<li> Ім'я таблиці у БД для зберігання конфігурації параметрів даного контролеру.</li>
-<li> Політику планування та пріоритет задачі опитування. </li></ul>
+<li> Стан "Ввімкнено" та "Виконується", у який переводити об'єкт контролеру при запуску.</li>
+<li> Планування обчислення та пріоритет задачі опитування джерел даних.</li></ul>
 <p>Треба відзначити, що опитування даних переважно здійснюється у синхронному режимі, однак для деяких плат аналогових входів (AI-АЦП) може бути більш оптимальним асинхронний режим, що пов'язано із тривалим часом встановлення значення після перемикання каналу мультіплексору. Так, на платі Advantech PCL-813B цей час складає 5мс.
 </p>
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.83_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D0.B0"><span class="mw-headline-number">2</span> Об'єкт параметру контролера</span></h2>
@@ -100,5 +99,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Comedi/uk">Modules/Comedi/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Comedi/uk">Modules/Comedi/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

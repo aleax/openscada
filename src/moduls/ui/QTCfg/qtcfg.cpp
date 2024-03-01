@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: qtcfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2023 by Roman Savochenko, <roman@oscada.org>      *
+ *   Copyright (C) 2004-2024 by Roman Savochenko, <roman@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -62,6 +62,10 @@
 #include "../QTStarter/lib_qtgen.h"
 #include "tuimod.h"
 
+#if QT_VERSION < 0x060000
+# define setSecsSinceEpoch(tm)	setTime_t(tm)
+#endif
+
 #define CH_REFR_TM	100
 #define GRP_SHOW_OP_LIM	10
 
@@ -92,7 +96,7 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     //Init centrall widget
     setCentralWidget(new QWidget(this));
     QGridLayout *QTCfgLayout = new QGridLayout(centralWidget());
-    QTCfgLayout->setMargin(3);
+    QTCfgLayout->setContentsMargins(3, 3, 3, 3);
 
     //Init splitter
     splitter = new QSplitter(centralWidget());
@@ -101,7 +105,7 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     //Create Navigator tree
     QFrame *frm = new QFrame(splitter);
     QVBoxLayout *vlay = new QVBoxLayout;
-    vlay->setMargin(0);
+    vlay->setContentsMargins(0, 0, 0, 0);
     CtrTree = new QTreeWidget;
     vlay->addWidget(CtrTree);
     CtrTree->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -168,29 +172,29 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     // Close
     if(!ico_t.load(TUIS::icoGet("close",NULL,true).c_str())) ico_t.load(":/images/close.png");
     actClose = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actClose->setShortcut(Qt::CTRL+Qt::Key_W);
+    actClose->setShortcut(Qt::CTRL|Qt::Key_W);
     connect(actClose, SIGNAL(triggered()), this, SLOT(close()));
     // Quit
     if(!ico_t.load(TUIS::icoGet("exit",NULL,true).c_str())) ico_t.load(":/images/exit.png");
     actQuit = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actQuit->setShortcut(Qt::CTRL+Qt::Key_Q);
+    actQuit->setShortcut(Qt::CTRL|Qt::Key_Q);
     connect(actQuit, SIGNAL(triggered()), this, SLOT(quitSt()));
     // Up button
     if(!ico_t.load(TUIS::icoGet("up",NULL,true).c_str())) ico_t.load(":/images/up.png");
     actUp = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actUp->setShortcut(Qt::ALT+Qt::Key_Up);
+    actUp->setShortcut(Qt::ALT|Qt::Key_Up);
     actUp->setEnabled(false);
     connect(actUp, SIGNAL(triggered()), this, SLOT(pageUp()));
     // Previous page
     if(!ico_t.load(TUIS::icoGet("previous",NULL,true).c_str())) ico_t.load(":/images/previous.png");
     actPrev = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actPrev->setShortcut(Qt::ALT+Qt::Key_Left);
+    actPrev->setShortcut(Qt::ALT|Qt::Key_Left);
     actPrev->setEnabled(false);
     connect(actPrev, SIGNAL(triggered()), this, SLOT(pagePrev()));
     // Next page
     if(!ico_t.load(TUIS::icoGet("next",NULL,true).c_str())) ico_t.load(":/images/next.png");
     actNext = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actNext->setShortcut(Qt::ALT+Qt::Key_Right);
+    actNext->setShortcut(Qt::ALT|Qt::Key_Right);
     actNext->setEnabled(false);
     connect(actNext, SIGNAL(triggered()), this, SLOT(pageNext()));
     // Load item from db
@@ -245,19 +249,19 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     // Start of "Auto update"
     if(!ico_t.load(TUIS::icoGet("start",NULL,true).c_str())) ico_t.load(":/images/start.png");
     actStartUpd = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actStartUpd->setShortcut(Qt::CTRL+Qt::Key_R);
+    actStartUpd->setShortcut(Qt::CTRL|Qt::Key_R);
     connect(actStartUpd, SIGNAL(triggered()), this, SLOT(pageCyclRefrStart()));
     // Stop of "Auto update"
     if(!ico_t.load(TUIS::icoGet("stop",NULL,true).c_str())) ico_t.load(":/images/stop.png");
     actStopUpd = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actStopUpd->setShortcut(Qt::CTRL+Qt::Key_E);
+    actStopUpd->setShortcut(Qt::CTRL|Qt::Key_E);
     actStopUpd->setEnabled(false);
     connect(actStopUpd, SIGNAL(triggered()), this, SLOT(pageCyclRefrStop()));
     // Favorite page toggling
     if(!favToggleAdd.load(TUIS::icoGet("favorites_add",NULL,true).c_str())) favToggleAdd.load(":/images/favorites_add.png");
     if(!favToggleDel.load(TUIS::icoGet("favorites_del",NULL,true).c_str())) favToggleDel.load(":/images/favorites_del.png");
     actFavToggle = new QAction(QPixmap::fromImage(favToggleAdd), "", this);
-    actFavToggle->setShortcut(Qt::CTRL+Qt::Key_B);
+    actFavToggle->setShortcut(Qt::CTRL|Qt::Key_B);
     actFavToggle->setEnabled(false);
     connect(actFavToggle, SIGNAL(triggered()), this, SLOT(favToggle()));
     // Favorite page
@@ -290,7 +294,7 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     // What is
     if(!ico_t.load(TUIS::icoGet("contexthelp",NULL,true).c_str())) ico_t.load(":/images/contexthelp.png");
     actWhatIs = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actWhatIs->setShortcut(Qt::SHIFT+Qt::Key_F1);
+    actWhatIs->setShortcut(Qt::SHIFT|Qt::Key_F1);
     connect(actWhatIs, SIGNAL(triggered()), this, SLOT(enterWhatsThis()));
 
     // Menus
@@ -628,7 +632,7 @@ bool ConfApp::exitModifChk( )
 		_("Some changes were made!\nSave the changes to the DB before exiting?"),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Yes);
 	    switch(ret) {
 		case QMessageBox::Yes:
-		    req.clear()->setName("save")->setAttr("path","/"+SYS->id()+"/%2fobj");
+		    req.clear()->setName("save")->setAttr("path","/"+SYS->id()+"/%2fobj")->setAttr("primaryCmd", "1");
 		    cntrIfCmd(req);
 		    return true;
 		case QMessageBox::No:
@@ -734,14 +738,16 @@ void ConfApp::pageNext( )
 
 void ConfApp::itDBLoad( )
 {
-    XMLNode req("load"); req.setAttr("path", selPath+"/%2fobj")->setAttr("force", (sender()==actDBLoadF)?"1":"");
+    XMLNode req("load");
+    req.setAttr("path", selPath+"/%2fobj")->setAttr("primaryCmd", "1")->setAttr("force", (sender()==actDBLoadF)?"1":"");
     if(cntrIfCmd(req)) mod->postMessCntr(req, this);
     pageRefresh();	//Any time but warnings in the deep
 }
 
 void ConfApp::itDBSave( )
 {
-    XMLNode req("save"); req.setAttr("path",selPath+"/%2fobj")->setAttr("force", (sender()==actDBSaveF)?"1":"");
+    XMLNode req("save");
+    req.setAttr("path",selPath+"/%2fobj")->setAttr("primaryCmd", "1")->setAttr("force", (sender()==actDBSaveF)?"1":"");
     if(cntrIfCmd(req)) mod->postMessCntr(req, this);
     else pageRefresh();
 }
@@ -974,7 +980,7 @@ void ConfApp::itPaste( )
 		    throw TError(s2i(req.attr("rez")), req.attr("mcat"), req.text());
 
 		//Load context of the source node to the destination one
-		req.setName("load")->setAttr("path", "/"+statNm+dstNm+"/%2fobj")->attrDel("ctx")->attrDel("rez");
+		req.setName("load")->setAttr("path", "/"+statNm+dstNm+"/%2fobj")->setAttr("primaryCmd", "1")->attrDel("ctx")->attrDel("rez");
 		if(cntrIfCmd(req))
 		    throw TError(s2i(req.attr("rez")), req.attr("mcat"), req.text());
 	    }
@@ -1456,7 +1462,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		QVBoxLayout *w_lay = new QVBoxLayout(wdg);
 		//((QGroupBox *)wdg)->setColumnLayout(0, Qt::Vertical);
 		w_lay->setSpacing(3);
-		w_lay->setMargin(3);
+		w_lay->setContentsMargins(3, 3, 3, 3);
 		//w_lay->setAlignment(Qt::AlignTop);
 		widget->layout()->addWidget(wdg);
 	    }
@@ -1544,7 +1550,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		if(!ico_t.load(TUIS::icoGet("find",NULL,true).c_str())) ico_t.load(":/images/find.png");
 		QAction *actFind = new QAction(QPixmap::fromImage(ico_t), _("Find"), tbl);
 		actFind->setObjectName("tableFind");
-		actFind->setShortcut(Qt::CTRL+Qt::Key_F);
+		actFind->setShortcut(Qt::CTRL|Qt::Key_F);
 		actFind->setShortcutContext(Qt::WidgetShortcut);
 		connect(actFind, SIGNAL(triggered()), this, SLOT(tableFind()));
 		tbl->addAction(actFind);
@@ -1860,7 +1866,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		val_w->setObjectName(br_path.c_str());
 		val_w->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 		val_w->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed));
-		connect(val_w, SIGNAL(activated(const QString&)), this, SLOT(combBoxActivate(const QString&)));
+		connect(val_w, SIGNAL(activated(int)), this, SLOT(combBoxActivate(int)));
 	    }
 
 	    if(t_s.attr("dscr").size()) {
@@ -2119,7 +2125,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		if(data_req.text().size()) tm_t = s2i(data_req.text());
 		else tm_t = time(NULL);
 		QDateTime dtm;
-		dtm.setTime_t(tm_t);
+		dtm.setSecsSinceEpoch(tm_t);
 		mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, val_r);
 		val_r->setText( "<b>"+dtm.toString("dd.MM.yyyy hh:mm:ss")+"</b>" );
 	    }
@@ -2247,6 +2253,11 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    if(val_r) {
 		mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, val_r);
 		val_r->setText((string("<b>")+TSYS::strEncode(sval,TSYS::Html)+"</b>").c_str());
+
+		if(QString(sval.c_str()).toStdWString().size() < s2i(OBJ_ID_SZ))
+		    val_r->setFixedWidth(1.2*QFontMetrics(val_r->font()).size(Qt::TextSingleLine,sval.c_str()).width());
+		else { val_r->setMinimumWidth(10); val_r->setMaximumWidth(100000); }
+
 		//val_r->adjustSize();
 	    }
 	    if(val_w && !val_w->isEdited()) {
@@ -2962,7 +2973,7 @@ void ConfApp::checkBoxStChange( int stat )
 
 	//Check block element
 	if(path[0] == 'b') {
-	    SYS->ctrId(root,TSYS::strDecode(path.substr(1),TSYS::PathEl) )->setText(val);
+	    SYS->ctrId(root,TSYS::strDecode(path.substr(1),TSYS::PathEl))->setText(val);
 	    return;
 	}
 	else {
@@ -2973,7 +2984,7 @@ void ConfApp::checkBoxStChange( int stat )
 	    if(req.text() == val) return;
 	    mess_info(mod->nodePath().c_str(), _("%s| Set '%s' to '%s'!"), user().c_str(), (selPath+"/"+path).c_str(), val.c_str());
 
-	    req.setName("set")->setText(val);
+	    req.setName("set")->setAttr("primaryCmd", "1")->setText(val);
 	    if(cntrIfCmd(req))	mod->postMessCntr(req, this);
 	}
     } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
@@ -2999,7 +3010,7 @@ void ConfApp::buttonClicked( )
 	    return;
 	}
 	else {
-	    XMLNode req("set"); req.setAttr("path", selPath+"/"+button->objectName().toStdString());
+	    XMLNode req("set"); req.setAttr("path", selPath+"/"+button->objectName().toStdString())->setAttr("primaryCmd", "1");
 	    //Copy parameters
 	    for(unsigned iCh = 0; iCh < n_el->childSize(); iCh++)
 		//*(req.childAdd()) = *(n_el->childGet(iCh));
@@ -3017,12 +3028,12 @@ void ConfApp::buttonClicked( )
     pageRefresh(CH_REFR_TM);
 }
 
-void ConfApp::combBoxActivate( const QString& ival )
+void ConfApp::combBoxActivate( int ival )
 {
     bool block = false;
-    string val = ival.toStdString();
     XMLNode *n_el;
     QComboBox *comb = (QComboBox *)sender();
+    string val = comb->itemText(ival).toStdString();
 
     try {
 	string path = comb->objectName().toStdString();
@@ -3066,7 +3077,7 @@ void ConfApp::combBoxActivate( const QString& ival )
 	    mess_info(mod->nodePath().c_str(),_("%s| Changed '%s' from '%s' to '%s'!"),
 		    user().c_str(), (selPath+"/"+path).c_str(), req.text().c_str(), val.c_str());
 
-	    req.setName("set")->setText(val);
+	    req.setName("set")->setAttr("primaryCmd", "1")->setText(val);
 	    if(cntrIfCmd(req)) mod->postMessCntr(req, this);
 	}
     } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
@@ -3231,7 +3242,7 @@ void ConfApp::tablePopup( const QPoint &pos )
     QTableWidget *tbl = (QTableWidget *)sender();
     string el_path = selPath+"/"+tbl->objectName().toStdString();
 
-    QAction *last_it, *actAdd, *actIns, *actDel, *actMoveUp, *actMoveDown, *actCopy, *actFind, *actFindNext;
+    QAction *last_it, *actAdd, *actIns, *actDel, *actMoveUp, *actMoveDown, *actCopy, *actCopyForMWiki, *actFind, *actFindNext;
     last_it = actAdd = actIns = actDel = actMoveUp = actMoveDown = actCopy = actFind = actFindNext = NULL;
 
     int row = tbl->currentRow();
@@ -3276,6 +3287,8 @@ void ConfApp::tablePopup( const QPoint &pos )
 	    popup.addSeparator();
 	    actCopy = last_it = new QAction(_("Copy"), this);
 	    popup.addAction(actCopy);
+	    actCopyForMWiki = last_it = new QAction(_("Copy for MediaWiki"), this);
+	    popup.addAction(actCopyForMWiki);
 	}
 	if(tbl->rowCount()) {
 	    popup.addSeparator();
@@ -3291,16 +3304,17 @@ void ConfApp::tablePopup( const QPoint &pos )
 	    QAction *rez = popup.exec(QCursor::pos());
 	    if(!rez)	{ popup.clear(); return; }
 
-	    if(rez == actCopy) {
+	    if(rez == actCopy || rez == actCopyForMWiki) {
 		QString cbRez;
-		bool firstRow = false, firstClm = false;
+		bool firstRow = false, firstClm = false, forMWiki = (rez == actCopyForMWiki);
 		for(int iR = 0; iR < tbl->rowCount(); iR++) {
 		    //if(firstRow && firstClm) cbRez += "\n";
 		    firstClm = false;
 		    for(int iC = 0; iC < tbl->columnCount(); iC++) {
 			if(!tbl->item(iR,iC)->isSelected()) continue;
-			if(firstClm) cbRez += "\t";
+			if(firstClm) cbRez += forMWiki ? " || " : "\t";
 			if(!firstClm && firstRow) cbRez += "\n";
+			if(!firstClm && forMWiki) cbRez += "|-\n| ";
 			cbRez += tbl->item(iR,iC)->text();
 			firstClm = firstRow = true;
 		    }
@@ -3312,7 +3326,7 @@ void ConfApp::tablePopup( const QPoint &pos )
 	    else if(rez == actFind || rez == actFindNext) return;
 
 	    XMLNode n_el1;
-	    n_el1.setAttr("path",el_path);
+	    n_el1.setAttr("path", el_path)->setAttr("primaryCmd", "1");
 	    if(rez == actAdd) {
 		n_el1.setName("add");
 		mess_info(mod->nodePath().c_str(), _("%s| '%s' add by a record."),
@@ -3465,14 +3479,14 @@ void ConfApp::imgPopup( const QPoint &pos )
 
 		//Send image to system
 		XMLNode n_el1("set");
-		n_el1.setAttr("path",el_path)->setText(TSYS::strEncode(rez,TSYS::base64));
+		n_el1.setAttr("path",el_path)->setAttr("primaryCmd", "1")->setText(TSYS::strEncode(rez,TSYS::base64));
 		mess_info(mod->nodePath().c_str(), _("%s| '%s' uploaded by the picture '%s'."),
 		    user().c_str(), el_path.c_str(), fileName.toStdString().c_str());
 		if(cntrIfCmd(n_el1)) { mod->postMessCntr(n_el1, this); return; }
 	    }
 	    else if(rez == clear_img) {
 		XMLNode n_el1("set");
-		n_el1.setAttr("path", el_path)->setText("");
+		n_el1.setAttr("path", el_path)->setAttr("primaryCmd", "1")->setText("");
 		mess_info(mod->nodePath().c_str(), _("%s| '%s' cleared."), user().c_str(), el_path.c_str());
 		if(cntrIfCmd(n_el1)) { mod->postMessCntr(n_el1, this); return; }
 		img->setImage("");
@@ -3530,16 +3544,16 @@ void ConfApp::tableSet( int row, int col )
 	else value = val.toString().toStdString();
 
 	//Prepare request
-	XMLNode n_el1("set"); n_el1.setAttr("path",el_path)->setText(value);
+	XMLNode n_el1("set"); n_el1.setAttr("path",el_path)->setAttr("primaryCmd", "1")->setText(value);
 	// Get current column id
 	for(unsigned iEl = 0; iEl < n_el->childSize(); iEl++)
 	    if(tbl->horizontalHeaderItem(col)->data(Qt::DisplayRole).toString() == n_el->childGet(iEl)->attr("dscr").c_str())
-	    { n_el1.setAttr("col",n_el->childGet(iEl)->attr("id")); break; }
+	    { n_el1.setAttr("col", n_el->childGet(iEl)->attr("id")); break; }
 	// Get row position
 	string row_addr;
 	if(!n_el->attr("key").size()) {
 	    row_addr = i2s(row);
-	    n_el1.setAttr("row",row_addr);
+	    n_el1.setAttr("row", row_addr);
 	}
 	else {
 	    // Get Key columns
@@ -3619,7 +3633,7 @@ void ConfApp::applyButton( )
 	string sval = el->text();
 	if(el->attr("tp") == "dec" || el->attr("tp") == "hex" || el->attr("tp") == "oct") {
 	    //Check and change decimal format and the limits control
-	    if(sval.compare(0,2,"0x") == 0 || QString(sval.c_str()).contains(QRegExp("[abcdefABCDEF]")))
+	    if(TRegExp("^0x[0-9a-fA-F]+$").test(sval))
 		el->setAttr("tpCh", "hex");
 	    else if(sval.size() > 1 && sval[0] == '0')
 		el->setAttr("tpCh", "oct");
@@ -3635,7 +3649,7 @@ void ConfApp::applyButton( )
 		user().c_str(), (selPath+"/"+path).c_str(), sval.c_str());
 
 	XMLNode n_el("set");
-	n_el.setAttr("path", selPath+"/"+path)->setText(sval);
+	n_el.setAttr("path", selPath+"/"+path)->setAttr("primaryCmd", "1")->setText(sval);
 	if(cntrIfCmd(n_el)) mod->postMessCntr(n_el, this);
     } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 

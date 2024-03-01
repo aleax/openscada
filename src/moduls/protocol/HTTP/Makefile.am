@@ -8,7 +8,7 @@ prot_HTTP_la_LDFLAGS = -module
 else
 oscd_modul_LTLIBRARIES = prot_HTTP.la
 prot_HTTP_la_LIBTOOLFLAGS = --tag=disable-static
-prot_HTTP_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+prot_HTTP_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 prot_HTTP_la_SOURCES = http.cpp

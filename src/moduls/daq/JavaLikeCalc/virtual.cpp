@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"5.6.4"
+#define MOD_VER		"5.6.8"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -105,7 +105,7 @@ void TpContr::postEnable( int flag )
     TTypeDAQ::postEnable( flag );
 
     //Controller db structure
-    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"60","system"));
+    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"60","system"));		//????[v1.0] Remove
     fldAdd(new TFld("FUNC",trS("Controller function or DAQ-template"),TFld::String,TFld::NoFlag,"40"));
     fldAdd(new TFld("SCHEDULE",trS("Calculation schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",trS("Priority of the calculation task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
@@ -379,7 +379,7 @@ void TpContr::cntrCmdProc( XMLNode *opt )
 	    for(unsigned iA = 0; iA < lst.size(); iA++)
 		opt->childAdd("el")->setAttr("id",lst[iA])->setText(trD(lbAt(lst[iA]).at().name()));
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	lbReg(new Lib(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str(),"*.*"));
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	lbReg(new Lib(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str(),DB_GEN));
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	lbUnreg(opt->attr("id"),1);
     }
     else TTypeDAQ::cntrCmdProc(opt);
@@ -407,12 +407,19 @@ Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem ) :
     isDAQTmpl(false), prcSt(false), callSt(false), endrunReq(false), chkLnkNeed(false),
     mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()), idFreq(-1), idStart(-1), idStop(-1), mPer(1e9)
 {
+    //????[v1.0] Remove
     cfg("PRM_BD").setS("JavaLikePrm_"+name_c);
 }
 
 Contr::~Contr( )
 {
 
+}
+
+string Contr::tblStd( const TTypeParam &tP ) const
+{
+    if(tP.name == "std") return "JavaLikePrm_"+id();
+    else return TController::tblStd(tP);
 }
 
 TCntrNode &Contr::operator=( const TCntrNode &node )

@@ -96,12 +96,12 @@ Creating a multilingual project is a non-trivial task that affects almost all as
 <ul><li> READING =&gt; reading the translation and BASE filed, of which the selection is BASIC in the absence-emptiness of translation</li>
 <li> SETTING =&gt; BASIC — direct, nonBASIC — direct translation and base</li>
 <li> CHANGING =&gt; just changing the early marked as "&lt;!&gt;" or: changing, BASIC — marking as "&lt;!&gt;" for actual translations, nonBASIC — marking as "&lt;!&gt;" for the base language</li>
-<li> CLEARING =&gt; clearing, BASIC — clearing the translations, nonBASIC — generating an exception for notification and saving the modification flag for repeating of reading the not translated one</li></ul></dd>
+<li> CLEANING =&gt; cleaning the BASIC and all translations</li></ul></dd>
 <dd>2.2. + MULTILANGUAGE-DYNAMIC mode, the changed values transferred in the form "{base}\000{lang}\000{mess}":
 <ul><li> READING =&gt; reading only BASIC and it registering in the message index</li>
 <li> SETTING =&gt; direct for the MAIN and copying the translation and BASIC; updating for the message index and translation cache</li>
 <li> CHANGING =&gt; just changing the early marked as "&lt;!&gt;" or: changing, BASIC — marking as "&lt;!&gt;" for actual translations; updating for the message index and translation cache</li>
-<li> CLEARING =&gt; clearing, BASIC — clearing the translations, nonBASIC — generating an exception for notification and saving the modification flag for repeating of reading the not translated one; updating for the message index and translation cache</li></ul></dd></dl></dd></dl>
+<li> CLEANING =&gt; cleaning the BASIC and all translations</li></ul></dd></dl></dd></dl>
 <p>BASIC message can be common for several sources so you cannot to edit its translation separately, but you can split that, from the context menu, per sources and next perform the differential translation.
 </p><p>Copying objects, as well as renaming, is generally done without translation, ie the target object will not have it, moreover, the MAIN message will be BASIC, from the language of the project execution, which is useful if you copy the object for further singlelingual use in the MAIN language. If this object also requires multilingualism, then immediately after copying you can use the translation manager (Fig.1), which will automatically replace the BASIC language and install the specified translations.<br />
 <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> In the MULTILANGUAGE-DYNAMIC mode all translations are copied automatically!
@@ -121,5 +121,5 @@ Creating a multilingual project is a non-trivial task that affects almost all as
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Create_multi_language_project/en">Documents/How_to/Create_multi_language_project/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Create_multi_language_project/en">Documents/How_to/Create_multi_language_project/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

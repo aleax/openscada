@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/HTTP</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FHTTP&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/HTTP" title="Modules/HTTP">Modules/HTTP</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/HTTP.html" title="Modules/HTTP (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/HTTP.html" title="Модули/HTTP (100% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FHTTP&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/HTTP" title="Modules/HTTP">Modules/HTTP</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/HTTP.html" title="Modules/HTTP (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/HTTP.html" title="Модули/HTTP (97% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -40,6 +40,7 @@
 <td> Протокол </td>
 <td> Роман Савоченко </td>
 <td> Надає підтримку HTTP для WWW базованих користувацьких інтерфейсів.
+<dl><dd>- реалізувати запит HEAD для правильної підтримки "<a class="external text" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Range_requests" rel="nofollow noreferrer noopener" target="_blank">HTTP запитів діапазону</a>".</dd></dl>
 </td></tr></table>
 <p>Модуль транспортного протоколу HTTP призначено для реалізації підтримки мережевого протоколу HTTP(Hypertext Transfer Protocol) у OpenSCADA.
 </p><p>Протокол HTTP використовується для передачі вмісту WWW. Так, через HTTP передаються наступні типи документів: html, xhtml, png, javascript та багато інших. Підтримка HTTP у OpenSCADA, у комплексі із транспортом <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>, дозволяє реалізовувати різні користувацькі функції на основі WWW інтерфейсу. Модуль реалізує два основних методи протоколу HTTP: GET та POST. Модуль забезпечує контроль цілісності HTTP-запитів та, спільно з транспортом Sockets, дозволяє "збирати" цілісні запити з їх фрагментів, а також забезпечувати утримання з'єднання "живим" (Keep-Alive).
@@ -204,18 +205,17 @@
 <ul><li> <i>user</i> — користувач для зміни.</li></ul></li>
 <li> <i>bool pgAccess(string URL)</i> — перевіряє доступність сторінки, визначеної у <i>URL</i>.
 <ul><li> <i>URL</i> — URL сторінки, що перевіряється.</li></ul></li>
-<li> <i>string pgCreator(string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}", string htmlHeadEls = "", string forceTmplFile = "", string lang = "" )</i> — формує сторінку або ресурс із вмістом <i>cnt</i>, загорнутим у HTTP з результатом <i>rcode</i>, із додатковими атрибутами HTTP <i>httpattrs</i>, додатковим елементом заголовку HTML <i>htmlHeadEls</i> та використанням файлу шаблону <i>forceTmplFile</i> та для мови <i>lang</i>.
+<li> <i>string pgCreator(string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}", string htmlHeadEls = "", string forceTmplFile = "")</i> — формує сторінку або ресурс із вмістом <i>cnt</i>, загорнутим у HTTP з результатом <i>rcode</i>, із додатковими атрибутами HTTP <i>httpattrs</i>, додатковим елементом заголовку HTML <i>htmlHeadEls</i> та використанням файлу шаблону <i>forceTmplFile</i> та для мови <i>lang</i>.
 <ul><li> <i>cnt</i> — вміст сторінки або ресурсу (зображення, XML, CSS, JavaScript, ...);</li>
 <li> <i>rcode</i> — результуючий код HTTP, на кшталт "200 OK"; порожнє значення вимикає додання HTTP заголовку;</li>
 <li> <i>httpattrs</i> — додаткові атрибути HTTP, переважно це "Content-Type" із значенням по замовченню "text/html;charset={SYS}"; тільки для "Content-Type: text/html" буде здійснюватися загортання у внутрішній/сервісний, або визначений <i>forceTmplFile</i>, HTML-шаблон;</li>
 <li> <i>htmlHeadEls</i> — додатковий тег заголовку HTML, переважно це META з "Refresh" для вказаного URL;</li>
-<li> <i>forceTmplFile</i> — файл прямо визначеного шаблону для перекриття внутрішнього/сервісного або головної сторінки.</li>
-<li> <i>lang</i> — мова інтерфейсу, що формується.</li></ul></li></ul>
+<li> <i>forceTmplFile</i> — файл прямо визначеного шаблону для перекриття внутрішнього/сервісного або головної сторінки.</li></ul></li></ul>
 
 
 
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/HTTP/uk">Modules/HTTP/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/HTTP/uk">Modules/HTTP/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

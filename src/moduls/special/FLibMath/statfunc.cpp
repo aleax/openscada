@@ -31,7 +31,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"0.7.4"
+#define MOD_VER		"0.7.5"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides a library of the standard mathematical functions.")
 #define LICENSE		"GPL2"

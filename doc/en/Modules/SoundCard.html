@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/SoundCard</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/SoundCard.html" title="Модули/Звуковая карта (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/SoundCard.html" title="Модулі/Звукова карта (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/SoundCard.html" title="Модули/Звуковая карта (87% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/SoundCard.html" title="Модулі/Звукова карта (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -54,18 +54,18 @@
 <h2><span class="mw-headline" id="Controller_object_of_the_data"><span class="mw-headline-number">1</span> Controller object of the data</span></h2>
 <p>To add an audio input device a controller object is created and configured in OpenSCADA. Example of the configuration tab of the controller object is shown in Figure 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:877px;"><a class="image" href="http://oscada.org/wiki/File:SoundCard_cntr.png"><img class="thumbimage" height="658" src="../files/SoundCard_cntr.png" width="875" /></a>  <div class="thumbcaption">Fig.1. Configuration tab of a controller object.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:776px;"><a class="image" href="http://oscada.org/wiki/File:SoundCard_cntr.png"><img class="thumbimage" height="647" src="../files/SoundCard_cntr.png" width="774" /></a>  <div class="thumbcaption">Fig.1. Configuration tab of a controller object.</div></div></div></div>
 <p>From this tab you can set:
 </p>
-<ul><li> State of the controller object, as follows: Status, "Enabled", "Running" and the name of the database containing the configuration.</li>
-<li> Id, name and description of the controller object.</li>
-<li> State, in which the controller object must be translated at boot: "Enabled" and "Running".</li>
-<li> Name of table to store the configuration of the parameters of the controller object.</li>
+<ul><li> State of the controller object, as follows: status, "Enabled", "Running" and the storage name containing the configuration.</li>
+<li> Identifier, name and description of the controller.</li>
+<li> The state "Enabled" and "Running", in which the controller object must be translated at start up.</li>
 <li> Card device from the list of available ones.</li>
 <li> Frequency of values acquisition of cards in Hertz.</li>
 <li> Type of values of acquisition from the list: "Real 32", "Integer 32" and "Integer 16".</li></ul>
 <h2><span class="mw-headline" id="Parameters"><span class="mw-headline-number">2</span> Parameters</span></h2>
-<p>To add a channel of input sound device a parameter of the controller object is created and configured in OpenSCADA. Example of the configuration tab of the parameter is shown in Figure 2.
+<p>The module provides only one the "Standard (std)" type of the parameters with the parameters table name "SoundCard_{CntrId}".
+</p><p>To add a channel of input sound device a parameter of the controller object is created and configured in OpenSCADA. Example of the configuration tab of the parameter is shown in Figure 2.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:756px;"><a class="image" href="http://oscada.org/wiki/File:SoundCard_prm.png"><img class="thumbimage" height="543" src="../files/SoundCard_prm.png" width="754" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of a parameter.</div></div></div></div>
 <p>From this tab you can set:
@@ -84,5 +84,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SoundCard/en">Modules/SoundCard/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SoundCard/en">Modules/SoundCard/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

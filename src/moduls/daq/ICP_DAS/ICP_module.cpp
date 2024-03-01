@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ICP_DAS file: ICP_module.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@ extern "C"
 #define MOD_NAME	trS("ICP DAS hardware")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.9.9"
+#define MOD_VER		"1.9.14"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides implementation for 'ICP DAS' hardware support.\
  Includes main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus.")
@@ -92,14 +92,13 @@ void TTpContr::postEnable( int flag )
     daReg(new da_ISA());
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));	//????[v1.0] Remove
     fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("BUS",trS("Bus"),TFld::Integer,TFld::Selectable,"2","1","-1;0;1;2;3;4;5;6;7;8;9;10",
-	    _("ISA;COM 1 (Master LP-8xxx);COM 1;COM 2;COM 3;COM 4;COM 5;COM 6;COM 7;COM 8;COM 9;COM 10")));
+	    trS("ISA;COM 1 (Master LP-8xxx);COM 1;COM 2;COM 3;COM 4;COM 5;COM 6;COM 7;COM 8;COM 9;COM 10")));
     fldAdd(new TFld("TR_OSCD",trS("Transport"),TFld::String,TFld::NoFlag,i2s(2*limObjID_SZ+5).c_str(),TrIcpDasNm));
     fldAdd(new TFld("BAUD",trS("Baudrate"),TFld::Integer,TFld::Selectable,"6","115200",
-	"300;600;1200;2400;4800;9600;19200;38400;57600;115200;230400;460800;500000;576000;921600",
 	"300;600;1200;2400;4800;9600;19200;38400;57600;115200;230400;460800;500000;576000;921600"));
     fldAdd(new TFld("LP_PRMS",trS("LinPAC parameters"),TFld::String,TFld::FullText,"1000"));
     fldAdd(new TFld("REQ_TRY",trS("Serial request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;10"));
@@ -160,13 +159,21 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	mBaud(cfg("BAUD").getId()), connTry(cfg("REQ_TRY").getId()), mSched(cfg("SCHEDULE")), mTrOscd(cfg("TR_OSCD")),
 	mPer(1e9), prcSt(false), callSt(false), endRunReq(false), tmGath(0), mCurSlot(-1), numReq(0), numErr(0), numErrResp(0)
 {
+    //????[v1.0] Remove
     cfg("PRM_BD").setS("ICPDASPrm_"+name_c);
+
     cfg("BUS").setI(1);
 }
 
 TMdContr::~TMdContr()
 {
     if(startStat()) stop();
+}
+
+string TMdContr::tblStd( const TTypeParam &tP ) const
+{
+    if(tP.name == "std")	return "ICPDASPrm_"+id();
+    else return TController::tblStd(tP);
 }
 
 string TMdContr::getStatus( )

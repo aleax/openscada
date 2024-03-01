@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 18:33+0300\n"
+"POT-Creation-Date: 2024-01-28 11:07+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -186,7 +186,8 @@ msgid "Redundancy"
 msgstr "Резервирование"
 
 msgid "Overtime of the reserve history reload at start, days"
-msgstr "Глубина принудительной перезагрузки истории резерва при запуске, в сутках."
+msgstr ""
+"Глубина принудительной перезагрузки истории резерва при запуске, в сутках."
 
 msgid "Message archivers"
 msgstr "Архиваторы сообщений"
@@ -352,8 +353,8 @@ msgstr "Состояние"
 msgid "Running"
 msgstr "Выполняется"
 
-msgid "Archiver DB"
-msgstr "БД архиватора"
+msgid "Storage"
+msgstr ""
 
 #, c-format
 msgid "Remove from '%s'"
@@ -379,7 +380,8 @@ msgid ""
 msgstr ""
 
 #, c-format
-msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
+msgid ""
+"The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
 "Режим привязки к сетке не поддерживает вставку очень старых значений %lld "
 "(%lld-%lld)."
@@ -435,9 +437,6 @@ msgstr "Конец буфера"
 
 msgid "Buffer begin"
 msgstr "Начало буфера"
-
-msgid "Archive DB"
-msgstr "БД архива"
 
 msgid ""
 "The size of the buffer of values should be large enough for the periodicity "
@@ -549,7 +548,8 @@ msgid "Last read buffer"
 msgstr "Последнее чтение буфера"
 
 #, c-format
-msgid "Number of the setting items achieved the limit %d for time range [%lld:%lld]!"
+msgid ""
+"Number of the setting items achieved the limit %d for time range [%lld:%lld]!"
 msgstr ""
 
 msgid "DB type (module)"
@@ -649,7 +649,8 @@ msgstr "Таблицы которые в БД, но не открыты на д�
 msgid "Load the program from this DB"
 msgstr "Загрузить программу из этой БД"
 
-msgid "Codepage of data in the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
+msgid ""
+"Codepage of data in the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr "Кодировка данных в БД. Для примера: UTF-8, KOI8-R, KOI8-U ... ."
 
 msgid ""
@@ -707,8 +708,8 @@ msgstr "Запись \"%s\" отсутствует. Вы сохраняли эт
 msgid "The DB is in the Read only mode."
 msgstr "БД в режиме Только для Чтения."
 
-msgid "Translation removed! Reload the base message."
-msgstr "Перевод удалён! Перегрузите базовое сообщение."
+msgid "A message completely cleaned for the base and all translations!"
+msgstr ""
 
 #, c-format
 msgid "Field id = %s(%s) is missing!"
@@ -717,6 +718,92 @@ msgstr "Поле id = %s(%s) отсутствует!"
 #, c-format
 msgid "%s:%s:> Error in the control item '%s'!"
 msgstr "%s:%s:> Ошибка элемента управления '%s'!"
+
+#, c-format
+msgid "set the cell ['%s':%s] to '%s'."
+msgstr ""
+
+msgid "command with arguments:"
+msgstr ""
+
+#, c-format
+msgid "set to '%s'."
+msgstr ""
+
+#, c-format
+msgid "add item '%s (%s)'."
+msgstr ""
+
+#, c-format
+msgid "add item '%s'."
+msgstr ""
+
+msgid "add item."
+msgstr ""
+
+#, c-format
+msgid "insert item '%s (%s)' to position of item '%s'."
+msgstr ""
+
+#, c-format
+msgid "insert item '%s' to position %s."
+msgstr ""
+
+#, c-format
+msgid "insert row '%s' to position of row %s."
+msgstr ""
+
+#, c-format
+msgid "delete item in position %s."
+msgstr ""
+
+#, c-format
+msgid "delete item '%s'."
+msgstr ""
+
+#, fuzzy, c-format
+msgid "delete row '%s'."
+msgstr "Удалить из '%s'"
+
+#, c-format
+msgid "edit item in position %s to '%s'."
+msgstr ""
+
+#, fuzzy, c-format
+msgid "edit item '%s' to '%s (%s)'."
+msgstr "2:Ошибка открытия файла '%s': %s"
+
+#, c-format
+msgid "edit item '%s' to '%s'."
+msgstr ""
+
+#, c-format
+msgid "move item in position %s to %s."
+msgstr ""
+
+#, c-format
+msgid "move row in position %s to %s."
+msgstr ""
+
+#, c-format
+msgid "load with forcibility %d."
+msgstr ""
+
+#, c-format
+msgid "save with forcibility %d."
+msgstr ""
+
+#, fuzzy, c-format
+msgid "copy from '%s' to '%s'."
+msgstr "Копирование из '%s' в '%s' невозможно."
+
+#, c-format
+msgid "user command '%s' to row '%s'."
+msgstr ""
+
+#, c-format
+msgid "other command '%s'."
+msgstr ""
 
 msgid "The node is already being processed!"
 msgstr "Узел уже обрабатывается!"
@@ -829,6 +916,14 @@ msgstr ""
 "Ошибка загрузки:\n"
 "%s"
 
+#, fuzzy, c-format
+msgid ""
+"Warning saving:\n"
+"%s"
+msgstr ""
+"Ошибка сохранения:\n"
+"%s"
+
 #, c-format
 msgid ""
 "Error saving:\n"
@@ -922,9 +1017,6 @@ msgstr "Контроллер"
 
 msgid "Status"
 msgstr "Статус"
-
-msgid "Controller DB"
-msgstr "БД контроллера"
 
 msgid "Date of modification"
 msgstr "Дата модификации"
@@ -1186,16 +1278,26 @@ msgstr "Ошибка получения объекта из не объектн�
 msgid "Closing the iconv handler error '%s (%d)'!"
 msgstr ""
 
-msgid "Storage address in the format \"{DB module}.{DB name}\"."
+msgid "Generic Storage"
+msgstr ""
+
+#, fuzzy
+msgid "Configuration File"
+msgstr "Конфигурационный файл"
+
+#, fuzzy
+msgid ""
+"Storage address in the format \"{DB module}.{DB name}\" or the common ones."
 msgstr "Адрес хранилища в формате \"{Модуль БД}.{Имя БД}\"."
 
-msgid "Set '*.*' to use the Generic Storage."
-msgstr "Установить '*.*' для использования Общего Хранилища."
-
 #, c-format
+msgid "Whole list of the object storages is: %s."
+msgstr ""
+
+#, fuzzy, c-format
 msgid ""
-"Please note that removing from the Generic Storage (*.*) will cause the data "
-"removing both from the Configuration File (<cfg>) and the Work DB (%s)!"
+"Please note that removing from \"%s (%s)\" will cause the data removing both "
+"from \"%s (%s)\" and \"Work DB (%s)\"!"
 msgstr ""
 "Заметьте пожалуйста, что удаление из Общего Хранилища (*.*) приведёт к "
 "удалению данных как из Конфигурационного Файла (<cfg>), так и Рабочей БД "
@@ -1443,7 +1545,8 @@ msgstr "2:Сбор остановлен."
 msgid "Parameter: "
 msgstr "Параметр: "
 
-msgid "The type changing leads to lose some data of the specific configurations."
+msgid ""
+"The type changing leads to lose some data of the specific configurations."
 msgstr "Смена типа повлечёт за собой потерю данных специфических конфигураций."
 
 msgid "Inclusion"
@@ -1579,9 +1682,10 @@ msgstr "Библиотека"
 msgid "Library DB"
 msgstr "БД библиотеки"
 
+#, fuzzy, c-format
 msgid ""
 "Storage address in the format \"{DB module}.{DB name}.{Table name}\".\n"
-"To use the Generic Storage, set '*.*.{Table name}'."
+"To use %s, set '%s.{Table name}'."
 msgstr ""
 "Адрес хранилища в формате \"{Модуль БД}.{Имя БД}.{Имя Таблицы}\".\n"
 "Установить '*.*.{Имя Таблицы}' для использования Общего Хранилища."
@@ -1668,14 +1772,8 @@ msgstr "Пользователь "
 msgid "Include"
 msgstr "Включен"
 
-msgid "User DB"
-msgstr "БД пользователя"
-
 msgid "Group "
 msgstr "Группа "
-
-msgid "User group DB"
-msgstr "БД группы пользователей"
 
 msgid ""
 "======================= Subsystem \"Specials\" options "
@@ -2017,8 +2115,10 @@ msgid "Error writing the configuration file '%s': %s"
 msgstr "Ошибка записи в конфигурационный файл '%s': %s"
 
 #, c-format
-msgid "Impossible to hold the project lock! Seems the project '%s' already running."
-msgstr "Невозможно захватить замок проекта! Похоже проект '%s' уже исполняется."
+msgid ""
+"Impossible to hold the project lock! Seems the project '%s' already running."
+msgstr ""
+"Невозможно захватить замок проекта! Похоже проект '%s' уже исполняется."
 
 msgid "Loading."
 msgstr "Загрузка."
@@ -2072,10 +2172,6 @@ msgstr "Программа прервана!"
 #, c-format
 msgid "Unknown signal %d!"
 msgstr "Неизвестный сигнал %d!"
-
-#, c-format
-msgid "Closing the file %p error '%s (%d)'!"
-msgstr ""
 
 msgid "Timeouted !!!"
 msgstr "Превышение времени ожидания !!!"
@@ -2563,6 +2659,10 @@ msgstr "Транспортный протокол"
 msgid "To connect"
 msgstr "Подключаться"
 
+#, fuzzy
+msgid "Addition parameters"
+msgstr "Ошибка добавления параметра '%s'."
+
 msgid "User that opens"
 msgstr "Открывающий пользователь"
 
@@ -2584,6 +2684,10 @@ msgstr "Уровень поднятия"
 #, fuzzy, c-format
 msgid "Error the output address '%s'!"
 msgstr "Ошибка удалённого хоста '%s'!"
+
+#, c-format
+msgid "For %s"
+msgstr ""
 
 msgid "Error finding and creating new input transports."
 msgstr "Ошибка поиска и создания новых входных транспортов."
@@ -2712,14 +2816,17 @@ msgstr "Входной транспорт: "
 msgid "Connect"
 msgstr "Подключение"
 
-msgid "Transport DB"
-msgstr "БД транспорта"
+msgid "Additional"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
 
 msgid "IO log"
 msgstr "Лог ВВ"
 
 #, fuzzy
-msgid "Log length, block limit, type"
+msgid "Log length, block limit, type, aggregation time"
 msgstr "Длина лога и ограничение блока"
 
 #, fuzzy
@@ -2727,6 +2834,9 @@ msgid "Use zero (0) for the log disabling, -1 for writing to a file."
 msgstr "Используйте ноль для отключения лога."
 
 msgid "Binary & Text;Binary;Text"
+msgstr ""
+
+msgid "Aggregation time in seconds and zero disables its."
 msgstr ""
 
 msgid "Log"
@@ -3049,3 +3159,6 @@ msgstr "Имя проекта установлено в:"
 
 msgid "already started."
 msgstr "уже запущен."
+
+#~ msgid "Translation removed! Reload the base message."
+#~ msgstr "Перевод удалён! Перегрузите базовое сообщение."

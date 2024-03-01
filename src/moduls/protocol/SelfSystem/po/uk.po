@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-06 07:28+0300\n"
+"POT-Creation-Date: 2023-07-23 15:36+0300\n"
 "PO-Revision-Date: 2007-10-23 18:19+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -27,6 +27,29 @@ msgid ""
 msgstr ""
 "Надає власний протокол OpenSCADA заснований на XML та інтерфейсі керування "
 "OpenSCADA."
+
+msgid "Compression level and lower limit"
+msgstr "Рівень і нижня межа стиснення"
+
+msgid "Life time of the authentication session, minutes"
+msgstr "Час життя сеансу аутентифікації, хвилин"
+
+msgid "Limit of the connections for one user and host"
+msgstr "Ліміт підключень одного користувача та хоста"
+
+msgid ""
+"ZLib compression level:\n"
+"  -1  - optimal speed-size;\n"
+"  0   - disable;\n"
+"  1-9 - direct level."
+msgstr ""
+"Рівень компресії ZLib:\n"
+"  -1  - оптимальна швидкість-розмір;\n"
+"  0   - вимкнено;\n"
+"  1-9 - прямий рівень."
+
+msgid "Limit in bytes."
+msgstr "Межа у байтах."
 
 #, c-format
 msgid ""
@@ -94,29 +117,6 @@ msgstr "Активні сеанси аутентифікації"
 
 msgid "Module options"
 msgstr "Опції модуля"
-
-msgid "Life time of the authentication session, minutes"
-msgstr "Час життя сеансу аутентифікації, хвилин"
-
-msgid "Limit of the connections for one user and host"
-msgstr "Ліміт підключень одного користувача та хоста"
-
-msgid "Compression level and lower limit"
-msgstr "Рівень і нижня межа стиснення"
-
-msgid ""
-"ZLib compression level:\n"
-"  -1  - optimal speed-size;\n"
-"  0   - disable;\n"
-"  1-9 - direct level."
-msgstr ""
-"Рівень компресії ZLib:\n"
-"  -1  - оптимальна швидкість-розмір;\n"
-"  0   - вимкнено;\n"
-"  1-9 - прямий рівень."
-
-msgid "Limit in bytes."
-msgstr "Межа у байтах."
 
 #, c-format
 msgid "Request received: '%s': %d, time: %g ms."

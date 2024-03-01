@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: os_contr.h
 /***************************************************************************
- *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -74,6 +74,8 @@ class TMdPrm : public TParamContr
 	string addPrm( const string &prm, const string &def = "" );
 	void setAddPrm( const string &prm, const string &val );
 
+	AutoHD<TVal> vlAt( const string &name, bool noex = false ) const;
+
 	TMdContr &owner( ) const;
 
 	//Attributes
@@ -110,6 +112,8 @@ class TMdContr: public TController
 	//Methods
 	TMdContr( string name_c, const string &daq_db, TElem *cfgelem );
 	~TMdContr( );
+
+	string tblStd( const TTypeParam &tP ) const;
 
 	string getStatus( );
 

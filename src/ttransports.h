@@ -21,10 +21,12 @@
 #ifndef TTRANSPORTS_H
 #define TTRANSPORTS_H
 
-#define STR_VER		19		//TransportS type modules version
+#define STR_VER		20		//TransportS type modules version
 #define STR_ID		"Transport"
 #define STR_IN_PREF	"in_"
 #define STR_OUT_PREF	"out_"
+#define STR_A_PRM	"prms"
+#define STR_A_PRM_CFGP	"CFG:"
 
 #include <string>
 
@@ -44,6 +46,9 @@ class TTransportOut;
 class TTransportIn : public TCntrNode, public TConfig
 {
     public:
+	//Data
+	enum AssociateTrStage { ATrStg_Common = 0, ATrStg_Create, ATrStg_Proc };
+
 	//Methods
 	TTransportIn( const string &id, const string &db, TElem *el );
 	virtual ~TTransportIn( );
@@ -58,7 +63,9 @@ class TTransportIn : public TCntrNode, public TConfig
 	string	protocols( )	{ return cfg("PROT").getS(); }
 	virtual unsigned keepAliveReqs( )	{ return 0; }
 	virtual unsigned keepAliveTm( )		{ return 0; }
-	virtual	string getStatus( );
+	TVariant prm( const string &id, const TVariant &val = TVariant(), bool toWr = false );
+	TVariant conPrm( const string &id, const TVariant &val = TVariant(), const string &cfg = "" );
+	virtual string getStatus( );
 
 	bool toStart( )		{ return mStart; }
 	bool startStat( ) const	{ return runSt; }
@@ -71,6 +78,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	void setDscr( const string &idscr )	{ cfg("DESCRIPT").setS(idscr); }
 	void setAddr( const string &addr )	{ cfg("ADDR").setS(addr); }
 	void setProtocols( const string &prt )	{ cfg("PROT").setS(prt); }
+	void clearConPrm( const string &id = "" );
 	void setToStart( bool val )		{ mStart = val; modif(); }
 
 	void setDB( const string &vl, bool qTop = false ) { setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
@@ -82,18 +90,17 @@ class TTransportIn : public TCntrNode, public TConfig
 	vector<AutoHD<TTransportOut> > associateTrs( bool checkForCleanDisabled = false );	//Associated output transports
 	AutoHD<TTransportOut> associateTr( const string &id );	//Getting the associated output transport at that connection ID
 
-	// IO log
-	int logLen( )	{ return mLogLen; }
-	int logItLim( )	{ return mLogItLim; }
-	void setLogLen( int vl );
-	void setLogItLim( int vl )	{ mLogItLim = vl; }
-	void pushLogMess( const string &vl, const string &data = "", int dataDir = 0 );
-
 	TTypeTransport &owner( ) const;
 
     protected:
 	//Methods
-	string associateTrO( const string &addr );	//Associated new output transport
+	// Associated output transport treating per stages
+	//  ATrStg_Common - common stage of default call stages ATrStg_Create, ATrStg_Proc;
+	//		    you can call stage ATrStg_Create, specific init the output transport and next call stage ATrStg_Proc to finish,
+	//		    and under the lock associateTrRes
+	//  ATrStg_Create - creating and registering the representative output transport with <addr> is the transport address
+	//  ATrStg_Proc - starting-connecting, reading the Initiate Connection ID, processing all presented associated transports
+	string associateTrO( const string &addr, char stage = ATrStg_Common );
 
 	void cntrCmdProc( XMLNode *opt );		//Control interface command process
 
@@ -107,8 +114,15 @@ class TTransportIn : public TCntrNode, public TConfig
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
+	// IO log
+	int logLen( )	{ return mLogLen; }
+	void setLogLen( int vl );
+	void pushLogMess( const string &vl, const string &data = "", int dataDir = 0 );
+
 	//Attributes
 	bool	runSt;
+
+	ResMtx	associateTrRes;
 
     private:
 	//Methods
@@ -119,12 +133,18 @@ class TTransportIn : public TCntrNode, public TConfig
 	char	&mStart;
 	string	mDB;
 
-	ResMtx	associateTrRes, mLogRes;
+	ResMtx	mLogRes;
 	vector<AutoHD<TTransportOut> >	mAssociateTrO;
 
+	map<string, TVariant>	mConPrms;
+
 	// IO log
-	int		mLogLen, mLogItLim, mLogLstDt, mLogTp, mLogFHD;
-	time_t		mLogLstDtTm;
+	int	mLogLen		:15;
+	int	mLogItLim	:21;
+	int	mLogTp		:3;
+	int	mLogAgrTm	:4;
+	int	mLogLstDt, mLogFHD;
+	time_t	mLogLstDtTm;
 	deque<string>	mLog;
 };
 
@@ -133,6 +153,8 @@ class TTransportIn : public TCntrNode, public TConfig
 //************************************************
 class TTransportOut : public TCntrNode, public TConfig
 {
+    friend class TTransportIn;
+
     public:
 	//Methods
 	TTransportOut( const string &id, const string &db, TElem *el );
@@ -149,7 +171,8 @@ class TTransportOut : public TCntrNode, public TConfig
 	string	addr( ) const		{ return cfg("ADDR").getS(); }
 	virtual	string timings( )	{ return ""; }
 	virtual	unsigned short attempts( ) { return 2; }
-	TVariant conPrm( const string &nm );
+	TVariant prm( const string &id, const TVariant &val = TVariant(), bool toWr = false );
+	TVariant conPrm( const string &id, const TVariant &val = TVariant(), const string &cfg = "" );
 	bool	startStat( ) const	{ return runSt; }
 	time_t	startTm( )		{ return mStartTm; }
 	int64_t	lstReqTm( )		{ return mLstReqTm; }
@@ -164,8 +187,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	void setAddr( const string &addr )		{ cfg("ADDR").setS(addr); }
 	virtual void setTimings( const string &vl, bool isDef = false )	{ }
 	virtual void setAttempts( unsigned short vl )	{ }
-	void setConPrm( const string &nm, const TVariant &vl );
-	void clearConPrm( );
+	void clearConPrm( const string &id = "" );
 
 	void setDB( const string &vl, bool qTop = false ) { setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 
@@ -176,13 +198,6 @@ class TTransportOut : public TCntrNode, public TConfig
 	{ return 0; }
 
 	void messProtIO( XMLNode &io, const string &prot );
-
-	// IO log
-	int logLen( )	{ return mLogLen; }
-	int logItLim( )	{ return mLogItLim; }
-	void setLogLen( int vl );
-	void setLogItLim( int vl )	{ mLogItLim = vl; }
-	void pushLogMess( const string &vl, const string &data = "", int dataDir = 0 );
 
 	TTypeTransport &owner( ) const;
 
@@ -196,11 +211,16 @@ class TTransportOut : public TCntrNode, public TConfig
 	void postDisable( int flag );		//Delete all DB if flag 1
 	bool cfgChange( TCfg &co, const TVariant &pc );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
-
 	void load_( TConfig *cfg );
 	void load_( )			{ }
 	void save_( );
+
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
+
+	// IO log
+	int logLen( )	{ return mLogLen; }
+	void setLogLen( int vl );
+	void pushLogMess( const string &vl, const string &data = "", int dataDir = 0 );
 
 	//Attributes
 	bool	runSt,
@@ -220,9 +240,15 @@ class TTransportOut : public TCntrNode, public TConfig
 	map<string, TVariant>	mConPrms;
 	ResMtx	mReqRes, mLogRes;
 
+	AutoHD<TTransportIn>	mAssociateSrcO;
+
 	// IO log
-	int		mLogLen, mLogItLim, mLogLstDt, mLogTp, mLogFHD;
-	time_t		mLogLstDtTm;
+	int	mLogLen		:15;
+	int	mLogItLim	:21;
+	int	mLogTp		:3;
+	int	mLogAgrTm	:4;
+	int	mLogLstDt, mLogFHD;
+	time_t	mLogLstDtTm;
 	deque<string>	mLog;
 };
 
@@ -243,14 +269,14 @@ class TTypeTransport: public TModule
 	// Input transports
 	void inList( vector<string> &list ) const		{ chldList(mIn, list); }
 	bool inPresent( const string &id ) const		{ return chldPresent(mIn, id); }
-	string inAdd( const string &id, const string &db = "*.*" );
+	string inAdd( const string &id, const string &db = DB_GEN );
 	void inDel( const string &id, bool complete = false )	{ chldDel(mIn, id, -1, complete?NodeRemove:NodeNoFlg); }
 	AutoHD<TTransportIn> inAt( const string &id ) const	{ return chldAt(mIn, id); }
 
 	// Output transports
 	void outList( vector<string> &list ) const		{ chldList(mOut, list); }
 	bool outPresent( const string &id ) const		{ return chldPresent(mOut, id); }
-	string outAdd( const string &id, const string &idb = "*.*" );
+	string outAdd( const string &id, const string &idb = DB_GEN );
 	void outDel( const string &id, bool complete = false )	{ chldDel(mOut, id, -1, complete?NodeRemove:NodeNoFlg); }
 	AutoHD<TTransportOut> outAt( const string &id ) const	{ return chldAt(mOut, id); }
 	virtual	string outAddrHelp( )				{ return ""; }
@@ -347,6 +373,9 @@ class TTransportS : public TSubSYS
 	TElem &outEl( ) 		{ return elOut; }
 
 	AutoHD<TTypeTransport> at( const string &iid ) const	{ return modAt(iid); }
+
+	static TVariant prm( string &cnt, const string &id, const TVariant &val = TVariant(), bool toWr = false );
+	static string cntrCmdPrm( XMLNode *opt, const string &path, const string &cnt );
 
     protected:
 	void load_( );

@@ -9,7 +9,7 @@ else
 oscd_modul_LTLIBRARIES = bd_DBGate.la
 bd_DBGate_la_CXXFLAGS =
 bd_DBGate_la_LIBTOOLFLAGS = --tag=disable-static
-bd_DBGate_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+bd_DBGate_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 bd_DBGate_la_SOURCES = DBGate.cpp

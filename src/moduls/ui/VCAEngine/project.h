@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: project.h
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -53,7 +53,7 @@ class Project : public TCntrNode, public TConfig
 	};
 
 	//Methods
-	Project( const string &id, const string &name, const string &lib_db = "*.*" );
+	Project( const string &id, const string &name, const string &lib_db = DB_GEN );
 	~Project( );
 
 	TCntrNode &operator=( const TCntrNode &node );
@@ -69,7 +69,6 @@ class Project : public TCntrNode, public TConfig
 	bool	toEnByNeed( )	{ return cfg("EN_BY_NEED").getB(); } //To enable the project by need
 	string	getStatus( );
 
-	bool isStdStorAddr( ) const		{ return (tbl() == ("prj_"+id())); }	//????[v1.0] Remove
 	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
 	string tbl( ) const	{ return cfg("DB_TBL").getS().empty() ? ("prj_"+id()) : cfg("DB_TBL").getS(); }
 	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
@@ -146,6 +145,9 @@ class Project : public TCntrNode, public TConfig
 	int	mPage;
 
     private:
+	//Methods
+	bool isStdStorAddr( ) const		{ return (tbl() == ("prj_"+id())); }	//????[v1.0] Remove
+
 	//Attributes
 	TCfg	&mId;		//Identifier
 	string	mDB,		//Work DB
@@ -212,7 +214,6 @@ class Page : public Widget, public TConfig
 
 	// Storing
 	void loadIO( );
-	void saveIO( );
 
 	void setEnable( bool val, bool force = false );
 
@@ -303,7 +304,6 @@ class PageWdg : public Widget, public TConfig
 
 	// Storing
 	void loadIO( );
-	void saveIO( );
 
 	// Data access
 	void resourceList( vector<string> &ls );

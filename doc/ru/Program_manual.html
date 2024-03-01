@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Документы/Руководство по программе</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FProgram+manual&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/Program_manual" title="Documents/Program manual">Documents/Program manual</a> and the translation is 97% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Program_manual.html" title="Documents/Program manual (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FProgram+manual&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/Program_manual" title="Documents/Program manual">Documents/Program manual</a> and the translation is 92% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Program_manual.html" title="Documents/Program manual (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Автор:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a></li>
 <li> <b>Изначально создано:</b> в <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual" rel="nofollow noreferrer noopener" target="_blank">старой Wiki</a> </li></ul>
@@ -141,7 +141,7 @@
 <li> <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">Логический уровень</a>;</li>
 <li> <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">Блочный вычислитель</a>;</li>
 <li> <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">Шлюз источников данных</a>;</li>
-<li> <a href="Modules/System.html" title="Special:MyLanguage/Modules/System">Сбор данных ОС</a>;</li>
+<li> <a href="../en/Modules/System.html" title="Special:MyLanguage/Modules/System">Сбор данных ОС</a>;</li>
 <li> <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>;</li>
 <li> <a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DCON клиент</a>;</li>
 <li> <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">Клиент OPC-UA</a>;</li>
@@ -266,7 +266,7 @@
 </p>
 <ul><li> <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">сокеты (TCP/UDP/UNIX)</a>;</li>
 <li> <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">последовательные интерфейсы</a>;</li>
-<li> <a href="Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">шифрованные каналы</a>.</li></ul>
+<li> <a href="../en/Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">шифрованные каналы</a>.</li></ul>
 <p>Подсистема "Транспорты" включает поддержку входных и выходных транспортов. Входные транспорты предназначены для обслуживания внешних запросов и отправки ответов. Выходные транспорты наоборот предназначены для отправки сообщений и ожидания ответов. Соответственно входные транспорты содержат конфигурацию локальной станции, как сервера прослушивания запросов, а выходные транспорты содержат конфигурацию удалённого сервера, для подключения. Такая специализация характерна для типового механизма "запрос-ответ", однако на данное время входные и выходные транспорты поддерживают независимую передачу и приём данных. Модули подсистемы "Транспорты" реализуют поддержку как входных, так и выходных транспортов.
 </p><p>Подсистема "Транспортные протоколы" предназначена для структуризации данных, полученных от подсистемы "Транспорты", является продолжением подсистемы "Транспорты", от чего имеет такое название, и осуществляет функции проверки структуры и целостности полученных данных. В глобальной нотации, эта подсистема содержит и реализует <b>КОММУНИКАЦИОННЫЕ</b> протоколы! Для указания протокола, вмести с которым должен работать транспорт, предусмотрено специальное конфигурационное поле. Модульным объектом, который содержится в подсистеме "Протоколы", является сам протокол. Например, транспортными протоколами могут быть и есть:
 </p>
@@ -286,6 +286,7 @@
 <li> транспорт, получив подтверждение, отправляет ответ и удаляет объект протокола, если это не режим сохранения подключения;</li>
 <li> если подтверждения нет то транспорт продолжает ожидание данных и в случае их поступления передаёт сохранённому объекту протокола.</li></ul>
 <p>Протоколы также поддерживаются для выходных транспортов и берут на себя функцию общения с транспортом и реализацию особенностей этих протоколов, при подготовке данных к передаче и разборе ответов. Внешний интерфейс доступа к протоколам, из кода других модулей и окружения программирования OpenSCADA, реализуется в XML дереве с собственной структурой для каждого протокольного модуля. Такой механизм позволяет выполнять прозрачный доступ к внешним системам, посредством транспортов, просто указывая имя протокола с помощью которого обслуживать передачу.
+</p><p>Transports have a possibility to holding additional parameters, whose can be parameters of used protocols, that is protocols can be individually configured to each connection. [<span style="color: red">PLAN</span>] In further this function will be used for the wrapping protocols.
 </p><p>Благодаря стандартному доступу к транспортам в OpenSCADA, можно легко менять способ обмена данными не затрагивая самих программ, которые обмениваются. Например, в случае локального обмена, можно использовать более быстрый транспорт на основе UNIX-сокетов, а в случае обмена через интернет и локальную сеть использовать TCP- или UDP-сокеты.
 </p>
 <h3><span class="mw-headline" id=".D0.98.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.8B_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8F.2C_.D0.BF.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.98.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.8B_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8F.22"><span class="mw-headline-number">1.7</span> Интерфейсы пользователя, подсистема "Интерфейсы пользователя"</span></h3>
@@ -476,12 +477,12 @@
 <p><span id="Storage" title="#Storage">Конфигурация в целом может поступать</span> тремя способами и согласно порядка: командная строка вызова программы, Конфигурационный Файл и База Данных. Из которых доступны для изменения Конфигурационный Файл и База Данных, где и сохраняются значения конфигурации, которые изменены в конфигураторах.
 </p><p>Типовым именем конфигурационного файла OpenSCADA является <b>{sysconfdir}/oscada.xml</b> (где <i>sysconfdir</i> типично — "/etc"), для конфигураций за проектами OpenSCADA, и <b>{Proj}/oscada.xml</b> для проекта "Proj". Формат конфигурационного файла и параметры командной строки рассмотрим в <a href="#CfgFilePrm">отдельном разделе</a>.
 </p><p>Учитывая модульность подсистемы "БД", БД могут быть различными. Причем предоставляется возможность сохранения различных частей OpenSCADA как в разных БД одного типа, так и в БД разных типов.
-</p><p>Много узлов OpenSCADA предоставляют возможность выбора хранилища для хранения своих данных и которое может быть указано как:
+</p><p>Many OpenSCADA nodes provide the ability to select a storage to store their data and which can be specified as:
 </p>
-<ul><li> <b>&lt;cfg&gt;</b> — Конфигурационный Файл;</li>
-<li> <b>{Модуль БД}.{Название БД}</b> — База Данных;</li>
-<li> <b>*.*</b> — Общее Хранилище (комбинированное), которое состоит из Конфигурационного Файла и рабочей Базы Данных, указанной в конфигурационном поле <i>Рабочая БД</i>; где Конфигурационный Файл первичный для уже присутствующих там данных, т.е. их изменения, но всё новое создаётся в Базе Данных.</li></ul>
-<p>Узлы, которые не предоставляют возможности выбора хранилища, фиксировано работают с Общим Хранилищем <b>*.*</b>, а те которые предоставляют такую возможность также отслеживают наличие своих данных в различных хранилищах и предлагают механизм последовательного удаления дубликатов или просто их выявления в различных библиотеках, которые формируются отдельными Базами Данных. Больше прочитать про механизм переноса конфигурации и выделения её в библиотеки вы можете в соответствующем "<a href="How_to_Transferring_project_configuration.html" title="Special:MyLanguage/Documents/How to/Transferring project configuration">Как Выполнить</a>".
+<ul><li> <b>Configuration File</b> (&lt;cfg&gt;);</li>
+<li> <b>{DB Module}.{DB Name}</b> — Data Base;</li>
+<li> <b>Generic Storage</b> (&lt;gen&gt;) — the Generic Storage (combined) consisting of the Configuration File and the work Data Base specified in the "Work DB" configuration field; where the Configuration File is primary for the data already existing there, ie their changes, but everything new is created in the Data Base.</li></ul>
+<p>Nodes that do not provide the ability to select a storage work fixedly with the <b>Generic Storage</b> (&lt;gen&gt;), and those that do so also track the availability of their data in different storages and offer a mechanism for sequentially removing duplicates or simply detecting them in different libraries, which are formed by separate databases. You can read more about the mechanisms for transferring the configuration and extracting it to the library in the appropriate "<a href="How_to_Transferring_project_configuration.html" title="Special:MyLanguage/Documents/How to/Transferring project configuration">How To</a>".
 </p><p>Изменение конфигурации того или иного узла устанавливает флаг модификации соответствующего узла, а также активирует кнопки "Загрузить из БД", для загрузки первоначальной конфигурации, и "Сохранить в БД" для сохранения изменений. Признак модификации также поднимается к родительскому узлу, что позволяет осуществлять восстановление-сохранение от корневого узла, хотя реально в операциях с БД, будут участвовать только модифицированные узлы. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Удаление узла приводит к непосредственному удалению его из хранилища и механизм модификации на эту операцию не распространяется.
 </p><p>Ряд настроек и конфигураций узлов OpenSCADA, которые исполняются или уже включены, не применяются сразу-же по внесению изменений, поскольку конфигурация читается/применяется обычно только при включении или запуске. Следовательно, для применения изменений в таких случаях, достаточно включить/выключить включенный объект или перезапустить исполняющийся — остановить/запустить. На данный момент большинство настроек, не предусматривающих непосредственного применения, просто недоступны для редактирования.
 </p><p>Дальнейшее рассмотрение конфигурации OpenSCADA будет производиться на основе интерфейса конфигуратора <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">UI.QTCfg</a>, однако принципы работы будут полностью соответствовать остальным конфигураторам, благодаря использованию общего интерфейса контроля OpenSCADA.
@@ -494,7 +495,7 @@
 <li> <i>Modules directory</i> — contains information of directories of modules of OpenSCADA, separated by ';', they can include a files' template in the end (/my/modules/path/lib*.so). <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> If the value of this field is incorrect then when the program is started, the program ends with a message in the console that the configuration is incorrect.</li>
 <li> <i>Icons directory</i> — contains information of directories of the program icons, separated by ';'. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> If the configuration navigation tree have no icons then the value of this field is incorrect.</li>
 <li> <i>Documents directory</i> — contains information of directories of the program documents, separated by ';'. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> If you can not to call local documents then the value of this field is incorrect or the documentation is not installed.</li>
-<li> <i>Work DB</i> — indicates the working Data Base, that is the Data Base part of the combined storage used to store main data of the program; which may be <a href="#CfgFilePrm">the Configuration File</a> (<b>&lt;cfg&gt;</b>) also for excluding completely the Data Base from the data storage.</li>
+<li> <i>Work DB</i> — indicates the working Data Base, that is the Data Base part of the combined storage (<b>Generic Storage</b>) used to store main data of the program; which may be the <b><a href="#CfgFilePrm">Configuration File</a></b> (&lt;cfg&gt;) also for excluding completely the Data Base from the data storage.</li>
 <li> <i>Save the program at exit, with the period</i> — points to the need to save the changed data at finishing of the program and indicates the periodicity in seconds with which to save the changed program's data.</li>
 <li> <i>Set modification for the calculated objects</i> — most suitable for the production systems together with the previous configuration properties, for the calculation context saving. But it is inconvinient in the development mode, all time reminding for the saving need.</li>
 <li> <i>Messages</i> — indicates the level of messages beginning from which they are to be processed and directions of the messages sending. Messages below this level will be ignored. The level "Debug (0)" have special sense, it set will enable debug messages generation by different parts of the program. To control the parts debug messages generation you can use the tab "Debug" (Fig.4d), which will be appeared in this case. The directions indicate the need of the message sending to the system logger, to the standard output, error and to the archive:
@@ -529,13 +530,13 @@
 <dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> You can learn more about the details and specifics of creating multilingual projects in the appropriate "<a href="../en/Create_multi_language_project.html" title="Special:MyLanguage/Documents/How to/Create multi language project">How To</a>".
 <ul><li> <i>Status</i> — current status of the project messages translation, where can be:</li></ul>
 <dl><dd><ul><li> "SINGLELANGUAGE, only use the already multilanguage DBs with their modification";</li>
-<li> "MULTILANGUAGE, creating or modification the configuration DBs as multilanguage ones with the pointed base language 'XX';</li>
+<li> "MULTILANGUAGE, creating or modification the configuration DBs as multilanguage ones with the pointed base language '{language}';</li>
 <li> "MULTILANGUAGE-DYNAMIC, and dynamic translation".</li></ul></dd></dl>
-<ul><li> <i>Base language - locales list</i> — enables the multilingual support for text variables in the configuration DBs by entry the base language and the project whole locales (like to "en_US.UTF-8") list (optional) separated by ';'. Further for the text variables in the non basic language in the tables of the database it will be created the separate columns. Under the text variables the all text fields of configurator, which can be translated into another language, are meant. Numbers and other special symbols are not in their count and are not translated. The whole locales list is not an obligatory part and used mostly for conversion the language code to whole locale for system functions and in the locale selection lists.</li></ul>
+<ul><li> <i>Base language - locales list</i> — enables the multilingual support for text variables in the configuration DBs by entry the base language and the project whole locales (like to "en_US.UTF-8") list (optional) separated by ';'. Further for the text variables in the non basic language in the tables of the database it will be created separate columns. Under the text variables the all text fields of configurator, which can be translated in another language, are meant. Numbers and other special symbols are not in their count and are not translated. The whole locales list is not an obligatory part and used mostly for conversion the language code to whole locale for system functions and in the locale selection lists.</li></ul>
 <dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> You can entry here other language besides English(en) as the base, but take in your mind that all standard OpenSCADA libraries formed for the base language English(en), so other base languages will break these DBs at change!</dd></dl>
 <ul><li> <i>, dynamic translation</i> — planed state of the dynamic text messages translation. The dynamic text messages translation causes the text messages translation cache enabling and requests to the translations to the DB depends to the OpenSCADA part's language, mostly for multi-language dynamic user interfaces when user has self-preferred language and users of the program a lot, as a rule, are end-users-operators.</li>
-<li> <i>Enable the manager</i> — enables the generic translation manager which cause full reloading for all built messages obtain, however this does not form the full messages index by deny to reload some objects into their execution. For the full messages index loading you ought to save the manager into the enabled mode and to restart OpenSCADA. Ongoing next start the program will form the full messages index.</li>
-<li> <i>Languages of managing</i> — list of the processing languages, in the two-character representation and separated by the character ';'. If the translations for the specified language in the source are presented then the language column will contain them otherwise it will be empty.</li>
+<li> <i>Enable the manager</i> — enables the generic translation manager which cause full reloading for all built messages obtain, however this does not form the full messages index by deny to reload some objects during their execution. For the full messages index loading you ought to save the manager into the enabled mode and to restart OpenSCADA. Ongoing next start the program will form the full messages index.</li>
+<li> <i>Languages of managing</i> — list of the processing languages separated by the character ';'. If the translations for the specified language in the source are presented then the language column will contain them otherwise it will be empty.</li>
 <li> <i>Source filter</i> — source filter of limiting the manager work in some DBs, the source just must contain such substring.</li>
 <li> <i>, check/fix</i> — enable for checking the base messages translation equality in different sources and fixing by: propagation the translations to empty sources, clearing the double to base translations. And the separated-second check for fixing by merging the base messages as the translations, since this operation can be some wrong in complex environments.</li>
 <li> <i>, pass</i> — pass the specified number of the table items from the top, useful for very big projects which are limited in time of the table complete processing.</li>
@@ -629,25 +630,25 @@
 <p>Подсистема не является модульной. Для конфигурации подсистемы предусмотрена корневая страница подсистемы "Безопасность", содержащая вкладку "Пользователи и группы пользователей". Вкладка "Пользователи и группы пользователей" (Рис.4.2a) содержит списки пользователей и групп пользователей. Пользователь в группе "Security" или с правами привилегированного пользователя может добавить, удалить пользователя или группу пользователей. Все остальные пользователи могут переходить к страницам пользователей или групп пользователей и изменять ряд персональных параметров на собственной странице пользователя.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:649px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_sec_ru.png"><img class="thumbimage" height="543" src="files/QTCfg_subsys_sec_ru.png" width="647" /></a>  <div class="thumbcaption">Рис. 4.2a. Вкладка "Пользователи и группы пользователей" корневой страницы подсистемы "Безопасность".</div></div></div></div>
-<p>Для конфигурации пользователя предоставляется страница, содержащая только вкладку "Пользователь" (Рис.4.2b). Вкладка содержит конфигурационные данные профиля пользователя, которые может изменять сам пользователь, пользователь в группе "Security" или привилегированный пользователь:
+<p>For user configuration, a page that contains only the "User" tab (Fig.2.4b) is provided. This tab contains configuration data of the user profile, which can be changed by the user, the user in the "Security" group or the privileged user:
 </p>
-<ul><li> <i>Имя</i> — информация об имени (идентификаторе) пользователя.</li>
-<li> <i>Полное имя</i> — указывает на полное имя пользователя.</li>
-<li> <i>Описание</i> — описание и произвольная информация о пользователе.</li>
-<li> <i>Пароль</i> — поле для изменения пароля пользователя. Всегда отображает "********".</li>
-<li> <i>Язык</i> — язык пользователя для контекста динамических сообщений и синтеза речи пользовательского интерфейса. Пусто для системного языка.</li>
-<li> <i>Изображение пользователя</i> — указывает изображение пользователя. Изображение может быть загружено или выгружено.</li>
-<li> <i>Группы</i> — таблица с перечнем групп пользователей и признаком принадлежности пользователя к соответствующей группе.</li>
-<li> <i>БД пользователя</i> — адрес БД для хранения данных пользователя, с отслеживанием наличия данных в различных хранилищах и предоставлением последовательного удаления дубликатов.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:681px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_sec_user_ru.png"><img class="thumbimage" height="733" src="files/QTCfg_subsys_sec_user_ru.png" width="679" /></a>  <div class="thumbcaption">Рис. 4.2b. Вкладка "Пользователь" страницы пользователя подсистемы "Безопасность".</div></div></div></div>
-<p>Для конфигурации группы пользователей предоставляется страница, содержащая только вкладку "Группа" (Рис.4.2c). Вкладка содержит конфигурационные данные профиля группы пользователей, которые может изменять только привилегированный пользователь:
+<ul><li> <i>Name</i> — information about the name (identifier) of the user.</li>
+<li> <i>Full name</i> — specifies the full name of the user.</li>
+<li> <i>Description</i> — description and arbitrary information about the user.</li>
+<li> <i>Password</i> — the field to change the user's password. It always displays "********".</li>
+<li> <i>Language</i> — user's language for the dynamic messages context and for text to speech of the user interface. Empty to the system language.</li>
+<li> <i>User picture</i> — specifies the user's picture. Picture can be loaded and saved.</li>
+<li> <i>Groups</i> — the table with a list of user groups and a sign of the user's belonging to the corresponding group.</li>
+<li> <i>Storage</i> — the user's data storage, with tracking the availability of the data in different storages and providing the sequentially removing duplicates.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:789px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_sec_user.png"><img class="thumbimage" height="734" src="../en/files/QTCfg_subsys_sec_user.png" width="787" /></a>  <div class="thumbcaption">Рис. 4.2b. Вкладка "Пользователь" страницы пользователя подсистемы "Безопасность".</div></div></div></div>
+<p>To configure a group of users, a page is provided that contains only the "Group" tab (Fig.4.2c). This tab contains configuration data of the user group profile that can only be changed by the privileged user:
 </p>
-<ul><li> <i>Имя</i> — информация об имени (идентификаторе) группы пользователей.</li>
-<li> <i>Полное имя</i> — указывает на полное имя группы пользователей.</li>
-<li> <i>Описание</i> — описание и произвольная информация о группе пользователей.</li>
-<li> <i>Пользователи</i> — список пользователей, включенных в данную группу. С помощью контекстного меню списка можно добавить или удалить пользователя в группе.</li>
-<li> <i>БД группы пользователей</i> — адрес БД для хранения данных группы пользователей, с отслеживанием наличия данных в различных хранилищах и предоставлением последовательного удаления дубликатов.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:651px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_sec_grp_ru.png"><img class="thumbimage" height="563" src="files/QTCfg_subsys_sec_grp_ru.png" width="649" /></a>  <div class="thumbcaption">Рис. 4.2c. Вкладка "Группа" страницы группы пользователей подсистемы "Безопасность".</div></div></div></div>
+<ul><li> <i>Name</i> — information about the name (identifier) of the user's group.</li>
+<li> <i>Full name</i> — specifies the full name of the user's group.</li>
+<li> <i>Description</i> — description and arbitrary information about the users group.</li>
+<li> <i>Users</i> — list of users included into this group. With the context menu of the list you can add or remove the user in the group.</li>
+<li> <i>Storage</i> — the user group data storage, with tracking the availability of the data in different storages and providing the sequentially removing duplicates.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:783px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_sec_grp.png"><img class="thumbimage" height="538" src="../en/files/QTCfg_subsys_sec_grp.png" width="781" /></a>  <div class="thumbcaption">Рис. 4.2c. Вкладка "Группа" страницы группы пользователей подсистемы "Безопасность".</div></div></div></div>
 <h3><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.8B.22"><span class="mw-headline-number">4.3</span> <span id="Transports" title="#Transports">Подсистема "Транспорты"</span></span></h3>
 <p>Подсистема является модульной и содержит иерархию объектов, изображённую на рисунке 1.6. Для конфигурации подсистемы предусмотрена корневая страница подсистемы "Транспорты", содержащая вкладки "Подсистема" и "Модули".
 </p><p>The tab "Subsystem" (Fig.4.3a) contains a configuration table for external, for this, OpenSCADA stations. External stations may be "System", "User" or both these are selected by the appropriate column. System's external stations are available only to the super user and are used in purpose of components of the system, for example, the horizontal redundancy mechanism and the module <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQ.DAQGate</a>. User's external stations are tied to the user who created them, and thus the list of user's external stations is individual for each user. User's external stations are used by components of the graphical interface, for example, <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">UI.QTCfg</a>, <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">UI.WebCfgD</a> and <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">UI.Vision</a>. In this table of external stations it is possible to add and delete records about the stations, as well as their modification. Each station contains the following fields:
@@ -668,34 +669,35 @@
 </p><p>Во вкладке "Модуль" содержится информация о модуле подсистемы "Транспорты" (Рис.4.1d), состав которой идентичен для всех модулей.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:681px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr_ru.png"><img class="thumbimage" height="558" src="files/QTCfg_subsys_tr_mod_tr_ru.png" width="679" /></a>  <div class="thumbcaption">Рис. 4.3b. Вкладка "Транспорты" модуля подсистемы "Транспорты".</div></div></div></div>
-<p>Каждый транспорт содержит собственную страницу конфигурации с вкладкой "Транспорт". Эта вкладка содержит основные настройки транспорта. <span id="TransportIn" title="#TransportIn">Входной транспорт</span> (Рис.4.3c) содержит:
+<p>Each transport contains its own generic configuration dialogues in the tab "Transport" and "Additional". The "Transport" tab contains basic transport settings. <span id="TransportIn" title="#TransportIn">Input transport</span> (Fig.4.3c) contains:
 </p>
-<ul><li> Раздел "Состояние" — содержит свойства, характеризующие состояние транспорта:
-<ul><li> <i>Статус</i> — информация о текущем состоянии транспорта и статистика его работы. Большинство модулей транспортов предоставляют расширенную диагностику в этом поле при включении <a href="#Config">режима отладки</a>.</li>
-<li> <i>Подключение</i> — оперативное состояние/команда транспорта.</li>
-<li> <i>БД транспорта</i> — адрес БД для хранения данных транспорта, с отслеживанием наличия данных в различных хранилищах и предоставлением последовательного удаления дубликатов.</li>
-<li> <i>Активные подключения</i> — список активных и актуальных подключений входного транспорта.</li></ul></li>
-<li> Раздел "Конфигурация" — непосредственно содержит поля конфигурации:
-<ul><li> <i>Идентификатор</i> — информация об идентификаторе транспорта.</li>
-<li> <i>Имя</i> — указывает имя транспорта.</li>
-<li> <i>Описание</i> — краткое описание транспорта и его назначения.</li>
-<li> <i>Адрес</i> — адрес транспорта в специфичном для типа транспорта (модуля) формате. Описание формата записи адреса транспорта, как правило, доступно во всплывающей подсказке этого поля.</li>
-<li> <i>Транспортный протокол</i> — указывает на модули транспортного протокола (подсистема "Транспортные протоколы"), которые должны работать в связке с данным входным транспортом. Т.е. полученные неструктурированные данные этот модуль будет направлять на структуризацию и обработку указанным модулям транспортного протокола.</li>
-<li> <i>Подключаться</i> — указывает на состояние/команду "Подключение" в которое переводить транспорт при загрузке.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_in_ru.png"><img class="thumbimage" height="836" src="files/Sockets_in_ru.png" width="808" /></a>  <div class="thumbcaption">Рис. 4.3c. Вкладка "Транспорт" страницы входного транспорта модуля подсистемы "Транспорты".</div></div></div></div>
-<p><span id="TransportOut" title="#TransportOut">Выходной транспорт</span> (Рис.4.3d) содержит:
+<ul><li> Section "State" — contains the settings that characterize the state of the transport:
+<ul><li> <i>Status</i> — information on the current transport's status and statistics of its work. Most modules provide advanced diagnostics in this field when enabled with <a href="#Config">the debugging mode</a>.</li>
+<li> <i>Connect</i> — operative state/command of the transport.</li>
+<li> <i>Storage</i> — the transport's data storage, with tracking the availability of the data in different storages and providing the sequentially removing duplicates.</li>
+<li> <i>Active connections</i> — active and actual connections list of the input transport.</li></ul></li>
+<li> Section "Configuration" — directly contains the configuration fields:
+<ul><li> <i>Identifier</i> — information on the transport's identifier.</li>
+<li> <i>Name</i> — specifies the transport's name.</li>
+<li> <i>Description</i> — brief description of the transport and its appointment.</li>
+<li> <i>Address</i> — transport address in a specific type of transport (module) format. Description of the format of the address of the transport, as a rule, is available in the tooltip for this field.</li>
+<li> <i>Transport protocol</i> — indicates the transport protocol modules (the subsystem "Transport protocols") those should work in conjunction with the input transport. That is, received unstructured data this module will sent to the structuring and processing to the specified modules of the transport protocol.</li>
+<li> <i>To connect</i> — indicates the state/command "Connect", in which to transfer the transport at startup.</li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:922px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_in.png"><img class="thumbimage" height="1190" src="../en/files/Sockets_in.png" width="920" /></a>  <div class="thumbcaption">Fig. 4.3c. The tab "Transport" and "Additional" of the page of an input transport of the module of the subsystem "Transports".</div></div></div></div>
+<p><span id="TransportOut" title="#TransportOut">Output transport</span> (Fig.4.3d) contains:
 </p>
-<ul><li> Раздел "Состояние" — содержит свойства, характеризующие состояние транспорта:
-<ul><li> <i>Статус</i> — информация о текущем состоянии транспорта и статистика его работы. Большинство модулей транспортов предоставляют расширенную диагностику в этом поле при включении <a href="#Config">режима отладки</a>.</li>
-<li> <i>Подключение</i> — оперативное состояние/команда транспорта. Учитывая сетевую природу транспортов, это состояние часто предусматривает подключение к удалённому сетевому узлу и соответственно отражает факт наличия подключения. Для выходных транспортов нет необходимости в обязательной установке этого состояния пользователем поскольку он используется внешней сущностью протоколов обмена, часто источниками данных, которые предварительно пытаются транспорт подключить, таким образом установив подключение для дальнейшего обмена, более того, транспорт может этой сущностью и отключаться.</li>
-<li> <i>БД транспорта</i> — адрес БД для хранения данных транспорта, с отслеживанием наличия данных в различных хранилищах и предоставлением последовательного удаления дубликатов.</li></ul></li>
-<li> Раздел "Конфигурация" — непосредственно содержит поля конфигурации:
-<ul><li> <i>Идентификатор</i> — информация об идентификаторе транспорта.</li>
-<li> <i>Имя</i> — указывает имя транспорта.</li>
-<li> <i>Описание</i> — краткое описание транспорта и его назначения.</li>
-<li> <i>Адрес</i> — адрес транспорта в специфичном для типа транспорта (модуля) формате. Описание формата записи адреса транспорта, как правило, доступно во всплывающей подсказке этого поля.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:731px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out_ru.png"><img class="thumbimage" height="636" src="files/Sockets_out_ru.png" width="729" /></a>  <div class="thumbcaption">Рис. 4.3d. Вкладка "Транспорт" страницы выходного транспорта модуля подсистемы "Транспорты".</div></div></div></div>
-<p>Выходной транспорт дополнительно предоставляет вкладку формирования пользовательского запроса через данный транспорт (Рис.4.3e). Вкладка предназначена для наладки связи и протоколов обмена, и она содержит:
+<ul><li> Section "State" — contains the settings that characterize the state of the transport:
+<ul><li> <i>Status</i> — information on the current transport's status and statistics of its work. Most modules provide advanced diagnostics in this field when enabled with <a href="#Config">the debuging mode</a>.</li>
+<li> <i>Connect</i> — operative state/command of the transport. Given the network nature of the transports, this state often involves connecting to a remote network node and accordingly reflecting the fact that the connection is present. For output transports, there is no need for the user to be obliged to set this state because it is used by an external entity of the communication protocols, often by the data sources, that try to connect the transport beforehand, so by establishing a connection for further exchange, moreover, the transport may be disconnected by that entity.</li>
+<li> <i>Transport DB</i> — the transport's data storage, with tracking the availability of the data in different storages and providing the sequentially removing duplicates.</li></ul></li>
+<li> Section "Configuration" — directly contains the configuration fields:
+<ul><li> <i>Identifier</i> — information on the transport's identifier.</li>
+<li> <i>Name</i> — specifies the transport's name.</li>
+<li> <i>Description</i> — brief description of the transport and its appointment.</li>
+<li> <i>Address</i> — transport address in a specific type of transport (module) format. Description of the format of the address of the transport, as a rule, is available in the tooltip for this field.</li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:922px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out.png"><img class="thumbimage" height="930" src="../en/files/Sockets_out.png" width="920" /></a>  <div class="thumbcaption">Fig. 4.3d. The tab "Transport" and "Additional" of the page of an output transport of the module of the subsystem "Transports".</div></div></div></div>
+<p>The tab "Additional" of both input and output transports contains specific parameters of the transport type and protocols' specific custom parameters. Also there can be reset all the additional parameters to default values and be cleaned the protocols' specific custom parameters.
+</p><p>Выходной транспорт дополнительно предоставляет вкладку формирования пользовательского запроса через данный транспорт (Рис.4.3e). Вкладка предназначена для наладки связи и протоколов обмена, и она содержит:
 </p>
 <ul><li> <i>Время</i> — информация о времени, затраченном на запрос и получение ответа.</li>
 <li> <i>Режим</i> — указывает режим данных, из списка: "Бинарный", "Текст(LF)", "Текст(CR)", "Текст(CR/LF)"; в котором будет формироваться запрос и предоставляться ответ. В бинарном режиме данные записываются парами чисел в шестнадцатеричном исчислении, т.е. байтами, разделёнными пробелами.</li>
@@ -705,9 +707,9 @@
 <li> <i>Запрос</i> — содержит данные запроса в выбранном режиме представления.</li>
 <li> <i>Ответ</i> — предоставляет данные ответа в выбранном режиме представления.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:825px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr_otr_req_ru.png"><img class="thumbimage" height="678" src="files/QTCfg_subsys_tr_mod_tr_otr_req_ru.png" width="823" /></a>  <div class="thumbcaption">Рис. 4.3e. Вкладка "Запрос" страницы выходного транспорта модуля подсистемы "Транспорты".</div></div></div></div>
-<p><span id="TrDiagnostic" title="#TrDiagnostic">Both input and output transports also contain the tab "IO log"</span> (Fig.4.3f). The tab is provided for generic control, observing and learning the traffic through the transports and includes the log length and block limit fields and the same text area of the log. For the log disable you can the log length field set to zero (0) and -1 for writing to a file.
+<p><span id="TrDiagnostic" title="#TrDiagnostic">Both input and output transports also contain the tab "IO log"</span> (Fig.4.3f). The tab is provided for generic control, observing and learning the traffic through the transports and includes the log length, block limit, type, aggregation time and the same text area of the log. For the log disable you can the log length field set to zero (0) and -1 for writing to a file.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:784px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr_log.png"><img class="thumbimage" height="749" src="../en/files/QTCfg_subsys_tr_mod_tr_log.png" width="782" /></a>  <div class="thumbcaption">Рис. 4.3f. Вкладка "Лог ВВ" страницы входного транспорта модуля подсистемы "Транспорты".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:992px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_tr_mod_tr_log.png"><img class="thumbimage" height="764" src="../en/files/QTCfg_subsys_tr_mod_tr_log.png" width="990" /></a>  <div class="thumbcaption">Рис. 4.3f. Вкладка "Лог ВВ" страницы входного транспорта модуля подсистемы "Транспорты".</div></div></div></div>
 <h3><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.A2.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D0.BD.D1.8B.D0.B5_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.8B.22"><span class="mw-headline-number">4.4</span> Подсистема "Транспортные протоколы"</span></h3>
 <p>Подсистема является модульной. Для конфигурации подсистемы предусмотрена корневая страница подсистемы "Транспортные протоколы", содержащая вкладку "Модули". Вкладка "Модули" (Рис.4.1b) содержит список модулей подсистемы "Транспортные протоколы" и идентична для всех модульных подсистем.
 </p><p>Каждый модуль подсистемы "Транспортные протоколы" предоставляет конфигурационную страницу с вкладкой "Модуль". Во вкладке "Модуль" содержится информация о модуле подсистемы "Транспортные протоколы" (Рис.4.1d), состав которой идентичен для всех модулей.
@@ -742,21 +744,21 @@
 <p>Вкладка "<span id="DAQTmpl" title="#DAQTmpl">Библиотеки шаблонов</span>" (Рис.4.5b) содержит список библиотек шаблонов для параметров этой подсистемы. В контекстном меню списка библиотек шаблонов пользователю предоставляется возможность добавления, удаления и перехода к нужной библиотеке. Вкладка "Модули" (Рис.4.1c) содержит список модулей подсистемы "Транспорты" и идентична для всех модульных подсистем.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:682px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl_ru.png"><img class="thumbimage" height="402" src="files/QTCfg_subsys_daq_tmpl_ru.png" width="680" /></a>  <div class="thumbcaption">Рис. 4.5b. Вкладка "Библиотеки шаблонов" подсистемы "Сбор данных".</div></div></div></div>
-<p>Каждая библиотека шаблонов подсистемы "Сбор данных" предоставляет конфигурационную страницу с вкладками "Библиотека" и "Шаблоны параметров". Вкладка "Библиотека" (Рис.4.5d) содержит основные настройки библиотеки в составе:
+<p>Each template library of the subsystem "Data acquisition" provides a configuration page with the tabs "Library" and "Parameter templates". The tab "Library" (Fig.4.5d) contains the basic settings of the library:
 </p>
-<ul><li> Раздел "Состояние" — содержит свойства, характеризующие состояние библиотеки:</li></ul>
-<dl><dd><ul><li> <i>Доступен</i> — состояние библиотеки "Доступен".</li>
-<li> <i>БД библиотеки</i> — адрес хранилища данных библиотеки и её шаблонов, с отслеживанием наличия данных в различных хранилищах и предоставлением последовательного удаления дубликатов.</li></ul>
-<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Объект всё ещё поддерживает определение избыточного адреса хранилища с таблицей, до того момента как вы переименуете её в стандартную форму "<b>tmplib_{ObjID}</b>".</dd></dl>
-<ul><li> <i>Дата модификации</i> — дата и время последней модификации объекта.</li></ul></dd></dl>
-<ul><li> Раздел "Конфигурация" — непосредственно содержит поля конфигурации:</li></ul>
-<dl><dd><ul><li> <i>Идентификатор</i> — информация об идентификаторе библиотеки.</li>
-<li> <i>Имя</i> — указывает имя библиотеки.</li>
-<li> <i>Описание</i> — краткое описание библиотеки и её назначения.</li></ul></dd></dl>
+<ul><li> Section "State" — contains properties that characterize the state of the library:</li></ul>
+<dl><dd><ul><li> <i>Accessing</i> — state of library "Accessing".</li>
+<li> <i>Storage</i> — the library and templates data storage, with tracking the availability of the data in different storages and providing the sequentially removing duplicates.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> The object still supports of specifying the spare storage addresses with tables before you rename the table in the standard form "<b>tmplib_{ObjID}</b>".</dd></dl>
+<ul><li> <i>Date of modification</i> — date and time for the object last modification.</li></ul></dd></dl>
+<ul><li> Section "Config" — directly contains the configuration fields:</li></ul>
+<dl><dd><ul><li> <i>Identifier</i> — information on the Id of the library.</li>
+<li> <i>Name</i> — specifies the name of the library.</li>
+<li> <i>Description</i> — short description of the library and its purpose.</li></ul></dd></dl>
 <p>Вкладка "Шаблоны параметров" (Рис.4.5d) содержит список шаблонов в библиотеке. В контекстном меню списка пользователю предоставляется возможность добавления, удаления и перехода к нужному шаблону.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:744px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl_lib_ru.png"><img class="thumbimage" height="626" src="files/QTCfg_subsys_daq_tmpl_lib_ru.png" width="742" /></a>  <div class="thumbcaption">Рис. 4.5c. Основная вкладка конфигурации библиотеки шаблонов подсистемы "Сбор данных".</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:758px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl_ls_ru.png"><img class="thumbimage" height="510" src="files/QTCfg_subsys_daq_tmpl_ls_ru.png" width="756" /></a>  <div class="thumbcaption">Рис. 4.5d. Вкладка списка шаблонов в библиотеке шаблонов подсистемы "Сбор данных".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:780px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl_lib.png"><img class="thumbimage" height="602" src="../en/files/QTCfg_subsys_daq_tmpl_lib.png" width="778" /></a>  <div class="thumbcaption">Рис. 4.5c. Основная вкладка конфигурации библиотеки шаблонов подсистемы "Сбор данных".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:686px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl_ls.png"><img class="thumbimage" height="512" src="../en/files/QTCfg_subsys_daq_tmpl_ls.png" width="684" /></a>  <div class="thumbcaption">Рис. 4.5d. Вкладка списка шаблонов в библиотеке шаблонов подсистемы "Сбор данных".</div></div></div></div>
 <p>Каждый шаблон библиотеки шаблонов предоставляет конфигурационную страницу с вкладками "Шаблон" и "ВВ". Вкладка "Шаблон" (Рис.4.5e) содержит основные настройки шаблона в составе:
 </p>
 <ul><li> Раздел "Состояние" — содержит свойства, характеризующие состояние шаблона:
@@ -787,25 +789,24 @@
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:680px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_ru.png"><img class="thumbimage" height="563" src="files/QTCfg_subsys_daq_mod_cntr_ru.png" width="678" /></a>  <div class="thumbcaption">Рис. 4.5g. Вкладка "Контроллеры" модуля подсистемы "Сбор данных".</div></div></div></div>
 <p>Каждый объект контроллера содержит собственную страницу конфигурации с вкладками "Контроллер", "Параметры" и "Диагностика".
-</p><p>Вкладка "Контроллер" (Рис.4.5h) содержит основные настройки. Состав этих настроек может несколько отличаться от одного модуля этой подсистемы к другому, о чём можно узнать в собственной документации модулей. В качестве примера рассмотрим настройки объекта контроллера у модуля контроллера логического уровня <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">DAQ.LogicLev</a>:
+</p><p>The tab "Controller" (Fig.4.5h) contains the basic settings. Content of these settings may differ slightly from one module of this subsystem to another, as you can find in the own documentation of the modules. As an example, let's examine the settings of a controller object in the module of the logical level controller <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">DAQ.LogicLev</a>:
 </p>
-<ul><li> Раздел "Состояние" — содержит свойства, характеризующие состояние объекта контроллера и самого контроллера:</li></ul>
-<dl><dd><ul><li> <i>Статус</i> — указывает на статус объекта контроллера и самого контроллера. В нашем случае контроллер исполняется, текущее время вычисления составляет 476 микросекунды и максимальное 2.0 миллисекунд.</li>
-<li> <i>Включен</i> — состояние объекта контроллера "Включен". Включенный объект контроллера предоставляет возможность создания параметров и их конфигурации.</li>
-<li> <i>Выполняется</i> — состояние объекта контроллера "Выполняется". Исполняющийся объект контроллера осуществляет физический сбор данных и/или включает механизмы доступа к этим данным.</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Некоторые типы источников данных предоставляют возможность исполнения некоторой части функций перехода в состояние <i>Включен</i> — горячее обновление конфигурационных данных при ручном запуске и что вы можете видеть во всплывающей подсказке к этому полю.</dd></dl>
-<ul><li> <i>БД контроллера</i> — адрес хранилища данных объекта контроллера и его параметров, с отслеживанием наличия данных в различных хранилищах и предоставлением последовательного удаления дубликатов.</li>
-<li> <i>Дата модификации</i> — дата и время последней модификации объекта.</li></ul></dd></dl>
-<ul><li> Раздел "Конфигурация" — непосредственно содержит поля конфигурации:</li></ul>
-<dl><dd><ul><li> <i>Идентификатор</i> — информация об идентификаторе объекта контроллера.</li>
-<li> <i>Имя</i> — указывает имя контроллера.</li>
-<li> <i>Описание</i> — краткое описание контроллера и его назначения.</li>
-<li> <i>Включать</i> — указывает на состояние "Включен" в которое переводить объект контроллера при запуске программы.</li>
-<li> <i>Запускать</i> — указывает на состояние "Выполняется" в которое переводить объект контроллера при запуске программы.</li>
-<li> <i>Таблицы параметров</i> — имена таблиц, в которых сохранять параметры разных типов (имеются в виду объекты параметров сбора данных).</li>
-<li> <i>Планирование вычисления</i> — определяет периодический или по расписанию характер вычисления. В нашем примере это периодическое секундное вычисления шаблона.</li>
-<li> <i>Уровень приоритета задачи получения данных</i> — устанавливает приоритет задачи сбора данных этого контроллера. Используется при планировании задач операционной системой. В случае наличия доступа это поле включает планирование задачи контроллера в режиме реального времени и с указанным приоритетом иначе модифицирует параметр "nice" задачи.</li></ul></dd></dl>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:782px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_main_ru.png"><img class="thumbimage" height="679" src="files/QTCfg_subsys_daq_mod_cntr_main_ru.png" width="780" /></a>  <div class="thumbcaption">Рис. 4.5h. Главная вкладка конфигурации объекта контроллера подсистемы "Сбор данных".</div></div></div></div>
+<ul><li> Section "State" — contains the properties, which characterize the state of the controller object and the controller itself:</li></ul>
+<dl><dd><ul><li> <i>Status</i> — specifies the controller object status. In our case, the controller is running and the current computation time is 1.15 milliseconds and the maximum one is 2.42 milliseconds.</li>
+<li> <i>Enabled</i> — state of the controller object "Enabled". When enabled, the controller object provides the possibility of creating the parameters and their configuration.</li>
+<li> <i>Running</i> — State of the controller object "Running". The running controller object performs the physical data acquisition and/or includes mechanisms for access to these data.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Some data source types provides a possibility of performing some part of the function of coming to the <i>Enabled</i> state — hot updating the data configuration at the manual starting and that you can see in the field tooltip.</dd></dl>
+<ul><li> <i>Storage</i> — data storage of the controller object and its parameters, with tracking the availability of the data in different storages and providing the sequentially removing duplicates. Parameters of different types are stored in different tables with own structure and unified name "{ModId}{TypeId}_{CntrId}", which can be specific for some modules.</li>
+<li> <i>Date of modification</i> — date and time for the object last modification.</li></ul></dd></dl>
+<ul><li> Section "Configuration" — directly contains the configuration fields:</li></ul>
+<dl><dd><ul><li> <i>Identifier</i> — information on the controller object identifier.</li>
+<li> <i>Name</i> — specifies the controller name.</li>
+<li> <i>Description</i> — brief description of the controller and its purpose.</li>
+<li> <i>To enable</i> — indicates the state of "Enabled", in which to transfer the controller object at the program startup.</li>
+<li> <i>To start</i> — indicates the state of "Running", in which to transfer the controller object at the program startup.</li>
+<li> <i>Schedule of the calculation</i> — defines whether periodic or scheduled character of the calculations is. In our example the template calculation is periodic in one second.</li>
+<li> <i>Priority of the acquisition task</i> — sets priority of the data acquisition of this controller. It is used when scheduling the operating system tasks. In the case of proper access availability this field enables the planning of the controller task in real time and with the specified priority otherwise it modifies the parameter "nice" of the task.</li></ul></dd></dl>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:783px;"><a class="image" href="http://oscada.org/wiki/File:LogicLev_cntr.png"><img class="thumbimage" height="619" src="../en/files/LogicLev_cntr.png" width="781" /></a>  <div class="thumbcaption">Рис. 4.5h. Главная вкладка конфигурации объекта контроллера подсистемы "Сбор данных".</div></div></div></div>
 <p>Вкладка "Параметры" (Рис.4.5i) содержит список параметров в объекте контроллера, предоставляет выбор типа создаваемых по умолчанию параметров, а также информацию об общем количестве и количестве включенных параметров. В контекстном меню списка параметров пользователю предоставляется возможность добавления, удаления и перехода к нужному параметру.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_ru.png"><img class="thumbimage" height="614" src="files/QTCfg_subsys_daq_mod_cntr_prm_ru.png" width="687" /></a>  <div class="thumbcaption">Рис. 4.5i. Вкладка "Параметры" страницы конфигурации объекта контроллера подсистемы "Сбор данных".</div></div></div></div>
@@ -904,7 +905,7 @@
 <ul><li> Section "State" — contains the properties, which characterize the state of the archive:
 <ul><li> <i>Running</i> — state of the parameter "Running". Running archive collects data in the buffer and is served by the archivers.</li>
 <li> <i>Begin and end of the buffer</i> — date and time of values begin and end into the buffer.</li>
-<li> <i>Archive DB</i> — storage address of the archive data, with tracking the availability of the data in different storages and providing the sequentially removing duplicates.</li></ul></li>
+<li> <i>Storage</i> — the archive's data storage, with tracking the availability of the data in different storages and providing the sequentially removing duplicates.</li></ul></li>
 <li> Section "Configuration" — directly contains the configuration fields:
 <ul><li> <i>Identifier</i> — information on the archive identifier.</li>
 <li> <i>Name</i> — specifies the archive name.</li>
@@ -918,7 +919,7 @@
 <li> <i>Buffer in the hard time grid</i> — indicates the mode of the buffer. The hard time grid mode involves the memory reservation for each value, but without the timestamp. This mode eliminates the possibility of packaging the adjacently-identical values but also saves on storage of the timestamp. Otherwise, the buffer operates in the mode of storage the value and timestamp and supports the packaging of adjacently-identical values.</li>
 <li> <i>Buffer in the high time resolution</i> — indicates the possibility of storing values at intervals and dimensions up to 1 microsecond, differently the values can be stored at intervals and dimensions up to 1 second.</li>
 <li> <i>Filling the passage points with the last value</i> — the passage values mostly fill by EVAL but sometime data periodicity of the source greater to the archive's one and it is normal.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:894px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_va_arch.png"><img class="thumbimage" height="718" src="../en/files/QTCfg_subsys_arch_va_arch.png" width="892" /></a>  <div class="thumbcaption">Рис. 4.6d. Основная вкладка конфигурации архива значений подсистемы "Архивы-История".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:866px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_va_arch.png"><img class="thumbimage" height="719" src="../en/files/QTCfg_subsys_arch_va_arch.png" width="864" /></a>  <div class="thumbcaption">Рис. 4.6d. Основная вкладка конфигурации архива значений подсистемы "Архивы-История".</div></div></div></div>
 <p>Вкладка "Архиваторы" (Рис.4.6e) содержит таблицу с конфигурацией процесса обработки данного архива доступными архиваторами. В строках расположены доступные архиваторы, а в колонках параметры:
 </p>
 <ul><li> <i>Архиватор</i> — информация об адресе архиватора.</li>
@@ -941,24 +942,24 @@
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:697px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_arcs_ru.png"><img class="thumbimage" height="457" src="files/QTCfg_subsys_arch_mod_arcs_ru.png" width="695" /></a>  <div class="thumbcaption">Рис. 4.6g. Вкладка "Архиваторы" модуля подсистемы "Архивы-История".</div></div></div></div>
 <p>Архиваторы сообщений содержат собственную страницу конфигурации с вкладками "Архиватор" и "Сообщения".
-</p><p>Вкладка "Архиватор" (Рис.4.6h) содержит основные настройки. Состав этих настроек может несколько отличаться от модуля к модулю этой подсистемы о чём можно узнать в собственной документации модулей. В качестве примера рассмотрим настройки архиватора сообщений у модуля архивирования на файловую систему <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">Arch.FSArch</a>:
+</p><p>The "Archiver" tab (Fig.4.6h) contains the basic settings. The structure of these settings may differ slightly from one module to another one of this subsystem as you can find in the own documentation of the modules. As an example we shall examine the settings of the message archiver from the module of the archiving on the file system <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">Arch.FSArch</a> Settings:
 </p>
-<ul><li> Раздел "Состояние" — содержит свойства характеризующие состояние архиватора:
-<ul><li> <i>Выполняется</i> — состояние архиватора "Выполняется". Исполняющийся архиватор обрабатывает буфер архива сообщений и помещает его данные в своё хранилище, а также обслуживает запросы на доступ к данным в этом хранилище.</li>
-<li> <i>БД архиватора</i> — адрес хранилища данных архиватора, с отслеживанием наличия данных в различных хранилищах и предоставлением последовательного удаления дубликатов.</li>
-<li> <i>Конец и начало архиватора</i> — дата и время конца и начала значений данных в хранилище архиватора.</li>
-<li> <i>Общий размер файлов архиватора</i> — информация о суммарном размере файлов архиватора с данными.</li>
-<li> <i>Время архивирования</i> — текущее и максимальное время, затраченное на архивирование данных архива сообщений.</li></ul></li>
-<li> Раздел "Конфигурация" — непосредственно содержит поля конфигурации:
-<ul><li> <i>Идентификатор</i> — информация об идентификаторе архиватора.</li>
-<li> <i>Имя</i> — указывает имя архиватора.</li>
-<li> <i>Описание</i> — краткое описание архиватора и его назначения.</li>
-<li> <i>Запускать</i> — указывает на состояние "Выполняется" в которое переводить архиватор при запуске программы.</li>
-<li> <i>Категории сообщений</i> — список категорий сообщений, разделённых символом ';'. Сообщения, попавшие под шаблоны или регулярные выражения категорий, будут обрабатываться архиватором. В категории можно указывать элементы выборки по шаблону, а именно символы '*' — для любой подстроки и '?' — для любого символа, а также регулярное выражение, заключённое между символами '/' (/mod_(System|LogicLev)/).</li>
-<li> <i>Уровень сообщений</i> — указывает на уровень сообщений архиватора. Сообщения с уровнем более или равным указанному обрабатываются архиватором — берутся из буфера.</li>
-<li> <i>Адрес</i> — адрес хранилища в специфичном для типа архиватора (модуля) формате. Описание формата записи адреса архиватора как правило доступно во всплывающей подсказке этого поля. В примере это относительный путь к директории хранилища.</li></ul></li>
-<li> Раздел "Дополнительные опции" — специализированный для модуля раздел с содержимым которого можно ознакомиться в документации на модуль.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:894px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main_ru.png"><img class="thumbimage" height="666" src="files/QTCfg_subsys_arch_mod_ma_main_ru.png" width="892" /></a>  <div class="thumbcaption">Рис. 4.6h. Главная вкладка конфигурации архиватора сообщений подсистемы "Архивы-История".</div></div></div></div>
+<ul><li> Section "State" — contains the properties, which characterize the archiver state:
+<ul><li> <i>Running</i> — archiver state "Running". The running archiver processes the buffer of the message archive and puts his data in its repository, but also it processes requests for access to data in the repository.</li>
+<li> <i>Storage</i> — the archiver's data storage, with tracking the availability of the data in different storages and providing the sequentially removing duplicates.</li>
+<li> <i>End and Begin of the archiver</i> — date and time of the end and start of data in the archiver repository.</li>
+<li> <i>Overall size of the archiver files</i> — information about the total size of the archiver files with the data.</li>
+<li> <i>Archiving time</i> — current and maximum time spent on the archiving of data of the message archive.</li></ul></li>
+<li> Section "Configuration" — directly contains the configuration fields:
+<ul><li> <i>Identifier</i> — information on the archiver identifier.</li>
+<li> <i>Name</i> — indicates the archiver name.</li>
+<li> <i>Description</i> — brief description of the archiver and its purpose.</li>
+<li> <i>To start</i> — indicates the state "Running" in which to transfer the archiver at the program startup.</li>
+<li> <i>Message categories</i> — list of categories of messages, separated by ';'. Messages matched with the templates or regular expressions of categories will be processed by the archiver. In the category you can specify the elements of selection by template, that is the characters '*' — for any string and '?' — for any character, as well as a regular expression enclosed between the symbols '/' (/mod_(System|LogicLev)/).</li>
+<li> <i>Messages level</i> — indicates the level of the archiver messages. Messages with the level greater than or equal to the specified one are processed by the archiver — taken from the buffer.</li>
+<li> <i>Address</i> — address of the storage in the specific for the type of archiver (module) format. The format description usually available in the tooltip for this field. In the example it is the relative path to the storage directory.</li></ul></li>
+<li> Section "Additional options" — a specialized section for the module, the contents of which can be found in the documentation for the module.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:778px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main.png"><img class="thumbimage" height="668" src="../en/files/QTCfg_subsys_arch_mod_ma_main.png" width="776" /></a>  <div class="thumbcaption">Рис. 4.6h. Главная вкладка конфигурации архиватора сообщений подсистемы "Архивы-История".</div></div></div></div>
 <p>Вкладка "Сообщения" (Рис.4.6i) содержит форму запроса сообщений из архива данного архиватора:
 </p>
 <ul><li> <i>Время, размер (секунд) и уровень</i> — указывает дату и время, размер или глубину и минимальный уровень сообщений (более или равный указанному) запроса.</li>
@@ -971,24 +972,24 @@
 <li> <i>Сообщение</i> — непосредственно текст сообщения.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1036px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_mess_ru.png"><img class="thumbimage" height="694" src="files/QTCfg_subsys_arch_mod_ma_mess_ru.png" width="1034" /></a>  <div class="thumbcaption">Рис. 4.6i. Вкладка запроса сообщений "Сообщения" архиватора сообщений подсистемы "Архивы-История".</div></div></div></div>
 <p>Архиваторы значений содержат собственную страницу конфигурации с вкладками "Архиватор" и "Архивы".
-</p><p>Вкладка "Архиватор" (Рис.4.6j) содержит основные настройки. Состав этих настроек может несколько отличаться от модуля к модулю этой подсистемы о чём можно узнать в собственной документации модулей. В качестве примера рассмотрим настройки архиватора значений у модуля архивирования на файловую систему <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">Arch.FSArch</a>:
+</p><p>The "Archivator" tab (Fig.4.6j) contains the basic settings. The structure of these settings may differ slightly from one module to another one of this subsystem as you can find in the own documentation of the modules. As an example we shall examine the settings of the value archiver from the module of the archiving on the file system <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">Arch.FSArch</a> Settings:
 </p>
-<ul><li> Раздел "Состояние" — содержит свойства характеризующие состояние архиватора:
-<ul><li> <i>Выполняется</i> — состояние архиватора "Выполняется". Исполняющийся архиватор обрабатывает буфера архивов значений и помещает их данные в своё хранилище, а также обслуживает запросы на доступ к данным в хранилище.</li>
-<li> <i>Время архивирования</i> — текущее и максимальное времени, затраченное на архивирование данных буферов архивов. Периодичность архивирования указывается в поле "Период архивирования" раздела "Конфигурация" этой вкладки.</li>
-<li> <i>БД архиватора</i> — адрес хранилища данных архиватора, с отслеживанием наличия данных в различных хранилищах и предоставлением последовательного удаления дубликатов.</li>
-<li> <i>Общий размер файлов архиватора</i> — информация о суммарном размере файлов архиватора с данными.</li></ul></li>
-<li> Раздел "Конфигурация" — непосредственно содержит поля конфигурации:
-<ul><li> <i>Идентификатор</i> — информация об идентификаторе архиватора.</li>
-<li> <i>Имя</i> — указывает имя архиватора.</li>
-<li> <i>Описание</i> — краткое описание архиватора и его назначения.</li>
-<li> <i>Запускать</i> — указывает на состояние "Выполняется" в которое переводить архиватор при запуске программы.</li>
-<li> <i>Адрес</i> — адрес хранилища в специфичном для типа архиватора (модуля) формате. Описание формата записи адреса архиватора как правило доступно во всплывающей подсказке этого поля. В примере это относительный путь к директории хранилища.</li>
-<li> <i>Период значений</i> — указывает периодичность значений, которые содержаться в хранилище архиватора, в секундах.</li>
-<li> <i>Период архивирования</i> — указывает периодичность задачи архивирования данных буферов архивов, в секундах. Размер буферов архивов, во временном выражении, должна быть не менее, а лучше несколько больше, периодичности задачи архивирования. Установить нулевой период для отключения использования архиватора в обработке буфера — только прямая запись.</li>
-<li> <i>Приоритет выбора</i> — приоритет выбора архиватора для режима использования источника "Все". Установить в нуль для полного исключения из выбора.</li></ul></li>
-<li> Раздел "Дополнительные опции" — специализированный для модуля раздел с содержимым которого можно ознакомиться в документации на модуль.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:800px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_va_main_ru.png"><img class="thumbimage" height="657" src="files/QTCfg_subsys_arch_mod_va_main_ru.png" width="798" /></a>  <div class="thumbcaption">Рис. 4.6j. Главная вкладка конфигурации архиватора значений подсистемы "Архивы-История".</div></div></div></div>
+<ul><li> Section "State" — contains the properties, which characterize the archiver state:
+<ul><li> <i>Running</i> — archiver state "Running". The running archiver processes the buffers of the value archives and puts their data in its repository, but also it processes requests for access to data in the repository.</li>
+<li> <i>Archiving time</i> — current and maximum time spent on the archiving of data of the buffers of the archives. Periodicity of archiving is set in the field "Period of the archiving" in the section "Configuration" of the tab.</li>
+<li> <i>Storage</i> — the archiver's data storage, with tracking the availability of the data in different storages and providing the sequentially removing duplicates.</li>
+<li> <i>Overall size of the archiver files</i> — information about the total size of the archiver files with the data.</li></ul></li>
+<li> Section "Configuration" — directly contains the configuration fields:
+<ul><li> <i>Identifier</i> — information on the archiver identifier.</li>
+<li> <i>Name</i> — indicates the archiver name.</li>
+<li> <i>Description</i> — brief description of the archiver and its purpose.</li>
+<li> <i>To start</i> — indicates the state "Running" in which to transfer the archiver at the program startup.</li>
+<li> <i>Address</i> — address of the storage in the specific for the type of archiver (module) format. The format description usually available in the tooltip for this field. In the example it is the relative path to the storage directory.</li>
+<li> <i>Period of the values</i> — indicates the periodicity of the values those are contained in the archiver repository, in seconds.</li>
+<li> <i>Period of the archiving</i> — indicates the periodicity of an archiving task of data of the buffers of the archives, in seconds. The size of the buffers of the archives in the time expression must not be less, and preferably somewhat greater, then the periodicity of the of archiving task. Set a zero period to disable the use of the archiver in processing the buffer — just a direct recording.</li>
+<li> <i>Selection priority</i> — selection of a priority of the archiver for using in the source mode "All". Set to zero for full the selection disabling.</li></ul></li>
+<li> Section "Additional options" — a specialized section for the module, the contents of which can be found in the documentation for the module.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:778px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_va_main.png"><img class="thumbimage" height="668" src="../en/files/QTCfg_subsys_arch_mod_va_main.png" width="776" /></a>  <div class="thumbcaption">Рис. 4.6j. Главная вкладка конфигурации архиватора значений подсистемы "Архивы-История".</div></div></div></div>
 <p>Вкладка "Архивы" (Рис.4.6k) содержит таблицу с информацией об архивах, обрабатываемых архиватором. Таблица в строках содержит архивы, а в колонках информацию:
 </p>
 <ul><li> <i>Архив</i> — имя архива.</li>
@@ -1029,9 +1030,11 @@
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1059px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_modshed_ru.png"><img class="thumbimage" height="667" src="files/QTCfg_subsys_modshed_ru.png" width="1057" /></a>  <div class="thumbcaption">Рис. 4.9. Главная вкладка конфигурации подсистемы "Диспетчер модулей".</div></div></div></div>
 <h3><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.84.D0.B8.D0.B3.D1.83.D1.80.D0.B0.D1.86.D0.B8.D0.BE.D0.BD.D0.BD.D1.8B.D0.B9_.D0.A4.D0.B0.D0.B9.D0.BB_.D0.B8_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B_.D0.BA.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4.D0.BD.D0.BE.D0.B9_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.B8"><span class="mw-headline-number">4.10</span> <span id="CfgFilePrm" title="#CfgFilePrm">Конфигурационный Файл и параметры командной строки</span></span></h3>
 <p>Конфигурационный Файл OpenSCADA предназначен для хранения основной конфигурации станции OpenSCADA. Только в Конфигурационном Файле и через параметры командной строки можно указать часть ключевых параметров станции, поэтому знакомство со структурой конфигурационного файла необходимо специалистам, разворачивающим специфические решения на основе OpenSCADA. Больше информации про запуск и исполнение OpenSCADA может быть найдено в секции "<a href="#Startup">Запуск и исполнение</a>".
-</p><p>Структурно Конфигурационный Файл организован на расширяемом языке разметки текста XML. Следовательно требуется жёсткое соблюдение правилам синтаксиса XML. Показательный пример Конфигурационного Файла OpenSCADA с примерами конфигурации большинства компонентов OpenSCADA, приведен ниже:
 </p>
-<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="cp">&lt;?xml version='1.0' encoding='UTF-8' ?&gt;</span>
+<div class="mw-collapsible mw-collapsed">
+<p>Структурно Конфигурационный Файл организован на расширяемом языке разметки текста XML. Следовательно требуется жёсткое соблюдение правилам синтаксиса XML. Показательный пример Конфигурационного Файла OpenSCADA с примерами конфигурации большинства компонентов OpenSCADA, приведен ...
+</p>
+<div class="mw-collapsible-content mw-highlight mw-content-ltr" dir="ltr"><pre><span class="cp">&lt;?xml version='1.0' encoding='UTF-8' ?&gt;</span>
 <span class="nt">&lt;OpenSCADA&gt;</span>
     <span class="c">&lt;!--</span>
 <span class="c">    This is the OpenSCADA configuration file.</span>
@@ -1500,12 +1503,15 @@
 
 <span class="nt">&lt;/OpenSCADA&gt;</span>
 </pre></div>
+</div>
 <p>Детально рассмотрим структуру конфигурационного файла. Один конфигурационный файл может содержать конфигурацию нескольких станций в секциях <i>&lt;station id="SimulatorStation"/&gt;</i>. Атрибутом "id" указывается идентификатор станции — класс станции. Использование той или иной секции станции указывается параметром командной строки <i>--station=SimulatorStation</i>, при вызове. Секция станции непосредственно содержит параметры станции и секции подсистем. Параметры конфигурации секции записываются в виде <i>&lt;prm id="StName"&gt;AGLKS&lt;/prm&gt;</i>, где атрибутом "id" указывается идентификатор параметра, а в теле тега "prm" указывается значение параметра "AGLKS". Перечень доступных параметров и их описание для станции и всех остальных секций можно получить в консоли, посредством вызова OpenSCADA с параметром <i>--help</i>.
 </p><p>Секции подсистем <i>&lt;node id="sub_DAQ" /&gt;</i> содержат: параметры подсистемы, секции модулей и секции таблиц отражения данных баз данных в конфигурационном файле. Секции модулей <i>&lt;node id="mod_DiamondBoards" /&gt;</i> содержат индивидуальные параметры модулей и секции таблиц отражения данных баз данных в конфигурационном файле.
 </p><p>Секции таблиц отражения данных баз данных предназначены для размещения в конфигурационном файле записей таблиц БД для компонентов OpenSCADA. Рассмотрим таблицу входных транспортов "Transport_in" подсистемы "Транспорты" <i>&lt;node id="sub_Transport"&gt;</i> из приведенного выше примера конфигурационного файла. Таблица содержит три записи с полями: ID, MODULE, NAME, DESCRIPT, ADDR, PROT, START. После загрузки с такой секцией и вообще без БД в подсистеме "Транспорты" модуля "Sockets" появятся три входных транспорта. Форматы структур таблиц основных компонентов включены в демонстрационные конфигурационные файлы — модели технологических процессов. За деталями структур таблиц БД обращайтесь к документации соответствующих модулей или просто сохраните нужный объект в конфигурационный файл.
-</p><p>Результат выполнения команды: <b>$ openscada_AGLKS --help</b>
 </p>
-<pre style="white-space: pre-wrap;">
+<div class="mw-collapsible mw-collapsed">
+<p>Результат выполнения команды <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">openscada_AGLKS --help</span> ...
+</p>
+<pre class="mw-collapsible-content" style="white-space: pre-wrap;">
 ***************************************************************************
 ********** OpenSCADA v0.9+r2535 (Linux-4.9.0-0.bpo.5-amd64). *********
 ***************************************************************************
@@ -1754,6 +1760,7 @@ ModAllow   &lt;список&gt;     Список разделяемых библ
 ModDeny    &lt;список&gt;     Список разделяемых библиотек запрещённых для автоматической загрузки, подключения и запуска (bd_DBF.so;daq_JavaLikeCalc.so).
 ChkPer     &lt;секунд&gt;     Период поиска новых разделяемых библиотек (модулей), 0 для отключения.
 </pre>
+</div>
 <h2><span class="mw-headline" id=".D0.97.D0.B0.D0.BF.D1.83.D1.81.D0.BA_.D0.B8_.D0.B8.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5"><span class="mw-headline-number">5</span> <span id="Startup" title="#Startup">Запуск и исполнение</span></span></h2>
 <p>OpenSCADA изначально является программой, которая может быть запущена из консоли или терминала, набрав <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">openscada</span>. В такой способ программа запустится с сообщениями её действий в эту консоль и блокированием консоли на ожидании действий пользователя, что является типовым режимом запуска в консоль-терминал и может использоваться для оперативной отладки и контроля результата действий и ошибок. Кроме типового режима предусмотрено также ещё три режима, которые определяются передачей <a href="#CfgFilePrm">параметров в команду запуска</a>:
 </p>
@@ -1807,9 +1814,11 @@ ChkPer     &lt;секунд&gt;     Период поиска новых раз�
 <li> именем символьной ссылки — <b>openscada_{ИмяПроекта}</b> на <b>openscada</b>.</li>
 <li> выбором присутствующего проекта из перечня локального графического интерфейса <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">UI.QTStarter</a>, который предоставляется по простому вызову первичного бинарного файла <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">openscada</span> — инициирующий режим (Рис.5c), и если не указаны графические модули Qt автоматического запуска — режим исполнения проекта OpenSCADA (Рис.5a).</li></ol>
 <p>Создать новый проект можно из локального графического интерфейса <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">UI.QTStarter</a> (Рис.5c) и через сценарий командной строки менеджера проектов <b>openscada-proj</b>, который собственно и вызывается из локального графического интерфейса.
-</p><p>Результат исполнения команды <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">openscada-proj --help</span>:
 </p>
-<pre style="white-space: pre-wrap;">
+<div class="mw-collapsible mw-collapsed">
+<p>Результат исполнения команды <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">openscada-proj --help</span> ...
+</p>
+<pre class="mw-collapsible-content" style="white-space: pre-wrap;">
 Projects management script of OpenSCADA mostly designed to call from OpenSCADA but also can be used independently.
 The script is mostly software platform specific and relates now for Linux.
 openscada-proj list
@@ -1842,6 +1851,7 @@ openscada-proj backupList {ProjName}
   OSCD_TAR_Args     - TAR extra arguments, by default \"--exclude=lock --exclude=ARCHIVES\";
   OSCD_BackLim      - Backups limit, by default 10.
 </pre>
+</div>
 <p>В целом сценарий командной строки менеджера проектов <b>openscada-proj</b> предусматривает функции и команды над проектами:
 </p>
 <ul><li> <i>list</i> — перечень присутствующих проектов;</li>
@@ -1896,5 +1906,5 @@ service openscada-lts-server start
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/ru">Documents/Program_manual/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/ru">Documents/Program_manual/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

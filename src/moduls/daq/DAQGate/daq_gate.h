@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.DAQGate file: daq_gate.h
 /***************************************************************************
- *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -225,6 +225,9 @@ class TTpContr: public TTypeDAQ
 	~TTpContr( );
 
 	bool redntAllow( )	{ return true; }
+
+	//Attributes
+	int8_t	tPrmId;
 
     protected:
 	//Methods

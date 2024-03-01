@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -151,9 +151,6 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
 
     if(getenv("USER")) mUser = getenv("USER");
 
-    //Init system clock
-    clkCalc();
-
 #if !defined(__ANDROID__) && __GLIBC_PREREQ(2,4)
     //Multi CPU allow check
     cpu_set_t cpuset;
@@ -242,24 +239,21 @@ TSYS::~TSYS( )
 	delete iCL->second;
 }
 
-string TSYS::ico( string *tp )
+string TSYS::ico( string *tp, bool retPath )
 {
-    string itp, rez;
-
     //At the localised name
-    rez = TSYS::strEncode(TUIS::icoGet(trD(name()),&itp), TSYS::base64);
+    string itp, rez = TUIS::icoGet(trD(name()), &itp, retPath);
     //... or the base name
     if(itp.empty()) {
 	if(mNameB.empty()) mNameB = TBDS::genPrmGet(nodePath()+"StName", "", "root");
-	rez = TSYS::strEncode(TUIS::icoGet(mNameB,&itp), TSYS::base64);
+	rez = TUIS::icoGet(mNameB, &itp, retPath);
+	//... or ID
+	if(itp.empty()) rez = TUIS::icoGet(id(), &itp, retPath);
     }
-    //... or ID
-    if(itp.empty())
-	rez = TSYS::strEncode(TUIS::icoGet(id(),&itp), TSYS::base64);
 
     if(tp) *tp = itp;
 
-    return rez;
+    return retPath ? rez : TSYS::strEncode(rez, TSYS::base64);
 }
 
 string TSYS::host( )
@@ -388,8 +382,9 @@ string TSYS::atime2str( time_t itm, const string &format, bool gmt, const string
     if(gmt) gmtime_r(&itm, &tm_tm);
     else localtime_r(&itm, &tm_tm);
     char buf[100];
-
     int rez = 0;
+
+#if HAVE_DECL_NEWLOCALE
     string user = user_lang.size() ? user_lang : Mess->trCtx();
     if(user.size()) {
 	string lang = TSYS::strLine(user, 1);
@@ -405,6 +400,7 @@ string TSYS::atime2str( time_t itm, const string &format, bool gmt, const string
 	    return (rez > 0) ? string(buf,rez) : "";
 	}
     }
+#endif
 
     rez = strftime(buf, sizeof(buf), format.empty()?"%d-%m-%Y %H:%M:%S":format.c_str(), &tm_tm);
     return (rez > 0) ? string(buf,rez) : string("");
@@ -536,15 +532,20 @@ string TSYS::strMess( const char *fmt, ... )
     return str;
 }
 
-string TSYS::strLabEnum( const string &base )
+string TSYS::strLabEnum( const string &base, bool onlyDec )
 {
     //Get number from end
     unsigned numbDig = base.size(), numbXDig = base.size();
     bool noDig = false;
-    for(int i_c = base.size()-1; i_c >= 0; i_c--) {
-	if(!noDig && isdigit(base[i_c])) numbDig = i_c; else noDig = true;
-	if(!(isxdigit(base[i_c]) || (i_c && strncasecmp(base.c_str()+i_c-1,"0x",2) == 0))) break;
-	else if(!isxdigit(base[i_c])) { numbXDig = i_c-1; break; }
+    for(int iC = base.size()-1; iC >= 0; iC--) {
+	if(onlyDec) {
+	    if(isdigit(base[iC]))
+		return base.substr(0, iC) + i2s(s2i(base.substr(iC,1))+1) + base.substr(iC+1);
+	    else continue;
+	}
+	if(!noDig && isdigit(base[iC])) numbDig = iC; else noDig = true;
+	if(!(isxdigit(base[iC]) || (iC && strncasecmp(base.c_str()+iC-1,"0x",2) == 0))) break;
+	else if(!isxdigit(base[iC])) { numbXDig = iC-1; break; }
     }
 
     //Process number and increment
@@ -1081,7 +1082,7 @@ bool TSYS::chkSelDB( const string& wDB,  bool isStrong )
 {
     return (selDB().empty() && !isStrong) ||
 	(selDB().size() && SYS->selDB() == TBDS::realDBName(wDB) &&
-	    (wDB == DB_CFG || wDB == "*.*" || ((AutoHD<TBD>)db().at().nodeAt(wDB,0,'.')).at().enableStat()));
+	    (wDB == DB_CFG || wDB == DB_GEN || ((AutoHD<TBD>)db().at().nodeAt(wDB,0,'.')).at().enableStat()));
 }
 
 void TSYS::setMainCPUs( const string &vl )
@@ -1150,39 +1151,6 @@ void TSYS::sighandler( int signal, siginfo_t *siginfo, void *context )
 	case SIGALRM: case SIGUSR1: break;
 	default:
 	    SYS->mess_sys(TMess::Warning, _("Unknown signal %d!"), signal);
-    }
-}
-
-void TSYS::clkCalc( )
-{
-    uint64_t st_pnt = shrtCnt();
-    sysSleep(0.1);
-    mSysclc = 10*(shrtCnt()-st_pnt);
-
-    if(!mSysclc) {
-	char buf[255];
-	FILE *fp = NULL;
-	//Try read file cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq for current CPU frequency get
-	if(!mSysclc && ((fp=fopen("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq","r")) ||
-			(fp=fopen("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq","r")))) {
-	    size_t rez = fread(buf, 1, sizeof(buf)-1, fp); buf[rez] = 0;
-	    mSysclc = uint64_t(s2r(buf)*1e3);
-	    if(fclose(fp) != 0)
-		mess_warning(nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), fp, strerror(errno), errno);
-	}
-
-	//Try read file cat /proc/cpuinfo for CPU frequency or BogoMIPS get
-	if(!mSysclc && (fp=fopen("/proc/cpuinfo", "r"))) {
-	    float frq;
-	    while(fgets(buf,sizeof(buf),fp) != NULL)
-		if(sscanf(buf,"cpu MHz : %f\n",&frq) || sscanf(buf,"bogomips : %f\n",&frq) || sscanf(buf,"BogoMIPS : %f\n",&frq))
-		{
-		    mSysclc = (uint64_t)(frq*1e6);
-		    break;
-		}
-	    if(fclose(fp) != 0)
-		mess_warning(nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), fp, strerror(errno), errno);
-	}
     }
 }
 
@@ -2076,8 +2044,6 @@ double TSYS::doubleBErev( double in )
     return in;
 }
 
-long TSYS::HZ( )	{ return sysconf(_SC_CLK_TCK); }
-
 bool TSYS::cntrEmpty( )
 {
     MtxAlloc res(dataRes(), true);
@@ -2523,9 +2489,6 @@ void *TSYS::ServTask( void * )
 
 	if(SYS->isRunning())
 	    try {
-		//CPU frequency calculation (per ten seconds)
-		if(!(iCnt%10))	SYS->clkCalc();
-
 		//Config-file checking for changes (per ten seconds)
 		if(!(iCnt%10))	SYS->cfgFileScan();
 
@@ -2650,12 +2613,11 @@ int TSYS::sysSleep( float tm )
 
     spTm.tv_sec = (time_t)tm;
     spTm.tv_nsec = (long)(1e9*(tm-floorf(tm)));
+#if HAVE_DECL_CLOCK_NANOSLEEP
     return clock_nanosleep(clkId, 0, &spTm, NULL);
-
-    /*struct timespec spTm;
-    spTm.tv_sec = (time_t)tm;
-    spTm.tv_nsec = (long int)(1e9*(tm-floorf(tm)));
-    return nanosleep(&spTm, NULL);*/
+#else
+    return nanosleep(&spTm, NULL);
+#endif
 }
 
 void TSYS::taskSleep( int64_t per, const string &icron, int64_t *lag )
@@ -2672,8 +2634,13 @@ void TSYS::taskSleep( int64_t per, const string &icron, int64_t *lag )
 		pnt_tm = ((cur_tm-off)/per + 1)*per,
 		wake_tm = 0;
 	do {
+#if HAVE_DECL_CLOCK_NANOSLEEP
 	    spTm.tv_sec = (pnt_tm+off)/1000000000ll; spTm.tv_nsec = (pnt_tm+off)%1000000000ll;
 	    if(clock_nanosleep(clkId,TIMER_ABSTIME,&spTm,NULL)) return;
+#else
+	    spTm.tv_sec = (pnt_tm+off-cur_tm)/1000000000ll; spTm.tv_nsec = (pnt_tm+off-cur_tm)%1000000000ll;
+	    if(nanosleep(&spTm,NULL)) return;
+#endif
 	    clock_gettime(clkId, &spTm);
 	    wake_tm = (int64_t)spTm.tv_sec*1000000000ll + spTm.tv_nsec - off;
 	} while(wake_tm < pnt_tm);
@@ -2876,7 +2843,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     // int fileSize( string file ) - Return the <file> size.
     if(iid == "fileSize" && prms.size() >= 1) {
 	int hd = open(prms[0].getS().c_str(), O_RDONLY);
-	int rez = -1;
+	int64_t rez = -1;
 	if(hd >= 0) {
 	    rez = lseek(hd, 0, SEEK_END);
 	    if(close(hd) != 0)
@@ -2891,12 +2858,12 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	int hd = open(prms[0].getS().c_str(), O_RDONLY);
 	if(hd >= 0) {
 	    if(prms.size() >= 2) lseek(hd, prms[1].getI(), SEEK_SET);
-	    int sz = (prms.size() >= 3) ? prms[2].getI() : -1;
+	    int64_t sz = (prms.size() >= 3) ? prms[2].getI() : -1;
 	    if(sz < 0)
-		for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; )
+		for(int64_t len = 0; (len=read(hd,buf,sizeof(buf))) > 0; )
 		    rez.append(buf, len);
 	    else
-		for(int len = 0, rLen = 0; rLen < sz && (len=read(hd,buf,fmin(sz-rLen,(int)sizeof(buf)))) > 0; rLen += len)
+		for(int64_t len = 0, rLen = 0; rLen < sz && (len=read(hd,buf,fmin(sz-rLen,(int64_t)sizeof(buf)))) > 0; rLen += len)
 		    rez.append(buf, len);
 	    if(close(hd) != 0)
 		mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
@@ -2906,7 +2873,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     // int fileWrite( string file, string str, bool append = false ) - Write <str> to <file>, remove presented or <append>.
     //	  Return wrote bytes count.
     if(iid == "fileWrite" && prms.size() >= 2) {
-	int wcnt = 0, wflags = O_WRONLY|O_CREAT|O_TRUNC;
+	int wflags = O_WRONLY|O_CREAT|O_TRUNC;
+	int64_t wcnt = 0;
 	string val = prms[1].getS();
 	if(prms.size() >= 3 && prms[2].getB()) wflags = O_WRONLY|O_CREAT|O_APPEND;
 	int hd = open(prms[0].getS().c_str(), wflags, permCrtFiles());
@@ -2953,16 +2921,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     // int sleep(real tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.
     //  tm - wait time in seconds (precised up to nanoseconds), up to prmInterf_TM(7 seconds)
     //  ntm - wait time part in nanoseconds
-    if(iid == "sleep" && prms.size() >= 1) {
+    if(iid == "sleep" && prms.size() >= 1)
 	return sysSleep(fmin(prms[0].getR()+1e-9*((prms.size()>=2)?prms[1].getI():0),(double)prmInterf_TM));
-	/*struct timespec spTm;
-	spTm.tv_sec = prms[0].getI();
-	spTm.tv_nsec = 1000000000l*(prms[0].getR()-spTm.tv_sec) + ((prms.size()>=2)?prms[1].getI():0);
-	spTm.tv_sec = vmin(prmInterf_TM, spTm.tv_sec);
-	clockid_t clkId = SYS->clockRT() ? CLOCK_REALTIME : CLOCK_MONOTONIC;
-	return clock_nanosleep(clkId, 0, &spTm, NULL);*/
-	//return nanosleep(&spTm, NULL);
-    }
     // int time(int usec) - returns absolute time in seconds from the epoch of 1/1/1970 and in microseconds, if <usec> is specified
     //  usec - microseconds of time
     if(iid == "time") {
@@ -3049,6 +3009,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	else localtime_r(&tm_t, &tm_tm);
 	char buf[1000];
 	int rez = 0;
+#if HAVE_DECL_NEWLOCALE
 	string lang = TSYS::strLine(user_lang, 1);
 	if(lang.size()) {
 	    lang = Mess->langToLocale(lang);
@@ -3060,6 +3021,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 		return (rez > 0) ? string(buf,rez) : "";
 	    }
 	}
+#endif
 	rez = strftime(buf, sizeof(buf), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &tm_tm);
 	return (rez > 0) ? string(buf,rez) : "";
     }
@@ -3285,11 +3247,13 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/gen/env/time",_("System time"),R_R_R_,"root","root",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/gen/env/clk",_("System planning clock"),R_R_R_,"root","root",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/gen/env/user",_("System user"),R_R_R_,"root","root",1,"tp","str");
+#if HAVE_LIBINTL_H
 		ctrMkNode("fld",opt,-1,"/gen/env/in_charset",_("Language"),R_R___,"root","root",2,
 		    "tp","str", "help",_("System locale charset."));
 		ctrMkNode("fld",opt,-1,"/gen/env/lang","",RWRWR_,"root","root",4,
 		    "tp","str", "dest","sel_ed", "sel_list",Mess->langBase().c_str(),
 		    "help",_("Complete locale information with language, country and charset in the view \"en_GB.UTF-8\"."));
+#endif
 		ctrMkNode("fld",opt,-1,"/gen/env/host",_("Host name"),R_R_R_,"root","root",1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/gen/env/CPU",_("CPU"),R_R_R_,"root","root",1,"tp","str");
 		if(nCPU() > 1)
@@ -3319,6 +3283,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    }
 	    ctrMkNode("comm",opt,-1,"/redund/hostLnk",_("Go to the configuration of the list of remote stations"),RWRW__,"root","Transport",1,"tp","lnk");
 	}
+#if HAVE_LIBINTL_H
 	if(ctrMkNode("area",opt,-1,"/tr",_("Translations"))) {
 	    ctrMkNode("fld",opt,-1,"/tr/status",_("Status"),R_R_R_,"root","root",1,"tp","str");
 	    XMLNode *blNd = ctrMkNode("fld",opt,-1,"/tr/baseLang",_("Base language - locales list"),RWRWR_,"root","root",2,
@@ -3353,12 +3318,13 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("list",opt,-1,"/tr/mess/base",Mess->langCodeBase().c_str(),RWRW__,"root","root",1,"tp","str");
 		    string lngEl;
 		    for(int off = 0; (lngEl=strParse(Mess->translLangs(),0,";",&off)).size(); )
-			if(lngEl.size() == 2 && lngEl != Mess->langCodeBase())
+			if(lngEl != Mess->langCodeBase())
 			    ctrMkNode("list",opt,-1,("/tr/mess/"+lngEl).c_str(),lngEl.c_str(),RWRW__,"root","root",1,"tp","str");
 		    ctrMkNode("list",opt,-1,"/tr/mess/src",_("Source"),R_R_R_,"root","root",1,"tp","str");
 		}
 	    }
 	}
+#endif
 	if(ctrMkNode("area",opt,-1,"/tasks",_("Tasks"),R_R___))
 	    if(ctrMkNode("table",opt,-1,"/tasks/tasks",_("Tasks"),RWRW__,"root","root",1,"key","path")) {
 		ctrMkNode("list",opt,-1,"/tasks/tasks/path",_("Path"),R_R___,"root","root",1,"tp","str");
@@ -3472,7 +3438,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLang(opt->text());
     }
     else if(a_path == "/gen/env/host" && ctrChkNode(opt))	opt->setText(host());
-    else if(a_path == "/gen/env/CPU" && ctrChkNode(opt))	opt->setText(strMess(_("%dx%0.3gGHz"),nCPU(),(float)sysClk()/1e9));
+    else if(a_path == "/gen/env/CPU" && ctrChkNode(opt))	opt->setText(sysClk()?strMess(_("%dx%0.3gGHz"),nCPU(),1e-3*sysClk()):i2s(nCPU()));
     else if(a_path == "/gen/env/mainCPUs") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD)) {
 	    string vl = mainCPUs();
@@ -3653,6 +3619,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    TBDS::genPrmSet(nodePath()+"TaskPhase:"+it->first, i2s(tVl));
 	}
     }
+#if HAVE_LIBINTL_H
     else if(a_path == "/tr/status" && ctrChkNode(opt)) {
 	string stM, stV;
 	if(Mess->langCodeBase().empty())
@@ -3715,7 +3682,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    // Columns list preparing
 	    ns.push_back(ctrMkNode("list",opt,-1,"/tr/mess/base","",RWRW__,"root","root"));
 	    for(int off = 0; (tStr=strParse(Mess->translLangs(),0,";",&off)).size(); )
-		if(tStr.size() == 2 && tStr != Mess->langCodeBase())
+		if(tStr != Mess->langCodeBase())
 		    ns.push_back(ctrMkNode("list",opt,-1,("/tr/mess/"+tStr).c_str(),tStr.c_str(),RWRW__,"root","root"));
 	    ns.push_back(ctrMkNode("list",opt,-1,"/tr/mess/src","",R_R_R_,"root","root"));
 
@@ -3895,6 +3862,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		!Mess->translItSplit(opt->attr("key_base"),TBDS::genPrmGet(nodePath()+"TrFltr","",opt->attr("user"))))
 	    opt->setAttr("noReload", "1");
     }
+#endif
     else if(!cntrEmpty() && a_path == "/debug/cntr" && ctrChkNode(opt,"get",R_R_R_,"root","root")) {
 	XMLNode *n_id	= ctrMkNode("list",opt,-1,"/debug/cntr/id","",R_R_R_,"root","root");
 	XMLNode *n_vl	= ctrMkNode("list",opt,-1,"/debug/cntr/vl","",R_R_R_,"root","root");

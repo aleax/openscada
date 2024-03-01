@@ -359,8 +359,8 @@ void Project::resourceDataList( vector<string> &list, const string &idb ) const
 
 bool Project::resourceDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb, int off, int *size ) const
 {
-    bool is_file = (iid.compare(0,5,"file:")==0);
-    bool is_res  = (iid.compare(0,4,"res:")==0);
+    bool is_file = (iid.find("file:") == 0);
+    bool is_res  = (iid.find("res:") == 0);
 
     if(!is_file) {
 	//Get resource file from DB
@@ -607,14 +607,15 @@ void Project::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/obj/st/status",_("Status"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		if(isStdStorAddr())
-		    ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB"),RWRWR_,"root",SUI_ID,4,
+		    ctrMkNode("fld",opt,-1,"/obj/st/db",_("Storage"),RWRWR_,"root",SUI_ID,4,
 			"tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 		else ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB"),RWRWR_,"root",SUI_ID,4,
 			"tp","str","dest","sel_ed","select",("/db/tblList:prj_"+id()).c_str(),
-			"help",_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the Generic Storage, set '*.*.{Table name}'."));
+			"help",TSYS::strMess(_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use %s, set '%s.{Table name}'."),
+					TMess::labStorFromCode(DB_GEN).c_str(),DB_GEN).c_str());
 		if(DB(true).size())
-		    ctrMkNode("comm",opt,-1,"/obj/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SUI_ID,
-			1,"help",(DB(true)=="*.*")?TMess::labStorRemGenStor().c_str():"");
+		    ctrMkNode("comm",opt,-1,"/obj/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),
+			TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",SUI_ID,1,"help",TMess::labStorRem(mDB).c_str());
 		ctrMkNode("fld",opt,-1,"/obj/st/timestamp",_("Date of modification"),R_R_R_,"root",SUI_ID,1,"tp","time");
 		ctrMkNode("fld",opt,-1,"/obj/st/use",_("Used"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 	    }
@@ -1301,18 +1302,18 @@ void Page::loadIO( )
 
 void Page::save_( )
 {
-    string db  = ownerProj()->DB();
-    string tbl = ownerProj()->tbl();
+    string  db  = ownerProj()->DB(),
+	    tbl = ownerProj()->tbl(), errors, warnings;
 
     //Save generic attributes
-    cfg("ATTRS").setS(mod->attrsSave(*this, db+"."+tbl, addr(), "", true));
+    cfg("ATTRS").setS(mod->attrsSave(*this,db+"."+tbl,addr(),"",true,&errors,&warnings));
 
     //Save generic widget's data
     mTimeStamp = SYS->sysTm();
     TBDS::dataSet(db+"."+tbl, mod->nodePath()+tbl, *this);
 
     //Save widget's attributes
-    saveIO();
+    if(enable()) mod->attrsSave(*this, ownerProj()->DB()+"."+ownerProj()->tbl(), addr(), "", false, &errors, &warnings);
 
     //Updation/saving here the removing mark "<deleted>" of the included widgets since the storage can be changed
     if(!parent().freeStat()) {
@@ -1330,14 +1331,9 @@ void Page::save_( )
 	    TBDS::dataSet(db+"."+tbl, mod->nodePath()+tbl, cEl);
 	}
     }
-}
 
-void Page::saveIO( )
-{
-    if(!enable()) return;
-
-    //Save widget's attributes
-    mod->attrsSave(*this, ownerProj()->DB()+"."+ownerProj()->tbl(), addr(), "");
+    if(errors.size())		throw TError(TError::Core_CntrError, nodePath(), errors);
+    else if(warnings.size())	throw TError(TError::Core_CntrWarning, nodePath(), warnings);
 }
 
 void Page::wClear( )
@@ -1720,7 +1716,7 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	if(nattr.size()) srcwdg = wdgAt(nwdg);
 	else nattr = nwdg;
 
-	bool is_pl = (a_path.substr(0,14) == "/links/lnk/pl_");
+	bool is_pl = (a_path.find("/links/lnk/pl_") == 0);
 	if(!(srcwdg.at().attrAt(nattr).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut))) {
 	    if(!is_pl) throw TError(nodePath(), _("The variable is not a link"));
 	    vector<string> a_ls;
@@ -1980,25 +1976,20 @@ void PageWdg::loadIO( )
 
 void PageWdg::save_( )
 {
-    string db  = ownerPage().ownerProj()->DB();
-    string tbl = ownerPage().ownerProj()->tbl();
+    string db  = ownerPage().ownerProj()->DB(),
+	   tbl = ownerPage().ownerProj()->tbl(), errors, warnings;
 
     //Save generic attributes
-    cfg("ATTRS").setS(mod->attrsSave(*this, db+"."+tbl, ownerPage().addr(), id(), true));
+    cfg("ATTRS").setS(mod->attrsSave(*this,db+"."+tbl,ownerPage().addr(),id(),true,&errors,&warnings));
 
     //Save generic widget's data
     TBDS::dataSet(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this);
 
     //Save widget's attributes
-    saveIO();
-}
+    if(enable()) mod->attrsSave(*this, ownerPage().ownerProj()->DB()+"."+ownerPage().ownerProj()->tbl(), ownerPage().addr(), id(), false, &errors, &warnings);
 
-void PageWdg::saveIO( )
-{
-    if(!enable()) return;
-
-    //Save widget's attributes
-    mod->attrsSave(*this, ownerPage().ownerProj()->DB()+"."+ownerPage().ownerProj()->tbl(), ownerPage().addr(), id());
+    if(errors.size())		throw TError(TError::Core_CntrError, nodePath(), errors);
+    else if(warnings.size())	throw TError(TError::Core_CntrWarning, nodePath(), warnings);
 }
 
 void PageWdg::wClear( )

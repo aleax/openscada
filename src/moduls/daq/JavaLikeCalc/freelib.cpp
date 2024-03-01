@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: freelib.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -172,14 +172,15 @@ void Lib::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessible"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		if(DB().size()) {
 		    if(isStdStorAddr())
-			ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
+			ctrMkNode("fld",opt,-1,"/lib/st/db",_("Storage"),RWRWR_,"root",SDAQ_ID,4,
 			    "tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 		    else ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
 			    "tp","str","dest","sel_ed","select",("/db/tblList:flb_"+id()).c_str(),
-			    "help",_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the Generic Storage, set '*.*.{Table name}'."));
+			    "help",TSYS::strMess(_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use %s, set '%s.{Table name}'."),
+					TMess::labStorFromCode(DB_GEN).c_str(),DB_GEN).c_str());
 		    if(DB(true).size())
-			ctrMkNode("comm",opt,-1,"/lib/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SDAQ_ID,
-			    1,"help",(DB(true)=="*.*")?TMess::labStorRemGenStor().c_str():"");
+			ctrMkNode("comm",opt,-1,"/lib/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),
+			    TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",SDAQ_ID,1,"help",TMess::labStorRem(mDB).c_str());
 		    ctrMkNode("fld",opt,-1,"/lib/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
 		}
 	    }

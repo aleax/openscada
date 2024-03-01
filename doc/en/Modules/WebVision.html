@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/WebVision</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/WebVision.html" title="Модули/WebVision (96% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/WebVision.html" title="Модулі/WebVision (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/WebVision.html" title="Модули/WebVision (94% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/WebVision.html" title="Модулі/WebVision (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> </td>
 <td> Operation user interface (WEB)
 </td>
-<td> 6.8 </td>
+<td> 6.9 </td>
 <td> GPL2 </td>
 <td> ui_WebVision.so </td>
 <td> en,uk,ru,de </td>
@@ -51,16 +51,14 @@
 <li> <b>Sponsored by, for the Export on 0.8 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> Vinnica Poultry Farm</li>
 <li> <b><a href="../To_do.html" title="Special:MyLanguage/Works/To do">To Do</a>:</b></li></ul>
 <dl><dd> * revise and unify the keyboard focus forcing on a first active element considering them specifity, to ensure the keyboard shortcuts;</dd>
+<dd> - expand the primitive "Diagram" by the mouse scaling operations;</dd>
+<dd> - implement own RTE-editor for the view Text of the primitive FormEl;</dd>
 <dd> - ElFigure: fix some properties loss (line width at the least) at the actions processing, in the way of the primitive code common refactoring;</dd>
-<dd> + expand the view "Table" of the primitive "FormEl" for user sorting by the selected column;</dd>
 <dd> * expand the status-bar, with the functions:
-<dl><dd> + export;</dd>
-<dd> - call of the project documents;</dd>
-<dd> + alarming-notification by sound and speech.</dd></dl></dd>
+<dl><dd> - user status fields.</dd></dl></dd>
 <dd> - ElFigure,Diagram: enable or make the anti aliasing, for the library GD;</dd>
 <dd> - implement the primitives "Diagram", "ElFigure" in the tag "SVG";</dd>
-<dd> - expand the variant "Animation" of the primitive "Media" in using the raw image files, like to PNG;</dd>
-<dd> + implement the variant "Full video" of the primitive "Media".</dd></dl>
+<dd> - expand the variant "Animation" of the primitive "Media" in using the raw image files, like to PNG.</dd></dl>
 </td></tr></table>
 <p>The module provides in OpenSCADA a mechanism of the final visualization of the visual control area (VCA). The module is based on WEB technologies (XHTML, JavaScript, CSS, AJAX). In its work, the module uses the data from the VCA engine — module <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.
 </p><p>Visual control area (VCA) is an integral part of the SCADA system. It applies to the client stations with a view to providing accessible information about the control object and to for the the issuance of the control actions to the object. In various practical situations and conditions the VCA, based on different principles of visualization, may by applied. For example, this may be the library of widgets Qt, GTK+, WxWidgets or hypertext mechanisms based on the technologies HTML, XHTML, XML, CSS and JavaScript, or third-party applications of visualization, realized in various programming languages Java, Python, etc. Any of these principles has its advantages and disadvantages, the combination of which could become an insurmountable obstacle to the use of VCA in a practical case. For example, technologies like the Qt library can create highly-productive VCA, which will undoubtedly important for the operator station for control the technological processes (TP). However, the need for installation of that client software in some cases may make using of it impossible. On the other hand, Web-technology does not require installation on client systems and is extremely multi-platform (it is enough to create a link to the Web-server at any Web-browser) that is most important for various engineering and administrative stations, but the productivity and reliability of such interfaces is lower, that actually eliminates the using of them at the operator stations of TP.
@@ -139,7 +137,8 @@
 <li> the current alarm status by a lamp with color related to the alarm level and the active notifiers' icons; blinks at the alarm appearing or changing; pressing on the lamp you may quiet the alarm in whole or the desired type of the notification, pressing the correspond notifier icon near;</li>
 <li> the menu buttons of call the page printing and data exporting for:
 <ul><li> printing: Main Page, Documents;</li>
-<li> exporting: Documents (HTML,CSV), Tables (CSV).</li></ul></li></ul></li>
+<li> exporting: Documents (HTML,CSV), Tables (CSV).</li></ul></li>
+<li> manual on the VCA-project — calls, by a click, the manual on the visualization project for the file "<b>{ProjVCA_ID}.[pdf|html|odt]</b>" in <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">the document folder</a>.</li></ul></li>
 <li> In the main field of the status line various messages and assistance messages are displayed.</li></ul>
 <p>The module supports multi-language which one enabled by the <a href="../Program_manual.html#ConfigTr" title="Special:MyLanguage/Documents/Program manual">dynamic messages translation of OpenSCADA</a>. The gotten language passes by the module <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> and detects in way and by the order:
 </p>
@@ -149,7 +148,7 @@
 <li> Generic language of the OpenSCADA process.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:619px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_auth.png"><img class="thumbimage" height="302" src="../files/HTTP_auth.png" width="617" /></a>  <div class="thumbcaption">Fig.1. Authentication page.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:620px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_connect.png"><img class="thumbimage" height="458" src="../files/WebVision_wvis_connect.png" width="618" /></a>  <div class="thumbcaption">Fig.2. Connection or creation of a new session of the execution project of the VCA.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1037px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run.png"><img class="thumbimage" height="778" src="../files/WebVision_wvis_run.png" width="1035" /></a>  <div class="thumbcaption">Fig.3. Main execution window.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1037px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run.png"><img class="thumbimage" height="817" src="../files/WebVision_wvis_run.png" width="1035" /></a>  <div class="thumbcaption">Fig.3. Main execution window.</div></div></div></div>
 <h2><span class="mw-headline" id="Presentation_of_the_basic_elements_.28primitives.29"><span class="mw-headline-number">3</span> <span id="Primitives" title="#Primitives">Presentation of the basic elements (primitives)</span></span></h2>
 <p>This version of the module does not implement all the shapes of the primitives laid by the project. In general, the project provides the following primitives:
 </p>
@@ -258,10 +257,9 @@
 <ul><li> "*" — call for a selecting dialog of the user; </li>
 <li> "$" — change the user to the default one;</li>
 <li> "{user}[:{password}]" — direct change to <i>user</i> with <i>password</i>; for empty password, the user is changed only if its permission is lesser or equal; a useful example of changing to the "user" after one minute inactivity:</li></ul>
-<pre style="white-space: pre-wrap;&nbsp;; margin-left: 20pt">
-if((SYS.time()-this.ownerSess().userActTm()) &lt; 60)userSetVis = "";
-else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user";
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="k">if</span><span class="p">((</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">time</span><span class="p">()</span><span class="o">-</span><span class="k">this</span><span class="p">.</span><span class="nx">ownerSess</span><span class="p">().</span><span class="nx">userActTm</span><span class="p">())</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">)</span><span class="nx">userSetVis</span> <span class="o">=</span> <span class="s2">""</span><span class="p">;</span>
+<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">ownerSess</span><span class="p">().</span><span class="nx">reqUser</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">"user"</span><span class="p">)</span> <span class="nx">userSetVis</span> <span class="o">=</span> <span class="s2">"user"</span><span class="p">;</span>
+</pre></div>
 </td></tr>
 <tr>
 <td> vs_goHttpUrl (view "Button" of the primitive "FormEl") </td>
@@ -437,6 +435,8 @@ else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user";
 <li> Resizing raster images on the server side. Mostly to decrease too big images size then decrease the traffic, what causes to rise the server load.</li>
 <li> Custom interface CSS rules. CSS rules to override the standard ones what placed in the special token ##CUST_CSS## of the file WebVisionVCA.html.</li></ul></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1089px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_cfg.png"><img class="thumbimage" height="605" src="../files/WebVision_wvis_cfg.png" width="1087" /></a>  <div class="thumbcaption">Fig.4. Configuration page of the module.</div></div></div></div>
+<p>You can deeply customise main interface of the module overriding and adding the HTML and JavaScript code by placing to folder of your OpenSCADA project files WebVisionVCA.html and WebVisionVCA.js which initially you can obtain from the module source code — <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/src/moduls/ui/WebVision/" rel="nofollow noreferrer noopener" target="_blank">UI.WebVision</a>.
+</p>
 <h2><span class="mw-headline" id="Efficiency_and_scalability"><span class="mw-headline-number">5</span> <span id="Efficiency" title="#Efficiency">Efficiency and scalability</span></span></h2>
 <p><b><u>31.07.2019</u></b><br />
 GROUNDS: The Web-sessions may create many objects servicing the VCA-session for generating images, processing documents and performing other background functions of the end user Web-interface. Moreover, in difference to <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a>, the VCA-sessions may be created, closed and recreated again multiple times for different users and remote hosts. In the time the memory heap is affected by the memory fragmentation, so the program consumes more memory than at the start. The table below represents the phenomenon for different environments and the first page of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">the DemoDB (AGLKS) project</a> reopening:
@@ -724,5 +724,5 @@ GROUNDS: At working with the board <a class="external" href="http://oscada.org/w
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/en">Modules/WebVision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/en">Modules/WebVision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

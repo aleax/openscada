@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.SystemTests file: test_prm.h
 /***************************************************************************
- *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -55,8 +55,8 @@ class TestPrm : public TFunction
 		mod->mess(id(),_("Value attributes: %d"),list_el.size());
 		for(unsigned i = 0; i < list_el.size(); i++) {
 		    AutoHD<TVal> val = prm.at().vlAt(list_el[i]);
-		    if( val.at().fld().flg()&TFld::Selectable )
-			mod->mess(id(),_("%s(SELECT): %s"),list_el[i].c_str(), val.at().getSEL().c_str() );
+		    //if(val.at().fld().flg()&TFld::Selectable)
+		    //	mod->mess(id(),_("%s(SELECT): %s"),list_el[i].c_str(), val.at().getSEL().c_str());
 		    switch(val.at().fld().type()) {
 			case TFld::String:
 			    mod->mess(id(),_("%s(STRING): %s"),list_el[i].c_str(), val.at().getS().c_str() );
@@ -77,8 +77,8 @@ class TestPrm : public TFunction
 		prm.at().cfgList(list_el);
 		mod->mess(id(),_("Configuration fields: %d"),list_el.size());
 		for(unsigned i = 0; i < list_el.size(); i++) {
-		    if( prm.at().cfg(list_el[i]).fld().flg()&TFld::Selectable )
-			mod->mess(id(),_("%s(SELECT): %s"),list_el[i].c_str(), prm.at().cfg(list_el[i]).getSEL().c_str() );
+		    //if(prm.at().cfg(list_el[i]).fld().flg()&TFld::Selectable)
+		    //	mod->mess(id(),_("%s(SELECT): %s"),list_el[i].c_str(), prm.at().cfg(list_el[i]).getSEL().c_str());
 		    switch(prm.at().cfg(list_el[i]).fld().type()) {
 			case TFld::String:
 			    mod->mess(id(),_("%s(STRING): %s"),list_el[i].c_str(), prm.at().cfg(list_el[i]).getS().c_str() );

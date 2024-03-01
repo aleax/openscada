@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.AMRDevs file: mod_amr.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@
 #define MOD_NAME	trS("AMR devices")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.7.10"
+#define MOD_VER		"0.8.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides access to automatic meter reading devices. Supported devices: Kontar (http://www.mzta.ru).")
 #define LICENSE		"GPL2"
@@ -200,12 +200,12 @@ void TMdContr::prmEn( const string &id, bool val )
 {
     ResAlloc res(enRes, true);
 
-    unsigned i_prm;
-    for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
-	if(p_hd[i_prm].at().id() == id) break;
+    unsigned iPrm;
+    for(iPrm = 0; iPrm < p_hd.size(); iPrm++)
+	if(p_hd[iPrm].at().id() == id) break;
 
-    if(val && i_prm >= p_hd.size())	p_hd.push_back(at(id));
-    if(!val && i_prm < p_hd.size())	p_hd.erase(p_hd.begin()+i_prm);
+    if(val && iPrm >= p_hd.size())	p_hd.push_back(at(id));
+    if(!val && iPrm < p_hd.size())	p_hd.erase(p_hd.begin()+iPrm);
 }
 
 void *TMdContr::Task( void *icntr )
@@ -215,14 +215,13 @@ void *TMdContr::Task( void *icntr )
     cntr.endrun_req = false;
     cntr.prc_st = true;
 
-    while(!cntr.endrun_req)
-    {
+    while(!cntr.endrun_req) {
 	int64_t t_cnt = TSYS::curTime();
 
 	//Update controller's data
 	cntr.enRes.resRequestR( );
-	for(unsigned i_p = 0; i_p < cntr.p_hd.size(); i_p++)
-	    try { cntr.p_hd[i_p].at().type().getVals(&cntr.p_hd[i_p].at()); }
+	for(unsigned iP = 0; iP < cntr.p_hd.size(); iP++)
+	    try { cntr.p_hd[iP].at().type().getVals(&cntr.p_hd[iP].at()); }
 	    catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	cntr.enRes.resRelease( );
 
@@ -239,8 +238,7 @@ void *TMdContr::Task( void *icntr )
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
-    if(opt->name() == "info")
-    {
+    if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
 	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel().c_str(),"help",TMess::labSecCRON().c_str());
@@ -292,14 +290,13 @@ void TMdPrm::enable( )
     TParamContr::enable();
 
     //Check for delete DAQ parameter's attributes
-    for(int i_p = 0; i_p < (int)els.fldSize(); i_p++)
-    {
+    for(int iP = 0; iP < (int)els.fldSize(); iP++) {
 	unsigned i_l;
 	for(i_l = 0; i_l < als.size(); i_l++)
-	    if(els.fldAt(i_p).name() == als[i_l])
+	    if(els.fldAt(iP).name() == als[i_l])
 		break;
 	if(i_l >= als.size())
-	    try { els.fldDel(i_p); i_p--; }
+	    try { els.fldDel(iP); iP--; }
 	    catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
     als.clear();

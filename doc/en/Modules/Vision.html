@@ -30,7 +30,7 @@
 <td> <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> </td>
 <td> Operation user interface (Qt)
 </td>
-<td> 8.6 </td>
+<td> 9.1 </td>
 <td> GPL2 </td>
 <td> ui_Vision.so </td>
 <td> en,uk,ru,de </td>
@@ -268,10 +268,10 @@
 <p>At the bottom of the development window of the VCA there is the status line. On the right side of the status line there are indicators of the visual scale of the edited frame, of the mode of changing of the size of the elements, of the mode of the VCA engine station and the user on whose behalf the development of the VCA interface is done. By double-clicking on the indicator of the user it can be changed the current user, entering the new username and password. In the main field of the status line it is displayed various information and assistance messages.
 </p><p>To edit properties of the visual elements there are two dialogues. The first dialogue allows you to edit the properties of containers of the visual elements, (Fig.2.b) — widgets libraries and projects. The second dialogue serves to edit the properties of the visual elements (Fig.2.d). Changes, made in the dialogues, at once, get to the VCA engine. To save these changes to the database, or restore from the database, it is necessary to use the appropriate tools of the main development window.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:622px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg.png"><img class="thumbimage" height="631" src="../files/Vision_wlbpg.png" width="620" /></a>  <div class="thumbcaption">Fig.2.b. Dialogue of editing of the properties of the containers of the visual elements.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:712px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg.png"><img class="thumbimage" height="635" src="../files/Vision_wlbpg.png" width="710" /></a>  <div class="thumbcaption">Fig.2.b. Dialogue of editing of the properties of the containers of the visual elements.</div></div></div></div>
 <p>With the help of the main tab of that dialog you can obtain:
 </p>
-<ul><li> State of the elements' container, that is: "Enabled", database of the container (with tracking the availability of the data in different storages and providing the sequentially removing duplicates), usage counter, date and time of the last modification.</li></ul>
+<ul><li> State of the elements' container, that is: "Enabled", storage of the container (with tracking the availability of the data in different storages and providing the sequentially removing duplicates), usage counter, date and time of the last modification.</li></ul>
 <dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The objects still support of specifying the spare storage addresses with tables before you rename the table in the standard form "<b>wlb_{ObjID}</b>" for the widget libraries and "<b>prj_{ObjID}</b>" for the projects.</dd></dl>
 <ul><li> Identifier, name and description of the container.</li>
 <li> For the project:</li></ul>
@@ -583,7 +583,7 @@
 <tr>
 <td> notify{N}, notifyVisVision{N} (page) </td>
 <td> Notification: type {N} </td>
-<td> Specifies a notifier and a procedure of the notification resource obtaining and the same notification, accordingly to the <a href="../Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">"Signalling (Alarms)" conception</a>. The notification performed in such priority — <b>notifyVisVision{N}</b> &gt; <b>Phonon</b> &gt; <b>notify{N}</b>. That is the <b>notifyVisVision{N}</b> is most priority, it overrides the <b>Phonon</b> notification and there you can implement very not ordinary notifications.
+<td> Specifies a notifier and a procedure of the notification resource obtaining and the same notification, accordingly to the <a href="../Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">"Signalling (Alarms)" conception</a>. The notification performed in such priority — <b>notifyVisVision{N}</b> &gt; <b>{Qt|Phonon}</b> &gt; <b>notify{N}</b>. That is the <b>notifyVisVision{N}</b> is most priority, it overrides the <b>{Qt|Phonon}</b> notification and there you can implement very not ordinary notifications.
 </td></tr>
 <tr>
 <td> statLine (main page) </td>
@@ -749,7 +749,7 @@ else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user:user";
 <ul><li> Indication of the media data source: images or video-material.</li>
 <li> Review of the images of most well-known formats with the possibility of fitting of it in the size of the widget.</li>
 <li> Playback of the simple animated images and video formats with the possibility to control the playback speed.</li>
-<li> Playback of the full-formatted video and audio by <a class="extiw" href="https://en.wikipedia.org/wiki/Phonon" title="wikipedia:Phonon">Phonon</a>.</li>
+<li> Playback of the full-formatted video and audio by Qt or <a class="extiw" href="https://en.wikipedia.org/wiki/Phonon" title="wikipedia:Phonon">Phonon</a>.</li>
 <li> Displaying the background as the color and image.</li>
 <li> Displaying the border along the perimeter of the widget, with the specified color, width and style.</li>
 <li> Formation of the active areas and generating the events when they are activated.</li></ul>
@@ -976,5 +976,5 @@ An example of editing a frame based on this primitive is shown in Figure 2.a, an
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/en">Modules/Vision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/en">Modules/Vision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

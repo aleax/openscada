@@ -58,7 +58,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: September 2007
-Version: 2.1.23
+Version: 2.1.30
 License: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAA
 GXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAABTxJREFUeJzt2XFo3GcZwPHPZdFO
@@ -91,7 +91,7 @@ a2szNDQ003rWz1l8E6+v4549pu7vO8XPaqeq5K4XUXBF9j0PVV1f6D+L53+M5OTk5OTk5OTk5OTk
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Вересень 2007
-Версія: 2.1.23
+Версія: 2.1.30
 Ліцензія: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса и содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
 
@@ -99,7 +99,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основны�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Сентябрь 2007
-Версия: 2.1.23
+Версия: 2.1.30
 Лицензия: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements');
 INSERT INTO VCALibs VALUES('mnEls','Mnemo elements','Provides the mnemonic elements library of the user interface of the industrial automation.
@@ -442,207 +442,6 @@ INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_doc_pane
 INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_doc_panel','prev1','/wlb_Main/wdg_doc_panel/wdg_prev1','owner;value;');
 INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_doc_panel','size','/wlb_Main/wdg_doc_panel/wdg_size','owner;value;');
 INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_doc_panel','tmTp','/wlb_Main/wdg_doc_panel/wdg_tmTp','owner;');
-CREATE TABLE IF NOT EXISTS 'prj_tmplSO_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so','pgCont','/wlb_Main/wdg_RootPgSo/wdg_pgCont','pgGrp;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so','infoW','/wlb_Main/wdg_RootPgSo/wdg_infoW','pgGrp;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_doc_panel','date','/wlb_Main/wdg_doc_panel/wdg_date','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_doc_panel','size','/wlb_Main/wdg_doc_panel/wdg_size','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','k1','/wlb_Main/wdg_cntrRegul/wdg_k1','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','k2','/wlb_Main/wdg_cntrRegul/wdg_k2','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','k3','/wlb_Main/wdg_cntrRegul/wdg_k3','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','k4','/wlb_Main/wdg_cntrRegul/wdg_k4','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','kp','/wlb_Main/wdg_cntrRegul/wdg_kp','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','td','/wlb_Main/wdg_cntrRegul/wdg_td','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','ti','/wlb_Main/wdg_cntrRegul/wdg_ti','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','zn','/wlb_Main/wdg_cntrRegul/wdg_zn','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','tiMin','/wlb_Main/wdg_cntrRegul/wdg_tiMin','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','h1','/wlb_Main/wdg_cntrRegul/wdg_h1','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','h2','/wlb_Main/wdg_cntrRegul/wdg_h2','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_grph_panel','size','/wlb_Main/wdg_grph_panel/wdg_size','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_grph_panel','date','/wlb_Main/wdg_grph_panel/wdg_date','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','rfct','/wlb_Main/wdg_cntrRegul/wdg_rfct','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','tiPer','/wlb_Main/wdg_cntrRegul/wdg_tiPer','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','kd','/wlb_Main/wdg_cntrRegul/wdg_kd','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','ki','/wlb_Main/wdg_cntrRegul/wdg_ki','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','tzd','/wlb_Main/wdg_cntrRegul/wdg_tzd','value;',2);
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_treeSelect','apply','/wlb_Main/wdg_treeSelect/wdg_apply','value;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_treeSelect','cancel','/wlb_Main/wdg_treeSelect/wdg_cancel','value;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_grph_panel','selWin','/wlb_Main/wdg_grph_panel/wdg_selWin','value;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','data','/wlb_Main/wdg_cntrPaspExt/wdg_data','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','sel_data','/wlb_Main/wdg_cntrPaspExt/wdg_sel_data','owner;value;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','sel_trends','/wlb_Main/wdg_cntrPaspExt/wdg_sel_trends','owner;value;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','sel_view','/wlb_Main/wdg_cntrPaspExt/wdg_sel_view','owner;value;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','trends','/wlb_Main/wdg_cntrPaspExt/wdg_trends','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','trendsList','/wlb_Main/wdg_cntrPaspExt/wdg_trendsList','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','view','/wlb_Main/wdg_cntrPaspExt/wdg_view','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','viewLabSet','/wlb_Main/wdg_cntrPaspExt/wdg_viewLabSet','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','viewSet','/wlb_Main/wdg_cntrPaspExt/wdg_viewSet','owner;perm;value;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPaspOld','doc','/wlb_Main/wdg_cntrPasp/wdg_doc','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','ElFigureTests1','/wlb_test/wdg_mn_gen/wdg_ElFigureTests1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','FormEl','/wlb_test/wdg_mn_gen/wdg_FormEl','owner;perm;extValue;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','Pi_нд','/wlb_test/wdg_mn_gen/wdg_Pi_нд','owner;pErr;pModeA;pModeC;pName;pPrec;pVal;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','TextEl','/wlb_test/wdg_mn_gen/wdg_TextEl','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','Ti_нд','/wlb_test/wdg_mn_gen/wdg_Ti_нд','owner;pErr;pModeA;pModeC;pName;pPrec;pVal;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','diagTests','/wlb_test/wdg_mn_gen/wdg_diagTests','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','media','/wlb_test/wdg_mn_gen/wdg_media','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prescrRunSimple','/wlb_test/wdg_mn_gen/wdg_prescrRunSimple','owner;perm;dbDB;dbProgs;prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prt','/wlb_test/wdg_mn_gen/wdg_prt','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','ElFigure1','/wlb_Main/wdg_grpGraph/wdg_ElFigure1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','arh','/wlb_Main/wdg_grpGraph/wdg_arh','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el1','/wlb_Main/wdg_grpGraph/wdg_el1','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el2','/wlb_Main/wdg_grpGraph/wdg_el2','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el3','/wlb_Main/wdg_grpGraph/wdg_el3','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el4','/wlb_Main/wdg_grpGraph/wdg_el4','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el5','/wlb_Main/wdg_grpGraph/wdg_el5','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el6','/wlb_Main/wdg_grpGraph/wdg_el6','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el7','/wlb_Main/wdg_grpGraph/wdg_el7','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el8','/wlb_Main/wdg_grpGraph/wdg_el8','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','name','/wlb_Main/wdg_grpGraph/wdg_name','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','trnd1','/wlb_Main/wdg_grpGraph/wdg_trnd1','owner;curSek;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','ElFigure1','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_ElFigure1','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','arh','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_arh','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el1','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el1','owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el2','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el2','owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el3','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el3','owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el4','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el4','owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el5','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el5','owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el6','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el6','owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el7','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el7','owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el8','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el8','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','name','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_name','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','trnd1','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_trnd1','owner;curSek;sclWin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','ElFigure','/wlb_Main/wdg_grpCadr/wdg_ElFigure','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el1','/wlb_Main/wdg_grpCadr/wdg_el1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el2','/wlb_Main/wdg_grpCadr/wdg_el2','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el3','/wlb_Main/wdg_grpCadr/wdg_el3','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el4','/wlb_Main/wdg_grpCadr/wdg_el4','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el5','/wlb_Main/wdg_grpCadr/wdg_el5','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el6','/wlb_Main/wdg_grpCadr/wdg_el6','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el7','/wlb_Main/wdg_grpCadr/wdg_el7','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el8','/wlb_Main/wdg_grpCadr/wdg_el8','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','name','/wlb_Main/wdg_grpCadr/wdg_name','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','trnd1','/wlb_Main/wdg_grpCadr/wdg_trnd1','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','ElFigure','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_ElFigure','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el1','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el1','owner;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmCom;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStop;prmVar;prmWMax;prmWMin;prmAddr;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el2','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el2','owner;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmCom;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStop;prmVar;prmWMax;prmWMin;prmAddr;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el3','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el3','owner;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmCom;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStop;prmVar;prmWMax;prmWMin;prmAddr;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el4','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el4','owner;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmCom;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStop;prmVar;prmWMax;prmWMin;prmAddr;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el5','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el5','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el6','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el6','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el7','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el7','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el8','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el8','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','name','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_name','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','trnd1','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_trnd1','owner;curSek;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_1','/wlb_Main/wdg_ViewCadr/wdg_el1_1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_2','/wlb_Main/wdg_ViewCadr/wdg_el1_2','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_3','/wlb_Main/wdg_ViewCadr/wdg_el1_3','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_4','/wlb_Main/wdg_ViewCadr/wdg_el1_4','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_5','/wlb_Main/wdg_ViewCadr/wdg_el1_5','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_6','/wlb_Main/wdg_ViewCadr/wdg_el1_6','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_1','/wlb_Main/wdg_ViewCadr/wdg_el2_1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_2','/wlb_Main/wdg_ViewCadr/wdg_el2_2','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_3','/wlb_Main/wdg_ViewCadr/wdg_el2_3','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_4','/wlb_Main/wdg_ViewCadr/wdg_el2_4','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_5','/wlb_Main/wdg_ViewCadr/wdg_el2_5','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_6','/wlb_Main/wdg_ViewCadr/wdg_el2_6','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_1','/wlb_Main/wdg_ViewCadr/wdg_el3_1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_2','/wlb_Main/wdg_ViewCadr/wdg_el3_2','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_3','/wlb_Main/wdg_ViewCadr/wdg_el3_3','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_4','/wlb_Main/wdg_ViewCadr/wdg_el3_4','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_5','/wlb_Main/wdg_ViewCadr/wdg_el3_5','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_6','/wlb_Main/wdg_ViewCadr/wdg_el3_6','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_1','/wlb_Main/wdg_ViewCadr/wdg_el4_1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_2','/wlb_Main/wdg_ViewCadr/wdg_el4_2','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_3','/wlb_Main/wdg_ViewCadr/wdg_el4_3','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_4','/wlb_Main/wdg_ViewCadr/wdg_el4_4','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_5','/wlb_Main/wdg_ViewCadr/wdg_el4_5','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_6','/wlb_Main/wdg_ViewCadr/wdg_el4_6','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','name','/wlb_Main/wdg_ViewCadr/wdg_name','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_1','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_1','owner;name;addr;var;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_2','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_2','owner;name;addr;var;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_3','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_3','owner;name;addr;var;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_4','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_4','owner;name;addr;var;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_5','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_5','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_6','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_6','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_1','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_1','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_2','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_2','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_3','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_3','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_4','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_4','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_5','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_5','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_6','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_6','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_1','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_1','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_2','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_2','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_3','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_3','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_4','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_4','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_5','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_5','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_6','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_6','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_1','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_1','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_2','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_2','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_3','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_3','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_4','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_4','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_5','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_5','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_6','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_6','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','name','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_name','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view5/pg_1','doc','/wlb_doc/wdg_docAlarmsRep/wdg_doc','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view5/pg_2','doc','/wlb_doc/wdg_docUsersSet/wdg_doc','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','ElFigure1','/wlb_Main/wdg_grpGraph/wdg_ElFigure1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','arh','/wlb_Main/wdg_grpGraph/wdg_arh','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el1','/wlb_Main/wdg_grpGraph/wdg_el1','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el2','/wlb_Main/wdg_grpGraph/wdg_el2','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el3','/wlb_Main/wdg_grpGraph/wdg_el3','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el4','/wlb_Main/wdg_grpGraph/wdg_el4','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el5','/wlb_Main/wdg_grpGraph/wdg_el5','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el6','/wlb_Main/wdg_grpGraph/wdg_el6','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el7','/wlb_Main/wdg_grpGraph/wdg_el7','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el8','/wlb_Main/wdg_grpGraph/wdg_el8','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','name','/wlb_Main/wdg_grpGraph/wdg_name','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','trnd1','/wlb_Main/wdg_grpGraph/wdg_trnd1','owner;curSek;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','ElFigure1','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_ElFigure1','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','arh','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_arh','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el1','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el1','owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el2','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el2','owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el3','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el3','owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el4','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el4','owner;name;addr;ed;max;min;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el5','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el5','owner;name;addr;ed;max;min;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el6','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el6','owner;name;addr;ed;max;min;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el7','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el7','owner;name;addr;ed;max;min;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el8','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el8','owner;name;addr;ed;max;min;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','name','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_name','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','trnd1','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_trnd1','owner;curSek;sclWin;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e1','/wlb_Main/wdg_ResultGraph/wdg_e1','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e10','/wlb_Main/wdg_ResultGraph/wdg_e10','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e11','/wlb_Main/wdg_ResultGraph/wdg_e11','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e12','/wlb_Main/wdg_ResultGraph/wdg_e12','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e13','/wlb_Main/wdg_ResultGraph/wdg_e13','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e14','/wlb_Main/wdg_ResultGraph/wdg_e14','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e15','/wlb_Main/wdg_ResultGraph/wdg_e15','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e16','/wlb_Main/wdg_ResultGraph/wdg_e16','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e2','/wlb_Main/wdg_ResultGraph/wdg_e2','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e3','/wlb_Main/wdg_ResultGraph/wdg_e3','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e4','/wlb_Main/wdg_ResultGraph/wdg_e4','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e5','/wlb_Main/wdg_ResultGraph/wdg_e5','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e6','/wlb_Main/wdg_ResultGraph/wdg_e6','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e7','/wlb_Main/wdg_ResultGraph/wdg_e7','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e8','/wlb_Main/wdg_ResultGraph/wdg_e8','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e9','/wlb_Main/wdg_ResultGraph/wdg_e9','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','name','/wlb_Main/wdg_ResultGraph/wdg_name','owner;perm;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e1','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e1','owner;p1_addr;p1_clr;p1_max;p1_min;p1_name;p2_addr;p2_max;p2_min;p2_name;p3_addr;p3_max;p3_min;p3_name;p4_addr;p4_max;p4_min;p4_name;p5_addr;p5_max;p5_min;p5_name;title;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e10','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e10','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e11','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e11','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e12','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e12','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e13','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e13','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e14','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e14','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e15','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e15','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e16','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e16','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e2','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e2','owner;p1_addr;p1_max;p1_min;p1_name;p2_addr;p2_max;p2_min;p2_name;p3_addr;p3_max;p3_min;p3_name;p4_addr;p4_max;p4_min;p4_name;title;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e3','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e3','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e4','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e4','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e5','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e5','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e6','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e6','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e7','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e7','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e8','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e8','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e9','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e9','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','name','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_name','owner;','');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_Main_mime VALUES('pg_next','image/png;6.00684','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAAZiS0dEACwA
 RADxQFue7AAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9gDBQghJ2VBTzAAAAAddEVYdENv
@@ -4147,6 +3946,128 @@ vp9RVtR0EtzcEnvTkFTddJMk4fpwEtV5xYaiBtNq2WeoQehsEm3wKF2mjOZZwZHlBOs8XgZTB0PR
 5kUONr/aMKSmDO1lFlUHOgPM9e0or+EC3Eg2S4YthqSU7yrC1nsGLKVEM5k6eKpzJLD8+1YLvJcX
 DDbr5qzx/1GGVMCmTZsEAI0/Etm4aaPcYxzwp/a/xj6QD+QD+UD+pOX/AOiTLUwUheT3AAAAAElF
 TkSuQmCC');
+INSERT INTO wlb_Main_mime VALUES('itEnter','image/png;4.53516','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
+3jxSFfoAAAAASUVORK5CYII=');
+INSERT INTO wlb_Main_mime VALUES('tblEdit','image/png;4.55859','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');
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','El_text_alarm','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;alignment;text;',2);
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','box_alarm','/wlb_mnEls/wdg_El_Alarm','name;geomX;geomY;geomW;geomH;geomXsc;geomYsc;geomZ;fillColor;elLst;',2);
@@ -10648,7 +10569,7 @@ if(f_start) {
 			this["wdg_e"+(3+4*(j-1))].attrSet("geomY", 30+142*yScale*(rows[0]+rows[1]));
 			this["wdg_e"+(4+4*(j-1))].attrSet("geomY", 30+142*yScale*(rows[0]+rows[1]+rows[2]));
 		}
-}','','',-1,'name;dscr;geomW;geomH;backColor;bordWidth;',1665334736);
+}','','',-1,'name;dscr;geomW;geomH;backColor;bordWidth;',1708341577);
 INSERT INTO wlb_Main VALUES('ResultGraphEl','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAoCAIAAADBrGu+AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 xUlEQVRYhdWYWW/bRhRG7ywkJZGUqFCKLC+J5TiIlwe3qQ3kB/RfB30uCkRNFQc2EnlRIsXWZpkU
 KZEccmb64CB2arSNVae0D/jCuRzgfOTgDjGo0Wjs7e0hhAzDgPvG3NwcPTw8fPnypeM4T548GQ6H
@@ -12735,7 +12656,7 @@ if(f_start || user != user_) {
 	toUpdate = true;
 }
 
-if(alarms_focus)	alUnSel = 10;	//Wait for 10 seconds
+if(this.alarms.attr("focus"))	alUnSel = 10;	//Wait for 10 seconds
 else if(alUnSel > 0 && (alUnSel=max(0,alUnSel-1/f_frq)) <= 0) {
 	alarms_value = "";
 	if(this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == alarms_NAME)
@@ -13499,47 +13420,96 @@ for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; ) {
 	else ev_rez += ev_cur + "\n";
 }
 event = ev_rez;','','',500,'owner;name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1677086092);
-INSERT INTO wlb_Main VALUES('storeHouse','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAB
-gUlEQVRYhe3Sy1LCMBiG4T9NUnviJAiF6rhz7cIb8Ia4Me7GJaMLB8SBUg6ltYU0iVtn3MiI/C7y
-7JN870zIcDh0HAf+xmw2A4DBYHDCO68fHvsNT0khgY6fXxhjrF6vM8YAgNgOsx2tNbft7ye1UqrY
-WZb188fa7baU0vO8EwwnxHJru9UyaLTu7watmjdN0uk8Zr7vSymDIIiiSNj+crWpKtHqhs3L9tfj
-SqlDkTctwTk/wZrjaYCloL7riGzzNC4sgLKSsszJaDQKwxBl0+9NJpMj/sP/ZAKwmQBsJgCbCcBm
-ArCZAGwmAJsJwGYCsJkAbCYAmwnAZgKwmQBsJgCbCcDGkqIq4i2llBDCbTtbJ2JfdqJbAJBSFh85
-49xxXADItyvFPQBdcy8qUSXbLWOcMkYpBYD161jL6szr0zRlm7xI93KdxFrpTi9U+/xQfFiNKwDI
-s2zx/uYH9W6/DwDpOtUu0VplpejWvFm8WcVzLwh60Q0AxPOFFvszB5Rl+QnZvJxbNlYddQAAAABJ
-RU5ErkJggg==','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+INSERT INTO wlb_Main VALUES('storeHouse','iVBORw0KGgoAAAANSUhEUgAAAEAAAAApCAIAAAAK8LgbAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAB
+UklEQVRYhe3PQU/CMBjG8ba022C02yDEuSiYSNSIn40vxnfw7t2LmuhhV2S6dRusY3hB402Chjcm
+7+/UQ9s8fzqdTh3HITuYTG6KsrAty/P8oBfs8mQPpaUqY+bzRfx43+m4/tkVS0xSa10k0guUHzzf
+3Z4Pw+jo2PL6aZZxzrlSSghBCCHC5rZDNoRS2uKcUvr965pbQhjKWLksm/l6900bQujPt7YqktR1
+XZWrnuy4UjmcqEFjko3XHy116na7o8trZtNaBUy0y3XGpZTGGCllFEXGchdvabVaUUaH44tWi3/9
+2zRNVeY+M9vUQzj5PLTH0ntf1q+JtpvVIDp9eXogLPMCofOCzmazMAwPtemPxXHMoDf8FgZAwwBo
+GAANA6BhADQMgIYB0DAAGgZAwwBoGAANA6BhADQMgIYB0DAAGgZA+/cBXGudpin0jD3lef4BCBlp
+6Y0NgVMAAAAASUVORK5CYII=','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
 function messByLang(iMess) {
 	if((tVl=iMess.match("^"+(this.ownerSess().reqLang().length?this.ownerSess().reqLang():SYS.lang())+":(.+)$","m")).length)
 		return tVl[1];
 	return iMess.parseLine(0);
 }
 
+function labSize( ltext, charW ) {
+	if(charW == null)	charW = 11;
+	for(labSz = 0, off = 0; off < ltext.length; labSz++)
+		ltext.charAt(off, "UTF-8");
+
+	return ceil(ceil(labSz*charW*0.6)/10)*10;
+}
+
+function itHighl( celO, itVl ) {
+	if(celO == null)	return "";
+	tLs = new Array();
+	if(celO.fltr.indexOf("index") == 0 && itVl.length) { celO.ls[tVl=itVl.trim()] = true; tLs.push(tVl); }
+	else if(celO.fltr.indexOf("list") == 0)
+		for(tLs = itVl.split(celO.fltr[4]), iLs = 0; iLs < tLs.length; iLs++)
+			celO.ls[tLs[iLs]=tLs[iLs].trim()] = true;
+
+	for(iLn = 0, off = 0; tLs.length && (tVl=celO.fltr.parseLine(0,off)).length; iLn++)
+		if(iLn && tLs.indexOf(tVl.parse(0,":")) >= 0) return tVl;
+
+	return "";
+}
+
+function updProc(iR, dataTbl, clsLsO ) {
+	procLng = "JavaLikeCalc.JavaScript";
+	procArgs = new Object();
+
+	updReq = "";
+	for(iC = 0; iC < dataTbl[iR].length; iC++)
+		if((itID=dataTbl[0][iC]).indexOf("SP_") == 0)
+			procArgs[itID.slice(3)] = ((itVl=dataTbl[iR][iC]) != "<NULL>") ? itVl : "";
+	for(iC = 0; iC < dataTbl[iR].length; iC++) {
+		if((itID=dataTbl[0][iC]).indexOf("SP_") != 0 || (tClO=clsLsO[(itID=itID.slice(3))]).isEVal() || !tClO.prc.length || dataTbl[iR][iC] != "<NULL>") continue;
+		if(tClO.prcId == null) tClO.prcId = this.nodePath("_")+"_"+itID;
+			SYS.DAQ.funcCall(procLng, procArgs, tClO.prc, tClO.prcId);
+			dataTbl[iR][iC] = procArgs[itID];
+			updReq += (updReq.length?", ":"") + "`SP_"+itID+"`=''"+SYS.strEncode(procArgs[itID],"SQL")+"''";
+		}
+	if(updReq.length)
+		SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET "+updReq+" WHERE `"+dataTbl[0][0]+"`=''"+dataTbl[iR][0]+"'';", true);
+}
+
 if(f_start) {
+	geomHOrig = 580;
 	toUpdate = toReport = false;
 	fMax = 5; fClrTo = -1;
+	itEdFormMarg = 20;
+	itEdFormX = itEdFormMarg;
+	itEdFormY = this.lab_fltr.attr("geomY");
+	itEdFormW = geomW - 2*itEdFormMarg;
+	itEdFormLineHigh = 20;
+	itEdFormOff = null;	//Height offset of the last item of the configuration form
 	btClassEdit_en = dataEditable && classEditable;
 	if(classFix.length)	classNm_text = class = classFix;
 	else classSel_en = true;
-	btEdit_en = dataEditable;
 	colVars = new Object();
-	btClassEdit_value = btEdit_value = false;
+	btClassEdit_value = btEdit_en = btEdit_value = btItEdit_value = false;
 	wUser = "";
+	geomH = geomHOrig;
+	dataTbl_geomH = itDel_geomY - dataTbl_geomY + itDel_geomH;
 }
 
 if(wUser != this.ownerSess().reqUser()) {
 	wUser = this.ownerSess().reqUser();
 
-	btClassEdit_value = btEdit_value = false;
+	btClassEdit_value = btEdit_value = btItEdit_en = btItEdit_value = false;
 	toUpdate = true; toCalcCycles = 1;
 }
 
 //Common events process
 for(off = 0; (sval=event.parse(0,"\n",off)).length; )
-	if(sval == "ws_BtToggleChange:/btClassEdit")	{ toUpdate = true; itDel_active = itCopy_active = false; }
+	if(sval == "ws_BtToggleChange:/btClassEdit")	toUpdate = true, itDel_active = itCopy_active = false, dataTbl_value = "";
 	else if(sval == "ws_BtToggleChange:/btEdit")	toUpdate = true;
 	else if(sval == "ws_CombChange:/classSel") {
 		class = ((tVl=classSel_value.match("\\((.+)\\)$")).length) ? tVl[1] : classSel_value;
 		toUpdate = true; colVars = new Object(); fClrTo = 0; dataTbl_value = "";
+		if(itEdFormOff != null)	itEdFormOff = -1;
 	}
 	else if(sval == "ws_LnAccept:/classEd") {
 		class = ((tVl=classEd_value.match("\\((.+)\\)$")).length) ? tVl[1] : classEd_value;
@@ -13569,16 +13539,30 @@ if((f_start || toUpdate) /*&& !classFix.length*/) {
 		dataTbl_geomH = itDel_geomY + (btEdit_value?0:itDel_geomH) - dataTbl_geomY;
 	}
 
+	btClassEdit_en = !(btItEdit_en && btItEdit_value);
 	btClassEdit_active = class.length;
-	itCopy_en = !btClassEdit_value;
-	classEd_en = !classFix.length && btClassEdit_value;
-	classSel_en = !classFix.length && !btClassEdit_value;
+	classEd_en = btClassEdit_en && !classFix.length && btClassEdit_value;
+	classSel_en = btClassEdit_en && !classFix.length && !btClassEdit_value;
 
 	go_report_en = go_reportIt_en = !btClassEdit_value;
 }
 
+//Removing old edition fields of the item configuration form
+if(f_start || (btClassEdit_value && itEdFormOff != null) || itEdFormOff == -1) {
+	itEdFormOff = null;
+	geomH = geomHOrig;
+
+	wLs = this.nodeList("wdg_");
+	for(iW = 0; iW < wLs.length; iW++)
+		if(wLs[iW].indexOf("wdg_fItLab") == 0 || wLs[iW].indexOf("wdg_fItVal") == 0)
+			this.wdgDel(wLs[iW].slice(4));
+}
+
 //The class edition mode
 if(btClassEdit_value) {
+	dataTbl_en = itDel_en = itAdd_en = true;
+	btEdit_en = btItEdit_en = btItEdit_value = itCopy_en = false;
+
 	SYS.BD.nodeAt(db,".").SQLReq("CREATE TABLE IF NOT EXISTS `classes` (`CLASS` varchar(20) DEFAULT '''', `ID` varchar(20) DEFAULT '''', `NAME` text, `TP` varchar(100) DEFAULT '''', `TBL` varchar(100) DEFAULT '''', `FILTER` text, `PROC` text, PRIMARY KEY (`CLASS`,`ID`));", true);
 
 	//Updation the main table
@@ -13621,6 +13605,7 @@ if(btClassEdit_value) {
 			if(dataTbl.length == 1) {
 				SYS.BD.nodeAt(db,".").SQLReq("CREATE TABLE IF NOT EXISTS `sh_"+class+"` (`ID` INT AUTO_INCREMENT, `NAME` varchar(200) DEFAULT '''', `DSCR` text, PRIMARY KEY (`ID`));", true);
 				SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `classes` (`CLASS`,`ID`,`NAME`) VALUES (''"+class+"'',''*TITLE'','''');", true);
+				SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `classes` (`CLASS`,`ID`,`NAME`) VALUES (''"+class+"'',''*ID'','''');", true);
 				SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `classes` (`CLASS`,`ID`,`NAME`) VALUES (''"+class+"'',''*NAME'','''');", true);
 				SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `classes` (`CLASS`,`ID`,`NAME`) VALUES (''"+class+"'',''*DSCR'','''');", true);
 			}
@@ -13663,168 +13648,267 @@ if(btClassEdit_value) {
 
 //The data representing mode
 if(f_start || toUpdate) {
-	// Initiate the filter
-	for(iF = 0; iF < fMax; iF++)
-		this["fltrCol"+iF].attrSet("items", tr("Disabled")+"\n"+tr("Name")+" (NAME)\n"+tr("Description")+" (DSCR)");
+	go_report_active = dataTbl_en = lab_fltr_en = btEdit_en = itDel_en = itAdd_en = itCopy_en = fltr0_en = fltrCol0_en = !btItEdit_value;
 
-	// Requesting the table structure
-	clsLs = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`,`NAME`,`TP`,`TBL`,`FILTER`,`PROC` FROM `classes` WHERE `CLASS`=''"+class+"'';");
-	clsLsO = new Object();	 clsLsSort = new Array();
-	hasProc = false;		//The scheme has procedures of the logical columns
-	for(iR = 1; iR < clsLs.length; iR++) {
-		clsLsO[clsLs[iR][0]] = tO = new Object();
-		tO.name = ((tO.name=clsLs[iR][1]) == "<NULL>" || !tO.name.length) ? clsLs[iR][0] : messByLang(tO.name);
-		tO.tp = clsLs[iR][2];
-		tO.tbl = clsLs[iR][3];
-		if((tO.fltr=clsLs[iR][4]) == "<NULL>")	tO.fltr = "";
-		if((tO.prc=clsLs[iR][5]) == "<NULL>")	tO.prc = "";
-		if(tO.prc.length) hasProc = true;
-		if(clsLs[iR][0] == "*NAME") {
-			tO.name = (tO.name==clsLs[iR][0]) ? tr("Name") : tO.name;
-			tO.tp = tO.tp.length ? tO.tp : "varchar(200)";
-			tO.tbl = tO.tbl.length ? tO.tbl : "center:170px";
-		}
-		else if(clsLs[iR][0] == "*DSCR") {
-			tO.name = (tO.name==clsLs[iR][0]) ? tr("Description") : tO.name;
-			tO.tp = tO.tp.length ? tO.tp : "text";
-			tO.tbl = tO.tbl.length ? tO.tbl : ":350px";
-		}
+	//Generic table
+	//------------------
+	if(dataTbl_en) {
+		geomH = geomHOrig;
 
-		if(clsLs[iR][0][0] != "*")
-			for(iF = 0; iF < fMax; iF++)
-				this["fltrCol"+iF].attrSet("items", this["fltrCol"+iF].attr("items")+"\n"+tO.name+" (SP_"+clsLs[iR][0]+")");
+		// Initiate the filter
+		for(iF = 0; iF < fMax; iF++)
+			this["fltrCol"+iF].attrSet("items", tr("Disabled")+"\n"+tr("Name")+" (NAME)\n"+tr("Description")+" (DSCR)");
 
-		if(clsLs[iR][0] != "*TITLE") clsLsSort.push(tO.tbl.parse(2,":")+":"+iR.toString(10,3));
-	}
-	clsLsSort.sort();
-	clsLsReq = "";
-	for(iL = 0; iL < clsLsSort.length; iL++)
-		clsLsReq += (clsLsReq.length?",":"") + "`"+(((tVl=clsLs[clsLsSort[iL].parse(1,":").toInt()][0])[0]=="*")?tVl.slice(1):"SP_"+tVl)+"`";
-
-	//Updation the main table
-	procLng = "JavaLikeCalc.JavaScript";
-	procArgs = new Object();
-
-	// Where prepairing for the filter
-	for(wherePart = "", iF = 0; iF < fMax; iF++) {
-		if(!(tVl=this["fltr"+iF].attr("value")).length)	continue;
-		itVl = this["fltrCol"+iF].attr("value").match("\\((.+)\\)")[1];
-		wherePart += (wherePart.length?"AND":"") + " `"+itVl+"` REGEXP ''"+tVl+"'' ";
-		if(!colVars[itVl].isEVal())	colVars[itVl]["<lock>"] = true;
-	}
-	for(var iC in colVars)
-		if(colVars[iC]["<lock>"] == true)	delete colVars[iC]["<lock>"];
-		else delete colVars[iC];
-	// Same requesting
-	dataTbl = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`,"+clsLsReq+" FROM `sh_"+class+"` "+(wherePart.length?"WHERE"+wherePart:"")+"ORDER BY ''ID'';");
-	dataTbl_items = "<tbl sel=''row'' sortEn=''"+(btEdit_value?0:1)+"'' colsWdthFit=''0'' hHdrVis=''1'' vHdrVis=''1''>\n";
-	colTps = new Object();
-	if(toReport)	tRep = "<body>\n"
-							"<h1>"+classNm_text+"</h1>\n"
-							"<table class=''data'' width=''100%'' export=''1''>\n";
-
-	for(iR = 0; iR < dataTbl.length; iR++) {
-		cntR = optR = "";
-		if(toReport) tRep += "<tr>";
-		//   ... the header
-		if(iR == 0)
-			for(iC = 0; iC < dataTbl[iR].length; iC++) {
-				itVl = dataTbl[iR][iC];
-				opt = "";
-				if(itVl == "ID")	opt += " width=''0px''";
-				else if((itVl.indexOf("SP_") == 0 && !(tVl=clsLsO[itVl.slice(3)]).isEVal()) || ((itVl == "NAME" || itVl == "DSCR") && !(tVl=clsLsO["*"+itVl]).isEVal()))
-				{
-					if((tVl.fltr == "index" || tVl.fltr.indexOf("list") == 0) && colVars[itVl].isEVal()) {
-						colVars[itVl] = new Object();
-						colVars[itVl].ls = new Object();
-						colVars[itVl].fltr = tVl.fltr;
-					}
-					opt += (btEdit_value && !tVl.prc.length) ? " edit=''1''" : "";
-					itVl = tVl.name;
-					if(tVl.tp.search("bool","i") >= 0)		colTps[iC] = "b";
-					else if(tVl.tp.search("int","i") >= 0)	colTps[iC] = "i";
-					else if(tVl.tp.search("(float|double)","i") >= 0) colTps[iC] = "r";
-					else if(tVl.tp.search("text","i") >= 0)	colTps[iC] = "t";
-					if((tVl2=tVl.tbl.parse(0,":")).length)	opt += " align=''"+tVl2+"''";
-					if((tVl2=tVl.tbl.parse(1,":")).length)	opt += " width=''"+tVl2+"''";
-					//this.messInfo("iC="+iC+"; tp="+tVl.tp+" = "+colTps[iC]+"; tVl.fltr="+tVl.fltr);
-				}
-				cntR += "<s"+opt+">"+SYS.strEncode(itVl,"HTML")+"</s>";
-				if(toReport) tRep += "<th>"+SYS.strEncode(itVl,"HTML")+"</th>";
+		// Requesting the table structure
+		clsLs = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`,`NAME`,`TP`,`TBL`,`FILTER`,`PROC` FROM `classes` WHERE `CLASS`=''"+class+"'';");
+		clsLsO = new Object();	 clsLsSort = new Array();
+		hasProc = false;		//The scheme has procedures of the logical columns
+		for(iR = 1; iR < clsLs.length; iR++) {
+			clsLsO[clsLs[iR][0]] = tO = new Object();
+			tO.name = ((tO.name=clsLs[iR][1]) == "<NULL>" || !tO.name.length) ? clsLs[iR][0] : messByLang(tO.name);
+			tO.tp = clsLs[iR][2];
+			tO.tbl = clsLs[iR][3];
+			if((tO.fltr=clsLs[iR][4]) == "<NULL>")	tO.fltr = "";
+			if((tO.prc=clsLs[iR][5]) == "<NULL>")	tO.prc = "";
+			if(tO.prc.length) hasProc = true;
+			if(clsLs[iR][0] == "*ID") {
+				tO.name = (tO.name==clsLs[iR][0]) ? tr("Identifier") : tO.name;
+				tO.tp = "int";
+				tO.tbl = tO.tbl.length ? tO.tbl : "center:0px";
 			}
-		//  ... the data
-		else {
-			//  ... prepairing the logical cells
-			if(hasProc) {
-				updReq = "";
-				for(iC = 0; iC < dataTbl[iR].length; iC++)
-					if((itID=dataTbl[0][iC]).indexOf("SP_") == 0)
-						procArgs[itID.slice(3)] = ((itVl=dataTbl[iR][iC]) != "<NULL>") ? itVl : "";
+			else if(clsLs[iR][0] == "*NAME") {
+				tO.name = (tO.name==clsLs[iR][0]) ? tr("Name") : tO.name;
+				tO.tp = tO.tp.length ? tO.tp : "varchar(200)";
+				tO.tbl = tO.tbl.length ? tO.tbl : "center:170px";
+			}
+			else if(clsLs[iR][0] == "*DSCR") {
+				tO.name = (tO.name==clsLs[iR][0]) ? tr("Description") : tO.name;
+				tO.tp = tO.tp.length ? tO.tp : "text";
+				tO.tbl = tO.tbl.length ? tO.tbl : ":350px";
+			}
+
+			if(clsLs[iR][0][0] != "*")
+				for(iF = 0; iF < fMax; iF++)
+					this["fltrCol"+iF].attrSet("items", this["fltrCol"+iF].attr("items")+"\n"+tO.name+" (SP_"+clsLs[iR][0]+")");
+
+			if(clsLs[iR][0] != "*TITLE") clsLsSort.push(tO.tbl.parse(2,":")+":"+iR.toString(10,3));
+		}
+		clsLsSort.sort();
+		clsLsReq = "";
+		for(iL = 0; iL < clsLsSort.length; iL++)
+			if((tVl=clsLs[clsLsSort[iL].parse(1,":").toInt()][0]) != "*ID")
+				clsLsReq += (clsLsReq.length?",":"") + "`"+((tVl[0]=="*")?tVl.slice(1):"SP_"+tVl)+"`";
+
+		//Updation the main table
+		// Where prepairing for the filter
+		for(wherePart = "", iF = 0; iF < fMax; iF++) {
+			if(!(tVl=this["fltr"+iF].attr("value")).length)	continue;
+			itVl = this["fltrCol"+iF].attr("value").match("\\((.+)\\)")[1];
+			wherePart += (wherePart.length?"AND":"") + " `"+itVl+"` REGEXP ''"+tVl+"'' ";
+			if(!colVars[itVl].isEVal())	colVars[itVl]["<lock>"] = true;
+		}
+		for(var iC in colVars)
+			if(colVars[iC]["<lock>"] == true)	delete colVars[iC]["<lock>"];
+			else delete colVars[iC];
+		// Same requesting
+		dataTbl = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`,"+clsLsReq+" FROM `sh_"+class+"` "+(wherePart.length?"WHERE"+wherePart:"")+"ORDER BY ''ID'';");
+		dataTbl_items = "<tbl sel=''row'' sortEn=''"+(btEdit_value?0:1)+"'' colsWdthFit=''0'' hHdrVis=''1'' vHdrVis=''1''>\n";
+		colTps = new Object();
+		if(toReport)	tRep = "<body>\n"
+								"<h1>"+classNm_text+"</h1>\n"
+								"<table class=''data'' width=''100%'' export=''1''>\n";
+
+		for(iR = 0; iR < dataTbl.length; iR++) {
+			cntR = optR = "";
+			if(toReport) tRep += "<tr>";
+			//   ... the header
+			if(iR == 0)
 				for(iC = 0; iC < dataTbl[iR].length; iC++) {
-					if((itID=dataTbl[0][iC]).indexOf("SP_") != 0 || (tClO=clsLsO[(itID=itID.slice(3))]).isEVal() || !tClO.prc.length || dataTbl[iR][iC] != "<NULL>") continue;
-					if(tClO.prcId.isEVal()) tClO.prcId = this.nodePath("_")+"_"+itID;
-					SYS.DAQ.funcCall(procLng, procArgs, tClO.prc, tClO.prcId);
-					dataTbl[iR][iC] = procArgs[itID];
-					updReq += (updReq.length?", ":"") + "`SP_"+itID+"`=''"+SYS.strEncode(procArgs[itID],"SQL")+"''";
-				}
-				if(updReq.length)
-					SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET "+updReq+" WHERE `"+dataTbl[0][0]+"`=''"+dataTbl[iR][0]+"'';", true);
-			}
-
-			//  ... representing
-			for(iC = 0; iC < dataTbl[iR].length; iC++) {
-				itVl = dataTbl[iR][iC];
-				opt = "";
-				if(itVl == "<NULL>")	itVl = "";
-				if(!(tVl2=colVars[dataTbl[0][iC]]).isEVal())	{
-					tLs = new Array();
-					if(tVl2.fltr.indexOf("index") == 0 && itVl.length) { tVl2.ls[tVl=itVl.trim()] = true; tLs.push(tVl); }
-					else if(tVl2.fltr.indexOf("list") == 0)
-						for(tLs = itVl.split(tVl2.fltr[4]), iLs = 0; iLs < tLs.length; iLs++)
-							tVl2.ls[tLs[iLs]=tLs[iLs].trim()] = true;
-					// Highlight
-					for(iLn = 0, off = 0; tLs.length && (tVl1=tVl2.fltr.parseLine(0,off)).length; iLn++)
-						if(iLn && tLs.indexOf(tVl1.parse(0,":")) >= 0) {
-							tVl = ((tVl=tVl1.parse(2,":")).length?" color=''"+tVl+"''":"") + ((tVl=tVl1.parse(3,":")).length?" font=''"+tVl+"''":"");
-							if(tVl1.parse(1,":")[0] == "1") optR += tVl; else opt += tVl;
+					itVl = dataTbl[iR][iC];
+					opt = "";
+					if(itVl == "ID" && clsLsO["*"+itVl] == null)	opt += " width=''0px''";
+					else if((itVl.indexOf("SP_") == 0 && !(tVl=clsLsO[itVl.slice(3)]).isEVal()) || ((itVl == "ID" || itVl == "NAME" || itVl == "DSCR") && !(tVl=clsLsO["*"+itVl]).isEVal()))
+					{
+						if((tVl.fltr == "index" || tVl.fltr.indexOf("list") == 0) && colVars[itVl].isEVal()) {
+							colVars[itVl] = new Object();
+							colVars[itVl].ls = new Object();
+							colVars[itVl].fltr = tVl.fltr;
 						}
+						opt += (btEdit_value && !tVl.prc.length && itVl != "ID") ? " edit=''1''" : "";
+						itVl = tVl.name;
+						if(tVl.tp.search("bool","i") >= 0)		colTps[iC] = "b";
+						else if(tVl.tp.search("int","i") >= 0)	colTps[iC] = "i";
+						else if(tVl.tp.search("(float|double)","i") >= 0) colTps[iC] = "r";
+						else if(tVl.tp.search("text","i") >= 0)	colTps[iC] = "t";
+						if((tVl2=tVl.tbl.parse(0,":")).length)	opt += " align=''"+tVl2+"''";
+						if((tVl2=tVl.tbl.parse(1,":")).length)	opt += " width=''"+tVl2+"''";
+						//this.messInfo("iC="+iC+"; tp="+tVl.tp+" = "+colTps[iC]+"; tVl.fltr="+tVl.fltr);
+					}
+					cntR += "<s"+opt+">"+SYS.strEncode(itVl,"HTML")+"</s>";
+					if(toReport) tRep += "<th>"+SYS.strEncode(itVl,"HTML")+"</th>";
 				}
-				if(!colTps[iC].isEVal())	cntR += "<"+colTps[iC]+opt+">"+SYS.strEncode(itVl,"HTML")+"</"+colTps[iC]+">";
-				else cntR += "<s"+opt+">"+SYS.strEncode(itVl,"HTML")+"</s>";
-				if(toReport) tRep += "<td style=''white-space: pre-wrap;"+((colTps[iC]=="t")?"text-align: left;":"")+"''>"+SYS.strEncode(itVl,"HTML")+"</td>";
-			}
-		}
-		dataTbl_items += (iR?"<r":"<h")+optR+">" + cntR + (iR?"</r>\n":"</h>\n");
-		if(toReport) tRep += "</tr>\n";
-	}
-	dataTbl_items += "</tbl>\n";
-	if(toReport) { tRep += "</table>\n</body>\n"; go_report_report = tRep; tRep = ""; }
+			//  ... the data
+			else {
+				//  ... prepairing the logical cells
+				if(hasProc) updProc(iR, dataTbl, clsLsO);
 
-	//Filter''s selection list update
-	for(iF = 0; iF < fMax; iF++) {
-		iFCo = this["fltrCol"+iF]; iFo = this["fltr"+iF];
-		fCol = iFCo.attr("value").match("\\((.+)\\)")[1];
-		//this.messInfo("iF="+iF+"; fCol="+fCol+"; colVars[fCol]="+colVars[fCol]);
-		if((tO=colVars[fCol]).isEVal())	continue;
-		tO = tO.ls;
-		fCfg = "";
-		fCfgPref = iFo.attr("value");
-		for(sumVl = "", tVl1 = "", off = 0; (tVl=fCfgPref.parse(0,"|",off)).length; tVl1 = tVl)
-			if(tVl1.length) { sumVl += (sumVl.length?"|":"")+tVl1; fCfg += sumVl + "\n"; }
-		for(var iFv in tO)
-			if(iFv.length && fCfgPref.indexOf(iFv) < 0)
-				fCfg += (fCfgPref.length?fCfgPref+"|":"") + iFv + "\n";
-			//fCfg += iFv+"\n";
-		iFo.attrSet("cfg", fCfg);
+				//  ... representing
+				for(iC = 0; iC < dataTbl[iR].length; iC++) {
+					itVl = dataTbl[iR][iC];
+					opt = "";
+					if(itVl == "<NULL>")	itVl = "";
+					if((tVl1=itHighl(colVars[dataTbl[0][iC]],itVl)).length) {
+						tVl = ((tVl=tVl1.parse(2,":")).length?" color=''"+tVl+"''":"") + ((tVl=tVl1.parse(3,":")).length?" font=''"+tVl+"''":"");
+						if(tVl1.parse(1,":")[0] == "1") optR += tVl; else opt += tVl;
+					}
+					if(!colTps[iC].isEVal())	cntR += "<"+colTps[iC]+opt+">"+SYS.strEncode(itVl,"HTML")+"</"+colTps[iC]+">";
+					else cntR += "<s"+opt+">"+SYS.strEncode(itVl,"HTML")+"</s>";
+					if(toReport)
+						tRep += "<td style=''white-space: pre-wrap;"+((colTps[iC]=="t")?"text-align: left;":"")+"''>"+
+							SYS.strEncode(itVl,"HTML").replace(new RegExp("(http|https|ftp)://(\\S+)","g"),"<a target=''_blank'' href=''$1://$2''>$2</a>")+
+							"</td>";
+				}
+			}
+			dataTbl_items += (iR?"<r":"<h")+optR+">" + cntR + (iR?"</r>\n":"</h>\n");
+			if(toReport) tRep += "</tr>\n";
+		}
+		dataTbl_items += "</tbl>\n";
+		if(toReport) { tRep += "</table>\n</body>\n"; go_report_report = tRep; tRep = ""; }
+
+		//Filter''s selection list update
+		for(iF = 0; iF < fMax; iF++) {
+			iFCo = this["fltrCol"+iF]; iFo = this["fltr"+iF];
+			fCol = iFCo.attr("value").match("\\((.+)\\)")[1];
+			//this.messInfo("iF="+iF+"; fCol="+fCol+"; colVars[fCol]="+colVars[fCol]);
+			if((tO=colVars[fCol]).isEVal())	continue;
+			tO = tO.ls;
+			fCfg = "";
+			fCfgPref = iFo.attr("value");
+			for(sumVl = "", tVl1 = "", off = 0; (tVl=fCfgPref.parse(0,"|",off)).length; tVl1 = tVl)
+				if(tVl1.length) { sumVl += (sumVl.length?"|":"")+tVl1; fCfg += sumVl + "\n"; }
+			for(var iFv in tO)
+				if(iFv.length && fCfgPref.indexOf(iFv) < 0)
+					fCfg += (fCfgPref.length?fCfgPref+"|":"") + iFv + "\n";
+				//fCfg += iFv+"\n";
+			iFo.attrSet("cfg", fCfg);
+		}
+	}
+	//Item edition form
+	//------------------
+	else if(btItEdit_value) {
+		toCreatFormIt = (itEdFormOff == null);	//Creating the form items
+
+		dataTblOneReq = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`,"+clsLsReq+" FROM `sh_"+class+"` WHERE `ID`=''"+dataTbl_value+"'';");
+		for(iR = 1; iR < dataTblOneReq.length; iR++) {
+			if(dataTblOneReq[iR][0] != dataTbl_value) continue;
+
+			if(hasProc) updProc(iR, dataTblOneReq, clsLsO);
+
+			for(iC = 0; iC < dataTblOneReq[iR].length; iC++) {
+				itVlNm = itVlId = dataTblOneReq[0][iC];
+				if((itVlId.indexOf("SP_") == 0 && !(celO=clsLsO[itVlId.slice(3)]).isEVal()) || ((itVlId == "NAME" || itVlId == "DSCR") && !(celO=clsLsO["*"+itVlId]).isEVal()))
+					itVlNm = celO.name;
+				if((itVl=dataTblOneReq[iR][iC]) == "<NULL>") itVl = "";
+				if(toCreatFormIt) {
+					if(itEdFormOff == null)	itEdFormOff = itEdFormY, geomZoff = 100;
+					// Label
+					nwlO = this.wdgAdd("fItLab"+itVlId, "", "/wlb_originals/wdg_Text");
+					nwlO.attrSet("geomX", itEdFormX).attrSet("geomW", tVl2=labSize(itVlNm+":"))
+						.attrSet("geomY", itEdFormOff).attrSet("geomH", itEdFormLineHigh)
+						.attrSet("text", itVlNm+":").attrSet("alignment", 8);
+					// Value
+					if(celO.prc.length || itVlId == "ID") {	//RO items
+						nwO = this.wdgAdd("fItVal"+itVlId, "", "/wlb_originals/wdg_Text");
+						nwO.attrSet("geomX", itEdFormX+tVl2).attrSet("geomW", itEdFormW - tVl2)
+							.attrSet("geomY", itEdFormOff).attrSet("geomH", itEdFormLineHigh).attrSet("geomZ", geomZoff++)
+							.attrSet("alignment", 8);
+						itEdFormOff += itEdFormLineHigh;
+					}
+					else {
+						nwO = this.wdgAdd("fItVal"+itVlId, "", "/wlb_originals/wdg_FormEl");
+						nwO.attrSet("geomX", itEdFormX+tVl2).attrSet("geomW", itEdFormW - tVl2)
+							.attrSet("geomY", itEdFormOff).attrSet("geomH", itEdFormLineHigh).attrSet("geomZ", geomZoff++)
+							.attrSet("active", 1).attrSet("confirm", 0);
+						itEdFormOff += itEdFormLineHigh;
+						//this.messInfo("TEST 00: "+itVlId+" > "+celO.tp);
+						if(celO.tp.search("bool","i") >= 0)
+							nwO.attrSet("elType", 2);
+						else if(celO.tp.search("int","i") >= 0)
+							nwO.attrSet("geomW", 100).attrSet("elType", 0).attrSet("view", 0);
+						else if(celO.tp.search("(float|double)","i") >= 0)
+							nwO.attrSet("geomW", 100).attrSet("elType", 0).attrSet("view", 0);
+						else if(celO.tp.search("text","i") >= 0) {
+							txtH = 10*itEdFormLineHigh;
+							if((tVl3=celO.tbl.parse(1,":")).length) {
+								if(tVl3.indexOf("px") > 0)	txtH = (tVl3.toInt()/geomW)*geomHOrig;
+								else if(tVl3.indexOf("%") > 0)	txtH = (tVl3.toInt()/100)*geomHOrig;
+								else txtH = 3*itEdFormLineHigh;
+							}
+							nwO.attrSet("geomX", itEdFormX).attrSet("geomW", itEdFormW)
+								.attrSet("geomY", itEdFormOff).attrSet("geomH", txtH).attrSet("elType", 1);
+							itEdFormOff += txtH;
+						}
+					}
+				} else nwlO = this.wdgAt("fItLab"+itVlId), nwO = this.wdgAt("fItVal"+itVlId);
+				//Dynamic
+				// Selection for indexes
+				if((celO.fltr == "index" || celO.fltr.indexOf("list") == 0) && nwO.attr("elType") == 0) {
+					nwO.attrSet("view", 1);
+					fCfg = "", fCfgPref = (celO.fltr == "index" || !itVl.length) ? "" :
+														itVl+((celO.fltr[4]==" ")?"":celO.fltr[4]+" ");
+					if(celO.fltr.indexOf("list") == 0)
+						for(fCfgAdd = "", off = 0; (iFv=itVl.parse(0,celO.fltr[4],off)).length; )
+							fCfgAdd += (fCfgAdd.length?celO.fltr[4]:"") + iFv, fCfg += fCfgAdd + "\n";
+					for(var iFv in colVars[itVlId].ls)
+						if(fCfg.indexOf(iFv) < 0)
+							fCfg += fCfgPref + iFv + "\n";
+					nwO.attrSet("cfg", fCfg);
+				}
+				// Highlighting
+				nwlO.attrSet("backColor","").attrSet("font","Arial 11");
+				if((tVl1=itHighl(celO,itVl)).length) {
+					if((tVl=tVl1.parse(2,":")).length)	nwlO.attrSet("backColor", tVl);
+					if((tVl=tVl1.parse(3,":")).length)	nwlO.attrSet("font", tVl);
+				}
+				// Value
+				nwO.attrSet((celO.prc.length||itVlId == "ID")?"text":"value", itVl);
+				delete nwlO; delete nwO;
+
+				if(itEdFormOff && (itEdFormOff+itEdFormMarg) > geomH)	geomH = itEdFormOff + itEdFormMarg;
+			}
+			break;
+		}
+		delete dataTblOneReq;
 	}
 
 	toUpdate = toReport = false;
 }
 
+if(event.length) {
+	itDel_active = itCopy_active = go_reportIt_active = dataTbl_value.length;
+	btItEdit_en = ((btEdit_en || btItEdit_value) && dataTbl_value.length);
+	if(btItEdit_en)	btItEdit_tipTool = btItEdit_value ? tr("Go to the Table") : tr("Go to the Item");
+}
+
 //Representing events process
 for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
-	itDel_active = itCopy_active = go_reportIt_active = dataTbl_value.length;
-	if(sval == "ws_BtRelease:/itAdd") {
+	if(sval == "ws_BtToggleChange:/btItEdit")	{
+		toUpdate = true, toCalcCycles = 1;
+		// Dynamic filter fields hide/show
+		var fClrToEd;
+		for(iF = 1; iF < fMax; iF++) {
+			tVal = (fClrToEd && iF <= fClrToEd);
+			if(this["fltr"+iF].attr("en"))	fClrToEd = iF;
+			this["fltrCol"+iF].attrSet("en", tVal); this["fltr"+iF].attrSet("en", tVal);
+		}
+		if(!btItEdit_en)	fClrToEd = null;
+		// Item edition fields show/hide
+		wLs = this.nodeList("wdg_");
+		for(iW = 0; iW < wLs.length; iW++)
+			if(wLs[iW].indexOf("wdg_fItLab") == 0 || wLs[iW].indexOf("wdg_fItVal") == 0)
+				this[wLs[iW]].attrSet("en", btItEdit_value);
+	}
+	else if(sval == "ws_BtRelease:/itAdd") {
 		nmLs = vlLs = "";
 		//Prepairing the filter values
 		for(iF = 0; iF < fMax; iF++) {
@@ -13847,15 +13931,17 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `sh_"+class+"` ("+colLs+") (SELECT "+colLs+" FROM `sh_"+class+"` WHERE `ID` = "+dataTbl_value+");");
 		toUpdate = true; toCalcCycles = 1;
 	}
-	else if(sval.slice(0,12) == "ws_TableEdit") {
-		col = sval.parse(0,"_",13).toInt(); row = sval.parse(1,"_",13).toInt();
+	else if((isTbl=(sval.slice(0,12)=="ws_TableEdit")) || (tVl=sval.match("^ws_(LnAccept|TxtAccept|ChkChange):/fItVal(.+)$")).length) {
+		if(isTbl) col = dataTbl[0][sval.parse(0,"_",13).toInt()], row = dataTbl[sval.parse(1,"_",13).toInt()+1][0], toVal = dataTbl_set;
+		else col = tVl[2], row = this.fItValID.attr("text"), toVal = this["fItVal"+col].attr("value");
+		//this.messInfo("TEST 00: col="+col+", row="+row+", toVal="+toVal);
 		//SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET `"+dataTbl[0][col]+"`=''"+SYS.strEncode(dataTbl_set,"SQL")+"'' WHERE `"+dataTbl[0][0]+"`=''"+dataTbl[row+1][0]+"'';");
-		updReq = "`"+dataTbl[0][col]+"`=''"+SYS.strEncode(dataTbl_set,"SQL")+"''";
+		updReq = "`"+col+"`=''"+SYS.strEncode(toVal,"SQL")+"''";
 		for(var itID in clsLsO)
 			if(itID[0] != "*" && clsLsO[itID].prc.length)
 				updReq += ", `SP_"+itID+"`=NULL";
-		SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET "+updReq+" WHERE `"+dataTbl[0][0]+"`=''"+dataTbl[row+1][0]+"'';");
-		if(colVars[dataTbl[0][col]].fltr.parseLine(1).length || hasProc)	toUpdate = true, toCalcCycles = 1;
+		SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET "+updReq+" WHERE `"+dataTbl[0][0]+"`=''"+row+"'';");
+		if(colVars[col].fltr.parseLine(1).length || hasProc)	toUpdate = true, toCalcCycles = 1;
 	}
 	else if(sval.slice(0,22) == "ws_CombChange:/fltrCol") {
 		fN = sval.slice(22).toInt();
@@ -13882,7 +13968,10 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 					itVl = tVl.name;
 				go_reportIt_report += "<span style=''font: bold 15px/25px Arial, sans-serif''>"+SYS.strEncode(itVl,"HTML")+":</span>";
 				if(colTps[iC] == "t")	go_reportIt_report += "<br/>";
-				go_reportIt_report += "<span style=''margin-left: 3pt; white-space: pre-wrap;''>"+SYS.strEncode(dataTblOneReq[iR][iC],"HTML")+"</span><br/>";
+				if((itVl=dataTblOneReq[iR][iC]) == "<NULL>") itVl = "";
+				go_reportIt_report += "<span style=''white-space: pre-wrap;"+((colTps[iC] == "t")?"":" margin-left: 3pt;")+"''>"+
+						SYS.strEncode(itVl,"HTML").replace(new RegExp("(http|https|ftp)://(\\S+)","g"),"<a target=''_blank'' href=''$1://$2''>$2</a>")+
+						"</span><br/>";
 			}
 			break;
 		}
@@ -13910,7 +13999,7 @@ if(fClrTo >= 0) {
 if(toCalcCycles > 0.1) {
 	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
 	toCalcCycles = max(0, toCalcCycles-1);
-}','','',-2,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1677093435);
+}','','',-2,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1702841631);
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_mnEls VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB
@@ -15392,7 +15481,7 @@ INSERT INTO prj_archBrowser VALUES('/archBrowser/so/1','doc','','root',0,'
 INSERT INTO prj_archBrowser VALUES('/archBrowser/so/1/doc','messRep','','/wlb_doc/wdg_docMessRep',0,'','','',-1,0,'owner;geomYsc;archLs;messCat;',1495719828);
 INSERT INTO prj_archBrowser VALUES('/archBrowser/control','graphCalc','','/wlb_Main/wdg_graphCalc',0,'','','',-1,0,'owner;',1563002360);
 CREATE TABLE IF NOT EXISTS 'prj_tmplSO' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO prj_tmplSO VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',0,'','','',-1,1,'pgOpen;',1634973676);
+INSERT INTO prj_tmplSO VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',0,'','','',-1,1,'pgOpen;',1708341698);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so','1','','root',1,'
 ','
 ','
@@ -15432,9 +15521,9 @@ INSERT INTO prj_tmplSO VALUES('/tmplSO/so/2','view1','','root',0,'
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/2','view2','','/wlb_Main/wdg_grpGraph',0,'','','',-1,2,'owner;perm;geomYsc;geomZ;pgGrp;',1615121472);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/2/view2','1','','..',0,'','','',-1,0,'owner;name;',1546704070);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so','view6','','root',0,'
-','','',-1,5,'owner;perm;name;geomZ;',1615121472);
-INSERT INTO prj_tmplSO VALUES('/tmplSO/so/view6','view6','','/wlb_Main/wdg_ResultGraph',0,'','','',-1,2,'owner;perm;geomYsc;geomZ;pgGrp;',1615121472);
-INSERT INTO prj_tmplSO VALUES('/tmplSO/so/view6/view6','1','','..',0,'','','',-1,0,'owner;name;grpName;',1554062066);
+','','',-1,5,'owner;perm;name;geomZ;',1708341698);
+INSERT INTO prj_tmplSO VALUES('/tmplSO/so/view6','view6','','/wlb_Main/wdg_ResultGraph',0,'','','',-1,2,'owner;perm;geomYsc;geomZ;pgGrp;',1708341698);
+INSERT INTO prj_tmplSO VALUES('/tmplSO/so/view6/view6','1','','..',0,'','','',-1,0,'owner;name;',1708341698);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/control','graphCalc','','/wlb_Main/wdg_graphCalc',0,'','','',-1,0,'owner;',1562746129);
 CREATE TABLE IF NOT EXISTS 'wlb_doc' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_doc VALUES('docRepDay','','/wlb_doc/wdg_doc',0,'JavaLikeCalc.JavaScript
@@ -15950,11 +16039,11 @@ if(toBuild) {
 CREATE TABLE IF NOT EXISTS 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"USER" TEXT DEFAULT 'root' ,"GRP" TEXT DEFAULT 'UI' ,"PERMIT" INTEGER DEFAULT '436' ,"PER" INTEGER DEFAULT '100' ,"STYLE" INTEGER DEFAULT '-1' ,"EN_BY_NEED" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO VCAPrjs VALUES('tmplSO','Signal groups (template)','Групи сигналізації (шаблон)','Группы сигнализаций (шаблон)','The projects'' template of visualisation based on signal groups.
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.2','Шаблон проекту візуалізації, який базовано на групах сигналізації.
+Version: 1.3.3','Шаблон проекту візуалізації, який базовано на групах сигналізації.
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.3.2','Шаблон проекта визуализации основанного на группах сигнализации.
+Версія: 1.3.3','Шаблон проекта визуализации основанного на группах сигнализации.
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.3.2','prj_tmplSO','','root','op',432,250,0,1);
+Версия: 1.3.3','prj_tmplSO','','root','op',432,250,0,1);
 INSERT INTO VCAPrjs VALUES('archBrowser','Archives browser','Огляд архівів','Обзор архивов','Project of value archives browsing.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -16121,8 +16210,8 @@ INSERT INTO prj_archBrowser_ses VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el4','wMi
 INSERT INTO prj_archBrowser_ses VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el4','pModeA','');
 INSERT INTO prj_archBrowser_ses VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el4','pModeC','');
 INSERT INTO prj_archBrowser_ses VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el4','color','#75C275-200');
-INSERT INTO prj_archBrowser_ses VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','addr','arh:MemInfo_use (+)');
-INSERT INTO prj_archBrowser_ses VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','name','val:DAQ.System.AutoDA.MemInfo.use');
+INSERT INTO prj_archBrowser_ses VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','addr','arh:MEM_use (+)');
+INSERT INTO prj_archBrowser_ses VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','name','val:DAQ.System.AutoDA.MEM.use');
 INSERT INTO prj_archBrowser_ses VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','dscr','');
 INSERT INTO prj_archBrowser_ses VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','min','val:0');
 INSERT INTO prj_archBrowser_ses VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el5','max','val:0');
@@ -17309,6 +17398,8 @@ INSERT INTO Trs VALUES('Table properties','Властивості таблиці
 INSERT INTO Trs VALUES('Filter','Фільтр','Фильтр','');
 INSERT INTO Trs VALUES('Procedure','Процедура','','');
 INSERT INTO Trs VALUES('%1 item:','%1 елемент:','','');
+INSERT INTO Trs VALUES('Go to the Table','Перейти до Таблиці','','');
+INSERT INTO Trs VALUES('Go to the Item','Перейти до Елементу','','');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#IO_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_Main_io VALUES('ElCadr','name','Element cadre',32,'','','','Елемент кадр','','Элемент кадр','','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','geomW','110',32,'','','','','','','','','','');
@@ -23209,7 +23300,7 @@ As you can see from the list of possible table fields, this item supports confir
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Ustijancev Michael
-Version: 1.5.2
+Version: 1.5.3
 License: GPLv2',32,'','','','Елемент-кадр слугує для відображення історії порушень та динамічного їх оновлення на поточний час у повноформатному табличному вигляді, із виділенням їх за кольором та текстом та можливістю багаторівневого фільтрування. Порушення отримуються із буферу поточних-активних порушень OpenSCADA та архіву(ів), визначеного конфігураційним полем <alArch>. Фактично елемент реалізує функції примітиву "Протокол" для порушень та із розширенням можливостей.
 
 Загалом кадр містить елементи:
@@ -23248,7 +23339,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для від�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Устьянцев Михайло
-Версія: 1.5.2
+Версія: 1.5.3
 Ліцензія: GPLv2','','Элемент-кадр служит для отображения истории нарушений и динамического их обновление для текущего времени в полноформатном табличном виде, с выделением их цветом и текстом и возможностью многоуровневого фильтрования. Нарушения получаются из буфера текущих-активных сообщений OpenSCADA и архива(ов), определённого конфигурационным полем <alArch>. Фактически элемент реализует функции примитива "Протокол" для нарушений и с расширением возможностей.
 
 В целом кадр содержит элементы:
@@ -23287,7 +23378,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для від�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Устьянцев Михаил
-Версия: 1.5.2
+Версия: 1.5.3
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','view','7',32,'','','pass','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','backColor','black',96,'backColorVal','','trnd1','','','','','','','');
@@ -23346,7 +23437,7 @@ Summary the total number of displayed graphs in one frame reaches 80, and it is 
 The frame doesn''t support any control!
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.1
+Version: 1.1.2
 License: GPLv2',32,'','','','Елемент-кадр слугує для відображення групи поточних трендів параметрів (до 5) у окремих кадрах-віджетах кількістю до 16 одиниць (4x4), стосовно яких підтримується масштабування залежно від їх конфігурованої кількості. Кадри-віджети трендів параметрів реалізуються супутнім віджетом "Кадр зведених графіків".
 
 Разом загальна кількість відображуваних графіків на одному кадрі сягає 80 та він призначений для формування окремого виду відображення, що застосовується поза об''єктів сигналізації — глобально за всім проектом візуалізації.
@@ -23354,7 +23445,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для від�
 Кадр не підтримує ніякого керування!
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.1.1
+Версія: 1.1.2
 Ліцензія: GPLv2','','Элемент-кадр служит для отображения группы текущих трендов параметров (до 5) в отдельных кадрах-виджетах количеством до 16 единиц (4x4), относительно которых поддерживается масштабирование в зависимости от их конфигурируемого количества. Кадры-виджеты трендов параметров реализуются сопутствующим виджетом "Кадр сводных графиков".
 
 Суммарно общее количество отображаемых графиков на одном кадре достигает 80 и он предназначен для формирования отдельного вида отображения, который применяется за объектами сигнализации — глобально по всему проекту визуализации.
@@ -23362,7 +23453,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для від�
 Кадр не поддерживает никакого управления!
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.1.1
+Версия: 1.1.2
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('ResultGraphEl','dscr','The element-widget serves as the basis for the result graphics and is not usually used independently. The widget displays the name of the group and up to five trends, with their text labels, over a fixed period of time (10 minutes) to observe the current trend of the parameters.
 
@@ -23827,10 +23918,10 @@ The frame provides currently and in future for next features:
   - adding, copying and removing of records-rows of the table in the edition mode;
   - generation of the report document of the selected item, which is ready to print and convenient in complete observing;
   - generation of the report document of the main table with accounting the filter settings and natural show the specific fields;
-  - [PLANNED] detailed control panel of the selected item with the specific fields.
+  - detailed control panel-form of the selected item with the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.1
+Version: 1.4.7
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -23841,15 +23932,15 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - додання, копіювання та видалення записів-рядків таблиці у режимі редагування;
   - генерація звітної документації до обраного елементу, готової до друку та зручної для повного огляду;
   - генерація звітної документації до основної таблиці з урахуванням налаштувань фільтру та природним відображенням специфічних полів;
-  - [ЗАПЛАНОВАНО] деталізована панель керування обраним елементом зі специфічними полями.
+  - деталізована панель-форма керування обраним елементом зі специфічними полями.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.3.1
+Версія: 1.4.7
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','900',32,'','','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','580',32,'','','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','900',40,'','','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','580',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','22',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','evProc','ws_BtPress:/itDel:open:/pg_control/pg_accept
 usr_report:/go_report:open:/pg_control/pg_alarmsStReport
@@ -23862,7 +23953,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','bordColor','black',32,'','','','','
 INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','fltr0','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','214',32,'','','fltr0','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','23',32,'','','fltr0','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','588',32,'','','fltr0','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','558',32,'','','fltr0','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','16',32,'','','fltr0','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','7',32,'','','fltr0','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','0',40,'','','fltr0','','','','','','','');
@@ -23874,7 +23965,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','fltr1','
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',32,'','','fltr1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','214',32,'','','fltr1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','40',32,'','','fltr1','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','588',32,'','','fltr1','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','558',32,'','','fltr1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','16',32,'','','fltr1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','7',32,'','','fltr1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','0',40,'','','fltr1','','','','','','','');
@@ -23886,7 +23977,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','fltr2','
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',32,'','','fltr2','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','214',32,'','','fltr2','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','57',32,'','','fltr2','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','588',32,'','','fltr2','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','558',32,'','','fltr2','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','16',32,'','','fltr2','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','9',32,'','','fltr2','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','0',40,'','','fltr2','','','','','','','');
@@ -23898,7 +23989,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','fltr3','
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',32,'','','fltr3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','214',32,'','','fltr3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','74',32,'','','fltr3','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','588',32,'','','fltr3','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','558',32,'','','fltr3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','16',32,'','','fltr3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','11',32,'','','fltr3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','0',40,'','','fltr3','','','','','','','');
@@ -23979,13 +24070,13 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','items','Disabled',8,'','','fltrCol4
 INSERT INTO wlb_Main_io VALUES('storeHouse','font','Arial 12',0,'','','fltrCol4','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','go_report','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',40,'','','go_report','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','875',32,'','','go_report','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','1',32,'','','go_report','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','22',32,'','','go_report','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','22',32,'','','go_report','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','864',32,'','','go_report','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','3',32,'','','go_report','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','35',32,'','','go_report','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','35',32,'','','go_report','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','6',32,'','','go_report','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Prepare and call a report of all visible',32,'','','go_report','Приготувати та викликати звіт усього видимого','','Приготовить и вызвать отчёт всего видимого','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',32,'','','go_report','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',40,'','','go_report','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','elType','3',32,'','','go_report','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','img','doc',0,'','','go_report','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','itAdd','','','','','','','');
@@ -24025,7 +24116,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','font','Arial 15',0,'','','itDel',''
 INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','lab_fltr','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','3',32,'','','lab_fltr','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','21',40,'','','lab_fltr','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','804',32,'','','lab_fltr','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','774',32,'','','lab_fltr','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','88',32,'','','lab_fltr','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','3',32,'','','lab_fltr','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomMargin','1',32,'','','lab_fltr','','','','','','','');
@@ -24046,7 +24137,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','text','Filter:
         &
         &','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','dataTbl','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','2',32,'','','dataTbl','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','3',32,'','','dataTbl','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','40',40,'','','dataTbl','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','895',32,'','','dataTbl','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','540',40,'','','dataTbl','','','','','','','');
@@ -24058,7 +24149,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','value','',8,'','','dataTbl','','','
 INSERT INTO wlb_Main_io VALUES('storeHouse','items','',8,'','','dataTbl','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','set','',8,'','','dataTbl','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','1',40,'','','itCopy','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','en','1',32,'','','itDel','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','en','1',40,'','','itDel','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','classEd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',40,'','','classEd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','200',32,'','','classEd','','','','','','','');
@@ -24107,22 +24198,22 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','img','edit',0,'','','btClassEdit','
 INSERT INTO wlb_Main_io VALUES('storeHouse','mode','1',0,'','','btClassEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','font','Arial 15',0,'','','btClassEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:ITW',32,'','','btEdit','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','name','Edit',32,'','','btEdit','Редагувати','','Редактировать','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','name','',32,'','','btEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',40,'','','btEdit','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','810',32,'','','btEdit','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','23',32,'','','btEdit','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','87',32,'','','btEdit','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','16',32,'','','btEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','779',32,'','','btEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','16',32,'','','btEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','22',32,'','','btEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','22',32,'','','btEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','20',32,'','','btEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','contextMenu','',32,'','','btEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',40,'','','btEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','elType','3',32,'','','btEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','value','0',8,'','','btEdit','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','img','',0,'','','btEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','img','tblEdit',0,'','','btEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','mode','1',0,'','','btEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','font','Arial 12',0,'','','btEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Edit the storehouse class',32,'','','btClassEdit','Редагувати клас складу','','Редактировать класс склада','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Edit the storehouse',32,'','','btEdit','Редагувати склад','','Редактировать склад','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Edit the storehouse table',32,'','','btEdit','Редагувати таблицю складу','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Select present or enter ID of the new storehouse class for editing',32,'','','classEd','Обрати наявний або ввести ІД нового класу складу для редагування','','Выбрать присутствующий или ввести ИД нового класса склада для редактирования','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Select the storehouse class',32,'','','classSel','Обрати клас складу','','Выбрать класс склада','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','perm','432',32,'','','btClassEdit','','','','','','','');
@@ -24163,15 +24254,37 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 15 1 0 0 0',0,'','','c
 INSERT INTO wlb_Main_io VALUES('grph_panel','img','',0,'','','curtime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomXsc','1',32,'','','prev1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',40,'','','go_reportIt','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','850',32,'','','go_reportIt','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','1',32,'','','go_reportIt','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','22',32,'','','go_reportIt','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','22',32,'','','go_reportIt','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','828',32,'','','go_reportIt','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','3',32,'','','go_reportIt','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','35',32,'','','go_reportIt','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','35',32,'','','go_reportIt','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','21',32,'','','go_reportIt','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Prepare and call a report for the selected record',32,'','','go_reportIt','Приготувати та викликати звіт обраного запису','','Приготовить и вызвать отчёт выбранной записи','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','0',40,'','','go_reportIt','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','elType','3',32,'','','go_reportIt','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','img','docIt',0,'','','go_reportIt','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:ITW',32,'','','btItEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','perm','432',32,'','','btItEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',40,'','','btItEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','803',32,'','','btItEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','16',32,'','','btItEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','22',32,'','','btItEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','22',32,'','','btItEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','22',32,'','','btItEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','',40,'','','btItEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',40,'','','btItEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','elType','3',32,'','','btItEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','value','0',8,'','','btItEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','img','itEnter',0,'','','btItEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','mode','1',0,'','','btItEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','font','Arial 15',0,'','','btItEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','name','',32,'','','btItEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','en','1',40,'','','dataTbl','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','en','1',40,'','','itAdd','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','en','1',40,'','','lab_fltr','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','en','1',40,'','','fltr0','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','en','1',40,'','','fltrCol0','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','tipStatus','Go to form of the selected item.',32,'','','btItEdit','Перейти до форми обраного елементу.','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_doc_uio VALUES('docRepDay','lastDay','Last day',131073,'-1|',8,'','','','Останній день','','','Последний день','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepDay','lastHour','Last hour',131073,'-1|',8,'','','','Остання година','','','Последний час','','','','','');
@@ -27960,7 +28073,7 @@ INSERT INTO wlb_Main_uio VALUES('cntrRegul','NAME','Parameter: code',131077,NULL
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','sp','Parameter: set-point',131076,'<EVAL>|',10,'Parameter|sp','','','Параметр: завдання','','','Параметр: задание','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','sp_addr','Parameter: set-point address',196613,NULL,10,'Parameter|sp','','','Параметр: адреса завдання','','','Параметр: адрес задания','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p1_min','Parameter1: minimum',131076,'<EVAL>|',10,'Parameter 1|min','','','Параметр1: мінімум','','','Параметр1: минимум','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('ResultGraph','grpName','Group name',131077,NULL,9,'','','','Ім''я групи','','','Имя группы','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('ResultGraph','grpName','Group name',131333,NULL,9,'','','','Ім''я групи','','','Имя группы','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p2_addr','Parameter2: address',196613,NULL,10,'Parameter 2|var','','','Параметр2: адреса','','','Параметр2: адрес','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p2_name','Parameter2: name',131077,NULL,10,'Parameter 2|NAME','','','Параметр2: ім''я','','','Параметр2: имя','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ResultGraphEl','p2_max','Parameter2: maximum',131076,'<EVAL>|',10,'Parameter 2|max','','','Параметр2: максимум','','','Параметр2: максимум','','','','','','');
@@ -28360,7 +28473,7 @@ else if(doRes && (sox=SYS.system("which sox")).length) {
 	return "audio/ogg";
 }',0,'','','','Повідомлення: тип 1 (Бузер)','','','Уведомление: тип 1 (Бузер)','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('storeHouse','report','Report',131205,'',8,'','','go_report','Звіт','','','Отчёт','','','','','Извештај','');
-INSERT INTO wlb_Main_uio VALUES('storeHouse','mess','Dialog message',131077,'Are you really want to delete this item?',0,'','','itDel','Повідомлення діалогу','Ви дійсно бажаєте видалити обраний елемент?','','Сообщение диалога','Вы действительно желаете удалить выбранный елемент?','','','','','');
+INSERT INTO wlb_Main_uio VALUES('storeHouse','mess','Dialog message',131077,'Are you really want to delete this item?',0,'','','itDel','Повідомлення діалогу','','','Сообщение диалога','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('storeHouse','db','DB: Data base',131077,'',9,'DB','','','БД: База даних','','БД','БД: База данных','','БД','','','','');
 INSERT INTO wlb_Main_uio VALUES('storeHouse','class','Class: initial',131077,'',8,'','','','Клас: поточний','','','Класс: начальный','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('storeHouse','classFix','Class: fixed',131077,'',9,'Class','','','Клас: фіксований','','Клас','Класс: фиксированный','','Класс','','','','');
@@ -29828,22 +29941,22 @@ INSERT INTO wlb_Main_incl VALUES('graphCalc','title','/wlb_originals/wdg_Text',-
 INSERT INTO wlb_Main_incl VALUES('grph_panel','curstime','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
 INSERT INTO wlb_Main_incl VALUES('alarmsStReport','apply','/wlb_originals/wdg_FormEl',-1,'owner;name;active;geomX;geomY;geomW;geomH;geomZ;elType;img;font;');
 INSERT INTO wlb_Main_incl VALUES('alarmsStReport','doc','/wlb_originals/wdg_Document',-1,'owner;active;geomX;geomY;geomW;geomH;style;doc;font;');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','fltr0','/wlb_originals/wdg_FormEl',-1,'owner;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','fltr0','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','fltr1','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','fltr2','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','fltr3','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','fltr4','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','fltrCol0','/wlb_originals/wdg_FormEl',-1,'owner;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','fltrCol0','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','fltrCol1','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','fltrCol2','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','fltrCol3','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','fltrCol4','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','go_report','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','itAdd','/wlb_originals/wdg_FormEl',-1,'owner;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','itAdd','/wlb_originals/wdg_FormEl',-1,'owner;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','itCopy','/wlb_originals/wdg_FormEl',-1,'owner;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','itDel','/wlb_originals/wdg_FormEl',-1,'owner;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','lab_fltr','/wlb_originals/wdg_Text',-1,'owner;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;text;');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','dataTbl','/wlb_originals/wdg_FormEl',-1,'owner;active;geomX;geomY;geomW;geomH;geomZ;contextMenu;elType;value;items;set;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','lab_fltr','/wlb_originals/wdg_Text',-1,'owner;en;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;text;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','dataTbl','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;contextMenu;elType;value;items;set;');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','classEd','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;font;');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','classNm','/wlb_originals/wdg_Text',-1,'owner;geomX;geomW;geomH;geomZ;font;alignment;text;');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','classSel','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;items;font;');
@@ -29852,6 +29965,7 @@ INSERT INTO wlb_Main_incl VALUES('storeHouse','btEdit','/wlb_originals/wdg_FormE
 INSERT INTO wlb_Main_incl VALUES('RootPgSo','alarms','/wlb_originals/wdg_Protocol',-1,'owner;en;geomX;geomY;geomW;geomH;geomZ;headVis;tSize;trcPer;lev;viewOrd;col;itProp;it0lev;it0color;it1lev;it1color;it2color;');
 INSERT INTO wlb_Main_incl VALUES('grph_panel','curstimeBeg','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','go_reportIt','/wlb_originals/wdg_FormEl',-1,'en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','btItEdit','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;img;mode;font;');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_doc_incl VALUES('docRepDay','doc','/wlb_doc/wdg_doc/wdg_doc',-1,'perm;geomZ;tmpl;doc;bTime;time;process;n;');
 INSERT INTO wlb_doc_incl VALUES('docRepMonth','doc','/wlb_doc/wdg_doc/wdg_doc',-1,'perm;geomZ;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;');
@@ -29872,4 +29986,205 @@ INSERT INTO wlb_doc_incl VALUES('docRepYear','set_month','/wlb_originals/wdg_For
 INSERT INTO wlb_doc_incl VALUES('docRepYear','set_val','/wlb_originals/wdg_FormEl',-1,'owner;perm;active;geomX;geomY;geomW;geomH;geomZ;value;view;font;');
 INSERT INTO wlb_doc_incl VALUES('docRepYear','year','/wlb_originals/wdg_FormEl',-1,'active;geomX;geomY;geomH;geomZ;elType;value;items;font;');
 INSERT INTO wlb_doc_incl VALUES('docRepYear','doc','/wlb_doc/wdg_doc/wdg_doc',-1,'owner;perm;geomY;geomH;geomZ;tmpl;doc;bTime;time;process;n;');
+CREATE TABLE IF NOT EXISTS 'prj_tmplSO_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so','pgCont','/wlb_Main/wdg_RootPgSo/wdg_pgCont',-1,'pgGrp;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so','infoW','/wlb_Main/wdg_RootPgSo/wdg_infoW',-1,'pgGrp;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_doc_panel','date','/wlb_Main/wdg_doc_panel/wdg_date',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_doc_panel','size','/wlb_Main/wdg_doc_panel/wdg_size',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','k1','/wlb_Main/wdg_cntrRegul/wdg_k1',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','k2','/wlb_Main/wdg_cntrRegul/wdg_k2',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','k3','/wlb_Main/wdg_cntrRegul/wdg_k3',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','k4','/wlb_Main/wdg_cntrRegul/wdg_k4',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','kp','/wlb_Main/wdg_cntrRegul/wdg_kp',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','td','/wlb_Main/wdg_cntrRegul/wdg_td',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','ti','/wlb_Main/wdg_cntrRegul/wdg_ti',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','zn','/wlb_Main/wdg_cntrRegul/wdg_zn',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','tiMin','/wlb_Main/wdg_cntrRegul/wdg_tiMin',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','h1','/wlb_Main/wdg_cntrRegul/wdg_h1',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','h2','/wlb_Main/wdg_cntrRegul/wdg_h2',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_grph_panel','size','/wlb_Main/wdg_grph_panel/wdg_size',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_grph_panel','date','/wlb_Main/wdg_grph_panel/wdg_date',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','rfct','/wlb_Main/wdg_cntrRegul/wdg_rfct',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','tiPer','/wlb_Main/wdg_cntrRegul/wdg_tiPer',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','kd','/wlb_Main/wdg_cntrRegul/wdg_kd',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','ki','/wlb_Main/wdg_cntrRegul/wdg_ki',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrRegul','tzd','/wlb_Main/wdg_cntrRegul/wdg_tzd',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_treeSelect','apply','/wlb_Main/wdg_treeSelect/wdg_apply',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_treeSelect','cancel','/wlb_Main/wdg_treeSelect/wdg_cancel',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_grph_panel','selWin','/wlb_Main/wdg_grph_panel/wdg_selWin',-1,'value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','data','/wlb_Main/wdg_cntrPaspExt/wdg_data',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','sel_data','/wlb_Main/wdg_cntrPaspExt/wdg_sel_data',-1,'owner;value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','sel_trends','/wlb_Main/wdg_cntrPaspExt/wdg_sel_trends',-1,'owner;value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','sel_view','/wlb_Main/wdg_cntrPaspExt/wdg_sel_view',-1,'owner;value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','trends','/wlb_Main/wdg_cntrPaspExt/wdg_trends',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','trendsList','/wlb_Main/wdg_cntrPaspExt/wdg_trendsList',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','view','/wlb_Main/wdg_cntrPaspExt/wdg_view',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','viewLabSet','/wlb_Main/wdg_cntrPaspExt/wdg_viewLabSet',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPasp','viewSet','/wlb_Main/wdg_cntrPaspExt/wdg_viewSet',-1,'owner;perm;value;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_cntrPaspOld','doc','/wlb_Main/wdg_cntrPasp/wdg_doc',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','ElFigureTests1','/wlb_test/wdg_mn_gen/wdg_ElFigureTests1',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','FormEl','/wlb_test/wdg_mn_gen/wdg_FormEl',-1,'owner;perm;extValue;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','Pi_нд','/wlb_test/wdg_mn_gen/wdg_Pi_нд',-1,'owner;pErr;pModeA;pModeC;pName;pPrec;pVal;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','TextEl','/wlb_test/wdg_mn_gen/wdg_TextEl',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','Ti_нд','/wlb_test/wdg_mn_gen/wdg_Ti_нд',-1,'owner;pErr;pModeA;pModeC;pName;pPrec;pVal;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','diagTests','/wlb_test/wdg_mn_gen/wdg_diagTests',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','media','/wlb_test/wdg_mn_gen/wdg_media',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prescrRunSimple','/wlb_test/wdg_mn_gen/wdg_prescrRunSimple',-1,'owner;perm;dbDB;dbProgs;prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','prt','/wlb_test/wdg_mn_gen/wdg_prt',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','ElFigure1','/wlb_Main/wdg_grpGraph/wdg_ElFigure1',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','arh','/wlb_Main/wdg_grpGraph/wdg_arh',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el1','/wlb_Main/wdg_grpGraph/wdg_el1',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el2','/wlb_Main/wdg_grpGraph/wdg_el2',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el3','/wlb_Main/wdg_grpGraph/wdg_el3',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el4','/wlb_Main/wdg_grpGraph/wdg_el4',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el5','/wlb_Main/wdg_grpGraph/wdg_el5',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el6','/wlb_Main/wdg_grpGraph/wdg_el6',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el7','/wlb_Main/wdg_grpGraph/wdg_el7',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','el8','/wlb_Main/wdg_grpGraph/wdg_el8',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','name','/wlb_Main/wdg_grpGraph/wdg_name',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','trnd1','/wlb_Main/wdg_grpGraph/wdg_trnd1',-1,'owner;curSek;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','ElFigure1','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_ElFigure1',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','arh','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_arh',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el1','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el1',-1,'owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el2','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el2',-1,'owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el3','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el3',-1,'owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el4','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el4',-1,'owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el5','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el5',-1,'owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el6','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el6',-1,'owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el7','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el7',-1,'owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','el8','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_el8',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','name','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_name',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2/pg_1','trnd1','/prj_tmplSO/pg_so/pg_1/pg_view2/wdg_trnd1',-1,'owner;curSek;sclWin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','ElFigure','/wlb_Main/wdg_grpCadr/wdg_ElFigure',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el1','/wlb_Main/wdg_grpCadr/wdg_el1',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el2','/wlb_Main/wdg_grpCadr/wdg_el2',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el3','/wlb_Main/wdg_grpCadr/wdg_el3',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el4','/wlb_Main/wdg_grpCadr/wdg_el4',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el5','/wlb_Main/wdg_grpCadr/wdg_el5',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el6','/wlb_Main/wdg_grpCadr/wdg_el6',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el7','/wlb_Main/wdg_grpCadr/wdg_el7',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','el8','/wlb_Main/wdg_grpCadr/wdg_el8',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','name','/wlb_Main/wdg_grpCadr/wdg_name',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','trnd1','/wlb_Main/wdg_grpCadr/wdg_trnd1',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','ElFigure','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_ElFigure',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el1','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el1',-1,'owner;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmCom;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStop;prmVar;prmWMax;prmWMin;prmAddr;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el2','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el2',-1,'owner;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmCom;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStop;prmVar;prmWMax;prmWMin;prmAddr;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el3','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el3',-1,'owner;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmCom;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStop;prmVar;prmWMax;prmWMin;prmAddr;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el4','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el4',-1,'owner;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmCom;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStop;prmVar;prmWMax;prmWMin;prmAddr;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el5','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el5',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el6','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el6',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el7','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el7',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','el8','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_el8',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','name','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_name',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3/pg_1','trnd1','/prj_tmplSO/pg_so/pg_1/pg_view3/wdg_trnd1',-1,'owner;curSek;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_1','/wlb_Main/wdg_ViewCadr/wdg_el1_1',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_2','/wlb_Main/wdg_ViewCadr/wdg_el1_2',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_3','/wlb_Main/wdg_ViewCadr/wdg_el1_3',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_4','/wlb_Main/wdg_ViewCadr/wdg_el1_4',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_5','/wlb_Main/wdg_ViewCadr/wdg_el1_5',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el1_6','/wlb_Main/wdg_ViewCadr/wdg_el1_6',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_1','/wlb_Main/wdg_ViewCadr/wdg_el2_1',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_2','/wlb_Main/wdg_ViewCadr/wdg_el2_2',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_3','/wlb_Main/wdg_ViewCadr/wdg_el2_3',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_4','/wlb_Main/wdg_ViewCadr/wdg_el2_4',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_5','/wlb_Main/wdg_ViewCadr/wdg_el2_5',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el2_6','/wlb_Main/wdg_ViewCadr/wdg_el2_6',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_1','/wlb_Main/wdg_ViewCadr/wdg_el3_1',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_2','/wlb_Main/wdg_ViewCadr/wdg_el3_2',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_3','/wlb_Main/wdg_ViewCadr/wdg_el3_3',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_4','/wlb_Main/wdg_ViewCadr/wdg_el3_4',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_5','/wlb_Main/wdg_ViewCadr/wdg_el3_5',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el3_6','/wlb_Main/wdg_ViewCadr/wdg_el3_6',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_1','/wlb_Main/wdg_ViewCadr/wdg_el4_1',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_2','/wlb_Main/wdg_ViewCadr/wdg_el4_2',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_3','/wlb_Main/wdg_ViewCadr/wdg_el4_3',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_4','/wlb_Main/wdg_ViewCadr/wdg_el4_4',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_5','/wlb_Main/wdg_ViewCadr/wdg_el4_5',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','el4_6','/wlb_Main/wdg_ViewCadr/wdg_el4_6',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','name','/wlb_Main/wdg_ViewCadr/wdg_name',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_1','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_1',-1,'owner;name;addr;var;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_2','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_2',-1,'owner;name;addr;var;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_3','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_3',-1,'owner;name;addr;var;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_4','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_4',-1,'owner;name;addr;var;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_5','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_5',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el1_6','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el1_6',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_1','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_1',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_2','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_2',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_3','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_3',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_4','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_4',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_5','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_5',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el2_6','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el2_6',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_1','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_1',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_2','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_2',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_3','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_3',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_4','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_4',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_5','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_5',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el3_6','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el3_6',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_1','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_1',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_2','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_2',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_3','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_3',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_4','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_4',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_5','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_5',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','el4_6','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_el4_6',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4/pg_1','name','/prj_tmplSO/pg_so/pg_1/pg_view4/wdg_name',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view5/pg_1','doc','/wlb_doc/wdg_docAlarmsRep/wdg_doc',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_1/pg_view5/pg_2','doc','/wlb_doc/wdg_docUsersSet/wdg_doc',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','ElFigure1','/wlb_Main/wdg_grpGraph/wdg_ElFigure1',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','arh','/wlb_Main/wdg_grpGraph/wdg_arh',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el1','/wlb_Main/wdg_grpGraph/wdg_el1',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el2','/wlb_Main/wdg_grpGraph/wdg_el2',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el3','/wlb_Main/wdg_grpGraph/wdg_el3',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el4','/wlb_Main/wdg_grpGraph/wdg_el4',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el5','/wlb_Main/wdg_grpGraph/wdg_el5',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el6','/wlb_Main/wdg_grpGraph/wdg_el6',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el7','/wlb_Main/wdg_grpGraph/wdg_el7',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','el8','/wlb_Main/wdg_grpGraph/wdg_el8',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','name','/wlb_Main/wdg_grpGraph/wdg_name',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','trnd1','/wlb_Main/wdg_grpGraph/wdg_trnd1',-1,'owner;curSek;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','ElFigure1','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_ElFigure1',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','arh','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_arh',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el1','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el1',-1,'owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el2','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el2',-1,'owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el3','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el3',-1,'owner;name;aMax;aMin;addr;ed;max;min;pModeA;pModeC;prec;wMax;wMin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el4','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el4',-1,'owner;name;addr;ed;max;min;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el5','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el5',-1,'owner;name;addr;ed;max;min;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el6','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el6',-1,'owner;name;addr;ed;max;min;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el7','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el7',-1,'owner;name;addr;ed;max;min;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','el8','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_el8',-1,'owner;name;addr;ed;max;min;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','name','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_name',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','trnd1','/prj_tmplSO/pg_so/pg_2/pg_view2/wdg_trnd1',-1,'owner;curSek;sclWin;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e1','/wlb_Main/wdg_ResultGraph/wdg_e1',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e10','/wlb_Main/wdg_ResultGraph/wdg_e10',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e11','/wlb_Main/wdg_ResultGraph/wdg_e11',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e12','/wlb_Main/wdg_ResultGraph/wdg_e12',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e13','/wlb_Main/wdg_ResultGraph/wdg_e13',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e14','/wlb_Main/wdg_ResultGraph/wdg_e14',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e15','/wlb_Main/wdg_ResultGraph/wdg_e15',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e16','/wlb_Main/wdg_ResultGraph/wdg_e16',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e2','/wlb_Main/wdg_ResultGraph/wdg_e2',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e3','/wlb_Main/wdg_ResultGraph/wdg_e3',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e4','/wlb_Main/wdg_ResultGraph/wdg_e4',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e5','/wlb_Main/wdg_ResultGraph/wdg_e5',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e6','/wlb_Main/wdg_ResultGraph/wdg_e6',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e7','/wlb_Main/wdg_ResultGraph/wdg_e7',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e8','/wlb_Main/wdg_ResultGraph/wdg_e8',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e9','/wlb_Main/wdg_ResultGraph/wdg_e9',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','name','/wlb_Main/wdg_ResultGraph/wdg_name',-1,'owner;perm;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e1','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e1',-1,'');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e10','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e10',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e11','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e11',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e12','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e12',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e13','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e13',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e14','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e14',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e15','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e15',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e16','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e16',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e2','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e2',-1,'');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e3','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e3',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e4','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e4',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e5','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e5',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e6','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e6',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e7','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e7',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e8','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e8',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e9','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e9',-1,'owner;');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','name','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_name',-1,'owner;');
 COMMIT;

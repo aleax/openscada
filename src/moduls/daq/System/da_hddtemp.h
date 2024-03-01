@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_hddtemp.h
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,21 +39,21 @@ class Hddtemp: public DA
 	string id( )	{ return "hddtemp"; }
 	string name( )	{ return _("HDD temperature"); }
 
-	void init( TMdPrm *prm, bool update = false );
 	void getVal( TMdPrm *prm );
 
-	void makeActiveDA( TMdContr *a_cntr );
+	void makeActiveDA( TMdContr *aCntr, const string &dIdPref = "", const string &dNmPref = "" )
+	{ DA::makeActiveDA(aCntr, "Temperature_hd", _("HD temperature")); }
 
     private:
 	//Methods
 	string getHDDTemp( );
-	void dList( vector<string> &list );
+	void dList( vector<string> &list, TMdPrm *prm = NULL );
 
 	string parseName( const string &vl );
 
 	//Attributes
-	ResRW	m_res;		//Resource for access to HDDTemp transport
-	string	t_tr, n_tr;
+	ResRW	mRes;		//Resource for access to HDDTemp transport
+	string	tTr, nTr;
 };
 
 } //End namespace

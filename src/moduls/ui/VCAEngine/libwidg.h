@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: libwidg.h
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,7 +38,7 @@ class WidgetLib : public TCntrNode, public TConfig
 {
     public:
 	//Methods
-	WidgetLib( const string &id, const string &name, const string &lib_db = "*.*" );
+	WidgetLib( const string &id, const string &name, const string &lib_db = DB_GEN );
 	~WidgetLib( );
 
 	TCntrNode &operator=( const TCntrNode &node );
@@ -49,7 +49,6 @@ class WidgetLib : public TCntrNode, public TConfig
 	string ico( ) const	{ string sval = cfg("ICO").getS(); return sval.size() ? sval : SYS->ico(); }	//Icon
 	string getStatus( );
 
-	bool isStdStorAddr( ) const		{ return (tbl() == ("wlb_"+id())); }	//????[v1.0] Remove
 	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
 	string tbl( ) const	{ return cfg("DB_TBL").getS().empty() ? ("wlb_"+id()) : cfg("DB_TBL").getS(); }
 	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
@@ -99,6 +98,9 @@ class WidgetLib : public TCntrNode, public TConfig
 	int	mWdg;
 
     private:
+	//Methods
+	bool isStdStorAddr( ) const		{ return (tbl() == ("wlb_"+id())); }	//????[v1.0] Remove
+
 	//Attributes
 	TCfg	&mId;
 	string	mDB,
@@ -150,7 +152,6 @@ class LWidget : public Widget, public TConfig
 
 	// Storing
 	void loadIO( );
-	void saveIO( );
 
 	// Data access
 	void resourceList( vector<string> &ls );
@@ -219,7 +220,6 @@ class CWidget : public Widget, public TConfig
 
 	// Storing
 	void loadIO( );
-	void saveIO( );
 
 	// Data access
 	void resourceList( vector<string> &ls );

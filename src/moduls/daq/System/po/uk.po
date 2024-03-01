@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.System translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.System package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2005-2022.
+# Roman Savochenko <roman@oscada.org>, 2005-2023.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
+"Project-Id-Version: OpenSCADA.DAQ.System 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-15 20:40+0300\n"
+"POT-Creation-Date: 2024-01-15 14:32+0200\n"
 "PO-Revision-Date: 2007-10-29 11:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: LANGUAGE <uk@li.org>\n"
@@ -15,33 +15,61 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Load (%)"
-msgstr "Завантаження (%)"
+msgid "System"
+msgstr "Система"
 
-msgid "System (%)"
-msgstr "Система (%)"
-
-msgid "User (%)"
-msgstr "Користувач (%)"
-
-msgid "Idle (%)"
-msgstr "Бездія (%)"
-
-msgid "General"
-msgstr "Взагалі"
+msgid ""
+"Load whole, system, user, idle\n"
+"In %"
+msgstr ""
+"Навантаження загальне, системне, користувацьке, відсутнє\n"
+"У %"
 
 #, c-format
 msgid "Closing the file %p error '%s (%d)'!"
 msgstr "Помилка закриття файлу %p - '%s (%d)'!"
 
-msgid "10:Device is not available."
-msgstr "10:Пристрій недоступний."
+msgid "Frequency: driver"
+msgstr "Частота: драйвер"
 
-msgid "Full CPU Load"
-msgstr "Повне навантаження CPU"
+msgid "Frequency: governor"
+msgstr "Частота: керувач"
 
-msgid "CPU Load: "
-msgstr "Навантаження CPU: "
+msgid ""
+"Frequency: current\n"
+"In MHz"
+msgstr ""
+"Частота: поточна\n"
+"У МГц"
+
+msgid ""
+"Frequency: minimum, set\n"
+"In MHz"
+msgstr ""
+"Частота: мінімум, встановлення\n"
+"У МГц"
+
+msgid ""
+"Frequency: maximum, set\n"
+"In MHz"
+msgstr ""
+"Частота: максимум, встановлення\n"
+"У МГц"
+
+msgid "Model name"
+msgstr "Назва моделі"
+
+msgid "MHz"
+msgstr "МГц"
+
+msgid "BogoMIPS"
+msgstr "ПідставніМОЗаС"
+
+msgid "MHz at rdtsc"
+msgstr "МГц за rdtsc"
+
+msgid "General"
+msgstr "Загалом"
 
 msgid "Total (GB)"
 msgstr "Разом (ГБ)"
@@ -61,15 +89,8 @@ msgstr "Використано файлових вузлів"
 msgid "Free file nodes"
 msgstr "Вільно файлових вузлів"
 
-msgid "Mount point"
-msgstr "Точка монтування"
-
 msgid "10:Mountpoint isn't available."
 msgstr "10:Точка монтування не доступна."
-
-#, c-format
-msgid "File system: '%s'"
-msgstr "Файлова система: '%s'"
 
 msgid "Read (B)"
 msgstr "Прочитано (Б)"
@@ -83,14 +104,11 @@ msgstr "Записано (Б)"
 msgid "Write speed (B/s)"
 msgstr "Швидкість запису (Б/с)"
 
-msgid "Disk(part)"
-msgstr "Диск(розділ)"
-
-msgid "HD statistic: "
-msgstr "Статистика НЖМД: "
+msgid "10:Device is not available."
+msgstr "10:Пристрій недоступний."
 
 msgid "Name"
-msgstr "Ім'я"
+msgstr "Назва"
 
 msgid "Measure unit"
 msgstr "Одиниця виміру"
@@ -98,14 +116,8 @@ msgstr "Одиниця виміру"
 msgid "Temperature"
 msgstr "Температура"
 
-msgid "Disk"
-msgstr "Диск"
-
 msgid "Parameter Hddtemp"
 msgstr "Параметр Hddtemp"
-
-msgid "HD temperature: "
-msgstr "Температура НЖМД: "
 
 msgid "Free (KiB)"
 msgstr "Вільно (КіБ)"
@@ -126,19 +138,16 @@ msgid "Swap free (KiB)"
 msgstr "Своп вільно (КіБ)"
 
 msgid "Swap total (KiB)"
-msgstr "Своп усього (КіБ)"
+msgstr "Своп загалом (КіБ)"
 
 msgid "Swap used (KiB)"
 msgstr "Своп використано (КіБ)"
-
-msgid "Memory info"
-msgstr "Інформація про пам'ять"
 
 msgid "Received (B)"
 msgstr "Прийнято (Б)"
 
 msgid "Receive speed (B/s)"
-msgstr "Швидкість прийому (Б/с)"
+msgstr "Швидкість прийняття (Б/с)"
 
 msgid "Transmitted (B)"
 msgstr "Передано (Б)"
@@ -146,11 +155,145 @@ msgstr "Передано (Б)"
 msgid "Transmit speed (B/s)"
 msgstr "Швидкість передавання (Б/с)"
 
-msgid "Interface"
-msgstr "Інтерфейс"
+msgid "Type"
+msgstr "Тип"
 
-msgid "Interface statistic: "
-msgstr "Статистика інтерфейсу: "
+msgid "Technology"
+msgstr "Технологія"
+
+msgid "Scope"
+msgstr "Простір"
+
+msgid "Present"
+msgstr "Наявне"
+
+msgid "Manufacturer, model, SN"
+msgstr "Виробник, модель, SN"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Online"
+msgstr "ВМережі"
+
+msgid "Health"
+msgstr "Здоров'є"
+
+msgid "Capacity"
+msgstr "Ємність"
+
+msgid "Capacity level"
+msgstr "Рівень ємності"
+
+msgid ""
+"Charge now, full, design\n"
+"In Ah"
+msgstr ""
+"Заряд зараз, повний, дизайн\n"
+"У Аг"
+
+msgid ""
+"Energy now, full, design\n"
+"In Ah"
+msgstr ""
+"Енергія зараз, повна, дизайн\n"
+"У Аг"
+
+msgid "Voltage"
+msgstr "Напруга"
+
+msgid "Voltage minimum"
+msgstr "Напруга мінімум"
+
+msgid "Cycle count"
+msgstr "Кількість циклів"
+
+msgid ""
+"Power\n"
+"In Watts"
+msgstr ""
+"Потужність\n"
+"У Ватах"
+
+msgid ""
+"Current\n"
+"In mAmpers"
+msgstr ""
+"Струм\n"
+"У мАмперах"
+
+msgid ""
+"Temperature\n"
+"In degC"
+msgstr ""
+"Температура\n"
+"У градС"
+
+msgid "Time to empty now, average"
+msgstr "Час спустошення зараз, середній"
+
+msgid "Time to full"
+msgstr "Час наповнення"
+
+msgid "Charge threshold start, stop"
+msgstr "Поріг зарядження початок, зупинка"
+
+msgid "Charge control threshold start, end"
+msgstr "Поріг контролю зарядження початок, кінець"
+
+msgid "Number of file descriptor slots currently"
+msgstr "Поточна кількість слотів файлових дескрипторів"
+
+msgid "Peak virtual memory size (KiB)"
+msgstr "Піковий розмір віртуальної пам'яті (КіБ)"
+
+msgid "Virtual memory size (KiB)"
+msgstr "Розмір віртуальної пам'яті (КіБ)"
+
+msgid "Locked memory size (KiB)"
+msgstr "Розмір заблокованої пам'яті (КіБ)"
+
+msgid "Pinned memory size (KiB)"
+msgstr "Розмір закріпленої пам'яті (КіБ)"
+
+msgid "Peak resident set size (KiB)"
+msgstr "Піковий розмір резидентного набору (КіБ)"
+
+msgid "Resident set size (KiB)"
+msgstr "Розмір резидентного набору (КіБ)"
+
+msgid "Size of resident anonymous memory (KiB)"
+msgstr "Розмір резидентної анонімної пам'яті (КіБ)"
+
+msgid "Size of resident file mappings (KiB)"
+msgstr "Розмір резидентних файлових мапувань (КіБ)"
+
+msgid "Size of resident shared memory (KiB)"
+msgstr "Розмір резидентної спільної пам'яті (КіБ)"
+
+msgid "Size of data segment (KiB)"
+msgstr "Розмір сегменту даних (КіБ)"
+
+msgid "Size of stack segment (KiB)"
+msgstr "Розмір сегменту стеку (КіБ)"
+
+msgid "Size of text segment (KiB)"
+msgstr "Розмір сегменту тексту (КіБ)"
+
+msgid "Shared library code size (KiB)"
+msgstr "Розмір коду спільних бібліотек (КіБ)"
+
+msgid "Page table entries size (KiB)"
+msgstr "Розмір таблиці записів (КіБ)"
+
+msgid "Swapped-out virtual memory size by anonymous private pages (KiB)"
+msgstr "Розмір віртуальної пам'яті, вилучений анонімними приватними сторінками (КіБ)"
+
+msgid "Size of hugetlb memory portions (KiB)"
+msgstr "Розмір порцій пам'яті hugetlb (КіБ)"
+
+msgid "Number of threads in process"
+msgstr "Кількість потоків у процесі"
 
 msgid "State"
 msgstr "Стан"
@@ -166,11 +309,8 @@ msgstr "Властивість "
 msgid "Closing the pipe %p error '%s (%d)'!"
 msgstr "Помилка закриття каналу %p - '%s (%d)'!"
 
-msgid "Data sensors"
-msgstr "Дані сенсорів"
-
-msgid "HDD SMART: "
-msgstr "SMART НЖМД: "
+msgid "Sensors"
+msgstr "Сенсори"
 
 msgid "UPS"
 msgstr "ДБЖ"
@@ -189,9 +329,6 @@ msgstr "Користувач"
 msgid "Password"
 msgstr "Пароль"
 
-msgid "UPS: "
-msgstr "ИБП: "
-
 msgid "Full seconds"
 msgstr "Секунди повні"
 
@@ -207,17 +344,8 @@ msgstr "Години"
 msgid "Days"
 msgstr "Дні"
 
-msgid "System"
-msgstr "Система"
-
 msgid "Station"
 msgstr "Станція"
-
-msgid "System up time"
-msgstr "Час роботи системи"
-
-msgid "Station up time"
-msgstr "Час роботи станції"
 
 msgid "System DA"
 msgstr "Збір даних системи"
@@ -226,11 +354,13 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Provides data acquisition from the OS. Supported OS Linux data sources: "
-"HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc."
+"Provides data acquisition from Operation System. Supported OS Linux data "
+"sources: CPU, Memory, Sensors, Disk SMART, Disk Statistic, File System, "
+"Network, Power, UPS, Up Time etc."
 msgstr ""
-"Надає збір даних операційної системи. Підтримуються джерела даних ОС Linux: "
-"HDDTemp, Sensors, Uptime, Memory, CPU, ДБЖ та інше."
+"Надає збір даних із Операційної Системи. Підтримуються джерела даних ОС "
+"Linux: ЦП, Пам'ять, Сенсори, SMART Диску, Статистика Диску, Файлова Система, "
+"Мережа, Живлення, ДБЖ, Час Дії та інше."
 
 msgid "Auto create active data sources"
 msgstr "Авт. створювати активні джерела даних"
@@ -282,32 +412,38 @@ msgid "Error writing value to attribute '%s': %s"
 msgstr "Помилка запису значення до атрибуту '%s': %s"
 
 msgid "CPU"
-msgstr "Процесор"
+msgstr "ЦП"
 
-msgid "File Systems"
-msgstr "Файлові Системи"
+msgid "File System"
+msgstr "Файлова Система"
 
-msgid "HDD statistic"
-msgstr "Статистика HDD"
+msgid "Disk Statistic"
+msgstr "Статистика Диску"
 
 msgid "HDD temperature"
 msgstr "Температура HDD"
 
+msgid "HD temperature"
+msgstr "Температура ЖД"
+
 msgid "Memory"
 msgstr "Пам'ять"
 
-msgid "Network statistic"
-msgstr "Статистика мережі"
+msgid "Network"
+msgstr "Мережа"
 
-msgid "Qt sensors"
-msgstr "Сенсори Qt"
+msgid "Power"
+msgstr "Живлення"
 
-msgid "Sensors"
-msgstr "Сенсори"
+msgid "Process"
+msgstr "Процес"
 
-msgid "UPS (NUT)"
-msgstr "ДБЖ (NUT)"
+msgid "Qt sensor"
+msgstr "Сенсор Qt"
 
-msgid "Up time"
-msgstr "Час роботи"
+msgid "Disk SMART"
+msgstr "SMART Диску"
+
+msgid "Up Time"
+msgstr "Час Дії"
 

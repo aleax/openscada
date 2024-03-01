@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.OPC_UA file: mod_prt.h
 /***************************************************************************
- *   Copyright (C) 2009-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,7 +46,7 @@ using namespace OPC;
 #define PRT_NAME	trS("Server OPC-UA")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"2.2.13"
+#define PRT_MVER	"2.2.16"
 #define PRT_AUTOR	trS("Roman Savochenko")
 #define PRT_DESCR	trS("Provides OPC-UA server service implementation.")
 #define PRT_LICENSE	"GPL2"
@@ -195,7 +195,7 @@ class TProt: public TProtocol, public Server
 	// Server's functions
 	void epList( vector<string> &ls ) const			{ chldList(mEndPnt,ls); }
 	bool epPresent( const string &id ) const		{ return chldPresent(mEndPnt,id); }
-	string epAdd( const string &id, const string &db = "*.*" );
+	string epAdd( const string &id, const string &db = DB_GEN );
 	void epDel( const string &id )				{ chldDel(mEndPnt, id); }
 	AutoHD<OPCEndPoint> epAt( const string &id ) const	{ return chldAt(mEndPnt, id); }
 

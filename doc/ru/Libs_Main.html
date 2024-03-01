@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Библиотеки/Основная</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FMain&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Main" title="Libs/Main">Libs/Main</a> and the translation is 8% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Main.html" title="Libs/Main (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--stub">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main.html" title="Бібліотеки/Основна (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FMain&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Main" title="Libs/Main">Libs/Main</a> and the translation is 6% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Main.html" title="Libs/Main (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--stub">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main.html" title="Бібліотеки/Основна (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -27,17 +27,18 @@
 <tr>
 <td> <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">Основная библиотека</a>
 </td>
-<td> 2.0 </td>
+<td> 2.1 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_base </td>
 <td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td>
-<td> Библиотека основных шаблонов обработки DAQ-источников и производных сервисов.
-<ul><li> <b>Основано:</b> Январь 2006</li>
-<li> <b>Спонсировано:</b> зависимо от элемента ...</li>
-<li> <b>Использовано:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">большинство проектов на OpenSCADA</a></li></ul>
+<td> Library of the main templates of the DAQ-sources processing and related services.
+<ul><li> <b>Founded:</b> January 2006</li>
+<li> <b>Sponsored by:</b> depending on the item ...</li>
+<li> <b>Used by:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">most projects on OpenSCADA</a></li></ul>
+<dl><dd>- finish of implementation the Partial Content requests in <a href="Libs_Main.html#fileServerHTTP" title="Special:MyLanguage/Libs/Main">WebUser: HTTP File Server</a> after support the HEAD request in <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a>.</dd></dl>
 </td></tr></table>
 <p>Библиотека создана для предоставления основных шаблонов обработки DAQ-источников и производных сервисов.
 </p><p>Названия элементов и их параметров доступны на языках: Английский, Украинский и mRussian. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода <i>tr()</i> и перевод этих сообщений также доступен Английским, Украинским и mRussian.
@@ -76,6 +77,11 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <ul>
 <li class="toclevel-2"><a href="#Notificator_by_SMS.2C_EMail-SMTP_.28ntf.29"><span class="tocnumber">3.1</span> <span class="toctext">Notificator by SMS, EMail-SMTP (ntf)</span></a></li>
 <li class="toclevel-2"><a href="#Initiative_connections_processing_for_the_associated_output_transports_.28initConAssociateTrs.29"><span class="tocnumber">3.2</span> <span class="toctext">Initiative connections processing for the associated output transports (initConAssociateTrs)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#For_WebUser"><span class="tocnumber">4</span> <span class="toctext">For WebUser</span></a>
+<ul>
+<li class="toclevel-2"><a href="#WebUser:_HTTP_File_Server_.28fileServerHTTP.29"><span class="tocnumber">4.1</span> <span class="toctext">WebUser: HTTP File Server (fileServerHTTP)</span></a></li>
 </ul>
 </li>
 </ul>
@@ -442,7 +448,7 @@ no;last;substitute<br />
 <tr>
 <td> NAME </td>
 <td> Name </td>
-<td> String </td>
+<td> String (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -451,7 +457,7 @@ no;last;substitute<br />
 <tr>
 <td> DESCR </td>
 <td> Description </td>
-<td> String </td>
+<td> Text (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -923,7 +929,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <tr>
 <td> NAME </td>
 <td> Name </td>
-<td> String </td>
+<td> String (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -932,7 +938,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <tr>
 <td> DESCR </td>
 <td> Description </td>
-<td> String </td>
+<td> Text (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -1303,7 +1309,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <tr>
 <td> NAME </td>
 <td> Name </td>
-<td> String </td>
+<td> String (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -1312,7 +1318,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <tr>
 <td> DESCR </td>
 <td> Description </td>
-<td> String </td>
+<td> Text (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -1541,7 +1547,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <tr>
 <td> NAME </td>
 <td> Name </td>
-<td> String </td>
+<td> String (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -1550,7 +1556,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <tr>
 <td> DESCR </td>
 <td> Description </td>
-<td> String </td>
+<td> Text (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -2149,7 +2155,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <tr>
 <td> NAME </td>
 <td> Name </td>
-<td> String </td>
+<td> String (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -2158,7 +2164,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <tr>
 <td> DESCR </td>
 <td> Description </td>
-<td> String </td>
+<td> Text (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -2360,7 +2366,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainUPSOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="747" src="../en/files/LibsMainUPSOp.png" width="402" /></a></div>
-<p>Data combination of the Uninterruptible Power Supply in a complex object of the attribute "All items". The template designed to use together with the DAQ-module "<a href="Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>" in the part "UPS" and to represent this data by the frame "<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Object properties</a>" as a complex object with properties, signalling at single borders and writing.
+<p>Data combination of the Uninterruptible Power Supply in a complex object of the attribute "All items". The template designed to use together with the DAQ-module "<a href="../en/Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>" in the part "UPS" and to represent this data by the frame "<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Object properties</a>" as a complex object with properties, signalling at single borders and writing.
 </p>
 <ul><li> <b>Sponsored by:</b> <a class="external text" href="http://diyaorg.dp.ua" rel="nofollow noreferrer noopener" target="_blank">DIYA Ltd</a></li></ul>
 <p><b><u>Template IOs</u></b><br />
@@ -2541,7 +2547,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <tr>
 <td> NAME </td>
 <td> Name </td>
-<td> String </td>
+<td> String (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -2550,7 +2556,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <tr>
 <td> DESCR </td>
 <td> Description </td>
-<td> String </td>
+<td> Text (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -2595,7 +2601,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainUPSCfg.png" title="Configuration."><img alt="Configuration." height="172" src="../en/files/LibsMainUPSCfg.png" width="356" /></a></div>
 <p><b><u>Configuring and using</u></b><br />
 </p>
-<dl><dd>1. Create a source controller object into the module "<a href="Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>" and set its Identifier like to "SYSData".</dd>
+<dl><dd>1. Create a source controller object into the module "<a href="../en/Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>" and set its Identifier like to "SYSData".</dd>
 <dd>2. Create a source parameter object into the previous controller object and set its Identifier like to "UPS".</dd>
 <dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
 <dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for it. Enable the parameter.</dd>
@@ -2701,7 +2707,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <tr>
 <td> NAME </td>
 <td> Name </td>
-<td> String </td>
+<td> String (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -2710,7 +2716,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <tr>
 <td> DESCR </td>
 <td> Description </td>
-<td> String </td>
+<td> Text (translate) </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -2841,6 +2847,15 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <td> Not attribute </td>
 <td> Constant </td>
 <td> al*:*
+</td></tr>
+<tr>
+<td> messCatExcl </td>
+<td> Message exclusion category, in regular expression </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td>
 </td></tr>
 <tr>
 <td> emailState </td>
@@ -2992,12 +3007,13 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <dl><dd>1. Create a parameter in a controller object of <a href="DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">the Logical Level</a> or a controller object in <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">the module DAQ.JavaLikeCalc</a>.</dd>
 <dd>2. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "SMS", one transport suitable for more receivers.</dd>
 <dd>3. Set for proper address, only for the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device. The serial port speed, asynchronous data format and timeouts will adjusted by the function.</dd>
-<dd>4. Create an output transport of the type "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" or "<a href="Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a>" and set its Identifier like to "SMTP", one transport suitable for more receivers. </dd>
+<dd>4. Create an output transport of the type "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" or "<a href="../en/Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a>" and set its Identifier like to "SMTP", one transport suitable for more receivers. </dd>
 <dd>5. Set-up for proper address, for Sockets(25) or SSL(465). The transport timeouts will be adjusted by the function.</dd>
 <dd>6. In the tab "Template configuration" you need to set:
 <ul><li> Maximum notification timeout, seconds.</li>
 <li> Messages level, negative for alarms.</li>
 <li> Messages category, template or regular expression.</li>
+<li> Message exclusion category, in regular expression.</li>
 <li> Output transport for SMTP connection, empty for disable.</li>
 <li> Auth, empty for disable.</li>
 <li> Sender.</li>
@@ -3042,7 +3058,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <dd><i>err</i> — sets for the request result.</dd></dl>
 <p><b><u>Configuring and using</u></b><br />
 </p>
-<dl><dd>1. Create an output transport of the type "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" or "<a href="Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a>" and set its Identifier like to "SMTP", one transport suitable for more receivers. </dd>
+<dl><dd>1. Create an output transport of the type "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" or "<a href="../en/Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a>" and set its Identifier like to "SMTP", one transport suitable for more receivers. </dd>
 <dd>2. Set-up for proper address, for Sockets(25) or SSL(465). The transport timeouts will be adjusted by the function.</dd>
 <dd>3. Create of needed <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">user protocol object</a> based on the templates, with Identifier like to "SMTP".</dd>
 <dd>4. Place some requesting commands directly into allowed or a new internal OpenSCADA procedure like to:</dd></dl>
@@ -3182,11 +3198,145 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <li> <i>Output transport timeouts</i> — increase the first digit for very slow connections and typical is normal in most situations</li>
 <li> <i>Source objects path</i> — set according to the item 3, for the first part, and to the control field path, for the second part, for example, and typically for for "ModBus", is — "ModBus:%2fcntr%2fcfg%2fADDR".</li></ul></dd>
 <dd>6. RESULT: Starting the controller object (where this parameter was created) and if it was not started, we should get, in the attribute <i>prcTr</i> of the parameter for information about the processed and therefore successfully transport-linked data sources. In case of some violations, we will get the corresponding information in the attribute <i>err</i> of the parameter. The absence of a representative object for the received identifier is placed in the protocol of messages.</dd></dl>
+<h2><span class="mw-headline" id="For_WebUser"><span class="mw-headline-number">4</span> <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">For WebUser</a></span></h2>
+<table class="wikitable">
+
+<tr>
+<td> <span id="fileServerHTTP" title="#fileServerHTTP"><h3><span class="mw-headline" id="WebUser:_HTTP_File_Server_.28fileServerHTTP.29"><span class="mw-headline-number">4.1</span> WebUser: HTTP File Server (<a href="Libs_Main.html#fileServerHTTP" title="Special:MyLanguage/Libs/Main">fileServerHTTP</a>)</span></h3></span>
+</td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The template for implementing a HTTP File Server directly in OpenSCADA, which is suitable one at missing a full-featured one for functions of servicing file requests from OpenSCADA Web-interfaces.
+</p><p>Currently there implemented only requesting files by the GET request of HTTP. There are supported also the Partial Content requests in single range and with forcing to this mode at some configured file size. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> That is work properly only for video and audio files and doesn't work for other files especially documents, so you have to configure the file size limit for solid reading in maximum size of your documents. For proper working the Partial Content requests we need to implement the HTTP request HEAD in the module <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> before implementing here!
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> rez </td>
+<td> Result </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 200 OK
+</td></tr>
+<tr>
+<td> HTTPreq </td>
+<td> HTTP request </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> url </td>
+<td> URL </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> page </td>
+<td> WWW-page </td>
+<td> String </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> HTTPvars </td>
+<td> HTTP variables </td>
+<td> Object </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> baseD </td>
+<td> Base directory </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> /data/share_res/local/Lib/
+</td></tr>
+<tr>
+<td> fSzSolidLim </td>
+<td> File size limit for solid reading, else enables the partial content </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 10e6
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz	Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainFileServerHTTPCfg.png" title="Configuration."><img alt="Configuration." height="513" src="../en/files/LibsMainFileServerHTTPCfg.png" width="575" /></a></div>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create a page in the <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">UI.WebUser</a> module with some reasonable <i>PageId</i>.</dd>
+<dd>2. In the tab "Procedure" you need to set:
+<ul><li> Base directory from which the page'll search files.</li>
+<li> File size limit for solid reading, else enables the partial content.</li></ul></dd>
+<dd>3. RESULT: Opening URL "http://{OpenSCADAHost}/WebUser/{PageId}/{MyFile}" in a WebBrowser will open and send you file on FS "{baseD}/{MyFile}".</dd></dl>
 
 
 
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/ru">Libs/Main/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/ru">Libs/Main/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

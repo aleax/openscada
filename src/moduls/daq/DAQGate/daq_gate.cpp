@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.DAQGate file: daq_gate.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.13.1"
+#define MOD_VER		"2.13.8"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -72,7 +72,7 @@ using namespace DAQGate;
 //******************************************************
 //* TTpContr                                           *
 //******************************************************
-TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID)
+TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID), tPrmId(-1)
 {
     mod = this;
 
@@ -92,14 +92,14 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable(flag);
 
     //Controler's DB structure
-    fldAdd(new TFld("PRM_BD",trS("Table of parameters cache"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PRM_BD",trS("Table of parameters cache"),TFld::String,TFld::NoFlag,"30",""));	//????[v1.0] Remove
     fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("TM_REST",trS("Timeout of restore, seconds"),TFld::Integer,TFld::NoFlag,"4","10","1;1000"));
     fldAdd(new TFld("TM_REST_DT",trS("Depth time of restore data, hours"),TFld::Real,TFld::NoFlag,"6.2","1","0;12"));
     fldAdd(new TFld("WR_ASYNCH",trS("Asynchronous writing"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fldAdd(new TFld("GATH_MESS_LEV",trS("Level of requested messages"),TFld::Integer,TFld::Selectable,"1","1",
-	"-1;0;1;2;3;4;5;6;7",_("==Disable==;Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X])")));
+	"-1;0;1;2;3;4;5;6;7",trS("==Disable==;Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X])")));
     fldAdd(new TFld("SYNCPER",trS("Synchronization time with the remote station, seconds"),TFld::Integer,TFld::NoFlag,"4","0","-1;1000"));
     fldAdd(new TFld("STATIONS",trS("Remote station"),TFld::String,TFld::NoFlag,"100"));
     fldAdd(new TFld("CNTRPRM",trS("List of the remote controller objects and parameters"),TFld::String,TFld::FullText,"200"));
@@ -107,13 +107,13 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("CNTR_TO_VPRM",trS("Placing different controllers to the separate virtual parameters"),TFld::Boolean,TFld::NoFlag,"1","0"));
 
     //Parameter type bd structure
-    int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
-    tpPrmAt(t_prm).fldAdd(new TFld("PRM_ADDR",trS("Remote parameter address"),TFld::String,TFld::FullText|TCfg::NoVal,"100",""));
-    tpPrmAt(t_prm).fldAdd(new TFld("ATTRS",trS("Attributes configuration cache"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
-    tpPrmAt(t_prm).fldAdd(new TFld("STATS",trS("Presence at the stations"),TFld::String,TCfg::NoVal,"10000",""));
+    tPrmId = tpParmAdd("Prm", "PRM_BD", _("Standard"), true);
+    tpPrmAt(tPrmId).fldAdd(new TFld("PRM_ADDR",trS("Remote parameter address"),TFld::String,TFld::FullText|TCfg::NoVal,"100",""));
+    tpPrmAt(tPrmId).fldAdd(new TFld("ATTRS",trS("Attributes configuration cache"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
+    tpPrmAt(tPrmId).fldAdd(new TFld("STATS",trS("Presence at the stations"),TFld::String,TCfg::NoVal,"10000",""));
     //Set to read only
-    //for(unsigned iSz = 0; iSz < tpPrmAt(t_prm).fldSize(); iSz++)
-    //	tpPrmAt(t_prm).fldAt(iSz).setFlg(tpPrmAt(t_prm).fldAt(iSz).flg()|TFld::NoWrite);
+    //for(unsigned iSz = 0; iSz < tpPrmAt(tPrmId).fldSize(); iSz++)
+    //	tpPrmAt(tPrmId).fldAt(iSz).setFlg(tpPrmAt(tPrmId).fldAt(iSz).flg()|TFld::NoWrite);
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db ) { return new TMdContr(name, daq_db, this); }
@@ -128,7 +128,8 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     mAsynchWr(cfg("WR_ASYNCH").getBd()), mAllowToDelPrmAttr(cfg("ALLOW_DEL_PA").getBd()), mPlaceCntrToVirtPrm(cfg("CNTR_TO_VPRM").getBd()),
     prcSt(false), callSt(false), syncSt(false), syncForce(false), endrunReq(false), mStatTm(0), curPat(dataRes()), mPer(1e9)
 {
-    cfg("PRM_BD").setS(MOD_ID"Prm_"+name_c);
+    //????[v1.0] Remove
+    cfg("PRM_BD").setS(MOD_ID "Prm_"+id());
 }
 
 TMdContr::~TMdContr( )
@@ -140,9 +141,10 @@ string TMdContr::getStatus( )
 {
     string val = TController::getStatus();
 
+    if(startStat() && (!redntUse() || syncForce) && syncSt)
+	val += TSYS::strMess(_("Sync. "));
     if(startStat() && !redntUse()) {
-	if(syncSt)	val += TSYS::strMess(_("Sync. "));
-	else {
+	if(!syncSt) {
 	    if(callSt)	val += TSYS::strMess(_("Acquisition. "));
 	    if(period())	val += TSYS::strMess(_("Acquisition with the period %s. "),tm2s(1e-9*period()).c_str());
 	    else val += TSYS::strMess(_("Next acquisition by the cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
@@ -269,7 +271,7 @@ void TMdContr::sync( bool onlyPrmLs )
 			while(iP1 < prmLs1.size() && at(prmLs1[iP1]).at().prmAddr() != cntrId) iP1++;
 			if(iP1 >= prmLs1.size()) {
 			    while(present(cntrId) && at(cntrId).at().prmAddr().size()) cntrId = TSYS::strLabEnum(cntrId);
-			    if(!present(cntrId)) add(cntrId, owner().tpPrmToId("std"));
+			    if(!present(cntrId)) add(cntrId, mod->tPrmId);
 			    curP = at(cntrId);
 			    //curP.at().setName(_("DAQ-controller ")+cntrId);
 			    curP.at().setPrmAddr(cntrId);
@@ -287,7 +289,7 @@ void TMdContr::sync( bool onlyPrmLs )
 			while(iP1 < prmLs1.size() && curP.at().at(prmLs1[iP1]).at().prmAddr() != prmLs[iP]) iP1++;
 			if(iP1 >= prmLs1.size()) {
 			    while(curP.at().present(prmId) && curP.at().at(prmId).at().prmAddr().size()) prmId = TSYS::strLabEnum(prmId);
-			    if(!curP.at().present(prmId)) curP.at().add(prmId, owner().tpPrmToId("std"));
+			    if(!curP.at().present(prmId)) curP.at().add(prmId, mod->tPrmId);
 			    curP = curP.at().at(prmId);
 			    curP.at().setName(req.childGet(1)->text());
 			    curP.at().setPrmAddr(prmLs[iP]);
@@ -300,7 +302,7 @@ void TMdContr::sync( bool onlyPrmLs )
 			while(iP1 < prmLs1.size() && at(prmLs1[iP1]).at().prmAddr() != prmLs[iP]) iP1++;
 			if(iP1 >= prmLs1.size()) {
 			    while(present(prmId) && at(prmId).at().prmAddr().size()) prmId = TSYS::strLabEnum(prmId);
-			    if(!present(prmId)) add(prmId, owner().tpPrmToId("std"));
+			    if(!present(prmId)) add(prmId, mod->tPrmId);
 			    curP = at(prmId);
 			    curP.at().setName(req.childGet(1)->text());
 			    curP.at().setPrmAddr(prmLs[iP]);
@@ -340,7 +342,7 @@ void TMdContr::sync( bool onlyPrmLs )
 			while(iP1 < prmLs1.size() && curP.at().at(prmLs1[iP1]).at().prmAddr() != prmPathW_) iP1++;
 			if(iP1 >= prmLs1.size()) {
 			    while(curP.at().present(prmId) && curP.at().at(prmId).at().prmAddr().size()) prmId = TSYS::strLabEnum(prmId);
-			    curP.at().add(prmId, owner().tpPrmToId("std"));
+			    curP.at().add(prmId, mod->tPrmId);
 			    curW = curP.at().at(prmId);
 			    curW.at().setName(prmW->text());
 			    curW.at().setPrmAddr(prmPathW_);
@@ -557,9 +559,22 @@ void *TMdContr::Task( void *icntr )
 
     for(unsigned int itCnt = 0; !cntr.endrunReq; itCnt++) {
 	if(cntr.redntUse()) {
-	    if(cntr.syncForce)
-		try { cntr.sync(); cntr.syncForce = false; }
-		catch(TError &err) { }
+	    if(cntr.syncForce) {
+		tCnt = TSYS::curTime();
+
+		// Checking the connection
+		bool isAccess = false;
+		for(map<string,StHd>::iterator st = cntr.mStatWork.begin(); st != cntr.mStatWork.end(); ++st) {
+		    if(st->second.cntr > 0) st->second.cntr = vmax(0, st->second.cntr-1e-6*(tCnt-tPrev));
+		    if(st->second.cntr <= 0) isAccess = true;
+		}
+
+		if(isAccess)	//Repeat the direct syncing up to success.
+		    try { cntr.sync(); cntr.syncForce = false; }
+		    catch(TError &err) { }
+
+		tPrev = tCnt;
+	    }
 
 	    //Just using the standard message archives redundancy
 	    TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
@@ -1144,7 +1159,7 @@ void TMdPrm::load_( )
 	    string aId = aEl->attr("id");
 	    if(vlPresent(aId)) continue;
 	    pEl.fldAdd(new TFld(aId.c_str(),aEl->attr("nm").c_str(),(TFld::Type)s2i(aEl->attr("tp")),
-		s2i(aEl->attr("flg")),"","",aEl->attr("vals").c_str(),aEl->attr("names").c_str()));
+		s2i(aEl->attr("flg")),"","",aEl->attr("vals"),aEl->attr("names")));
 	    vlAt(aId).at().setHasArch(false);
 	    vlAt(aId).at().setHasArchReq(false);
 	    //vlAt(aEl->attr("id")).at().setS(aEl->text());
@@ -1214,7 +1229,7 @@ void TMdPrm::sync( )
 		    TFld::Type tp = (TFld::Type)s2i(ael->attr("tp"));
 		    pEl.fldAdd(new TFld(aId.c_str(),ael->attr("nm").c_str(),tp,
 			(s2i(ael->attr("flg"))&(TFld::Selectable|TFld::NoWrite|TFld::HexDec|TFld::OctDec|TFld::FullText))|TVal::DirWrite|TVal::DirRead,
-			"","",ael->attr("vals").c_str(),ael->attr("names").c_str()));
+			"","",ael->attr("vals"),ael->attr("names")));
 		    modif(true);
 		}
 		vlAt(aId).at().setHasArch(false);

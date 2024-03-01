@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 18:33+0300\n"
+"POT-Creation-Date: 2024-01-28 11:07+0200\n"
 "PO-Revision-Date: 2020-10-25 10:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team:  <uk@li.org>\n"
@@ -355,8 +355,8 @@ msgstr "Стан"
 msgid "Running"
 msgstr "Виконується"
 
-msgid "Archiver DB"
-msgstr "БД архіватору"
+msgid "Storage"
+msgstr "Сховище"
 
 #, c-format
 msgid "Remove from '%s'"
@@ -380,8 +380,8 @@ msgid ""
 "Number of the copying items achieved the limit %d for time range [%lld:%lld]"
 "(%lld)!"
 msgstr ""
-"Кількість копійованих елементів досягнула обмеження %d для діапазону [%lld:%lld]"
-"(%lld)!"
+"Кількість копійованих елементів досягнула обмеження %d для діапазону [%lld:"
+"%lld](%lld)!"
 
 #, c-format
 msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
@@ -440,9 +440,6 @@ msgstr "Кінець буферу"
 
 msgid "Buffer begin"
 msgstr "Початок буферу"
-
-msgid "Archive DB"
-msgstr "БД архіву"
 
 msgid ""
 "The size of the buffer of values should be large enough for the periodicity "
@@ -554,7 +551,9 @@ msgstr "Останнє читання буферу"
 
 #, c-format
 msgid "Number of the setting items achieved the limit %d for time range [%lld:%lld]!"
-msgstr "Кількість встановлюваних елементів досягнула обмеження %d для діапазону [%lld:%lld]!"
+msgstr ""
+"Кількість встановлюваних елементів досягнула обмеження %d для діапазону "
+"[%lld:%lld]!"
 
 msgid "DB type (module)"
 msgstr "Тип БД (модуль)"
@@ -710,8 +709,8 @@ msgstr "Запис \"%s\" відсутній. Ви зберігали цей о�
 msgid "The DB is in the Read only mode."
 msgstr "БД у режимі Тільки для Читання."
 
-msgid "Translation removed! Reload the base message."
-msgstr "Переклад видалено! Перевантажте базове повідомлення."
+msgid "A message completely cleaned for the base and all translations!"
+msgstr "Повідомлення цілком очищено щодо бази і всіх перекладів!"
 
 #, c-format
 msgid "Field id = %s(%s) is missing!"
@@ -720,6 +719,92 @@ msgstr "Поле id = %s(%s) відсутнє!"
 #, c-format
 msgid "%s:%s:> Error in the control item '%s'!"
 msgstr "%s:%s:> Помилка елементу керування '%s'."
+
+#, c-format
+msgid "set the cell ['%s':%s] to '%s'."
+msgstr "встановлення комірки ['%s':%s] у '%s'."
+
+msgid "command with arguments:"
+msgstr "команда із аргументами:"
+
+#, c-format
+msgid "set to '%s'."
+msgstr "встановлення у '%s'."
+
+#, c-format
+msgid "add item '%s (%s)'."
+msgstr "додання елементу '%s (%s)'."
+
+#, c-format
+msgid "add item '%s'."
+msgstr "додання елементу '%s'."
+
+msgid "add item."
+msgstr "додання елементу."
+
+#, c-format
+msgid "insert item '%s (%s)' to position of item '%s'."
+msgstr "вставка елементу '%s (%s)' до позиції елементу '%s'."
+
+#, c-format
+msgid "insert item '%s' to position %s."
+msgstr "вставка елементу '%s' до позиції %s."
+
+#, c-format
+msgid "insert row '%s' to position of row %s."
+msgstr "вставка рядку '%s' до позиції рядку %s."
+
+#, c-format
+msgid "delete item in position %s."
+msgstr "видалення елементу у позиції %s."
+
+#, c-format
+msgid "delete item '%s'."
+msgstr "видалення елементу '%s'."
+
+#, c-format
+msgid "delete row '%s'."
+msgstr "видалення рядка '%s'."
+
+#, c-format
+msgid "edit item in position %s to '%s'."
+msgstr "редагування елементу у позиції %s в '%s'."
+
+#, c-format
+msgid "edit item '%s' to '%s (%s)'."
+msgstr "редагування елементу '%s' в '%s (%s)'."
+
+#, c-format
+msgid "edit item '%s' to '%s'."
+msgstr "редагування елементу '%s' в '%s'."
+
+#, c-format
+msgid "move item in position %s to %s."
+msgstr "пересування елементу у позиції %s в %s."
+
+#, c-format
+msgid "move row in position %s to %s."
+msgstr "пересування рядку у позиції %s в %s."
+
+#, c-format
+msgid "load with forcibility %d."
+msgstr "завантаження із примусовістю %d."
+
+#, c-format
+msgid "save with forcibility %d."
+msgstr "збереження із примусовістю %d."
+
+#, c-format
+msgid "copy from '%s' to '%s'."
+msgstr "копіювання із '%s' до '%s'."
+
+#, c-format
+msgid "user command '%s' to row '%s'."
+msgstr "користувацька команда '%s' до рядку '%s'."
+
+#, c-format
+msgid "other command '%s'."
+msgstr "інша команда '%s'."
 
 msgid "The node is already being processed!"
 msgstr "Вузол вже обробляється!"
@@ -834,6 +919,14 @@ msgstr ""
 
 #, c-format
 msgid ""
+"Warning saving:\n"
+"%s"
+msgstr ""
+"Попередження збереження:\n"
+"%s"
+
+#, c-format
+msgid ""
 "Error saving:\n"
 "%s"
 msgstr ""
@@ -925,9 +1018,6 @@ msgstr "Контролер"
 
 msgid "Status"
 msgstr "Статус"
-
-msgid "Controller DB"
-msgstr "БД контролера"
 
 msgid "Date of modification"
 msgstr "Дата модифікації"
@@ -1189,19 +1279,26 @@ msgstr "Помилка отримання об'єкту з не об'єктно�
 msgid "Closing the iconv handler error '%s (%d)'!"
 msgstr "Помилка закриття тримача iconv '%s (%d)'!"
 
-msgid "Storage address in the format \"{DB module}.{DB name}\"."
-msgstr "Адреса сховища у форматі \"{Модуль БД}.{Ім'я БД}\"."
+msgid "Generic Storage"
+msgstr "Загальне Сховище"
 
-msgid "Set '*.*' to use the Generic Storage."
-msgstr "Встановити '*.*' для використання Загального Сховку."
+msgid "Configuration File"
+msgstr "Конфігураційний Файл"
+
+msgid "Storage address in the format \"{DB module}.{DB name}\" or the common ones."
+msgstr "Адреса сховища у форматі \"{Модуль БД}.{Ім'я БД}\" або загальне."
+
+#, c-format
+msgid "Whole list of the object storages is: %s."
+msgstr "Весь перелік сховищ об'єкту: %s."
 
 #, c-format
 msgid ""
-"Please note that removing from the Generic Storage (*.*) will cause the data "
-"removing both from the Configuration File (<cfg>) and the Work DB (%s)!"
+"Please note that removing from \"%s (%s)\" will cause the data removing both "
+"from \"%s (%s)\" and \"Work DB (%s)\"!"
 msgstr ""
-"Зауважте будь ласка, що видалення із Загального Сховку (*.*) призведе до "
-"видалення даних як із Конфігураційного Файлу (<cfg>), так і Робочої БД (%s)!"
+"Зауважте, будь ласка, що видалення із \"%s (%s)\" призведе до видалення із "
+"\"%s (%s)\" і \"Робочої БД (%s)\"!"
 
 msgid ""
 "Schedule wrotes in seconds periodic form or in the standard CRON form.\n"
@@ -1592,12 +1689,13 @@ msgstr "Бібліотека"
 msgid "Library DB"
 msgstr "БД бібліотеки"
 
+#, c-format
 msgid ""
 "Storage address in the format \"{DB module}.{DB name}.{Table name}\".\n"
-"To use the Generic Storage, set '*.*.{Table name}'."
+"To use %s, set '%s.{Table name}'."
 msgstr ""
 "Адреса сховища у форматі \"{Модуль БД}.{Ім'я БД}.{Ім'я Таблиці}\".\n"
-"Встановити '*.*.{Ім'я Таблиці}' для використання Загального Сховища."
+"Для використання %s встановити '%s.{Ім'я Таблиці}' ."
 
 msgid "Parameter templates"
 msgstr "Шаблони параметрів"
@@ -1681,14 +1779,8 @@ msgstr "Користувач: "
 msgid "Include"
 msgstr "Включено до"
 
-msgid "User DB"
-msgstr "БД користувача"
-
 msgid "Group "
 msgstr "Група "
-
-msgid "User group DB"
-msgstr "БД групи користувачів"
 
 msgid ""
 "======================= Subsystem \"Specials\" options "
@@ -2085,10 +2177,6 @@ msgstr "Програму перевано!"
 msgid "Unknown signal %d!"
 msgstr "Невідомий сигнал %d!"
 
-#, c-format
-msgid "Closing the file %p error '%s (%d)'!"
-msgstr "Помилка закриття файлу %p - '%s (%d)'!"
-
 msgid "Timeouted !!!"
 msgstr "Час очікування вичерпано!!!"
 
@@ -2418,7 +2506,7 @@ msgid "Prior."
 msgstr "Пріор."
 
 msgid "CPU set"
-msgstr "Вст. CPU"
+msgstr "Вст. ЦП"
 
 msgid ""
 "To set up the processors you use, write a row of numbers separated by a ':' "
@@ -2570,6 +2658,9 @@ msgstr "Транспортний протокол"
 msgid "To connect"
 msgstr "Підключатися"
 
+msgid "Addition parameters"
+msgstr "Додаткові параметри"
+
 msgid "User that opens"
 msgstr "Користувач що відкриває"
 
@@ -2591,6 +2682,10 @@ msgstr "Рівень підняття"
 #, c-format
 msgid "Error the output address '%s'!"
 msgstr "Помилка вихідної адреси '%s'!"
+
+#, c-format
+msgid "For %s"
+msgstr "Для %s"
 
 msgid "Error finding and creating new input transports."
 msgstr "Помилка пошуку та створення нових вхідних транспортів."
@@ -2718,20 +2813,26 @@ msgstr "Вхідний транспорт: "
 msgid "Connect"
 msgstr "Підключення"
 
-msgid "Transport DB"
-msgstr "БД транспорту"
+msgid "Additional"
+msgstr "Додаткове"
+
+msgid "Reset"
+msgstr "Скинути"
 
 msgid "IO log"
 msgstr "Лог ВВ"
 
-msgid "Log length, block limit, type"
-msgstr "Логу довжина, обмеження блоку, тип"
+msgid "Log length, block limit, type, aggregation time"
+msgstr "Логу довжина, обмеження блоку, тип, час агрегації"
 
 msgid "Use zero (0) for the log disabling, -1 for writing to a file."
 msgstr "Використовуйте нуль (0) для вимкнення логу, -1 для запису до файлу."
 
 msgid "Binary & Text;Binary;Text"
 msgstr "Бінарне і Текст;Бінарне;Текст"
+
+msgid "Aggregation time in seconds and zero disables its."
+msgstr "Час агрегації у секундах і нуль для її вимкнення."
 
 msgid "Log"
 msgstr "Лог"

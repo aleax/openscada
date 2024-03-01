@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.ModBus file: modbus_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -51,9 +51,9 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
     mNodeEl.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,0,"1","0"));
     mNodeEl.fldAdd(new TFld("ADDR",trS("Address"),TFld::Integer,0,"3","1","1;247"));
     mNodeEl.fldAdd(new TFld("InTR",trS("Input transport"),TFld::String,0,i2s(limObjID_SZ).c_str(),"*"));
-    mNodeEl.fldAdd(new TFld("PRT",trS("Protocol"),TFld::String,TFld::Selectable,"5","*","RTU;ASCII;TCP;*",_("RTU;ASCII;TCP/IP;All")));
+    mNodeEl.fldAdd(new TFld("PRT",trS("Protocol"),TFld::String,TFld::Selectable,"5","*","RTU;ASCII;TCP;*",trS("RTU;ASCII;TCP/IP;All")));
     mNodeEl.fldAdd(new TFld("MODE",trS("Mode"),TFld::Integer,TFld::Selectable,"1","0",
-	TSYS::strMess("%d;%d;%d",Node::MD_DATA,Node::MD_GT_ND,Node::MD_GT_NET).c_str(),_("Data;Gateway node;Gateway net")));
+	TSYS::strMess("%d;%d;%d",Node::MD_DATA,Node::MD_GT_ND,Node::MD_GT_NET),trS("Data;Gateway node;Gateway net")));
     mNodeEl.fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec));
     // For "Data" mode
     mNodeEl.fldAdd(new TFld("DT_PER",trS("Period of the data calculation, seconds"),TFld::Real,0,"5.3","1","0.001;99"));
@@ -61,7 +61,7 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
     mNodeEl.fldAdd(new TFld("DT_PROG",trS("Procedure"),TFld::String,TFld::TransltText,"1000000"));
     // For "Gateway" mode
     mNodeEl.fldAdd(new TFld("TO_TR",trS("To output transport"),TFld::String,0,i2s(limObjID_SZ).c_str()));
-    mNodeEl.fldAdd(new TFld("TO_PRT",trS("To protocol"),TFld::String,TFld::Selectable,"5","RTU","RTU;ASCII;TCP","RTU;ASCII;TCP/IP"));
+    mNodeEl.fldAdd(new TFld("TO_PRT",trS("To protocol"),TFld::String,TFld::Selectable,"5","RTU","RTU;ASCII;TCP"));
     mNodeEl.fldAdd(new TFld("TO_ADDR",trS("To address"),TFld::Integer,0,"3","1","1;247"));
 
     //Node data IO DB structure
@@ -1389,11 +1389,11 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/nd/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/nd/st/status",_("Status"),R_R_R_,"root",SPRT_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/nd/st/en_st",_("Enabled"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/nd/st/db",_("DB"),RWRWR_,"root",SPRT_ID,4,
+		ctrMkNode("fld",opt,-1,"/nd/st/db",_("Storage"),RWRWR_,"root",SPRT_ID,4,
 		    "tp","str", "dest","select", "select","/db/list","help",TMess::labStor().c_str());
 		if(DB(true).size())
-		    ctrMkNode("comm",opt,-1,"/nd/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SPRT_ID,
-			1,"help",(DB(true)=="*.*")?TMess::labStorRemGenStor().c_str():"");
+		    ctrMkNode("comm",opt,-1,"/nd/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),
+			TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",SPRT_ID,1,"help",TMess::labStorRem(mDB).c_str());
 		ctrMkNode("fld",opt,-1,"/nd/st/timestamp",_("Date of modification"),R_R_R_,"root",SPRT_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/nd/cfg",_("Configuration"))) {
@@ -1485,7 +1485,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(progLang());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setProgLang(opt->text());
     }
-    else if(a_path.substr(0,7) == "/nd/cfg") TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SPRT_ID, RWRWR_);
+    else if(a_path.find("/nd/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SPRT_ID, RWRWR_);
     else if(a_path == "/plang/list") {
 	vector<string> lls, ls;
 	//Templates

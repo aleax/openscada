@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/SSL</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/SSL.html" title="Модули/SSL (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/SSL.html" title="Модулі/SSL (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../../ru/Modules/SSL.html" title="Модули/SSL (24% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/SSL.html" title="Модулі/SSL (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a> </td>
 <td> SSL
 </td>
-<td> 3.4 </td>
+<td> 4.5 </td>
 <td> GPL2 </td>
 <td> tr_SSL.so </td>
 <td> en,uk,ru,de </td>
@@ -43,10 +43,10 @@
 <th colspan="9"> Description
 </th></tr>
 <tr>
-<td colspan="9"> Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.
+<td colspan="9"> Provides transport based on the secure sockets' layer. <a class="external text" href="http://www.openssl.org" rel="nofollow noreferrer noopener" target="_blank">OpenSSL</a> is used and supported SSL-TLS depending on the library version.
 <ul><li> <b>Sponsored by, for an external certificates file on 0.3 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> Vinnica Poultry Farm</li></ul>
 </td></tr></table>
-<p>The module provides support for secure sockets layer (SSL) based transports to the program. The module is based on the library <a class="external text" href="http://www.openssl.org" rel="nofollow noreferrer noopener" target="_blank">OpenSSL</a>. Input and output transport protocols SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported; the general list of which depends on their availability in the OpenSSL library and, in the absence of a direct specification, it is selected for most relevant and safe.
+<p>The module provides to the program support for the Secure Sockets Layer (SSL) based transports. The module is based on the library <a class="external text" href="http://www.openssl.org" rel="nofollow noreferrer noopener" target="_blank">OpenSSL</a>. Input and output SSL-TLS transport protocols are supported, the general list of which is dependent on their availability in the OpenSSL library and the most relevant and safe is selected.
 </p><p>You can add new input and output safe sockets through the configuration of <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">the transport subsystem</a> in any OpenSCADA configurator.
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -57,45 +57,58 @@
 </ul>
 </div>
 
+<p>On new SSL-versions the "Transports" tab of the module is appended by information of the common-context ciphers for input-server and output-client parts differently, see Figure 1.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:891px;"><a class="image" href="http://oscada.org/wiki/File:SSL_tr.png"><img class="thumbimage" height="705" src="../files/SSL_tr.png" width="889" /></a>  <div class="thumbcaption">Fig.1. The "Transports" tab with SSL ciphers.</div></div></div></div>
 <h2><span class="mw-headline" id="Input_transports"><span class="mw-headline-number">1</span> Input transports</span></h2>
-<p>The configured and running input transport opens server SSL-socket for the expectation of connection of the clients. SSL-socket is a multi-stream one, i.e. when the client connects, the client SSL-connection and a new stream in which the client is served are created. The server SSL-socket in this moment switches to the waiting for the request from the new client. Thus the parallel service of the clients is achieved.
-</p><p>Each input transport is necessarily associated with one of the available transport protocols, to which input messages are transmitted. In conjunction with the transport protocol is supported by a mechanism of the combining of pieces of requests, disparate while transferring.
-</p><p>Configuration dialog of the input SSL-transport is shown in Figure 1.
+<p>Configured and running input transport opens server SSL-socket for the expectation of connection of the clients, besides the initiative connections. SSL-socket is multi-stream, i.e. when the client connects, the client socket and the new thread are created in which the client is served. Server socket in this moment switches to the waiting for the request from the new client. Thus the parallel service of the clients is achieved.
+</p><p>Each input transport is associated with one or several available transport protocols, to which input messages are transmitted. Together with the transport protocols, the mechanism of combining fragmented pieces when sending requests is supported.
+</p><p>Read about the passive acquisition mechanism and initiative connections you can in the corresponding part of the "<a href="../DAQ.html#PassiveAndInitiative" title="Special:MyLanguage/Documents/DAQ">Data acquisition in OpenSCADA</a>" document.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:893px;"><a class="image" href="http://oscada.org/wiki/File:SSL_in.png"><img class="thumbimage" height="804" src="../files/SSL_in.png" width="891" /></a>  <div class="thumbcaption">Fig.1. Configuration dialog of the input SSL-transport.</div></div></div></div>
-<p>Using this dialog you can set:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:889px;"><a class="image" href="http://oscada.org/wiki/File:SSL_in.png"><img class="thumbimage" height="1300" src="../files/SSL_in.png" width="887" /></a>  <div class="thumbcaption">Fig.2. The generic configuration dialogues of the input SSL-transport.</div></div></div></div>
+<p>Using the main dialog you can set:
 </p>
-<ul><li> State of the transport, that is: status, "Connect", name of the database (containing the configuration) and a list with information about the active connections.</li>
+<ul><li> State of the transport, that is: status, "Connect", name of the storage (containing the configuration), a list with information about the active connections and supported ciphers.</li>
 <li> Identifier, name and description of the transport.</li>
-<li> Address of the transport in the format "<b>{addr}:{port}[:{mode}]</b>", where:
+<li> Address of the transport in the format "<b>{addr}[:{port}[,{port2}[,{portN}]][:{mode}[:{IDmess}]]]</b>", where:
 <ul><li> <i>addr</i> — address to open SSL, it must be one of the addresses of the host. Empty or "*" address opens SSL for all interfaces. There may be as the symbolic representation as well as IPv4 "<b>127.0.0.1</b>" or IPv6 "<b>[::1]</b>".</li>
-<li> <i>port</i> — network port on which the SSL is opened, indication of the character name of the port, according to <i>/etc/services</i> is available.</li>
-<li> <i>mode</i> — SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), by default and in error, the safest and most appropriate one is used.</li></ul></li>
+<li> <i>port</i>, <i>port2</i>, <i>portN</i> — network ports on which SSL is sequential opened (at busy the first ones), indication of the character name of the port, according to <i>/etc/services</i> is available.</li>
+<li> <i>mode</i> – mode of operation:
+<ul><li> <b>0</b>(default) — ordinal connection;</li>
+<li> <b>2</b> — initiative connection. Enables the mode of connecting this input transport to remote host (address instead of local) and switching to the listening state of this host. The "Keep alive timeout" value is used as the timeout of the re-connection of this transport in the absence of activity in order to restore the possibly lost connection.</li></ul></li>
+<li> <i>IDmess</i> — identification message of the initiative connection — the mode 2.</li></ul></li>
 <li> Selecting of the transport protocols.</li>
-<li> State "Connect", in which the transport must be switched at start up.</li>
+<li> State "Connect", in which the transport must be switched at start up.</li></ul>
+<p>Using the additional dialog you can set:
+</p>
+<ul><li> Priority of the transport tasks.</li>
+<li> System input buffer size in kilobytes of the socket. Set to 0 for disabling the user size. Actual size you can see in the status.</li>
+<li> Maximum segment size (MSS) in bytes, for limit the transmitted packages size (segments TCP) on bad link channels. Set to 0 for disabling the user limit for size. Actual size you can see in the status.</li>
 <li> PEM-file of the certificates and private key; or the certificates, private SSL key directly and password of the private SSL key.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Hidden in the connected state.</dd>
 <dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Is traced in 60 seconds for updating, then the transport reconnect for actualisation.</dd></dl>
-<ul><li> Maximum number of clients, Maximum number of clients per host and Size of the input buffer.</li>
-<li> Keep alive requests. Closing the connection after the specified requests. Zero value to disable - not close ever.</li>
+<ul><li> [!INIT] Maximum number of clients, Maximum number of clients per host and Size of the input buffer.</li>
+<li> [!INIT] Keep alive requests. Closing the connection after the specified requests. Zero value to disable - not close ever.</li>
 <li> Keep alive timeout, seconds. Closing the connection after no requests at the specified timeout. Zero value to disable - not close ever.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> We do not recommend disable the function by the TCP/IP network's properties does not guarantee notice the server about the connection disable, for example after power supply lost on the client. As result the opened client connections will left <span style="color: red">forever</span> and after their number achieve to the limit, server will drop new connections!</dd></dl>
-<ul><li> Transport's tasks priority.</li></ul>
+<ul><li> [INIT|ASSOC] Timeouts, tries of the initiative connection and the associated output transports, empty for default and separated by '||'. Format of the timeouts and tries is corresponded to ones of the output transport.</li>
+<li> Protocols' specific custom parameters.</li>
+<li> Reset all the additional parameters to default values and cleanup the protocols' specific custom parameters.</li></ul>
 <h2><span class="mw-headline" id="Output_transports"><span class="mw-headline-number">2</span> Output transports</span></h2>
 <p>Configured and running output transport opens a connection to the specified server. In the case of destroying the connection, output transport is stopped. In order to resume the connection transport must be re-run, that all protocols do automatically.
-</p><p>The transport supports the direct definition of multiple server addresses and the processing of all IP addresses in which the symbolic address is resolved, which allows you to build <a href="../DAQ.html#Redundancy" title="Special:MyLanguage/Documents/DAQ">vertical redundancy</a> directly by the transport that will be automatically connected to the first available server.
-</p><p>Main tab of the configuration page of the output SSL-transport is shown in Figure 2.
+</p><p>The transport supports of direct definition of multiple server addresses and processing of all IP addresses in which the symbolic address is resolved, which allows you to build <a href="../DAQ.html#Redundancy" title="Special:MyLanguage/Documents/DAQ">vertical redundancy</a> directly by the transport that will be automatically connected to the first available server.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:898px;"><a class="image" href="http://oscada.org/wiki/File:SSL_out.png"><img class="thumbimage" height="592" src="../files/SSL_out.png" width="896" /></a>  <div class="thumbcaption">Fig.2. Main tab of the configuration page of the output SSL-transport.</div></div></div></div>
-<p>Using this dialog you can set:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:914px;"><a class="image" href="http://oscada.org/wiki/File:SSL_out.png"><img class="thumbimage" height="1045" src="../files/SSL_out.png" width="912" /></a>  <div class="thumbcaption">Fig.3. The generic configuration dialogues of the output SSL-transport.</div></div></div></div>
+<p>Using the main dialog you can set:
 </p>
-<ul><li> State of the transport, that is: status, "Connect" and the name of the database, containing the configuration.</li>
+<ul><li> State of the transport, that is: status, "Connect", name of the storage, containing the configuration, and supported ciphers.</li>
 <li> Identifier, name and description of the transport.</li>
-<li> Address of the transport in the format "<b>{addr}[,{addrN}]:{port}[:{mode}]</b>", where:
+<li> Address of the transport in the format "<b>{addr}[,{addrN}]:{port}</b>", where:
 <ul><li> <i>addr</i> — address with which the connection is made. There may be as the symbolic representation as well as IPv4 "<b>127.0.0.1</b>" or IPv6 "<b>[::1]</b>".</li>
-<li> <i>port</i> — network port with which the connection is made. Indication of the character name of the port according to <i>/etc/services</i> is available.</li>
-<li> <i>mode</i> — SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), by default and in error, the safest and most appropriate one is used.</li></ul></li>
-<li> PEM-file of the certificates and private key; or the certificates, private SSL key directly and password of the private SSL key.</li></ul>
+<li> <i>port</i> — network port with which the connection is made. Indication of the character name of the port according to <i>/etc/services</i> is available.</li></ul></li></ul>
+<p>Using the additional dialog you can set:
+</p>
+<ul><li> PEM-file of the certificates and private key; or the certificates, private SSL key directly and password of the private SSL key.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Hidden in the connected state.</dd></dl>
 <ul><li> Connection timings in the format "<b>{conn}:{next}</b>", where:
 <ul><li> <i>conn</i> — maximum time of waiting the connection, in seconds;</li>
@@ -103,16 +116,18 @@
 <dl><dd> Can be prioritatile specified into the address field as the second global argument, as such "<b>localhost:123||5:1</b>".</dd></dl>
 <ul><li> Attempts of the requesting both for this transport and protocol, for full requests.</li></ul>
 <dl><dd> Can be prioritatile specified into the address field as the third global argument, as such "<b>localhost:123||5:1||3</b>".</dd></dl>
+<ul><li> Maximum segment size (MSS) in bytes, for limit the transmitted packages size (segments TCP) on bad link channels. Set to 0 for disabling the user limit for size. Actual size you can see in the status.</li>
+<li> Protocols' specific custom parameters.</li>
+<li> Reset all the additional parameters to default values and cleanup the protocols' specific custom parameters.</li></ul>
 <h2><span class="mw-headline" id="Certificates_and_keys"><span class="mw-headline-number">3</span> Certificates and keys</span></h2>
-<p>For the full function of the module, you need certificates and private keys. In the case of input SSL-transport (server), they are mandatory. In the case of the output SSL-transport, they may not be installed, although their use is desirable.
+<p>For the full function of the module, you need certificates and private keys. In the case of input SSL-transport (server), they are mandatory. In the case of the output SSL-transport, they may not be installed, although their using is desirable.
 </p><p>The simplest configuration of the certificate is self-subscription certificate and private key. The following describes how to create them using the tool <b>openssl</b>:
 </p>
-<pre style="white-space: pre-wrap;">
-# Generation the secret key
-$ openssl genrsa -out ./key.pem -des3 -rand /var/log/messages 2048
-# Generation of self-subscription certificate
-$ openssl req -x509 -new -key ./key.pem -out ./selfcert.pem -days 365
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c"># Generation the secret key</span>
+openssl genrsa -out ./key.pem -des3 -rand /var/log/messages 2048
+<span class="c"># Generation of self-subscription certificate</span>
+openssl req -x509 -new -key ./key.pem -out ./selfcert.pem -days 365
+</pre></div>
 <p>Next, the contents of the files "key.pem" and "selfcert.pem" is copied into the text field of the certificate and key. Password of the private key is installed in the appropriate field.
 </p>
 
@@ -120,5 +135,5 @@ $ openssl req -x509 -new -key ./key.pem -out ./selfcert.pem -days 365
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SSL/en">Modules/SSL/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SSL/en">Modules/SSL/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

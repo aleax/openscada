@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/WebVision</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FWebVision&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/WebVision" title="Modules/WebVision">Modules/WebVision</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/WebVision.html" title="Modules/WebVision (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/WebVision.html" title="Модули/WebVision (96% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FWebVision&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/WebVision" title="Modules/WebVision">Modules/WebVision</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/WebVision.html" title="Modules/WebVision (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/WebVision.html" title="Модули/WebVision (94% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> </td>
 <td> Робочий користувацький інтерфейс (WEB)
 </td>
-<td> 6.8 </td>
+<td> 6.9 </td>
 <td> GPL2 </td>
 <td> ui_WebVision.so </td>
 <td> en,uk,ru,de </td>
@@ -51,16 +51,14 @@
 <li> <b>Спонсорування, Експорту на 0.8 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> Вінницька Птахофабрика</li>
 <li> <b><a href="../../en/To_do.html" title="Special:MyLanguage/Works/To do">Завдання (To Do)</a>:</b></li></ul>
 <dl><dd> * відревізувати та уніфікувати примушення клавіатурного фокусу на першому активному елементі з урахуванням їх специфіки, для гарантування клавіатурних скорочень;</dd>
+<dd> - розширити примітив "Діаграма" операціями масштабування мишею;</dd>
+<dd> - реалізувати власний RTE-редактор для вигляду Text примітиву FormEl;</dd>
 <dd> - ElFigure: виправити втрату деяких властивостей (щонайменш товщину лінії) при опрацюванні дій, у процесі загальної переробки коду примітиву;</dd>
-<dd> + розширити вид "Таблиця" примітиву "FormEl" користувацьким сортуванням за обраним стовпчиком;</dd>
 <dd> * доповнити панель статусу, функціями:
-<dl><dd> + експорт;</dd>
-<dd> - виклик документації проєкту;</dd>
-<dd> + сигналізація-сповіщення звуком та мовою.</dd></dl></dd>
+<dl><dd> - користувацькі поля статусу.</dd></dl></dd>
 <dd> - ElFigure,Diagram: ввімкнути або реалізувати згладжування, для бібліотеки GD;</dd>
 <dd> - реалізувати примітиви "Діаграма", "ElFigure" тегом "SVG";</dd>
-<dd> - розширити варіант "Анімація" примітиву "Медіа" використанням RAW файлів зображень, на кшталт PNG;</dd>
-<dd> + реалізувати варіант "Повне відео" примітиву "Медіа".</dd></dl>
+<dd> - розширити варіант "Анімація" примітиву "Медіа" використанням RAW файлів зображень, на кшталт PNG.</dd></dl>
 </td></tr></table>
 <p>Модуль надає до OpenSCADA механізм кінцевої візуалізації середовища візуалізації та управління (СВУ). Модуль засновано на WEB технологіях (XHTML, JavaScript, CSS, AJAX). У своїй роботі модуль використовує дані рушія СВУ — модуль <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a>.
 </p><p>Среда визуализации и управления (СВУ) является неотъемлемой составляющей SCADA системы. Она применяется на клиентских станциях с целью доступного предоставления информации об объекте управления и выдачи управляющих воздействий на объект. В различных практических ситуациях и условиях могут применяться СВУ, построенные на различных принципах визуализации. Например, это могут быть библиотеки виджетов Qt, GTK+, wxWidgets или гипертекстовые механизмы на основе технологий HTML, XHTML, XML, CSS и JavaScript или сторонние приложения визуализации, реализованные на различных языках программирования Java, Python и т.д. Любой из этих принципов имеет свои преимущества и недостатки, комбинация которых может стать непреодолимым препятствием в возможности использования СВУ в том или ином практическом случае. Например, технологии вроде библиотеки Qt позволяют создавать высокопроизводительные СВУ, что несомненно важно для станций оператора управления технологическим процессом (ТП). Однако, необходимость инсталляции данного клиентского ПО может сделать его использование невозможным в отдельных ситуациях. С другой стороны, Web-технологии не требуют инсталляции на клиентские системы и являются предельно многоплатформенными (достаточно указать ссылку на Web-сервер в любом Web-браузере), что наиболее важно для различных инженерных и административных станций. С другой стороны, производительность и надёжность таких интерфейсов ниже, что практически исключает их использование на станциях оператора ТП.
@@ -140,7 +138,8 @@
 <li> поточний статус порушення у лампі кольором, який відповідає рівню порушення, та іконки активних сповіщувачів; блимає при появі та зміні порушення; натиснувши на лампу Ви можете сквітувати (стишити) ці порушення цілком або бажаний тип сповіщення, натиснувши іконку відповідного сповіщувача поряд;</li>
 <li> кнопка меню із виклику друку та експорту даних сторінки для:
 <ul><li> друку: Основної Сторінки, Документів;</li>
-<li> експорту: Документів (HTML,CSV), Таблиць (CSV).</li></ul></li></ul></li>
+<li> експорту: Документів (HTML,CSV), Таблиць (CSV).</li></ul></li>
+<li> підручнику на проєкт СВУ — кліком викликає підручник на проєкт візуалізації щодо файлу "<b>{ProjVCA_ID}.[pdf|html|odt]</b>" у <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">теці документів</a>.</li></ul></li>
 <li> У головному полі рядка статусу виводяться різні інформаційні повідомлення та повідомлення допомоги.</li></ul>
 <p>Модуль підтримує багатомовність, яка вмикається <a href="../Program_manual.html#ConfigTr" title="Special:MyLanguage/Documents/Program manual">динамічним перекладом повідомлень OpenSCADA</a>. Отримана мова передається модулем <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> та визначається шляхом та у послідовності:
 </p>
@@ -150,7 +149,7 @@
 <li> Загальна мова процесу OpenSCADA.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:619px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_auth_uk.png"><img class="thumbimage" height="286" src="../files/HTTP_auth_uk.png" width="617" /></a>  <div class="thumbcaption">Рис.1. Сторінка аутентифікації.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:606px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_connect_uk.png"><img class="thumbimage" height="458" src="../files/WebVision_wvis_connect_uk.png" width="604" /></a>  <div class="thumbcaption">Рис.2. Підключення або створення нового сеансу виконання проєкту СВУ.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1037px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_uk.png"><img class="thumbimage" height="778" src="../files/WebVision_wvis_run_uk.png" width="1035" /></a>  <div class="thumbcaption">Рис.3. Головне вікно режиму виконання.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1037px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_uk.png"><img class="thumbimage" height="817" src="../files/WebVision_wvis_run_uk.png" width="1035" /></a>  <div class="thumbcaption">Рис.3. Головне вікно режиму виконання.</div></div></div></div>
 <h2><span class="mw-headline" id=".D0.9F.D1.80.D0.B5.D0.B4.D1.81.D1.82.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.D0.B1.D0.B0.D0.B7.D0.BE.D0.B2.D0.B8.D1.85_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.96.D0.B2_.28.D0.BF.D1.80.D0.B8.D0.BC.D1.96.D1.82.D0.B8.D0.B2.D1.96.D0.B2.29"><span class="mw-headline-number">3</span> <span id="Primitives" title="#Primitives">Представлення базових елементів (примітивів)</span></span></h2>
 <p>Даною версією модуля реалізовано не всі образи примітивів, закладені проєктом. Загалом, проєктом закладено примітиви:
 </p>
@@ -259,10 +258,9 @@
 <ul><li> "*" — виклик діалогу обрання користувача;</li>
 <li> "$" — зміна користувача на типового;</li>
 <li> "{користувач}[:{пароль}]" — пряма зміна на <i>користувач</i> із <i>паролем</i>; для порожнього пароля користувач змінюється лише якщо його права менше або дорівнюють; корисний приклад зміни на користувача "user" після хвилини неактивності:</li></ul>
-<pre style="white-space: pre-wrap;&nbsp;; margin-left: 20pt">
-if((SYS.time()-this.ownerSess().userActTm()) &lt; 60)userSetVis = "";
-else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user";
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="k">if</span><span class="p">((</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">time</span><span class="p">()</span><span class="o">-</span><span class="k">this</span><span class="p">.</span><span class="nx">ownerSess</span><span class="p">().</span><span class="nx">userActTm</span><span class="p">())</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">)</span><span class="nx">userSetVis</span> <span class="o">=</span> <span class="s2">""</span><span class="p">;</span>
+<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">ownerSess</span><span class="p">().</span><span class="nx">reqUser</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">"user"</span><span class="p">)</span> <span class="nx">userSetVis</span> <span class="o">=</span> <span class="s2">"user"</span><span class="p">;</span>
+</pre></div>
 </td></tr>
 <tr>
 <td> vs_goHttpUrl (вигляд "Кнопка" примітиву "FormEl") </td>
@@ -438,6 +436,8 @@ else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user";
 <li> Зміна розміру растрових зображень на боці серверу. Переважно щоб зменшити розмір занадто великий зображень відтак і трафіку, що призводить до збільшення навантаження на сервер.</li>
 <li> Користувацькі CSS правила інтерфейсу. CSS правила перевизначення стандартних, що розташовуються за спеціальним знаком ##CUST_CSS## файлу WebVisionVCA.html.</li></ul></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1129px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_cfg_uk.png"><img class="thumbimage" height="605" src="../files/WebVision_wvis_cfg_uk.png" width="1127" /></a>  <div class="thumbcaption">Рис.4. Сторінка конфігурації модуля.</div></div></div></div>
+<p>Ви можете глибоко налаштувати основний інтерфейс модуля замінивши та доповнивши код HTML і JavaScript шляхом розташування до теки вашого проєкту OpenSCADA файлів WebVisionVCA.html і WebVisionVCA.js, які початково можете отримати з вихідного коду модуля — <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/src/moduls/ui/WebVision/" rel="nofollow noreferrer noopener" target="_blank">UI.WebVision</a>.
+</p>
 <h2><span class="mw-headline" id=".D0.95.D1.84.D0.B5.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D1.96.D1.81.D1.82.D1.8C_.D1.82.D0.B0_.D0.BC.D0.B0.D1.81.D1.88.D1.82.D0.B0.D0.B1.D0.BE.D0.B2.D0.B0.D0.BD.D1.96.D1.81.D1.82.D1.8C"><span class="mw-headline-number">5</span> <span id="Efficiency" title="#Efficiency">Ефективність та масштабованість</span></span></h2>
 <p><b><u>31.07.2019</u></b><br />
 GROUNDS: The Web-sessions may create many objects servicing the VCA-session for generating images, processing documents and performing other background functions of the end user Web-interface. Moreover, in difference to <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a>, the VCA-sessions may be created, closed and recreated again multiple times for different users and remote hosts. In the time the memory heap is affected by the memory fragmentation, so the program consumes more memory than at the start. The table below represents the phenomenon for different environments and the first page of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">the DemoDB (AGLKS) project</a> reopening:
@@ -725,5 +725,5 @@ GROUNDS: At working with the board <a class="external" href="http://oscada.org/w
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/uk">Modules/WebVision/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/uk">Modules/WebVision/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

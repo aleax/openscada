@@ -50,7 +50,7 @@ TProt::TProt( string name ) : TProtocol(PRT_ID)
     mEndPntEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     mEndPntEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
     mEndPntEl.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,0,"1","0"));
-    mEndPntEl.fldAdd(new TFld("SerialzType",trS("Serializer type"),TFld::Integer,TFld::Selectable,"1","0","0",_("Binary")));
+    mEndPntEl.fldAdd(new TFld("SerialzType",trS("Serializer type"),TFld::Integer,TFld::Selectable,"1","0","0",trS("Binary")));
     mEndPntEl.fldAdd(new TFld("URL",trS("URL"),TFld::String,0,"50","opc.tcp://localhost:4841"));
     mEndPntEl.fldAdd(new TFld("SecPolicies",trS("Security policies"),TFld::String,TFld::FullText,"100","None:0\nBasic128Rsa15:1"));
     mEndPntEl.fldAdd(new TFld("ServCert",trS("Server certificate (PEM)"),TFld::String,TFld::FullText,"10000"));
@@ -783,11 +783,11 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/ep/st/asess",_("Active sessions"),(enableStat()?R_R_R_:0),"root",SPRT_ID);
 		ctrMkNode("list",opt,-1,"/ep/st/asubscr",_("Active subscriptions"),(enableStat()?R_R_R_:0),"root",SPRT_ID);
 		ctrMkNode("fld",opt,-1,"/ep/st/en_st",_("Enabled"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/ep/st/db",_("DB"),RWRWR_,"root",SPRT_ID,4,
+		ctrMkNode("fld",opt,-1,"/ep/st/db",_("Storage"),RWRWR_,"root",SPRT_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 		if(DB(true).size())
-		    ctrMkNode("comm",opt,-1,"/ep/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SPRT_ID,
-			1,"help",(DB(true)=="*.*")?TMess::labStorRemGenStor().c_str():"");
+		    ctrMkNode("comm",opt,-1,"/ep/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),
+			TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",SPRT_ID,1,"help",TMess::labStorRem(mDB).c_str());
 	    }
 	    if(ctrMkNode("area",opt,-1,"/ep/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/ep/cfg",0,"root",SPRT_ID,RWRWR_);

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-19 14:41+0200\n"
+"POT-Creation-Date: 2024-01-28 11:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -311,7 +311,7 @@ msgstr ""
 msgid "Running"
 msgstr ""
 
-msgid "Archiver DB"
+msgid "Storage"
 msgstr ""
 
 #, c-format
@@ -389,9 +389,6 @@ msgid "Buffer end"
 msgstr ""
 
 msgid "Buffer begin"
-msgstr ""
-
-msgid "Archive DB"
 msgstr ""
 
 msgid ""
@@ -619,7 +616,7 @@ msgstr ""
 msgid "The DB is in the Read only mode."
 msgstr ""
 
-msgid "Translation removed! Reload the base message."
+msgid "A message completely cleaned for the base and all translations!"
 msgstr ""
 
 #, c-format
@@ -628,6 +625,92 @@ msgstr ""
 
 #, c-format
 msgid "%s:%s:> Error in the control item '%s'!"
+msgstr ""
+
+#, c-format
+msgid "set the cell ['%s':%s] to '%s'."
+msgstr ""
+
+msgid "command with arguments:"
+msgstr ""
+
+#, c-format
+msgid "set to '%s'."
+msgstr ""
+
+#, c-format
+msgid "add item '%s (%s)'."
+msgstr ""
+
+#, c-format
+msgid "add item '%s'."
+msgstr ""
+
+msgid "add item."
+msgstr ""
+
+#, c-format
+msgid "insert item '%s (%s)' to position of item '%s'."
+msgstr ""
+
+#, c-format
+msgid "insert item '%s' to position %s."
+msgstr ""
+
+#, c-format
+msgid "insert row '%s' to position of row %s."
+msgstr ""
+
+#, c-format
+msgid "delete item in position %s."
+msgstr ""
+
+#, c-format
+msgid "delete item '%s'."
+msgstr ""
+
+#, c-format
+msgid "delete row '%s'."
+msgstr ""
+
+#, c-format
+msgid "edit item in position %s to '%s'."
+msgstr ""
+
+#, c-format
+msgid "edit item '%s' to '%s (%s)'."
+msgstr ""
+
+#, c-format
+msgid "edit item '%s' to '%s'."
+msgstr ""
+
+#, c-format
+msgid "move item in position %s to %s."
+msgstr ""
+
+#, c-format
+msgid "move row in position %s to %s."
+msgstr ""
+
+#, c-format
+msgid "load with forcibility %d."
+msgstr ""
+
+#, c-format
+msgid "save with forcibility %d."
+msgstr ""
+
+#, c-format
+msgid "copy from '%s' to '%s'."
+msgstr ""
+
+#, c-format
+msgid "user command '%s' to row '%s'."
+msgstr ""
+
+#, c-format
+msgid "other command '%s'."
 msgstr ""
 
 msgid "The node is already being processed!"
@@ -733,6 +816,12 @@ msgstr ""
 
 #, c-format
 msgid ""
+"Warning saving:\n"
+"%s"
+msgstr ""
+
+#, c-format
+msgid ""
 "Error saving:\n"
 "%s"
 msgstr ""
@@ -817,9 +906,6 @@ msgid "Controller"
 msgstr ""
 
 msgid "Status"
-msgstr ""
-
-msgid "Controller DB"
 msgstr ""
 
 msgid "Date of modification"
@@ -1069,14 +1155,21 @@ msgstr ""
 msgid "Closing the iconv handler error '%s (%d)'!"
 msgstr ""
 
-msgid "Storage address in the format \"{DB module}.{DB name}\"."
+msgid "Generic Storage"
 msgstr ""
 
-msgid "Set '*.*' to use the Generic Storage."
+msgid "Configuration File"
+msgstr ""
+
+msgid "Storage address in the format \"{DB module}.{DB name}\" or the common ones."
 msgstr ""
 
 #, c-format
-msgid "Please note that removing from the Generic Storage (*.*) will cause the data removing both from the Configuration File (<cfg>) and the Work DB (%s)!"
+msgid "Whole list of the object storages is: %s."
+msgstr ""
+
+#, c-format
+msgid "Please note that removing from \"%s (%s)\" will cause the data removing both from \"%s (%s)\" and \"Work DB (%s)\"!"
 msgstr ""
 
 msgid ""
@@ -1361,9 +1454,10 @@ msgstr ""
 msgid "Library DB"
 msgstr ""
 
+#, c-format
 msgid ""
 "Storage address in the format \"{DB module}.{DB name}.{Table name}\".\n"
-"To use the Generic Storage, set '*.*.{Table name}'."
+"To use %s, set '%s.{Table name}'."
 msgstr ""
 
 msgid "Parameter templates"
@@ -1444,13 +1538,7 @@ msgstr ""
 msgid "Include"
 msgstr ""
 
-msgid "User DB"
-msgstr ""
-
 msgid "Group "
-msgstr ""
-
-msgid "User group DB"
 msgstr ""
 
 msgid ""
@@ -1708,10 +1796,6 @@ msgstr ""
 
 #, c-format
 msgid "Unknown signal %d!"
-msgstr ""
-
-#, c-format
-msgid "Closing the file %p error '%s (%d)'!"
 msgstr ""
 
 msgid "Timeouted !!!"
@@ -2120,6 +2204,9 @@ msgstr ""
 msgid "To connect"
 msgstr ""
 
+msgid "Addition parameters"
+msgstr ""
+
 msgid "User that opens"
 msgstr ""
 
@@ -2140,6 +2227,10 @@ msgstr ""
 
 #, c-format
 msgid "Error the output address '%s'!"
+msgstr ""
+
+#, c-format
+msgid "For %s"
 msgstr ""
 
 msgid "Error finding and creating new input transports."
@@ -2256,19 +2347,25 @@ msgstr ""
 msgid "Connect"
 msgstr ""
 
-msgid "Transport DB"
+msgid "Additional"
+msgstr ""
+
+msgid "Reset"
 msgstr ""
 
 msgid "IO log"
 msgstr ""
 
-msgid "Log length, block limit, type"
+msgid "Log length, block limit, type, aggregation time"
 msgstr ""
 
 msgid "Use zero (0) for the log disabling, -1 for writing to a file."
 msgstr ""
 
 msgid "Binary & Text;Binary;Text"
+msgstr ""
+
+msgid "Aggregation time in seconds and zero disables its."
 msgstr ""
 
 msgid "Log"

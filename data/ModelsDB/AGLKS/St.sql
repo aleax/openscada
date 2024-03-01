@@ -919,11 +919,11 @@ INSERT INTO Transport_in VALUES('testOPC','Sockets','','','*:4841','OPC_UA',1,5,
 ');
 INSERT INTO Transport_in VALUES('testModem','Serial','Test Modem',' ','/dev/ttyUSB0:115200:8N1::1','UserProtocol.test',0,0,'','Тест модему',' ','Тест модема','','<prms TMS="0.95:48" MdmPreInit="0.5" MdmPostInit="1" MdmInitStr1="ATZ" MdmInitStr2="" MdmInitResp="OK" MdmRingReq="RING" MdmRingAnswer="ATA" MdmRingAnswerResp="CONNECT" MdmHangUp="+++ATH" MdmHangUpResp="OK"/>
 ');
-INSERT INTO Transport_in VALUES('testRelease','Sockets','','','localhost:10001','UserProtocol.test',1,'','','','','','','<prms MSS="0" MaxQueue="10" MaxClients="20" MaxClientsPerHost="0" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
+INSERT INTO Transport_in VALUES('testRelease','Sockets','','','localhost:10001','UserProtocol.test',0,'','','','','','','<prms MSS="0" MaxQueue="10" MaxClients="20" MaxClientsPerHost="0" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
 ');
-INSERT INTO Transport_in VALUES('testRelease1','Sockets','','','UDP:localhost:10001','UserProtocol.test',1,'','','','','','','<prms MSS="0" MaxQueue="10" MaxClients="20" MaxClientsPerHost="0" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
+INSERT INTO Transport_in VALUES('testRelease1','Sockets','','','UDP:localhost:10001','UserProtocol.test',0,'','','','','','','<prms MSS="0" MaxQueue="10" MaxClients="20" MaxClientsPerHost="0" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
 ');
-INSERT INTO Transport_in VALUES('testRelease2','Sockets','','','UNIX:testRelease.socket','UserProtocol.test',1,'','','','','','','<prms MSS="0" MaxQueue="10" MaxClients="20" MaxClientsPerHost="0" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
+INSERT INTO Transport_in VALUES('testRelease2','Sockets','','','UNIX:testRelease.socket','UserProtocol.test',0,'','','','','','','<prms MSS="0" MaxQueue="10" MaxClients="20" MaxClientsPerHost="0" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
 ');
 INSERT INTO Transport_in VALUES('testRelease','SSL','','','127.0.0.1:10041','UserProtocol.test',1,'','','','','','','<prms MaxClients="20" MaxClientsPerHost="0" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" PKeyPass="123456">
 <CertKey>
@@ -986,7 +986,7 @@ fdfa9weotHT55KrlRp06LxgUqckwoHoGjKDwR8bCk7s0QobgxuFufjEqUZg44VXw
 ');
 INSERT INTO Transport_in VALUES('testRelease','Serial','','/dev/pts/7:115200:8N1','/dev/pts/6:115200:8N1','UserProtocol.test',0,'','','','','','','<prms TMS="2.86:48" TaskPrior="0" MdmTm="20" MdmPreInit="0.5" MdmPostInit="1" MdmInitStr1="ATZ" MdmInitResp="OK" MdmRingReq="RING" MdmRingAnswer="ATA" MdmRingAnswerResp="CONNECT" />
 ');
-INSERT INTO Transport_in VALUES('CNTR','SSL','OpenSCADA control interface','','*:10045','SelfSystem',1,'','','','','','','<prms MaxClients="20" MaxClientsPerHost="5" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" PKeyPass="openscada">
+INSERT INTO Transport_in VALUES('CNTR','SSL','OpenSCADA control interface','','*:10045,10046,10047','SelfSystem',1,'','','','','','','<prms MaxClients="20" MaxClientsPerHost="5" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" PKeyPass="openscada">
 <CertKey>
 -----BEGIN CERTIFICATE-----
 MIIEBzCCAu+gAwIBAgIUKUZH4W3IoHMvFLOk0TScTE9pBn0wDQYJKoZIhvcNAQEL
@@ -1045,7 +1045,7 @@ ENOyP4AoXrjpowZOVNk0ee8xM7X/2EUJKEaiu7BQUarvpLrTkZBlXUfRg4xl915J
 </CertKey>
 </prms>
 ');
-INSERT INTO Transport_in VALUES('WEB','SSL','WWW-interface','The WEB-interfaces transport.','*:10042','HTTP',1,'','','','Транспорт WEB-інтерфейсів.','','Транспорт WEB-интерфейсов.','<prms MaxClients="100" MaxClientsPerHost="25" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" PKeyPass="openscada">
+INSERT INTO Transport_in VALUES('WEB','SSL','WWW-interface','The WEB-interfaces transport.','*:10042,10043,10044','HTTP',1,'','','','Транспорт WEB-інтерфейсів.','','Транспорт WEB-интерфейсов.','<prms MaxClients="100" MaxClientsPerHost="25" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" PKeyPass="openscada">
 <CertKey>
 -----BEGIN CERTIFICATE-----
 MIIEBzCCAu+gAwIBAgIUKUZH4W3IoHMvFLOk0TScTE9pBn0wDQYJKoZIhvcNAQEL
@@ -1194,9 +1194,9 @@ INSERT INTO wlb_originals_io VALUES('Diagram','parNum','1',0,'','','','','','','
 INSERT INTO wlb_originals_io VALUES('Document','time','0',0,'','','','','','','','','');
 INSERT INTO wlb_originals_io VALUES('Document','n','0',0,'','','','','','','','','');
 CREATE TABLE IF NOT EXISTS 'OPC_UA_Prm_test' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"ND_LS" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
-INSERT INTO OPC_UA_Prm_test VALUES('test','','','','','','','',1,'4:"DAQ.System.AutoDA.CPULoad.load"||loadCPU|CPU Load
-4:"DAQ.System.AutoDA.MemInfo.use"
-4:"DAQ.System.AutoDA.MemInfo.free"
+INSERT INTO OPC_UA_Prm_test VALUES('test','','','','','','','',1,'4:"DAQ.System.AutoDA.CPU.load"||loadCPU|CPU Load
+4:"DAQ.System.AutoDA.MEM.use"
+4:"DAQ.System.AutoDA.MEM.free"
 4:"DAQ.LogicLev.gen.F3.var"|fr|F3
 4:"DAQ.LogicLev.gen.F4.ed"|srw|edF4|F4 dimension');
 CREATE TABLE IF NOT EXISTS 'ModBusPrm_testTCP' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"ATTR_LS" TEXT DEFAULT '' ,"ru#ATTR_LS" TEXT DEFAULT '' ,"uk#ATTR_LS" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
@@ -1703,10 +1703,10 @@ INSERT INTO Archive_val VALUES('gN1_dP','','','','','','',1,2,'LogicLev.gen.gN1.
 INSERT INTO Archive_val VALUES('gN1_T','','','','','','',1,2,'LogicLev.gen.gN1.T',0,4,1.0,100,1,1,0,'FSArch.1s;FSArch.1m;FSArch.1h;');
 INSERT INTO Archive_val VALUES('gN1_P','','','','','','',1,2,'LogicLev.gen.gN1.P',0,4,1.0,100,1,1,0,'FSArch.1s;FSArch.1m;FSArch.1h;');
 INSERT INTO Archive_val VALUES('P3_var','','','','','','',1,2,'LogicLev.gen.P3.var',0,4,1.0,100,1,1,0,'FSArch.1s;FSArch.1m;FSArch.1h;');
-INSERT INTO Archive_val VALUES('MemInfo_use','','','','','','',1,1,'System.AutoDA.MemInfo.use',0,1,1.0,100,1,0,0,'DBArch.1s;FSArch.1s;FSArch.1m;');
+INSERT INTO Archive_val VALUES('MemInfo_use','','','','','','',1,1,'System.AutoDA.MEM.use',0,1,1.0,100,1,0,0,'DBArch.1s;FSArch.1s;FSArch.1m;');
 INSERT INTO Archive_val VALUES('F3_var','','','','','','',1,2,'LogicLev.gen.F3.var',0,4,1.0,100,1,1,0,'FSArch.1s;DBArch.1s;FSArch.1m;FSArch.1h;');
 INSERT INTO Archive_val VALUES('P4_var','','','','','','',1,2,'LogicLev.gen.P4.var',0,4,1.0,100,1,1,0,'FSArch.1s;FSArch.1m;FSArch.1h;');
-INSERT INTO Archive_val VALUES('CPULoad_load','','','','','','',1,1,'System.AutoDA.CPULoad.load',0,4,1.0,100,1,0,0,'DBArch.1s;FSArch.1s;FSArch.1m;');
+INSERT INTO Archive_val VALUES('CPULoad_load','','','','','','',1,1,'System.AutoDA.CPU.load',0,4,1.0,100,1,0,0,'DBArch.1s;FSArch.1s;FSArch.1m;');
 INSERT INTO Archive_val VALUES('gN1_Q','','','','','','',1,2,'LogicLev.gen.gN1.Q',3,4,1.0,100,1,1,0,'FSArch.1s;FSArch.1m;FSArch.1h;');
 INSERT INTO Archive_val VALUES('F4_var','','','','','','',1,2,'LogicLev.gen.F4.var',0,4,1.0,100,1,1,0,'FSArch.1s;DBArch.1s;FSArch.1m;FSArch.1h;');
 INSERT INTO Archive_val VALUES('gN1_F','','','','','','',1,2,'LogicLev.gen.gN1.F',0,4,1.0,100,1,1,0,'FSArch.1s;FSArch.1m;FSArch.1h;');
@@ -1822,6 +1822,9 @@ INSERT INTO Archive_val VALUES('CB7_st_open','','','','','','',1,2,'LogicLev.gen
 INSERT INTO Archive_val VALUES('F_PP3_var','','','','','','',1,2,'LogicLev.gen.F_PP3.var',0,4,1.0,100,1,1,0,'FSArch.1h;');
 INSERT INTO Archive_val VALUES('F_PP5_var','','','','','','',1,2,'LogicLev.gen.F_PP5.var',0,4,1.0,100,1,1,0,'FSArch.1h;');
 INSERT INTO Archive_val VALUES('PT0503_var','','','','','','',1,2,'LogicLev.gen.PT0503.var',0,4,1.0,100,1,1,0,'FSArch.1h;');
+INSERT INTO Archive_val VALUES('CPU_load','','','','','','',1,1,'DAQGate.test.CPU.load',0,4,1.0,100,1,1,0,'FSArch.1s;FSArch.1m;FSArch.1h;');
+INSERT INTO Archive_val VALUES('MEM_free','','','','','','',1,1,'DAQGate.test.MEM.free',0,1,1.0,100,1,1,0,'FSArch.1s;FSArch.1m;FSArch.1h;');
+INSERT INTO Archive_val VALUES('MEM_use','','','','','','',1,1,'DAQGate.test.MEM.use',0,1,1.0,100,1,1,0,'FSArch.1s;FSArch.1m;FSArch.1h;');
 CREATE TABLE IF NOT EXISTS 'SYS' ("user" TEXT DEFAULT '' ,"id" TEXT DEFAULT '' ,"val" TEXT DEFAULT '' ,"uk#val" TEXT DEFAULT '' , PRIMARY KEY ("user","id"));
 INSERT INTO SYS VALUES('root','/sub_Protocol/mod_HTTP/AuthTime','10','');
 INSERT INTO SYS VALUES('root','/sub_Protocol/mod_HTTP/AutoLogin','<aLog><it addrs="*" user="user" /></aLog>','');
@@ -1831,197 +1834,6 @@ INSERT INTO SYS VALUES('roman','/sub_UI/mod_Vision/uiProps','<UI devWinState="AA
 INSERT INTO SYS VALUES('roman','/sub_UI/mod_VCAEngine/wdgAttr','doc','');
 CREATE TABLE IF NOT EXISTS 'DAQ_Siemens' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"TM_REST" INTEGER DEFAULT '30' ,"ASINC_WR" INTEGER DEFAULT '0' ,"TYPE" INTEGER DEFAULT '0' ,"ADDR" TEXT DEFAULT '10' ,"ADDR_TR" TEXT DEFAULT '' ,"SLOT" INTEGER DEFAULT '2' ,"CIF_DEV" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO DAQ_Siemens VALUES('test','','','','','','',1,0,3,0,'<high>','CIFPrm_test',0,'1',0,30,0,1,'192.168.2.12','',2,0);
-CREATE TABLE IF NOT EXISTS 'DAQGatePrm_test' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PRM_ADDR" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"STATS" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
-INSERT INTO DAQGatePrm_test VALUES('CPU0Load','','CPU Load: 0','Нагрузка процессора: 0','Навантаження CPU: 0','','','',1,'System/AutoDA/prm_CPU0Load','<Attrs>
-<a id="load" nm="Load (%)" tp="4" flg="772" />
-<a id="sys" nm="System (%)" tp="4" flg="772" />
-<a id="user" nm="User (%)" tp="4" flg="772" />
-<a id="idle" nm="Idle (%)" tp="4" flg="772" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('CPU1Load','','CPU Load: 1','Нагрузка процессора: 1','Навантаження CPU: 1','','','',1,'System/AutoDA/prm_CPU1Load','<Attrs>
-<a id="load" nm="Load (%)" tp="4" flg="772" />
-<a id="sys" nm="System (%)" tp="4" flg="772" />
-<a id="user" nm="User (%)" tp="4" flg="772" />
-<a id="idle" nm="Idle (%)" tp="4" flg="772" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('CPULoad','','Full CPU Load','Общая нагрузка процессора','Повне навантаження процесору','','','',1,'System/AutoDA/prm_CPULoad','<Attrs>
-<a id="load" nm="Load (%)" tp="4" flg="772" />
-<a id="sys" nm="System (%)" tp="4" flg="772" />
-<a id="user" nm="User (%)" tp="4" flg="772" />
-<a id="idle" nm="Idle (%)" tp="4" flg="772" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('Interface_eth0','','Interface statistic: eth0','Статистика интерфейсов: eth0','Статистика інтерфейсу: eth0','','','',1,'System/AutoDA/prm_Interface_eth0','<Attrs>
-<a id="rcv" nm="Receive (B)" tp="4" flg="772" />
-<a id="rcvSp" nm="Receive speed (B/s)" tp="4" flg="772" />
-<a id="trns" nm="Transmit (B)" tp="4" flg="772" />
-<a id="trnsSp" nm="Transmit speed (B/s)" tp="4" flg="772" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('Interface_lo','','Interface statistic: lo','Статистика интерфейсов: lo','Статистика інтерфейсу: lo','','','',1,'System/AutoDA/prm_Interface_lo','<Attrs>
-<a id="rcv" nm="Receive (B)" tp="4" flg="772" />
-<a id="rcvSp" nm="Receive speed (B/s)" tp="4" flg="772" />
-<a id="trns" nm="Transmit (B)" tp="4" flg="772" />
-<a id="trnsSp" nm="Transmit speed (B/s)" tp="4" flg="772" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('Interface_wlan0','','Interface statistic: wlan0','Статистика интерфейсов: wlan0','Статистика інтерфейсу: wlan0','','','',1,'System/AutoDA/prm_Interface_wlan0','<Attrs>
-<a id="rcv" nm="Receive (B)" tp="4" flg="772" />
-<a id="rcvSp" nm="Receive speed (B/s)" tp="4" flg="772" />
-<a id="trns" nm="Transmit (B)" tp="4" flg="772" />
-<a id="trnsSp" nm="Transmit speed (B/s)" tp="4" flg="772" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('MemInfo','','Memory info','Информация про память','Інформація про пам''ять','','','',1,'System/AutoDA/prm_MemInfo','<Attrs>
-<a id="free" nm="Free (kB)" tp="1" flg="772" />
-<a id="total" nm="Total (kB)" tp="1" flg="772" />
-<a id="use" nm="Use (kB)" tp="1" flg="772" />
-<a id="buff" nm="Buffers (kB)" tp="1" flg="772" />
-<a id="cache" nm="Cached (kB)" tp="1" flg="772" />
-<a id="sw_free" nm="Swap free (kB)" tp="1" flg="772" />
-<a id="sw_total" nm="Swap total (kB)" tp="1" flg="772" />
-<a id="sw_use" nm="Swap use (kB)" tp="1" flg="772" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('SensorsData','','Data sensors','Данные сенсоров','Дані сенсорів','','','',1,'System/AutoDA/prm_SensorsData','<Attrs>
-<a id="thinkpad_fan1" nm="thinkpad fan1" tp="4" flg="772" />
-<a id="thinkpad_temp1" nm="thinkpad temp1" tp="4" flg="772" />
-<a id="thinkpad_temp2" nm="thinkpad temp2" tp="4" flg="772" />
-<a id="thinkpad_temp3" nm="thinkpad temp3" tp="4" flg="772" />
-<a id="thinkpad_temp4" nm="thinkpad temp4" tp="4" flg="772" />
-<a id="thinkpad_temp5" nm="thinkpad temp5" tp="4" flg="772" />
-<a id="thinkpad_temp6" nm="thinkpad temp6" tp="4" flg="772" />
-<a id="thinkpad_temp7" nm="thinkpad temp7" tp="4" flg="772" />
-<a id="thinkpad_temp8" nm="thinkpad temp8" tp="4" flg="772" />
-<a id="k8temp_temp1" nm="k8temp temp1" tp="4" flg="772" />
-<a id="k8temp_temp2" nm="k8temp temp2" tp="4" flg="772" />
-<a id="k8temp_temp3" nm="k8temp temp3" tp="4" flg="772" />
-<a id="k8temp_temp4" nm="k8temp temp4" tp="4" flg="772" />
-<a id="pch_wildcat_point_temp1" nm="pch_wildcat_point temp1" tp="4" flg="772" />
-<a id="acpitz_temp1" nm="acpitz temp1" tp="4" flg="772" />
-<a id="coretemp_temp1" nm="coretemp temp1" tp="4" flg="772" />
-<a id="coretemp_temp2" nm="coretemp temp2" tp="4" flg="772" />
-<a id="coretemp_temp3" nm="coretemp temp3" tp="4" flg="772" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('Statistic_sda','','HDD statistic: sda','Статистика НЖМД: sda','Статистика НЖМД: sda','','','',1,'System/AutoDA/prm_Statistic_sda','<Attrs>
-<a id="rd" nm="Read (B)" tp="4" flg="772" />
-<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
-<a id="wr" nm="Write (B)" tp="4" flg="772" />
-<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('Statistic_sda1','','HDD statistic: sda1','Статистика НЖМД: sda1','Статистика НЖМД: sda1','','','',1,'System/AutoDA/prm_Statistic_sda1','<Attrs>
-<a id="rd" nm="Read (B)" tp="4" flg="772" />
-<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
-<a id="wr" nm="Write (B)" tp="4" flg="772" />
-<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('Statistic_sda2','','HDD statistic: sda2','Статистика НЖМД: sda2','Статистика НЖМД: sda2','','','',1,'System/AutoDA/prm_Statistic_sda2','<Attrs>
-<a id="rd" nm="Read (B)" tp="4" flg="772" />
-<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
-<a id="wr" nm="Write (B)" tp="4" flg="772" />
-<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('UpTimeStation','','Station up time','Время работы станции','Час роботи станції','','','',1,'System/AutoDA/prm_UpTimeStation','<Attrs>
-<a id="full" nm="Full seconds" tp="1" flg="772" />
-<a id="sec" nm="Seconds" tp="1" flg="772" />
-<a id="min" nm="Minutes" tp="1" flg="772" />
-<a id="hour" nm="Hours" tp="1" flg="772" />
-<a id="day" nm="Days" tp="1" flg="772" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('UpTimeSystem','','System up time','Время работы системы','Час роботи системи','','','',1,'System/AutoDA/prm_UpTimeSystem','<Attrs>
-<a id="full" nm="Full seconds" tp="1" flg="772" />
-<a id="sec" nm="Seconds" tp="1" flg="772" />
-<a id="min" nm="Minutes" tp="1" flg="772" />
-<a id="hour" nm="Hours" tp="1" flg="772" />
-<a id="day" nm="Days" tp="1" flg="772" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('test','','','','','','','',1,'ModBus/testTCP/prm_test','<Attrs>
-<a id="reg0" nm="Register 0" tp="1" flg="772" />
-<a id="reg1" nm="Register 1" tp="1" flg="772" />
-<a id="reg3" nm="Register 3" tp="1" flg="768" />
-<a id="reg4" nm="Register 4" tp="1" flg="772" />
-<a id="coil3" nm="Bit" tp="0" flg="768" />
-<a id="coil8" nm="Bit" tp="0" flg="768" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('test1','test','','','','','','',1,'ModBus/testTCP/prm_test/prm_test1','<Attrs>
-<a id="i6" nm="Integer32 [6,7]" tp="1" flg="768" />
-<a id="u6" nm="Integer32 (unsigned) [6,7]" tp="1" flg="772" />
-<a id="i10" nm="Integer64 [10-13]" tp="1" flg="772" />
-<a id="f8" nm="Float [8,9]" tp="4" flg="768" />
-<a id="d14" nm="Double [14-17]" tp="4" flg="768" />
-<a id="d18" nm="Double [18-21]" tp="4" flg="768" />
-<a id="s10" nm="String [110-120]" tp="5" flg="768" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('CPU2Load','','Навантаження CPU: 2','','','','','',1,'System/AutoDA/prm_CPU2Load','<Attrs>
-<a id="load" nm="Завантаження (%)" tp="4" flg="772" />
-<a id="sys" nm="Система (%)" tp="4" flg="772" />
-<a id="user" nm="Користувач (%)" tp="4" flg="772" />
-<a id="idle" nm="Бездія (%)" tp="4" flg="772" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('CPU3Load','','Навантаження CPU: 3','','','','','',1,'System/AutoDA/prm_CPU3Load','<Attrs>
-<a id="load" nm="Завантаження (%)" tp="4" flg="772" />
-<a id="sys" nm="Система (%)" tp="4" flg="772" />
-<a id="user" nm="Користувач (%)" tp="4" flg="772" />
-<a id="idle" nm="Бездія (%)" tp="4" flg="772" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('FS_','','Файлова система: ''/''','','','','','',1,'System/AutoDA/prm_FS_','<Attrs>
-<a id="total" nm="Разом (ГБ)" tp="4" flg="772" />
-<a id="used" nm="Використано (ГБ)" tp="4" flg="772" />
-<a id="free" nm="Вільно (ГБ)" tp="4" flg="772" />
-<a id="totalN" nm="Разом файлових вузлів" tp="1" flg="772" />
-<a id="usedN" nm="Використано файлових вузлів" tp="1" flg="772" />
-<a id="freeN" nm="Вільно файлових вузлів" tp="1" flg="772" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('FS_data','','Файлова система: ''/data''','','','','','',1,'System/AutoDA/prm_FS_data','<Attrs>
-<a id="total" nm="Разом (ГБ)" tp="4" flg="772" />
-<a id="used" nm="Використано (ГБ)" tp="4" flg="772" />
-<a id="free" nm="Вільно (ГБ)" tp="4" flg="772" />
-<a id="totalN" nm="Разом файлових вузлів" tp="1" flg="772" />
-<a id="usedN" nm="Використано файлових вузлів" tp="1" flg="772" />
-<a id="freeN" nm="Вільно файлових вузлів" tp="1" flg="772" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('Interface_wwan0','','Статистика інтерфейсу: wwan0','','','','','',1,'System/AutoDA/prm_Interface_wwan0','<Attrs>
-<a id="rcv" nm="Прийнято (Б)" tp="4" flg="772" />
-<a id="rcvSp" nm="Швидкість прийому (Б/с)" tp="4" flg="772" />
-<a id="trns" nm="Передано (Б)" tp="4" flg="772" />
-<a id="trnsSp" nm="Швидкість передавання (Б/с)" tp="4" flg="772" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('Statistic_sda3','','Статистика НЖМД: sda3','','','','','',1,'System/AutoDA/prm_Statistic_sda3','<Attrs>
-<a id="rd" nm="Прочитано (Б)" tp="4" flg="772" />
-<a id="rdSp" nm="Швидкість читання (Б/с)" tp="4" flg="772" />
-<a id="wr" nm="Записано (Б)" tp="4" flg="772" />
-<a id="wrSp" nm="Швидкість запису (Б/с)" tp="4" flg="772" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('Statistic_sda4','','Статистика НЖМД: sda4','','','','','',1,'System/AutoDA/prm_Statistic_sda4','<Attrs>
-<a id="rd" nm="Прочитано (Б)" tp="4" flg="772" />
-<a id="rdSp" nm="Швидкість читання (Б/с)" tp="4" flg="772" />
-<a id="wr" nm="Записано (Б)" tp="4" flg="772" />
-<a id="wrSp" nm="Швидкість запису (Б/с)" tp="4" flg="772" />
-</Attrs>
-','loop;');
-INSERT INTO DAQGatePrm_test VALUES('Statistic_sda5','','Статистика НЖМД: sda5','','','','','',1,'System/AutoDA/prm_Statistic_sda5','<Attrs>
-<a id="rd" nm="Прочитано (Б)" tp="4" flg="772" />
-<a id="rdSp" nm="Швидкість читання (Б/с)" tp="4" flg="772" />
-<a id="wr" nm="Записано (Б)" tp="4" flg="772" />
-<a id="wrSp" nm="Швидкість запису (Б/с)" tp="4" flg="772" />
-</Attrs>
-','loop;');
 CREATE TABLE IF NOT EXISTS 'DAQ_DCON' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ADDR" TEXT DEFAULT '' ,"REQ_TRY" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO DAQ_DCON VALUES('test','','','','','','',1,0,3,0,'<high>','DCONPrm_test',0,'1',0,'testModBus',1);
 CREATE TABLE IF NOT EXISTS 'Archive_mess_proc' ("ID" TEXT DEFAULT '' ,"MODUL" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '0' ,"CATEG" TEXT DEFAULT '' ,"LEVEL" INTEGER DEFAULT '0' ,"ADDR" TEXT DEFAULT '' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"A_PRMS" TEXT DEFAULT '' , PRIMARY KEY ("ID","MODUL"));
@@ -2132,4 +1944,310 @@ INSERT INTO LogLevPrm_gen VALUES('F_PP3','','F_PP3','','','Gas flow through the 
 INSERT INTO LogLevPrm_gen VALUES('F_PP5','','F_PP5','','','Gas flow through the diaphragm PP5','Расход газа через диафрагму PP5','Витрати газу через діафрагму PP5',1,1686918657,'base.anUnif');
 INSERT INTO LogLevPrm_gen VALUES('gN1','','Account node of the diaphragm PP1','Узел учёта диафрагмы PP1','Вузол обліку діафрагми PP1',' ',' ',' ',1,0,'tests.gasPoint');
 INSERT INTO LogLevPrm_gen VALUES('CB7','','CB7','КШ7','КК7','Control block of the ball crane CB7','Блок контроля шарового крана КШ7','Блок контролю кульовим краном КК7',1,0,'base.digitBlockUnif');
+CREATE TABLE IF NOT EXISTS 'DAQGatePrm_test' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"TIMESTAMP" INTEGER DEFAULT '0' ,"PRM_ADDR" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"STATS" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
+INSERT INTO DAQGatePrm_test VALUES('CPU','','CPU: General','','','','','',1,1696748801,'System/AutoDA/prm_CPU','<Attrs>
+<a id="load" nm="Load whole, system, user, idle&#010;In %" tp="4" flg="772" />
+<a id="sys" tp="4" flg="772" />
+<a id="user" tp="4" flg="772" />
+<a id="idle" tp="4" flg="772" />
+<a id="frqDrv" nm="Frequency: driver" tp="5" flg="772" />
+<a id="frqGov" nm="Frequency: governor" tp="5" flg="772" />
+<a id="frqCur" nm="Frequency: current&#010;In MHz" tp="4" flg="772" />
+<a id="frqMin" nm="Frequency: minimum, set&#010;In MHz" tp="4" flg="772" />
+<a id="frqMinCur" tp="4" flg="772" />
+<a id="frqMax" nm="Frequency: maximum, set&#010;In MHz" tp="4" flg="772" />
+<a id="frqMaxCur" tp="4" flg="772" />
+<a id="model" nm="Model name" tp="5" flg="772" />
+<a id="MHz" nm="MHz" tp="4" flg="772" />
+<a id="BogoMIPS" nm="BogoMIPS" tp="4" flg="772" />
+<a id="rdtsc" nm="MHz at rdtsc" tp="4" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('CPU0','','CPU: 0','','','','','',1,1696748802,'System/AutoDA/prm_CPU0','<Attrs>
+<a id="load" nm="Load whole, system, user, idle&#010;In %" tp="4" flg="772" />
+<a id="sys" tp="4" flg="772" />
+<a id="user" tp="4" flg="772" />
+<a id="idle" tp="4" flg="772" />
+<a id="frqDrv" nm="Frequency: driver" tp="5" flg="772" />
+<a id="frqGov" nm="Frequency: governor" tp="5" flg="772" />
+<a id="frqCur" nm="Frequency: current&#010;In MHz" tp="4" flg="772" />
+<a id="frqMin" nm="Frequency: minimum, set&#010;In MHz" tp="4" flg="772" />
+<a id="frqMinCur" tp="4" flg="772" />
+<a id="frqMax" nm="Frequency: maximum, set&#010;In MHz" tp="4" flg="772" />
+<a id="frqMaxCur" tp="4" flg="772" />
+<a id="model" nm="Model name" tp="5" flg="772" />
+<a id="MHz" nm="MHz" tp="4" flg="772" />
+<a id="BogoMIPS" nm="BogoMIPS" tp="4" flg="772" />
+<a id="rdtsc" nm="MHz at rdtsc" tp="4" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('CPU1','','CPU: 1','','','','','',1,1696748802,'System/AutoDA/prm_CPU1','<Attrs>
+<a id="load" nm="Load whole, system, user, idle&#010;In %" tp="4" flg="772" />
+<a id="sys" tp="4" flg="772" />
+<a id="user" tp="4" flg="772" />
+<a id="idle" tp="4" flg="772" />
+<a id="frqDrv" nm="Frequency: driver" tp="5" flg="772" />
+<a id="frqGov" nm="Frequency: governor" tp="5" flg="772" />
+<a id="frqCur" nm="Frequency: current&#010;In MHz" tp="4" flg="772" />
+<a id="frqMin" nm="Frequency: minimum, set&#010;In MHz" tp="4" flg="772" />
+<a id="frqMinCur" tp="4" flg="772" />
+<a id="frqMax" nm="Frequency: maximum, set&#010;In MHz" tp="4" flg="772" />
+<a id="frqMaxCur" tp="4" flg="772" />
+<a id="model" nm="Model name" tp="5" flg="772" />
+<a id="MHz" nm="MHz" tp="4" flg="772" />
+<a id="BogoMIPS" nm="BogoMIPS" tp="4" flg="772" />
+<a id="rdtsc" nm="MHz at rdtsc" tp="4" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('CPU2','','CPU: 2','','','','','',1,1696748802,'System/AutoDA/prm_CPU2','<Attrs>
+<a id="load" nm="Load whole, system, user, idle&#010;In %" tp="4" flg="772" />
+<a id="sys" tp="4" flg="772" />
+<a id="user" tp="4" flg="772" />
+<a id="idle" tp="4" flg="772" />
+<a id="frqDrv" nm="Frequency: driver" tp="5" flg="772" />
+<a id="frqGov" nm="Frequency: governor" tp="5" flg="772" />
+<a id="frqCur" nm="Frequency: current&#010;In MHz" tp="4" flg="772" />
+<a id="frqMin" nm="Frequency: minimum, set&#010;In MHz" tp="4" flg="772" />
+<a id="frqMinCur" tp="4" flg="772" />
+<a id="frqMax" nm="Frequency: maximum, set&#010;In MHz" tp="4" flg="772" />
+<a id="frqMaxCur" tp="4" flg="772" />
+<a id="model" nm="Model name" tp="5" flg="772" />
+<a id="MHz" nm="MHz" tp="4" flg="772" />
+<a id="BogoMIPS" nm="BogoMIPS" tp="4" flg="772" />
+<a id="rdtsc" nm="MHz at rdtsc" tp="4" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('CPU3','','CPU: 3','','','','','',1,1696748802,'System/AutoDA/prm_CPU3','<Attrs>
+<a id="load" nm="Load whole, system, user, idle&#010;In %" tp="4" flg="772" />
+<a id="sys" tp="4" flg="772" />
+<a id="user" tp="4" flg="772" />
+<a id="idle" tp="4" flg="772" />
+<a id="frqDrv" nm="Frequency: driver" tp="5" flg="772" />
+<a id="frqGov" nm="Frequency: governor" tp="5" flg="772" />
+<a id="frqCur" nm="Frequency: current&#010;In MHz" tp="4" flg="772" />
+<a id="frqMin" nm="Frequency: minimum, set&#010;In MHz" tp="4" flg="772" />
+<a id="frqMinCur" tp="4" flg="772" />
+<a id="frqMax" nm="Frequency: maximum, set&#010;In MHz" tp="4" flg="772" />
+<a id="frqMaxCur" tp="4" flg="772" />
+<a id="model" nm="Model name" tp="5" flg="772" />
+<a id="MHz" nm="MHz" tp="4" flg="772" />
+<a id="BogoMIPS" nm="BogoMIPS" tp="4" flg="772" />
+<a id="rdtsc" nm="MHz at rdtsc" tp="4" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('DiskSt_sda','','Disk Statistic: sda','','','','','',1,1696748802,'System/AutoDA/prm_DiskSt_sda','<Attrs>
+<a id="rd" nm="Read (B)" tp="4" flg="772" />
+<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
+<a id="wr" nm="Write (B)" tp="4" flg="772" />
+<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('DiskSt_sda1','','Disk Statistic: sda1','','','','','',1,1696748802,'System/AutoDA/prm_DiskSt_sda1','<Attrs>
+<a id="rd" nm="Read (B)" tp="4" flg="772" />
+<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
+<a id="wr" nm="Write (B)" tp="4" flg="772" />
+<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('DiskSt_sda2','','Disk Statistic: sda2','','','','','',1,1696748802,'System/AutoDA/prm_DiskSt_sda2','<Attrs>
+<a id="rd" nm="Read (B)" tp="4" flg="772" />
+<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
+<a id="wr" nm="Write (B)" tp="4" flg="772" />
+<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('DiskSt_sda3','','Disk Statistic: sda3','','','','','',1,1696748802,'System/AutoDA/prm_DiskSt_sda3','<Attrs>
+<a id="rd" nm="Read (B)" tp="4" flg="772" />
+<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
+<a id="wr" nm="Write (B)" tp="4" flg="772" />
+<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('DiskSt_sda4','','Disk Statistic: sda4','','','','','',1,1696748802,'System/AutoDA/prm_DiskSt_sda4','<Attrs>
+<a id="rd" nm="Read (B)" tp="4" flg="772" />
+<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
+<a id="wr" nm="Write (B)" tp="4" flg="772" />
+<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('DiskSt_sda5','','Disk Statistic: sda5','','','','','',1,1696748802,'System/AutoDA/prm_DiskSt_sda5','<Attrs>
+<a id="rd" nm="Read (B)" tp="4" flg="772" />
+<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
+<a id="wr" nm="Write (B)" tp="4" flg="772" />
+<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('DiskSt_sda6','','Disk Statistic: sda6','','','','','',1,1696748802,'System/AutoDA/prm_DiskSt_sda6','<Attrs>
+<a id="rd" nm="Read (B)" tp="4" flg="772" />
+<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
+<a id="wr" nm="Write (B)" tp="4" flg="772" />
+<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('DiskSt_sda7','','Disk Statistic: sda7','','','','','',1,1696748802,'System/AutoDA/prm_DiskSt_sda7','<Attrs>
+<a id="rd" nm="Read (B)" tp="4" flg="772" />
+<a id="rdSp" nm="Read speed (B/s)" tp="4" flg="772" />
+<a id="wr" nm="Write (B)" tp="4" flg="772" />
+<a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('FS_','','File System: /','','','','','',1,1696748802,'System/AutoDA/prm_FS_','<Attrs>
+<a id="total" nm="Total (GB)" tp="4" flg="772" />
+<a id="used" nm="Used (GB)" tp="4" flg="772" />
+<a id="free" nm="Free (GB)" tp="4" flg="772" />
+<a id="totalN" nm="Total file nodes" tp="1" flg="772" />
+<a id="usedN" nm="Used file nodes" tp="1" flg="772" />
+<a id="freeN" nm="Free file nodes" tp="1" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('FS_data','','File System: /data','','','','','',1,1696748802,'System/AutoDA/prm_FS_data','<Attrs>
+<a id="total" nm="Total (GB)" tp="4" flg="772" />
+<a id="used" nm="Used (GB)" tp="4" flg="772" />
+<a id="free" nm="Free (GB)" tp="4" flg="772" />
+<a id="totalN" nm="Total file nodes" tp="1" flg="772" />
+<a id="usedN" nm="Used file nodes" tp="1" flg="772" />
+<a id="freeN" nm="Free file nodes" tp="1" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('MEM','','Memory','','','','','',1,1696748802,'System/AutoDA/prm_MEM','<Attrs>
+<a id="free" nm="Free (KiB)" tp="1" flg="772" />
+<a id="total" nm="Total (KiB)" tp="1" flg="772" />
+<a id="use" nm="Used (KiB)" tp="1" flg="772" />
+<a id="buff" nm="Buffers (KiB)" tp="1" flg="772" />
+<a id="cache" nm="Cached (KiB)" tp="1" flg="772" />
+<a id="sw_free" nm="Swap free (KiB)" tp="1" flg="772" />
+<a id="sw_total" nm="Swap total (KiB)" tp="1" flg="772" />
+<a id="sw_use" nm="Swap used (KiB)" tp="1" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('Net_enp0s25','','Network: enp0s25','','','','','',1,1696748802,'System/AutoDA/prm_Net_enp0s25','<Attrs>
+<a id="rcv" nm="Received (B)" tp="4" flg="772" />
+<a id="rcvSp" nm="Receive speed (B/s)" tp="4" flg="772" />
+<a id="trns" nm="Transmitted (B)" tp="4" flg="772" />
+<a id="trnsSp" nm="Transmit speed (B/s)" tp="4" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('Net_lo','','Network: lo','','','','','',1,1696748802,'System/AutoDA/prm_Net_lo','<Attrs>
+<a id="rcv" nm="Received (B)" tp="4" flg="772" />
+<a id="rcvSp" nm="Receive speed (B/s)" tp="4" flg="772" />
+<a id="trns" nm="Transmitted (B)" tp="4" flg="772" />
+<a id="trnsSp" nm="Transmit speed (B/s)" tp="4" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('Net_wlp3s0','','Network: wlp3s0','','','','','',1,1696748802,'System/AutoDA/prm_Net_wlp3s0','<Attrs>
+<a id="rcv" nm="Received (B)" tp="4" flg="772" />
+<a id="rcvSp" nm="Receive speed (B/s)" tp="4" flg="772" />
+<a id="trns" nm="Transmitted (B)" tp="4" flg="772" />
+<a id="trnsSp" nm="Transmit speed (B/s)" tp="4" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('PowerAC','','Power: AC','','','','','',1,1696748802,'System/AutoDA/prm_PowerAC','<Attrs>
+<a id="type" nm="Type" tp="5" flg="772" />
+<a id="online" nm="Online" tp="0" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('PowerBAT0','','Power: BAT0','','','','','',1,1696748802,'System/AutoDA/prm_PowerBAT0','<Attrs>
+<a id="type" nm="Type" tp="5" flg="772" />
+<a id="technology" nm="Technology" tp="5" flg="772" />
+<a id="present" nm="Present" tp="0" flg="772" />
+<a id="manufacturer" nm="Manufacturer, model, SN" tp="5" flg="772" />
+<a id="model_name" tp="5" flg="772" />
+<a id="serial_number" tp="5" flg="772" />
+<a id="status" nm="Status" tp="5" flg="772" />
+<a id="capacity" nm="Capacity" tp="1" flg="772" />
+<a id="capacity_level" nm="Capacity level" tp="5" flg="772" />
+<a id="energy_now" nm="Energy now, full, design&#010;In Ah" tp="4" flg="772" />
+<a id="energy_full" tp="4" flg="772" />
+<a id="energy_full_design" tp="4" flg="772" />
+<a id="voltage_now" nm="Voltage" tp="4" flg="772" />
+<a id="voltage_min_design" nm="Voltage minimum" tp="4" flg="772" />
+<a id="cycle_count" nm="Cycle count" tp="1" flg="772" />
+<a id="power_now" nm="Power&#010;In Watts" tp="4" flg="772" />
+<a id="charge_start_threshold" nm="Charge threshold start, stop" tp="1" flg="772" />
+<a id="charge_stop_threshold" tp="1" flg="772" />
+<a id="charge_control_start_threshold" nm="Charge control threshold start, end" tp="1" flg="772" />
+<a id="charge_control_end_threshold" tp="1" flg="772" />
+<a id="charge_behaviour" nm="charge_behaviour" tp="5" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('PowerBAT1','','Power: BAT1','','','','','',1,1696748802,'System/AutoDA/prm_PowerBAT1','<Attrs>
+<a id="type" nm="Type" tp="5" flg="772" />
+<a id="technology" nm="Technology" tp="5" flg="772" />
+<a id="present" nm="Present" tp="0" flg="772" />
+<a id="manufacturer" nm="Manufacturer, model, SN" tp="5" flg="772" />
+<a id="model_name" tp="5" flg="772" />
+<a id="serial_number" tp="5" flg="772" />
+<a id="status" nm="Status" tp="5" flg="772" />
+<a id="capacity" nm="Capacity" tp="1" flg="772" />
+<a id="capacity_level" nm="Capacity level" tp="5" flg="772" />
+<a id="energy_now" nm="Energy now, full, design&#010;In Ah" tp="4" flg="772" />
+<a id="energy_full" tp="4" flg="772" />
+<a id="energy_full_design" tp="4" flg="772" />
+<a id="voltage_now" nm="Voltage" tp="4" flg="772" />
+<a id="voltage_min_design" nm="Voltage minimum" tp="4" flg="772" />
+<a id="cycle_count" nm="Cycle count" tp="1" flg="772" />
+<a id="power_now" nm="Power&#010;In Watts" tp="4" flg="772" />
+<a id="charge_start_threshold" nm="Charge threshold start, stop" tp="1" flg="772" />
+<a id="charge_stop_threshold" tp="1" flg="772" />
+<a id="charge_control_start_threshold" nm="Charge control threshold start, end" tp="1" flg="772" />
+<a id="charge_control_end_threshold" tp="1" flg="772" />
+<a id="charge_behaviour" nm="charge_behaviour" tp="5" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('Sensors','','Sensors','','','','','',1,1696748802,'System/AutoDA/prm_Sensors','<Attrs>
+<a id="iwlwifi_1_temp1" nm="iwlwifi_1 temp1" tp="4" flg="772" />
+<a id="pch_wildcat_point_temp1" nm="pch_wildcat_point temp1" tp="4" flg="772" />
+<a id="BAT1_in0" nm="BAT1 in0" tp="4" flg="772" />
+<a id="acpitz_temp1" nm="acpitz temp1" tp="4" flg="772" />
+<a id="coretemp_temp1" nm="coretemp temp1" tp="4" flg="772" />
+<a id="coretemp_temp2" nm="coretemp temp2" tp="4" flg="772" />
+<a id="coretemp_temp3" nm="coretemp temp3" tp="4" flg="772" />
+<a id="thinkpad_fan1" nm="thinkpad fan1" tp="4" flg="772" />
+<a id="thinkpad_temp1" nm="thinkpad temp1" tp="4" flg="772" />
+<a id="thinkpad_temp2" nm="thinkpad temp2" tp="4" flg="772" />
+<a id="thinkpad_temp3" nm="thinkpad temp3" tp="4" flg="772" />
+<a id="thinkpad_temp4" nm="thinkpad temp4" tp="4" flg="772" />
+<a id="thinkpad_temp5" nm="thinkpad temp5" tp="4" flg="772" />
+<a id="thinkpad_temp6" nm="thinkpad temp6" tp="4" flg="772" />
+<a id="thinkpad_temp7" nm="thinkpad temp7" tp="4" flg="772" />
+<a id="thinkpad_temp8" nm="thinkpad temp8" tp="4" flg="772" />
+<a id="BAT0_in0" nm="BAT0 in0" tp="4" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('UpTm_stat','','Up Time: Station','','','','','',1,1696748802,'System/AutoDA/prm_UpTm_stat','<Attrs>
+<a id="full" nm="Full seconds" tp="1" flg="772" />
+<a id="sec" nm="Seconds" tp="1" flg="772" />
+<a id="min" nm="Minutes" tp="1" flg="772" />
+<a id="hour" nm="Hours" tp="1" flg="772" />
+<a id="day" nm="Days" tp="1" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('UpTm_sys','','Up Time: System','','','','','',1,1696748802,'System/AutoDA/prm_UpTm_sys','<Attrs>
+<a id="full" nm="Full seconds" tp="1" flg="772" />
+<a id="sec" nm="Seconds" tp="1" flg="772" />
+<a id="min" nm="Minutes" tp="1" flg="772" />
+<a id="hour" nm="Hours" tp="1" flg="772" />
+<a id="day" nm="Days" tp="1" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('test','','','','','','','',1,1696748802,'ModBus/testTCP/prm_test','<Attrs>
+<a id="reg0" nm="Register 0" tp="1" flg="772" />
+<a id="reg1" nm="Register 1" tp="1" flg="772" />
+<a id="reg3" nm="Register 3" tp="1" flg="768" />
+<a id="reg4" nm="Register 4" tp="1" flg="772" />
+<a id="coil3" nm="Bit" tp="0" flg="768" />
+<a id="coil8" nm="Bit" tp="0" flg="768" />
+<a id="AT101_1_Ti" nm="AT101_1 Ti" tp="1" flg="772" />
+</Attrs>
+','loop');
+INSERT INTO DAQGatePrm_test VALUES('test1','test','','','','','','',1,1696748802,'ModBus/testTCP/prm_test/prm_test1','<Attrs>
+<a id="i6" nm="Integer32 [6,7]" tp="1" flg="768" />
+<a id="u6" nm="Integer32 (unsigned) [6,7]" tp="1" flg="772" />
+<a id="i10" nm="Integer64 [10-13]" tp="1" flg="772" />
+<a id="f8" nm="Float [8,9]" tp="4" flg="768" />
+<a id="d14" nm="Double [14-17]" tp="4" flg="768" />
+<a id="d18" nm="Double [18-21]" tp="4" flg="768" />
+<a id="s10" nm="String [110-120]" tp="5" flg="768" />
+</Attrs>
+','loop');
 COMMIT;

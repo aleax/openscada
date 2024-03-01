@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.h
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -50,6 +50,7 @@
 #define ARCH_ALRM	"<alarms>"
 #define ARCH_ALRM_CH	"<alarmsChange>"
 #define ARCH_NOALRM	"<noalarms>"
+#define DB_GEN		"<gen>"
 #define DB_CFG		"<cfg>"
 #define DB_NULL		"<NULL>"
 
@@ -186,7 +187,7 @@ class TSYS : public TCntrNode
 	string	id( ) const	{ return mId.c_str(); }
 	string	name( ) const	{ return mName.getVal(); }
 	void setName( const string &vl )	{ mName = vl; sysModifFlgs |= MDF_Name; modif(); }
-	string	ico( string *tp = NULL );
+	string	ico( string *tp = NULL, bool retPath = false );
 	string	user( ) const	{ return mUser; }	//Run user name
 	string	host( );
 
@@ -252,21 +253,9 @@ class TSYS : public TCntrNode
 
 	static void sighandler( int signal, siginfo_t *siginfo, void *context );
 
-	// Short time dimensions
 	int	nCPU( )		{ return mN_CPU; }
-	uint64_t sysClk( )	{ return mSysclc; }
-	void	clkCalc( );
-	uint64_t shrtCnt( ) {
-#if defined (__i386__) || defined (__x86_64__)
-	    unsigned int cntl, cnth;
-	    asm volatile("rdtsc; movl %%eax,%0; movl %%edx,%1;":"=r"(cntl),"=r"(cnth)::"%eax","%edx");
-	    return ((uint64_t)cnth<<32)+cntl;
-#else
-	    return 0;
-#endif
-	}
-	static long HZ( );
-
+	float	sysClk( )	{ return mSysclc; }	//In MHz
+	void	setSysClk( float vl )	{ mSysclc = vl; }
 	time_t	sysTm( ) volatile	{ return mSysTm ? mSysTm : time(NULL); }	//System time fast access, from updated cell
 	static int64_t curTime( clockid_t clc = CLOCK_REALTIME );	//Current system time, microseconds
 	static uint64_t curTimeN( clockid_t clc = CLOCK_REALTIME );	//Current system time, nanoseconds
@@ -355,7 +344,7 @@ class TSYS : public TCntrNode
 	static string strEncode( const string &in, Code tp, const string &opt = "" );
 	static string strDecode( const string &in, Code tp = Custom, const string &opt = "" );
 	static string strMess( const char *fmt, ... );
-	static string strLabEnum( const string &base );
+	static string strLabEnum( const string &base, bool onlyDec = true );
 
 	static string strCompr( const string &in, int lev = -1 );
 	static string strUncompr( const string &in );
@@ -499,7 +488,7 @@ class TSYS : public TCntrNode
 
 	int		mN_CPU;
 	pthread_t	mainPthr;
-	uint64_t	mSysclc;
+	float		mSysclc;
 	volatile time_t	mSysTm;
 	bool		mClockRT;	//Used clock REALTIME, else it is MONOTONIC
 

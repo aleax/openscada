@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Tmpl file: module.h
 /***************************************************************************
- *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
+ *   Copyright (C) 2023 by MyName MyFamily, <my@email.org>                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -138,10 +138,6 @@ class TTr: public TTypeTransport
 	TTransportOut *Out( const string &id, const string &stor );
 
 	string outAddrHelp( );
-
-    private:
-	//Methods
-	void postEnable( int flag );
 };
 
 extern TTr *mod;	//The module root link

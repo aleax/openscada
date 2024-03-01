@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.AMRDevs file: da_Kontar.h
 /***************************************************************************
- *   Copyright (C) 2014-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2014-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -64,7 +64,6 @@ class Kontar: public TTypeParam
 
 		//Atributes
 		XMLNode	cfg;
-		string	prevTr;
 		string	pass, key;
 		vector<SMemBlk> mBlks;	//Acquisition memory blocks for values
 		time_t	lstClcSet;
@@ -73,8 +72,6 @@ class Kontar: public TTypeParam
 	//Methods
 	Kontar( );
 	~Kontar( );
-
-	string DB( TController *cntr )	{ return mod->modId()+"KontarPrm_"+cntr->id(); }
 
 	void create( TParamContr *prm );
 	void destroy( TParamContr *prm );

@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/VCAEngine</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/VCAEngine.html" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (88% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/VCAEngine.html" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/VCAEngine.html" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (83% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/VCAEngine.html" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Visual control area engine
 </td>
-<td> 7.11 </td>
+<td> 7.13 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -47,8 +47,7 @@
 <ul><li> <b>Sponsored by, for finishing the changes obtaining mechanism on the visualisers runtime without spare requests and lost data on 1.5 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> Vinnica Poultry Farm</li>
 <li> <b><a href="../To_do.html" title="Special:MyLanguage/Works/To do">To Do</a>:</b></li></ul>
 <dl><dd> - append the image files edition user API for raster (PNG, JPEG, GIF), by LibGD2, and vector (SVG):
-<dl><dd>+ append the images loading and saving their changes into the session table from the user procedures, allows to edit SVG (XML);</dd>
-<dd>- implement the main functions of the GD object (into <a href="../Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">Special.FLibSYS</a>).</dd></dl></dd>
+<dl><dd>- implement the main functions of the GD object (into <a href="../Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">Special.FLibSYS</a>).</dd></dl></dd>
 <dd> ... <i>for <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> also</i> ...</dd>
 <dd> - move the runtime requests to VCAEngine in the asynchronous mode;
 <dl><dd>&nbsp;!&gt; has a problem with processing recursive events into event(), in the case of the mouse release events loss in processing the pressing mouse event.</dd></dl></dd>
@@ -1468,16 +1467,16 @@ Where:
 <td> Element type </td>
 <td> 20 </td>
 <td> Type of the element, from which depends the list of additional attributes:
-<ul><li> Line edit</li>
-<li> Text edit</li>
-<li> Check box</li>
-<li> Button</li>
-<li> Combo box</li>
-<li> List</li>
-<li> Tree</li>
-<li> Table</li>
-<li> Slider</li>
-<li> Scroll bar</li></ul>
+<ul><li> Line edit (0)</li>
+<li> Text edit (1)</li>
+<li> Check Box (2)</li>
+<li> Button (3)</li>
+<li> Combo box (4)</li>
+<li> List (5)</li>
+<li> Tree (8)</li>
+<li> Table (9)</li>
+<li> Slider (6)</li>
+<li> Scroll bar (7)</li></ul>
 </td></tr>
 <tr>
 <td colspan="4"> <i>Line edit:</i>
@@ -1493,14 +1492,14 @@ Where:
 <td> View </td>
 <td> 22 </td>
 <td> View of the editing line:
-<ul><li> Text</li>
-<li> Combobox</li>
-<li> Integer</li>
-<li> Real</li>
-<li> Time</li>
-<li> Date</li>
-<li> Date and Time</li>
-<li> Password</li></ul>
+<ul><li> Text (0)</li>
+<li> Combo Box (1)</li>
+<li> Integer (2)</li>
+<li> Real (3)</li>
+<li> Time (4)</li>
+<li> Date (5)</li>
+<li> Date and Time (6)</li>
+<li> Password (7)</li></ul>
 </td></tr>
 <tr>
 <td> cfg </td>
@@ -1882,7 +1881,7 @@ Where:
 <td> bordStyle </td>
 <td> Border: style </td>
 <td> 24 </td>
-<td> Border style: "None", "Dotted", "Dashed", "Solid", "Double", "Groove", "Ridge", "Inset", "Outset".
+<td> Border style: "None" (0), "Dotted" (1), "Dashed" (2), "Solid" (3), "Double" (4), "Groove" (5), "Ridge" (6), "Inset" (7), "Outset" (8).
 </td></tr>
 <tr>
 <td> font </td>
@@ -1921,7 +1920,7 @@ Where:
 <td> alignment </td>
 <td> Alignment </td>
 <td> 29 </td>
-<td> Alignment of the text: "Top left", "Top right", "Top center", "Top justify", "Bottom left", "Bottom right", "Bottom justify", "V center left", "V center right", "Center", "V center justify".
+<td> Alignment of the text: "Top left" (0), "Top right" (1), "Top center" (2), "Top justify" (3), "Bottom left" (4), "Bottom right" (5), "Bottom center" (6), "Bottom justify" (7), "V center left" (8), "V center right" (9), "Center" (10), "V center justify" (11).
 </td></tr>
 <tr>
 <td> inHtml </td>
@@ -1954,7 +1953,7 @@ Where:
 <td> arg{x}tp </td>
 <td> Argument {x}: type </td>
 <td> 50+10*x+1 </td>
-<td> Argument <i>x</i> type: "Integer", "Real", "String".
+<td> Argument <i>x</i> type: "Integer" (0), "Real" (1), "String" (2).
 </td></tr>
 <tr>
 <td> arg{x}cfg </td>
@@ -2033,6 +2032,7 @@ Where:
 <ul><li> "src" — source:
 <ul><li> <i>file</i> — directly from the local file, visualizer and engine, by the path;</li>
 <li> <i>res</i> — from the resources table of DB;</li>
+<li> <i>data</i> — directly data in the form "data:{mime}\n{base64}";</li>
 <li> <i>stream</i> — stream URL for playback video and audio.</li></ul></li>
 <li> "name" — file path or identifier of the resource.<br /></li></ul>
 <p>Examples:
@@ -3529,10 +3529,10 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 <p>In addition to the list of opened sessions, the tab in Figure 4.2 contains a table with a list of sessions that must be created and started up at the boot time of OpenSCADA. Creation of sessions through this tool can be useful for Web-based interface. In this case, when connecting, Web-user data is ready and ensures the continuity of the formation of archival documents.
 </p><p>Configuration of the container widgets in the face of libraries and widget projects is done through pages in Figure 4.3 (for project) and Figure 4.5 (for widgets library). The widgets library contains the widgets, and project — the pages. Both types contain a tab of configuration resources used by widgets (Fig.4.6). The project page also contains the tab "Diagnostics" (Fig.4.4) for debugging and monitoring the execution of pages in sessions.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:799px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg.png"><img class="thumbimage" height="686" src="../files/VCAeng_pg.png" width="797" /></a>  <div class="thumbcaption">Fig.4.3. Configuration page of the projects.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:782px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg.png"><img class="thumbimage" height="690" src="../files/VCAeng_pg.png" width="780" /></a>  <div class="thumbcaption">Fig.4.3. Configuration page of the projects.</div></div></div></div>
 <p>From this page you can set:
 </p>
-<ul><li> State of the container, same: "Enabled", name of the database (containing the configuration and with tracking the availability of the data in different storages and providing the sequentially removing duplicates), date and time of last modification, counter of the use.</li></ul>
+<ul><li> State of the container, same: "Enabled", name of the storage (containing the configuration and with tracking the availability of the data in different storages and providing the sequentially removing duplicates), date and time of last modification, counter of the use.</li></ul>
 <dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The object still supports of specifying the spare storage addresses with tables before you rename the table in the standard form "<b>prj_{ObjID}</b>".</dd></dl>
 <ul><li> Identifier, name, description and icon of the container.</li>
 <li> Owner, group and access rights to the container.</li>
@@ -3541,10 +3541,10 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1131px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_diag.png"><img class="thumbimage" height="545" src="../files/VCAeng_pg_diag.png" width="1129" /></a>  <div class="thumbcaption">Fig.4.4. Tab "Diagnostics" of the projects.</div></div></div></div>
 <p>From this tab you can select time (or refresh to current) and size to obtain the diagnostic messages of the sessions of running this project.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:817px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_wlb.png"><img class="thumbimage" height="589" src="../files/VCAeng_wlb.png" width="815" /></a>  <div class="thumbcaption">Fig.4.5. Configuration page of the widgets libraries.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_wlb.png"><img class="thumbimage" height="616" src="../files/VCAeng_wlb.png" width="808" /></a>  <div class="thumbcaption">Fig.4.5. Configuration page of the widgets libraries.</div></div></div></div>
 <p>From this page you can set:
 </p>
-<ul><li> State of the container, same: "Enabled", name of the database (containing the configuration and with tracking the availability of the data in different storages and providing the sequentially removing duplicates), date and time of last modification, counter of the use.</li></ul>
+<ul><li> State of the container, same: "Enabled", name of the storage (containing the configuration and with tracking the availability of the data in different storages and providing the sequentially removing duplicates), date and time of last modification, counter of the use.</li></ul>
 <dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The object still supports of specifying the spare storage addresses with tables before you rename the table in the standard form "<b>wlb_{ObjID}</b>".</dd></dl>
 <ul><li> Identifier, name, description and icon of the container.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:691px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_mime.png"><img class="thumbimage" height="589" src="../files/VCAeng_mime.png" width="689" /></a>  <div class="thumbcaption">Fig.4.6. Configuration tab of resources of the container.</div></div></div></div>
@@ -3580,5 +3580,5 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/en">Modules/VCAEngine/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/en">Modules/VCAEngine/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

@@ -173,7 +173,7 @@ class TProt: public TProtocol
 	// User protocol's functions
 	void uPrtList( vector<string> &ls ) const		{ chldList(mPrtU, ls); }
 	bool uPrtPresent( const string &id ) const		{ return chldPresent(mPrtU, id); }
-	string uPrtAdd( const string &id, const string &db = "*.*" );
+	string uPrtAdd( const string &id, const string &db = DB_GEN );
 	void uPrtDel( const string &id )			{ chldDel(mPrtU, id); }
 	AutoHD<UserPrt> uPrtAt( const string &id ) const	{ return chldAt(mPrtU, id); }
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,6 +35,7 @@
 #include <QScrollBar>
 #include <QCheckBox>
 #include <QMdiSubWindow>
+#include <QActionGroup>
 
 #include "../QTStarter/lib_qtgen.h"
 #include "vis_run.h"
@@ -43,6 +44,10 @@
 #include "vis_devel_dlgs.h"
 #include "vis_devel.h"
 #include "vis_shape_elfig.h"
+
+#if QT_VERSION < 0x050000
+# define mappedObject(obj)	mapped(obj)
+#endif
 
 #undef _
 #define _(mess) mod->I18N(mess, lang().c_str()).c_str()
@@ -77,12 +82,12 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     QImage ico_t;
     if(!ico_t.load(TUIS::icoGet("close",NULL,true).c_str())) ico_t.load(":/images/close.png");
     actClose = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actClose->setShortcut(Qt::CTRL+Qt::Key_W);
+    actClose->setShortcut(Qt::CTRL|Qt::Key_W);
     connect(actClose, SIGNAL(triggered()), this, SLOT(close()));
     //  Quit
     if(!ico_t.load(TUIS::icoGet("exit",NULL,true).c_str())) ico_t.load(":/images/exit.png");
     actQuit = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actQuit->setShortcut(Qt::CTRL+Qt::Key_Q);
+    actQuit->setShortcut(Qt::CTRL|Qt::Key_Q);
     connect(actQuit, SIGNAL(triggered()), this, SLOT(quitSt()));
     //  About "Program info"
     if(!ico_t.load(TUIS::icoGet("help",NULL,true).c_str())) ico_t.load(":/images/help.png");
@@ -113,7 +118,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     //  What is
     if(!ico_t.load(TUIS::icoGet("contexthelp",NULL,true).c_str())) ico_t.load(":/images/contexthelp.png");
     actWhatIs = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actWhatIs->setShortcut(Qt::SHIFT+Qt::Key_F1);
+    actWhatIs->setShortcut(Qt::SHIFT|Qt::Key_F1);
     connect(actWhatIs, SIGNAL(triggered()), this, SLOT(enterWhatsThis()));
 
     // Page, project, widget and this library actions
@@ -386,7 +391,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     menuBar()->addMenu((menuWindow=new QMenu(this)));
     connect(menuWindow, SIGNAL(aboutToShow()), this, SLOT(updateMenuWindow()));
     wMapper = new QSignalMapper(this);
-    connect(wMapper, SIGNAL(mapped(QWidget *)), this, SLOT(setActiveSubWindow(QWidget *)));
+    connect(wMapper, SIGNAL(mappedObject(QObject*)), this, SLOT(setActiveSubWindow(QObject*)));
 
     menuBar()->addMenu((menuView=new QMenu(this)));
     if(s2i(SYS->cmdOpt("showWin")) != 2) {
@@ -978,7 +983,7 @@ void VisDevelop::setToolIconSize( )
     }
 }
 
-void VisDevelop::setActiveSubWindow( QWidget *w )	{ work_space->setActiveSubWindow(dynamic_cast<QMdiSubWindow *>(w)); }
+void VisDevelop::setActiveSubWindow( QObject *w )	{ work_space->setActiveSubWindow(dynamic_cast<QMdiSubWindow *>(w)); }
 
 void VisDevelop::fullScreen( bool vl )
 {
@@ -1078,7 +1083,7 @@ void VisDevelop::selectItem( const string &item, bool force )
     else work_wdgTimer->start();
 }
 
-void VisDevelop::applyWorkWdg( )
+void VisDevelop::applyWorkWdg( char inPrj )
 {
     if(winClose) return;
 
@@ -1098,8 +1103,8 @@ void VisDevelop::applyWorkWdg( )
     string sel2 = TSYS::pathLev(cur_wdg, 1);
     string sel3 = TSYS::pathLev(cur_wdg, 2);
 
-    bool isProj = (sel1.substr(0,4)=="prj_");
-    bool isLib  = (sel1.substr(0,4)=="wlb_");
+    bool isProj = (sel1.find("prj_") == 0 && inPrj != 0);
+    bool isLib  = (sel1.find("wlb_") == 0 && inPrj != 1);
 
     //Process main actions
     actPrjRun->setEnabled(isProj);
@@ -1107,8 +1112,8 @@ void VisDevelop::applyWorkWdg( )
     //Set visual item's actions
     actVisItAdd->setEnabled(isProj || (isLib&&sel3.empty()));
     // Process add actions of visual items
-    for(int i_a = 0; i_a < actGrpWdgAdd->actions().size(); i_a++)
-	actGrpWdgAdd->actions().at(i_a)->setEnabled(isProj || (isLib&&sel3.empty()));
+    for(int iA = 0; iA < actGrpWdgAdd->actions().size(); iA++)
+	actGrpWdgAdd->actions().at(iA)->setEnabled(isProj || (isLib&&sel3.empty()));
     //Process visual item actions
     actVisItDel->setEnabled(isProj || isLib);
     actVisItProp->setEnabled(isProj || isLib);
@@ -1232,10 +1237,14 @@ void VisDevelop::itDBSave( )
 	if(dlg.exec() == QDialog::Accepted) {
 	    string cur_wdg;
 	    for(int iOff = 0; (cur_wdg=TSYS::strSepParse(own_wdg,0,';',&iOff)).size(); ) {
-		// Send load request
+		// Sending the saving request
 		XMLNode req("save");
 		req.setAttr("path", cur_wdg+"/%2fobj")->setAttr("force", (sender()==actDBSaveF)?"1":"");
-		if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
+		if(cntrIfCmd(req)) {
+		    if(req.attr("mtxt").size())
+			mod->postMess(req.attr("mcat").c_str(), req.attr("mtxt").c_str(), TVision::Warning, this);
+		    else mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
+		}
 	    }
 	}
     }
@@ -1563,7 +1572,7 @@ void VisDevelop::visualItClear( const string &elWa )
 	    if(workAttr.size()) workWdgLoc += "/" + workAttr;
 	    workAttr = work_tmp;
 	}
-	if(workAttr.size() > 2 && workAttr.substr(0,2) == "a_") workAttr = workAttr.substr(2);
+	if(workAttr.find("a_") == 0) workAttr = workAttr.substr(2);
 	else { workWdgLoc += "/"+workAttr; workAttr = ""; }
     }
 
@@ -1595,7 +1604,7 @@ void VisDevelop::visualItDownParent( const string &elWa )
 	    if(workAttr.size()) workWdgLoc += "/" + workAttr;
 	    workAttr = work_tmp;
 	}
-	if(workAttr.size() > 2 && workAttr.substr(0,2) == "a_") workAttr = workAttr.substr(2);
+	if(workAttr.find("a_") == 0) workAttr = workAttr.substr(2);
 	else { workWdgLoc += "/"+workAttr; workAttr = ""; }
     }
 
@@ -1730,7 +1739,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	dlg.setMess(t_el.c_str());
 	dlg.setId(t1_el.c_str());
 	// Add Link flag for copy operation
-	if(copy_buf_w[0] != '1' && d_el != "prj_" && d_el != "wlb_" && d_el_.substr(0,4) != "wdg_") {
+	if(copy_buf_w[0] != '1' && d_el != "prj_" && d_el != "wlb_" && d_el_.find("wdg_") != 0) {
 	    dlg.edLay()->addWidget(new QLabel(_("Inherit:"),&dlg), 3, 0);
 	    wInher = new QCheckBox(&dlg);
 	    dlg.edLay()->addWidget(wInher, 3, 1);
@@ -1774,7 +1783,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 		if(!err || err == 1) {	//Not errors or warnings
 		    if(it_nm.size()) {
 			req.clear()->setName("set")->setText(it_nm);
-			if(d_el.substr(0,4) == "prj_" || d_el.substr(0,4) == "wlb_")
+			if(d_el.find("prj_") == 0 || d_el.find("wlb_") == 0)
 			    req.setAttr("path",d_elp+"/"+d_el+"/%2fobj%2fcfg%2fname");
 			else req.setAttr("path",d_elp+"/"+d_el+"/%2fwdg%2fcfg%2fname");
 			cntrIfCmd(req);

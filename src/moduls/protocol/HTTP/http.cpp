@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.8.9"
+#define MOD_VER		"3.8.13"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -177,7 +177,7 @@ TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	return false;
     }
     //string pgCreator( string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}",
-    //                 string htmlHeadEls = "", string forceTmplFile = "", string lang = "" ) -
+    //                 string htmlHeadEls = "", string forceTmplFile = "" ) -
     //    Forming page or resource from content <cnt>, wrapped to HTTP result <rcode>, with HTTP additional attributes <httpattrs>,
     //    HTML additional head's element <htmlHeadEls> and forced template file <forceTmplFile>.
     //  cnt       - a page or a resource (images, XML, CSS, JavaScript, ...) content;
@@ -185,8 +185,7 @@ TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     //  httpattrs - additional HTTP-attributes, mostly this is "Content-Type" which by default sets to "text/html;charset={SYS}";
     //              only for "Content-Type: text/html" will do wrapping to internal/service or force <forceTmplFile> HTML-template;
     //  htmlHeadEls   - an additional HTML-header's tag, it's mostly META with "Refresh" to pointed URL;
-    //  forceTmplFile - force template file for override the internal/service template by the main-page template or other;
-    //  lang - language.
+    //  forceTmplFile - force template file for override the internal/service template by the main-page template or other.
     if(iid == "pgCreator" && prms.size()) {
 	size_t extPos;
 
@@ -199,8 +198,7 @@ TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	string cTmplExt;
 	if((extPos=cTmpl.rfind(".")) != string::npos)	{ cTmplExt = cTmpl.substr(extPos); cTmpl = cTmpl.substr(0, extPos); }
 
-	string lang = (prms.size() >= 6) ? prms[5].getS() : "";
-	if(lang.size() > 2)	lang = lang.substr(0, 2);
+	string lang = TSYS::strLine(user_lang, 1);
 
 	// HTTP header's attributes
 	string httpattrs = (prms.size() >= 3) ? prms[2].getS() : "";
@@ -256,21 +254,15 @@ TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 		}
 	    }
 	    if(answer.empty()) {
-		string icoNm;
-		TUIS::icoGet(SYS->name(), &icoNm);
-		if(icoNm.size()) icoNm = SYS->name() + "." + icoNm;
-		else {
-		    TUIS::icoGet(SYS->id(), &icoNm);
-		    if(icoNm.size()) icoNm = SYS->id() + "." + icoNm;
-		}
+		string icoNm = TSYS::pathLevEnd(SYS->ico(NULL,true), 0);
 		answer = "<?xml version='1.0' ?>\n"
 		    "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n"
 		    "<html xmlns='http://www.w3.org/1999/xhtml'>\n"
 		    " <head>\n"
 		    "  <meta http-equiv='Content-Type' content='text/html; charset=" + Mess->charset() + "'/>\n" +
 		    ((prms.size() >= 4) ? prms[3].getS() : "" ) +
-		    "  <title>" PACKAGE_NAME ": " + SYS->name() + " (" + SYS->id() + ")</title>\n" +
-		    (icoNm.size()?"  <link rel='shortcut icon' href='/"+icoNm+"' type='image' />\n":"") +
+		    "  <title>" PACKAGE_NAME ": " + trD_L(SYS->name(),lang) + " (" + SYS->id() + ")</title>\n" +
+		    (icoNm.size()?"  <link rel='shortcut icon' href='/"+TSYS::strEncode(icoNm,TSYS::HttpURL)+"' type='image' />\n":"") +
 		//    "  <title>" PACKAGE_NAME "!</title>\n"
 		//    "  <link rel='shortcut icon' href='/" SPRT_ID "." MOD_ID ".png' type='image' />\n"
 		    "  <style type='text/css'>\n"
@@ -288,7 +280,7 @@ TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 		    "  </style>\n"
 		    " </head>\n"
 		    " <body>\n"
-		    "  <h1 class='head'>" PACKAGE_NAME ": " + SYS->name() + " (" + SYS->id() + ")</h1>\n"
+		    "  <h1 class='head'>" PACKAGE_NAME ": " + trD_L(SYS->name(),lang) + " (" + SYS->id() + ")</h1>\n"
 		    "  <hr/><br/>\n"
 		    "<center>\n" CtxTmplMark "</center>\n"
 		    "  <hr/>\n"
@@ -584,7 +576,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 		    "tp","str", "dest","sel_ed", "select","/prm/cfg/tmplMainPageList");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/authSesDB",_("DB of the active authentication sessions"),RWRWR_,"root",SPRT_ID,4,
 		    "tp","str", "dest","select", "select","/db/list:onlydb",
-		    "help",(TMess::labStor(true)+"\n"+
+		    "help",(TMess::labStor()+"\n"+
 			_("Set to empty to disable using the external table of the active authentication sessions.")).c_str());
 		if(authSessTbl().size())
 		    ctrMkNode("fld",opt,-1,"/prm/cfg/spaceUID",_("Authentication UID generation space"),RWRWR_,"root",SPRT_ID,3,"tp","dec", "min","0", "max","100");
@@ -701,9 +693,9 @@ TProtIn::~TProtIn( )
 string TProtIn::pgCreator( const string &cnt, const string &rcode, const string &httpattrs, const string &htmlHeadEls, const string &forceTmplFile )
 {
     vector<TVariant> prms;
-    prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile); prms.push_back(lang());
+    prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile);
 
-    return objFuncCall("pgCreator", prms, "root").getS();
+    return objFuncCall("pgCreator", prms, "root\n"+lang()).getS();
 }
 
 bool TProtIn::pgAccess( const string &URL )
@@ -733,7 +725,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Content: %d:\n%s"), request.size(), request.c_str());
 
 	//Parse first record
-	req = TSYS::strLine(request,0,&pos);
+	req = TSYS::strLine(request, 0, &pos);
 	if(req == request) { mNotFull = true; return mNotFull; }	//HTTP header is not full
 	string method   = TSYS::strSepParse(req, 0, ' ');
 	string uris     = TSYS::strSepParse(req, 1, ' ');
@@ -774,7 +766,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		}
 	    }
 	    else if(strcasecmp(var.c_str(),"accept-language") == 0 && (brLang=TSYS::strTrim(TSYS::strParse(val,0,","))).size() > 2)
-		brLang = brLang.substr(0, 2);
+		brLang = TSYS::strParse(brLang, 0, "-");
 	    else if(strcasecmp(var.c_str(),"oscd_lang") == 0)	vars.pop_back();
 	}
 
@@ -938,7 +930,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	    }
 	    //Check for module's icon and other images in the folder "icons/"
 	    if(method == "GET" && name_mod.rfind(".") != string::npos) {
-		string icoTp, ico = TUIS::icoGet(name_mod.substr(0,name_mod.rfind(".")), &icoTp);
+		string icoTp, ico = TUIS::icoGet(TSYS::strDecode(name_mod.substr(0,name_mod.rfind(".")),TSYS::HttpURL), &icoTp);
 		if(ico.size()) {
 		    answer = pgCreator(ico, "200 OK", "Content-Type: "+TUIS::mimeGet(name_mod,ico,"image/"+icoTp));
 		    return mNotFull || KeepAlive;

@@ -73,14 +73,14 @@ class Engine : public TUI
 	// Widgets libraries
 	void wlbList( vector<string> &ls ) const		{ chldList(idWlb, ls); }
 	bool wlbPresent( const string &id ) const		{ return chldPresent(idWlb, id); }
-	string wlbAdd( const string &id, const string &inm = "", const string &idb = "*.*" );
+	string wlbAdd( const string &id, const string &inm = "", const string &idb = DB_GEN );
 	void wlbDel( const string &id, bool full = false )	{ chldDel(idWlb, id, -1, full?NodeRemove:NodeNoFlg); }
 	AutoHD<WidgetLib> wlbAt( const string &id ) const;
 
 	// Projects
 	void prjList( vector<string> &ls ) const		{ chldList(idPrj, ls); }
 	bool prjPresent( const string &id ) const		{ return chldPresent(idPrj, id); }
-	string prjAdd( const string &id, const string &inm = "", const string &idb = "*.*" );
+	string prjAdd( const string &id, const string &inm = "", const string &idb = DB_GEN );
 	void prjDel( const string &id, bool full = false )	{ chldDel(idPrj, id, -1, full?NodeRemove:NodeNoFlg); }
 	AutoHD<Project> prjAt( const string &id ) const;
 
@@ -98,7 +98,7 @@ class Engine : public TUI
 
 	// Attributes process functions
 	void attrsLoad( Widget &w, const string &fullDB, const string &idw, const string &idc, const string &attrs, bool ldGen = false );
-	string attrsSave( Widget &w, const string &fullDB, const string &idw, const string &idc, bool ldGen = false );
+	string attrsSave( Widget &w, const string &fullDB, const string &idw, const string &idc, bool ldGen = false, string *errors = NULL, string *warnings = NULL );
 
 	// DB structures
 	TElem &elWdgLib( )	{ return lbwdg_el; }

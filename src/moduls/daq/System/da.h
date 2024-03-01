@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da.h
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +22,8 @@
 #define DA_H
 
 #include <tcontroller.h>
+
+#define SEP_SUBID "|"
 
 using namespace OSCADA;
 
@@ -44,18 +46,26 @@ class DA: public TElem
 	virtual string id( ) = 0;
 	virtual string name( ) = 0;
 
-	virtual bool isSlow( )	{ return false; }
+	virtual bool isDynamic( )	{ return false; }	//the source is dynamic,
+								//  that is the attributes list is different for different subtypes
+	virtual bool isSlow( )		{ return false; }	//the source is slow
+	virtual bool hasSubTypes( )	{ return true; }	//the source has subtypes
 
-	virtual void init( TMdPrm *prm, bool update = false ) 	{ }
-	virtual void deInit( TMdPrm *prm )	{ }
+	virtual void updGen( bool cntr = false )	{ }	//the generic updating call in whether the Controller Cycle for <cntr>
+								//  or in System one
 
-	virtual bool cntrCmdProc( TMdPrm *prm, XMLNode *opt )	{ return false; }
-	virtual void cfgChange( TCfg &co, const TVariant &pc )	{ }
+	virtual void dList( vector<string> &list, TMdPrm *prm = NULL )	{ }
+	virtual void makeActiveDA( TMdContr *aCntr, const string &dIdPref = "", const string &dNmPref = "" );
+
+	virtual void init( TMdPrm *prm, bool update = false );
+	virtual void deInit( TMdPrm *prm );
 
 	virtual void getVal( TMdPrm *prm )	{ }
+	virtual void vlGet( TMdPrm *prm, TVal &val )	{ }
 	virtual void vlSet( TMdPrm *prm, TVal &vo, const TVariant &vl, const TVariant &pvl )	{ }
 
-	virtual void makeActiveDA( TMdContr *a_cntr )	{ }
+	virtual bool cntrCmdProc( TMdPrm *prm, XMLNode *opt )	{ return false; }
+	virtual void cfgChange( TMdPrm *prm, TCfg &co, const TVariant &pc )	{ }
 };
 
 } //End namespace

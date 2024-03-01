@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.0.1"
+#define MOD_VER		"2.0.3"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the WEB-based configurator of the OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -166,7 +166,7 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 	//Get about module page
 	if(zero_lev == "about")	getAbout(ses);
 	//Get module icon and global image
-	else if(zero_lev == "ico" || zero_lev.substr(0,4) == "img_") {
+	else if(zero_lev == "ico" || zero_lev.find("img_") == 0) {
 	    string itp;
 	    ses.page = TUIS::icoGet((zero_lev=="ico")?"UI." MOD_ID:zero_lev.substr(4), &itp);
 	    page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;

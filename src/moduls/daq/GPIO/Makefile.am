@@ -3,7 +3,7 @@ EXTRA_DIST = *.h po/*
 oscd_modul_LTLIBRARIES = daq_GPIO.la
 daq_GPIO_la_CXXFLAGS =
 daq_GPIO_la_LIBTOOLFLAGS = --tag=disable-static
-daq_GPIO_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+daq_GPIO_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 
 daq_GPIO_la_CXXFLAGS += $(GPIO_CFLAGS)
 daq_GPIO_la_LDFLAGS += $(GPIO_LDLAGS)

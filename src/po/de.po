@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 18:33+0300\n"
+"POT-Creation-Date: 2024-01-28 11:07+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -359,8 +359,8 @@ msgstr "Zustand"
 msgid "Running"
 msgstr "Am Laufen"
 
-msgid "Archiver DB"
-msgstr "Archiver DB"
+msgid "Storage"
+msgstr "Lagerung"
 
 #, c-format
 msgid "Remove from '%s'"
@@ -383,7 +383,9 @@ msgstr "Fordert %d Datensätze für Zeit %s."
 msgid ""
 "Number of the copying items achieved the limit %d for time range [%lld:%lld]"
 "(%lld)!"
-msgstr "Die Anzahl der kopierten Elemente hat den Grenzwert %d für den Zeitraum [%lld:%lld] (%lld) erreicht!"
+msgstr ""
+"Die Anzahl der kopierten Elemente hat den Grenzwert %d für den Zeitraum "
+"[%lld:%lld] (%lld) erreicht!"
 
 #, c-format
 msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
@@ -440,9 +442,6 @@ msgstr "Buffersende"
 
 msgid "Buffer begin"
 msgstr "Buffersbeginn"
-
-msgid "Archive DB"
-msgstr "Archiv Datenbank"
 
 msgid ""
 "The size of the buffer of values should be large enough for the periodicity "
@@ -554,7 +553,9 @@ msgstr "Letzte Lesepuffer"
 
 #, c-format
 msgid "Number of the setting items achieved the limit %d for time range [%lld:%lld]!"
-msgstr "Die Anzahl der Einstellungselemente hat den Grenzwert %d für den Zeitraum [%lld:%lld] erreicht!"
+msgstr ""
+"Die Anzahl der Einstellungselemente hat den Grenzwert %d für den Zeitraum "
+"[%lld:%lld] erreicht!"
 
 msgid "DB type (module)"
 msgstr "Typ der Datenbank (Modul)"
@@ -714,8 +715,8 @@ msgstr "Datensatz \"%s\" ist nicht vorhanden. Sind Sie das Objekt gespeichert?"
 msgid "The DB is in the Read only mode."
 msgstr "Die DB befindet sich im Read-Only-Modus."
 
-msgid "Translation removed! Reload the base message."
-msgstr "Übersetzung entfernt! Laden Sie die Basisnachricht neu."
+msgid "A message completely cleaned for the base and all translations!"
+msgstr "Eine Nachricht wird für die Basis und alle Übersetzungen komplett bereinigt!"
 
 #, c-format
 msgid "Field id = %s(%s) is missing!"
@@ -724,6 +725,92 @@ msgstr "Feld id = %s(%s) ist nicht vorhanden!"
 #, c-format
 msgid "%s:%s:> Error in the control item '%s'!"
 msgstr "%s:%s:> Fehler des Kontrollelements '%s'!"
+
+#, c-format
+msgid "set the cell ['%s':%s] to '%s'."
+msgstr "setze die Zelle ['%s':%s] auf '%s'."
+
+msgid "command with arguments:"
+msgstr "Befehl mit Argumenten:"
+
+#, c-format
+msgid "set to '%s'."
+msgstr "auf '%s' gesetzt."
+
+#, c-format
+msgid "add item '%s (%s)'."
+msgstr "Element hinzufügen '%s (%s)'."
+
+#, c-format
+msgid "add item '%s'."
+msgstr "Element hinzufügen '%s'."
+
+msgid "add item."
+msgstr "Element hinzufügen."
+
+#, c-format
+msgid "insert item '%s (%s)' to position of item '%s'."
+msgstr "Element '%s (%s)' an Position von Element '%s' einfügen."
+
+#, c-format
+msgid "insert item '%s' to position %s."
+msgstr "Element '%s' an Position %s einfügen."
+
+#, c-format
+msgid "insert row '%s' to position of row %s."
+msgstr "Zeile '%s' an Position von Zeile %s einfügen."
+
+#, c-format
+msgid "delete item in position %s."
+msgstr "Element an Position %s löschen."
+
+#, c-format
+msgid "delete item '%s'."
+msgstr "Element '%s' löschen."
+
+#, c-format
+msgid "delete row '%s'."
+msgstr "Zeile '%s' löschen."
+
+#, c-format
+msgid "edit item in position %s to '%s'."
+msgstr "Element an Position %s zu '%s' bearbeiten."
+
+#, c-format
+msgid "edit item '%s' to '%s (%s)'."
+msgstr "Element '%s' zu '%s (%s)' bearbeiten."
+
+#, c-format
+msgid "edit item '%s' to '%s'."
+msgstr "Element '%s' zu '%s' bearbeiten."
+
+#, c-format
+msgid "move item in position %s to %s."
+msgstr "Element an Position %s nach %s verschieben."
+
+#, c-format
+msgid "move row in position %s to %s."
+msgstr "Zeile an Position %s nach %s verschieben."
+
+#, c-format
+msgid "load with forcibility %d."
+msgstr "Laden mit Gewalt %d."
+
+#, c-format
+msgid "save with forcibility %d."
+msgstr "Speichern Sie mit Gewalt %d."
+
+#, c-format
+msgid "copy from '%s' to '%s'."
+msgstr "Kopieren von '%s' nach '%s'."
+
+#, c-format
+msgid "user command '%s' to row '%s'."
+msgstr "Benutzerbefehl '%s' in Zeile '%s'."
+
+#, c-format
+msgid "other command '%s'."
+msgstr "anderer Befehl '%s'."
 
 msgid "The node is already being processed!"
 msgstr "Der Knoten wird bereits bearbeitet!"
@@ -838,10 +925,18 @@ msgstr ""
 
 #, c-format
 msgid ""
+"Warning saving:\n"
+"%s"
+msgstr ""
+"Achtung Sparen:\n"
+"%s"
+
+#, c-format
+msgid ""
 "Error saving:\n"
 "%s"
 msgstr ""
-"Fehler beim Speichern\n"
+"Fehler beim Speichern:\n"
 "%s"
 
 msgid "[TableName]"
@@ -929,9 +1024,6 @@ msgstr "Controller"
 
 msgid "Status"
 msgstr "Status"
-
-msgid "Controller DB"
-msgstr "Datenbank des Controllers"
 
 msgid "Date of modification"
 msgstr "Änderungsdatum"
@@ -1195,20 +1287,27 @@ msgstr "Fehler beim Empfang des Objekts vom anderen IO %d !"
 msgid "Closing the iconv handler error '%s (%d)'!"
 msgstr "Fehler '%s (%d)' beim Schließen des Iconv-Handlers!"
 
-msgid "Storage address in the format \"{DB module}.{DB name}\"."
-msgstr "Speicheradresse im Format \"{DB-Modul}.{DB-Name}\"."
+msgid "Generic Storage"
+msgstr "Generische Lagerung"
 
-msgid "Set '*.*' to use the Generic Storage."
-msgstr "Setzen Sie '*.*', um den generischen Speicher zu verwenden."
+msgid "Configuration File"
+msgstr "Konfigurationsdatei"
+
+msgid "Storage address in the format \"{DB module}.{DB name}\" or the common ones."
+msgstr "Speicheradresse im Format \"{DB-Modul}.{DB-Name}\" oder die gemeinsamen."
+
+#, c-format
+msgid "Whole list of the object storages is: %s."
+msgstr "Die gesamte Liste der Objekt Lagerung lautet: %s."
 
 #, c-format
 msgid ""
-"Please note that removing from the Generic Storage (*.*) will cause the data "
-"removing both from the Configuration File (<cfg>) and the Work DB (%s)!"
+"Please note that removing from \"%s (%s)\" will cause the data removing both "
+"from \"%s (%s)\" and \"Work DB (%s)\"!"
 msgstr ""
-"Bitte beachten Sie, dass das Entfernen aus dem Generischen Speicher (*.*) "
-"dazu führt, dass die Daten sowohl aus der Konfigurationsdatei (<cfg>) als "
-"auch aus der Arbeitsdatenbank (%s) entfernt werden!"
+"Bitte beachten Sie, dass durch das Entfernen aus \"%s (%s)\" die Daten "
+"sowohl aus \"%s (%s)\" als auch aus \"Arbeitsdatenbank (%s)\" entfernt "
+"werden!"
 
 msgid ""
 "Schedule wrotes in seconds periodic form or in the standard CRON form.\n"
@@ -1598,12 +1697,13 @@ msgstr "Bibliothek"
 msgid "Library DB"
 msgstr "Bibliothek DB"
 
+#, c-format
 msgid ""
 "Storage address in the format \"{DB module}.{DB name}.{Table name}\".\n"
-"To use the Generic Storage, set '*.*.{Table name}'."
+"To use %s, set '%s.{Table name}'."
 msgstr ""
-"Speicheradresse im Format \"{DB-Modul}.{DB-Name}.{Table name}\".\n"
-"Um den generischen Speicher zu verwenden, legen Sie '*.*.{Table name}' fest."
+"Lagerung Adresse im Format \"{DB-Modul}.{DB-Name}.{Tabellenname}\".\n"
+"Um %s zu verwenden, legen Sie \"%s.{Tabellenname}\" fest."
 
 msgid "Parameter templates"
 msgstr "Parametervorlagen"
@@ -1688,14 +1788,8 @@ msgstr "Benutzer: "
 msgid "Include"
 msgstr "Eingeschlossen"
 
-msgid "User DB"
-msgstr "Datenbank des Benutzers"
-
 msgid "Group "
 msgstr "Gruppe "
-
-msgid "User group DB"
-msgstr "Datenbank der Benutzergruppe"
 
 msgid ""
 "======================= Subsystem \"Specials\" options "
@@ -2102,10 +2196,6 @@ msgstr "Programmabbruch!"
 #, c-format
 msgid "Unknown signal %d!"
 msgstr "Unbekanntes Signal %d!"
-
-#, c-format
-msgid "Closing the file %p error '%s (%d)'!"
-msgstr "Schließen der Datei %p Fehler '%s (%d)'!"
 
 msgid "Timeouted !!!"
 msgstr "Zeitüberschreitung !!!"
@@ -2595,6 +2685,9 @@ msgstr "Übertragungsprotokoll"
 msgid "To connect"
 msgstr "Zum Verbinden"
 
+msgid "Addition parameters"
+msgstr "Zusatzparameter"
+
 msgid "User that opens"
 msgstr "Benutzer, der geöffnet wird"
 
@@ -2616,6 +2709,10 @@ msgstr "Höhe des Hebens"
 #, c-format
 msgid "Error the output address '%s'!"
 msgstr "Fehler bei Ausgabeadresse '%s'!"
+
+#, c-format
+msgid "For %s"
+msgstr "Für %s"
 
 msgid "Error finding and creating new input transports."
 msgstr "Fehler beim Suchen und Erstellen neuer Eingabetransporte."
@@ -2744,14 +2841,17 @@ msgstr "Eingangsübertragung: "
 msgid "Connect"
 msgstr "Verbinden"
 
-msgid "Transport DB"
-msgstr "Datenbank der Übertragung"
+msgid "Additional"
+msgstr "Zusätzlich"
+
+msgid "Reset"
+msgstr "Zurücksetzen"
 
 msgid "IO log"
 msgstr "IO log"
 
-msgid "Log length, block limit, type"
-msgstr "Protokolllänge, Blocklimit, Typ"
+msgid "Log length, block limit, type, aggregation time"
+msgstr "Protokolllänge, Blocklimit, Typ, Aggregationszeit"
 
 msgid "Use zero (0) for the log disabling, -1 for writing to a file."
 msgstr ""
@@ -2760,6 +2860,9 @@ msgstr ""
 
 msgid "Binary & Text;Binary;Text"
 msgstr "Binär zu Text;Binär;Text"
+
+msgid "Aggregation time in seconds and zero disables its."
+msgstr "Aggregationszeit in Sekunden und Null deaktiviert sie."
 
 msgid "Log"
 msgstr "Log"

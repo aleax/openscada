@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/DAQGate</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/DAQGate.html" title="Модули/Шлюз сбора данных (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/DAQGate.html" title="Модулі/Шлюз збору даних (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/DAQGate.html" title="Модули/Шлюз сбора данных (93% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/DAQGate.html" title="Модулі/Шлюз збору даних (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a> </td>
 <td> Gateway of the data sources
 </td>
-<td> 2.12 </td>
+<td> 2.13 </td>
 <td> GPL2 </td>
 <td> daq_DAQGate.so </td>
 <td> en,uk,ru,de </td>
@@ -76,14 +76,13 @@
 <h2><span class="mw-headline" id="Controller_object"><span class="mw-headline-number">1</span> Controller object</span></h2>
 <p>To add a data source a controller object of OpenSCADA is created and configured. An example of the configuration tab for a controller object of this type is shown in Figure 2.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:985px;"><a class="image" href="http://oscada.org/wiki/File:DAQGate_tr_cntr.png"><img class="thumbimage" height="945" src="../files/DAQGate_tr_cntr.png" width="983" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:DAQGate_tr_cntr.png" title="Enlarge" /></div>Fig.2. Configuration tab of a controller object.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:917px;"><a class="image" href="http://oscada.org/wiki/File:DAQGate_tr_cntr.png"><img class="thumbimage" height="922" src="../files/DAQGate_tr_cntr.png" width="915" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of a controller object.</div></div></div></div>
 <p>With this tab you can set:
 </p>
-<ul><li> State of the controller object, that is: status, "Enabled", "Running" and the database name containing the configuration.</li></ul>
+<ul><li> State of the controller object, that is: status, "Enabled", "Running" and the storage name containing the configuration.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Manual restart of the enabled controller object causes the force resync at the sync period &gt;= 0.</dd></dl>
 <ul><li> Identifier, name and description of the controller.</li>
 <li> The state "Enabled" and "Running" in which the controller object must be translated at start up.</li>
-<li> Table of the parameters cache storage those are created even when the data source is not available.</li>
 <li> Acquisition schedule policy and priority of the data acquisition task. </li>
 <li> Time interval of repetition attempts to restore communication with the lost station, in seconds.</li>
 <li> Maximum depth of data of the archive values and messages to restore when start, in the hours. Zero for disable the remote archive access.</li>
@@ -121,5 +120,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/DAQGate/en">Modules/DAQGate/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/DAQGate/en">Modules/DAQGate/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

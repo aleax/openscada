@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tprmtmpl.h
 /***************************************************************************
- *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -169,7 +169,6 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 	string	name( );
 	string	descr( );
 
-	bool isStdStorAddr( ) const		{ return (tbl() == ("tmplib_"+id())); }	//????[v1.0] Remove
 	string	DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
 	string	tbl( ) const			{ return cfg("DB").getS().empty() ? ("tmplib_"+id()) : cfg("DB").getS(); }
 	string	fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
@@ -206,6 +205,8 @@ class TPrmTmplLib : public TCntrNode, public TConfig
     private:
 	//Methods
 	const char *nodeName( ) const	{ return mId.getSd(); }
+
+	bool isStdStorAddr( ) const		{ return (tbl() == ("tmplib_"+id())); }	//????[v1.0] Remove
 
 	//Attributes
 	bool	runSt;

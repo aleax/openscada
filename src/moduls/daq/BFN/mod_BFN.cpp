@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.BFN file: mod_BFN.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.29"
+#define MOD_VER		"0.6.32"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Support Big Farm Net (BFN) modules for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -81,7 +81,6 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable(flag);
 
     //Controler's bd structure
-    //fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("SYNCPER",trS("Period of sync with the remote station, seconds"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000"));
@@ -194,7 +193,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TTypeDAQ::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/symbs",_("Symbols"))) {
-	    ctrMkNode("fld",opt,-1,"/symbs/db",_("Symbols DB"),RWRWR_,"root",SDAQ_ID,4,
+	    ctrMkNode("fld",opt,-1,"/symbs/db",_("Storage"),RWRWR_,"root",SDAQ_ID,4,
 		"tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 	    if(ctrMkNode("table",opt,-1,"/symbs/codes",_("Codes"),RWRWR_,"root",SDAQ_ID,2,"s_com","add,del","key","id")) {
 		ctrMkNode("list",opt,-1,"/symbs/codes/id",_("Identifier"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
@@ -282,7 +281,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) : ::TC
 	mPrior(cfg("PRIOR").getId()), mSync(cfg("SYNCPER").getRd()),
 	mPer(1e9), prc_st(false), acq_st(false), endrun_req(false), alSt(-1), tm_gath(0)
 {
-    //cfg("PRM_BD").setS("TmplPrm_"+name_c);
+
 }
 
 TMdContr::~TMdContr( )

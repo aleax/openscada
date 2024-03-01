@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-15 20:40+0300\n"
+"POT-Creation-Date: 2024-01-15 14:32+0200\n"
 "PO-Revision-Date: OpenSCADA.DAQ.System 1.2.0\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: LANGUAGE <ru@li.org>\n"
@@ -15,33 +15,53 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Load (%)"
-msgstr "Загрузка (%)"
+msgid "System"
+msgstr "Система"
 
-msgid "System (%)"
-msgstr "Система (%)"
-
-msgid "User (%)"
-msgstr "Пользователь (%)"
-
-msgid "Idle (%)"
-msgstr "Простой (%)"
-
-msgid "General"
-msgstr "В общем"
+msgid ""
+"Load whole, system, user, idle\n"
+"In %"
+msgstr ""
 
 #, c-format
 msgid "Closing the file %p error '%s (%d)'!"
 msgstr ""
 
-msgid "10:Device is not available."
-msgstr "10:Устройство недоступно."
+msgid "Frequency: driver"
+msgstr ""
 
-msgid "Full CPU Load"
-msgstr "Общая нагрузка процессора"
+msgid "Frequency: governor"
+msgstr ""
 
-msgid "CPU Load: "
-msgstr "Нагрузка процессора: "
+msgid ""
+"Frequency: current\n"
+"In MHz"
+msgstr ""
+
+msgid ""
+"Frequency: minimum, set\n"
+"In MHz"
+msgstr ""
+
+msgid ""
+"Frequency: maximum, set\n"
+"In MHz"
+msgstr ""
+
+msgid "Model name"
+msgstr ""
+
+msgid "MHz"
+msgstr ""
+
+msgid "BogoMIPS"
+msgstr ""
+
+msgid "MHz at rdtsc"
+msgstr ""
+
+msgid "General"
+msgstr "В общем"
 
 msgid "Total (GB)"
 msgstr "Всего (ГБ)"
@@ -61,15 +81,8 @@ msgstr "Использовано файловых узлов"
 msgid "Free file nodes"
 msgstr "Свободно файловых узлов"
 
-msgid "Mount point"
-msgstr "Точка монтирования"
-
 msgid "10:Mountpoint isn't available."
 msgstr "10:Точка монтирования не доступна."
-
-#, c-format
-msgid "File system: '%s'"
-msgstr "Файловая система: '%s'"
 
 msgid "Read (B)"
 msgstr "Прочитано (Б)"
@@ -83,11 +96,8 @@ msgstr "Записано (Б)"
 msgid "Write speed (B/s)"
 msgstr "Скорость записи (Б/c)"
 
-msgid "Disk(part)"
-msgstr "Диск(раздел)"
-
-msgid "HD statistic: "
-msgstr "Статистика НЖМД: "
+msgid "10:Device is not available."
+msgstr "10:Устройство недоступно."
 
 msgid "Name"
 msgstr "Имя"
@@ -98,14 +108,8 @@ msgstr "Единица измерения"
 msgid "Temperature"
 msgstr "Температура"
 
-msgid "Disk"
-msgstr "Диск"
-
 msgid "Parameter Hddtemp"
 msgstr "Параметр Hddtemp"
-
-msgid "HD temperature: "
-msgstr "Температура НЖМД: "
 
 msgid "Free (KiB)"
 msgstr "Свободно (КиБ)"
@@ -131,9 +135,6 @@ msgstr "Своп всего (КиБ)"
 msgid "Swap used (KiB)"
 msgstr "Своп использовано (КиБ)"
 
-msgid "Memory info"
-msgstr "Информация про память"
-
 msgid "Received (B)"
 msgstr "Принято (Б)"
 
@@ -146,11 +147,137 @@ msgstr "Передано (Б)"
 msgid "Transmit speed (B/s)"
 msgstr "Скорость передачи (Б/с)"
 
-msgid "Interface"
-msgstr "Интерфейс"
+msgid "Type"
+msgstr ""
 
-msgid "Interface statistic: "
-msgstr "Статистика интерфейсов: "
+msgid "Technology"
+msgstr ""
+
+msgid "Scope"
+msgstr ""
+
+msgid "Present"
+msgstr ""
+
+msgid "Manufacturer, model, SN"
+msgstr ""
+
+#, fuzzy
+msgid "Status"
+msgstr "Состояние"
+
+msgid "Online"
+msgstr ""
+
+msgid "Health"
+msgstr ""
+
+msgid "Capacity"
+msgstr ""
+
+msgid "Capacity level"
+msgstr ""
+
+msgid ""
+"Charge now, full, design\n"
+"In Ah"
+msgstr ""
+
+msgid ""
+"Energy now, full, design\n"
+"In Ah"
+msgstr ""
+
+msgid "Voltage"
+msgstr ""
+
+msgid "Voltage minimum"
+msgstr ""
+
+msgid "Cycle count"
+msgstr ""
+
+msgid ""
+"Power\n"
+"In Watts"
+msgstr ""
+
+msgid ""
+"Current\n"
+"In mAmpers"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"Temperature\n"
+"In degC"
+msgstr "Температура"
+
+msgid "Time to empty now, average"
+msgstr ""
+
+msgid "Time to full"
+msgstr ""
+
+msgid "Charge threshold start, stop"
+msgstr ""
+
+msgid "Charge control threshold start, end"
+msgstr ""
+
+msgid "Number of file descriptor slots currently"
+msgstr ""
+
+msgid "Peak virtual memory size (KiB)"
+msgstr ""
+
+msgid "Virtual memory size (KiB)"
+msgstr ""
+
+msgid "Locked memory size (KiB)"
+msgstr ""
+
+msgid "Pinned memory size (KiB)"
+msgstr ""
+
+msgid "Peak resident set size (KiB)"
+msgstr ""
+
+msgid "Resident set size (KiB)"
+msgstr ""
+
+msgid "Size of resident anonymous memory (KiB)"
+msgstr ""
+
+msgid "Size of resident file mappings (KiB)"
+msgstr ""
+
+msgid "Size of resident shared memory (KiB)"
+msgstr ""
+
+msgid "Size of data segment (KiB)"
+msgstr ""
+
+msgid "Size of stack segment (KiB)"
+msgstr ""
+
+msgid "Size of text segment (KiB)"
+msgstr ""
+
+msgid "Shared library code size (KiB)"
+msgstr ""
+
+msgid "Page table entries size (KiB)"
+msgstr ""
+
+msgid "Swapped-out virtual memory size by anonymous private pages (KiB)"
+msgstr ""
+
+msgid "Size of hugetlb memory portions (KiB)"
+msgstr ""
+
+msgid "Number of threads in process"
+msgstr ""
 
 msgid "State"
 msgstr "Состояние"
@@ -166,11 +293,8 @@ msgstr "Свойство "
 msgid "Closing the pipe %p error '%s (%d)'!"
 msgstr ""
 
-msgid "Data sensors"
-msgstr "Данные сенсоров"
-
-msgid "HDD SMART: "
-msgstr "SMART НЖМД: "
+msgid "Sensors"
+msgstr "Сенсоры"
 
 msgid "UPS"
 msgstr "ИБП"
@@ -189,9 +313,6 @@ msgstr "Пользователь"
 msgid "Password"
 msgstr "Пароль"
 
-msgid "UPS: "
-msgstr "ИБП: "
-
 msgid "Full seconds"
 msgstr "Секунды полные"
 
@@ -207,17 +328,8 @@ msgstr "Часы"
 msgid "Days"
 msgstr "Дни"
 
-msgid "System"
-msgstr "Система"
-
 msgid "Station"
 msgstr "Станция"
-
-msgid "System up time"
-msgstr "Время работы системы"
-
-msgid "Station up time"
-msgstr "Время работы станции"
 
 msgid "System DA"
 msgstr "Сбор данных системы"
@@ -225,9 +337,11 @@ msgstr "Сбор данных системы"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
+#, fuzzy
 msgid ""
-"Provides data acquisition from the OS. Supported OS Linux data sources: "
-"HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc."
+"Provides data acquisition from Operation System. Supported OS Linux data "
+"sources: CPU, Memory, Sensors, Disk SMART, Disk Statistic, File System, "
+"Network, Power, UPS, Up Time etc."
 msgstr ""
 "Предоставляет сбор данных операционной системы. Поддерживаются источники "
 "данных ОС Linux: HDDTemp, Sensors, Uptime, Memory, CPU, UPS и другие."
@@ -284,29 +398,107 @@ msgstr "Ошибка записи значения в атрибут '%s': %s"
 msgid "CPU"
 msgstr "Процессор"
 
-msgid "File Systems"
+#, fuzzy
+msgid "File System"
 msgstr "Файловые Системы"
 
-msgid "HDD statistic"
+#, fuzzy
+msgid "Disk Statistic"
 msgstr "Статистика HDD"
 
 msgid "HDD temperature"
 msgstr "Температура HDD"
 
+#, fuzzy
+msgid "HD temperature"
+msgstr "Температура HDD"
+
 msgid "Memory"
 msgstr "Память"
 
-msgid "Network statistic"
-msgstr "Статистика сети"
+msgid "Network"
+msgstr ""
 
-msgid "Qt sensors"
+msgid "Power"
+msgstr ""
+
+msgid "Process"
+msgstr ""
+
+#, fuzzy
+msgid "Qt sensor"
 msgstr "Сенсоры Qt"
 
-msgid "Sensors"
-msgstr "Сенсоры"
+#, fuzzy
+msgid "Disk SMART"
+msgstr "SMART НЖМД: "
 
-msgid "UPS (NUT)"
-msgstr "ИБП (NUT)"
+msgid "Up Time"
+msgstr ""
 
-msgid "Up time"
-msgstr "Время работы"
+#~ msgid "Data sensors"
+#~ msgstr "Данные сенсоров"
+
+#~ msgid "Load (%)"
+#~ msgstr "Загрузка (%)"
+
+#~ msgid "System (%)"
+#~ msgstr "Система (%)"
+
+#~ msgid "User (%)"
+#~ msgstr "Пользователь (%)"
+
+#~ msgid "Idle (%)"
+#~ msgstr "Простой (%)"
+
+#~ msgid "Full CPU Load"
+#~ msgstr "Общая нагрузка процессора"
+
+#~ msgid "CPU Load: "
+#~ msgstr "Нагрузка процессора: "
+
+#~ msgid "Mount point"
+#~ msgstr "Точка монтирования"
+
+#, c-format
+#~ msgid "File system: '%s'"
+#~ msgstr "Файловая система: '%s'"
+
+#~ msgid "Disk(part)"
+#~ msgstr "Диск(раздел)"
+
+#~ msgid "HD statistic: "
+#~ msgstr "Статистика НЖМД: "
+
+#~ msgid "Disk"
+#~ msgstr "Диск"
+
+#~ msgid "HD temperature: "
+#~ msgstr "Температура НЖМД: "
+
+#~ msgid "Memory info"
+#~ msgstr "Информация про память"
+
+#~ msgid "Interface"
+#~ msgstr "Интерфейс"
+
+#~ msgid "Interface statistic: "
+#~ msgstr "Статистика интерфейсов: "
+
+#~ msgid "UPS: "
+#~ msgstr "ИБП: "
+
+#~ msgid "System up time"
+#~ msgstr "Время работы системы"
+
+#~ msgid "Station up time"
+#~ msgstr "Время работы станции"
+
+#~ msgid "Network statistic"
+#~ msgstr "Статистика сети"
+
+#~ msgid "UPS (NUT)"
+#~ msgstr "ИБП (NUT)"
+
+#~ msgid "Up time"
+#~ msgstr "Время работы"

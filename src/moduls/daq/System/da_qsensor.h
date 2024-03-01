@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_qsensor.h
 /***************************************************************************
- *   Copyright (C) 2018-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2018-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,18 +36,18 @@ class QSensor: public DA
 	QSensor( );
 	~QSensor( );
 
-	string id( )	{ return "QSensor"; }
-	string name( )	{ return _("Qt sensors"); }
+	bool isDynamic( ) { return true; }
 
-	void init( TMdPrm *prm, bool update = false );
-	void deInit( TMdPrm *prm );
+	string id( )	{ return "QSensor"; }
+	string name( )	{ return _("Qt sensor"); }
+
 	void getVal( TMdPrm *prm );
 
-	void makeActiveDA( TMdContr *aCntr );
+	void dList( vector<string> &list, TMdPrm *prm = NULL );
 
     protected:
 	//Methods
-	TVariant getSensors( TMdContr &cntr );
+	TVariant getSensors( );
 
     private:
 	//Attributes

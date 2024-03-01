@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/ICP DAS</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/ICP_DAS.html" title="Модули/ICP-DAS (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/ICP_DAS.html" title="Модулі/ICP-DAS (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/ICP_DAS.html" title="Модули/ICP-DAS (95% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/ICP_DAS.html" title="Модулі/ICP-DAS (100% translated)">Українська</a></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
@@ -86,17 +86,16 @@
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:660px;"><a class="image" href="http://oscada.org/wiki/File:ICP_cntr.png"><img class="thumbimage" height="642" src="../files/ICP_cntr.png" width="658" /></a>  <div class="thumbcaption">Fig.1. Configuration tab of a controller.</div></div></div></div>
 <p>From this tab you can set:
 </p>
-<ul><li> State of the controller, namely: the status, "Enable" and "Run" and the name of the database containing the configuration.</li>
-<li> Id, name and description of the controller.</li>
-<li> The state, in which the controller must be translated at boot: "To enable" and "To start".</li>
-<li> Name of table to store the configuration of the parameters of the controller.</li>
-<li> The calls planing policy and the priority of the task of data acquisition.</li>
+<ul><li> State of the controller object, as follows: status, "Enabled", "Running" and the storage name containing the configuration.</li>
+<li> Identifier, name and description of the controller.</li>
+<li> The state "Enabled" and "Running", in which the controller object must be translated at start up.</li>
+<li> Policy of scheduling and priority of the data acquisition task.</li>
 <li> Bus, on which the modules/boards are placed. If you specify a serial interface (COM {X}), then access is made under the protocol <i>DCON</i>. If the main controller bus is <i>LP-8xxx</i> the access is made through the parallel bus API or mixed. Bus <i>ISA</i> set allow select boards for bus ISA, from configured boards list.</li>
 <li> Transport through which requests to the serial bus performed. It's allowed on field "Bus" set to "COM {X}". If set "&lt;ICP DAS&gt;" then used the serial requests API from "ICP DAS", by default.</li>
 <li> Data transfer rate for the serial interface. It is indicated for the not main bus and transport "&lt;ICP DAS&gt;".</li>
 <li> Serial request tries.</li></ul>
 <h2><span class="mw-headline" id="Parameters"><span class="mw-headline-number">2</span> Parameters</span></h2>
-<p>The module provides only one type of parameters — "Standard" and three groups of modules/boards, accessable dependent from selected bus:
+<p>The module provides only one the "Standard (std)" type of the parameters with the parameters table name "ICPDASPrm_{CntrId}". There accessible three groups of modules/boards depending from selected bus:
 </p>
 <ul><li> <i>ISA</i> — boards on <i>ISA</i>;</li>
 <li> <i>I-87xxx</i> — modules on serial bus and with protocol <i>DCON</i>, for example into <i>LinPAC</i>;</li>
@@ -1066,6 +1065,8 @@ IXISA_8254CS
 </td>
 <td>
 </td></tr></table>
+<p><br />
+</p>
 <h2><span class="mw-headline" id="Links"><span class="mw-headline-number">3</span> Links</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:Lp8x81_2629rt_up.tgz" title="File:Lp8x81 2629rt up.tgz">Special modules for Linux kernel 2.6.29-rt-up for controllers LP-8x81</a></li>
 <li> <a class="external" href="http://oscada.org/wiki/File:Lp8x81_2629rt1_up.tgz" title="File:Lp8x81 2629rt1 up.tgz">Special modules for Linux kernel 2.6.29-rt1-up for controllers LP-8x81</a></li>
@@ -1079,5 +1080,5 @@ IXISA_8254CS
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ICP_DAS/en">Modules/ICP_DAS/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ICP_DAS/en">Modules/ICP_DAS/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

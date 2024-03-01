@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/Siemens</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/Siemens.html" title="Модули/Siemens (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Siemens.html" title="Модулі/Siemens (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/Siemens.html" title="Модули/Siemens (98% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Siemens.html" title="Модулі/Siemens (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a> </td>
 <td> Siemens DAQ and Beckhoff
 </td>
-<td> 4.4 </td>
+<td> 4.5 </td>
 <td> GPL2 </td>
 <td> daq_Siemens.so </td>
 <td> en,uk,ru,de </td>
@@ -46,7 +46,7 @@
 <td colspan="9"> Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol) and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the protocol TwinCAT ADS/AMS due it working with data blocks also.
 <ul><li> <b>Sponsored by, for the Simple type support, the data area specifying and other extension on 1.6 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> INSERTEC LTDA</li>
 <li> <b><a href="../To_do.html" title="Special:MyLanguage/Works/To do">To Do</a>:</b></li></ul>
-<dl><dd> + append the builtin Standard Mode of the DAQ-Parameters.</dd></dl>
+<dl><dd> -</dd></dl>
 </td></tr></table>
 <p>The primary goal of this module was to support the Siemens S7 industrial controllers (S7-200,300,400,1200). Historically, access to the controllers of this company in the ProfiBus network is carried out only through its own communication processors (CP5412, CP5613, etc.) and its own protocol S7. The specified communication processors and APIs for the S7 protocol are quite expensive, besides, the drivers for the communication processors and the S7 API are closed, and also available only for the Intel + MS Windows platform (there was some information about the possibility of purchasing it for Linux).
 </p><p>As an alternative to communication processors of the company Siemens, which allows you to fully work with the Siemens controllers, is the range of communication products of the firm <a class="external text" href="http://hilscher.com" rel="nofollow noreferrer noopener" target="_blank">Hilscher</a>, through the communications processors CIF of the series ProfiBus (PB) and the library <a class="external text" href="http://libnodave.sourceforge.net" rel="nofollow noreferrer noopener" target="_blank">LibnoDave</a>.
@@ -63,8 +63,8 @@
 <li class="toclevel-1 tocsection-2"><a href="#Controller_object"><span class="tocnumber">2</span> <span class="toctext">Controller object</span></a></li>
 <li class="toclevel-1 tocsection-3"><a href="#Parameters"><span class="tocnumber">3</span> <span class="toctext"><span>Parameters</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-4"><a href="#Logical_.28logic.29"><span class="tocnumber">3.1</span> <span class="toctext">Logical (logic)</span></a></li>
-<li class="toclevel-2 tocsection-5"><a href="#Simple_.28simple.29"><span class="tocnumber">3.2</span> <span class="toctext">Simple (simple)</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Logical_.28Prm.29"><span class="tocnumber">3.1</span> <span class="toctext">Logical (Prm)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Simple_.28PrmS.29"><span class="tocnumber">3.2</span> <span class="toctext">Simple (PrmS)</span></a></li>
 </ul>
 </li>
 <li class="toclevel-1 tocsection-6"><a href="#Asynchronous_writing_mode"><span class="tocnumber">4</span> <span class="toctext">Asynchronous writing mode</span></a></li>
@@ -85,14 +85,13 @@
 <h2><span class="mw-headline" id="Controller_object"><span class="mw-headline-number">2</span> Controller object</span></h2>
 <p>To add a data source the controller object of OpenSCADA creates and configures. An example of a configuration tab for a controller object of this type is shown in Figure 3.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:740px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_cntr.png"><img class="thumbimage" height="830" src="../files/Siemens_cntr.png" width="738" /></a>  <div class="thumbcaption">Fig.3. Configuration tab of a controller object.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:779px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_cntr.png"><img class="thumbimage" height="775" src="../files/Siemens_cntr.png" width="777" /></a>  <div class="thumbcaption">Fig.3. Configuration tab of a controller object.</div></div></div></div>
 <p>Using this tab you can set:
 </p>
-<ul><li> The state of the controller object, as follows: Status, "Enabled", "Running" and the name of the database containing the configuration.</li></ul>
+<ul><li> The state of the controller object, as follows: Status, "Enabled", "Running" and the name of the storage containing the configuration.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Manual restart of the enabled controller object causes the force reformation of the acquisition blocks.</dd></dl>
 <ul><li> Identifier, name and description of the controller.</li>
 <li> The state "Enabled" and "Running", in which the controller object must be translated at boot.</li>
-<li> Names of tables of storing the configuration of the parameters of the controller object for standard and logical types.</li>
 <li> Policy of scheduling and priority of the data acquisition task.</li>
 <li> Connection recovery time, in seconds, after lost connection.</li>
 <li> Mode of asynchronous writing to the remote controller.</li>
@@ -111,13 +110,13 @@
 <li> <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">OpenSCADA output transport</a> for the protocol ADS (port 48898, 801 for AMS) and ISO_TCP (port 102) for sending requests.</li>
 <li> Maximum size of the request block in bytes, useful for controllers with such limits.</li></ul>
 <h2><span class="mw-headline" id="Parameters"><span class="mw-headline-number">3</span> <span id="Parameters" title="#Parameters">Parameters</span></span></h2>
-<p>The data acquisition module provides two types of parameter: "Logical (logic)" and "Simple (simple)". Additional configuration fields of the parameters of this module are:
+<p>The data acquisition module provides two types of parameter: "Logical (Prm)" and "Simple (PrmS)". Additional configuration fields of the parameters of this module are:
 </p>
-<ul><li> <i><b>Logical (logic)</b></i>:
+<ul><li> <i><b>Logical (Prm)</b></i>:
 <ul><li> <i>Parameter template</i> — address of the DAQ-parameter template.</li></ul></li>
-<li> <i><b>Simple (simple)</b></i>:
+<li> <i><b>Simple (PrmS)</b></i>:
 <ul><li> <i>Attributes list</i> — contains a structured list of configuration for the attributes Siemens.</li></ul></li></ul>
-<h4><span class="mw-headline" id="Logical_.28logic.29"><span class="mw-headline-number">3.1</span> Logical (logic)</span></h4>
+<h4><span class="mw-headline" id="Logical_.28Prm.29"><span class="mw-headline-number">3.1</span> Logical (Prm)</span></h4>
 <p>Given of high intelligence of the data sources, in face of the industrial controllers of Siemens S7-200,300,400,1200, the type parameter objects are executed on the basis of <a href="../DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">templates</a>. This approach allows you not to be restricted to a rigid list of types of parameters, which also restricts the capabilities of the controllers, but to allow the user to create the required types of parameters independently, or to use libraries of earlier developed types of parameters — templates.
 </p><p>The additional configuration fields of the type parameters (Fig.4) is the selection field of the parameter template.
 </p>
@@ -166,7 +165,7 @@
 <li> <i>NAME</i> — parameter name, read-only.</li>
 <li> <i>DESCR</i> — parameter description, read-only.</li>
 <li> <i>this</i> — parameter object, allows access to the attributes of the parameter, for example, to access the archives.</li></ul>
-<h4><span class="mw-headline" id="Simple_.28simple.29"><span class="mw-headline-number">3.2</span> Simple (simple)</span></h4>
+<h4><span class="mw-headline" id="Simple_.28PrmS.29"><span class="mw-headline-number">3.2</span> Simple (PrmS)</span></h4>
 <p>Main page of configuration parameters of the simple type parameter is shown in Figure 9.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:685px;"><a class="image" href="http://oscada.org/wiki/File:SiemensSimpl_prm.png"><img class="thumbimage" height="669" src="../files/SiemensSimpl_prm.png" width="683" /></a>  <div class="thumbcaption">Fig.9. Configuration tab of the simple parameter type.</div></div></div></div>
@@ -330,5 +329,5 @@ Where:
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Siemens/en">Modules/Siemens/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Siemens/en">Modules/Siemens/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

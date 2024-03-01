@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_sensors.h
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,6 +23,8 @@
 
 #include "da.h"
 
+#define DIR_VDEV "/sys/devices/virtual/"
+
 namespace SystemCntr
 {
 
@@ -36,28 +38,25 @@ class Sensors: public DA
 	Sensors( );
 	~Sensors( );
 
+	bool hasSubTypes( )	{ return false; }
+
 	string id( )	{ return "sensors"; }
 	string name( )	{ return _("Sensors"); }
 
-	void init( TMdPrm *prm, bool update = false );
-	void deInit( TMdPrm *prm );
 	void getVal( TMdPrm *prm );
 
-	void makeActiveDA( TMdContr *a_cntr );
-
-    protected:
-	//Methods
-	void getSensors( TMdPrm *prm, bool onlyCreate = false );
+	void makeActiveDA( TMdContr *aCntr, const string &dIdPref = "", const string &dNmPref = "" );
 
     private:
 	//Attributes
 	static const char *mbmon_cmd;
 	bool libsensor_ok;
+
+	//Methods
+	bool devChkAccess( const string &file, const string &acs = "r" );
+	string devRead( const string &file );
 };
-
-
 
 } //End namespace
 
 #endif //DA_SENSORS_H
-

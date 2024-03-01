@@ -133,7 +133,7 @@ The frame can only be used as a basis for creating your own archival type docume
 <p>The document, shown in Figure 1.1.1, is provided for generating a day report of the hour-averaged values in view of the trends diagram and the data table. The document is initially the archival type but in time it is made dynamic also, so, depending from the execution mode, you can whether select a ready document from the archive or specify the data time and depth. The document commonly uses and represents the representative structure of the DAQ-template "<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Analog signal</a>". As a data source of this document is <a href="Program_manual.html#ArchVals" title="Special:MyLanguage/Documents/Program manual">the value archives</a> of the DAQ-parameters.
 </p><p>Working in the primary archival mode performed with the 5 minutes period, when during an hour an one record-row data is formed. The last one record-row is closed at the 5 minute of a new hour (14:05 for example) and a new one record-row is started. Whole and complete document is archived at the 3 minute of the "Report hour (<i>repHour</i>)" of the next day (09:03 for example).
 </p>
-<ul><li> <b>Sponsored for the dynamization by</b>: BLUE STAR GROUP Ltd</li></ul>
+<ul><li> <b>Sponsored for the dynamization by</b>: BLUE STAR GROUP Ltd and Vinnica Poultry Farm</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibDocuments_docRepDay.png"><img class="thumbimage" height="580" src="files/LibDocuments_docRepDay.png" width="900" /></a>  <div class="thumbcaption">Fig.1.1.1. The "Day report of the hour-averaged values" document in the runtime mode.</div></div></div></div>
 <p><b><u>Using — development</u></b><br />
 The document is designed to perform the role of page-template, and should therefore be placed directly in the project's tree. To each document can be connected up to ten parameters, setting the links. Items, for which there are not set the links, will be hidden at runtime.
@@ -918,8 +918,6 @@ In the runtime mode, the items, for which links have been set, are displayed. Th
 <td> Parameter{n}|isMan </td>
 <td> Marks this parameter as the manual input one.
 </td></tr></table>
-<p><br />
-</p>
 <h2><span class="mw-headline" id="Service_related_functions"><span class="mw-headline-number">2</span> <span id="ServFunc" title="#ServFunc">Service related functions</span></span></h2>
 <p>The service functions of the frames of reports and documents are intended to perform the characteristic tasks of obtaining reporting data, for which you need to perform some verification or counting, for example, to check the validity and to summarize. Forming complex data, such as charts embedded in a document, can also be a service function.
 </p><p>To address the library functions you can use the static call address <b>DAQ.JavaLikeCalc.lib_doc.{Func}()</b> or dynamic <b>SYS.DAQ.JavaLikeCalc["lib_doc"]["{Func}"].call()</b>, <b>SYS.DAQ.JavaLikeCalc["lib_doc"].{Func}()</b>". Where {Func} — function identifier in the library.
@@ -1324,5 +1322,5 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Documents/en">Libs/Documents/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Documents/en">Libs/Documents/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

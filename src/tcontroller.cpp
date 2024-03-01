@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcontroller.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -58,7 +58,7 @@ TCntrNode &TController::operator=( const TCntrNode &node )
     const TController *src_n = dynamic_cast<const TController*>(&node);
     if(!src_n) return *this;
 
-    //Individual DB names store
+    //Individual DB names store - ????[v1.0] Remove
     vector<string> dbNms;
     for(unsigned iTp = 0; iTp < owner().tpPrmSize(); iTp++)
 	dbNms.push_back(owner().tpPrmAt(iTp).DB(this));
@@ -67,7 +67,7 @@ TCntrNode &TController::operator=( const TCntrNode &node )
     exclCopy(*src_n, "ID;");
     setDB(src_n->DB());
 
-    //Individual DB names restore
+    //Individual DB names restore - ????[v1.0] Remove
     for(unsigned iTp = 0; iTp < owner().tpPrmSize() && iTp < dbNms.size(); iTp++)
 	owner().tpPrmAt(iTp).setDB(this, dbNms[iTp]);
 
@@ -101,8 +101,8 @@ void TController::postDisable( int flag )
 
 	//Delete parameter tables
 	for(unsigned iTp = 0; iTp < owner().tpPrmSize(); iTp++)
-	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+owner().tpPrmAt(iTp).DB(this),
-				owner().nodePath()+owner().tpPrmAt(iTp).DB(this));
+	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+tbl(owner().tpPrmAt(iTp)),
+				owner().nodePath()+tbl(owner().tpPrmAt(iTp)));
 
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
@@ -132,7 +132,11 @@ int64_t TController::timeStamp( )
     return mTimeStamp;
 }
 
-string TController::tbl( ) const	{ return owner().owner().subId()+"_"+owner().modId(); }
+string TController::tbl( ) const			{ return owner().owner().subId()+"_"+owner().modId(); }
+
+string TController::tbl( const TTypeParam &tP ) const	{ return tP.DB(this); }
+
+string TController::tblStd( const TTypeParam &tP ) const{ return owner().modId()+tP.name+"_"+id(); }
 
 string TController::getStatus( )
 {
@@ -279,15 +283,15 @@ void TController::LoadParmCfg( )
 
     //Search and create new parameters
     for(unsigned iTp = 0; iTp < owner().tpPrmSize(); iTp++) {
-	if(owner().tpPrmAt(iTp).DB(this).empty()) continue;
+	if(tbl(owner().tpPrmAt(iTp)).empty()) continue;
 	try {
 	    TConfig cEl(&owner().tpPrmAt(iTp));
 	    //cEl.cfgViewAll(false);
 	    cEl.cfg("OWNER").setS("", TCfg::ForceUse);
 
 	    // Search new one in DB and Config-file
-	    for(int fldCnt = 0; TBDS::dataSeek(DB()+"."+owner().tpPrmAt(iTp).DB(this),
-					owner().nodePath()+owner().tpPrmAt(iTp).DB(this),fldCnt++,cEl,TBDS::UseCache); )
+	    for(int fldCnt = 0; TBDS::dataSeek(DB()+"."+tbl(owner().tpPrmAt(iTp)),
+					owner().nodePath()+tbl(owner().tpPrmAt(iTp)),fldCnt++,cEl,TBDS::UseCache); )
 	    {
 		try {
 		    string shfr = cEl.cfg("SHIFR").getS();
@@ -385,7 +389,7 @@ void TController::redntDataUpdate( )
     for(unsigned iP = 0; iP < req.childSize(); iP++) {
 	XMLNode *p = req.childGet(iP);
 	addr = p->attr("path");
-	if(addr == "/%2fcntr%2fst%2fstatus") { mRdSt.setVal(p->text()); continue; }
+	if(addr == "/%2fcntr%2fst%2fstatus") { mRdSt.setVal(p->text()); continue; }	//???? Move to the synchronous request in getStatus()
 	size_t aPos = addr.rfind("/"); addr = (aPos == string::npos) ? "" : addr.substr(0, aPos);
 	if((prm=nodeAt(addr,0,0,0,true)).freeStat()) continue;
 	prm.at().mRdPrcTm = s2i(p->attr("prcTm"));
@@ -400,8 +404,8 @@ void TController::redntDataUpdate( )
 		    int64_t btm = atoll(aNd->attr("tm").c_str());
 		    int64_t per = atoll(aNd->attr("per").c_str());
 		    TValBuf buf(vl.at().arch().at().valType(), 0, per, false, true);
-		    for(unsigned i_v = 0; i_v < aNd->childSize(); i_v++)
-			buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
+		    for(unsigned iV = 0; iV < aNd->childSize(); iV++)
+			buf.setS(aNd->childGet(iV)->text(),btm+per*iV);
 		    vl.at().arch().at().setVals(buf, buf.begin(), buf.end(), "");
 		}
 		else if(aNd->name() == "del" && prm.at().dynElCntr()) {
@@ -409,7 +413,7 @@ void TController::redntDataUpdate( )
 		    TFld::Type tp = (TFld::Type)s2i(aNd->attr("type"));
 		    unsigned flg = s2i(aNd->attr("flg"));
 		    if(vl.freeStat()) prm.at().dynElCntr()->fldAdd(new TFld(aNd->attr("id").c_str(),aNd->attr("name").c_str(),tp,flg,"","",
-									    aNd->attr("values").c_str(),aNd->attr("selNames").c_str()));
+									    aNd->attr("values"),aNd->attr("selNames")));
 		    else {
 			unsigned aId = prm.at().dynElCntr()->fldId(aNd->attr("id"), true);
 			prm.at().dynElCntr()->fldAt(aId).setDescr(aNd->attr("name"));
@@ -551,18 +555,21 @@ void TController::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/cntr/st/status",_("Status"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/cntr/st/enSt",_("Enabled"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/cntr/st/runSt",_("Running"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Controller DB"),RWRWR_,"root",SDAQ_ID,4,
+		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Storage"),RWRWR_,"root",SDAQ_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 		if(DB(true).size())
-		    ctrMkNode("comm",opt,-1,"/cntr/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SDAQ_ID,
-			1,"help",(DB(true)=="*.*")?TMess::labStorRemGenStor().c_str():"");
+		    ctrMkNode("comm",opt,-1,"/cntr/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),
+			TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",SDAQ_ID,1,"help",TMess::labStorRem(mDB).c_str());
 		ctrMkNode("fld",opt,-1,"/cntr/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/cntr/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/cntr/cfg",0,"root",SDAQ_ID,RWRWR_);
-		ctrRemoveNode(opt,"/cntr/cfg/MESS_LEV");
-		ctrRemoveNode(opt,"/cntr/cfg/REDNT");
-		ctrRemoveNode(opt,"/cntr/cfg/REDNT_RUN");
+		for(unsigned iTpP = 0; iTpP < owner().tpPrmSize(); ++iTpP)	//????[v1.0] Remove
+		    if(owner().tpPrmAt(iTpP).mDB.size() && tbl(owner().tpPrmAt(iTpP)) == tblStd(owner().tpPrmAt(iTpP)))
+			ctrRemoveNode(opt, ("/cntr/cfg/"+owner().tpPrmAt(iTpP).mDB).c_str());
+		ctrRemoveNode(opt, "/cntr/cfg/MESS_LEV");
+		ctrRemoveNode(opt, "/cntr/cfg/REDNT");
+		ctrRemoveNode(opt, "/cntr/cfg/REDNT_RUN");
 	    }
 	}
 	if(owner().tpPrmSize()) {
@@ -648,9 +655,9 @@ void TController::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(runSt?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	s2i(opt->text()) ? start() : stop();
     }
-    else if(a_path.substr(0,9) == "/cntr/cfg") {
+    else if(a_path.find("/cntr/cfg") == 0) {
 	TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SDAQ_ID, RWRWR_);
-	if(ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR))
+	if(ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR))	//????[v1.0] Remove
 	    for(unsigned iT = 0; iT < owner().tpPrmSize(); iT++)
 		if(owner().tpPrmAt(iT).mDB == TSYS::pathLev(a_path,2))
 		{ modifG(); break; }

@@ -46,9 +46,7 @@
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/GraphicElementsLibraries/MainElements" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li>
 <li> <b>Used by:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">most projects on OpenSCADA</a></li>
 <li> <b><a href="To_do.html" title="Special:MyLanguage/Works/To do">To Do</a>:</b></li></ul>
-<dl><dd> + <a href="#storeHouse">Storehouse</a>: generation of the report document of the selected item, which is ready to print and convenient in complete observing;</dd>
-<dd> + <a href="#storeHouse">Storehouse</a>: generation of the report document of the main table with accounting the filter settings and natural show the specific fields;</dd>
-<dd> - <a href="#storeHouse">Storehouse</a>: detailed control panel of the selected item with the specific fields.</dd></dl>
+<dl><dd> -</dd></dl>
 </td></tr></table>
 <p>The library is created to provide main elements of the user interface and it contains graphic elements, often need when forming the user interface of the automation of technological and common processes. The library is built on the basis <a href="Modules/VCAEngine.html#WidgetPrimitives" title="Special:MyLanguage/Modules/VCAEngine">primitives of the widgets</a> and the internal programming language <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>.
 </p><p>The element's names and their parameters are available in languages: English, Ukrainian and mRussian. Their source code wrote in the human-language independent mode with calls for the translations by the function <i>tr()</i> and the message's translation also allowed for English, Ukrainian and mRussian.
@@ -873,7 +871,7 @@ In the runtime mode, the year, month, and day are displayed according to the "se
 <li> container of the control panels (right-bottom).</li></ul>
 <p><i>Signal objects area of the buttons-indicators</i> provides information on the presence of violations in the signal object and for switching between them.
 </p><p>To show the signal objects selection the background color is used, by the styles: <i>backColorButton</i> and <i>backColorButtonSel</i>. And the violations are displayed in the color of the text according to the styles: <i>labColorGood</i>, <i>labColorWarning</i>, <i>labColorAlarm</i>; and in which value the text of the inquieted signal object may blink.
-</p><p>Buttons are currently generated dynamically by copying the first and only, according to the virtual pages of the signal objects in the project tree, with the serial digital identification from 1. The limitation on the number of buttons or signal objects is only the total length of the names of the signal objects that can be placed in two rows of these buttons. That is, for short names we can get up to near 100 signal objects. If the signal object is one, even this single base button is hidden.
+</p><p>Buttons are currently generated dynamically by copying the first and only, according to the virtual pages of the signal objects in the project tree, with the serial digital identification from 1 (one). The limitation on the number of buttons or signal objects is only the total length of the names of the signal objects that can be placed in two rows of these buttons. That is, for short names we can get up to near 100 signal objects. If the signal object is one, even this single base button is hidden.
 </p><p><i>Navigation area by types of view</i> — indication of the choice and selection of the type of view, such as: "Mnemonic schemes", "Graph groups", "Contour groups", "Documents" and more; and the listing buttons or the direct selection combobox of the frames into the signal object.
 </p><p>The buttons area of the types of view is dynamic, in the sense of occupying the space of the missing ones, and the meaning of the types of view themselves are configured to different from the default value, i.e. there are two main types of view (view1 and view2), three auxiliary (view3, view4 and view5), as well as one common to the whole interface (view6).
 </p><p>Below are also the buttons of quietation those appear in the event of violations, and at the top is a customizable logo.
@@ -898,7 +896,7 @@ This widget can be used only in the root page mode that should be placed in the 
 <dd> <b>greg</b>/* — the specific page template of <a href="#cntrRegul">the PID-regulator configuration</a>, contains a lot of pages of the end PID-regulators configuration, statically connected and which are call only by the "PID" button of <a href="#ElCadr">the element cadre</a>.</dd></dl></dd>
 <dd> [<b>view6</b>|<b>rg</b>]/ — logical container of the global type of view 6 (typically and early it is <a href="#ResultGrph">the result graphics</a> — common graphs for the entire interface):
 <dl><dd> [<b>view6</b>|<b>rg</b>]/* — the type of view 6 (typically and early it is a template of <a href="#ResultGrph">the result graphics</a>), contains a lot of pages of the end frames.</dd></dl></dd></dl></dd></dl>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Identifiers of the pages of the types of view, specified as [<b>view1</b>|<b>mn</b>], must be specified in the tree either in the new scheme "view1" or in the old scheme "mn". Mixing is not supported!
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Identifiers of the pages of the types of view, specified as [<b>view1</b>|<b>mn</b>], must be specified in the tree either in the new scheme "view1" or in the old scheme "mn". Mixing is not supported and the view items must not be empty, that is contain at least one active page!
 </p><p>As the text of the signal object buttons, there are used name of the logical container with the corresponding <i>n</i> identifier. The description of this container also takes the text of the tooltip to this button if it is not empty. Description of the container also taken into tooltip for this button, if it is not empty.
 </p><p>All further adjustments and edits around this frame must be made for its copy-link in the project tree, and it is strongly not recommended to edit it in the library, otherwise you will lose the ability to update the library or these changes when updating it!
 </p><p>The text and the tooltip of the buttons of the types of view are directly changed in the corresponding properties of these widgets. The fast keys of the type of view are taken from the toolbar brackets, such as "Graphs (CtrlAlt+G)", and processed accordingly. To change the image of the type of view, it is enough to override the icon of the corresponding view, such as "view1", by loading the image with the appropriate name in the project Mime-data.
@@ -2230,7 +2228,7 @@ In the runtime mode, a list is formed with available users and, at their selecti
 <tr>
 <td> <span id="storeHouse" title="#storeHouse"><h3><span class="mw-headline" id="Storehouse_.28storeHouse.29"><span class="mw-headline-number">3.8</span> Storehouse (<a href="Libs_Main_graphical_elements.html#storeHouse" title="Special:MyLanguage/Libs/Main graphical elements">storeHouse</a>)</span></h3></span>
 </td>
-<td> 1.3 </td>
+<td> 1.4 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk
@@ -2277,7 +2275,7 @@ The frame provides currently and in future for next features:
 <li> adding, copying and removing of records-rows of the table in the edition mode;</li>
 <li> generation of the report document of the selected item, which is ready to print and convenient in complete observing;</li>
 <li> generation of the report document of the main table with accounting the filter settings and natural show the specific fields;</li>
-<li> [PLANNED] detailed control panel of the selected item with the specific fields.</li></ul></li></ul>
+<li> detailed control panel-form of the selected item with the specific fields.</li></ul></li></ul>
 <p>The storehouse classes store in the table "classes" with the fixed table structure "<u><b>CLASS</b></u>, <u><b>ID</b></u>, <b>NAME</b>, <b>TP</b> , <b>TBL</b>, <b>FILTER</b>, <b>PROC</b>", where:
 </p>
 <ul><li> <i>CLASS</i> [varchar(20)] — class ID;</li>
@@ -2300,8 +2298,8 @@ The frame provides currently and in future for next features:
 <dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Setting here a procedure will clean up (set to NULL) all the column cells!</dd></dl>
 <p>Data of storehouse of the corresponded class stores in different table with name "sh_{CLASS}" and the structure "<u><b>ID</b></u>, <b>NAME</b>, <b>DSCR</b>, <b>SP_{ID}1</b>, ..., <b>SP_{ID}N</b>", where:
 </p>
-<ul><li> <i>ID</i> [INT] — automatic index of the table;</li>
-<li> <i>NAME</i> [varchar(200)] — name of the item, allowed for type changing;</li>
+<ul><li> <i>ID</i> [INT] — automatic index of the table, allowed for change the visibility;</li>
+<li> <i>NAME</i> [varchar(200)] — name of the item, allowed for change the type;</li>
 <li> <i>DSCR</i> [text] — description of the item;</li>
 <li> <i>SP_{ID}X</i> — specific field of the class corresponding to <i>ID</i> in the class table.</li></ul>
 <p>For the special means there in the table "classes" reserved and forcibly created fields "*TITLE" for the whole storehouse localised name and "*NAME", "*DSCR" which control the corresponded fixed fields.
@@ -2311,7 +2309,7 @@ The frame provides currently and in future for next features:
 The widget is designed to perform the role of a page, and should therefore be placed directly in the project's tree. Additionally, into the panels folder of the project, you need to place <a href="#accept">the accepting dialog frame</a> and some attribute configuration is required, below, where no links are provided.
 </p><p>To enable the reporting, you have to place <a href="#alarmsStReport">the frame of alarms reporting</a> in the logical container of panels of the project tree.
 </p><p><b><u>Using — runtime</u></b><br />
-In the runtime mode you will see single big table for class (Fig.3.8b) and data (Fig.3.8c) edition and representing.
+In the runtime mode you will see a single big table for class (Fig.3.8b) and data (Fig.3.8c) representing with edition right in the table or in the item edition form (Fig.3.8d).
 </p><p>In the main class data representing mode the users can observe the table, filter and sort the representing data at the specified fields.
 </p><p>In the main class data edition mode the users, allowed to edit, can add, copy, remove the rows/records and edit the fields.
 </p><p>In the class edition mode, the users, allowed to edit, can add new and remove present (after removing the last item) classes; and add, remove the specific class fields and edit properties of that fields.
@@ -2321,6 +2319,7 @@ In the runtime mode you will see single big table for class (Fig.3.8b) and data 
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseClassR.png"><img class="thumbimage" height="580" src="files/LibMainEls_storeHouseClassR.png" width="900" /></a>  <div class="thumbcaption">Fig.3.8b. The "Storehouse" frame in the runtime mode at the class representing.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseDataR.png"><img class="thumbimage" height="580" src="files/LibMainEls_storeHouseDataR.png" width="900" /></a>  <div class="thumbcaption">Fig.3.8c. The "Storehouse" frame in the runtime mode at the data representing.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseDataRf.png"><img class="thumbimage" height="580" src="files/LibMainEls_storeHouseDataRf.png" width="900" /></a>  <div class="thumbcaption">Fig.3.8d. The "Storehouse" frame in the runtime mode at the item edition form.</div></div></div></div>
 <p><b><u>Linking and configuring the attributes</u></b><br />
 </p>
 <table class="wikitable">
@@ -3173,5 +3172,5 @@ Calling the dialogue is made from the frame-initiator, and closing is made by pr
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/en">Libs/Main_graphical_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/en">Libs/Main_graphical_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

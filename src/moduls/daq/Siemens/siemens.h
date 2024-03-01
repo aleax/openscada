@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.Siemens file: siemens.h
 /***************************************************************************
- *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -274,7 +274,7 @@ class TMdContr: public TController
 	MtxString conErr;		//Connection error
 	vector< AutoHD<TMdPrm> > pHd;	//Parameter's process list
 	vector< SDataRec > acqBlks;	//Acquisition data blocks
-	vector< SDataRec > writeBlks;	//Data block for write to a data source, for asynchronous write mode
+	vector< SDataRec > writeBlks;	//Data block for write to the data source, for asynchronous write mode
 	AutoHD<TTransportOut>	tr;	//OpenSCADA output transport, for ADS and SELF_ISO_TCP
 
 	uint16_t mInvokeID;
@@ -314,6 +314,8 @@ class TTpContr: public TTypeDAQ
 	void getLifeListPB( unsigned board, string &buffer );
 
 	//Attributes
+	int8_t	tPrmId, tPrmSId;
+
 	ResRW	resAPI;
 
     protected:

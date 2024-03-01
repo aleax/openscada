@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/Рушій Середовища Візуалізації та Управління (СВУ)</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVCAEngine&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/VCAEngine" title="Modules/VCAEngine">Modules/VCAEngine</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/VCAEngine.html" title="Modules/VCAEngine (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/VCAEngine.html" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (88% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVCAEngine&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/VCAEngine" title="Modules/VCAEngine">Modules/VCAEngine</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/VCAEngine.html" title="Modules/VCAEngine (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/VCAEngine.html" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (83% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Рушій Середовища Візуалізації та Управління
 </td>
-<td> 7.11 </td>
+<td> 7.13 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -47,8 +47,7 @@
 <ul><li> <b>Спонсорування, завершення механізму отримання змін виконанням візуалізатору без зайвих запитів та втрати даних на 1.5 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> Вінницька Птахофабрика</li>
 <li> <b><a href="../../en/To_do.html" title="Special:MyLanguage/Works/To do">Завдання (To Do)</a>:</b></li></ul>
 <dl><dd> - доповнити користувацьке API редагування файлів растром (PNG, JPEG, GIF), посередництвом LibGD2, та векторно (SVG):
-<dl><dd>+ доповнити завантаженням та збереженням змін зображень до таблиці сеансу та із процедур користувача, дозволяє редагувати SVG (XML);</dd>
-<dd>- реалізувати основні функції об'єкту GD (у <a href="../Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">Special.FLibSYS</a>).</dd></dl></dd>
+<dl><dd>- реалізувати основні функції об'єкту GD (у <a href="../Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">Special.FLibSYS</a>).</dd></dl></dd>
 <dd> ... <i>також для <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a></i> ...</dd>
 <dd> - перенести запити часу виконання до VCAEngine у асинхронний режим;
 <dl><dd>&nbsp;!&gt; має проблему із опрацюванням рекурсивних подій у event(), для випадку втрати подій відпускання миші при опрацюванні подій натискання миші.</dd></dl></dd>
@@ -1450,16 +1449,16 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <td> Тип елементу </td>
 <td> 20 </td>
 <td> Тип елементу, від значення якого залежить перелік додаткових атрибутів:
-<ul><li> Рядок редагування</li>
-<li> Редактор тексту</li>
-<li> Прапорець</li>
-<li> Кнопка</li>
-<li> Вибір з переліку (ComboBox)</li>
-<li> Перелік</li>
-<li> Дерево</li>
-<li> Таблиця</li>
-<li> Слайдер</li>
-<li> Стрічка гортання</li></ul>
+<ul><li> Рядок редагування (0)</li>
+<li> Редактор тексту (1)</li>
+<li> Прапорець (2)</li>
+<li> Кнопка (3)</li>
+<li> Вибір з переліку (ComboBox) (4)</li>
+<li> Перелік (5)</li>
+<li> Дерево (8)</li>
+<li> Таблиця (9)</li>
+<li> Слайдер (6)</li>
+<li> Стрічка гортання (7)</li></ul>
 </td></tr>
 <tr>
 <td colspan="4"> <i>Рядок редагування:</i>
@@ -1475,14 +1474,14 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <td> Вид </td>
 <td> 22 </td>
 <td> Вид рядка редагування:
-<ul><li> Текст</li>
-<li> Комбобокс</li>
-<li> Ціле</li>
-<li> Реальне</li>
-<li> Час</li>
-<li> Дата</li>
-<li> Дата та час</li>
-<li> Пароль</li></ul>
+<ul><li> Текст (0)</li>
+<li> Комбо Бокс (1)</li>
+<li> Ціле (2)</li>
+<li> Реальне (3)</li>
+<li> Час (4)</li>
+<li> Дата (5)</li>
+<li> Дата та час (6)</li>
+<li> Пароль (7)</li></ul>
 </td></tr>
 <tr>
 <td> cfg </td>
@@ -1883,7 +1882,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <td> bordStyle </td>
 <td> Границя: стиль </td>
 <td> 24 </td>
-<td> Стиль бордюру: "Немає", "Точковий", "Пунктирний", "Суцільний", "Подвійний", "Канавка", "Кромка", "Втиснутий", "Виступаючий".
+<td> Стиль бордюру: "Немає" (0), "Точковий" (1), "Пунктирний" (2), "Суцільний" (3), "Подвійний" (4), "Канавка" (5), "Кромка" (6), "Втиснутий" (7), "Виступаючий" (8).
 </td></tr>
 <tr>
 <td> font </td>
@@ -1924,7 +1923,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <td> alignment </td>
 <td> Вирівнювання </td>
 <td> 29 </td>
-<td> Вирівнювання тексту: "Зверху ліворуч", "Зверху праворуч", "Зверху у центрі", "Зверху по ширині", "Знизу ліворуч", "Знизу праворуч", "Знизу у центрі", "Знизу по ширині", "У центрі ліворуч", "У центрі праворуч", "У центрі", "У центрі по ширині".
+<td> Вирівнювання тексту: "Зверху ліворуч" (0), "Зверху праворуч" (1), "Зверху у центрі" (2), "Зверху по ширині" (3), "Знизу ліворуч" (4), "Знизу праворуч" (5), "Знизу у центрі" (6), "Знизу по ширині" (7), "У центрі ліворуч" (8), "У центрі праворуч" (9), "У центрі" (10), "У центрі по ширині" (11).
 </td></tr>
 <tr>
 <td> inHtml </td>
@@ -1957,7 +1956,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <td> arg{x}tp </td>
 <td> Аргумент {x}: тип </td>
 <td> 50+10*x+1 </td>
-<td> Тип аргументу <i>x</i>: "Цілий", "Реальний", "Рядок".
+<td> Тип аргументу <i>x</i>: "Цілий" (0), "Реальний" (1), "Рядок" (2).
 </td></tr>
 <tr>
 <td> arg{x}cfg </td>
@@ -2042,6 +2041,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <ul><li> "src" — джерело:
 <ul><li> <i>file</i> — прямо з локального, візуалізатор та рущій, файлу за шляхом;</li>
 <li> <i>res</i> — з таблиці ресурсів БД;</li>
+<li> <i>data</i> — безпосередньо дані у формі "data:{mime}\n{base64}";</li>
 <li> <i>stream</i> — URL потоку програвання відео або аудіо.</li></ul></li>
 <li> "name" — шлях файлу або ідентифікатор ресурсу.<br /></li></ul>
 <p>Приклади:
@@ -3550,10 +3550,10 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 <p>Крім переліку відкритих сеансів, вкладка на рисунку 4.2 містить таблицю з переліком сеансів, які мають створюватися та запускатися у момент завантаження OpenSCADA. Створення сеансів за посередництвом цього механізму може бути корисним для Web-інтерфейсу. У такому випадку, при підключені Web-користувача, всі дані вже готові та забезпечується неперервність формування архівних документів.
 </p><p>Конфігурація контейнерів віджетів у особі бібліотек віджетів та проєктів виконується за посередництвом сторінок на рисунку 4.3 (для проєкту) та рисунку 4.5 (для бібліотеки віджетів). Бібліотека віджетів містить віджети, а проєкт — сторінки. Обидва типи контейнеру містять вкладку конфігурації ресурсів, що використовуються віджетами (рис.4.6). Сторінка проєкту також містить вкладку "Діагностика" (рис.4.4) для налагодження та контролю за виконанням сторінки у сеансах.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:817px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_uk.png"><img class="thumbimage" height="690" src="../files/VCAeng_pg_uk.png" width="815" /></a>  <div class="thumbcaption">Рис.4.3. Сторінка конфігурації проєктів.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:827px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_uk.png"><img class="thumbimage" height="690" src="../files/VCAeng_pg_uk.png" width="825" /></a>  <div class="thumbcaption">Рис.4.3. Сторінка конфігурації проєктів.</div></div></div></div>
 <p>За допомогою цієї сторінки можна встановити:
 </p>
-<ul><li> Стан контейнеру, а саме: "Ввімкнено", ім'я БД (що містить конфігурацію та з відстеженням наявності даних у різних сховищах та наданням послідовного видалення дублікатів), дата та час останньої модифікації, лічильник використання.</li></ul>
+<ul><li> Стан контейнеру, а саме: "Ввімкнено", ім'я сховища (що містить конфігурацію та з відстеженням наявності даних у різних сховищах та наданням послідовного видалення дублікатів), дата та час останньої модифікації, лічильник використання.</li></ul>
 <dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Об'єкт все ще підтримує визначення надлишкової адреси сховку із таблицею до того часу як ви перейменуєте її у стандартну форму "<b>prj_{ObjID}</b>".</dd></dl>
 <ul><li> Ідентифікатор, ім'я, опис та іконка контейнеру.</li>
 <li> Власник, група користувачів та права доступу до елементу.</li>
@@ -3562,10 +3562,10 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1074px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_diag_uk.png"><img class="thumbimage" height="561" src="../files/VCAeng_pg_diag_uk.png" width="1072" /></a>  <div class="thumbcaption">Рис.4.4. Вкладка "Діагностика" проєкту.</div></div></div></div>
 <p>У цій вкладці Ви можете обрати час (або оновити до поточного) та розмір для отримання діагностичних повідомлень сеансів виконання даного проєкту.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:776px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_wlb_uk.png"><img class="thumbimage" height="605" src="../files/VCAeng_wlb_uk.png" width="774" /></a>  <div class="thumbcaption">Рис.4.5. Сторінка конфігурації бібліотек віджетів.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:869px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_wlb_uk.png"><img class="thumbimage" height="624" src="../files/VCAeng_wlb_uk.png" width="867" /></a>  <div class="thumbcaption">Рис.4.5. Сторінка конфігурації бібліотек віджетів.</div></div></div></div>
 <p>За допомогою цієї сторінки можна встановити:
 </p>
-<ul><li> Стан контейнеру, а саме: "Ввімкнено", ім'я БД (що містить конфігурацію та з відстеженням наявності даних у різних сховищах та наданням послідовного видалення дублікатів), дата та час останньої модифікації, лічильник використання.</li></ul>
+<ul><li> Стан контейнеру, а саме: "Ввімкнено", ім'я сховища (що містить конфігурацію та з відстеженням наявності даних у різних сховищах та наданням послідовного видалення дублікатів), дата та час останньої модифікації, лічильник використання.</li></ul>
 <dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Об'єкт все ще підтримує визначення надлишкової адреси сховку із таблицею до того часу як ви перейменуєте її у стандартну форму "<b>wlb_{ObjID}</b>".</dd></dl>
 <ul><li> Ідентифікатор, ім'я, опис та іконка контейнеру.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:691px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_mime_uk.png"><img class="thumbimage" height="605" src="../files/VCAeng_mime_uk.png" width="689" /></a>  <div class="thumbcaption">Рис.4.6. Вкладка конфігурації ресурсів контейнеру.</div></div></div></div>
@@ -3601,5 +3601,5 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/uk">Modules/VCAEngine/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/uk">Modules/VCAEngine/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

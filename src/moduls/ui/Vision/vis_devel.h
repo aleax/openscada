@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel.h
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -82,6 +82,7 @@ class VisDevelop : public QMainWindow
 
     public slots:
 	//Public slots
+	void applyWorkWdg( char inPrj = -1 );	//Timeouted apply work widget
 	void selectItem( const string &item, bool force = false );	//Update enabled actions state
 	void editToolUpdate( );						//Edit tools visible update
 	void modifyToolUpdate( const string &it );
@@ -208,10 +209,9 @@ class VisDevelop : public QMainWindow
     private slots:
 	//Private slots
 	void enterManual( );
-	void applyWorkWdg( );	//Timeouted apply work widget
 	void endRunChk( );	//End run flag check
 	void setToolIconSize( );
-	void setActiveSubWindow(QWidget *);
+	void setActiveSubWindow( QObject* );
 
 	void fullScreen( bool vl );	//Full screen toggle
 

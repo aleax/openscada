@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-23 09:56+0200\n"
+"POT-Creation-Date: 2023-12-10 09:30+0200\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1060,8 +1060,8 @@ msgstr "Status:"
 msgid "Enabled:"
 msgstr "Eingeschaltet:"
 
-msgid "Container DB:"
-msgstr "Datenbank des Containers:"
+msgid "Storage:"
+msgstr "Lagerung:"
 
 msgid "Configuration"
 msgstr "Konfiguration"
@@ -1169,7 +1169,7 @@ msgstr "Bilder (*.png *.xpm *.jpg)"
 msgid "Error saving to the file '%s'."
 msgstr "Fehler beim Speichern in die Datei '%s'."
 
-msgid "Loading the picture"
+msgid "Loading a picture"
 msgstr "Laden des Bildes"
 
 msgid "Images (*.png *.jpg)"
@@ -1311,6 +1311,9 @@ msgstr "Senken Sie die Widget Änderungen an der übergeordneten"
 msgid "Press for lowering the widget changes to its parent."
 msgstr "Betätigen zum Senken Sie die Widget Änderungen an der übergeordneten."
 
+msgid "Upload file"
+msgstr "Datei hochladen"
+
 msgid "Full-text editing of the attribute."
 msgstr "Volltextbearbeitung des Attributs."
 
@@ -1336,6 +1339,12 @@ msgid "Lowering down the selected attribute change of the visual item to the par
 msgstr ""
 "Die ausgewählte Attributänderung des visuellen Elements zum übergeordneten "
 "Element verringern"
+
+msgid "Loading a file"
+msgstr "Eine Datei laden"
+
+msgid "Any (*)"
+msgstr "Beliebig (*)"
 
 msgid "Widgets"
 msgstr "Widget"
@@ -2215,9 +2224,6 @@ msgstr "Widgetsgestalt '%1' ist nicht verfügbar!"
 
 msgid "Saving a file"
 msgstr "Eine Datei speichern"
-
-msgid "Loading a file"
-msgstr "Eine Datei laden"
 
 msgid "Error writing to the file '%1'."
 msgstr "Fehler beim Schreiben in die Datei '%1'."

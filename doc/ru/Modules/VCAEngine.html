@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/Движок Среды Визуализации и Управлений (СВУ)</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVCAEngine&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/VCAEngine" title="Modules/VCAEngine">Modules/VCAEngine</a> and the translation is 88% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/VCAEngine.html" title="Modules/VCAEngine (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/VCAEngine.html" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVCAEngine&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/VCAEngine" title="Modules/VCAEngine">Modules/VCAEngine</a> and the translation is 83% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/VCAEngine.html" title="Modules/VCAEngine (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/VCAEngine.html" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Движок Среды Визуализации и Управления
 </td>
-<td> 7.11 </td>
+<td> 7.13 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -47,8 +47,7 @@
 <ul><li> <b>Sponsored by, for finishing the changes obtaining mechanism on the visualisers runtime without spare requests and lost data on 1.5 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> Vinnica Poultry Farm</li>
 <li> <b><a href="../../en/To_do.html" title="Special:MyLanguage/Works/To do">To Do</a>:</b></li></ul>
 <dl><dd> - append the image files edition user API for raster (PNG, JPEG, GIF), by LibGD2, and vector (SVG):
-<dl><dd>+ append the images loading and saving their changes into the session table from the user procedures, allows to edit SVG (XML);</dd>
-<dd>- implement the main functions of the GD object (into <a href="../Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">Special.FLibSYS</a>).</dd></dl></dd>
+<dl><dd>- implement the main functions of the GD object (into <a href="../Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">Special.FLibSYS</a>).</dd></dl></dd>
 <dd> ... <i>for <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> also</i> ...</dd>
 <dd> - move the runtime requests to VCAEngine in the asynchronous mode;
 <dl><dd>&nbsp;!&gt; has a problem with processing recursive events into event(), in the case of the mouse release events loss in processing the pressing mouse event.</dd></dl></dd>
@@ -1450,16 +1449,16 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <td> Тип элемента </td>
 <td> 20 </td>
 <td> Тип элемента, от значения которого зависит перечень дополнительных атрибутов:
-<ul><li> Строка редактирования</li>
-<li> Редактор текста</li>
-<li> Флажок</li>
-<li> Кнопка</li>
-<li> Выбор из списка (ComboBox)</li>
-<li> Список</li>
-<li> Дерево</li>
-<li> Таблица</li>
-<li> Слайдер</li>
-<li> Полоса прокрутки</li></ul>
+<ul><li> Строка редактирования (0)</li>
+<li> Редактор текста (1)</li>
+<li> Флажок (2)</li>
+<li> Кнопка (3)</li>
+<li> Выбор из списка (ComboBox) (4)</li>
+<li> Список (5)</li>
+<li> Дерево (8)</li>
+<li> Таблица (9)</li>
+<li> Слайдер (6)</li>
+<li> Полоса прокрутки (7)</li></ul>
 </td></tr>
 <tr>
 <td colspan="4"> <i>Строка редактирования:</i>
@@ -1475,14 +1474,14 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <td> Вид </td>
 <td> 22 </td>
 <td> Вид строки редактирования:
-<ul><li> Текст</li>
-<li> Комбобокс</li>
-<li> Целое</li>
-<li> Вещественное</li>
-<li> Время</li>
-<li> Дата</li>
-<li> Дата и время</li>
-<li> Пароль</li></ul>
+<ul><li> Текст (0)</li>
+<li> Комбобокс (1)</li>
+<li> Целое (2)</li>
+<li> Вещественное (3)</li>
+<li> Время (4)</li>
+<li> Дата (5)</li>
+<li> Дата и время (6)</li>
+<li> Пароль (7)</li></ul>
 </td></tr>
 <tr>
 <td> cfg </td>
@@ -1883,7 +1882,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <td> bordStyle </td>
 <td> Граница: стиль </td>
 <td> 24 </td>
-<td> Стиль бордюра: "Нет", "Точечный", "Пунктирный", "Сплошной", "Двойной", "Канавка", "Кромка", "Вдавлен", "Выступающий".
+<td> Стиль бордюра: "Нет" (0), "Точечный" (1), "Пунктирный" (2), "Сплошной" (3), "Двойной" (4), "Канавка" (5), "Кромка" (6), "Вдавлен" (7), "Выступающий" (8).
 </td></tr>
 <tr>
 <td> font </td>
@@ -1924,7 +1923,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <td> alignment </td>
 <td> Выравнивание </td>
 <td> 29 </td>
-<td> Выравнивание текста: "Вверху слева", "Вверху справа", "Вверху по центру", "Вверху по ширине", "Внизу слева", "Внизу справа", "Внизу по центру", "Внизу по ширине", "По центру слева", "По центру справа", "По середине", "По центру по ширине".
+<td> Выравнивание текста: "Вверху слева" (0), "Вверху справа" (1), "Вверху по центру" (2), "Вверху по ширине" (3), "Внизу слева" (4), "Внизу справа" (5), "Внизу по центру" (6), "Внизу по ширине" (7), "По центру слева" (8), "По центру справа" (9), "По середине" (10), "По центру по ширине" (11).
 </td></tr>
 <tr>
 <td> inHtml </td>
@@ -1957,7 +1956,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <td> arg{x}tp </td>
 <td> Аргумент {x}: тип </td>
 <td> 50+10*x+1 </td>
-<td> Тип аргумента <i>x</i>: "Целый", "Вещественный", "Строка".
+<td> Тип аргумента <i>x</i>: "Целый" (0), "Вещественный" (1), "Строка" (2).
 </td></tr>
 <tr>
 <td> arg{x}cfg </td>
@@ -1972,186 +1971,183 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 </td></tr></table>
 <h4><span class="mw-headline" id=".D0.AD.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82_.D0.BE.D1.82.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.B8.D1.8F_.D0.BC.D0.B5.D0.B4.D0.B8.D0.B0-.D0.BC.D0.B0.D1.82.D0.B5.D1.80.D0.B8.D0.B0.D0.BB.D0.BE.D0.B2_.28Media.29"><span class="mw-headline-number">3.9.4</span> <span id="Media" title="#Media">Элемент отображения медиа-материалов (Media)</span></span></h4>
 <p>Данный примитив предназначен для проигрывания различных медиа-материалов, начиная от простых изображений и заканчивая полноценными аудио и видео потоками.
-</p><p><b>Таблица.</b> Набор дополнительных свойств/атрибутов примитива "Элемент отображения медиа-материалов (Media)"
+</p><p><b>Table.</b> List of additional properties/attributes of the primitive "Element of visualization of media-materials (Media)"
 </p>
 <table class="wikitable">
 
 <tr>
-<th> Идентификатор </th>
-<th> Имя </th>
-<th> Номер </th>
-<th> Значение
+<th> Identifier </th>
+<th> Name </th>
+<th> Number </th>
+<th> Value
 </th></tr>
 <tr>
 <td> backColor </td>
-<td> Фон: цвет </td>
+<td> Background: color </td>
 <td> 20 </td>
-<td>
-<p>Фоновый цвет. Имя цвета в виде "<b>{color}[-{alpha}]</b>", где:
+<td> Background color. Color name in the view "<b>{color}[-{alpha}]</b>", where:
+<ul><li> "color" — standard color name or its numeric representation of three hexadecimal numbers of individual colors "#RRGGBB";</li>
+<li> "alpha" — level of the alpha [0...255], where 0 — completely transparent.<br /></li></ul>
+<p>Examples:
 </p>
-<ul><li> "color" — стандартное имя цвета или его числовое представление из трёх шестнадцатеричных чисел отдельных цветов "#RRGGBB";</li>
-<li> "alpha" — уровень альфа-канала [0...255], где 0 — полностью прозрачный.<br /></li></ul>
-<p>Примеры:
-</p>
-<ul><li> "red" — сплошной красный цвет;</li>
-<li> "#FF0000" — сплошной красный цвет в цифровом коде;</li>
-<li> "red-127" — полупрозрачный красный цвет.</li></ul>
+<ul><li> "red" — solid red color;</li>
+<li> "#FF0000" — solid red color by the digital code;</li>
+<li> "red-127" — half transparent red color. </li></ul>
 </td></tr>
 <tr>
 <td> backImg </td>
-<td> Фон: изображение </td>
+<td> Background: image </td>
 <td> 21 </td>
-<td>
-<p>Фоновое изображение. Имя изображения в виде "<b>[{src}:]{name}</b>", где:
+<td> Background image. The image name in the view "<b>[{src}:]{name}</b>", where:
+<ul><li> "src" — source of the image:
+<ul><li> <i>file</i> — directly from the local file by the path;</li>
+<li> <i>res</i> — from the resources table of DB.</li></ul></li>
+<li> "name" — file path or identifier of the resource.<br /></li></ul>
+<p>Examples:
 </p>
-<ul><li> "src" — источник изображения:
-<ul><li> <i>file</i> — прямо из локального файла по пути;</li>
-<li> <i>res</i> — из таблицы ресурсов БД.</li></ul></li>
-<li> "name" — путь файла или идентификатор ресурса.<br /></li></ul>
-<p>Примеры:
-</p>
-<ul><li> "res:backLogo" — из таблицы ресурсов БД для идентификатора "backLogo";</li>
-<li> "backLogo" — как и предыдущий;</li>
-<li> "file:/var/tmp/backLogo.png" — из локального файла по пути "/var/tmp/backLogo.png". </li></ul>
+<ul><li> "res:backLogo" — from the resources table of DB for the identifier "backLogo";</li>
+<li> "backLogo" — like toe the previous;</li>
+<li> "file:/var/tmp/backLogo.png" — from local file by the path "/var/tmp/backLogo.png".</li></ul>
 </td></tr>
 <tr>
 <td> bordWidth </td>
-<td> Граница: ширина </td>
+<td> Border: width </td>
 <td> 22 </td>
-<td> Ширина бордюра.
+<td> Border width.
 </td></tr>
 <tr>
 <td> bordColor </td>
-<td> Граница: цвет </td>
+<td> Border: color </td>
 <td> 23 </td>
-<td> Цвет бордюра (детальнее в атрибуте 20).
+<td> Border color (details in attribute 20).
 </td></tr>
 <tr>
 <td> bordStyle </td>
-<td> Граница: стиль </td>
+<td> Border: style </td>
 <td> 24 </td>
-<td> Стиль бордюра: "Нет", "Точечный", "Пунктирный", "Сплошной", "Двойной", "Канавка", "Кромка", "Вдавлен", "Выступающий".
+<td> Border style: "None", "Dotted", "Dashed", "Solid", "Double", "Groove", "Ridge", "Inset", "Outset".
 </td></tr>
 <tr>
 <td> src </td>
-<td> Источник </td>
+<td> Source </td>
 <td> 25 </td>
 <td>
-<p>Имя источника медиа в виде "<b>[{src}:]{name}</b>", где:
+<p>Name of the Media source in the view "<b>[{src}:]{name}</b>", where:
 </p>
-<ul><li> "src" — источник:
-<ul><li> <i>file</i> — прямо из локального, визуализатор и движок, файла по пути;</li>
-<li> <i>res</i> — из таблицы ресурсов БД;</li>
-<li> <i>stream</i> — URL потока проигрывания видео или аудио.</li></ul></li>
-<li> "name" — путь файла или идентификатор ресурса.<br /></li></ul>
-<p>Примеры:
+<ul><li> "src" — source:
+<ul><li> <i>file</i> — directly from the local file, visualizer and engine, by the path;</li>
+<li> <i>res</i> — from the resources table of DB;</li>
+<li> <i>data</i> — directly data in the form "data:{mime}\n{base64}";</li>
+<li> <i>stream</i> — stream URL for playback video and audio.</li></ul></li>
+<li> "name" — file path or identifier of the resource.<br /></li></ul>
+<p>Examples:
 </p>
-<ul><li> "res:workMedia" — из таблицы ресурсов БД для идентификатора "workMedia";</li>
-<li> "workMedia" — как и предыдущий;</li>
-<li> "file:/var/tmp/workMedia.mng" — из локального файла по пути "/var/tmp/workMedia.mng";</li>
-<li> "stream:http://localhost.localhost:5050" — проигрывание видео или аудио из URL.</li></ul>
+<ul><li> "res:workMedia" — from the resources table of DB for the identifier "workMedia";</li>
+<li> "workMedia" — like to previous;</li>
+<li> "file:/var/tmp/workMedia.mng" — from the local file by the path "/var/tmp/workMedia.mng";</li>
+<li> "stream:http://localhost.localhost:5050" — playback for video and audio stream from the URL.</li></ul>
 </td></tr>
 <tr>
 <td> type </td>
-<td> Тип </td>
+<td> Type </td>
 <td> 27 </td>
 <td>
-<p>Тип медиа:
+<p>Media type:
 </p>
-<ul><li> "Изображение" — растровое или векторное (может не поддерживаться) изображение, вроде: PNG, JPEG, GIF, SVG;</li>
-<li> "Анимация" — простое анимированное изображение, вроде: GIF, MNG;</li>
-<li> "Видео" — полное видео или поток, вроде: OGM, AVI, MKV, MPG, MP4;</li>
-<li> "Аудио" — просто аудио или поток, вроде: OGG, MP3, WAV.</li></ul>
+<ul><li> "Image" — raster or vector (can not support) image, like to: PNG, JPEG, GIF, SVG;</li>
+<li> "Animation" — simple animation image, like to: GIF, MNG;</li>
+<li> "Video" — full video or stream, like to: OGM, AVI, MKV, MPG, MP4;</li>
+<li> "Audio" — just audio or stream, like to: OGG, MP3, WAV.</li></ul>
 </td></tr>
 <tr>
 <td> areas </td>
-<td> Области карты </td>
+<td> Map areas </td>
 <td> 28 </td>
-<td> Количество активных областей.
+<td> Number of the active areas.
 </td></tr>
 <tr>
-<td colspan="4"> <i>Атрибуты изображения (Image)</i>
-</td></tr>
-<tr>
-<td> fit </td>
-<td> Заполнять виджет </td>
-<td> 26 </td>
-<td> Признак "Согласовать содержимое с размером виджета".
-</td></tr>
-<tr>
-<td colspan="4"> <i>Атрибуты анимации-видеоролика (Animation)</i>
+<td colspan="4"> <i>Attributes of the image (Image)</i>
 </td></tr>
 <tr>
 <td> fit </td>
-<td> Заполнять виджет </td>
+<td> Fit to the widget size </td>
 <td> 26 </td>
-<td> Признак "Согласовать содержимое с размером виджета".
+<td> Sign "Coordinate the contents with the widget size".
+</td></tr>
+<tr>
+<td colspan="4"> <i>Attributes of the animation-video (Animation)</i>
+</td></tr>
+<tr>
+<td> fit </td>
+<td> Fit to the widget size </td>
+<td> 26 </td>
+<td> Sign "Coordinate the contents with the widget size".
 </td></tr>
 <tr>
 <td> speed </td>
-<td> Скорость проигрывания </td>
+<td> Play speed </td>
 <td> 29 </td>
-<td> Скорость проигрывания, в процентах от оригинальной скорости. Если значение меньше или равно 1% то проигрывание прекращается.
+<td> Speed of playback, as a percentage from the original speed. If the value is less or even than 1%, the playback stops.
 </td></tr>
 <tr>
-<td colspan="4"> <i>Атрибуты полноформатного видео (Full video)</i>
+<td colspan="4"> <i>Attributes of the full video (Full video)</i>
 </td></tr>
 <tr>
 <td> play </td>
-<td> Играть </td>
+<td> Play </td>
 <td> 29 </td>
-<td> Видео/аудио — "Играть".
+<td> Video/audio — "Play".
 </td></tr>
 <tr>
 <td> roll </td>
-<td> Заворачивать проигрывание </td>
+<td> Roll play </td>
 <td> 30 </td>
-<td> Повторение проигрывания по завершению.
+<td> Roll play on the finish.
 </td></tr>
 <tr>
 <td> pause </td>
-<td> Пауза </td>
+<td> Pause </td>
 <td> 31 </td>
-<td> Приостановить проигрывание.
+<td> Playing pause.
 </td></tr>
 <tr>
 <td> size </td>
-<td> Размер </td>
+<td> Size </td>
 <td> 32 </td>
-<td> Общий размер видео, в миллисекундах.
+<td> Total video size, in milliseconds.
 </td></tr>
 <tr>
 <td> seek </td>
-<td> Положение </td>
+<td> Seek </td>
 <td> 33 </td>
-<td> Позиция проигрывания видео, в миллисекундах.
+<td> Seek video playing, in milliseconds.
 </td></tr>
 <tr>
 <td> volume </td>
-<td> Громкость </td>
+<td> Volume </td>
 <td> 34 </td>
-<td> Громкость звука [0...100].
+<td> Sound volume [0...100].
 </td></tr>
 <tr>
-<td colspan="4"> <i>Активные области</i>
+<td colspan="4"> <i>Active areas</i>
 </td></tr>
 <tr>
 <td> area{x}shp </td>
-<td> Область {x}: образ </td>
+<td> Area {x}: shape </td>
 <td> 40+3*x </td>
-<td> Вид области <i>x</i>: "Квадрат", "Полилиния", "Окружность".
+<td> Type of the area <i>x</i>: "Rect", "Poly", "Circle".
 </td></tr>
 <tr>
 <td> area{x}coord </td>
-<td> Область {x}: координаты </td>
+<td> Area {x}: coordinates </td>
 <td> 40+3*x+1 </td>
-<td> Координаты области <i>x</i>, через запятую идут координаты: "x1,y1,x2,y2,xN,yN".
+<td> Coordinates of the area <i>x</i>, are separated by commas: "x1,y1,x2,y2,xN,yN".
 </td></tr>
 <tr>
 <td> area{x}title </td>
-<td> Область {x}: заголовок </td>
+<td> Area {x}: title </td>
 <td> 40+3*x+2 </td>
-<td> Заголовок области <i>x</i>.
+<td> Title of the area <i>x</i>.
 </td></tr></table>
 <h4><span class="mw-headline" id=".D0.AD.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82_.D0.BF.D0.BE.D1.81.D1.82.D1.80.D0.BE.D0.B5.D0.BD.D0.B8.D1.8F_.D0.B4.D0.B8.D0.B0.D0.B3.D1.80.D0.B0.D0.BC.D0.BC_.28Diagram.29"><span class="mw-headline-number">3.9.5</span> <span id="Diagram" title="#Diagram">Элемент построения диаграмм (Diagram)</span></span></h4>
 <p>Данный примитив предназначен для построения различных диаграмм во времени, включая графики-тренды отображения текущего процесса и архивных данных. Реализованы следующие типы диаграмм:
@@ -3565,24 +3561,24 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 <p>Кроме списка открытых сеансов, вкладка на рисунке 4.2 содержит таблицу с перечнем сеансов, которые должны создаваться и запускаться в момент загрузки OpenSCADA. Создание сеансов посредством этого механизма может быть полезным для Web-интерфейса. В таком случае, при подключении Web-пользователя, все данные уже готовы и обеспечивается непрерывность формирования архивных документов.
 </p><p>Конфигурация контейнеров виджетов в лице библиотек виджетов и проектов выполняется посредством страниц на рисунке 4.3 (для проекта) и рисунке 4.5 (для библиотеки виджетов). Библиотека виджетов содержит виджеты, а проект — страницы. Оба типа контейнера содержат вкладку конфигурации ресурсов, используемых виджетами (рис.4.6). Страница проекта также содержит вкладку "Диагностика" (рис.4.4) для отладки и контроля за исполнением страницы в сеансах.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:839px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_ru.png"><img class="thumbimage" height="687" src="../files/VCAeng_pg_ru.png" width="837" /></a>  <div class="thumbcaption">Рис.4.3. Страница конфигурации проектов.</div></div></div></div>
-<p>С помощью этой страницы можно установить:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:782px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg.png"><img class="thumbimage" height="690" src="../../en/files/VCAeng_pg.png" width="780" /></a>  <div class="thumbcaption">Рис.4.3. Страница конфигурации проектов.</div></div></div></div>
+<p>From this page you can set:
 </p>
-<ul><li> Состояние контейнера, а именно: "Включен", имя БД (содержащей конфигурацию и с отслеживанием наличия данных в различных хранилищах и предоставлением последовательного удаления дубликатов), дата и время последней модификации, счётчик использования.</li></ul>
-<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Объект всё ещё поддерживает определение избыточного адреса хранилища с таблицей, до того момента как вы переименуете её в стандартную форму "<b>prj_{ObjID}</b>".</dd></dl>
-<ul><li> Идентификатор, имя, описание и иконка контейнера.</li>
-<li> Владелец, группа пользователей и права доступа к элементу.</li>
-<li> Период вычисления сеансов, основанных на данном проекте.</li>
-<li> Признак включения по надобности.</li></ul>
+<ul><li> State of the container, same: "Enabled", name of the storage (containing the configuration and with tracking the availability of the data in different storages and providing the sequentially removing duplicates), date and time of last modification, counter of the use.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> The object still supports of specifying the spare storage addresses with tables before you rename the table in the standard form "<b>prj_{ObjID}</b>".</dd></dl>
+<ul><li> Identifier, name, description and icon of the container.</li>
+<li> Owner, group and access rights to the container.</li>
+<li> Period for computing of the sessions based on the given project.</li>
+<li> Signal of enabling as needed.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1042px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_diag_ru.png"><img class="thumbimage" height="542" src="../files/VCAeng_pg_diag_ru.png" width="1040" /></a>  <div class="thumbcaption">Рис.4.4. Вкладка "Диагностика" проекта.</div></div></div></div>
 <p>В этой вкладке Вы можете выбрать время (или обновить к текущему) и размер для получения диагностических сообщений сеансов исполнения данного проекта.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:730px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_wlb_ru.png"><img class="thumbimage" height="603" src="../files/VCAeng_wlb_ru.png" width="728" /></a>  <div class="thumbcaption">Рис.4.5. Страница конфигурации библиотек виджетов.</div></div></div></div>
-<p>С помощью этой страницы можно установить:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_wlb.png"><img class="thumbimage" height="616" src="../../en/files/VCAeng_wlb.png" width="808" /></a>  <div class="thumbcaption">Рис.4.5. Страница конфигурации библиотек виджетов.</div></div></div></div>
+<p>From this page you can set:
 </p>
-<ul><li> Состояние контейнера, а именно: "Включен", имя БД (содержащей конфигурацию и с отслеживанием наличия данных в различных хранилищах и предоставлением последовательного удаления дубликатов) дата и время последней модификации, счётчик использования.</li></ul>
-<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Объект всё ещё поддерживает определение избыточного адреса хранилища с таблицей, до того момента как вы переименуете её в стандартную форму "<b>wlb_{ObjID}</b>".</dd></dl>
-<ul><li> Идентификатор, имя, описание и иконка контейнера.</li></ul>
+<ul><li> State of the container, same: "Enabled", name of the storage (containing the configuration and with tracking the availability of the data in different storages and providing the sequentially removing duplicates), date and time of last modification, counter of the use.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> The object still supports of specifying the spare storage addresses with tables before you rename the table in the standard form "<b>wlb_{ObjID}</b>".</dd></dl>
+<ul><li> Identifier, name, description and icon of the container.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:693px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_mime_ru.png"><img class="thumbimage" height="603" src="../files/VCAeng_mime_ru.png" width="691" /></a>  <div class="thumbcaption">Рис.4.6. Вкладка конфигурации ресурсов контейнера.</div></div></div></div>
 <p>Конфигурация сеанса проекта значительно отличается от конфигурации проекта (рис.4.7), однако, также, содержит страницы проекта.
 </p>
@@ -3616,5 +3612,5 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/ru">Modules/VCAEngine/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/ru">Modules/VCAEngine/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

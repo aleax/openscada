@@ -12,6 +12,9 @@ liboscada_la_SOURCES = tsys.cpp resalloc.cpp tarchives.cpp tarchval.cpp tbds.cpp
     telem.cpp tparamcontr.cpp tmodule.cpp xml.cpp tcntrnode.cpp tdaqs.cpp tfunction.cpp
 liboscada_la_CXXFLAGS = $(PTHREAD_CFLAGS)
 liboscada_la_LIBADD = $(PTHREAD_LIBS) $(LIB_CORE)
+if CoreLibStatic
+liboscada_la_LIBTOOLFLAGS = "--tag=disable-shared"
+endif
 
 I18N_mod = $(PACKAGE)
 I18N_add1 = -LShell -kGETTEXT ../data/openscada_start.in

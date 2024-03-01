@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: session.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1465,7 +1465,7 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 			for(unsigned iAl = 0; iAl < sAtrLs.size(); iAl++) {
 			    AutoHD<Attr> attr = src.at().attrAt(sAtrLs[iAl]);
 			    if(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
-				attr.at().cfgVal().size() > 4 && attr.at().cfgVal().substr(0,4) == "prm:" && !SYS->daq().at().attrAt(attr.at().cfgVal().substr(4),0,true).freeStat())
+				attr.at().cfgVal().find("prm:") == 0 && !SYS->daq().at().attrAt(attr.at().cfgVal().substr(4),0,true).freeStat())
 			    {
 				prmLnk = attr.at().cfgVal().substr(4);
 				break;
@@ -2632,8 +2632,8 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	string tStr = TSYS::pathLev(a_path, 2);
 	//Visualizer specific attributes creation at the request
 	if(!attrPresent(tStr) && opt->attr("aNm").size()) {
-	    parent().at().attrAdd(new TFld(tStr.c_str(),opt->attr("aNm").c_str(),(TFld::Type)s2i(opt->attr("aTp")),
-			s2i(opt->attr("aFlg"))|Attr::IsUser,"",opt->text().c_str(),opt->attr("aVls").c_str(),opt->attr("aNms").c_str()));
+	    parent().at().attrAdd(new TFld(tStr.c_str(),opt->attr("aNm"),(TFld::Type)s2i(opt->attr("aTp")),
+			s2i(opt->attr("aFlg"))|Attr::IsUser,"",opt->text().c_str(),opt->attr("aVls"),opt->attr("aNms")));
 	    parent().at().attrAt(tStr).at().setAModif_(1);
 	    parent().at().modif();
 	}

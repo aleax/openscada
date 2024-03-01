@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VISION file: vis_shape_elfig.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2021 by Roman Savochenko <roman@oscada.org>
+ *   Copyright (C) 2012-2023 by Roman Savochenko <roman@oscada.org>
  *		   2007-2012 by Lysenko Maxim <mlisenko@oscada.org>
  *		   2007-2008 by Yashina Kseniya <ksu@oscada.org>
  *
@@ -40,16 +40,16 @@
 #include <QFont>
 #include <QCheckBox>
 #include <QPushButton>
-//#include <QPolygonF>
 
-//#include <tsys.h>
-//#include "tvision.h"
-//#include "vis_widgs.h"
 #include "vis_run_widgs.h"
 #include "vis_devel.h"
 #include "vis_devel_widgs.h"
 #include "../QTStarter/lib_qtgen.h"
 #include "vis_shape_elfig.h"
+
+#if QT_VERSION < 0x060000
+# define MiddleButton	MidButton
+#endif
 
 using namespace OSCADA_QT;
 using namespace VISION;
@@ -1564,7 +1564,7 @@ bool ShapeElFigure::event( WdgView *w, QEvent *event )
 		    if(!runW->hasFocus())		runW->setFocus(Qt::MouseFocusReason);
 		    if(ev->buttons()&Qt::LeftButton)	attrs.push_back(std::make_pair("event",sev+"Left\nws_FigLeft"));
 		    if(ev->buttons()&Qt::RightButton)	attrs.push_back(std::make_pair("event",sev+"Right\nws_FigRight"));
-		    if(ev->buttons()&Qt::MidButton)	attrs.push_back(std::make_pair("event",sev+"Midle\nws_FigMiddle"));
+		    if(ev->buttons()&Qt::MiddleButton)	attrs.push_back(std::make_pair("event",sev+"Midle\nws_FigMiddle"));
 		    w->attrsSet(attrs);
 		    return false;
 		}
@@ -3690,7 +3690,7 @@ QPainterPath ShapeElFigure::painterPathSimple( int type, double ang, QPointF pBe
 	    double arc_a = length(pCntr3, pCntr1), arc_b = length(pCntr1, pCntr2),
 		   tt_start = aT.x(), tt_end = aT.y();
 	    QPointF rotArc;// = rotate(arc(tt_start,arc_a,arc_b), ang);
-	    //printf("TEST 00 Arc: ang=%g; tt_start=%g; tt_end=%g; pCntr1=[%g:%g]; pCntr2=[%g:%g]; pCntr3=[%g:%g]; arc_a=%g; arc_b=%g\n",
+	    //printf("Arc: ang=%g; tt_start=%g; tt_end=%g; pCntr1=[%g:%g]; pCntr2=[%g:%g]; pCntr3=[%g:%g]; arc_a=%g; arc_b=%g\n",
 	    //	ang, tt_start, tt_end, pCntr1.x(), pCntr1.y(), pCntr2.x(), pCntr2.y(), pCntr3.x(), pCntr3.y(), arc_a, arc_b);
 	    for(double t = tt_start; true; t += ARC_STEP) {
 		rotArc = rotate(arc(vmin(t,tt_end),arc_a,arc_b), ang);

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.GPIO file: da_BCM2835.h
 /***************************************************************************
- *   Copyright (C) 2018 by Roman Savochenko, <roman@oscada.org>            *
+ *   Copyright (C) 2018-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -83,8 +83,6 @@ class BCM2835 : public TTypeParam
     //Methods
     BCM2835( );
     //~BCM2835( );
-
-    string DB( TController *cntr )	{ return mod->modId()+"BCM2835Prm_"+cntr->id(); }
 
     void create( TParamContr *prm );
     void destroy( TParamContr *prm );

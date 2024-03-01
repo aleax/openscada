@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/SelfSystem</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/SelfSystem.html" title="Модули/Собственный Системный Протокол (83% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/SelfSystem.html" title="Модулі/Власний Системний Протокол (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--high" href="../../ru/Modules/SelfSystem.html" title="Модули/Собственный Системный Протокол (62% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/SelfSystem.html" title="Модулі/Власний Системний Протокол (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a> </td>
 <td> Own protocol of OpenSCADA
 </td>
-<td> 1.10 </td>
+<td> 2.0 </td>
 <td> GPL2 </td>
 <td> prot_SelfSystem.so </td>
 <td> en,uk,ru,de </td>
@@ -52,11 +52,11 @@
 </div>
 
 <h2><span class="mw-headline" id="The_syntax_of_the_protocol"><span class="mw-headline-number">1</span> The syntax of the protocol</span></h2>
-<p>The protocol is based on the "Request-Answer" method. The queries and their structure are given in Table 1.
-</p><p><b>Table 1</b> Structure of the request.
+<p>The protocol is based on the "Request-Answer" method. The queries and their structure are given in the followed Table.
 </p>
 <table class="wikitable">
-
+<caption> Structure of the request.
+</caption>
 <tr>
 <th> Requests
 </th></tr>
@@ -93,6 +93,7 @@ Any invalid request.
 </p>
 </td></tr></table>
 <p>The protocol supports the ability of the traffic compression. Only the Control Interface data <i>command of the control interface</i> and <i>result of the command of the control interface</i> are compressed. The fact of receipt of a compressed request or response is determined by the negative value of the <i>req_size</i> or the <i>rez_size</i> response. You can define the compression options on the configuration page of the module (Fig. 1). Response of the protocol input part is forced to the compression with level -1 (that is optimal) at the compressed requests.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> All those parameters can be configured individually for the transport, due to the module is first one supports configuration of the external sources in additional parameters of the transports.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:783px;"><a class="image" href="http://oscada.org/wiki/File:SelfSystem_compr.png"><img class="thumbimage" height="491" src="../files/SelfSystem_compr.png" width="781" /></a>  <div class="thumbcaption">Fig.1. Main tab of the configuration page of the module parameters.</div></div></div></div>
 <p>On this tab, you can:
@@ -117,5 +118,5 @@ Any invalid request.
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SelfSystem/en">Modules/SelfSystem/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SelfSystem/en">Modules/SelfSystem/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

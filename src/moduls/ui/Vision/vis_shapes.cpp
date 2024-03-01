@@ -49,13 +49,6 @@
 #include <QToolTip>
 #include <QScrollBar>
 #include <QHeaderView>
-#if QT_VERSION < 0x050000
-# include <QPlastiqueStyle>
-#else
-# include <QCommonStyle>
-# include <qdrawutil.h>
-#endif
-
 #include "vis_run.h"
 #include "vis_devel.h"
 #include "vis_run_widgs.h"
@@ -63,14 +56,39 @@
 #include "../QTStarter/lib_qtgen.h"
 #include "vis_shapes.h"
 
-#ifdef HAVE_PHONON
-#ifdef HAVE_PHONON_VIDEOPLAYER
-#include <phonon/VideoPlayer>
-#include <phonon/VideoWidget>
-#else
-#include <Phonon/VideoPlayer>
-#include <Phonon/VideoWidget>
+#if HAVE_MULTIMEDIA
+# include <QMediaPlayer>
+# include <QVideoWidget>
+# if QT_VERSION >= 0x060000
+#  include <QAudioOutput>
+#  define setVolume(vol) audioOutput()->setVolume(vol)
+#  define setMedia(url)  setSource(url)
+#  define state()	playbackState()
+# endif
+#elif HAVE_PHONON
+# ifdef HAVE_PHONON_VIDEOPLAYER
+#  include <phonon/VideoPlayer>
+#  include <phonon/VideoWidget>
+#  include <phonon/MediaObject>
+# else
+#  include <Phonon/VideoPlayer>
+#  include <Phonon/VideoWidget>
+#  include <Phonon/MediaObject>
+# endif
+using namespace Phonon;
 #endif
+
+#if QT_VERSION >= 0x050000
+# include <QCommonStyle>
+# include <qdrawutil.h>
+#else
+# include <QPlastiqueStyle>
+#endif
+
+#if QT_VERSION < 0x060000
+# define MiddleButton		MidButton
+# define setSecsSinceEpoch(tm)	setTime_t(tm)
+# define typeId()		type()
 #endif
 
 using namespace OSCADA_QT;
@@ -216,7 +234,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	    break;
 	case A_GEOM_W: case A_GEOM_X_SC: rel_cfg = (shD->elType==F_TABLE);	break;
 	case A_GEOM_MARGIN:
-	    w->layout()->setMargin(s2i(val));
+	    w->layout()->setContentsMargins(s2i(val), s2i(val), s2i(val), s2i(val));
 	    rel_cfg = (shD->elType==F_BUTTON);
 	    break;
 	case A_FormElType:
@@ -351,9 +369,12 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		wdg->setStyle(NULL);
 		if(!backimg.empty() && img.loadFromData((const uchar*)backimg.data(),backimg.size())) {
 		    if(mod->dropCommonWdgStls()) toStlSYS = true;
-		    int icSzW = w->width() - w->layout()->margin();
-		    int icSzH = w->height() - w->layout()->margin();
-		    img = img.scaled(w->width()-w->layout()->margin(), w->height()-w->layout()->margin(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+		    int icSzW = 0, icSzH = 0;
+		    w->layout()->getContentsMargins(&icSzW, &icSzH, NULL, NULL);
+		    icSzW = w->width() - icSzW, icSzH = w->height() - icSzH;
+		    //int icSzW = w->width() - w->layout()->margin();
+		    //int icSzH = w->height() - w->layout()->margin();
+		    img = img.scaled(icSzW, icSzH, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
 		    wdg->setIconSize(QSize(icSzW,icSzH));
 		    wdg->setIcon(QPixmap::fromImage(img));
@@ -391,7 +412,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		if(!wdg || !qobject_cast<QComboBox*>(wdg)) {
 		    if(wdg) wdg->deleteLater();
 		    shD->addrWdg = wdg = new QComboBox(w);
-		    if(runW) connect(wdg, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboChange(const QString&)));
+		    if(runW) connect(wdg, SIGNAL(currentIndexChanged(int)), this, SLOT(comboChange(int)));
 		    mk_new = true;
 		}
 		//Font
@@ -1245,17 +1266,19 @@ void ShapeFormEl::buttonToggled( bool val )
 void ShapeFormEl::buttonMenuTrig( )
 {
     QAction *act = (QAction*)sender();
-    WdgView *w = (WdgView *)act->parentWidget()->parentWidget();
-    w->attrSet("event", "ws_BtMenu="+act->data().toString().toStdString(), A_NO_ID, true);
+    QWidget *wA = dynamic_cast<QWidget*>(act->parent());
+    WdgView *w = wA ? dynamic_cast<WdgView*>(wA->parentWidget()) : NULL;
+    if(w) w->attrSet("event", "ws_BtMenu="+act->data().toString().toStdString(), A_NO_ID, true);
 }
 
-void ShapeFormEl::comboChange( const QString &val )
+void ShapeFormEl::comboChange( int id )
 {
-    WdgView *w = (WdgView *)((QWidget*)sender())->parentWidget();
+    QComboBox *comb = (QComboBox *)sender();
+    WdgView *w = (WdgView *)comb->parentWidget();
     if(((ShpDt*)w->shpData)->evLock)	return;
 
     AttrValS attrs;
-    attrs.push_back(std::make_pair("value",val.toStdString()));
+    attrs.push_back(std::make_pair("value",comb->itemText(id).toStdString()));
     attrs.push_back(std::make_pair("event","ws_CombChange"));
     w->attrsSet(attrs);
 }
@@ -1336,7 +1359,7 @@ void ShapeFormEl::tableChange( int row, int col )
     QTableWidgetItem *wIt = el->item(row, col);
 
     QVariant val = wIt->data(Qt::DisplayRole);
-    if(val.type() == QVariant::Bool) val = val.toInt();
+    if(val.typeId() == QVariant::Bool) val = val.toInt();
 
     //Events prepare
     AttrValS attrs;
@@ -1424,11 +1447,11 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val, const stri
 	    shD->backGrnd.setColor(getColor(val));
 
 	    QPalette plt(w->palette());
-	    QBrush brsh = plt.brush(QPalette::Background);
+	    QBrush brsh = plt.brush(QPalette::Window);
 	    brsh.setColor(shD->backGrnd.color());
-	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Background).color());
+	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Window).color());
 	    brsh.setStyle(brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern);
-	    plt.setBrush(QPalette::Background, brsh);
+	    plt.setBrush(QPalette::Window, brsh);
 	    w->setPalette(plt);
 
 	    up = true;
@@ -1440,7 +1463,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val, const stri
 	    shD->backGrnd.setTextureImage((!backimg.empty()&&img.loadFromData((const uchar*)backimg.data(),backimg.size()))?img:QImage());
 
 	    QPalette plt(w->palette());
-	    QBrush brsh = plt.brush(QPalette::Background);
+	    QBrush brsh = plt.brush(QPalette::Window);
 	    brsh.setTextureImage(img);
 	    brsh.setStyle(!brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern);
 	    plt.setBrush(QPalette::Base,brsh);
@@ -1499,7 +1522,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val, const stri
 		if(argN >= (int)shD->args.size()) break;
 		if((uiPrmPos%A_TextArsSz) == A_TextArsVal || (uiPrmPos%A_TextArsSz) == A_TextArsTp) {
 		    QVariant gval = shD->args[argN].val();
-		    int tp = (gval.type()==QVariant::Double) ? 1 : ((gval.type()==QVariant::String) ? 2 : 0);
+		    int tp = (gval.typeId()==QVariant::Double) ? 1 : ((gval.typeId()==QVariant::String) ? 2 : 0);
 		    if((uiPrmPos%A_TextArsSz) == A_TextArsVal)	gval = val.c_str();
 		    if((uiPrmPos%A_TextArsSz) == A_TextArsTp)	tp = s2i(val);
 		    switch(tp) {
@@ -1517,7 +1540,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val, const stri
     if(reform && !w->allAttrLoad()) {
 	QString text = shD->text_tmpl.c_str();
 	for(unsigned iA = 0; iA < shD->args.size(); iA++) {
-	    switch(shD->args[iA].val().type()) {
+	    switch(shD->args[iA].val().typeId()) {
 		case QVariant::String:
 		    text = text.arg(shD->args[iA].val().toString(), vmax(-1000,vmin(1000,s2i(shD->args[iA].cfg()))));
 		    break;
@@ -1618,10 +1641,6 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 //************************************************
 //* Media view shape widget                      *
 //************************************************
-#ifdef HAVE_PHONON
-using namespace Phonon;
-#endif
-
 ShapeMedia::ShapeMedia( ) : WdgShape("Media")
 {
 
@@ -1639,6 +1658,7 @@ void ShapeMedia::destroy( WdgView *w )
     ShpDt *shD = (ShpDt*)w->shpData;
 
     if(shD->tfile.size()) remove(shD->tfile.c_str());
+    if(shD->chkTimer) { delete shD->chkTimer; shD->chkTimer = NULL; }
 
     clear(w);
 
@@ -1659,41 +1679,70 @@ void ShapeMedia::clear( WdgView *w )
 	    //lab->movie()->deleteLater();	//!!!! Crashes here for GIF playback
 	    lab->clear();
 	}
-#ifdef HAVE_PHONON
-	if(shD->mediaType == FM_VIDEO || shD->mediaType == FM_AUDIO) { lab->deleteLater(); shD->addrWdg = NULL; }
+#if HAVE_MULTIMEDIA || HAVE_PHONON
+	if(shD->mediaType == FM_VIDEO || shD->mediaType == FM_AUDIO) { shD->addrWdg->deleteLater(); shD->addrWdg = NULL; }
 #endif
     }
 
-#ifdef HAVE_PHONON
+#if HAVE_MULTIMEDIA || HAVE_PHONON
+# if HAVE_MULTIMEDIA
+    QMediaPlayer *player = dynamic_cast<QMediaPlayer*>(shD->addrWdg);
+# elif HAVE_PHONON
     VideoPlayer *player = dynamic_cast<VideoPlayer*>(shD->addrWdg);
-    if(player && (shD->mediaType == FM_IMG || shD->mediaType == FM_ANIM)) { player->deleteLater(); shD->addrWdg = NULL; }
+# endif
+    if(player && (shD->mediaType == FM_IMG || shD->mediaType == FM_ANIM)) {
+	player->deleteLater(); shD->addrWdg = NULL;
+	if(shD->chkTimer) { delete shD->chkTimer; shD->chkTimer = NULL; }
+    }
 #endif
 }
 
-void ShapeMedia::mediaFinished( )
+void ShapeMedia::chkTimer( )
 {
-    WdgView *w = (WdgView*)((QWidget*)sender())->parentWidget();
+    WdgView *w = dynamic_cast<WdgView*>(((QWidget*)sender())->parentWidget());
+    if(!w) return;
     ShpDt *shD = (ShpDt*)w->shpData;
-
-#ifdef HAVE_PHONON
+#if HAVE_MULTIMEDIA || HAVE_PHONON
+# if HAVE_MULTIMEDIA
+    QMediaPlayer *player = dynamic_cast<QMediaPlayer*>(shD->addrWdg);
+    if(player->duration() != shD->videoSize)
+	w->attrSet("size", r2s(shD->videoSize=player->duration()), A_NO_ID, true);
+    if(player->position() != shD->videoSeek)
+	w->attrSet("seek", r2s(shD->videoSeek=player->position()), A_NO_ID, true);
+    if(!w->isEnabled() && player->state() == QMediaPlayer::PlayingState) player->stop();
+    bool isFinished = (w->isEnabled() && shD->videoPlay && player->state() == QMediaPlayer::StoppedState);
+# elif HAVE_PHONON
     VideoPlayer *player = dynamic_cast<VideoPlayer*>(shD->addrWdg);
-    AttrValS attrs;
-    if(shD->videoRoll && player) player->play();
-    else attrs.push_back(std::make_pair("play","0"));
-    attrs.push_back(std::make_pair("event","ws_MediaFinished"));
-    w->attrsSet(attrs);
+    if(player->totalTime() != shD->videoSize)
+	w->attrSet("size", r2s(shD->videoSize=player->totalTime()), A_NO_ID, true);
+    if(player->currentTime() != shD->videoSeek)
+	w->attrSet("seek", r2s(shD->videoSeek=player->currentTime()), A_NO_ID, true);
+    if(!w->isEnabled() && player->isPlaying()) player->stop();
+    bool isFinished = (w->isEnabled() && shD->videoPlay && player->mediaObject()->state() == StoppedState);
+# endif
+    if(isFinished) {
+	AttrValS attrs;
+	if(shD->videoRoll && player) player->play();
+	else attrs.push_back(std::make_pair("play","0"));
+	attrs.push_back(std::make_pair("event","ws_MediaFinished"));
+	w->attrsSet(attrs);
+    }
 #endif
 }
 
 bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const string &attr )
 {
     QLabel *lab;
-#ifdef HAVE_PHONON
-    VideoPlayer *player;
-#endif
 
     bool up = true, reld_cfg = false;
     ShpDt *shD = (ShpDt*)w->shpData;
+    QWidget *endW = NULL;
+
+#if HAVE_MULTIMEDIA
+    QMediaPlayer *player = dynamic_cast<QMediaPlayer*>(shD->addrWdg);
+#elif HAVE_PHONON
+    VideoPlayer *player = dynamic_cast<VideoPlayer*>(shD->addrWdg);
+#endif
 
     switch(uiPrmPos) {
 	case A_COM_LOAD: reld_cfg = true;	break;
@@ -1706,22 +1755,22 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 	    if(!qobject_cast<RunWdgView*>(w))	break;
 	    shD->active = s2i(val);
 	    shD->realActive = shD->active && ((RunWdgView*)w)->permCntr();
-	    if(shD->addrWdg) shD->addrWdg->setMouseTracking(shD->realActive);
+	    if((endW=qobject_cast<QWidget*>(shD->addrWdg))) endW->setMouseTracking(shD->realActive);
 	    w->setMouseTracking(shD->realActive);
 	    break;
 	case A_GEOM_MARGIN:
 	    shD->geomMargin = s2i(val);
-	    w->layout()->setMargin(shD->geomMargin);
+	    w->layout()->setContentsMargins(shD->geomMargin, shD->geomMargin, shD->geomMargin, shD->geomMargin);
 	    break;
 	case A_BackColor: {
 	    shD->backGrnd.setColor(getColor(val));
 
 	    QPalette plt(w->palette());
-	    QBrush brsh = plt.brush(QPalette::Background);
+	    QBrush brsh = plt.brush(QPalette::Window);
 	    brsh.setColor(shD->backGrnd.color());
-	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Background).color());
+	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Window).color());
 	    brsh.setStyle( brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern );
-	    plt.setBrush(QPalette::Background,brsh);
+	    plt.setBrush(QPalette::Window,brsh);
 	    w->setPalette(plt);
 	    break;
 	}
@@ -1733,10 +1782,10 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		shD->backGrnd.setTextureImage(img);
 
 	    QPalette plt(w->palette());
-	    QBrush brsh = plt.brush(QPalette::Background);
+	    QBrush brsh = plt.brush(QPalette::Window);
 	    brsh.setTextureImage(img);
 	    brsh.setStyle(!brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern);
-	    plt.setBrush(QPalette::Background,brsh);
+	    plt.setBrush(QPalette::Window,brsh);
 	    w->setPalette(plt);
 	    break;
 	}
@@ -1777,34 +1826,44 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		    lab->movie()->start();
 		}
 	    }
-#ifdef HAVE_PHONON
-	    else if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg))) {
-		if(shD->videoPlay) {
-		    player->play();
-		    w->attrSet("size", r2s(player->totalTime()), A_NO_ID, true);
-		}
+#if HAVE_MULTIMEDIA || HAVE_PHONON
+	    else if(player) {
+		if(shD->videoPlay) player->play();
 		else player->stop();
 	    }
 #endif
 	    break;
-#ifdef HAVE_PHONON
+#if HAVE_MULTIMEDIA || HAVE_PHONON
 	case A_MediaRoll: shD->videoRoll = (bool)s2i(val);	break;
 	case A_MediaPause:
 	    shD->videoPause = (bool)s2i(val);
-	    if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg))) {
+	    if(player) {
+# if HAVE_MULTIMEDIA
+		if(shD->videoPause && player->state() != QMediaPlayer::PausedState) player->pause();
+		if(!shD->videoPause && player->state() == QMediaPlayer::PausedState) player->play();
+# elif HAVE_PHONON
 		if(shD->videoPause && !player->isPaused()) player->pause();
 		if(!shD->videoPause && player->isPaused()) player->play();
+# endif
 	    }
 	    break;
 	case A_MediaSeek:
 	    if(shD->videoSeek == s2r(val)) break;
 	    shD->videoSeek = s2r(val);
-	    if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg))) player->seek(shD->videoSeek);
+# if HAVE_MULTIMEDIA
+	    if(player) player->setPosition(shD->videoSeek);
+# elif HAVE_PHONON
+	    if(player) player->seek(shD->videoSeek);
+# endif
 	    break;
 	case A_MediaVolume:
 	    if(shD->audioVolume == s2r(val)) break;
 	    shD->audioVolume = s2r(val);
-	    if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg))) player->setVolume(shD->audioVolume/100);
+# if HAVE_MULTIMEDIA
+	    if(player) player->setVolume(shD->audioVolume);
+# elif HAVE_PHONON
+	    if(player) player->setVolume(shD->audioVolume/100);
+# endif
 	    break;
 #endif
 	default:
@@ -1828,6 +1887,14 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 
     if(reld_cfg && !w->allAttrLoad()) {
 	bool mk_new = false;
+
+	string sdata;
+	if(shD->mediaSrc.find("data:") == 0) {
+	    int offL = 0;
+	    string fLine = TSYS::strLine(shD->mediaSrc, 0, &offL);
+	    sdata = TSYS::strDecode(shD->mediaSrc.substr(offL), TSYS::base64);
+	} else sdata = w->resGet(shD->mediaSrc);
+
 	switch(shD->mediaType) {
 	    case FM_IMG: {
 		QImage img;
@@ -1839,7 +1906,6 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		lab = dynamic_cast<QLabel*>(shD->addrWdg);
 		if(!lab) break;
 		lab->setAlignment(Qt::AlignCenter);
-		string sdata = w->resGet(shD->mediaSrc);
 		if(!sdata.empty() && img.loadFromData((const uchar*)sdata.data(),sdata.size())) {
 		    lab->setPixmap(QPixmap::fromImage(img.scaled(
 			(int)((float)img.width()*w->xScale(true)),
@@ -1859,7 +1925,6 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		lab = dynamic_cast<QLabel*>(shD->addrWdg);
 		if(!lab) break;
 		lab->setAlignment(Qt::AlignCenter);
-		string sdata = w->resGet(shD->mediaSrc);
 		if(sdata.size()) {
 		    QBuffer *buf = new QBuffer(w);
 		    buf->setData(sdata.data(), sdata.size());
@@ -1881,22 +1946,90 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		} else lab->setText("");
 		break;
 	    }
-#ifdef HAVE_PHONON
+#if HAVE_MULTIMEDIA || HAVE_PHONON
 	    case FM_VIDEO: case FM_AUDIO: {
-		//Clear previous movie data
+		//Clearing previous movie data
 		clear(w);
-		//Create player widget
+		//Creating the media player
+		shD->chkTimer = new QTimer(w);
+		shD->chkTimer->setSingleShot(false);
+		connect(shD->chkTimer, SIGNAL(timeout()), this, SLOT(chkTimer()));
+		shD->chkTimer->start(STD_WAIT_TM*1000);
+
+# if HAVE_MULTIMEDIA
 		if(!shD->addrWdg) {
-		    shD->addrWdg = new VideoPlayer((shD->mediaType==FM_AUDIO)?Phonon::MusicCategory:Phonon::VideoCategory, w);
-		    connect(shD->addrWdg, SIGNAL(finished()), this, SLOT(mediaFinished()));
-		    ((VideoPlayer*)shD->addrWdg)->videoWidget()->installEventFilter(w);
+		    shD->addrWdg = player = new QMediaPlayer(w);
+#  if QT_VERSION >= 0x060000
+		    player->setAudioOutput(new QAudioOutput);
+#  endif
+		    if(shD->mediaType == FM_VIDEO) {
+			shD->extO = endW = new QVideoWidget(w);
+			player->setVideoOutput((QVideoWidget*)endW);
+			endW->show();
+			endW->installEventFilter(w);
+		    } else shD->extO = NULL;
+		    mk_new = true;
+		}
+		player = dynamic_cast<QMediaPlayer*>(shD->addrWdg);
+		if(!player) break;
+
+		if(player->state() == QMediaPlayer::PlayingState) { player->stop(); player->setPosition(0); }
+
+		//Try playing the local file
+		if(shD->mediaSrc.find("file:") == 0) {
+		    QString fNm = shD->mediaSrc.substr(5).c_str(), fPath = QDir::currentPath() + "/" + fNm;
+		    if(QFile(fPath).open(QIODevice::ReadOnly) || QFile(fPath=fNm).open(QIODevice::ReadOnly))
+			player->setMedia(QUrl::fromLocalFile(fPath));
+		    else player->setMedia(QUrl());
+		}
+		//Try playing a Stream by URL
+		else if(shD->mediaSrc.find("stream:") == 0)
+		    player->setMedia(QUrl(shD->mediaSrc.substr(5).c_str()));
+		//Try for remote VCAEngine resource at last
+		if(shD->mediaSrc.size() &&
+#  if QT_VERSION < 0x060000
+			player->currentMedia().isNull())
+#  else
+			player->mediaStatus() == QMediaPlayer::NoMedia)
+#  endif
+		{
+		    if(sdata.size()) {
+			shD->tfile = TSYS::path2sepstr(w->id(), '_');
+			int tfid = open(shD->tfile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles());
+			if(tfid >= 0) {
+			    if(write(tfid,sdata.data(),sdata.size()) != (ssize_t)sdata.size())
+				mod->postMess(mod->nodePath().c_str(), QString(_("Error writing to the file '%1'.")).arg(shD->tfile.c_str()), TVision::Error);
+			    if(close(tfid) != 0)
+				mess_warning(mod->nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), tfid, strerror(errno), errno);
+			    player->setMedia(QUrl::fromLocalFile(shD->tfile.c_str()));
+			}
+		    }
+		}
+#  if QT_VERSION < 0x060000
+		if(!player->currentMedia().isNull())
+#  else
+		if(player->mediaStatus() != QMediaPlayer::NoMedia)
+#  endif
+		{
+		    if(shD->videoPlay) player->play();
+		    else player->stop();
+		    if(shD->videoPause) player->pause();
+		    player->setPosition(shD->videoSeek);
+		    player->setVolume(shD->audioVolume);
+		}
+# elif HAVE_PHONON
+		if(!shD->addrWdg) {
+		    shD->addrWdg = player = new VideoPlayer((shD->mediaType==FM_AUDIO)?Phonon::MusicCategory:Phonon::VideoCategory, w);
+		    player->videoWidget()->installEventFilter(w);
 		    mk_new = true;
 		}
 		//Set new data
 		player = dynamic_cast<VideoPlayer*>(shD->addrWdg);
 		if(!player) break;
-		MediaSource mSrc;
+
 		if(player->isPlaying()) { player->stop(); player->seek(0); }
+
+		MediaSource mSrc;
 		//Try playing the local file
 		if(shD->mediaSrc.find("file:") == 0) {
 		    QString fNm = shD->mediaSrc.substr(5).c_str(), fPath = QDir::currentPath() + "/" + fNm;
@@ -1909,9 +2042,8 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		    mSrc = MediaSource(QUrl(shD->mediaSrc.substr(7).c_str()));
 		//Try remote VCAEngine resource at last
 		if(shD->mediaSrc.size() && (mSrc.type() == MediaSource::Invalid || mSrc.type() == MediaSource::Empty)) {
-		    string sdata = w->resGet(shD->mediaSrc);
 		    if(sdata.size()) {
-			shD->tfile = TSYS::path2sepstr(w->id(),'_');
+			shD->tfile = TSYS::path2sepstr(w->id(), '_');
 			int tfid = open(shD->tfile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles());
 			if(tfid >= 0) {
 			    if(write(tfid,sdata.data(),sdata.size()) != (ssize_t)sdata.size())
@@ -1924,25 +2056,25 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		}
 		if(mSrc.type() != MediaSource::Invalid && mSrc.type() != MediaSource::Empty) {
 		    player->load(mSrc);
-		    if(shD->videoPlay) {
-			player->play();
-			w->attrSet("size", r2s(player->totalTime()), A_NO_ID, true);
-		    }
+		    if(shD->videoPlay) player->play();
 		    else player->stop();
 		    if(shD->videoPause) player->pause();
 		    player->seek(shD->videoSeek);
 		    player->setVolume(shD->audioVolume/100);
 		}
+# endif
 		break;
 	    }
 #endif
 	}
-	if(mk_new) {
-	    if(shD->mediaType == FM_AUDIO) shD->addrWdg->setVisible(false);
+	if(mk_new && (endW || (endW=qobject_cast<QWidget*>(shD->addrWdg)))) {
+#if HAVE_PHONON
+	    if(shD->mediaType == FM_AUDIO) endW->setVisible(false);
+#endif
 	    w->setMouseTracking(qobject_cast<DevelWdgView*>(w) || (shD->active && ((RunWdgView*)w)->permCntr()));
-	    shD->addrWdg->setMouseTracking(qobject_cast<DevelWdgView*>(w) || (shD->active && ((RunWdgView*)w)->permCntr()));
-	    shD->addrWdg->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-	    ((QVBoxLayout*)w->layout())->addWidget(shD->addrWdg);
+	    endW->setMouseTracking(qobject_cast<DevelWdgView*>(w) || (shD->active && ((RunWdgView*)w)->permCntr()));
+	    endW->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+	    ((QVBoxLayout*)w->layout())->addWidget(endW);
 	}
     }
 
@@ -2001,7 +2133,7 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 		switch(((QMouseEvent*)event)->button()) {
 		    case Qt::LeftButton:	sev += "Left";	break;
 		    case Qt::RightButton:	sev += "Right";	break;
-		    case Qt::MidButton:		sev += "Midle";	break;
+		    case Qt::MiddleButton:	sev += "Midle";	break;
 		    default: return false;
 		}
 		w->attrSet("event", sev, A_NO_ID, true);
@@ -2017,7 +2149,14 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 
 bool ShapeMedia::eventFilter( WdgView *w, QObject *object, QEvent *event )
 {
-#ifdef HAVE_PHONON
+#if HAVE_MULTIMEDIA
+    QVideoWidget *playerW = dynamic_cast<QVideoWidget*>(((ShpDt*)w->shpData)->extO);
+    if(playerW && playerW == object)
+	if(event->type() == QEvent::MouseButtonDblClick && ((QMouseEvent*)event)->button() == Qt::LeftButton) {
+	    playerW->setFullScreen(!playerW->isFullScreen());
+	    return true;
+	}
+#elif HAVE_PHONON
     VideoPlayer *player = dynamic_cast<VideoPlayer*>(((ShpDt*)w->shpData)->addrWdg);
     if(player && player->videoWidget() == object)
 	if(event->type() == QEvent::MouseButtonDblClick && ((QMouseEvent*)event)->button() == Qt::LeftButton) {
@@ -2113,11 +2252,11 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val, const s
 	    shD->backGrnd.setColor(getColor(val));
 
 	    QPalette plt(w->palette());
-	    QBrush brsh = plt.brush(QPalette::Background);
+	    QBrush brsh = plt.brush(QPalette::Window);
 	    brsh.setColor(shD->backGrnd.color());
-	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Background).color());
+	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Window).color());
 	    brsh.setStyle(brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern);
-	    plt.setBrush(QPalette::Background, brsh);
+	    plt.setBrush(QPalette::Window, brsh);
 	    w->setPalette(plt);
 	    up = true;
 	    break;
@@ -2130,10 +2269,10 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val, const s
 		shD->backGrnd.setTextureImage(img);
 
 	    QPalette plt(w->palette());
-	    QBrush brsh = plt.brush(QPalette::Background);
+	    QBrush brsh = plt.brush(QPalette::Window);
 	    brsh.setTextureImage(img);
 	    brsh.setStyle(!brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern);
-	    plt.setBrush(QPalette::Background, brsh);
+	    plt.setBrush(QPalette::Window, brsh);
 	    w->setPalette(plt);
 	    up = true;
 	    break;
@@ -4213,7 +4352,7 @@ void ShapeProtocol::init( WdgView *w )
 
     //Bckground palette init
     QPalette plt(shD->addrWdg->palette());
-    plt.setBrush(QPalette::Background, QPalette().brush(QPalette::Background));
+    plt.setBrush(QPalette::Window, QPalette().brush(QPalette::Window));
     shD->addrWdg->setPalette(plt);
 }
 
@@ -4248,7 +4387,7 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val, const 
 	    shD->addrWdg->setSelectionMode(shD->active ? QAbstractItemView::SingleSelection : QAbstractItemView::NoSelection);
 //	    shD->addrWdg->setEnabled( shD->active && ((RunWdgView*)w)->permCntr() );
 	    break;
-	case A_GEOM_MARGIN: w->layout()->setMargin(s2i(val));	break;
+	case A_GEOM_MARGIN: w->layout()->setContentsMargins(s2i(val), s2i(val), s2i(val), s2i(val));	break;
 	case A_BackColor: {
 	    QPalette plt(shD->addrWdg->palette());
 	    QBrush brsh = plt.brush(QPalette::Base);
@@ -4530,7 +4669,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	    tit = NULL;
 	    if(iCl == c_tm) {
 		QDateTime	dtm;
-		dtm.setTime_t(shD->messList[sortIts[iM].second].time);
+		dtm.setSecsSinceEpoch(shD->messList[sortIts[iM].second].time);
 		shD->addrWdg->setItem(iM, c_tm, tit=new QTableWidgetItem(dtm.toString("dd.MM.yyyy hh:mm:ss")));
 		tit->setData(Qt::TextAlignmentRole, (int)(Qt::AlignCenter|Qt::TextWordWrap));
 	    }
@@ -4662,28 +4801,41 @@ void ShapeDocument::init( WdgView *w )
 {
     w->shpData = new ShpDt();
     ShpDt *shD = (ShpDt*)w->shpData;
+    DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
 
     QVBoxLayout *lay = new QVBoxLayout(w);
-#ifdef HAVE_WEBKIT
-    shD->web = new QWebView(w);
-    shD->web->setAttribute(Qt::WA_AcceptTouchEvents, false);
+    if(devW)	shD->web = new QTextBrowser(w);	//!!!! Only QTextBrowser in the development mode
+    else {
+#if HAVE_WEBENGINE
+	shD->web = new QWebEngineView(w);
+# if QT_VERSION >= 0x060000
+	connect(shD->web, SIGNAL(printFinished(bool)), this, SLOT(printFinished()));
+# endif
+#elif HAVE_WEBKIT
+	shD->web = new QWebView(w);
+	shD->web->setAttribute(Qt::WA_AcceptTouchEvents, false);
 #else
-    shD->web = new QTextBrowser(w);
+	shD->web = new QTextBrowser(w);
 #endif
 
-    if(qobject_cast<RunWdgView*>(w)) {
 	shD->web->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(shD->web, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(custContextMenu()));
     }
 
     eventFilterSet(w, shD->web, true);
     w->setFocusProxy(shD->web);
-    if(qobject_cast<DevelWdgView*>(w)) setFocus(w, shD->web, false, true);
+    if(devW) setFocus(w, shD->web, false, true);
 
     lay->addWidget(shD->web);
 }
 
-void ShapeDocument::destroy( WdgView *w )	{ delete (ShpDt*)w->shpData; }
+void ShapeDocument::destroy( WdgView *w )
+{
+    //Waiting for the print finish
+    while(((ShpDt*)w->shpData)->printCB) qApp->processEvents();
+
+    delete (ShpDt*)w->shpData;
+}
 
 bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val, const string &attr )
 {
@@ -4705,7 +4857,7 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val, const 
 	    setFocus(w, shD->web, shD->active && runW->permCntr());
 	    shD->web->setEnabled(shD->active && runW->permCntr());
 	    break;
-	case A_GEOM_MARGIN: w->layout()->setMargin(s2i(val));	break;
+	case A_GEOM_MARGIN: w->layout()->setContentsMargins(s2i(val), s2i(val), s2i(val), s2i(val));	break;
 	case A_DocStyle: if(shD->style != val) { shD->style = val; relDoc = true; }	break;
 	case A_DocTmpl:
 	    if((!shD->doc.empty() && !shD->tmpl) || shD->doc == val) break;
@@ -4724,21 +4876,31 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val, const 
     if(relDoc && !w->allAttrLoad()) {
 	shD->web->setFont(getFont(shD->font,vmin(w->xScale(true),w->yScale(true)),false));
 
-#ifdef HAVE_WEBKIT
-	QPoint scrollPos;
-	if(shD->web->page() && shD->web->page()->mainFrame()) scrollPos = shD->web->page()->mainFrame()->scrollPosition();
+	if(!runW) ((QTextBrowser*)shD->web)->setHtml(shD->toHtml().c_str());
+	else {
+#if HAVE_WEBENGINE
+	    QWebEngineView *wb = (QWebEngineView *)shD->web;
+	    //!!!! Impossible to change the scroll position in WebEngine, only read
+#elif HAVE_WEBKIT
+	    QWebView *wb = (QWebView *)shD->web;
+	    QPoint scrollPos;
+	    if(wb->page() && wb->page()->mainFrame()) scrollPos = wb->page()->mainFrame()->scrollPosition();
 #else
-	int scrollPos = shD->web->verticalScrollBar()->value();
+	    QTextBrowser *wb = (QTextBrowser *)shD->web;
+	    int scrollPos = wb->verticalScrollBar()->value();
 #endif
 
-	shD->web->setHtml(shD->toHtml().c_str());
+	    wb->setHtml(shD->toHtml().c_str());
 
-#ifdef HAVE_WEBKIT
-	if(!scrollPos.isNull() && shD->web->page() && shD->web->page()->mainFrame())
-	    shD->web->page()->mainFrame()->setScrollPosition(scrollPos);
+#if HAVE_WEBENGINE
+	    //!!!! Impossible to change the scroll position in WebEngine, only read
+#elif HAVE_WEBKIT
+	    if(!scrollPos.isNull() && wb->page() && wb->page()->mainFrame())
+		wb->page()->mainFrame()->setScrollPosition(scrollPos);
 #else
-	shD->web->verticalScrollBar()->setValue(scrollPos);
+	    wb->verticalScrollBar()->setValue(scrollPos);
 #endif
+	}
     }
 
     return true;
@@ -4795,7 +4957,16 @@ void ShapeDocument::custContextMenu( )
 {
     QObject *web = sender();
     RunWdgView *w = dynamic_cast<RunWdgView*>(web->parent());
-#ifdef HAVE_WEBKIT
+    if(!w) return;
+
+#if HAVE_WEBENGINE
+    QMenu *menu = new QMenu(w);	//!!!! Due to there is no sense in the StandardContextMenu
+/*# if QT_VERSION < 0x060000
+    QMenu *menu = ((QWebEngineView*)web)->page()->createStandardContextMenu();
+# else
+    QMenu *menu = ((QWebEngineView*)web)->createStandardContextMenu();
+# endif*/
+#elif HAVE_WEBKIT
     QMenu *menu = ((QWebView*)web)->page()->createStandardContextMenu();
 #else
     QMenu *menu = ((QTextBrowser*)web)->createStandardContextMenu();
@@ -4808,10 +4979,20 @@ void ShapeDocument::custContextMenu( )
     if(!ico_t.load(TUIS::icoGet("export",NULL,true).c_str())) ico_t.load(":/images/export.png");
     QAction *actExp = new QAction(QPixmap::fromImage(ico_t),_("Export"),this);
     menu->addAction(actExp);
+
     QAction *rez = menu->exec(QCursor::pos());
     if(rez == actPrint) w->mainWin()->printDoc(w->id());
     else if(rez == actExp) w->mainWin()->exportDoc(w->id());
+
+//#if !HAVE_WEBENGINE
     menu->deleteLater();	//delete menu;
+//#endif
+}
+
+void ShapeDocument::printFinished( )
+{
+    WdgView *w = dynamic_cast<WdgView*>(sender()->parent());
+    if(w) ((ShpDt*)w->shpData)->printCB = false;
 }
 
 void ShapeDocument::setFocus( WdgView *view, QWidget *wdg, bool en, bool devel )
@@ -4890,12 +5071,23 @@ void ShapeDocument::ShpDt::nodeProcess( XMLNode *xcur )
 }
 
 #ifndef QT_NO_PRINTER
-void ShapeDocument::ShpDt::print( QPrinter * printer )
+void ShapeDocument::ShpDt::print( QPrinter *printer )
 {
-# ifdef HAVE_WEBKIT
-    web->print(printer);
+    //Waiting for the print finish
+    while(printCB) qApp->processEvents();
+
+# if HAVE_WEBENGINE
+    //Starting the print
+    printCB = true;
+#  if QT_VERSION < 0x060000
+    ((QWebEngineView*)web)->page()->print(printer, [this](bool) { this->printCB = false; } );
+#  else
+    ((QWebEngineView*)web)->print(printer);
+#  endif
+# elif HAVE_WEBKIT
+    ((QWebView*)web)->print(printer);
 # else
-    web->document()->print(printer);
+    ((QTextBrowser*)web)->document()->print(printer);
 # endif
 }
 #endif
@@ -4959,7 +5151,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
 	    break;
 	case A_GEOM_MARGIN:
 	    shD->geomMargin = s2i(val);
-	    if(w->layout()) w->layout()->setMargin(shD->geomMargin);
+	    if(w->layout()) w->layout()->setContentsMargins(shD->geomMargin, shD->geomMargin, shD->geomMargin, shD->geomMargin);
 	    break;
 	case A_BackColor: {
 	    shD->backGrnd.setColor(getColor(val));
@@ -5028,7 +5220,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
 		    if(!shD->inclScrl) {
 			QGridLayout *wlay = (QGridLayout*)w->layout();
 			if(!wlay) wlay = new QGridLayout(w);
-			wlay->setMargin(0/*shD->geomMargin*/);
+			wlay->setContentsMargins(0, 0, 0, 0);
 			shD->inclScrl = new QScrollArea(w);
 			shD->inclScrl->setFocusPolicy(Qt::NoFocus);
 			shD->inclScrl->setFrameShape(QFrame::NoFrame);

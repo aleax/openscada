@@ -8,7 +8,7 @@ tr_Sockets_la_LDFLAGS = -module
 else
 oscd_modul_LTLIBRARIES = tr_Sockets.la
 tr_Sockets_la_LIBTOOLFLAGS = --tag=disable-static
-tr_Sockets_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+tr_Sockets_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 tr_Sockets_la_SOURCES = socket.cpp

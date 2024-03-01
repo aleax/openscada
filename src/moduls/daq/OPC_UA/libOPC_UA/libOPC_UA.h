@@ -3,6 +3,12 @@
 /********************************************************************************
  *   Copyright (C) 2009-2023 by Roman Savochenko, <roman@oscada.org>		*
  *										*
+ *   Version: 2.2.0								*
+ *	* UA::symmetricEncrypt() and UA::symmetricDecrypt() merged		*
+ *	  to UA::symmetricCrypt() and switched for using EVP_CipherInit()	*
+ *	  and EVP_CipherUpdate() instead AES_cbc_encrypt();			*
+ *	* using of RSA_public_encrypt() moved to EVP_PKEY_encrypt()		*
+ *	  of RSA_private_decrypt() moved to EVP_PKEY_decrypt() for new versions	*
  *   Version: 2.1.30								*
  *	* NodeId appended for the function operator==() of direct comparing.	*
  *	* The default LifeTimeCounter of the subscriptions set to 2400.		*
@@ -588,8 +594,7 @@ class UA
     static string asymmetricSign( const string &mess, const string &pvPem );
     static int asymmetricKeyLength( const string &keyCertPem );
     static string deriveKey( const string &secret, const string &seed, int keyLen );
-    static string symmetricEncrypt( const string &mess, const string &keySet, const string &secPolicy );
-    static string symmetricDecrypt( const string &mess, const string &keySet, const string &secPolicy );
+    static string symmetricCrypt( const string &mess, const string &keySet, const string &secPolicy, bool encrypt );
     static string symmetricSign( const string &mess, const string &keySet, const string &secPolicy );
 };
 

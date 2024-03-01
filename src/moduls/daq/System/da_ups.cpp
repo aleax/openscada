@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_ups.cpp
 /***************************************************************************
- *   Copyright (C) 2014-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2014-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,54 +28,35 @@ using namespace SystemCntr;
 //*************************************************
 //* UPS                                           *
 //*************************************************
-UPS::UPS( ) : tTr("Sockets"), nTr("sys_UPS"), reqRes(true)
-{
+UPS::UPS( ) : tTr("Sockets"), nTr("sys_UPS"), reqRes(true)	{ }
 
-}
-
-UPS::~UPS( )
-{
-
-}
+UPS::~UPS( )	{ }
 
 void UPS::init( TMdPrm *prm, bool update )
 {
+    DA::init(prm, update);
+
     if(!update) {
-	prm->daData = new tval();
-	prm->vlElemAtt(&((tval*)prm->daData)->els);
+	TCfg &cSubt = prm->cfg("SUBT");
+	cSubt.fld().setDescr(_("UPS"));
+	cSubt.fld().setFlg(cSubt.fld().flg()|TFld::SelEdit);
+	cSubt.setS("localhost:3493");
     }
-
-    TCfg &c_subt = prm->cfg("SUBT");
-    if(!update) {
-	c_subt.fld().setDescr(_("UPS"));
-	c_subt.fld().setFlg(c_subt.fld().flg()|TFld::SelEdit);
-	c_subt.setS("localhost:3493");
-    }
-
-    string dls = upsList(c_subt.getS());
-    MtxAlloc res(prm->dataRes(), true);
-    c_subt.fld().setValues(dls);
-    c_subt.fld().setSelNames(dls);
-    res.unlock();
-
-    if(!update && dls.size()) c_subt.setS(TSYS::strParse(dls,0,";"));
 }
 
 void UPS::deInit( TMdPrm *prm )
 {
-    TCfg &c_subt = prm->cfg("SUBT");
-    c_subt.fld().setFlg(c_subt.fld().flg()&~(TFld::SelEdit));
+    DA::deInit(prm);
 
-    prm->vlElemDet(&((tval*)prm->daData)->els);
-    delete (tval*)prm->daData;
-    prm->daData = NULL;
+    TCfg &cSubt = prm->cfg("SUBT");
+    cSubt.fld().setFlg(cSubt.fld().flg()&~(TFld::SelEdit));
 }
 
-void UPS::cfgChange( TCfg &co, const TVariant &pc )
+void UPS::cfgChange( TMdPrm *prm, TCfg &co, const TVariant &pc )
 {
     if(co.name() == "SUBT") {
 	string dls = upsList(co.getS());
-	co.fld().setValues(dls);
+	co.fld().setValues("");
 	co.fld().setSelNames(dls);
     }
 }
@@ -131,7 +112,7 @@ void UPS::getVal( TMdPrm *prm )
 			string stp = reqUPS(addr, "GET TYPE "+UPS+" "+var+"\x0A", (prm->owner().messLev()==TMess::Debug)?prm->nodePath():"");
 			string vLen, selLs;
 			size_t fPos = 0;
-			unsigned flg = (stp.rfind("RW") != string::npos) ? (unsigned)TVal::DirWrite : (unsigned)TFld::NoWrite;
+			unsigned flg = (stp.rfind("RW") != string::npos) ? (unsigned)(TVal::DirWrite|TVal::NoSave) : (unsigned)TFld::NoWrite;
 			if((fPos=stp.rfind("STRING:")) != string::npos) vLen = atoi(stp.c_str()+fPos+7);
 			if(stp.rfind("ENUM") != string::npos) {
 			    string enS = reqUPS(addr, "LIST ENUM "+UPS+" "+var+"\x0A", (prm->owner().messLev()==TMess::Debug)?prm->nodePath():"");
@@ -144,7 +125,7 @@ void UPS::getVal( TMdPrm *prm )
 			    flg |= TFld::Selectable;
 			}
 			// Create
-			((tval*)prm->daData)->els.fldAdd(new TFld(aid.c_str(),descr.c_str(),TFld::String,flg,vLen.c_str(),"",selLs.c_str(),selLs.c_str(),vid.c_str()));
+			((TElem*)prm->daData)->fldAdd(new TFld(aid.c_str(),descr,TFld::String,flg,vLen.c_str(),"",selLs,selLs,vid.c_str()));
 		    }
 		    prm->vlAt(aid).at().setS(aVal, 0, true);
 		    als.push_back(aid);
@@ -166,7 +147,7 @@ void UPS::getVal( TMdPrm *prm )
 			    descr = vVal;
 			else descr = var;
 			// Create
-			((tval*)prm->daData)->els.fldAdd(new TFld(aid.c_str(),descr.c_str(),TFld::Boolean,TVal::DirWrite,"","","","",vid.c_str()));
+			((TElem*)prm->daData)->fldAdd(new TFld(aid.c_str(),descr.c_str(),TFld::Boolean,TVal::DirWrite|TVal::NoSave,"","","","",vid.c_str()));
 		    }
 		    prm->vlAt(aid).at().setB(false, 0, true);
 		    als.push_back(aid);
@@ -281,34 +262,9 @@ bool UPS::cntrCmdProc( TMdPrm *p, XMLNode *opt )
     return true;
 }
 
-void UPS::makeActiveDA( TMdContr *aCntr )
+void UPS::dList( vector<string> &list, TMdPrm *prm )
 {
-    string list = upsList("localhost:3493"), uEl;
-    try {
-	//UPS list process
-	for(int off = 0; (uEl=TSYS::strParse(list,0,";",&off)).size(); ) {
-	    vector<string> pLs;
-	    // Find propper parameter's object
-	    aCntr->list(pLs);
-
-	    unsigned i_p;
-	    for(i_p = 0; i_p < pLs.size(); i_p++) {
-		AutoHD<TMdPrm> p = aCntr->at(pLs[i_p]);
-		if(p.at().cfg("TYPE").getS() == id() && TSYS::strParse(p.at().cfg("SUBT"),0," ") == TSYS::strParse(uEl,0," "))
-		    break;
-	    }
-	    if(i_p < pLs.size()) continue;
-
-	    string upsAprm = "UPS";
-	    while(aCntr->present(upsAprm)) upsAprm = TSYS::strLabEnum(upsAprm);
-	    aCntr->add(upsAprm, 0);
-	    AutoHD<TMdPrm> dprm = aCntr->at(upsAprm);
-	    dprm.at().setName(_("UPS: ")+uEl);
-	    dprm.at().autoC(true);
-	    dprm.at().cfg("TYPE").setS(id());
-	    dprm.at().cfg("SUBT").setS(uEl);
-	    dprm.at().cfg("EN").setB(true);
-	    if(aCntr->enableStat()) dprm.at().enable();
-	}
-    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    string dls = upsList(prm?prm->cfg("SUBT").getS():"localhost:3493"), tVl;
+    for(int off = 0; (tVl=TSYS::strParse(dls,0,";",&off)).size() || off < dls.size(); )
+	list.push_back(tVl);
 }

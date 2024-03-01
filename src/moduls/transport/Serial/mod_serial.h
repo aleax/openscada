@@ -220,7 +220,7 @@ class TTr: public TTypeTransport
 	TTransportOut *Out( const string &name, const string &idb );
 
 	string outAddrHelp( );
-	string outTimingsHelp( );
+	static string outTimingsHelp( );
 
 	static void writeLine( int fd, const string &ln, bool noNewLn = false );
 	static string expect( int fd, const string& expLst, int tm );
@@ -234,9 +234,6 @@ class TTr: public TTypeTransport
 	void load_( );
 
     private:
-	//Methods
-	void postEnable( int flag );
-
 	//Attributes
 	map<string,bool> mDevLock;
 };

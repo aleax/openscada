@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SNMP file: snmp.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,7 +47,7 @@
 #define MOD_NAME	trS("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.9.14"
+#define MOD_VER		"0.9.17"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides an implementation of the client of SNMP-service.")
 #define LICENSE		"GPL2"
@@ -98,7 +98,7 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable(flag);
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD",trS("Table of parameters"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PRM_BD",trS("Table of parameters"),TFld::String,TFld::NoFlag,"30",""));	//????[v1.0] Remove
     fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("ADDR",trS("Remote host address"),TFld::String,TFld::NoFlag,"30","localhost"));
@@ -110,7 +110,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PATTR_LIM",trS("Limit of the attributes number"),TFld::Integer,TFld::NoFlag,"3","100","10;10000"));
 
     //Parameter type bd structure
-    int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
+    int t_prm = tpParmAdd("Prm", "PRM_BD", _("Standard"), true);
     tpPrmAt(t_prm).fldAdd(new TFld("OID_LS",trS("OID list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
 }
 
@@ -124,6 +124,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
     mPrior(cfg("PRIOR").getId()), mPattrLim(cfg("PATTR_LIM").getId()), mRetr(cfg("RETR").getId()), mTm(cfg("TM").getId()),
     mPer(1e9), prcSt(false), callSt(false), endrunReq(false), prmEnErr(false), tmGath(0), acqErr(dataRes())
 {
+    //????[v1.0] Remove
     cfg("PRM_BD").setS("SNMPPrm_"+name_c);
 }
 
@@ -663,7 +664,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
     //Service commands process
     string a_path = opt->attr("path");
-    if(a_path.substr(0,6) == "/serv/")	{ TParamContr::cntrCmdProc(opt); return; }
+    if(a_path.find("/serv/") == 0)	{ TParamContr::cntrCmdProc(opt); return; }
 
     //Get page info
     if(opt->name() == "info") {

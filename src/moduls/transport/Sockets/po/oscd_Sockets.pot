@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-05 09:58+0300\n"
+"POT-Creation-Date: 2023-12-10 09:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,9 +24,6 @@ msgid "Roman Savochenko, Maxim Kochetkov(2014)"
 msgstr ""
 
 msgid "Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols."
-msgstr ""
-
-msgid "Addition parameters"
 msgstr ""
 
 msgid ""
@@ -50,12 +47,19 @@ msgid ""
 "    conn - maximum time of waiting the connection, in seconds;\n"
 "    next - maximum time of waiting for continue the response, in seconds;\n"
 "    rep  - minimum time of waiting the request repeating, in seconds.\n"
-"Can be prioritatile specified in the address field as the second global argument, as such \"localhost:123||5:1\"."
 msgstr ""
 
-msgid ""
-"Attempts of the requesting both for this transport and protocol, for full requests.\n"
-"Can be prioritatile specified in the address field as the third global argument, as such \"localhost:123||5:1||3\"."
+msgid "Can be prioritatile specified in the address field as the second global argument, as such \"localhost:123||5:1\"."
+msgstr ""
+
+msgid "Attempts of the requesting both for this transport and protocol, for full requests.\n"
+msgstr ""
+
+msgid "Can be prioritatile specified in the address field as the third global argument, as such \"localhost:123||5:1||3\"."
+msgstr ""
+
+#, c-format
+msgid "The host address '%s'. "
 msgstr ""
 
 #, c-format
@@ -82,7 +86,7 @@ msgstr ""
 msgid "Error the address '%s': '%s (%d)'"
 msgstr ""
 
-msgid "sockaddr to large."
+msgid "sockaddr very big."
 msgstr ""
 
 #, c-format
@@ -230,9 +234,9 @@ msgstr ""
 
 msgid ""
 "Socket's input transport has the address format:\n"
-"  [TCP:]{addr}:{port}[:{mode}[:{IDmess}]] - TCP socket:\n"
+"  [TCP:]{addr}[:{port}[,{port2}[,{portN}]][:{mode}[:{IDmess}]]] - TCP socket:\n"
 "    addr - address for socket to be opened, empty or \"*\" address opens socket for all interfaces; there may be as the symbolic representation as well as IPv4 \"127.0.0.1\" or IPv6 \"[::1]\";\n"
-"    port - network port on which the socket is opened, indication of the character name of the port, according to /etc/services is available;\n"
+"    port, port2, portN - network ports on which the socket is sequential opened (at busy the first ones), indication of the character name of the port, according to /etc/services is available;\n"
 "    mode - mode of operation: 0 - break connections; 1(default) - keep alive; 2 - initiative connections;\n"
 "    IDmess - identification message of the initiative connection - the mode 2.\n"
 "  UDP:{addr}:{port} - UDP socket:\n"
@@ -292,6 +296,12 @@ msgid ""
 "Zero value to disable - do not close ever."
 msgstr ""
 
+msgid "Timeouts, tries"
+msgstr ""
+
+msgid "... of the initiative connection and the associated output transports, empty for default and separated by '||'. "
+msgstr ""
+
 #, c-format
 msgid "%s %d(%s): last %s; traffic in %s, out %s; "
 msgstr ""
@@ -301,7 +311,7 @@ msgid "processing time %s[%s]; "
 msgstr ""
 
 #, c-format
-msgid "To the host '%s'. "
+msgid "To the host address '%s'. "
 msgstr ""
 
 #, c-format
@@ -320,6 +330,9 @@ msgstr ""
 
 #, c-format
 msgid "Resolving for '%s'"
+msgstr ""
+
+msgid "sockaddr to large."
 msgstr ""
 
 #, c-format

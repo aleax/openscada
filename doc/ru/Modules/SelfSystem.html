@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/Собственный Системный Протокол</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSelfSystem&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/SelfSystem" title="Modules/SelfSystem">Modules/SelfSystem</a> and the translation is 83% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/SelfSystem.html" title="Modules/SelfSystem (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/SelfSystem.html" title="Модулі/Власний Системний Протокол (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSelfSystem&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/SelfSystem" title="Modules/SelfSystem">Modules/SelfSystem</a> and the translation is 62% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/SelfSystem.html" title="Modules/SelfSystem (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--high">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/SelfSystem.html" title="Модулі/Власний Системний Протокол (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">SelfSystem</a> </td>
 <td> Собственный протокол OpenSCADA
 </td>
-<td> 1.10 </td>
+<td> 2.0 </td>
 <td> GPL2 </td>
 <td> prot_SelfSystem.so </td>
 <td> en,uk,ru,de </td>
@@ -46,33 +46,33 @@
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
-<li class="toclevel-1 tocsection-1"><a href="#.D0.A1.D0.B8.D0.BD.D1.82.D0.B0.D0.BA.D1.81.D0.B8.D1.81_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D0.B0"><span class="tocnumber">1</span> <span class="toctext">Синтаксис протокола</span></a></li>
+<li class="toclevel-1 tocsection-1"><a href="#The_syntax_of_the_protocol"><span class="tocnumber">1</span> <span class="toctext">The syntax of the protocol</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#.D0.92.D0.BD.D1.83.D1.82.D1.80.D0.B5.D0.BD.D0.BD.D1.8F.D1.8F_.D1.81.D1.82.D1.80.D1.83.D0.BA.D1.82.D1.83.D1.80.D0.B0_.D0.B8.D1.81.D1.85.D0.BE.D0.B4.D1.8F.D1.89.D0.B5.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D0.B0"><span class="tocnumber">2</span> <span class="toctext">Внутренняя структура исходящего протокола</span></a></li>
 </ul>
 </div>
 
-<h2><span class="mw-headline" id=".D0.A1.D0.B8.D0.BD.D1.82.D0.B0.D0.BA.D1.81.D0.B8.D1.81_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D0.B0"><span class="mw-headline-number">1</span> Синтаксис протокола</span></h2>
-<p>Протокол построен по методу "Запрос-Ответ". Запросы и их структура сведены в таблице 1.
-</p><p><b>Таблица 1</b> Структура запроса.
+<h2><span class="mw-headline" id="The_syntax_of_the_protocol"><span class="mw-headline-number">1</span> The syntax of the protocol</span></h2>
+<p>The protocol is based on the "Request-Answer" method. The queries and their structure are given in the followed Table.
 </p>
 <table class="wikitable">
-
+<caption> Structure of the request.
+</caption>
 <tr>
-<th> Запросы
+<th> Requests
 </th></tr>
 <tr>
 <td>
 <p><b>REQ:</b> "SES_OPEN {user} {password}\n"<br />
 <b>REZ OK:</b> "REZ 0 {ses_id}\n"<br />
 <b>REZ ERR:</b> "REZ 1 Error authentication: wrong user or password.\n"<br />
-Запрос на открытие сеанса от имени пользователя <i>user</i> с паролем <i>password</i>. В случае успеха будет получен идентификатор сеанса, иначе — код и сообщение об ошибке.
+Request to open a session from the username <i>user</i> with the <i>password</i>. In case of success, the session ID will be received, otherwise, the code and the error message.
 </p>
 </td></tr>
 <tr>
 <td>
 <p><b>REQ:</b> "SES_CLOSE {ses_id}\n"<br />
 <b>REZ:</b> "REZ 0\n"<br />
-Закрытие сеанса. Результат всегда успешен.
+Closure of the session. The result is always successful.
 </p>
 </td></tr>
 <tr>
@@ -82,17 +82,18 @@
 <b>REZ OK:</b> "REZ 0 {rez_size}\n{result of the command of the control interface}"<br />
 <b>REZ ERR:</b> "REZ 1 Error authentication: session is not valid.\n"<br />
 <b>REZ ERR:</b> "REZ 2 {error of the control interface}"<br />
-Основные запросы — сеансовый и прямой. Реализуются путём отправки стандартной команды <a href="../../en/API.html#CntrNode" title="Special:MyLanguage/Documents/API">Интерфейса Управления OpenSCADA</a> в поле <i>command of the control interface</i>. В результате будет получен ответ Интерфейса Управления <i>result of the command of the control interface</i> или одна из ошибок.
+Basic queries — session and direct ones. Implemented by sending a standard command of the <a href="../../en/API.html#CntrNode" title="Special:MyLanguage/Documents/API">OpenSCADA Control Interface</a> in the <i>command of the control interface</i> field. The result will be the response of the Control Interface <i>result of the command of the control interface</i> or one of the errors.
 </p>
 </td></tr>
 <tr>
 <td>
-<p><b>REQ:</b> "{Ошибочная последовательность}"<br />
+<p><b>REQ:</b> "{Error sequence}"<br />
 <b>REZ ERR:</b> "REZ 3 Error the command format.\n"<br />
-Любой некорректный запрос.
+Any invalid request.
 </p>
 </td></tr></table>
 <p>The protocol supports the ability of the traffic compression. Only the Control Interface data <i>command of the control interface</i> and <i>result of the command of the control interface</i> are compressed. The fact of receipt of a compressed request or response is determined by the negative value of the <i>req_size</i> or the <i>rez_size</i> response. You can define the compression options on the configuration page of the module (Fig. 1). Response of the protocol input part is forced to the compression with level -1 (that is optimal) at the compressed requests.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> All those parameters can be configured individually for the transport, due to the module is first one supports configuration of the external sources in additional parameters of the transports.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:783px;"><a class="image" href="http://oscada.org/wiki/File:SelfSystem_compr.png"><img class="thumbimage" height="491" src="../../en/files/SelfSystem_compr.png" width="781" /></a>  <div class="thumbcaption">Рис.1. Главная вкладка страницы конфигурации параметров модуля.</div></div></div></div>
 <p>On this tab, you can:
@@ -117,5 +118,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SelfSystem/ru">Modules/SelfSystem/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SelfSystem/ru">Modules/SelfSystem/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

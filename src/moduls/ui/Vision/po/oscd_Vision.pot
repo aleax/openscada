@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-23 09:56+0200\n"
+"POT-Creation-Date: 2024-02-06 08:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -916,7 +916,7 @@ msgid ""
 "Paste to it anyway?"
 msgstr ""
 
-msgid "Attempting to copy/move yourself for \"%1/%1\"!"
+msgid "Attempting to copy/move itself for \"%1/%1\"!"
 msgstr ""
 
 msgid "Properties of the widgets library"
@@ -937,7 +937,7 @@ msgstr ""
 msgid "Enabled:"
 msgstr ""
 
-msgid "Container DB:"
+msgid "Storage:"
 msgstr ""
 
 msgid "Configuration"
@@ -1046,7 +1046,7 @@ msgstr ""
 msgid "Error saving to the file '%s'."
 msgstr ""
 
-msgid "Loading the picture"
+msgid "Loading a picture"
 msgstr ""
 
 msgid "Images (*.png *.jpg)"
@@ -1181,6 +1181,9 @@ msgstr ""
 msgid "Press for lowering the widget changes to its parent."
 msgstr ""
 
+msgid "Upload file"
+msgstr ""
+
 msgid "Full-text editing of the attribute."
 msgstr ""
 
@@ -1196,6 +1199,12 @@ msgid ""
 msgstr ""
 
 msgid "Lowering down the selected attribute change of the visual item to the parent"
+msgstr ""
+
+msgid "Loading a file"
+msgstr ""
+
+msgid "Any (*)"
 msgstr ""
 
 msgid "Widgets"
@@ -2042,9 +2051,6 @@ msgid "Widget's shape '%1' is not implemented yet!"
 msgstr ""
 
 msgid "Saving a file"
-msgstr ""
-
-msgid "Loading a file"
 msgstr ""
 
 msgid "Error writing to the file '%1'."

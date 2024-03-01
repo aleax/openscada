@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/JavaLikeCalc</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/JavaLikeCalc.html" title="Модули/Вычислитель похожий на Java (92% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/JavaLikeCalc.html" title="Модулі/Обчислювач подібний до Java (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/JavaLikeCalc.html" title="Модули/Вычислитель похожий на Java (89% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/JavaLikeCalc.html" title="Модулі/Обчислювач подібний до Java (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -365,15 +365,14 @@ For access to <a href="../User_API.html" title="Special:MyLanguage/Documents/Use
 <h2><span class="mw-headline" id="Controller_object_and_its_configuration"><span class="mw-headline-number">2</span> <span id="Controller" title="#Controller">Controller object and its configuration</span></span></h2>
 <p>The controller object of the module, to provide immediate calculations, connects with the functions of libraries, built with his help, or with <a href="../DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">the data acquisition template</a>. In the case of a data acquisition template, the possibility of external linking with other parameters and attributes of the subsystem "Data Collection" is added. In order to provide calculated data in OpenSCADA, parameters can be created in the controller object. Example of the configuration tab of the controller object of the given type shown in Figure 2.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:750px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_cntr.png"><img class="thumbimage" height="661" src="../files/JavaLikeCalc_cntr.png" width="748" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of the controller object.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:776px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_cntr.png"><img class="thumbimage" height="691" src="../files/JavaLikeCalc_cntr.png" width="774" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of the controller object.</div></div></div></div>
 <p>From this tab you can set:
 </p>
-<ul><li> The state of the controller object, as follows: Status, "Enable", "Running" and the name of the database containing the configuration.</li>
-<li> Id, name and description of the controller.</li>
-<li> The state, in which the controller object must be translated at the program startup: "Enabled" and "Running".</li>
-<li> Name of a table to store the settings.</li>
+<ul><li> State of the controller object, as follows: status, "Enabled", "Running" and the storage name containing the configuration.</li>
+<li> Identifier, name and description of the controller.</li>
+<li> The state "Enabled" and "Running", in which the controller object must be translated at start up.</li>
 <li> Address of the computational function or <a href="../Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">the data acquisition template</a>.</li>
-<li> The calculation schedule policy, priority and number of iterations in one cycle of calculation task.</li></ul>
+<li> Policy of scheduling, priority of the data acquisition task and number of iterations in one cycle of calculation task.</li></ul>
 <p>Tab "Calculation" of the controller object (Fig. 3) contains parameters and a text of the program, are directly performed by the controller. Also, for monitoring of the execution, the time of calculating of the program is shown. The module provides processing a number of special options available in the controller program:
 </p>
 <ul><li> <i>f_frq</i> — calculation frequency of the controller program, read-only.</li>
@@ -382,7 +381,8 @@ For access to <a href="../User_API.html" title="Special:MyLanguage/Documents/Use
 <li> <i>this</i> — the controller object.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:838px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_cntr_calc.png"><img class="thumbimage" height="661" src="../files/JavaLikeCalc_cntr_calc.png" width="836" /></a>  <div class="thumbcaption">Fig.3. Tab "Calculation" of the controller object.</div></div></div></div>
 <h2><span class="mw-headline" id="Parameter_of_the_controller_object_and_its_configuration"><span class="mw-headline-number">3</span> Parameter of the controller object and its configuration</span></h2>
-<p>Parameter of the controller object of the module performs the function of providing the access to the results of computation of the controller to OpenSCADA by attributes if the parameters. From the specific fields, the configuration tab of the parameter of the controller object contains only the field for listing the parameters of the computational function that must be reflected.
+<p>The module provides only one the "Standard (std)" type of the parameters with the parameters table name "JavaLikePrm_{CntrId}".
+</p><p>Parameter of the controller object of the module performs the function of providing the access to the results of computation of the controller to OpenSCADA by attributes if the parameters. From the specific fields, the configuration tab of the parameter of the controller object contains only the field for listing the parameters of the computational function that must be reflected.
 </p>
 <h2><span class="mw-headline" id="Libraries_of_functions_of_the_module"><span class="mw-headline-number">4</span> <span id="FuncsLibs" title="#FuncsLibs">Libraries of functions of the module</span></span></h2>
 <p>The module provides a mechanism to create libraries of user's functions on the Java-like language. Example of the configuration tab of the library is shown in Figure 4. The tab contains the basic fields: accessing, address of the DB table (with tracking the availability of the data in different storages and providing the sequentially removing duplicates), date and time of modification, identifier, name and description.
@@ -610,5 +610,5 @@ REQ[<b>root-DAQ</b>]: <i>&lt;set path="/DAQ/JavaLikeCalc/<b>{CNTR}</b>/%2fserv%2
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/JavaLikeCalc/en">Modules/JavaLikeCalc/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/JavaLikeCalc/en">Modules/JavaLikeCalc/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

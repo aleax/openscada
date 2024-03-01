@@ -253,8 +253,8 @@ void WidgetLib::resourceDataList( vector<string> &list, const string &idb ) cons
 
 bool WidgetLib::resourceDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb, int off, int *size ) const
 {
-    bool is_file = (iid.find("file:")==0);
-    bool is_res  = (iid.find("res:")==0);
+    bool is_file = (iid.find("file:") == 0);
+    bool is_res  = (iid.find("res:") == 0);
 
     if(!is_file) {
 	//Get resource file from DB
@@ -368,14 +368,15 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/obj/st/status",_("Status"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		if(isStdStorAddr())
-		    ctrMkNode("fld",opt,-1,"/obj/st/db",_("Library DB"),RWRWR_,"root",SUI_ID,4,
+		    ctrMkNode("fld",opt,-1,"/obj/st/db",_("Storage"),RWRWR_,"root",SUI_ID,4,
 			"tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 		else ctrMkNode("fld",opt,-1,"/obj/st/db",_("Library DB"),RWRWR_,"root",SUI_ID,4,
 			"tp","str","dest","sel_ed","select",("/db/tblList:wlb_"+id()).c_str(),
-			"help",_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the Generic Storage, set '*.*.{Table name}'."));
+			"help",TSYS::strMess(_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use %s, set '%s.{Table name}'."),
+				TMess::labStorFromCode(DB_GEN).c_str(),DB_GEN).c_str());
 		if(DB(true).size())
-		    ctrMkNode("comm",opt,-1,"/obj/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SUI_ID,
-			1,"help",(DB(true)=="*.*")?TMess::labStorRemGenStor().c_str():"");
+		    ctrMkNode("comm",opt,-1,"/obj/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),
+			TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",SUI_ID,1,"help",TMess::labStorRem(mDB).c_str());
 		ctrMkNode("fld",opt,-1,"/obj/st/timestamp",_("Date of modification"),R_R_R_,"root",SUI_ID,1,"tp","time");
 		ctrMkNode("fld",opt,-1,"/obj/st/use",_("Used"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 	    }
@@ -773,19 +774,19 @@ void LWidget::save_( )
 {
     if(enableByNeed)	return;
 
-    string db  = ownerLib().DB();
-    string tbl = ownerLib().tbl();
+    string  db  = ownerLib().DB(),
+	    tbl = ownerLib().tbl(), errors, warnings;
 
     mTimeStamp = SYS->sysTm();
 
     //Saving the generic data and attributes
     if(SYS->cfgCtx() && SYS->cfgCtx()->attr("srcTbl").empty())
 	SYS->cfgCtx()->setAttr("srcTbl", tbl);
-    cfg("ATTRS").setS(mod->attrsSave(*this, db+"."+tbl, id(), "", true));
+    cfg("ATTRS").setS(mod->attrsSave(*this,db+"."+tbl,id(),"",true,&errors,&warnings));
     TBDS::dataSet(db+"."+tbl, mod->nodePath()+tbl, *this);
 
     //Save widget's attributes
-    saveIO();
+    if(enable()) mod->attrsSave(*this, ownerLib().DB()+"."+ownerLib().tbl(), id(), "", false, &errors, &warnings);
 
     //Updation/saving here the removing mark "<deleted>" of the included widgets since the storage can be changed
     if(!parent().freeStat()) {
@@ -803,14 +804,9 @@ void LWidget::save_( )
 	    TBDS::dataSet(db+"."+tbl, mod->nodePath()+tbl, cEl);
 	}
     }
-}
 
-void LWidget::saveIO( )
-{
-    if(!enable()) return;
-
-    //Save widget's attributes
-    mod->attrsSave(*this, ownerLib().DB()+"."+ownerLib().tbl(), id(), "");
+    if(errors.size())		throw TError(TError::Core_CntrError, nodePath(), errors);
+    else if(warnings.size())	throw TError(TError::Core_CntrWarning, nodePath(), warnings);
 }
 
 void LWidget::wClear( )
@@ -1124,26 +1120,22 @@ void CWidget::loadIO( )
 
 void CWidget::save_( )
 {
-    string db  = ownerLWdg().ownerLib().DB();
-    string tbl = ownerLWdg().ownerLib().tbl();
+    string  db  = ownerLWdg().ownerLib().DB(),
+	    tbl = ownerLWdg().ownerLib().tbl(), errors, warnings;
 
     //Save generic attributes
     if(SYS->cfgCtx() && SYS->cfgCtx()->attr("srcTbl").empty() && SYS->cfgCtx()->attr("srcW").empty())
 	SYS->cfgCtx()->setAttr("srcW", ownerLWdg().id());
-    cfg("ATTRS").setS(mod->attrsSave(*this,db+"."+tbl,ownerLWdg().id(),id(),true));
+    cfg("ATTRS").setS(mod->attrsSave(*this,db+"."+tbl,ownerLWdg().id(),id(),true,&errors,&warnings));
 
     //Save generic widget's data
     TBDS::dataSet(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this);
 
     //Save widget's attributes
-    saveIO();
-}
+    if(enable()) mod->attrsSave(*this, ownerLWdg().ownerLib().DB()+"."+ownerLWdg().ownerLib().tbl(), ownerLWdg().id(), id(), false, &errors, &warnings);
 
-void CWidget::saveIO( )
-{
-    if(!enable()) return;
-
-    mod->attrsSave(*this, ownerLWdg().ownerLib().DB()+"."+ownerLWdg().ownerLib().tbl(), ownerLWdg().id(), id());
+    if(errors.size())		throw TError(TError::Core_CntrError, nodePath(), errors);
+    else if(warnings.size())	throw TError(TError::Core_CntrWarning, nodePath(), warnings);
 }
 
 void CWidget::wClear( )

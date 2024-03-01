@@ -37,13 +37,16 @@
 #include <QScrollArea>
 #include <QMessageBox>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QMenuBar>
 
 #include "../QTStarter/lib_qtgen.h"
 #include "vis_widgs.h"
 #include "vis_devel.h"
 #include "vis_devel_dlgs.h"
+
+#if QT_VERSION < 0x060000
+# define typeId()	type()
+#endif
 
 #undef _
 #define _(mess) mod->I18N(mess, owner()->lang().c_str()).c_str()
@@ -66,7 +69,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
 
     //Create tabulator
     QVBoxLayout *tab_lay = new QVBoxLayout(this);
-    tab_lay->setMargin(5);
+    tab_lay->setContentsMargins(5, 5, 5, 5);
     wdg_tabs = new QTabWidget(this);
     tab_lay->addWidget(wdg_tabs);
     connect(wdg_tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
@@ -91,13 +94,13 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     //QWidget *tab_w = wdg_tabs->widget(0);
 
     dlg_lay = new QGridLayout(tab_w);
-    dlg_lay->setMargin(9);
+    dlg_lay->setContentsMargins(9, 9, 9, 9);
     dlg_lay->setSpacing(6);
 
     //State parameters
     grp = new QGroupBox(_("State"),tab_w);
     glay = new QGridLayout;
-    glay->setMargin(4);
+    glay->setContentsMargins(4, 4, 4, 4);
     glay->setSpacing(6);
 
     obj_ico = new QPushButton(tab_w);
@@ -124,7 +127,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     connect(obj_enable, SIGNAL(stateChanged(int)), this, SLOT(isModify()));
     glay->addWidget(obj_enable, 1, 2);
 
-    lab = new QLabel(_("Container DB:"), tab_w);
+    lab = new QLabel(_("Storage:"), tab_w);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
     glay->addWidget(lab, 2, 1);
     obj_db = new LineEdit(tab_w, LineEdit::Combo);
@@ -161,7 +164,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     //Configuration parameters
     grp = new QGroupBox(_("Configuration"), tab_w);
     glay = new QGridLayout;
-    glay->setMargin(4);
+    glay->setContentsMargins(4, 4, 4, 4);
     glay->setSpacing(6);
 
     glay->addWidget(new QLabel(_("Identifier:"),tab_w), 0, 0);
@@ -229,7 +232,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     tab_w = wdg_tabs->widget(1);
 
     dlg_lay = new QGridLayout(tab_w);
-    dlg_lay->setMargin(9);
+    dlg_lay->setContentsMargins(9, 9, 9, 9);
     dlg_lay->setSpacing(6);
 
     mimeDataTable = new QTableWidget(0, 3, tab_w);
@@ -258,7 +261,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     tab_w = wdg_tabs->widget(2);
 
     dlg_lay = new QGridLayout(tab_w);
-    dlg_lay->setMargin(9);
+    dlg_lay->setContentsMargins(9, 9, 9, 9);
     dlg_lay->setSpacing(6);
 
     lab = new QLabel(_("Style:"),tab_w);
@@ -296,7 +299,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     //------------------
     wdg_tabs->addTab((tab_w=new QWidget),_("Diagnostics"));
     dlg_lay = new QGridLayout(tab_w);
-    dlg_lay->setMargin(9);
+    dlg_lay->setContentsMargins(9, 9, 9, 9);
     dlg_lay->setSpacing(6);
 
     lab = new QLabel(_("Time:"), tab_w);
@@ -410,19 +413,35 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	gnd = TCntrNode::ctrId(root, obj_db->objectName().toStdString(), true);
 	obj_db->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 	if(gnd) {
-	    if(dynamic_cast<QComboBox*>(obj_db->workWdg()))
-		((QComboBox*)obj_db->workWdg())->setEditable(gnd->attr("dest")=="sel_ed");
+	    QComboBox *cBox = dynamic_cast<QComboBox*>(obj_db->workWdg());
+	    bool isEd = (cBox && gnd->attr("dest") == "sel_ed");
+	    if(cBox) cBox->setEditable(isEd);
 
 	    req.clear()->setAttr("path", ed_it+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) {
-		string els;
-		for(unsigned iL = 0; iL < req.childSize(); iL++)
-		    els += req.childGet(iL)->text() + "\n";
-		obj_db->setCfg(els.c_str());
+		if(!isEd && cBox) {
+		    cBox->clear();
+		    bool hasId = false;
+		    for(unsigned iEl = 0; iEl < req.childSize() && !hasId; ++iEl)
+			hasId = req.childGet(iEl)->attr("id").size();
+		    for(unsigned iEl = 0; iEl < req.childSize(); ++iEl)
+			cBox->addItem(req.childGet(iEl)->text().c_str(), hasId?QString(req.childGet(iEl)->attr("id").c_str()):QVariant());
+		}
+		else {
+		    string els;
+		    for(unsigned iL = 0; iL < req.childSize(); iL++)
+			els += req.childGet(iL)->text() + "\n";
+		    obj_db->setCfg(els.c_str());
+		}
 	    }
 
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_db->objectName().toStdString(),TSYS::PathEl));
-	    if(!owner()->cntrIfCmd(req)) obj_db->setValue(req.text().c_str());
+	    if(!owner()->cntrIfCmd(req)) {
+		int curIdx;
+		if(!isEd && cBox && (curIdx=cBox->findData(req.text().c_str())) >= 0)
+		    cBox->setCurrentIndex(curIdx);
+		else obj_db->setValue(req.text().c_str());
+	    }
 	}
 	// Remove from DB
 	gnd = TCntrNode::ctrId(root, obj_remFromDB->objectName().toStdString(), true);
@@ -776,7 +795,7 @@ void LibProjProp::doIco( QAction *it )
 		throw TError(mod->nodePath().c_str(), _("Error saving to the file '%s'."), fileName.toStdString().c_str());
 	}
 	else if(it->objectName() == "load") {
-	    QString fileName = owner()->getFileName(_("Loading the picture"),"",_("Images (*.png *.jpg)"));
+	    QString fileName = owner()->getFileName(_("Loading a picture"),"",_("Images (*.png *.jpg)"));
 	    if(fileName.isEmpty())	return;
 
 	    QImage ico_t;
@@ -823,7 +842,10 @@ void LibProjProp::isModify( QObject *snd )
 	update = true;
     }
     else if(oname == obj_db->objectName() || oname == obj_name->objectName() || oname == prj_ctm->objectName()) {
-	req.setText(((LineEdit*)snd)->value().toStdString());
+	QComboBox *cBox = dynamic_cast<QComboBox*>(((LineEdit*)snd)->workWdg());
+	req.setText((!cBox || cBox->itemData(cBox->currentIndex()).isNull())
+			? ((LineEdit*)snd)->value().toStdString()
+			: cBox->itemData(cBox->currentIndex()).toString().toStdString());
 	update = (oname==obj_db->objectName());
     }
     else if(oname == obj_remFromDB->objectName()) update = true;
@@ -892,9 +914,7 @@ void LibProjProp::showEvent( QShowEvent * event )
     adjustSize();
     resize(size().expandedTo(src));
 
-#if defined(__ANDROID__)
-    move((QApplication::desktop()->width()-width())/2, (QApplication::desktop()->height()-height())/2);
-#endif
+    winFit(*this);
 }
 
 void LibProjProp::addMimeData( )
@@ -1041,7 +1061,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
 
     //Create tabulator
     QVBoxLayout *tab_lay = new QVBoxLayout(this);
-    tab_lay->setMargin(5);
+    tab_lay->setContentsMargins(5, 5, 5, 5);
     wdg_tabs = new QTabWidget(this);
     tab_lay->addWidget(wdg_tabs);
     connect(wdg_tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
@@ -1065,13 +1085,13 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     //QWidget *tab_w = wdg_tabs->widget(0);
 
     dlg_lay = new QGridLayout(tab_w);
-    dlg_lay->setMargin(9);
+    dlg_lay->setContentsMargins(9, 9, 9, 9);
     dlg_lay->setSpacing(6);
 
     // State parameters
     grp = new QGroupBox(_("State"),tab_w);
     glay = new QGridLayout;
-    glay->setMargin(4);
+    glay->setContentsMargins(4, 4, 4, 4);
     glay->setSpacing(6);
     obj_ico = new QPushButton(tab_w);
     obj_ico->setObjectName("/wdg/cfg/ico");
@@ -1137,7 +1157,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     //  Configuration parameters
     grp = new QGroupBox(_("Configuration"),tab_w);
     glay = new QGridLayout;
-    glay->setMargin(4);
+    glay->setContentsMargins(4, 4, 4, 4);
     glay->setSpacing(6);
 
     glay->addWidget(new QLabel(_("Identifier:"),tab_w), 0, 0);
@@ -1189,7 +1209,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     tab_w = wdg_tabs->widget(1);
 
     dlg_lay = new QGridLayout(tab_w);
-    dlg_lay->setMargin(9);
+    dlg_lay->setContentsMargins(9, 9, 9, 9);
     dlg_lay->setSpacing(6);
 
     // Add attributes view widget
@@ -1208,7 +1228,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     proc_split->addWidget(attr_cf_fr);
 
     glay = new QGridLayout(attr_cf_fr);
-    glay->setMargin(9);
+    glay->setContentsMargins(9, 9, 9, 9);
     glay->setSpacing(6);
 
     // Add attributes configuration widget
@@ -1236,7 +1256,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     proc_split->addWidget(wdg_proc_fr);
 
     glay = new QGridLayout(wdg_proc_fr);
-    glay->setMargin(9);
+    glay->setContentsMargins(9, 9, 9, 9);
     glay->setSpacing(6);
 
     //????[v1.0] Remove at moving to the main tab in proc_perG
@@ -1276,7 +1296,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     tab_w = wdg_tabs->widget(3);
 
     dlg_lay = new QGridLayout(tab_w);
-    dlg_lay->setMargin(9);
+    dlg_lay->setContentsMargins(9, 9, 9, 9);
     dlg_lay->setSpacing(6);
 
     // Add attributes view widget
@@ -1479,15 +1499,15 @@ void VisItProp::showDlg( const string &iit, bool reload )
 
 	// Special fields
 	//  Page type
-	gnd = TCntrNode::ctrId(root,pg_tp->objectName().toStdString(),true);
+	gnd = TCntrNode::ctrId(root, pg_tp->objectName().toStdString(), true);
 	pg_tp->setVisible(gnd); ((QLabel*)TSYS::str2addr(pg_tp->windowIconText().toStdString()))->setVisible(gnd);
 	if(gnd) {
 	    pg_tp->setEnabled(s2i(gnd->attr("acs"))&SEC_WR);
 
 	    int sel_val = 0;
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(pg_tp->objectName().toStdString(),TSYS::PathEl));
-	    if( !owner()->cntrIfCmd(req) ) sel_val = s2i(req.text());
-	    //   Get combo list
+	    if(!owner()->cntrIfCmd(req)) sel_val = s2i(req.text());
+	    //   Getting list of the combo
 	    pg_tp->clear();
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req))
@@ -1727,7 +1747,7 @@ void VisItProp::doIco( QAction *it )
 		throw TError(mod->nodePath().c_str(), _("Error saving to the file '%s'."), fileName.toStdString().c_str());
 	}
 	else if(it->objectName() == "load") {
-	    QString fileName = owner()->getFileName(_("Loading the picture"),"",_("Images (*.png *.jpg)"));
+	    QString fileName = owner()->getFileName(_("Loading a picture"),"",_("Images (*.png *.jpg)"));
 	    if(fileName.isEmpty())	return;
 
 	    QImage ico_t;
@@ -1839,9 +1859,7 @@ void VisItProp::showEvent( QShowEvent * event )
     adjustSize();
     resize(size().expandedTo(src));
 
-#if defined(__ANDROID__)
-    move((QApplication::desktop()->width()-width())/2, (QApplication::desktop()->height()-height())/2);
-#endif
+    winFit(*this);
 }
 
 void VisItProp::addAttr( )
@@ -1970,6 +1988,7 @@ void VisItProp::ItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
     QItemDelegate::paint(painter, option, index);
 }
 
+
 QWidget *VisItProp::ItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QWidget *wDel = NULL;
@@ -1993,7 +2012,7 @@ QWidget *VisItProp::ItemDelegate::createEditor(QWidget *parent, const QStyleOpti
 	else if(index.column() == 2 || index.column() == 5) wDel = new QComboBox(parent);
 	else {
 	    QItemEditorFactory factory;
-	    wDel = factory.createEditor(value.type(),parent);
+	    wDel = factory.createEditor(value.typeId(),parent);
 	}
     }
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: virtual.h
 /***************************************************************************
- *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -119,6 +119,8 @@ class Contr: public TController, public TPrmTempl::Impl
 	//Methods
 	Contr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~Contr( );
+
+	string tblStd( const TTypeParam &tP ) const;
 
 	TCntrNode &operator=( const TCntrNode &node );
 

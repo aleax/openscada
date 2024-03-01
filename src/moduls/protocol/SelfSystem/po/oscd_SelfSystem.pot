@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-06 07:28+0300\n"
+"POT-Creation-Date: 2023-07-23 15:36+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,6 +24,25 @@ msgid "Roman Savochenko"
 msgstr ""
 
 msgid "Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA."
+msgstr ""
+
+msgid "Compression level and lower limit"
+msgstr ""
+
+msgid "Life time of the authentication session, minutes"
+msgstr ""
+
+msgid "Limit of the connections for one user and host"
+msgstr ""
+
+msgid ""
+"ZLib compression level:\n"
+"  -1  - optimal speed-size;\n"
+"  0   - disable;\n"
+"  1-9 - direct level."
+msgstr ""
+
+msgid "Limit in bytes."
 msgstr ""
 
 #, c-format
@@ -87,25 +106,6 @@ msgid "Active authentication sessions"
 msgstr ""
 
 msgid "Module options"
-msgstr ""
-
-msgid "Life time of the authentication session, minutes"
-msgstr ""
-
-msgid "Limit of the connections for one user and host"
-msgstr ""
-
-msgid "Compression level and lower limit"
-msgstr ""
-
-msgid ""
-"ZLib compression level:\n"
-"  -1  - optimal speed-size;\n"
-"  0   - disable;\n"
-"  1-9 - direct level."
-msgstr ""
-
-msgid "Limit in bytes."
 msgstr ""
 
 #, c-format

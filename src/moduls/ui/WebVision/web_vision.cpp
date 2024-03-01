@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebVision file: web_vision.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"6.8.10"
+#define MOD_VER		"6.9.8"
 #define AUTHORS		trS("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	trS("Visual operation user interface, based on the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -242,13 +242,14 @@ TWEB::TWEB( string name ) : TUI(MOD_ID),
 
 #if 0
     //Text items for translation in the file WebVisionVCA.js
-    char mess[][100] = { _("Date and time"), _("Level"), _("Category"), _("Message"), _("mcsec"), _("Ready"), _("Page"), _("View access is not permitted."),
+    char mess[][100] = { _("Apply"), _("Cancel"), _("Date and time"), _("View access is not permitted."),
+	_("Level"), _("Category"), _("Message"), _("mcsec"), _("Ready"), _("Page"),
 	_("Today"), _("Mon"), _("Tue"), _("Wed"), _("Thr"), _("Fri"), _("Sat"), _("Sun"),
 	_("January"), _("February"), _("March"), _("April"), _("May"), _("June"), _("July"),
 	_("August"), _("September"), _("October"), _("November"), _("December")
 	_("Field for displaying and changing the current user."), _("Field for displaying and changing the used interface style."),
-	_("Alarm level: %1"), _("Notificator %1"),
-	_("Field for printing and exporting data."), _("Main Page"), _("Document %1"), _("Table %1"), _("No data for export!") };
+	_("Alarm level: %1"), _("Notificator %1"), _("Field for printing and exporting data."), 
+	_("Field of getting the project manual."), _("Main Page"), _("Document %1"), _("Table %1"), _("No data for export!") };
 #endif
 }
 
@@ -333,9 +334,9 @@ string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcod
 	    httpattrs + "\x0D\x0A\x0D\x0A" + cnt;*/
 
     vector<TVariant> prms;
-    prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile); prms.push_back(lang);
+    prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile);
 
-    return iprt->objFuncCall("pgCreator", prms, "root").getS();
+    return iprt->objFuncCall("pgCreator", prms, "root\n"+lang).getS();
 }
 
 bool TWEB::pgAccess( TProtocolIn *iprt, const string &URL )
@@ -355,7 +356,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
     try {
 	string zero_lev = TSYS::pathLev(ses.url, 0);
 	//Get the icon and the global image of the module
-	if(zero_lev == "ico" || zero_lev.compare(0,4,"img_") == 0) {
+	if(zero_lev == "ico" || zero_lev.find("img_") == 0) {
 	    string itp = "png";
 	    //Session's and project's icons request processing
 	    map<string,string>::iterator prmEl = ses.prm.find("it");

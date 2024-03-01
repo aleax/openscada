@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_mem.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,22 +44,7 @@ Mem::Mem( )
     fldAdd(new TFld("sw_use",trS("Swap used (KiB)"),TFld::Integer,TFld::NoWrite));
 }
 
-Mem::~Mem( )
-{
-
-}
-
-void Mem::init( TMdPrm *prm, bool update )
-{
-    if(update)	return;
-
-    prm->cfg("SUBT").setView(false);
-}
-
-void Mem::deInit( TMdPrm *prm )
-{
-    prm->cfg("SUBT").setView(true);
-}
+Mem::~Mem( )	{ }
 
 void Mem::getVal( TMdPrm *prm )
 {
@@ -68,56 +53,30 @@ void Mem::getVal( TMdPrm *prm )
 
     FILE *f = fopen("/proc/meminfo","r");
     m_total = m_free = m_buff = m_cach = sw_total = sw_free = 0;
-    while(f && fgets(buf,sizeof(buf),f) != NULL) {
-	sscanf(buf,"MemTotal: %d kB\n",&m_total);
-	sscanf(buf,"MemFree: %d kB\n",&m_free);
-	sscanf(buf,"Buffers: %d kB\n",&m_buff);
-	sscanf(buf,"Cached: %d kB\n",&m_cach);
-	sscanf(buf,"SwapTotal: %d kB\n",&sw_total);
-	sscanf(buf,"SwapFree: %d kB\n",&sw_free);
-    }
-    if(fclose(f) != 0)
+    while(f && fgets(buf,sizeof(buf),f) != NULL)
+	if(!m_total && sscanf(buf,"MemTotal: %d kB\n",&m_total)) ;
+	else if(!m_free && sscanf(buf,"MemFree: %d kB\n",&m_free)) ;
+	else if(!m_buff && sscanf(buf,"Buffers: %d kB\n",&m_buff)) ;
+	else if(!m_cach && sscanf(buf,"Cached: %d kB\n",&m_cach)) ;
+	else if(!sw_total && sscanf(buf,"SwapTotal: %d kB\n",&sw_total)) ;
+	else if(!sw_free && sscanf(buf,"SwapFree: %d kB\n",&sw_free)) ;
+
+    if(f && fclose(f) != 0)
 	mess_warning(prm->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
 
     if(m_total || m_free || m_buff || m_cach || sw_total || sw_free) {
 	prm->daErr = "";
-	prm->vlAt("free").at().setI(m_free+m_buff+m_cach,0,true);
-	prm->vlAt("total").at().setI(m_total,0,true);
-	prm->vlAt("use").at().setI(m_total-m_free-m_buff-m_cach,0,true);
-	prm->vlAt("buff").at().setI(m_buff,0,true);
-	prm->vlAt("cache").at().setI(m_cach,0,true);
-	prm->vlAt("sw_free").at().setI(sw_free,0,true);
-	prm->vlAt("sw_total").at().setI(sw_total,0,true);
-	prm->vlAt("sw_use").at().setI(sw_total-sw_free,0,true);
+	prm->vlAt("free").at().setI(m_free+m_buff+m_cach, 0, true);
+	prm->vlAt("total").at().setI(m_total, 0, true);
+	prm->vlAt("use").at().setI(m_total-m_free-m_buff-m_cach, 0, true);
+	prm->vlAt("buff").at().setI(m_buff, 0, true);
+	prm->vlAt("cache").at().setI(m_cach, 0, true);
+	prm->vlAt("sw_free").at().setI(sw_free, 0, true);
+	prm->vlAt("sw_total").at().setI(sw_total, 0, true);
+	prm->vlAt("sw_use").at().setI(sw_total-sw_free, 0, true);
     }
     else if(!prm->daErr.getVal().size()) {
 	prm->setEval();
 	prm->daErr = _("10:Device is not available.");
     }
-}
-
-void Mem::makeActiveDA( TMdContr *aCntr )
-{
-    FILE *f = fopen("/proc/meminfo", "r");
-    if(f && !aCntr->present("MemInfo")) {
-	vector<string> pLs;
-	// Find propper parameter's object
-	aCntr->list(pLs);
-	unsigned iP;
-	for(iP = 0; iP < pLs.size(); iP++)
-	    if(aCntr->at(pLs[iP]).at().cfg("TYPE").getS() == id()) break;
-	if(iP >= pLs.size()) {
-	    string pId = "MemInfo";
-	    while(aCntr->present(pId)) pId = TSYS::strLabEnum(pId);
-	    aCntr->add(pId, 0);
-	    AutoHD<TMdPrm> dprm = aCntr->at(pId);
-	    dprm.at().setName(_("Memory info"));
-	    dprm.at().autoC(true);
-	    dprm.at().cfg("TYPE").setS(id());
-	    dprm.at().cfg("EN").setB(true);
-	    if(aCntr->enableStat()) dprm.at().enable();
-	}
-    }
-    if(f && fclose(f) != 0)
-	mess_warning(aCntr->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
 }

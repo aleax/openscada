@@ -8,7 +8,7 @@ daq_OPC_UA_la_LDFLAGS = -module
 else
 oscd_modul_LTLIBRARIES = daq_OPC_UA.la
 daq_OPC_UA_la_LIBTOOLFLAGS = --tag=disable-static
-daq_OPC_UA_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+daq_OPC_UA_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 daq_OPC_UA_la_SOURCES = moduls.cpp mod_daq.cpp mod_prt.cpp

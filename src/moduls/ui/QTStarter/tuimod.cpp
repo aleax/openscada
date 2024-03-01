@@ -23,7 +23,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
-
 #include <QApplication>
 #include <QMenuBar>
 #include <QToolBar>
@@ -33,7 +32,6 @@
 #include <QLayout>
 #include <QFrame>
 #include <QVBoxLayout>
-#include <QTextCodec>
 #include <QTimer>
 #include <QLocale>
 #include <QMessageBox>
@@ -53,13 +51,21 @@
 #include <tmess.h>
 #include "tuimod.h"
 
+#if QT_VERSION < 0x060000
+# include <QTextCodec>
+
+# define position()		pos()
+# define globalPosition()	globalPos()
+# define typeId()		type()
+#endif
+
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"QTStarter"
 #define MOD_NAME	trS("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.14.8"
+#define MOD_VER		"6.0.5"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -112,8 +118,8 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID),
 	_("Look in:"),_("Computer"),_("File"),_("Folder"),_("File &name:"),_("Open"),_("&Open"),_("Cancel"),_("Save"),_("&Save"),_("Save As"),_("Date Modified"),_("All Files (*)"),
 	_("Create New Folder"),_("List View"),_("Detail View"),_("Files of type:"),_("New Folder"),_("&New Folder"),_("Show &hidden files"),_("&Delete"),_("&Rename"),_("Remove"),
 	_("&Undo"),_("&Redo"),_("Cu&t"),_("&Copy"),_("&Paste"),_("Delete"),_("Select All"),_("Insert Unicode control character"),
-	_("Size"),_("Type"),_("Drive"),_("Go back"),_("Go forward"),_("Go to the parent directory"),_("Create a New Folder"),_("Change to list view mode"),_("Change to detail view mode"),
-	_("Destination file exists"),
+	_("Size"),_("Type"),_("Drive"),_("Go back"),_("Go forward"),_("Reload"),_("Save page"),_("View page source"),
+	_("Go to the parent directory"),_("Create a New Folder"),_("Change to list view mode"),_("Change to detail view mode"),_("Destination file exists"),
 	_("%1 bytes"),_("%1 KB"),_("%1 MB"),
 	_("Are sure you want to delete '%1'?"),_("%1 already exists.\nDo you want to replace it?"),_("Recent Places"),
 	_("<h3>About Qt</h3><p>This program uses Qt version %1.</p>"),
@@ -171,13 +177,15 @@ void TUIMod::postEnable( int flag )
 #endif
     }
 
-
     if(!SYS->cmdOptPresent("QtInNotMainThread")) {
 	if(SYS->mainThr.freeStat()) SYS->mainThr = this;
 	if(hideMode) return;
 
-	//Init locale setLocale
 	QLocale::setDefault(QLocale(Mess->lang().c_str()));
+
+#if HAVE_WEBENGINE
+	QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+#endif
 
 	//Qt application object init
 	QtApp = new StApp(mod->qtArgC, (char**)&mod->qtArgV);
@@ -487,8 +495,11 @@ void TUIMod::toQtArg( const char *nm, const char *arg )
 
 void *TUIMod::Task( void * )
 {
-    //Init locale setLocale
     QLocale::setDefault(QLocale(Mess->lang().c_str()));
+
+#if HAVE_WEBENGINE
+    QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+#endif
 
     //Qt application object init
     mod->QtApp = new StApp(mod->qtArgC, (char**)&mod->qtArgV);
@@ -692,7 +703,7 @@ TVariant TUIMod::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 //*************************************************
 StApp::StApp( int &argv, char **args ) : QApplication(argv, args), origStl(mod->dataRes()),
     inExec(false), transl(NULL), trayMenu(NULL), tray(NULL), stDlg(NULL), initExec(false),
-    simulRightMKeyTm(0), mouseBtPress(0), mouseBtRecv(NULL), mouseBtHold(QEvent::None,QPoint(),Qt::NoButton,Qt::NoButton,Qt::NoModifier)
+    simulRightMKeyTm(0), mouseBtPress(0), mouseBtRecv(NULL), mouseBtHoldPos(QPoint()), mouseBtHoldPosG(QPoint())
 {
     setApplicationName(PACKAGE_STRING);
     setQuitOnLastWindowClosed(false);
@@ -722,11 +733,12 @@ bool StApp::notify( QObject *receiver, QEvent *event )
     if(event && simulRightMKeyTm > 0) {
 	if(event->type() == QEvent::MouseButtonPress && ((QMouseEvent*)event)->button() == Qt::LeftButton) {
 	    mouseBtRecv = receiver;
-	    mouseBtHold = *((QMouseEvent*)event);
+	    mouseBtHoldPos = ((QMouseEvent*)event)->position(), mouseBtHoldPosG = ((QMouseEvent*)event)->globalPosition();
 	    mouseBtPress = TSYS::curTime();
 	}
 	if(mouseBtPress && ((event->type() == QEvent::MouseButtonRelease && ((QMouseEvent*)event)->button() == Qt::LeftButton) ||
-		(event->type() == QEvent::MouseMove && (((QMouseEvent*)event)->globalPos()-mouseBtHold.globalPos()).manhattanLength() > QFontMetrics(font()).height()) ||
+		(event->type() == QEvent::MouseMove &&
+		    (((QMouseEvent*)event)->globalPosition()-mouseBtHoldPosG).toPoint().manhattanLength() > QFontMetrics(font()).height()) ||
 		(event->type() == QEvent::FocusOut && mouseBtRecv == receiver)))
 	    mouseBtPress = 0;
     }
@@ -833,14 +845,14 @@ void StApp::timerEvent( QTimerEvent *event )
     if(mod->mQtLookMdf)	updLookFeel();
 
     if(mouseBtPress && 1e-6*(TSYS::curTime()-mouseBtPress) >= simulRightMKeyTm) {
-	QMouseEvent evPress(QEvent::MouseButtonPress, mouseBtHold.pos(), Qt::RightButton, Qt::NoButton, Qt::NoModifier);
+	QMouseEvent evPress(QEvent::MouseButtonPress, mouseBtHoldPos.toPoint(), mouseBtHoldPosG.toPoint(), Qt::RightButton, Qt::NoButton, Qt::NoModifier);
 	sendEvent(mouseBtRecv, &evPress);
 
-	QMouseEvent evRels(QEvent::MouseButtonRelease, mouseBtHold.pos(), Qt::RightButton, Qt::NoButton, Qt::NoModifier);
+	QMouseEvent evRels(QEvent::MouseButtonRelease, mouseBtHoldPos.toPoint(), mouseBtHoldPosG.toPoint(), Qt::RightButton, Qt::NoButton, Qt::NoModifier);
 	sendEvent(mouseBtRecv, &evRels);
 
 	if(dynamic_cast<QWidget*>(mouseBtRecv)) {
-	    QContextMenuEvent evCtxMenu(QContextMenuEvent::Mouse, mouseBtHold.pos());
+	    QContextMenuEvent evCtxMenu(QContextMenuEvent::Mouse, mouseBtHoldPos.toPoint(), mouseBtHoldPosG.toPoint());
 	    sendEvent(mouseBtRecv, &evCtxMenu);
 	}
 	mouseBtPress = 0;
@@ -865,7 +877,7 @@ void StApp::timerEvent( QTimerEvent *event )
 	oS.getO().at().propSet("error", sensors[iS]->error());
 	for(int iV = 0; iV < rd->valueCount(); iV++) {
 	    QVariant tvl = rd->value(iV);
-	    switch(tvl.type()) {
+	    switch(tvl.typeId()) {
 		case QVariant::Bool:
 		    oS.getO().at().propSet(i2s(iV), tvl.toBool());
 		    break;
@@ -1117,7 +1129,7 @@ StartDialog::StartDialog( ) : logo(NULL), prjsLs(NULL), prjsBt(NULL), updTmr(NUL
     // What is
     if(!ico_t.load(TUIS::icoGet("contexthelp",NULL,true).c_str())) ico_t.load(":/images/contexthelp.png");
     QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),_("What's &This"),this);
-    actWhatIs->setShortcut(Qt::SHIFT+Qt::Key_F1);
+    actWhatIs->setShortcut(Qt::SHIFT|Qt::Key_F1);
     actWhatIs->setToolTip(_("Question about GUI elements"));
     actWhatIs->setWhatsThis(_("The button for requesting the information about user interface elements."));
     //actWhatIs->setStatusTip(_("Press for requesting about user interface elements"));
@@ -1135,7 +1147,7 @@ StartDialog::StartDialog( ) : logo(NULL), prjsLs(NULL), prjsBt(NULL), updTmr(NUL
     //Append the logotype
     setCentralWidget(new QWidget(this));
     QVBoxLayout *wnd_lay = new QVBoxLayout(centralWidget());
-    wnd_lay->setMargin(6);
+    wnd_lay->setContentsMargins(6, 6, 6, 6);
     wnd_lay->setSpacing(4);
 
     QPixmap pxImg(":/images/logo.png");
@@ -1379,7 +1391,7 @@ void StartDialog::updatePrjList( bool force, const string &stage )
 	    }
 
 	    tit->setText((string(scan_rez->d_name)+(opt.size()?" ("+opt+")":"")).c_str());
-	    tit->setData(Qt::UserRole, scan_rez->d_name);
+	    tit->setData(Qt::UserRole, QString(scan_rez->d_name));
 	    tit->setData(Qt::UserRole+1, isRun ? "" : bLs.c_str());
 	    tit->setData(Qt::UserRole+2, isRun);
 	    tit->setData(Qt::UserRole+3, (int)SYS->sysTm());

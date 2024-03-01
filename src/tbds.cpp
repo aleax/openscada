@@ -59,9 +59,9 @@ string TBDS::realDBName( const string &bdn, bool back )
     if(back) {
 	bool isEqSz = false;
 	if(bdn.find(SYS->workDB()) == 0 && ((isEqSz=(bdn.size()==SYS->workDB().size())) || bdn[SYS->workDB().size()] == '.'))
-	    return string("*.*") + (isEqSz ? "" : bdn.substr(SYS->workDB().size()));
+	    return string(DB_GEN) + (isEqSz ? "" : bdn.substr(SYS->workDB().size()));
 	else if(bdn.find(DB_CFG) == 0 && ((isEqSz=(bdn.size()==strlen(DB_CFG))) || bdn[strlen(DB_CFG)] == '.'))
-	    return string("*.*") + (isEqSz ? "" : bdn.substr(strlen(DB_CFG)));
+	    return string(DB_GEN) + (isEqSz ? "" : bdn.substr(strlen(DB_CFG)));
 	return bdn;
     }
 
@@ -71,9 +71,8 @@ string TBDS::realDBName( const string &bdn, bool back )
     string bd_tbl = TSYS::strParse(bdn, 0, ".", &off);
 
     if(bd_t == DB_CFG)	return bdn;
-    if(SYS->workDB() == DB_CFG && bd_t == "*" && bd_n == "*")	return DB_CFG"."+bd_tbl;
-    return ((bd_t=="*") ? TSYS::strParse(SYS->workDB(),0,".") : bd_t)+"."+
-	   ((bd_n=="*") ? TSYS::strParse(SYS->workDB(),1,".") : bd_n)+(bd_tbl.empty() ? "" : "."+bd_tbl);
+    if(bd_t == DB_GEN && SYS->workDB() == DB_CFG)	return DB_CFG "." + bd_n;
+    return (bd_t == DB_GEN) ? (SYS->workDB()+"."+bd_n) : bdn;
 }
 
 string TBDS::dbPart( const string &bdn, bool tbl )
@@ -83,8 +82,9 @@ string TBDS::dbPart( const string &bdn, bool tbl )
     string p2 = TSYS::strParse(bdn, 0, ".", &off);
     string p3 = TSYS::strParse(bdn, 0, ".", &off);
 
-    return (p1 == DB_CFG) ? (tbl ? p2 : p1) :
-			    (tbl ? p3 : p1+"."+p2);
+    return (p1 == DB_CFG || p1 == DB_GEN)
+			    ? (tbl ? p2 : p1)
+			    : (tbl ? p3 : p1+"."+p2);
 }
 
 void TBDS::dbList( vector<string> &ls, char flg )
@@ -96,7 +96,7 @@ void TBDS::dbList( vector<string> &ls, char flg )
 	return;
     }
 
-    if(flg&LsInclGenFirst) ls.push_back("*.*");
+    if(flg&LsInclGenFirst) ls.push_back(DB_GEN);
 
     AutoHD<TBDS> dbs = SYS->db();
 
@@ -200,7 +200,7 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
 
     cfg.setTrcSet(true);
 
-    if(isCfgCtx || (path.size() && (ibdn.empty() || ibdn.find("*.*") == 0 || TSYS::strParse(bdn,0,".") == DB_CFG))) {
+    if(isCfgCtx || (path.size() && (ibdn.empty() || TSYS::strParse(ibdn,0,".") == DB_GEN || TSYS::strParse(bdn,0,".") == DB_CFG))) {
 	ResAlloc res(SYS->cfgRes());
 	XMLNode *nd = NULL, *fnd = NULL, *el;
 	string vl, vl_tr;
@@ -329,7 +329,7 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, char f
     TError dbErr;
 
     //Load from config
-    if(isCfgCtx || (path.size() && (ibdn.empty() || ibdn.find("*.*") == 0 || TSYS::strParse(bdn,0,".") == DB_CFG))) {
+    if(isCfgCtx || (path.size() && (ibdn.empty() || TSYS::strParse(ibdn,0,".") == DB_GEN || TSYS::strParse(bdn,0,".") == DB_CFG))) {
 	ResAlloc res(SYS->cfgRes(), false);
 	XMLNode *nd = NULL, *fnd = NULL, *el;
 	string vl, vl_tr;
@@ -434,10 +434,10 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char f
     string bdn = realDBName(ibdn);
 
     bool isCfgCtx = (localCfgCtx || ((ibdn.size() || path.size()) && SYS->cfgCtx()));
-    bool toChangeExistsCfg = (!isCfgCtx && ibdn.find("*.*") == 0 && !(flags&OnlyCfg || TSYS::strParse(bdn,0,".") == DB_CFG));
+    bool toChangeExistsCfg = (!isCfgCtx && TSYS::strParse(ibdn,0,".") == DB_GEN && !(flags&OnlyCfg || TSYS::strParse(bdn,0,".") == DB_CFG));
 
     //Save to config
-    if(isCfgCtx || (path.size() && (ibdn.empty() || ibdn.find("*.*") == 0 || toChangeExistsCfg || TSYS::strParse(bdn,0,".") == DB_CFG))) {
+    if(isCfgCtx || (path.size() && (ibdn.empty() || TSYS::strParse(ibdn,0,".") == DB_GEN || toChangeExistsCfg || TSYS::strParse(bdn,0,".") == DB_CFG))) {
 	ResAlloc res(SYS->cfgRes());
 	XMLNode *nd = NULL, *wel = NULL, *fnd;
 	vector<string> cf_el;
@@ -604,7 +604,7 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, char f
     TError dbErr;
 
     //Delete from config
-    if(path.size() && (ibdn.empty() || ibdn.find("*.*") == 0 || TSYS::strParse(bdn,0,".") == DB_CFG)) {
+    if(path.size() && (ibdn.empty() || TSYS::strParse(ibdn,0,".") == DB_GEN || TSYS::strParse(bdn,0,".") == DB_CFG)) {
 	ResAlloc res(SYS->cfgRes(), false);
 	XMLNode *nd = SYS->cfgNode(SYS->id()+"/"+path, true);
 	vector<string> cf_el;
@@ -674,7 +674,7 @@ bool TBDS::dataDelTbl( const string &ibdn, const string &path, char flags )
     bool db_true = false;
 
     //Delete from config
-    if(path.size() && (ibdn.empty() || ibdn.find("*.*") == 0 || TSYS::strParse(bdn,0,".") == DB_CFG)) {
+    if(path.size() && (ibdn.empty() || TSYS::strParse(ibdn,0,".") == DB_GEN || TSYS::strParse(bdn,0,".") == DB_CFG)) {
 	ResAlloc res(SYS->cfgRes(), false);
 	XMLNode *nd = SYS->cfgNode(SYS->id()+"/"+path, true);
 	if(nd) { nd->parent()->childDel(nd); db_true = true; }
@@ -1449,7 +1449,7 @@ bool TTable::fieldSQLSeek( int row, TConfig &cfg, const string &cacheKey, int fl
 	sid = tblStrct[iFld].nm;
 	TCfg *u_cfg = cfg.at(sid, true);
 	if(!u_cfg && !Mess->translDyn() && sid.find(Mess->langCode()+"#") == 0) {
-	    u_cfg = cfg.at(sid.substr(3), true);
+	    u_cfg = cfg.at(TSYS::strParse(sid,1,"#"), true);
 	    if(u_cfg && !(u_cfg->fld().flg()&TFld::TransltText)) continue;
 	    trPresent = true;
 	}
@@ -1496,7 +1496,8 @@ bool TTable::fieldSQLSeek( int row, TConfig &cfg, const string &cacheKey, int fl
 	sid = (*tbl)[0][iFld];
 	TCfg *u_cfg = cfg.at(sid, true);
 	if(u_cfg) setSQLVal(*u_cfg, (*tbl)[row][iFld]);
-	else if(trPresent && sid.find(Mess->langCode()+"#") == 0 && (*tbl)[row][iFld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
+	else if(trPresent && sid.find(Mess->langCode()+"#") == 0 && (*tbl)[row][iFld].size() &&
+		(u_cfg=cfg.at(TSYS::strParse(sid,1,"#"),true)))
 	    setSQLVal(*u_cfg, (*tbl)[row][iFld], true);
     }
 
@@ -1518,7 +1519,7 @@ void TTable::fieldSQLGet( TConfig &cfg )
 	sid = tblStrct[iFld].nm;
 	TCfg *u_cfg = cfg.at(sid, true);
 	if(!u_cfg && !Mess->translDyn() && sid.find(Mess->langCode()+"#") == 0) {
-	    u_cfg = cfg.at(sid.substr(3), true);
+	    u_cfg = cfg.at(TSYS::strParse(sid,1,"#"), true);
 	    if(u_cfg && !(u_cfg->fld().flg()&TFld::TransltText)) continue;
 	    trPresent = true;
 	}
@@ -1542,7 +1543,8 @@ void TTable::fieldSQLGet( TConfig &cfg )
 	sid = tbl[0][iFld];
 	TCfg *u_cfg = cfg.at(sid, true);
 	if(u_cfg) setSQLVal(*u_cfg, tbl[1][iFld]);
-	else if(trPresent && sid.find(Mess->langCode()+"#") == 0 && tbl[1][iFld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
+	else if(trPresent && sid.find(Mess->langCode()+"#") == 0 && tbl[1][iFld].size() &&
+		(u_cfg=cfg.at(TSYS::strParse(sid,1,"#"),true)))
 	    setSQLVal(*u_cfg, tbl[1][iFld], true);
     }
 }
@@ -1569,7 +1571,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
     //Checking for the translation presence
     bool hasTr = Mess->translCfg(), hasTrCol = false;
     for(unsigned iFld = 0; iFld < tblStrct.size() && !hasTrCol; iFld++)
-	if((sid=tblStrct[iFld].nm).size() > 3 && sid[2] == '#') {
+	if((sid=tblStrct[iFld].nm).size() > 3 && sid.find("#") != string::npos) {
 	    hasTr = true;
 	    if(sid.find(Mess->langCode()+"#") == 0) hasTrCol = true;
 	}
@@ -1662,10 +1664,10 @@ void TTable::fieldSQLSet( TConfig &cfg )
 		if(Mess->translDyn() && !u_cfg.isKey() && u_cfg.view() && u_cfg.fld().flg()&TFld::TransltText && !u_cfg.noTransl()) {
 		    trCacheUpd.push_back(u_cfg.name()+string(1,0)+svalBASE_RAW+string(1,0)+svalRAW+(isTransl?string(1,0)+toLang:""));
 		    for(unsigned iFld = 0; iFld < tblStrct.size(); iFld++)
-			if(tblStrct[iFld].nm.size() > 3 && tblStrct[iFld].nm.compare(3,string::npos,cf_el[iEl]) == 0 &&
-				tblStrct[iFld].nm.find(toLang) != 0 && trD_L(svalBASE_RAW,tblStrct[iFld].nm.substr(0,2)) != svalBASE_RAW) {
+			if(tblStrct[iFld].nm.size() > 3 && TSYS::strParse(tblStrct[iFld].nm,1,"#") == cf_el[iEl] &&
+				tblStrct[iFld].nm.find(toLang) != 0 && trD_L(svalBASE_RAW,TSYS::strParse(tblStrct[iFld].nm,0,"#")) != svalBASE_RAW) {
 			    ls += (ls.size()?", \"":"\"") + TSYS::strEncode(tblStrct[iFld].nm,TSYS::SQL,"\"") + "\"";
-			    ls2 += (ls2.size()?", '":"'") + TSYS::strEncode(trD_L(svalBASE_RAW,tblStrct[iFld].nm.substr(0,2)),TSYS::SQL,"'") + "'";
+			    ls2 += (ls2.size()?", '":"'") + TSYS::strEncode(trD_L(svalBASE_RAW,TSYS::strParse(tblStrct[iFld].nm,0,"#")),TSYS::SQL,"'") + "'";
 			}
 		}
 	    }
@@ -1689,7 +1691,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
 		hasTr = true;
 
 	    // No translation
-	    if(!hasTr || u_cfg.fld().type() != TFld::String || !(u_cfg.fld().flg()&TFld::TransltText) || (cf_el[iEl].size() > 3 && cf_el[iEl][2] == '#'))
+	    if(!hasTr || u_cfg.fld().type() != TFld::String || !(u_cfg.fld().flg()&TFld::TransltText) || (cf_el[iEl].size() > 3 && cf_el[iEl].find("#") != string::npos))
 		ls += (ls.size()?", \"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval;
 	    // Translation
 	    else {
@@ -1717,7 +1719,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
 		    ls += (ls.size()?", \"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval;
 		    for(unsigned iFld = 0; iFld < tblStrct.size(); iFld++) {
 			sid = tblStrct[iFld].nm;
-			if(sid.size() <= 3 || sid.compare(3,string::npos,cf_el[iEl]) != 0 || sid.compare(0,3,Mess->langCodeBase()+"#") == 0)
+			if(sid.size() <= 3 || TSYS::strParse(sid,1,"#") != cf_el[iEl] || TSYS::strParse(sid,0,"#") == Mess->langCodeBase())
 			    continue;
 			ls += (ls.size()?", \"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=''";
 		    }
@@ -1796,7 +1798,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
 				ls += (ls.size()?", \"":"\"") + TSYS::strEncode(tbl[0][iFld],TSYS::SQL,"\"") + "\"='" + TSYS::strEncode(tVl,TSYS::SQL,"'") + "'";
 
 				if(Mess->translDyn() && svalRAW.size())
-				    trCacheUpd.push_back(u_cfg.name()+string(1,0)+svalRAW+string(1,0)+tVl+string(1,0)+tbl[0][iFld].substr(0,2));
+				    trCacheUpd.push_back(u_cfg.name() + string(1,0) + svalRAW+string(1,0) + tVl+string(1,0) + TSYS::strParse(tbl[0][iFld],0,"#"));
 			    }
 			}
 		    }

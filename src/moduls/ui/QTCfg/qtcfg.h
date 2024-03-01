@@ -199,7 +199,7 @@ class ConfApp: public QMainWindow
     // Self widget's slots
     void checkBoxStChange( int stat );		//QCheckBox
     void buttonClicked( );			//Button
-    void combBoxActivate( const QString& );	//QComboBox
+    void combBoxActivate( int );		//QComboBox
     void listBoxGo( QListWidgetItem* );		//QListBox go for banch
     void listBoxPopup();			//QListBox popup menu
     void tablePopup( const QPoint &pos );	//QTable popup menu

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-29 09:04+0300\n"
+"POT-Creation-Date: 2024-02-13 09:20+0200\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -627,6 +627,9 @@ msgstr "Передвинуть вверх (Ctrl+Up)"
 
 msgid "Move Down (Ctrl+Down)"
 msgstr "Передвинуть вниз (Ctrl+Down)"
+
+msgid "Copy for MediaWiki"
+msgstr ""
 
 #, c-format
 msgid "%s| '%s' add by a record."

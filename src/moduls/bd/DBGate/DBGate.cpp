@@ -29,7 +29,7 @@
 #define MOD_NAME	trS("DB gate")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.1.6"
+#define MOD_VER		"1.1.7"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("BD module. Allows to locate databases of the remote OpenSCADA stations to local ones.")
 #define MOD_LICENSE	"GPL2"

@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.DBArch file: mess.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@ ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
     TMArchivator(iid, idb, cf_el), tmProc(0), tmProcMax(0), mBeg(0), mEnd(0), mMaxSize(0),
     mTmAsStr(false), mKeyTmCat(true), needMeta(true)
 {
-    setAddr("*.*");
+    setAddr(DB_GEN);
 }
 
 ModMArch::~ModMArch( )
@@ -79,7 +79,7 @@ void ModMArch::load_( )
     //TMArchivator::load_();
 
     //Init address to DB
-    if(addr().empty()) setAddr("*.*");
+    if(addr().empty()) setAddr(DB_GEN);
 
     try {
 	XMLNode prmNd;
@@ -277,7 +277,7 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time"),R_R_R_,"root",SARH_ID,1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SARH_ID,3,
-	    "dest","select","select","/db/list:onlydb","help",TMess::labStor(true).c_str());
+	    "dest","select","select","/db/list:onlydb","help",TMess::labStor().c_str());
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID)) {
 	    ctrMkNode("fld",opt,-1,"/prm/add/sz",_("Archive size, days"),RWRWR_,"root",SARH_ID,2,
 		"tp","real", "help",_("Set to 0 to disable this limit and to rise some the performance."));

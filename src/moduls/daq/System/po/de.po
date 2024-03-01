@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2011-2022.
+# Roman Savochenko <roman@oscada.org>, 2011-2023.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
+"Project-Id-Version: OpenSCADA.DAQ.System 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-15 20:40+0300\n"
+"POT-Creation-Date: 2024-01-15 14:32+0200\n"
 "PO-Revision-Date: 2009-08-18 09:59+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -20,33 +20,61 @@ msgstr ""
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "Load (%)"
-msgstr "Auslastung (%)"
+msgid "System"
+msgstr "System"
 
-msgid "System (%)"
-msgstr "System (%)"
-
-msgid "User (%)"
-msgstr "Benutzer (%)"
-
-msgid "Idle (%)"
-msgstr "Idletime (%)"
-
-msgid "General"
-msgstr "Im allgemein"
+msgid ""
+"Load whole, system, user, idle\n"
+"In %"
+msgstr ""
+"Laden Gesamtes, System, Benutzer, Leerlauf\n"
+"Im %"
 
 #, c-format
 msgid "Closing the file %p error '%s (%d)'!"
 msgstr "Schließen der Datei %p Fehler '%s (%d)'!"
 
-msgid "10:Device is not available."
-msgstr "10:Das Gerät ist."
+msgid "Frequency: driver"
+msgstr "Häufigkeit: Fahrer"
 
-msgid "Full CPU Load"
-msgstr "Auslastung des Prozessors"
+msgid "Frequency: governor"
+msgstr "Häufigkeit: Gouverneur"
 
-msgid "CPU Load: "
-msgstr "Auslastung des Prozessors: "
+msgid ""
+"Frequency: current\n"
+"In MHz"
+msgstr ""
+"Frequenz: aktuell\n"
+"In MHz"
+
+msgid ""
+"Frequency: minimum, set\n"
+"In MHz"
+msgstr ""
+"Häufigkeit: Minimum, eingestellt\n"
+"In MHz"
+
+msgid ""
+"Frequency: maximum, set\n"
+"In MHz"
+msgstr ""
+"Häufigkeit: Maximum, eingestellt\n"
+"In MHz"
+
+msgid "Model name"
+msgstr "Modellname"
+
+msgid "MHz"
+msgstr "MHz"
+
+msgid "BogoMIPS"
+msgstr "BogoMIPS"
+
+msgid "MHz at rdtsc"
+msgstr "MHz bei rdtsc"
+
+msgid "General"
+msgstr "Im allgemein"
 
 msgid "Total (GB)"
 msgstr "Total (GB)"
@@ -66,15 +94,8 @@ msgstr "Verwendete Datei-Knoten"
 msgid "Free file nodes"
 msgstr "Freie Datei Knoten"
 
-msgid "Mount point"
-msgstr "Einhängepunkt"
-
 msgid "10:Mountpoint isn't available."
 msgstr "10:Mountpoint ist nicht verfügbar."
-
-#, c-format
-msgid "File system: '%s'"
-msgstr "Dateisystem: '%s'"
 
 msgid "Read (B)"
 msgstr "Gelesen (B)"
@@ -88,11 +109,8 @@ msgstr "Geschrieben (B)"
 msgid "Write speed (B/s)"
 msgstr "Speed Geschrieben (B/s)"
 
-msgid "Disk(part)"
-msgstr "Disk(Teil)"
-
-msgid "HD statistic: "
-msgstr "HD-Statistik: "
+msgid "10:Device is not available."
+msgstr "10:Das Gerät ist."
 
 msgid "Name"
 msgstr "Name"
@@ -103,14 +121,8 @@ msgstr "Masseinheit"
 msgid "Temperature"
 msgstr "Temperatur"
 
-msgid "Disk"
-msgstr "Disk"
-
 msgid "Parameter Hddtemp"
 msgstr "Parameter Hddtemp"
-
-msgid "HD temperature: "
-msgstr "HD-Temperatur: "
 
 msgid "Free (KiB)"
 msgstr "Frei (KiB)"
@@ -136,9 +148,6 @@ msgstr "Swap total (KiB)"
 msgid "Swap used (KiB)"
 msgstr "Swap benutzt (KiB)"
 
-msgid "Memory info"
-msgstr "Speicherinformation"
-
 msgid "Received (B)"
 msgstr "Empfangen (B)"
 
@@ -151,11 +160,145 @@ msgstr "Uebermitteln (B)"
 msgid "Transmit speed (B/s)"
 msgstr "Speed Uebermitteln (B/s)"
 
-msgid "Interface"
-msgstr "Schnittstelle"
+msgid "Type"
+msgstr "Typ"
 
-msgid "Interface statistic: "
-msgstr "Schnittstellenstatistik: "
+msgid "Technology"
+msgstr "Technologie"
+
+msgid "Scope"
+msgstr "Umfang"
+
+msgid "Present"
+msgstr "Gegenwart"
+
+msgid "Manufacturer, model, SN"
+msgstr "Hersteller, Modell, SN"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Online"
+msgstr "Online"
+
+msgid "Health"
+msgstr "Gesundheit"
+
+msgid "Capacity"
+msgstr "Kapazität"
+
+msgid "Capacity level"
+msgstr "Kapazitätsniveau"
+
+msgid ""
+"Charge now, full, design\n"
+"In Ah"
+msgstr ""
+"Jetzt aufladen, voll, Design\n"
+"Im Ah"
+
+msgid ""
+"Energy now, full, design\n"
+"In Ah"
+msgstr ""
+"Energie jetzt, voll, Design\n"
+"Im Ah"
+
+msgid "Voltage"
+msgstr "Voltzahl"
+
+msgid "Voltage minimum"
+msgstr "Voltzahlminimum"
+
+msgid "Cycle count"
+msgstr "Zyklusanzahl"
+
+msgid ""
+"Power\n"
+"In Watts"
+msgstr ""
+"Leistung\n"
+"In Watt"
+
+msgid ""
+"Current\n"
+"In mAmpers"
+msgstr ""
+"Aktuell\n"
+"In Ampere"
+
+msgid ""
+"Temperature\n"
+"In degC"
+msgstr ""
+"Temperatur\n"
+"In GradC"
+
+msgid "Time to empty now, average"
+msgstr "Zeit zum Entleeren, durchschnittlich"
+
+msgid "Time to full"
+msgstr "Zeit, voll zu werden"
+
+msgid "Charge threshold start, stop"
+msgstr "Ladeschwelle Start, Stopp"
+
+msgid "Charge control threshold start, end"
+msgstr "Ladekontrollschwelle Anfang, Ende"
+
+msgid "Number of file descriptor slots currently"
+msgstr "Anzahl der aktuellen Dateideskriptor-Slots"
+
+msgid "Peak virtual memory size (KiB)"
+msgstr "Spitzengröße des virtuellen Speichers (KiB)"
+
+msgid "Virtual memory size (KiB)"
+msgstr "Größe des virtuellen Speichers (KiB)"
+
+msgid "Locked memory size (KiB)"
+msgstr "Größe des gesperrten Speichers (KiB)"
+
+msgid "Pinned memory size (KiB)"
+msgstr "Größe des angehefteten Speichers (KiB)"
+
+msgid "Peak resident set size (KiB)"
+msgstr "Spitzengröße der Residentmenge (KiB)"
+
+msgid "Resident set size (KiB)"
+msgstr "Größe des Resident-Sets (KiB)"
+
+msgid "Size of resident anonymous memory (KiB)"
+msgstr "Größe des residenten anonymen Speichers (KiB)"
+
+msgid "Size of resident file mappings (KiB)"
+msgstr "Größe der residenten Dateizuordnungen (KiB)"
+
+msgid "Size of resident shared memory (KiB)"
+msgstr "Größe des residenten Shared Memory (KiB)"
+
+msgid "Size of data segment (KiB)"
+msgstr "Größe des Datensegments (KiB)"
+
+msgid "Size of stack segment (KiB)"
+msgstr "Größe des Stapelsegments (KiB)"
+
+msgid "Size of text segment (KiB)"
+msgstr "Größe des Textsegments (KiB)"
+
+msgid "Shared library code size (KiB)"
+msgstr "Größe des Shared-Library-Codes (KiB)"
+
+msgid "Page table entries size (KiB)"
+msgstr "Größe der Seitentabelleneinträge (KiB)"
+
+msgid "Swapped-out virtual memory size by anonymous private pages (KiB)"
+msgstr "Größe des ausgelagerten virtuellen Speichers nach anonymen privaten Seiten (KiB)"
+
+msgid "Size of hugetlb memory portions (KiB)"
+msgstr "Größe der Hugetlb-Speicherportionen (KiB)"
+
+msgid "Number of threads in process"
+msgstr "Anzahl der Threads in Bearbeitung"
 
 msgid "State"
 msgstr "Zustand"
@@ -171,11 +314,8 @@ msgstr "Eigentum "
 msgid "Closing the pipe %p error '%s (%d)'!"
 msgstr "Schließen der Pipe %p Fehler '%s (%d)'!"
 
-msgid "Data sensors"
-msgstr "Datesensoren"
-
-msgid "HDD SMART: "
-msgstr "HDD SMART: "
+msgid "Sensors"
+msgstr "Sensoren"
 
 msgid "UPS"
 msgstr "USV"
@@ -194,9 +334,6 @@ msgstr "Benutzer"
 msgid "Password"
 msgstr "Passwort"
 
-msgid "UPS: "
-msgstr "USV: "
-
 msgid "Full seconds"
 msgstr "Volle Sekunden"
 
@@ -212,17 +349,8 @@ msgstr "Stunden"
 msgid "Days"
 msgstr "Tage"
 
-msgid "System"
-msgstr "System"
-
 msgid "Station"
 msgstr "Station"
-
-msgid "System up time"
-msgstr "Betriebszeit des Systems"
-
-msgid "Station up time"
-msgstr "Betriebszeit der Station"
 
 msgid "System DA"
 msgstr "Systemdatenerfassung"
@@ -231,11 +359,13 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid ""
-"Provides data acquisition from the OS. Supported OS Linux data sources: "
-"HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc."
+"Provides data acquisition from Operation System. Supported OS Linux data "
+"sources: CPU, Memory, Sensors, Disk SMART, Disk Statistic, File System, "
+"Network, Power, UPS, Up Time etc."
 msgstr ""
-"Ermöglicht die Datenerfassung des Betriebssystems. Unterstützt werden die ОС "
-"Linux Datenquellen: HDDTemp, Sensors, Uptime, Memory, CPU, UPS und andere."
+"Bietet Datenerfassung vom Betriebssystem. Unterstützte Betriebssystem- Linux-"
+"Datenquellen: CPU, Speicher, Sensoren, Disk SMART, Festplattenstatistik, "
+"Dateisystem, Netzwerk, Strom, USV, Betriebszeit usw."
 
 msgid "Auto create active data sources"
 msgstr "Automatisches Erstellen ist aktiv - DA"
@@ -289,30 +419,36 @@ msgstr "Fehler beim Schreiben des Werts für das Attribut '%s': %s"
 msgid "CPU"
 msgstr "Prozessor"
 
-msgid "File Systems"
-msgstr "Dateisysteme"
+msgid "File System"
+msgstr "Dateisystem"
 
-msgid "HDD statistic"
-msgstr "HDD Statistik"
+msgid "Disk Statistic"
+msgstr "Festplattenstatistik"
 
 msgid "HDD temperature"
 msgstr "HDD Temperatur"
 
+msgid "HD temperature"
+msgstr "HD Temperatur"
+
 msgid "Memory"
 msgstr "Speicher"
 
-msgid "Network statistic"
-msgstr "Netzstatistik"
+msgid "Network"
+msgstr "Netzwerk"
 
-msgid "Qt sensors"
-msgstr "Qt-Sensoren"
+msgid "Power"
+msgstr "Leistung"
 
-msgid "Sensors"
-msgstr "Sensoren"
+msgid "Process"
+msgstr "Prozess"
 
-msgid "UPS (NUT)"
-msgstr "USV (NUT)"
+msgid "Qt sensor"
+msgstr "Qt-Sensor"
 
-msgid "Up time"
+msgid "Disk SMART"
+msgstr "Festplatte SMART"
+
+msgid "Up Time"
 msgstr "Betriebszeit"
 

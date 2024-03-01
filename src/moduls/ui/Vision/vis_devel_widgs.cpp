@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -50,6 +50,7 @@
 #include <QMimeData>
 #include <QCompleter>
 #include <QMdiSubWindow>
+#include <QActionGroup>
 
 #include "../QTStarter/lib_qtgen.h"
 #include "vis_widgs.h"
@@ -57,11 +58,17 @@
 #include "vis_shapes.h"
 #include "vis_devel_widgs.h"
 
-using namespace OSCADA_QT;
-using namespace VISION;
+#if QT_VERSION < 0x060000
+# define fromSecsSinceEpoch(tm)	fromTime_t(tm)
+# define toSecsSinceEpoch()	toTime_t()
+# define typeId()		type()
+#endif
 
 #undef _
 #define _(mess) mod->I18N(mess, mainWin()->lang().c_str()).c_str()
+
+using namespace OSCADA_QT;
+using namespace VISION;
 
 //****************************************
 //* Inspector of attributes model        *
@@ -446,8 +453,8 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 	    switch(role) {
 		case Qt::DisplayRole:
 		    val = it->data();
-		    if(val.type() == QVariant::Int && it->flag()&ModInspAttr::Item::DateTime)
-			val = QDateTime::fromTime_t(val.toInt()?val.toInt():time(NULL)).toString("dd.MM.yyyy hh:mm:ss");
+		    if(val.typeId() == QVariant::Int && it->flag()&ModInspAttr::Item::DateTime)
+			val = QDateTime::fromSecsSinceEpoch(val.toInt()?val.toInt():time(NULL)).toString("dd.MM.yyyy hh:mm:ss");
 		    break;
 		case Qt::EditRole:	val = it->dataEdit();	break;
 		case Qt::UserRole:	val = it->flag();	break;
@@ -550,51 +557,61 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &ivl, int ro
 
 	XMLNode chCtx("attr");
 
-	string val = (value.type()==QVariant::Bool) ? (value.toBool()?"1":"0") : value.toString().toStdString();
+	string val = (value.typeId()==QVariant::Bool) ? (value.toBool()?"1":"0") : value.toString().toStdString();
 	XMLNode req("set"), reqPrev("get");
 	bool toSetWdg = false;
 	for(int off = 0; (swdg=TSYS::strSepParse(nwdg,0,';',&off)).size(); ) {
 	    req.setAttr("path",swdg+"/%2fattr%2f"+nattr)->setText(val);
 	    DevelWdgView *dw = mainWin()->work_space->findChild<DevelWdgView*>(swdg.c_str());
 	    if(dw) {
-		chCtx.clear();
-		chCtx.setAttr("id",nattr)->setAttr("prev",it->data().toString().toStdString())->setText(val);
+		chCtx.clear()->setAttr("id",nattr)->setAttr("prev",it->data().toString().toStdString());
 		if(it->flag()&Item::Active) dw->chLoadCtx(chCtx, "", nattr);
 		//Load previous value for group
 		if(isGrp) {
-		    reqPrev.setAttr("path",swdg+"/%2fattr%2f"+nattr);
+		    reqPrev.clear()->setAttr("path",swdg+"/%2fattr%2f"+nattr);
 		    if(!mainWin()->cntrIfCmd(reqPrev)) chCtx.setAttr("prev",reqPrev.text());
 		}
 	    }
 
-	    string reqVal = req.text();
 	    int reqRez = 0;
 	    if((reqRez=mainWin()->cntrIfCmd(req)))
 		mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), (reqRez==TError::Core_CntrWarning)?TVision::Warning:TVision::Error, mainWin());
 
 	    if(reqRez == TError::NoError || reqRez == TError::Core_CntrWarning) {
-		//Send change request to opened to edit widget
-		if(dw)	dw->chRecord(chCtx);
+		string reqVal = req.text();
 
-		// List check
+		//Requesting back the set value to control limits of the single setting
+		if(!isGrp) {
+		    req.setName("get")->clear()->setAttr("path",swdg+"/%2fattr%2f"+nattr);
+		    mainWin()->cntrIfCmd(req); reqVal = req.text();
+		    switch(it->data().typeId()) {
+			case QVariant::Bool:	value = (bool)s2i(reqVal);break;
+			case QVariant::Int:	value = s2i(reqVal);	break;
+			case QVariant::Double:	value = s2r(reqVal);	break;
+			default:		value = reqVal.c_str();	break;
+		    }
+		    if(value == it->data()) return true;
+		}
+
+		//Sending the change request to opened widget for editing
+		if(dw)	{ chCtx.setText(reqVal); dw->chRecord(chCtx); }
+
+		//Checking the list
 		for(int iIt = 0; iIt < it->dataEdit1().toStringList().size() && iIt < it->dataEdit().toStringList().size(); iIt++)
 		    if(it->dataEdit1().toStringList()[iIt] == value) { value = it->dataEdit().toStringList()[iIt]; break; }
 
-		//Local update
-		switch(it->data().type()) {
-		    case QVariant::Bool:	it->setData((bool)s2i(reqVal));	break;
-		    case QVariant::Int:		it->setData(s2i(reqVal));	break;
-		    case QVariant::Double:	it->setData(s2r(reqVal));	break;
-		    default:			it->setData(reqVal.c_str());	break;
-		}
+		//Locally update
+		it->setData(value);
 
+		//Notifying
 		it->setModify(true);
 		emit modified(swdg+"/a_"+nattr);
 		emit dataChanged(index, index);
 		if(it->flag()&(Item::Active|Item::Select|Item::SelEd)) toSetWdg = true;
 	    }
 	}
-	if(toSetWdg || (TSYS::strSepParse(cur_wdg,1,';').size() && (isGrp || nwdg == TSYS::strSepParse(cur_wdg,0,';')))) setWdg(cur_wdg);
+	if(toSetWdg || (TSYS::strSepParse(cur_wdg,1,';').size() && (isGrp || nwdg == TSYS::strSepParse(cur_wdg,0,';'))))
+	    setWdg(cur_wdg);
     } catch(...) { return false; }
 
     return true;
@@ -711,8 +728,8 @@ bool InspAttr::event( QEvent *event )
 void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 {
     string nattr, nwdg;
-    QAction *actClr, *actChDown, *actCopy, *actEdit;
-    actClr = actChDown = actCopy = actEdit = NULL;
+    QAction *actClr, *actChDown, *actCopy, *actEdit, *actUpload;
+    actClr = actChDown = actCopy = actEdit = actUpload = NULL;
     ModInspAttr::Item *it = NULL;
 
     //Attribute
@@ -756,6 +773,12 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	    actChDown = new QAction(QPixmap::fromImage(ico_t),_("Lower the widget changes to its parent"),this);
 	    actChDown->setStatusTip(_("Press for lowering the widget changes to its parent."));
 	    popup.addAction(actChDown);
+	}
+
+	// Image data loading directly
+	if(it->flag()&ModInspAttr::Item::Resource) {
+	    actUpload = new QAction(_("Upload file"), this);
+	    popup.addAction(actUpload);
 	}
     }
 
@@ -808,6 +831,22 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 		modelData.setWdg(modelData.curWdg());
 	    }
 	}
+	else if(actUpload && rez == actUpload) {
+	    QString fn = ((VisDevelop*)window())->getFileName(_("Loading a file"),"",_("Any (*)"), QFileDialog::AcceptOpen);
+	    if(fn.size()) {
+		QFile file(fn);
+		if(!file.open(QFile::ReadOnly))
+		    mod->postMess(mod->nodePath().c_str(), QString(_("Error opening the file '%1': %2")).arg(fn).arg(file.errorString()), TVision::Error, this);
+		else if(file.size() >= limUserFile_SZ)
+		    mod->postMess(mod->nodePath().c_str(), QString(_("The download file '%1' is very large.")).arg(fn), TVision::Error);
+		else {
+		    QByteArray data = file.readAll();
+		    model()->setData(selectedIndexes()[0],
+			("data:"+TUIS::mimeGet(file.fileName().toStdString(),"")+"\n"+TSYS::strEncode(string(data.data(),data.size()),TSYS::base64)).c_str(),
+			Qt::EditRole);
+		}
+	    }
+	}
 	popup.clear();
     }
 }
@@ -831,7 +870,7 @@ QWidget *InspAttr::ItemDelegate::createEditor( QWidget *parent, const QStyleOpti
 	w_del = new QComboBox(parent);
 	if(flag&ModInspAttr::Item::SelEd) ((QComboBox*)w_del)->setEditable(true);
     }
-    else if(value.type() == QVariant::String && flag&ModInspAttr::Item::FullText) {
+    else if(value.typeId() == QVariant::String && flag&ModInspAttr::Item::FullText) {
 	w_del = new QTextEdit(parent);
 #if QT_VERSION >= 0x050A00
 	((QTextEdit*)w_del)->setTabStopDistance(40);
@@ -850,21 +889,21 @@ QWidget *InspAttr::ItemDelegate::createEditor( QWidget *parent, const QStyleOpti
 	    snt_hgl->setSnthHgl(rules);
 	}
     }
-    else if(value.type() == QVariant::String && flag&ModInspAttr::Item::Font)
+    else if(value.typeId() == QVariant::String && flag&ModInspAttr::Item::Font)
 	w_del = new LineEditProp(parent,LineEditProp::Font);
-    else if(value.type() == QVariant::String && flag&ModInspAttr::Item::Color)
+    else if(value.typeId() == QVariant::String && flag&ModInspAttr::Item::Color)
 	w_del = new LineEditProp(parent,LineEditProp::Color);
-    else if(value.type() == QVariant::Int && flag&ModInspAttr::Item::DateTime) {
+    else if(value.typeId() == QVariant::Int && flag&ModInspAttr::Item::DateTime) {
 	w_del = new QDateTimeEdit(parent);
 	((QDateTimeEdit*)w_del)->setCalendarPopup(true);
 	((QDateTimeEdit*)w_del)->setDisplayFormat("dd.MM.yyyy hh:mm:ss");
     }
-    else if(value.type() == QVariant::Int) {
+    else if(value.typeId() == QVariant::Int) {
 	w_del = new QSpinBox(parent);
 	((QSpinBox*)w_del)->setMinimum(-2147483647);
 	((QSpinBox*)w_del)->setMaximum(2147483647);
     }
-    else if(value.type() == QVariant::Double) {
+    else if(value.typeId() == QVariant::Double) {
 	w_del = new QDoubleSpinBox(parent);
 	((QDoubleSpinBox*)w_del)->setMinimum(-1e100);
 	((QDoubleSpinBox*)w_del)->setMaximum(1e100);
@@ -872,7 +911,7 @@ QWidget *InspAttr::ItemDelegate::createEditor( QWidget *parent, const QStyleOpti
     }
     else {
 	QItemEditorFactory factory;
-	w_del = factory.createEditor(value.type(), parent);
+	w_del = factory.createEditor(value.typeId(), parent);
     }
 
     w_del->installEventFilter(const_cast<InspAttr::ItemDelegate*>(this));
@@ -891,12 +930,13 @@ void InspAttr::ItemDelegate::setEditorData( QWidget *editor, const QModelIndex &
 	if(flag&ModInspAttr::Item::SelEd) comb->setEditText(index.data(Qt::DisplayRole).toString());
 	else comb->setCurrentIndex(comb->findText(index.data(Qt::DisplayRole).toString()));
     }
-    else if(value.type()==QVariant::String && flag&ModInspAttr::Item::FullText && dynamic_cast<QTextEdit*>(editor))
+    else if(value.typeId() == QVariant::String && flag&ModInspAttr::Item::FullText && dynamic_cast<QTextEdit*>(editor))
 	((QTextEdit*)editor)->setPlainText(value.toString());
-    else if(value.type() == QVariant::String && (flag&ModInspAttr::Item::Font || flag&ModInspAttr::Item::Color) && dynamic_cast<LineEditProp*>(editor))
+    else if(value.typeId() == QVariant::String && (flag&ModInspAttr::Item::Font || flag&ModInspAttr::Item::Color) &&
+	    dynamic_cast<LineEditProp*>(editor))
 	((LineEditProp*)editor)->setValue(value.toString());
-    else if(value.type() == QVariant::Int && flag&ModInspAttr::Item::DateTime && dynamic_cast<QDateTimeEdit*>(editor))
-	((QDateTimeEdit*)editor)->setDateTime(QDateTime::fromTime_t(value.toInt()?value.toInt():time(NULL)));
+    else if(value.typeId() == QVariant::Int && flag&ModInspAttr::Item::DateTime && dynamic_cast<QDateTimeEdit*>(editor))
+	((QDateTimeEdit*)editor)->setDateTime(QDateTime::fromSecsSinceEpoch(value.toInt()?value.toInt():time(NULL)));
     else QItemDelegate::setEditorData(editor, index);
 }
 
@@ -907,13 +947,14 @@ void InspAttr::ItemDelegate::setModelData( QWidget *editor, QAbstractItemModel *
 
     if(flag&ModInspAttr::Item::Select && dynamic_cast<QComboBox*>(editor))
 	model->setData(index,((QComboBox*)editor)->currentText(),Qt::EditRole);
-    else if(value.type()==QVariant::String && flag&ModInspAttr::Item::FullText && dynamic_cast<QTextEdit*>(editor))
+    else if(value.typeId() == QVariant::String && flag&ModInspAttr::Item::FullText && dynamic_cast<QTextEdit*>(editor))
 	model->setData(index,((QTextEdit*)editor)->toPlainText(),Qt::EditRole);
-    else if(value.type() == QVariant::String && (flag&ModInspAttr::Item::Font || flag&ModInspAttr::Item::Color) && dynamic_cast<LineEditProp*>(editor))
+    else if(value.typeId() == QVariant::String && (flag&ModInspAttr::Item::Font || flag&ModInspAttr::Item::Color) &&
+	    dynamic_cast<LineEditProp*>(editor))
 	model->setData(index,((LineEditProp*)editor)->value());
-    else if(value.type() == QVariant::Int && flag&ModInspAttr::Item::DateTime && dynamic_cast<QDateTimeEdit*>(editor))
+    else if(value.typeId() == QVariant::Int && flag&ModInspAttr::Item::DateTime && dynamic_cast<QDateTimeEdit*>(editor))
     {
-	int tm = ((QDateTimeEdit*)editor)->dateTime().toTime_t();
+	int tm = ((QDateTimeEdit*)editor)->dateTime().toSecsSinceEpoch();
 	model->setData(index,(tm>(time(NULL)+3600))?0:tm,Qt::EditRole);
     }
     else QItemDelegate::setModelData(editor, model, index);
@@ -925,7 +966,7 @@ QSize InspAttr::ItemDelegate::sizeHint( const QStyleOptionViewItem &option, cons
 
     QVariant value = index.data(Qt::EditRole);
     int flag = index.data(Qt::UserRole).toInt();
-    if(value.type()==QVariant::String && flag&ModInspAttr::Item::FullText)
+    if(value.typeId() == QVariant::String && flag&ModInspAttr::Item::FullText)
 	return QSize(w_sz.width(),vmin(150,vmax(50,w_sz.height())));
 
     return QSize(w_sz.width(),vmin(150,w_sz.height()));
@@ -1700,12 +1741,14 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 
 void WdgTree::ctrTreePopup( )
 {
-    QMenu popup;
+    owner()->applyWorkWdg(0);
 
+    QMenu popup;
     //Add actions
     popup.addAction(owner()->actLibNew);
     popup.addAction(owner()->actVisItAdd);
     QMenu *forLib = popup.addMenu(owner()->actVisItAdd->icon(), _("... from the Library"));
+    forLib->setEnabled(owner()->actVisItAdd->isEnabled());
     for(unsigned iLm = 0; iLm < owner()->lb_menu.size(); iLm++)
 	forLib->addMenu(owner()->lb_menu[iLm]);
     popup.addAction(owner()->actVisItDel);
@@ -1958,14 +2001,16 @@ void ProjTree::updateTree( const string &vca_it )
 
 void ProjTree::ctrTreePopup( )
 {
-    QMenu popup;
+    owner()->applyWorkWdg(1);
 
+    QMenu popup;
     //Add actions
     popup.addAction(owner()->actPrjRun);
     popup.addSeparator();
     popup.addAction(owner()->actPrjNew);
     popup.addAction(owner()->actVisItAdd);
     QMenu *forLib = popup.addMenu(owner()->actVisItAdd->icon(), _("... from the Library"));
+    forLib->setEnabled(owner()->actVisItAdd->isEnabled());
     for(unsigned iLm = 0; iLm < owner()->lb_menu.size(); iLm++)
 	forLib->addMenu(owner()->lb_menu[iLm]);
     popup.addAction(owner()->actVisItDel);
@@ -1996,10 +2041,10 @@ void ProjTree::ctrTreePopup( )
 //**********************************************************************************************
 //* Text edit line widget with detail dialog edit button. Support: Font and Color edit dialogs.*
 //**********************************************************************************************
-LineEditProp::LineEditProp( QWidget *parent, DType tp, bool m_toClose ) : QWidget( parent ), m_tp(tp), toClose(m_toClose)
+LineEditProp::LineEditProp( QWidget *parent, DType tp, bool m_toClose ) : QWidget(parent), m_tp(tp), toClose(m_toClose)
 {
     QHBoxLayout *box = new QHBoxLayout(this);
-    box->setMargin(0);
+    box->setContentsMargins(0, 0, 0, 0);
     box->setSpacing(0);
 
     ed_fld = new QLineEdit(this);

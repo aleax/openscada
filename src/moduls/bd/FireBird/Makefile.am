@@ -9,7 +9,7 @@ else
 oscd_modul_LTLIBRARIES = bd_FireBird.la
 bd_FireBird_la_CXXFLAGS =
 bd_FireBird_la_LIBTOOLFLAGS = --tag=disable-static
-bd_FireBird_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
+bd_FireBird_la_LDFLAGS = -module -avoid-version $(LIB_MOD)
 endif
 
 bd_FireBird_la_CXXFLAGS += $(FIREBIRD_CFLAGS)

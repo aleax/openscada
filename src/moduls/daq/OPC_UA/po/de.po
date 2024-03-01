@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 17:36+0300\n"
+"POT-Creation-Date: 2024-02-06 08:32+0200\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -62,6 +62,9 @@ msgstr "Auth: Benutzer"
 msgid "Auth: password"
 msgstr "Auth: Passwort"
 
+msgid "Asynchronous write"
+msgstr "Asynchronous Rekord"
+
 msgid "Use the \"Read\" function"
 msgstr "Verwenden Sie die \"Read \" Funktion"
 
@@ -103,6 +106,7 @@ msgstr "Wiederherstellung in %.6g s. "
 msgid "Acquisition. "
 msgstr "Erwerb. "
 
+#, c-format
 msgid "Acquisition with the period %s. "
 msgstr "Erwerb mit dem Zeitraum %s. "
 
@@ -110,8 +114,13 @@ msgstr "Erwerb mit dem Zeitraum %s. "
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Erwerb nächsten durch cron '%s'. "
 
+#, c-format
 msgid "Spent time %s[%s], requests %.6g. "
 msgstr "Verbrauchte Zeit %s[%s], anfragen %.6g. "
+
+#, c-format
+msgid "To write %d. "
+msgstr "Schreiben von %d. "
 
 #, c-format
 msgid ""
@@ -466,8 +475,8 @@ msgstr "Aktive Abonnements"
 msgid "Enabled"
 msgstr "Aktiviert"
 
-msgid "DB"
-msgstr "DB"
+msgid "Storage"
+msgstr "Lagerung"
 
 #, c-format
 msgid "Remove from '%s'"
@@ -502,8 +511,7 @@ msgstr "0 für die automatische Setzen von cntrKeepAlive*publInterv"
 
 #, c-format
 msgid "%d(%s): at %s(live %s), secure channel %u; Publish requests %u"
-msgstr ""
-"%d(%s): bei %s(live %s), sicherer Kanal %u; Anfragen veröffentlichen %u"
+msgstr "%d(%s): bei %s(live %s), sicherer Kanal %u; Anfragen veröffentlichen %u"
 
 msgid "Closed"
 msgstr "Geschlossen"
@@ -549,3 +557,4 @@ msgstr "Server OPC-UA"
 
 msgid "Provides OPC-UA server service implementation."
 msgstr "Bietet OPC-UA Server-Service-Implementierung."
+

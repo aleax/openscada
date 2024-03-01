@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ICP_DAS file: da_LP_8x.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2012-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -327,8 +327,8 @@ void da_LP_8x::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &p
     tval *ePrm = (tval*)p->extPrms;
 
     if(p->modTp.getS() == "I-8017") {	//Individual I-8017 processing
-	bool ha = (vo.name().substr(0,2) == "ha");
-	bool la = (vo.name().substr(0,2) == "la");
+	bool ha = (vo.name().find("ha") == 0);
+	bool la = (vo.name().find("la") == 0);
 	if(!(ha||la) || !ePrm->init) return;
 
 	//Create previous value
@@ -442,7 +442,7 @@ bool da_LP_8x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 	    if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 		p->setModPrm("fastPer", ePrm ? r2s(ePrm->fastPer = s2r(opt->text()),5) : opt->text());
 	}
-	else if(a_path.substr(0,12) == "/cfg/mode/in") {
+	else if(a_path.find("/cfg/mode/in") == 0) {
 	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 		opt->setText(ePrm?i2s(ePrm->cnlMode[s2i(a_path.substr(12))]):p->modPrm("cnl:"+a_path.substr(12),"0"));
 	    if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
@@ -615,8 +615,6 @@ void *da_LP_8x::fastTask( void *ip )
 	    //Calc next work time and sleep
 	    wTm += 1000000ll*ePrm->fastPer;
 	    TSYS::taskSleep(int64_t(1e9*ePrm->fastPer));	//To prevent hang at wTm more lesser to current
-	    //sp_tm.tv_sec = wTm/1000000; sp_tm.tv_nsec = 1000*(wTm%1000000);
-	    //clock_nanosleep(CLOCK_REALTIME, TIMER_ABSTIME, &sp_tm, NULL);
 	}
     }
 

@@ -42,6 +42,7 @@ class TpContr;
 class Lib : public TCntrNode, public TConfig
 {
     public:
+	//Methods
 	Lib( const string &id, const string &name, const string &lib_db );
 	~Lib( );
 
@@ -52,7 +53,6 @@ class Lib : public TCntrNode, public TConfig
 	string descr( )		{ return cfg("DESCR").getS(); }
 	bool startStat( ) const	{ return runSt; }
 
-	bool isStdStorAddr( ) const		{ return (tbl() == ("flb_"+id())); }	//????[v1.0] Remove
 	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
 	string tbl( ) const			{ return cfg("DB").getS().empty() ? ("flb_"+id()) : cfg("DB").getS(); }
 	string fullDB( bool qTop = false ) const { return DB(qTop)+'.'+tbl(); }
@@ -74,6 +74,7 @@ class Lib : public TCntrNode, public TConfig
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     protected:
+	//Methods
 	const char *nodeName( ) const	{ return mId.getSd(); }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
@@ -85,6 +86,10 @@ class Lib : public TCntrNode, public TConfig
 	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
     private:
+	//Methods
+	bool isStdStorAddr( ) const		{ return (tbl() == ("flb_"+id())); }	//????[v1.0] Remove
+
+	//Attributes
 	bool	runSt;
 	int	mFnc;
 	string	mDB;

@@ -280,6 +280,9 @@ Information variables of the program:
 <li> <i>ARCH_ALRM</i> — Name of requesting the actual alarms table ("&lt;alarms&gt;").</li>
 <li> <i>ARCH_ALRM_CH</i> — Name of requesting for records change of the the actual alarms table ("&lt;alarmsChange&gt;").</li>
 <li> <i>ARCH_NOALRM</i> — Name of requesting for the buffer and archivers and without the actual alarms table ("&lt;noalarms&gt;").</li>
+<li> <i>DB_GEN</i> — Code name of the Generic Storage ("&lt;gen&gt;").</li>
+<li> <i>DB_CFG</i> — Code name of the Configuration File ("&lt;cfg&gt;").</li>
+<li> <i>DB_NULL</i> — Mark of the DB NULL value ("&lt;NULL&gt;").</li>
 <li> <i>__func__</i> — The full name of the calling function.</li>
 <li> <i>vmin (a,b)</i> — Determination of the minimum value.</li>
 <li> <i>vmax (a,b)</i> — Definition of the maximum value.</li></ul>
@@ -295,7 +298,7 @@ Information variables of the program:
 <li> <i>string id( ) const;</i> — station ID.</li>
 <li> <i>string name( ) const;</i> — Localized name of the station.</li>
 <li> <i>void setName( const string &amp;vl );</i> — Setting the localized name of the station.</li>
-<li> <i>string ico( string *tp = NULL );</i> — Common station icon obtaining with placing the file type to <i>tp</i>.</li>
+<li> <i>string ico( string *tp = NULL, bool retPath = false );</i> — Obtaining file data or path, for <i>retPath</i>, of the station common icon with placing the file type to <i>tp</i>.</li>
 <li> <i>string user( ) const;</i> — The system user on behalf of which the system is running.</li>
 <li> <i>string host( );</i> — Host name for the station run.</li>
 <li> <i>void list( vector&lt;string&gt; &amp;list ) const;</i> — A list of registered subsystems in the system.</li>
@@ -346,10 +349,7 @@ Information variables of the program:
 <li> <i>void setCfgCtx( XMLNode *vl, bool last = false );</i> — Set the global configuration context of the interstation copying or the <i>last</i> setting link, for the access lock used <i>cfgLoadSaveM()</i>. At any operation with the global configuration context the last setting link is cleared.</li>
 <li> <i>ResMtx &amp;cfgLoadSaveM( );</i> — Lock of the loading and saving configuration.</li>
 <li> <i>static void sighandler( int signal );</i> — Function of the  default handler of the signals of the system as a whole.</li>
-<li> <i>unsigned long long sysClk( );</i> — The estimated frequency of the processor on which the system works (Hz). </li>
-<li> <i>void clkCalc( );</i> — Calculation of frequency of the processor on which the system works. It is called periodically for the systems with variable CPU  frequency.</li>
-<li> <i>unsigned long long shrtCnt( );</i> — The function of the measurement of small intervals of time by the counter of the CPU cycles. Returns the value of the counter of CPU cycles.</li>
-<li> <i>static long HZ( );</i> — Time of the system teak  of the CPU.</li>
+<li> <i>float sysClk( ); void setSysClk( float vl );</i> — System clock-frequency in MHz and its setting from outside for information on the root page.</li>
 <li> <i>void taskCreate( const string &amp;path, int priority, void *(*start_routine)(void *), void *arg, int wtm = 5, pthread_attr_t *pAttr = NULL, bool *startSt = NULL );</i> — Create task (thread) with id <i>path</i>, <i>priority</i> (-1...99), task's function <i>start_routine</i> and it argument <i>arg</i>, and also wait for user's code start by flag <i>startSt</i>.</li>
 <li> <i>void taskDestroy( const string &amp;path, bool *endrunCntr = NULL, int wtm = 5, bool noSignal = false );</i> — Destroy task with id <i>path</i>, start control flag <i>startCntr</i>. Use <i>noSignal</i> for exclude signal <i>SIGALRM</i> send to the task.</li>
 <li> <i>void taskSendSIGALRM( const string &amp;path );</i> — Sending the termination signal "ALARM" to a task with id <i>path</i>.</li>
@@ -392,7 +392,7 @@ Information variables of the program:
 <li> <i>static string ll2str( long long val, IntView view=Dec );</i> — Transformation of a long integer (64bit) to the string type of view <i>view</i>.</li>
 <li> <i>static string real2str( double val, int prec=15, char tp='g');</i> — Real transformation with an accuracy <i>prec</i> signs and type <i>tp</i> to the string.</li>
 <li> <i>static double realRound( double val, int dig=0, bool toint=false );</i> — Rounding the real number to the specified digit <i>dig</i> after the decimal point with the possibility of transformation to integer after rounding <i>toint</i>.</li>
-<li> <i>static string atime2str( time_t tm, const string &amp;format = "", bool gmt = false );</i> — Astronomic UNIX time <i>tm</i> conversion to a string, in the <i>format</i> of the POSIX-function "strftime()" or "gmtime()", for <i>gmt</i>.</li>
+<li> <i>static string atime2str( time_t tm, const string &amp;format = "", bool gmt = false, const string &amp;user_lang = "" );</i> — Astronomic UNIX time <i>tm</i> conversion to string in the <i>format</i> of the POSIX-function "strftime()" or "gmtime()" for <i>gmt</i>, also can be localised for the user and language <i>user_lang</i> or from the messages translation context.</li>
 <li> <i>static string time2str( double tm );</i> — Convert time interval, in seconds, to string like "1hour 23min 10sec".</li>
 <li> <i>static string cpct2str( double cnt );</i> — Traffic counter <i>cnt</i> (bytes) convert to string like "12.5KiB".</li>
 <li> <i>static double str2real( const string &amp;val );</i> — String transformation to the real.</li>
@@ -410,7 +410,7 @@ Information variables of the program:
 <li> <i>static string strEncode( const string &amp;in, Code tp, const string &amp;opt = "" );</i> — Encoding of the string by the specified rule <i>tp</i> and the option <i>opt</i> (symbols by "Custom").</li>
 <li> <i>static string strDecode( const string &amp;in, Code tp = Custom, const string &amp;opt = "" );</i> — Decoding of the string <i>in</i> by the specified rule <i>tp</i> and the option <i>opt</i> (separator or "&lt;text&gt;" for "Bin").</li>
 <li> <i>static string strMess( const char *fmt, ... );</i> — Formation of the string by the template <i>fmt</i> and arguments. It is implemented on the basis of "printf".</li>
-<li> <i>static string strLabEnum( const string &amp;base );</i> — Individual string labels from <i>base</i> forming by increment at end. Supported numbering into decimal, hexadecimal (prefix "0x") or octal (prefix "0") notation.</li>
+<li> <i>static string strLabEnum( const string &amp;base, bool onlyDec = true );</i> — Individual string labels from <i>base</i> forming by increment at end. Supported numbering into decimal, hexadecimal (prefix "0x") or octal (prefix "0") notation and <i>onlyDec</i> for simple enumerating one digit, found the first from the string end.</li>
 <li> <i>string strCompr( const string &amp;in, int lev=-1);</i> — Compression of the string <i>in</i> with the compression level <i>lev</i>.</li>
 <li> <i>string strUncompr( const string &amp;in );</i> — Decompression of the string <i>in</i>.</li>
 <li> <i>static inline uint16_t getUnalign16( const void *p ); static inline uint32_t getUnalign32( const void *p ); static inline uint64_t getUnalign64( const void *p );</i> — Unaligned read for unsigned </li>
@@ -556,7 +556,7 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>bool translItSplit( const string &amp;base, const string &amp;srcFltr = "" );</i> — Splitting the BASE message <i>base</i> per it sources and only for matched ones to <i>srcFltr</i>.</li>
 <li> <i>bool translItRemTrs( const string &amp;base, const string &amp;srcFltr = "" );</i> — Removing the BASE message <i>base</i> from the individual messages table "Trs" and only for matched sources to <i>srcFltr</i>.</li>
 <li> <i>string trCtx( const string &amp;user_lang = mess_TrModifMark, bool *hold = NULL );</i> — Getting (by default) and registering(no empty)/clearing(empty) the translation context <i>user_lang</i> bound to the call pthread. <i>hold</i> can be pointed to detect the context already registered and do not clear that.</li>
-<li> <i>static string labStor( bool nogen = false ); static string labStorRemGenStor( ); static string labSecCRON( ); static string labSecCRONsel( ); static string labTaskPrior( ); static string labMessCat( ); static string labStdOutTrs( );</i> — Common help labels.</li>
+<li> <i>static string labStorFromCode( const string &amp;code ); static string labStor( ); static string labStorRem( const string &amp;cnt ); static string labSecCRON( ); static string labSecCRONsel( ); static string labTaskPrior( ); static string labMessCat( ); static string labStdOutTrs( );</i> — Common help labels.</li>
 <li> <i>int getUTF8( const string &amp;str, int off = 0, int32_t *symb = NULL );</i> — Get and parse a UTF-8 symbol.</li>
 <li> <i>static string setUTF8( int32_t symb );</i> — Set, form and return a UTF-8 symbol from their code <i>symb</i>.</li></ul>
 <h3><span class="mw-headline" id="Object_subsystem_.28TSubSYS.29"><span class="mw-headline-number">2.3</span> <span id="TSubSYS" title="#TSubSYS">Object subsystem (TSubSYS)</span></span></h3>
@@ -663,7 +663,7 @@ Flags of the function <i>dbList()</i> (enum – TDBS::DBLsFlg):
 </p>
 <ul><li> <i>LsNoFlg</i> (0) — no list flag;</li>
 <li> <i>LsCheckSel</i> (0x01) —  points to the necessity of verifying the fact of boot from the selected database and to insert to the db list the only selected one;</li>
-<li> <i>LsInclGenFirst</i> (0x02) — include the Generic Storage "<b>*.*</b>" in the first.</li></ul>
+<li> <i>LsInclGenFirst</i> (0x02) — include the Generic Storage ("&lt;gen&gt;") in the first.</li></ul>
 <p>Flags of the queries to the storage (enum – TDBS::ReqGenFlg):
 </p>
 <ul><li> <i>NoFlg</i> (0) — no query flag;</li>
@@ -677,7 +677,7 @@ Flags of the function <i>dbList()</i> (enum – TDBS::DBLsFlg):
 </p>
 <ul><li> <i>static string fullDBSYS( );</i> — The full name of the system table.</li>
 <li> <i>static string fullDB( );</i> — The full name of the table with a description of the registered databases.</li>
-<li> <i>static string realDBName( const string &amp;bdn, bool back = false );</i> — Conversion of the full template name of the database or table (of view *.*.myTbl) in the real name. Actually the replacement of the special elements '*' by the elements of the working DB. Use <i>back</i> for the backward conversion.</li>
+<li> <i>static string realDBName( const string &amp;bdn, bool back = false );</i> — Conversion of the full template name of the database or table (of view "&lt;gen&gt;.myTbl") in the real name. Use <i>back</i> for the backward conversion.</li>
 <li> <i>static string dbPart( const string &amp;bdn, bool tbl = false );</i> — Getting the generic storage address part or the table at <i>tbl</i> from the common storage name <i>bdn</i>.</li>
 <li> <i>static void dbList( vector&lt;string&gt; &amp;ls, char flags = LsNoFlg );</i> — List of available databases with the DBLsFlg <i>flags</i>.</li>
 <li> <i>static AutoHD&lt;TTable&gt; tblOpen( const string &amp;bdn, bool create = false );</i> — Opening the table <i>bdn</i> of the storage by it full path with the creation <i>create</i> at absence.</li>
@@ -687,8 +687,8 @@ Flags of the function <i>dbList()</i> (enum – TDBS::DBLsFlg):
 <li> <i>static bool dataSet( const string &amp;bdn, const string &amp;path, TConfig &amp;cfg, char flags = NoFlg, XMLNode *localCfgCtx = NULL );</i> — Setting/Saving the record to the storage according to the ReqGenFlg <i>flags</i>. If the DB name <i>bdn</i> or path <i>path</i> to the configuration file are not pointed, their processing is skipped. More about conditions of using the Configuration File and the Data Bases read in the <a href="#DataConcept">Data storing conception</a>. <i>localCfgCtx</i> is used for saving to the local configuration context, is prepared for <i>dataSeek()</i> and <i>dataGet()</i>, and it missing causes for checking and using, at presence, the global configuration context <i>SYS-&gt;cfgCtx()</i>.</li>
 <li> <i>static bool dataDel( const string &amp;bdn, const string &amp;path, TConfig &amp;cfg, char flags = NoFlg );</i> — Deleting the record in the storage according to the ReqGenFlg <i>flags</i>. If the DB name <i>bdn</i> or path <i>path</i> to the configuration file are not pointed, their processing is skipped. More about conditions of using the Configuration File and the Data Bases read in the <a href="#DataConcept">Data storing conception</a>.</li>
 <li> <i>static bool dataDelTbl( const string &amp;bdn, const string &amp;path = "", char flags = NoFlg );</i> — The data container table common removing from the storage <i>bbn</i> and the configuration file <i>path</i>, according to the ReqGenFlg <i>flags</i>.</li>
-<li> <i>static string genPrmGet( const string &amp;path, const string &amp;oval = "", const string &amp;user = "root", char flags = NoFlg );</i> — Getting the generic parameter <i>path</i> from the Generic Storage "<b>*.*.SYS</b>" on behalf of the <i>user</i> and according to the ReqGenFlg <i>flags</i>. If the data are not available the value <i>oval</i> is returned. On the Configuration File there are used the object parameters by the tags "prm" and on the Data Base there is used the table "SYS".</li>
-<li> <i>static void genPrmSet( const string &amp;path, const string &amp;val, const string &amp;user = "root", char flags = NoFlg );</i> — Setting/Saving the generic parameter <i>path</i> to the Generic Storage "<b>*.*.SYS</b>" of the <i>user</i> and according to the ReqGenFlg <i>flags</i>.</li></ul>
+<li> <i>static string genPrmGet( const string &amp;path, const string &amp;oval = "", const string &amp;user = "root", char flags = NoFlg );</i> — Getting the generic parameter <i>path</i> from the Generic Storage ("&lt;gen&gt;.SYS") on behalf of the <i>user</i> and according to the ReqGenFlg <i>flags</i>. If the data are not available the value <i>oval</i> is returned. On the Configuration File there are used the object parameters by the tags "prm" and on the Data Base there is used the table "SYS".</li>
+<li> <i>static void genPrmSet( const string &amp;path, const string &amp;val, const string &amp;user = "root", char flags = NoFlg );</i> — Setting/Saving the generic parameter <i>path</i> to the Generic Storage ("&lt;gen&gt;.SYS") of the <i>user</i> and according to the ReqGenFlg <i>flags</i>.</li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>int subVer( );</i> — Subsystem version.</li>
@@ -873,7 +873,7 @@ Flags of the SQL requests (enum – TTable::SQLFeqFlag):
 <li> <i>void modStop( );</i> — Stop of the module.</li>
 <li> <i>void list( vector&lt;string&gt; &amp;list ) const;</i> — The list of the controllers.</li>
 <li> <i>bool present( const string &amp;id ) const;</i> — Check for the availability of the specified controller object.</li>
-<li> <i>string add( const string &amp;id, const string &amp;daq_db = "*.*" );</i> — Add the controller object. Returns the end created identifier.</li>
+<li> <i>string add( const string &amp;id, const string &amp;daq_db = DB_GEN );</i> — Add the controller object. Returns the end created identifier.</li>
 <li> <i>void del( const string &amp;id );</i> — Delete the controller object.</li>
 <li> <i>AutoHD&lt;TController&gt; at( const string &amp;id, const string &amp;who = "" ) const;</i> — Connect to the controller object.</li>
 <li> <i>bool tpPrmPresent( const string &amp;name_t );</i> — Check for the availability of the specified controller type.</li>
@@ -911,14 +911,15 @@ Redundancy modes (enum TController::Redundant):
 </p>
 <ul><li> <i>TController( const string &amp;name_c, const string &amp;daq_db, TElem *cfgelem );</i> — Initializing constructor of the controller.</li>
 <li> <i>string DAQPath( );</i> — Getting for DAQ-address of the element.</li>
-<li> <i>string id( );</i> — Controller ID.</li>
+<li> <i>string id( ) const;</i> — Controller ID.</li>
 <li> <i>string workId( );</i> — Work ID of the controller, including the ID of the module.</li>
 <li> <i>string name( );</i> — Controller's name.</li>
 <li> <i>string descr( );</i> — Controller's description.</li>
 <li> <i>int64_t timeStamp( );</i> — Timestamp of the object changing as maximum of timestamps of the included parameter objects.</li>
 <li> <i>virtual string getStatus( );</i> — Request function of the controller status.</li>
 <li> <i>string DB( bool qTop = false ) const;</i> — Storage name of the controller's instance, <i>qTop</i> for the storage queue top.</li>
-<li> <i>string tbl( ) const;</i> — The name of the table of DB of the controller's instance.</li>
+<li> <i>string tbl( ) const;</i> — Name of the table of DB of the controller's instance.</li>
+<li> <i>virtual string tbl( const TTypeParam &amp;tP ) const;</i> — Name of the table of DB of the parameter's instance for the parameter type <i>tP</i>.</li>
 <li> <i>string fullDB( bool qTop = false ) const;</i> — The full name of the table of storage of the controller's instance, <i>qTop</i> for the storage queue top.</li>
 <li> <i>void setName( const string &amp;nm );</i> — Set the controller's name.</li>
 <li> <i>void setDescr( const string &amp;dscr );</i> — Set the controller's description.</li>
@@ -971,9 +972,11 @@ Redundancy modes (enum TController::Redundant):
 <ul><li> <i>TTypeParam( const char *iid, const char *iname, const char *idb = "", bool i_isPrmCntr = false );</i> — Initializing constructor.</li>
 <li> <i>virtual void create( TParamContr *prm );</i> — Create or set the parameter <i>prm</i> type.</li>
 <li> <i>virtual void destroy( TParamContr *prm );</i> — Remove or clean the parameter <i>prm</i> type.</li>
-<li> <i>virtual string DB( TController *cntr );</i> — Get table name of the parameters of the controller <i>cntr</i>.</li>
-<li> <i>void setDB( TController *cntr, const string &amp;vl );</i> — Set the table name of the parameters of the controller <i>cntr</i>.</li>
-<li> <i>virtual void enable( TParamContr *prm );</i> — To enable the parameter <i>prm</i>.</li>
+<li> <i>virtual string DB( const TController *cntr ) const;</i> — Get table name of the parameters of the controller <i>cntr</i>.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Will be removed in v1.0, use <a href="#TController">TController</a>::tbl() instead.</dd></dl>
+<ul><li> <i>void setDB( TController *cntr, const string &amp;vl );</i> — Set the table name of the parameters of the controller <i>cntr</i>.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Will be removed in v1.0.</dd></dl>
+<ul><li> <i>virtual void enable( TParamContr *prm );</i> — To enable the parameter <i>prm</i>.</li>
 <li> <i>virtual void disable( TParamContr *prm );</i> — To disable the parameter <i>prm</i>.</li>
 <li> <i>virtual bool cfgChange( TParamContr *prm, TCfg &amp;cfg );</i> — The configuration filed <i>cfg</i> of the parameter <i>prm</i> change.</li>
 <li> <i>virtual void vlGet( TParamContr *prm, TVal &amp;vo );</i> — Predicting function of the value getting, through the parameter <i>prm</i>. It is used for direct (synchronous) reading.</li>
@@ -1072,7 +1075,8 @@ Additional flags to the object <a href="#TFld">#TFld</a> (enum TVal::AttrFlag):
 </p>
 <ul><li> <i>TVal::DirRead(0x100)</i> — Flag for the direct reading of the value;</li>
 <li> <i>TVal::DirWrite(0x200)</i> — Flag for the direct writing of the value;</li>
-<li> <i>TVal::Dynamic(0x400)</i> — Flag of the dynamic attribute, creates in typical from user procedures.</li></ul>
+<li> <i>TVal::Dynamic(0x400)</i> — Flag of the dynamic attribute, creates in typical from user procedures.</li>
+<li> <i>TVal::NoSave(0x800)</i> — Flag of the attribute can be changed but cannot be saved, that is do not mark its modified</li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>TVal( );</i> — Default constructor.</li>
@@ -1082,17 +1086,16 @@ Additional flags to the object <a href="#TFld">#TFld</a> (enum TVal::AttrFlag):
 <li> <i>void setFld( TFld &amp;fld );</i> — Initialization as the repository of dynamic data.</li>
 <li> <i>void setCfg( TCfg &amp;cfg );</i> — Initialization as the reflection of static data (DB).</li>
 <li> <i>string name( );</i> — Attribute's name.</li>
-<li> <i>int64_t time( );</i> — Time marker of the the last/current value (10<sup>-6</sup>s).</li>
+<li> <i>int64_t time( );</i> — Timestamp of the the last/current value (10<sup>-6</sup>s).</li>
+<li> <i>void setTime( int64_t vl );</i> — Setting the timestamp outside the value setting.</li>
 <li> <i>bool isCfg( );</i> — Sign of the value object created in base of a configuration element.</li>
 <li> <i>bool dataActive( );</i> — Activity (updatable) flag of data.</li>
-<li> <i>string getSEL( long long *tm = NULL, bool sys = false );</i> — Request of the selected type value for the specified time <i>tm</i>. If NULL then it will be returned the last value.</li>
 <li> <i>TVariant get( long long *tm = NULL, bool sys = false );</i> — Request of the value for the specified time <i>tm</i>. If NULL then it will be returned the last value.</li>
 <li> <i>string getS( long long *tm = NULL, bool sys = false );</i> — Request of the string type value for the specified time <i>tm</i>. If NULL then it will be returned the last value.</li>
 <li> <i>double getR( long long *tm = NULL, bool sys = false );</i> — Request of the real type value for the specified time <i>tm</i>. If NULL then it will be returned the last value.</li>
 <li> <i>int64_t getI( long long *tm = NULL, bool sys = false );</i> — Request of the integer type value for the specified time <i>tm</i>. If NULL then it will be returned the last value.</li>
 <li> <i>char getB( long long *tm = NULL, bool sys = false );</i> — Request of the boolean type value for the specified time <i>tm</i>. If NULL then it will be returned the last value.</li>
 <li> <i>AutoHD&lt;TVarObj&gt; getO( int64_t *tm = NULL, bool sys = false );</i> — Request of the object type value.</li>
-<li> <i>void setSEL( const string &amp;value, long long tm = 0, bool sys = false );</i> — Setting of the selected type value <i>value</i>.</li>
 <li> <i>void set( const TVariant &amp;value, long long tm = 0, bool sys = false );</i> — Setting of the value <i>value</i>.</li>
 <li> <i>void setS( const string &amp;value, long long tm = 0, bool sys = false );</i> — Setting of the string type value <i>value</i>.</li>
 <li> <i>void setR( double value, long long tm = 0, bool sys = false );</i> — Setting of the real type value <i>value</i>.</li>
@@ -1253,7 +1256,7 @@ Structure of template links (class — TPrmTempl::Impl::SLnk):
 <li> <i>void subStop( );</i> — Stop of the system.</li>
 <li> <i>void valList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the values'archives in the subsystem.</li>
 <li> <i>bool valPresent( const string &amp;id ) const;</i> — Check for the availability of the values' archive <i>id</i>.</li>
-<li> <i>string valAdd( const string &amp;id, const string &amp;idb = "*.*" );</i> — Addition of the new values' archive <i>id</i>. Returns the end created identifier.</li>
+<li> <i>string valAdd( const string &amp;id, const string &amp;idb = DB_GEN );</i> — Addition of the new values' archive <i>id</i>. Returns the end created identifier.</li>
 <li> <i>void valDel( const string &amp;id, bool db = false );</i> — Deleting of the values' archive <i>id</i>.</li>
 <li> <i>AutoHD&lt;TVArchive&gt; valAt( const string &amp;id ) const;</i> — Connection/addressing to the values' archive <i>id</i>.</li>
 <li> <i>void setActMess( TMArchivator *a, bool val );</i> — Setting of the messages archivator <i>a</i> into the active status <i>val</i>. Active archivator will be provided by the subsystem with the flow of messages.</li>
@@ -1406,12 +1409,12 @@ The data acquisition mode/source (enumeration — TVArchive::SrcMode):
 </p>
 <ul><li> <i>void messList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the messages' archivers.</li>
 <li> <i>bool messPresent( const string &amp;id ) const;</i> — Check for the presence of the specified messages' archiver.</li>
-<li> <i>string messAdd( const string &amp;id, const string &amp;idb = "*.*" );</i> — Adding of the messages' archiver. Returns the end created identifier.</li>
+<li> <i>string messAdd( const string &amp;id, const string &amp;idb = DB_GEN );</i> — Adding of the messages' archiver. Returns the end created identifier.</li>
 <li> <i>void messDel( const string &amp;id, bool full = false );</i> — Deleting of the messages' archiver.</li>
 <li> <i>AutoHD&lt;TMArchivator&gt; messAt( const string &amp;id ) const;</i> — Connection to the messages' archiver.</li>
 <li> <i>void valList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the values' archivers.</li>
 <li> <i>bool valPresent( const string &amp;id ) const;</i> — Check for the presence of the specified values' archiver.</li>
-<li> <i>string valAdd( const string &amp;id, const string &amp;idb = "*.*" );</i> — Adding of the values' archiver. Returns the end created identifier.</li>
+<li> <i>string valAdd( const string &amp;id, const string &amp;idb = DB_GEN );</i> — Adding of the values' archiver. Returns the end created identifier.</li>
 <li> <i>void valDel( const string &amp;id, bool full = false );</i> — Deleting of the values' archiver.</li>
 <li> <i>AutoHD&lt;TVArchivator&gt; valAt( const string &amp;id ) const;</i> — Connection to the values' archiver.</li>
 <li> <i>TArchiveS &amp;owner( ) const;</i> — Subsystem "Archives" - the owner of the archiver's type.</li></ul>
@@ -1569,7 +1572,15 @@ The data acquisition mode/source (enumeration — TVArchive::SrcMode):
 <td><i><a href="#TSubSYS">TSubSYS</a></i>
 </td></tr></table>
 <p><b>Data:</b><br />
-External hosts mode (enum — TTransportS::ExtHost::Mode):
+Definitions of space the Transport subsystem (definition):
+</p>
+<ul><li> <i>STR_VER</i> — Modules version (26);</li>
+<li> <i>STR_ID</i> — Identifier the subsystem ("Transport");</li>
+<li> <i>STR_IN_PREF</i> — Prefix of the input transports ("in_");</li>
+<li> <i>STR_OUT_PREF</i> — Prefix of the output transports ("out_");</li>
+<li> <i>STR_A_PRM</i> — Root XML-tag of the additional parameters ("prms");</li>
+<li> <i>STR_A_PRM_CFGP</i> — Prefix of the configuration parameters of the connection time ("CFG:").</li></ul>
+<p>External hosts mode (enum — TTransportS::ExtHost::Mode):
 </p>
 <ul><li> <i>User</i> (0) — User.</li>
 <li> <i>System</i> (1) — System.</li>
@@ -1610,9 +1621,11 @@ External hosts mode (enum — TTransportS::ExtHost::Mode):
 <li> <i>int cntrIfCmd( XMLNode &amp;node, const string &amp;senderPref, const string &amp;user = "" );</i> — Transfer of the control area request of the OpenSCADA <i>node</i> to the remote station.  </li>
 <li> <i>void subStart( );</i> — Start of the subsystem.</li>
 <li> <i>void subStop( );</i> — Stop of the subsystem.</li>
-<li> <i>TElem &amp;inEl( );</i> — DB structure of the input transports</li>
-<li> <i>TElem &amp;outEl( );</i> — DB structure of the output transports</li>
-<li> <i>AutoHD&lt;TTypeTransport&gt; at( const string &amp;id ) const;</i> — Addressing/connection to the type of transport <i>id</i>.</li></ul>
+<li> <i>TElem &amp;inEl( );</i> — DB structure of the input transports.</li>
+<li> <i>TElem &amp;outEl( );</i> — DB structure of the output transports.</li>
+<li> <i>AutoHD&lt;TTypeTransport&gt; at( const string &amp;id ) const;</i> — Addressing/connection to the type of transport <i>id</i>.</li>
+<li> <i>static TVariant prm( string &amp;cnt, const string &amp;id, const TVariant &amp;val = TVariant(), bool toWr = false );</i> — Getting for value the addition parameter <i>id</i> with default one <i>val</i>, or setting to the value <i>val</i> at <i>toWr</i>. The additional parameters can store the connection time parameters at pointing <i>id</i> in the form "{id}\n{SRC}[\n{NAME}[\n{HELP}]]". The additional parameters stored in the XML-container <i>cnt</i> and this function used from <a href="#TTransportIn">TTransportIn</a>::prm() and <a href="#TTransportOut">TTransportOut</a>::prm() for the configuration field "A_PRMS" as a container.</li>
+<li> <i>static string cntrCmdPrm( XMLNode *opt, const string &amp;path, const string &amp;cnt );</i> — Providing the OpenSCADA Control Interface in <i>opt</i> and <i>path</i> for the addition parameters in the input container. Changed container content is returned.</li></ul>
 <h3><span class="mw-headline" id="The_modular_object_of_the_transports.27_type_.28TTypeTransport.29"><span class="mw-headline-number">6.2</span> <span id="TTypeTransport" title="#TTypeTransport">The modular object of the transports' type (TTypeTransport)</span></span></h3>
 <table class="wikitable">
 
@@ -1629,12 +1642,12 @@ External hosts mode (enum — TTransportS::ExtHost::Mode):
 <ul><li> <i>virtual bool isNetwork( );</i> — The sign of network implementation by this module.</li>
 <li> <i>void inList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the input transports.</li>
 <li> <i>bool inPresent( const string &amp;id ) const;</i> — Check for an input transport presence.</li>
-<li> <i>string inAdd( const string &amp;id, const string &amp;db = "*.*" );</i> — Addition of the input transport. Returns the end created identifier.</li>
+<li> <i>string inAdd( const string &amp;id, const string &amp;db = DB_GEN );</i> — Addition of the input transport. Returns the end created identifier.</li>
 <li> <i>void inDel( const string &amp;id, bool complete = false );</i> — Deleting of the input transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
 <li> <i>AutoHD&lt;TTransportIn&gt; inAt( const string &amp;id ) const;</i> — Connection to the input transport.</li>
 <li> <i>void outList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the output transports.</li>
 <li> <i>bool outPresent( const string &amp;id ) const;</i> — Check for an output transport presence.</li>
-<li> <i>string outAdd( const string &amp;id, const string &amp;db = "*.*" );</i> — Addition of the output transport. Returns the end created identifier.</li>
+<li> <i>string outAdd( const string &amp;id, const string &amp;db = DB_GEN );</i> — Addition of the output transport. Returns the end created identifier.</li>
 <li> <i>void outDel( const string &amp;id, bool complete = false );</i> — Deleting of the output transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
 <li> <i>AutoHD&lt;TTransportOut&gt; outAt( const string &amp;id ) const;</i> — Connection to the output transport.</li>
 <li> <i>virtual string outAddrHelp( );</i> — Address format help of the output transports.</li>
@@ -1656,6 +1669,12 @@ External hosts mode (enum — TTransportS::ExtHost::Mode):
 <td><b>Inherited:</b></td>
 <td>By the objects of input transports of the subsystem's "Transports" modules.
 </td></tr></table>
+<p><b>Data:</b><br />
+Stages of the new Associated Output Transports processing (enum — TTransportIn::AssociateTrStage):
+</p>
+<ul><li> <i>ATrStg_Common</i> (0) — common stage of default call stages <i>ATrStg_Create</i>, <i>ATrStg_Proc</i>; you can call stage <i>ATrStg_Create</i>, specific init the output transport and next call stage <i>ATrStg_Proc</i> to finish, and under the lock <i>associateTrRes</i>;</li>
+<li> <i>ATrStg_Create</i> (1) — creating and registering the representative output transport with <i>addr</i> is the transport address;</li>
+<li> <i>ATrStg_Proc</i> (2) — starting-connecting, reading the Initiate Connection ID, processing all presented associated transports.</li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>TTransportIn( const string &amp;id, const string &amp;db, TElem *el );</i> — Initializing constructor.</li>
@@ -1667,6 +1686,8 @@ External hosts mode (enum — TTransportS::ExtHost::Mode):
 <li> <i>string protocols( );</i> — Linked transport protocols.</li>
 <li> <i>virtual unsigned keepAliveReqs( );</i> — Maximum Keep Alive requests.</li>
 <li> <i>virtual unsigned keepAliveTm( );</i> — Keep Alive time.</li>
+<li> <i>TVariant prm( const string &amp;id, const TVariant &amp;val = TVariant(), bool toWr = false );</i> — Getting for value the addition parameter <i>id</i> with default one <i>val</i>, or setting to the value <i>val</i> at <i>toWr</i>. The additional parameters can store the connection time parameters at pointing <i>id</i> in the form "{id}\n{SRC}[\n{NAME}[\n{HELP}]]". The additional parameters stored in XML of the configuration field "A_PRMS".</li>
+<li> <i>TVariant conPrm( const string &amp;id, const TVariant &amp;val = TVariant(), const string &amp;cfg = "" );</i> — Getting for value the connection time parameter <i>id</i> and setting the parameter at specifying the value <i>val</i>. If the connection time parameter also is a configuration from an external source, you specify the argument <i>cfg</i> in the form "{SRC}[\n{NAME}[\n{HELP}]]". Configuration of the external sources is read only by this function with setting the value <i>val</i> and configuration <i>cfg</i> once at initialisation, all changes for value the configuration performed by user from control interface of the transport.</li>
 <li> <i>virtual string getStatus( );</i> — Getting the status of the input transport.</li>
 <li> <i>bool toStart( );</i> — The sign "To start".</li>
 <li> <i>bool startStat( );</i> — The status "Running".</li>
@@ -1677,6 +1698,7 @@ External hosts mode (enum — TTransportS::ExtHost::Mode):
 <li> <i>void setDscr( const string &amp;idscr );</i> — Setting the description of transport in <i>idscr</i>.</li>
 <li> <i>void setAddr( const string &amp;addr );</i> — Setting the address of transport in <i>addr</i>.</li>
 <li> <i>void setProtocols( const string &amp;prt );</i> — Setting of the linked transport protocols.</li>
+<li> <i>void clearConPrm( const string &amp;id = "" );</i> — Clearing the connection time parameter <i>id</i> at non empty, all ones at empty and the external source configuration at "CFG:".</li>
 <li> <i>void setToStart( bool val );</i> — Setting of the sign "To start".</li>
 <li> <i>void setDB( const string &amp;vl, bool qTop = false );</i> — Setting of the transport's storage address, <i>qTop</i> for the storage queue top.</li>
 <li> <i>virtual void start( );</i> — Start of the transport.</li>
@@ -1684,16 +1706,17 @@ External hosts mode (enum — TTransportS::ExtHost::Mode):
 <li> <i>virtual int writeTo( const string &amp;sender, const string &amp;data );</i> — Sending <i>data</i> backward to the <i>sender</i>. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Deprecated mostly and replaced by the polling mode of the <a href="API.html#TProtocolIn" title="Special:MyLanguage/Documents/API">input transport protocol</a>, Initially implemented in transports with support of the initiative sending, not only at a request.</li>
 <li> <i>vector&lt;AutoHD&lt;TTransportOut&gt; &gt; associateTrs( bool checkForCleanDisabled = false );</i> — The associated output transports massive, created by the input transport for typical requests to the connection initiator. Set <i>checkForCleanDisabled</i> for prior checking and clean up disabled ones.</li>
 <li> <i>AutoHD&lt;TTransportOut&gt; associateTr( const string &amp;id );</i> — Getting the associated output transport at that connection ID.</li>
-<li> <i>int logLen( );</i> — length of the IO log.</li>
-<li> <i>void setLogLen( int vl );</i> — set length of the IO log.</li>
-<li> <i>void pushLogMess( const string &amp;vl, const string &amp;data = "", int dataDir = 0 );</i> — push the message <i>vl</i> with the <i>data</i> in the direction <i>dataDir</i> to the log in the format "<b>{vl}\n{data}</b>".</li>
 <li> <i>TTypeTransport &amp;owner( ) const;</i> — Transport's type – the owner of the input transport.</li></ul>
 <p><b>Protected methods:</b>
 </p>
-<ul><li> <i>string associateTrO( const string &amp;addr );</i> — The associated output transport creation with the address <i>addr</i>.</li></ul>
+<ul><li> <i>string associateTrO( const string &amp;addr, char stage = ATrStg_Common );</i> — The associated output transport creation with the address <i>addr</i> on the <i>stage</i> as an enumeration <i>AssociateTrStage</i>.</li>
+<li> <i>int logLen( );</i> — length of the IO log.</li>
+<li> <i>void setLogLen( int vl );</i> — set length of the IO log.</li>
+<li> <i>void pushLogMess( const string &amp;vl, const string &amp;data = "", int dataDir = 0 );</i> — push the message <i>vl</i> with the <i>data</i> in the direction <i>dataDir</i> to the log in the format "<b>{vl}\n{data}</b>".</li></ul>
 <p><b>Protected attributes:</b>
 </p>
-<ul><li> <i>bool runSt;</i> — The sign "Running".</li></ul>
+<ul><li> <i>bool runSt;</i> — The sign "Running".</li>
+<li> <i>ResMtx associateTrRes;</i> — Resources lock of the <i>associateTrO()</i> stages <i>AssociateTrStage</i>.</li></ul>
 <h3><span class="mw-headline" id="The_object_of_the_output_transports_.28TTransportOut.29"><span class="mw-headline-number">6.4</span> <span id="TTransportOut" title="#TTransportOut">The object of the output transports (TTransportOut)</span></span></h3>
 <table class="wikitable">
 
@@ -1716,7 +1739,8 @@ External hosts mode (enum — TTransportS::ExtHost::Mode):
 <li> <i>string addr( ) const;</i> — Transport address.</li>
 <li> <i>virtual string timings( );</i> — Transport timeouts.</li>
 <li> <i>virtual unsigned short attempts( );</i> — Connection attempts.</li>
-<li> <i>TVariant conPrm( const string &amp;nm );</i> — Getting the connection parameter <i>nm</i> value.</li>
+<li> <i>TVariant prm( const string &amp;id, const TVariant &amp;val = TVariant(), bool toWr = false );</i> — Getting for value the addition parameter <i>id</i> with default one <i>val</i>, or setting to the value <i>val</i> at <i>toWr</i>. The additional parameters can store the connection time parameters at pointing <i>id</i> in the form "{id}\n{SRC}[\n{NAME}[\n{HELP}]]". The additional parameters stored in XML of the configuration field "A_PRMS".</li>
+<li> <i>TVariant conPrm( const string &amp;id, const TVariant &amp;val = TVariant(), const string &amp;cfg = "" );</i> — Getting for value the connection time parameter <i>id</i> and setting the parameter at specifying the value <i>val</i>. If the connection time parameter also is a configuration from an external source, you specify the argument <i>cfg</i> in the form "{SRC}[\n{NAME}[\n{HELP}]]". Configuration of the external sources is read only by this function with setting the value <i>val</i> and configuration <i>cfg</i> once at initialisation, all changes for value the configuration performed by user from control interface of the transport.</li>
 <li> <i>bool startStat( );</i> — Status "Running".</li>
 <li> <i>time_t startTm( );</i> — Status "Time of starting/connection".</li>
 <li> <i>int64_t lstReqTm( );</i> — Status "Last request time".</li>
@@ -1729,18 +1753,19 @@ External hosts mode (enum — TTransportS::ExtHost::Mode):
 <li> <i>void setAddr( const string &amp;addr );</i> — Setting the address of transport.</li>
 <li> <i>virtual void setTimings( const string &amp;vl, bool isDef = false );</i> — Setting the transport timeouts, as default one for <i>isDef</i>.</li>
 <li> <i>virtual void setAttempts( unsigned short vl );</i> — Setting the connection attempts.</li>
-<li> <i>void setConPrm( const string &amp;nm, const TVariant &amp;vl );</i> — Setting the connection parameter <i>nm</i> to value <i>vl</i>.</li>
-<li> <i>void clearConPrm( );</i> — Clearing the connection parameters.</li>
+<li> <i>void clearConPrm( const string &amp;id = "" );</i> — Clearing the connection time parameter <i>id</i> at non empty, all ones at empty and the external source configuration at "CFG:".</li>
 <li> <i>void setDB( const string &amp;vl, bool qTop = false );</i> — Setting of the transport's storage address, <i>qTop</i> for the storage queue top.</li>
 <li> <i>virtual void start( int time = 0 );</i> — Starting the transport with the connection timeout <i>time</i>. When you start the output transport the actual connection to the remote station is established for the interfaces that works by the connection. At this time the errors can occur if the connection is impossible and the transport should return to the stopped state.</li>
 <li> <i>virtual void stop( );</i> — Stopping the transport.</li>
 <li> <i>virtual int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 );</i> — Sending of the data over the transport. The waiting timeout <i>time</i> of the connection in milliseconds. The <i>time</i> in negative disables the transport's request/respond mode and allows for the independently reading/writing to a buffer IO, with the reading timeout <i>time</i> in absolute.</li>
 <li> <i>void messProtIO( XMLNode &amp;io, const string &amp;prot );</i> — Sending of the data in the XML tree <i>in</i> over the transport using the transport protocol <i>prot</i>.</li>
-<li> <i>int logLen( );</i> — length of the IO log.</li>
-<li> <i>void setLogLen( int vl );</i> — set length of the IO log.</li>
-<li> <i>void pushLogMess( const string &amp;vl, const string &amp;data = "", int dataDir = 0 );</i> — push the message <i>vl</i> with the <i>data</i> in the direction <i>dataDir</i> to the log in the format "<b>{vl}\n{data}</b>".</li>
 <li> <i>TTypeTransport &amp;owner( ) const;</i> — Type of transport - the owner of output transport.</li>
 <li> <i>ResMtx &amp;reqRes( );</i> — The requesting resource, needs to global lock into protocols with fragments receiving.</li></ul>
+<p><b>Protected methods:</b>
+</p>
+<ul><li> <i>int logLen( );</i> — length of the IO log.</li>
+<li> <i>void setLogLen( int vl );</i> — set length of the IO log.</li>
+<li> <i>void pushLogMess( const string &amp;vl, const string &amp;data = "", int dataDir = 0 );</i> — push the message <i>vl</i> with the <i>data</i> in the direction <i>dataDir</i> to the log in the format "<b>{vl}\n{data}</b>".</li></ul>
 <p><b>Protected attributes:</b>
 </p>
 <ul><li> <i>bool runSt;</i> — The sign "Running".</li>
@@ -1892,12 +1917,12 @@ Requests parameters (enum — GetOpts):
 <li> <i>void usrList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the users <i>list</i>.</li>
 <li> <i>void usrGrpList( const string &amp;name, vector&lt;string&gt; &amp;list );</i> — The list of the users' groups <i>list</i>, in which the user <i>name</i> is included.</li>
 <li> <i>bool usrPresent( const string &amp;name ) const;</i> — Check fro the presence of the specified user <i>name</i>.</li>
-<li> <i>string usrAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the user <i>name</i> with the saving to the DB <i>db</i>. Returns the end created name of the user.</li>
+<li> <i>string usrAdd( const string &amp;name, const string &amp;db = DB_GEN );</i> — Addition of the user <i>name</i> with the saving to the DB <i>db</i>. Returns the end created name of the user.</li>
 <li> <i>void usrDel( const string &amp;name, bool complete = false );</i> — Deleting of the user <i>name</i> with the possibility of the completely deleting <i>complete</i>.</li>
 <li> <i>AutoHD&lt;TUser&gt; usrAt( const string &amp;name ) const;</i> — Attaching of the user <i>name</i>.</li>
 <li> <i>void grpList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the users' groups <i>list</i>.</li>
 <li> <i>bool grpPresent( const string &amp;name ) const;</i> — Check fro the presence of the specified users' group <i>name</i>.</li>
-<li> <i>string grpAdd( const string &amp;name, const string &amp;db = "*.*" );</i> — Addition of the users' group <i>name</i> with the saving to the DB <i>db</i>. Returns the end created name of the user group.</li>
+<li> <i>string grpAdd( const string &amp;name, const string &amp;db = DB_GEN );</i> — Addition of the users' group <i>name</i> with the saving to the DB <i>db</i>. Returns the end created name of the user group.</li>
 <li> <i>void grpDel( const string &amp;name, bool complete = false );</i> — Deleting of the users' group <i>name</i> with the possibility of the completely deleting <i>complete</i>.</li>
 <li> <i>AutoHD&lt;TGroup&gt; grpAt( const string &amp;name ) const;</i> — Connection to the users' group <i>name</i>.</li></ul>
 <h3><span class="mw-headline" id="The_user.27s_object_.28TUser.29"><span class="mw-headline-number">10.2</span> <span id="TUser" title="#TUser">The user's object (TUser)</span></span></h3>
@@ -2135,11 +2160,11 @@ Parameter's type (enum — IO::Type):
 </p>
 <h3><span class="mw-headline" id="Data_storing_conception"><span class="mw-headline-number">13.1</span> <span id="DataConcept" title="#DataConcept">Data storing conception</span></span></h3>
 <p>OpenSCADA commonly defines and uses as the storage only the Configuration File and the Data Bases of different types of the "DB" subsystem. Where the Configuration File has the highest priority as an obligatory and always present storage.
-</p><p>The Generic Storage is a common system configuration field of selection a storage for common program data and as default storage value of OpenSCADA nodes to store. As the Generic Storage there can be selected whether the Configuration File "<b>&lt;cfg&gt;</b>" or a DB "<b>{DB module}.{DB name}</b>", and the same is pointed as "<b>*.*</b>" for enabling the implicit data accessing method in OpenSCADA nodes.
+</p><p>The Generic Storage is a common system configuration field of selection a storage for common program data and as default storage value of OpenSCADA nodes to store. As the Generic Storage there can be selected whether the Configuration File "<b>&lt;cfg&gt;</b>" or a DB "<b>{DB module}.{DB name}</b>", and the same is pointed as "<b>&lt;gen&gt;</b>" for enabling the implicit data accessing method in OpenSCADA nodes.
 </p><p>There are provided two variants of the data accessing:
 </p>
 <ol><li> directly and exclusively at the specified storage name;</li>
-<li> implicitly at specifying the Generic Storage name "<b>*.*</b>", what commonly means of accessing to the Configuration File firstly and the Generic Storage DB secondary, at the data missing in the Configuration File.</li></ol>
+<li> implicitly at specifying the Generic Storage name "<b>&lt;gen&gt;</b>", what commonly means of accessing to the Configuration File firstly and the Generic Storage DB secondary, at the data missing in the Configuration File.</li></ol>
 <p>The "DB" subsystem (the class <i>TBDS</i>) provides the functions <i>dataSeek()</i>, <i>dataGet()</i>, <i>dataSet()</i>, <i>dataDel()</i> of accessing the data which perform the data accessing variants in such ways:
 </p>
 <ul><li> <i>dataSeek()</i> — the data seeking function:</li></ul>
@@ -2241,13 +2266,11 @@ Additional flags to <a href="#TFld">#TFld</a> (enum — TCfg::AttrFlg):
 <li> <i>void setIsSet( bool vl );</i> — Setting the setting element sign.</li>
 <li> <i>void toDefault( bool notSetType = false );</i> — Setting the field value to the default one, and without setting the field type at <i>notSetType</i>.</li>
 <li> <i>TFld &amp;fld( ) const;</i> —  Configuration of the cell.</li>
-<li> <i>string getSEL( );</i> — Get the value of the selectable type.</li>
 <li> <i>string getS( ) const; string getS( uint8_t RqFlg );</i> — Get the value of the string type with the request flags <i>RqFlg</i>.</li>
 <li> <i>const char *getSd( );</i> — Get the direct access to the string type value.</li>
 <li> <i>double &amp;getRd( );</i> — Get the direct access to the real type value.</li>
 <li> <i>int64_t &amp;getId( );</i> — Get the direct access to the integer type value.</li>
 <li> <i>char &amp;getBd( );</i> — Get the direct access to the boolean type value.</li>
-<li> <i>void setSEL( const string &amp;val, uint8_t RqFlg = 0 );</i> — Set the value of the selectable type to the <i>val</i> with the request flags <i>RqFlg</i>.</li>
 <li> <i>void setS( const string &amp;val ); TCfg &amp;operator=( const string &amp;vl ); TCfg &amp;operator=( const char *vl ); void setS( const string &amp;val, uint8_t RqFlg );</i> — Set the value of the string type to the <i>val</i> with the request flags <i>RqFlg</i>.</li>
 <li> <i>void setR( double val ); TCfg &amp;operator=( double vl ); void setR( double val, uint8_t RqFlg );</i> — Set the value of the real type to the <i>val</i> with the request flags <i>RqFlg</i>.</li>
 <li> <i>void setI( int64_t val ); TCfg &amp;operator=( int64_t vl ); void setI( int64_t val, uint8_t RqFlg );</i> — Set the value of the integer type to the <i>val</i> with the request flags <i>RqFlg</i>.</li>
@@ -2266,7 +2289,7 @@ Additional flags to <a href="#TFld">#TFld</a> (enum — TCfg::AttrFlg):
 <li> <i>TElem( const TElem &amp;src );</i> — Copying constructor.</li>
 <li> <i>TElem &amp;operator=( const TElem &amp;src );</i> — Copying from <i>src</i>.</li>
 <li> <i>string &amp;elName( );</i> — The name if the structure.</li>
-<li> <i>void fldList( vector&lt;string&gt; &amp;list );</i> — The cell's list in the structure <i>list</i>.</li>
+<li> <i>void fldList( vector&lt;string&gt; &amp;list ) const;</i> — The cell's list in the structure <i>list</i>.</li>
 <li> <i>unsigned fldSize( ) const;</i> — The number of cells in the structure.</li>
 <li> <i>unsigned fldId( const string &amp;name, bool noex = false );</i> — Getting the index of the cell from its identifier <i>name</i>. Set <i>noex</i> on no the cell present caused return overall cells number, without exception generation.</li>
 <li> <i>bool fldPresent( const string &amp;name );</i> — Check for the presence of the specified cell <i>name</i>.</li>
@@ -2276,7 +2299,8 @@ Additional flags to <a href="#TFld">#TFld</a> (enum — TCfg::AttrFlg):
 <li> <i>void fldClear( );</i> — Removing all cells.</li>
 <li> <i>void valAtt( TValElem *cnt );</i> — Is called automatically when the structure is attached to the data storage <i>cnt</i>.</li>
 <li> <i>void valDet( TValElem *cnt );</i> — Is called automatically when the structure is detached from the data storage <i>cnt</i>.</li>
-<li> <i>ResMtx &amp;resEl( );</i> — Mutex for access to containers of the fields.</li></ul>
+<li> <i>ResMtx &amp;resEl( );</i> — Mutex for access to containers of the fields.</li>
+<li> <i>unsigned contN( );</i> — Counter of the connected containers.</li></ul>
 <h3><span class="mw-headline" id="Data_structure_cell_.28TFld.29"><span class="mw-headline-number">13.5</span> <span id="TFld" title="#TFld">Data structure cell (TFld)</span></span></h3>
 <p><b>Data:</b><br />
 Cell's type (enum – TFld::Type):
@@ -2307,7 +2331,7 @@ Cell's type (enum – TFld::Type):
 </p>
 <ul><li> <i>TFld( );</i> — Initialization by default.</li>
 <li> <i>TFld( const TFld &amp;ifld, const char *name = NULL );</i> — Copying constructor, with possibility for individual <i>name</i> set.</li>
-<li> <i>TFld( const char *name, const string &amp;descr, Type type, unsigned char flg, const char *valLen = "", const char *valDef = "", const char *vals = "", const char *nSel = "", const char *res = "" );</i> —  Initialization with the specified configuration.</li>
+<li> <i>TFld( const char *name, const string &amp;descr, Type type, unsigned flg, const char *valLen = "", const char *valDef = "", const string &amp;vals = "", const string &amp;nSel = "", const char *res = "" );</i> —  Initialization with the specified configuration.</li>
 <li> <i>TFld &amp;operator=( const TFld &amp;fld );</i> — Copy of the cell from <i>fld</i>.</li>
 <li> <i>const string &amp;name( ) const;</i> — Cell's name.</li>
 <li> <i>string descr( ) const;</i> — Cell's description.</li>
@@ -2330,19 +2354,6 @@ Cell's type (enum – TFld::Type):
 <li> <i>void setValues( const string &amp;vls );</i> — Set the working range of value or the list of possible values for the selectable type (as — "vl1;vl2;vl3") to the <i>vls</i>.</li>
 <li> <i>void setSelNames( const string &amp;slnms );</i> — Set the list of values' names for the selectable type (as — "Value 1;Value 2;Value 3") to the <i>slnms</i>.</li>
 <li> <i>void setReserve( const string &amp;ires );</i> — Set of the reserve parameter to <i>res</i>.</li>
-<li> <i>const vector&lt;string&gt; &amp;selValS() const;</i> — List of values' variants for the string type.</li>
-<li> <i>const vector&lt;int&gt;    &amp;selValI() const;</i> — List of values' variants for the integer type.</li>
-<li> <i>const vector&lt;double&gt; &amp;selValR() const;</i> — List of values' variants for the real type</li>
-<li> <i>const vector&lt;bool&gt;   &amp;selValB() const;</i> — List of values' variants for the boolean type</li>
-<li> <i>const vector&lt;string&gt; &amp;selNm() const;</i> — List of the names of values' variants.</li>
-<li> <i>string selVl2Nm( const string &amp;val );</i> — Get the selectable name from the value <i>val</i> of the string type.</li>
-<li> <i>string selVl2Nm( int64_t val );</i> — Get the selectable name from the value <i>val</i> of the integer type.</li>
-<li> <i>string selVl2Nm( double val );</i> — Get the selectable name from the value <i>val</i> of the real type.</li>
-<li> <i>string selVl2Nm( bool val ); string selVl2Nm( char val );</i> — Get the selectable name from the value <i>val</i>of the Boolean type.</li>
-<li> <i>string selNm2VlS( const string &amp;name );</i> — Get the value of string type from the selectable name <i>name</i>.</li>
-<li> <i>int64_t selNm2VlI( const string &amp;name );</i> — Get the value of integer type from the selectable name <i>name</i>.</li>
-<li> <i>double selNm2VlR( const string &amp;name );</i> — Get the value of real type from the selectable name <i>name</i>.</li>
-<li> <i>bool selNm2VlB( const string &amp;name );</i> — Get the value of boolean type from the selectable name <i>name</i>.</li>
 <li> <i>XMLNode *cntrCmdMake( XMLNode *opt, const string &amp;path, int pos, const string &amp;user = "root", const string &amp;grp = "root", int perm = 0664 );</i> — Create a form element in accordance with the parameters of the cell.</li></ul>
 <h3><span class="mw-headline" id="The_object_which_preacts_about_changing_of_the_structure_.28TValElem.29"><span class="mw-headline-number">13.6</span> <span id="TValElem" title="#TValElem">The object which preacts about changing of the structure (TValElem)</span></span></h3>
 <table class="wikitable">
@@ -4063,13 +4074,13 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 <li> <i>char nodeMode( ) const;</i> — Node's status.</li>
 <li> <i>unsigned nodeUse( bool selfOnly );</i> — Number of the connections to the node. <i>selfOnly</i> — only self connections, without childs.</li>
 <li> <i>unsigned nodePos( );</i> — The position of the node in the parent-node's container. It is valid only for ordered containers.</li>
-<li> <i>int isModify( int mflg = TCntrNode::All );</i> — Checking for the modification of the node or nodes' branch.</li>
+<li> <i>int isModify( int mflg = TCntrNode::All ) const;</i> — Checking for the modification of the node or nodes' branch.</li>
 <li> <i>void modif( bool save = false, bool forceLoad = false );</i> — Setting the modification sign of the node, with saving <i>save</i> the sign at the loading and marking for the force loading <i>forceLoad</i>.</li>
 <li> <i>void modifG( bool forceLoad = false );</i> — Setting the modification sign of the node branch, with marking for the force loading <i>forceLoad</i>.</li>
 <li> <i>void modifClr( bool save = false );</i> — Clearing the modification sign or the saving sign <i>save</i> of the node.</li>
 <li> <i>void modifGClr( );</i> — Clearing the modification sign of the node branch.</li>
 <li> <i>void load( TConfig *cfg = NULL, string *errs = NULL );</i> — Load the dynamic tree node for ready configuration <i>cfg</i>. The loading errors place to <i>errs</i> by lines.</li>
-<li> <i>void save( unsigned lev = 0, string *errs = NULL );</i> — Saving the dynamic tree node, on nesting level <i>lev</i> (service). The saving errors place to <i>errs</i> by lines.</li>
+<li> <i>void save( unsigned lev = 0, string *errs = NULL, int *errL = NULL );</i> — Saving the dynamic tree node, on nesting level <i>lev</i> (service). The saving errors place to <i>errs</i> by lines and maximum level <i>errL</i>.</li>
 <li> <i>virtual void AHDConnect( );</i> — Connection to the node (capture of the resource).</li>
 <li> <i>virtual bool AHDDisConnect( );</i> — Disсonnection from the node (release of the resource). Resource will remove on zero result.</li>
 <li> <i>void mess_sys( int8_t level, const char *fmt,  ... );</i> — The system message forms for the node path as the category, the <i>level</i>, the formatted message <i>fmt</i> appended by the node location and followed arguments.</li>
@@ -4254,7 +4265,6 @@ Error codes (enum — TError::Codes):
 <li> <i>TError::Tr_ErrDevice (14)</i> — transport level, device error;</li>
 <li> <i>TError::DB_SQL_Connect (20)</i> — DB level, error the SQL-connection;</li>
 <li> <i>TError::DB_SQL_Query (21)</i> — DB level, error the SQL-query;</li>
-<li> <i>TError::DB_TrRemoved (22)</i> — DB level, translation removed;</li>
 <li> <i>TError::DB_ReadOnly (23)</i> — DB in the Read Only mode;</li>
 <li> <i>TError::Arch_Val_OldBufVl (30)</i> — archives level, old value placing to the value buffer;</li>
 <li> <i>TError::Arch_Val_DblVSrc (31)</i> — double value source setting try;</li>
@@ -4859,7 +4869,7 @@ Error codes (enum — TError::Codes):
 <td> Provides the realtime data acquisition from the external systems or it formation in the calculators, implemented by the module. That is the main subsystem since SCADA is about the Data Acquisition primarily. As the main subsystem it provides several approaches in the modules implementation, which mostly about the attributes structure formation and storing:
 <ol><li> Static formation through definition a set of the parameter types inherited from <a href="API.html#TTypeParam" title="Special:MyLanguage/Documents/API">TTypeParam</a>, that is the structures applying is performed as an attributes set with the parameter type change. This method is least flexible and it used by such modules: <a href="Modules/GPIO.html" title="Special:MyLanguage/Modules/GPIO">GPIO</a>, <a href="Modules/SMH2Gi.html" title="Special:MyLanguage/Modules/SMH2Gi">SMH2Gi</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/AMRDevs" title="Special:MyLanguage/Modules/AMRDevs">AMRDevs</a>.</li>
 <li> Dynamic formation with the structure container <a href="API.html#TElem" title="Special:MyLanguage/Documents/API">TElem</a> managing in the parameter object <a href="API.html#TParamContr" title="Special:MyLanguage/Documents/API">TParamContr</a>. This method is most flexible and used in most modules which mean of the structure be configurable.</li>
-<li> As an extension of the dynamic formation there is the <a href="DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">Logical Level parameter type</a>, what can be added to any module, but that used mostly in the universal data sources: <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a>, <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>, <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a>, <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">LogicLev</a>.</li></ol>
+<li> As an extension of the dynamic formation there is the <a href="DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">Logical Level parameter type</a>, what can be added to any module, but that used mostly in the universal data sources: <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a>, <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>, <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a>, <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a>.</li></ol>
 </td></tr>
 <tr>
 <td><b><a href="API.html#TTypeDAQ" title="Special:MyLanguage/Documents/API">TTypeDAQ</a>-&gt;<a href="API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — the root module object of the "Data AcQuisition" subsystem:
@@ -4999,5 +5009,5 @@ Error codes (enum — TError::Codes):
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2023</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.6</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

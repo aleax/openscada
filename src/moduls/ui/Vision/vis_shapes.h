@@ -40,7 +40,9 @@
 #include <QTextBrowser>
 #include <QPrinter>
 
-#ifdef HAVE_WEBKIT
+#if HAVE_WEBENGINE
+#include <QWebEngineView>
+#elif HAVE_WEBKIT
 #include <QWebView>
 #include <QWebFrame>
 #endif
@@ -160,7 +162,7 @@ class ShapeFormEl : public WdgShape
 	// Check box events
 	void checkChange( int );
 	// Combo box and list events
-	void comboChange( const QString& );
+	void comboChange( int );
 	// List events
 	void listChange( );
 	// Tree events
@@ -266,8 +268,7 @@ class ShapeMedia : public WdgShape
 
     public slots:
 	//Public slots
-	// Media play events
-	void mediaFinished( );
+	void chkTimer( );
 
     private:
 	//Data
@@ -290,7 +291,8 @@ class ShapeMedia : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), active(false), realActive(false), geomMargin(0), mediaType(-1), addrWdg(NULL)	{ }
+		ShpDt( ) : en(true), active(false), realActive(false), geomMargin(0), mediaType(-1),
+			videoSize(0), videoSeek(0), audioVolume(0), addrWdg(NULL), extO(NULL), chkTimer(NULL) { }
 		//Attributes
 		short	en		:1;
 		short	active		:1;
@@ -303,9 +305,10 @@ class ShapeMedia : public WdgShape
 		short	videoPlay	:1;
 		short	videoRoll	:1;
 		short	videoPause	:1;
-		double	videoSeek, audioVolume;
+		double	videoSize, videoSeek, audioVolume;
 		QBrush	backGrnd;
-		QWidget *addrWdg;
+		QObject *addrWdg, *extO;
+		QTimer	*chkTimer;
 		QPen	border;
 		string	mediaSrc, tfile;
 		vector<MapArea>	maps;
@@ -540,12 +543,12 @@ class ShapeDocument : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), active(true), tmpl(false), web(NULL) { }
+		ShpDt( ) : en(true), active(true), tmpl(false), web(NULL), printCB(false) { }
 
 		string	toHtml( );
 		void	nodeProcess( XMLNode *xcur );
 #ifndef QT_NO_PRINTER
-		void	print( QPrinter * printer );
+		void	print( QPrinter *printer );
 #endif
 
 		//Attributes
@@ -553,14 +556,11 @@ class ShapeDocument : public WdgShape
 		short	active	:1;
 		short	view	:4;
 		short	tmpl	:1;
-#ifdef HAVE_WEBKIT
-		QWebView	*web;
-#else
-		QTextBrowser	*web;
-#endif
+		QWidget	*web;
 		string	font;
 		string	style;
 		string	doc;
+		bool	printCB;
 	};
 
 	//Methods
@@ -574,6 +574,7 @@ class ShapeDocument : public WdgShape
 
     private slots:
 	void custContextMenu( );
+	void printFinished( );
 
     private:
 	//Methods
