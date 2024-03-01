@@ -1,4 +1,8 @@
 2024-03-01 Roman 0.9.7
+- FIX:DAQ.System: Fix building by appending missing files.
+
+
+2024-03-01 Roman 0.9.7
 - New and significantly updated parts:
     - OpenSCADA Core: 3:13:0 => 3:14:0
     - OpenSCADA "Transport" subsystem: 19 => 20
