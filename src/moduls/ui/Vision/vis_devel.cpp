@@ -45,10 +45,6 @@
 #include "vis_devel.h"
 #include "vis_shape_elfig.h"
 
-#if QT_VERSION < 0x050000
-# define mappedObject(obj)	mapped(obj)
-#endif
-
 #undef _
 #define _(mess) mod->I18N(mess, lang().c_str()).c_str()
 
@@ -391,7 +387,6 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     menuBar()->addMenu((menuWindow=new QMenu(this)));
     connect(menuWindow, SIGNAL(aboutToShow()), this, SLOT(updateMenuWindow()));
     wMapper = new QSignalMapper(this);
-    connect(wMapper, SIGNAL(mappedObject(QObject*)), this, SLOT(setActiveSubWindow(QObject*)));
 
     menuBar()->addMenu((menuView=new QMenu(this)));
     if(s2i(SYS->cmdOpt("showWin")) != 2) {
@@ -983,7 +978,17 @@ void VisDevelop::setToolIconSize( )
     }
 }
 
-void VisDevelop::setActiveSubWindow( QObject *w )	{ work_space->setActiveSubWindow(dynamic_cast<QMdiSubWindow *>(w)); }
+void VisDevelop::setActiveSubWindow( )
+{
+    if(!sender()) return;
+
+    QList<QMdiSubWindow *> windows = work_space->subWindowList();
+    for(int iW = 0; iW < windows.size(); ++iW)
+	if(windows.at(iW)->windowTitle() == sender()->property("wTitle").toString()) {
+	    work_space->setActiveSubWindow(windows.at(iW));
+	    break;
+	}
+}
 
 void VisDevelop::fullScreen( bool vl )
 {
@@ -1192,9 +1197,10 @@ void VisDevelop::updateMenuWindow( )
     for(int iW = 0; iW < windows.size(); ++iW) {
 	QMdiSubWindow *child = windows.at(iW);
 	QAction *act = menuWindow->addAction(QString((iW<9)?"&%1 %2":"%1 %2").arg(iW+1).arg(child->windowTitle()));
+	act->setProperty("wTitle", child->windowTitle());
 	act->setCheckable(true);
 	act->setChecked(child == act_win);
-	connect(act, SIGNAL(triggered()), wMapper, SLOT(map()));
+	connect(act, SIGNAL(triggered()), this, SLOT(setActiveSubWindow()));
 	wMapper->setMapping(act, child);
     }
 }

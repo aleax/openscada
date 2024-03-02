@@ -1,3 +1,13 @@
+2024-03-02 Roman 0.9.7
+- FIX:data/openscada-proj.in: Fixed in processing the project for the lock file and the core crash file at presence the project both
+    in the system and user directory, that is the user directory is checked in first.
+- FIX:configure.ac: Fixed in checking the libpthread presence.
+- !!!!:FIX:DB: In function TTable::fieldSQLDel() fixed for true checking the function success.
+- !!!!:FIX:DAQ.BFN,UI.VCAEngine: Adapted for checking the TBDS::dataDel() success result to prevent hangs here on RO storages.
+- FIX:UI.Vision: Fixed in QMdiSubWindow mapping to QSignalMapper with adaption to Qt5 at least,
+    so removed mappedObject() as a completely spare one.
+
+
 2024-03-01 Roman 0.9.7
 - FIX:DAQ.System: Fix building by appending missing files.
 

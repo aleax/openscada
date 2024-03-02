@@ -211,7 +211,7 @@ class VisDevelop : public QMainWindow
 	void enterManual( );
 	void endRunChk( );	//End run flag check
 	void setToolIconSize( );
-	void setActiveSubWindow( QObject* );
+	void setActiveSubWindow( );
 
 	void fullScreen( bool vl );	//Full screen toggle
 
