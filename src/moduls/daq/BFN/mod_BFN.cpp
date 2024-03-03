@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.32"
+#define MOD_VER		"0.6.33"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Support Big Farm Net (BFN) modules for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -164,7 +164,7 @@ void TTpContr::save_( )
     // Clear no present codes
     for(int fld_cnt = 0; TBDS::dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++) {
 	if(mSymbCode.find(c_el.cfg("ID").getI()) != mSymbCode.end()) continue;
-	TBDS::dataDel(wdb+"."+wtbl, nodePath()+wtbl, c_el, TBDS::UseAllKeys|TBDS::NoException);
+	if(!TBDS::dataDel(wdb+"."+wtbl,nodePath()+wtbl,c_el,TBDS::UseAllKeys|TBDS::NoException)) break;
 	fld_cnt--;
     }
 
@@ -180,7 +180,7 @@ void TTpContr::save_( )
     // Clear no present codes
     for(int fld_cnt = 0; TBDS::dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++) {
 	if(mSymbAlrm.find(c_el.cfg("ID").getI()) != mSymbAlrm.end()) continue;
-	TBDS::dataDel(wdb+"."+wtbl, nodePath()+wtbl, c_el, TBDS::UseAllKeys|TBDS::NoException);
+	if(!TBDS::dataDel(wdb+"."+wtbl,nodePath()+wtbl,c_el,TBDS::UseAllKeys|TBDS::NoException)) break;
 	fld_cnt--;
     }
 }

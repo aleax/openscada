@@ -1218,14 +1218,7 @@ string UA::symmetricCrypt( const string &mess, const string &keySet, const strin
     unsigned char obuf[mess.size()], ivecb[keySize];
     memcpy(ivecb, keySet.data()+signSize+keySize, keySize);
 
-    //!!!! Old
-    /*AES_KEY key;
-    if(encrypt)
-	AES_set_encrypt_key((const unsigned char*)(keySet.data()+signSize), keySize*8, &key);
-    else AES_set_decrypt_key((const unsigned char*)(keySet.data()+signSize), keySize*8, &key);
-    AES_cbc_encrypt((const unsigned char*)mess.data(), obuf, mess.size(), &key, ivecb, encrypt);*/
-
-    //!!!! New
+#if OPENSSL_VERSION_NUMBER >= 0x10000000L
     int obufl = 0;
     unsigned char key[keySize];
     memcpy(key, keySet.data()+signSize, keySize);
@@ -1234,6 +1227,13 @@ string UA::symmetricCrypt( const string &mess, const string &keySet, const strin
     EVP_CIPHER_CTX_set_padding(ctx, false);
     EVP_CipherUpdate(ctx, obuf, &obufl, (const unsigned char*)mess.data(), mess.size());
     EVP_CIPHER_CTX_free(ctx);
+#else
+    AES_KEY key;
+    if(encrypt)
+	AES_set_encrypt_key((const unsigned char*)(keySet.data()+signSize), keySize*8, &key);
+    else AES_set_decrypt_key((const unsigned char*)(keySet.data()+signSize), keySize*8, &key);
+    AES_cbc_encrypt((const unsigned char*)mess.data(), obuf, mess.size(), &key, ivecb, encrypt);
+#endif
 
     return string((char*)obuf, mess.size());
 }

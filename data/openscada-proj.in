@@ -93,24 +93,27 @@ case "$1" in
 		sed -i "s/\(^\(Generic\|\)Name\(=\|\\[.*\\]=\).*\)/\1: $prjNm/" "$DESKTOP_DIR/openscada_$prjNm.desktop"
 	    fi
 	fi
+    fi
 
-	# Check for lost lock at it PID and openscada process in whole
-	if test -f $dPrjRez/lock; then
-	    pid=`cat $dPrjRez/lock | sed -r 's/^0*([0-9]+).*/\1/'`
-	    if ! ps -A -o "pid cmd" | grep "^ *$pid.*openscada" > /dev/null; then rm $dPrjRez/lock; fi
-	fi
+    #Checking for lost lock at it PID and openscada process in whole, and starting from the user directory
+    dPrjRez=$dPrjUser/$prjNm
+    if test ! -d $dPrjRez; then dPrjRez=$dPrj/$prjNm; fi
 
-	# Core dump files "core[.*]" into work directory process
-	if test -n "$(which gdb 2> /dev/null)"; then
-	    cd $dPrjRez
-	    for fit in `ls core* 2> /dev/null`; do
-		resultFile="${prjNm}_${fit}_$(date +%F_%H.%M).crash"
-		echo "Core dump process for back trace purchase to the file $resultFile"
-		gdb @bindir_full@/openscada --core ${fit} --batch --quiet -ex "thread apply all bt full" -ex "quit" > $resultFile
-		gzip $resultFile
-		rm -f ${fit}
-	    done
-	fi
+    if test -f $dPrjRez/lock; then
+	pid=`cat $dPrjRez/lock | sed -r 's/^0*([0-9]+).*/\1/'`
+	if ! ps -A -o "pid cmd" | grep "^ *$pid.*openscada" > /dev/null; then rm $dPrjRez/lock; fi
+    fi
+
+    # Core dump files "core[.*]" into work directory process
+    if test -n "$(which gdb 2> /dev/null)"; then
+	cd $dPrjRez
+	for fit in `ls core* 2> /dev/null`; do
+	    resultFile="${prjNm}_${fit}_$(date +%F_%H.%M).crash"
+	    echo "Core dump process for back trace purchase to the file $resultFile"
+	    gdb @bindir_full@/openscada --core ${fit} --batch --quiet -ex "thread apply all bt full" -ex "quit" > $resultFile
+	    gzip $resultFile
+	    rm -f ${fit}
+	done
     fi
     ;;
   remove)

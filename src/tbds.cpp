@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tbds.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1854,6 +1854,6 @@ void TTable::fieldSQLDel( TConfig &cfg )
 	//Checking for the presence
 	vector< vector<string> > tbl;
 	owner().sqlReq("SELECT 1 FROM \""+TSYS::strEncode(name(),TSYS::SQL,"\"")+"\" WHERE "+req_where+";", &tbl, true);
-	if(tbl.size() < 2) return;
+	if(tbl.size() >= 2) throw;	//Not removed then
     }
 }

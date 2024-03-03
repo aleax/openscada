@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: project.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1271,15 +1271,13 @@ void Page::loadIO( )
 		sid.size() < spar.size() && spar.compare(spar.size()-sid.size(),sid.size(),sid) == 0)
 	{
 	    if(wdgPresent(sid)) wdgDel(sid);
-	    TBDS::dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, TBDS::UseAllKeys);
-	    fldCnt--;
+	    if(TBDS::dataDel(db+"."+tbl,mod->nodePath()+tbl,cEl,TBDS::UseAllKeys|TBDS::NoException))
+		fldCnt--;
 	    continue;
 	}
 	// Record without any changes
-	else if(!cEl.cfg("ATTRS").getS().size()) {
-	    TBDS::dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, TBDS::UseAllKeys);
+	else if(!cEl.cfg("ATTRS").getS().size() && TBDS::dataDel(db+"."+tbl,mod->nodePath()+tbl,cEl,TBDS::UseAllKeys|TBDS::NoException))
 	    fldCnt--;
-	}
 	bool isNew = false;
 	if((isNew=!wdgPresent(sid)))
 	    try { wdgAdd(sid, "", ""); }

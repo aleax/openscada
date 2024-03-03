@@ -152,7 +152,7 @@ AC_ARG_ENABLE(AllModuls,
 
 AC_MSG_RESULT([========== Checking for libraries of the core =============])
 # AX_PTHREAD
-AC_SEARCH_LIBS(pthread, [pthread_create])
+AC_SEARCH_LIBS(pthread_create, [pthread])
 if test $enable_CrossCompile = no; then
     AC_FUNC_MALLOC
     AC_FUNC_REALLOC
