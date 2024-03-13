@@ -1,3 +1,16 @@
+2024-03-12 Roman 0.9.7
+- FIX:configure.ac: Returned back in detection LibIntl.
+- !!!!:FIX:Transports: Adapted for checking the TBDS::dataDel() success result to prevent hangs here on RO storages.
+- FIX:DAQ.DAQGate: Appended in setting the last archive value with timestamp to the current value
+    for cases of missing the current value different request by the tag <vl />.
+- Archive: The message "The grid mode doesn't support inserting too old values" expanded for show time in date format.
+- FIX:UI.Vision: Restored in new action items of the library widgets appearance for Qt6 by placing the new actions to Menu before ToolBar.
+    FIX: The event QEvent::KeyRelease in LineEdit apply replaced by QEvent::KeyPress also as in UI.QTCfg for Qt6.
+- FIX:UI.WebVision: The LineEdit view of the primitive FormEl fixed in wrong hiding special icons of ComBobox and so on.
+    FIX: The view Table of the primitive FormEl prevented of sorting try for empty columns at some sort switching.
+    Indicator of not apply editing the view LineEdit of the primitive FormEl changed to left red thick border.
+
+
 2024-03-02 Roman 0.9.7
 - FIX:data/openscada-proj.in: Fixed in processing the project for the lock file and the core crash file at presence the project both
     in the system and user directory, that is the user directory is checked in first.

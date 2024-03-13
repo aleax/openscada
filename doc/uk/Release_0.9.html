@@ -334,32 +334,33 @@
 <h3><span class="mw-headline" id=".5B01.01.7532.2F01.03.2024.5D_.D0.A1.D0.AC.D0.9E.D0.9C.D0.95_.D0.BE.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">7.1</span> [01.01.7532/01.03.2024] СЬОМЕ оновлення</span></h3>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Стан:</b> <span style="color: red">тестування та після-складання ...</span></li></ul>
-<p>Загальний процес випуску, користувачам для оцінки ваших очікувань та розробникам для нагадування завдань:<br />
+<p>Загальний процес випуску користувачам для оцінки ваших очікувань та розробникам для нагадування завдань:<br />
 <b><u>1. Тиждень приготування та складання:</u></b><br />
 </p>
 <ul><li> Складання останньої Робочої (Work) SVN-ревізії для всіх оточень нерегулярного складання щоб забезпечити ранне та широке тестування прийдешнього LTS релізу.</li>
-<li> Анонсування початку процесу випуску:
+<li> Анонс початку процесу випуску:
 <ul><li> створення нової <a href="index.html" title="Special:MyLanguage/Documents">сторінки релізу</a> або <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">сторінки оновлення</a> на Wiki;</li>
 <li> створення нової новини-сторінки на <a class="external text" href="http://oscada.org/en/main/%7Cофіційному" rel="nofollow noreferrer noopener" target="_blank">сайті OpenSCADA</a>;</li>
-<li> створення нового повідомлення-посилання на новину-сторінку на <a class="external text" href="https://www.facebook.com/Roman.Savochenko" rel="nofollow noreferrer noopener" target="_blank">FaceBook</a> та <a class="external text" href="https://www.linkedin.com/in/roman-savochenko-71b50272/" rel="nofollow noreferrer noopener" target="_blank">LinkedIn</a>;</li></ul></li>
-<li> Злиття змін Робочої (Work) версії, або копіювання цілком дерева Робочої гілки, до LTS гілки-дерева.</li>
+<li> створення нового повідомлення-посилання на новину-сторінку на <a class="external text" href="https://www.facebook.com/Roman.Savochenko" rel="nofollow noreferrer noopener" target="_blank">FaceBook</a> і <a class="external text" href="https://www.linkedin.com/in/roman-savochenko-71b50272/" rel="nofollow noreferrer noopener" target="_blank">LinkedIn</a>;</li></ul></li>
+<li> Злиття змін Робочої (Work) версії або копіювання цілком дерева Робочої гілки до LTS гілки-дерева.</li>
 <li> Внесення деяких змін, специфічних до LTS, стосовно підняття версії:
 <ul><li> оновлення <b>configure.ac</b> щодо версії випуску-оновлення та бібліотеки ядра;</li>
 <li> оновлення <b>data/*.spec</b> та <b>data/{debian,debian_mod}/changelog</b> стосовно нового номеру версії та доповнення протоколу змін файлів новими записами випуску-оновлення.</li></ul></li>
 <li> Формування-доповнення ПротоколуЗмін LTS змінами з ПротоколуЗмін Work, групуючи зміни за розташуванням та сортуючи їх за станом виправлення та рівнем, із комбінування нових можливостей у одному елементі та без видалення будь-яких відмінних змін.</li>
 <li> Копіювання значних змін із сформованого ПротоколуЗмін LTS до відповідної сторінки релізу-оновлення, беручи зміни за рівнем більш або рівні "!!".</li>
 <li> Переклад сторінок релізу-оновлення, оновлення "<a href="../en/To_do.html" title="Special:MyLanguage/Works/To do">Завдання (ToDo)</a>" та "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Works/Road_map" title="Special:MyLanguage/Works/Road map">Дорожньої карти (RoadMap)</a>".</li>
-<li> Генерація актуальної позамережевої документації використовуючи сервісну процедуру "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
+<li> Генерація актуальної позамережевої документації, використовуючи сервісну процедуру "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
 <li> Застосування-вивантаження змін LTS дерева до репозиторію та складання цього.</li>
-<li> Анонсування релізу-оновлення.</li></ul>
+<li> Анонс релізу-оновлення.</li>
+<li> Оновлення <a class="external text" href="http://oscada.org/ua/golovna/zavantazhiti/" rel="nofollow noreferrer noopener" target="_blank">сторінки Завантажити</a>.</li></ul>
 <p><b><u>2. Тиждень(і) тестування та після-складання:</u></b><br />
 </p>
 <ul><li> Гаряче тестування збірок релізу.</li>
 <li> Завершення та виправлення перекладу ПротоколуЗмін та документації.</li>
 <li> Генерація актуальної позамережевої документації використовуючи сервісну процедуру "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
-<li> Застосування-вивантаження виправлень релізу до репозиторію та складання цього щодо другої збірки, і для кожного тижня виправлення критичних помилок — перший тиждень без критичних виправлень означатиме завершення випуску LTS, тож, КОРИСТУВАЧІ, тестуйте ретельно LTS реліз щоб потім не скаржитись на його кінцеву збірку!</li></ul>
+<li> Застосування-вивантаження виправлень релізу до репозиторію та складання цього щодо другої збірки, і для кожного тижня виправлення критичних помилок — перший тиждень без критичних виправлень означатиме завершення випуску LTS, тож, КОРИСТУВАЧІ — тестуйте ретельно LTS реліз щоб потім не скаржитись на його кінцеву збірку!</li></ul>
 </div>
-<p>Це оновлення <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релізу 0.9 LTS</a> виправляє біля 60 помилок та додає ДУЖЕ БАГАТО удосконалень із декількома значними-концептуальними, з якими цілком можна ознайомитися у <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2954" rel="nofollow noreferrer noopener" target="_blank">протоколі змін оновлення</a>.
+<p>Це оновлення <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релізу 0.9 LTS</a> виправляє біля 60 помилок та додає ДУЖЕ БАГАТО удосконалень із декількома значними-концептуальними, з якими цілком можна ознайомитися у <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2958" rel="nofollow noreferrer noopener" target="_blank">протоколі змін оновлення</a>.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> <b><u>Важливі дії користувача за оновленням</u></b><br />
 </p>
 <ul><li> DAQ.System: ІД автоматично генерованих параметрів DA змінено у: CPU - "CPU[{N}]", fs - "FS{MP}", hddstat - "DiskSt_{dev}", MEM - "MEM", netstat - "Net_{IF}", sensors - "Sensors", hddsmart - "DiskSMART", ups - "UPS", uptime - "UpTm_{U}".</li></ul>
@@ -447,7 +448,7 @@
 <li> Transport.SSL,Special.FLibSYS: використання MD5() переведено на EVP_DigestInit_ex(), EVP_DigestUpdate(), EVP_DigestFinal_ex() для нових версій.</li></ul></li>
 <li> configure.ac: При додані Qt6 його доповнено щодо Qt6Sensors, Qt6WebEngineWidgets, Qt6MultimediaWidgets.
 <ul><li> Доповнено перевіркою Qt5WebEngineWidgets і Qt5MultimediaWidgets для підтримки у UI.Vision.</li>
-<li> Доповнено перевіркою декларацій-функцій clock_nanosleep, pthread_rwlock_timedwrlock, newlocale із вдосконаленням виявлення LibIntl, для дуже простих оточень MIPS із UCLibC.</li>
+<li> Доповнено перевіркою декларацій-функцій clock_nanosleep, pthread_rwlock_timedwrlock, newlocale для дуже простих оточень MIPS із UCLibC.</li>
 <li> Параметри <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">--disable-WebKit</span> і <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">--disable-Phonon</span> перейменовано у <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">--disable-QtWebEngine</span> і <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">--disable-QtMultimediaEngine</span> відповідно.</li>
 <li> Загальні зміни QtWebKit_{CFLAGS,LIBS} і phonon_{CFLAGS,LIBS} перейменовано у QtWebEngine_{CFLAGS,LIBS} і QtMultimediaEngine_{CFLAGS,LIBS} відповідно.</li>
 <li> Покращено більшість відповідних повідомлень.</li>
@@ -480,7 +481,7 @@
 <li> розділювач комбінацій клавіш "+" замінено "|", тобто "Qt::SHIFT|Qt::Key_F1";</li>
 <li> подія QEvent::KeyRelease у застосуванні LineEdit замінено на QEvent::KeyPress;</li>
 <li> QTStarter: загальну бібліотеку lib_qtgen доповнено функцією winFit() загального підлаштування специфічних вікон мобільних систем; доповнено атрибутом Qt::AA_ShareOpenGLContexts перед об'єктом додатку Qt для функціювання QtWebEngine на Qt6;</li>
-<li> Vision: адаптація до Qt WebEngineWidgets замість WebKit та до Qt MultimediaWidgets замість Phonon, і примітив Документ розділено задля примусового використання QTextBrowser у режимі розробки.</li></ul></li></ul>
+<li> Vision: адаптація до Qt WebEngineWidgets замість WebKit та до Qt MultimediaWidgets замість Phonon, і примітив Документ розділено задля примусового використання QTextBrowser у режимі розробки. Відновлено появу нових елементів дій віджетів бібліотек шляхом розташування нових дій у Меню перед Панеллю Інструментів.</li></ul></li></ul>
 <p><b><u><span id="TransportAddPrm" title="#TransportAddPrm">КОНЦЕПТУАЛЬНЕ &gt; Перегляд і уніфікація підсистеми Транспортів у керуванні додатковими параметрами та розширення використання параметрів часу підключення щодо реєстрації конфігураційних параметрів зовнішніх джерел</span> </u></b><br />
 </p>
 <ul><li> конфігураційне поле "A_PRMS" контейнеру додаткових параметрів переміщено із модулів до бібліотеки ядра;</li>
@@ -580,6 +581,7 @@
 <p><b><u>Система</u></b><br />
 </p>
 <ul><li> Складання: configure.ac: Підняття версії бібліотеки ядра до 3:14:0 і версії програми до 0.9.7. Підняття версії модулів підсистеми "Збір Даних" до 15, "Транспорти" до 20.</li>
+<li> FIX:DB,Transports,DAQ.BFN,UI.VCAEngine: Адаптовано до перевірки вдалого результату TBDS::dataDel() для запобігання зависань на сховищах лише для читання із виправленням функції TTable::fieldSQLDel() щодо коректної перевірки успішності функції.</li>
 <li> .,DAQ.{DAQGate,DCON,DiamondBoards,ICP_DAS,LogicLev,ModBus,OPC_UA,Siemens,SoundCard,System},Protocol.{ModBus,OPC_UA},UI.VCAEngine: Значно спрощено у підтримці типів обрання, встановивши опціональним і з підтримкою динамічного перекладу. Дозволено також визначення лише переліку значень.</li>
 <li> .,Archive.DBArch,DAQ.{BFN,JavaLikeCalc,ModBus,OPC_UA},Protocol.UserProtocol,UI.{VCAEngine,Vision,WebUser}: Загальне сховище перейменовано із "*.*" у "&lt;gen&gt;":
 <ul><li> із отриманням назв специфічних сховищ "Загальне Сховище" і "Конфігураційний Файл" всюди з нової функції TMess::labStorFromCode();</li>

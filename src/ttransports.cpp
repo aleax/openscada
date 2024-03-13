@@ -351,7 +351,7 @@ void TTransportS::save_( )
     c_el.cfgViewAll(false);
     for(int fld_cnt = 0; TBDS::dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el); )
 	if(!extHostGet(c_el.cfg("OP_USER").getS(),c_el.cfg("ID").getS()).id.size()) {
-	    TBDS::dataDel(extHostsDB(), nodePath()+"ExtTansp", c_el, TBDS::UseAllKeys|TBDS::NoException);
+	    if(!TBDS::dataDel(extHostsDB(),nodePath()+"ExtTansp",c_el,TBDS::UseAllKeys|TBDS::NoException)) break;
 	    fld_cnt--;
 	}
 }

@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.13.8"
+#define MOD_VER		"2.13.9"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -832,16 +832,21 @@ void *TMdContr::Task( void *icntr )
 				    vl.at().setHasArchReq(true);
 				}
 				else if(aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize()) {
+				    vl.at().setHasArch(true);
+
+				    //  Setting the archive
 				    int64_t btm = atoll(aNd->attr("tm").c_str());
 				    int64_t per = atoll(aNd->attr("per").c_str());
 				    TValBuf buf(vl.at().arch().at().valType(), 0, per, false, true);
 				    for(unsigned iV = 0; iV < aNd->childSize(); iV++) {
-					buf.setS(aNd->childGet(iV)->text(), btm+per*iV);
+					buf.setS((tVl=aNd->childGet(iV)->text()), btm+per*iV);
 					stO.numRA++;
 				    }
 				    vl.at().arch().at().setVals(buf, buf.begin(), buf.end(), "");
-				    cntr.mStatTm = vmax(cntr.mStatTm, btm + per*aNd->childSize());
-				    if(aNd->childSize()) vl.at().setHasArch(true);
+
+				    //  Updating the current value with timestamp
+				    if((btm=btm+per*aNd->childSize()) > cntr.mStatTm)
+					vl.at().setS(tVl, (cntr.mStatTm=btm)-per);
 				}
 			    }
 			}

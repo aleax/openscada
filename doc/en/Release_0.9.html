@@ -334,13 +334,13 @@
 <h3><span class="mw-headline" id=".5B01.01.7532.2F01.03.2024.5D_The_SEVENTH_update"><span class="mw-headline-number">7.1</span> [01.01.7532/01.03.2024] The SEVENTH update</span></h3>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>State:</b> <span style="color:red">testing and post-building ...</span></li></ul>
-<p>The common releasing process, for the users to estimate your expectations and for the developers to remind the tasks:<br />
+<p>The common releasing process for the users to estimate your expectations and for the developers to remind the tasks:<br />
 <b><u>1. The preparing and building week:</u></b><br />
 </p>
 <ul><li> Building the last Work SVN-revision for all environments of the irregular building to provide early and wide testing the coming LTS release.</li>
 <li> Announcing the releasing process start:
-<ul><li> creating a new <a href="index.html" title="Special:MyLanguage/Documents">release page</a> or <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">update page</a> on Wiki;</li>
-<li> creating a new news-page on <a class="external text" href="http://oscada.org/en/main/%7Cthe" rel="nofollow noreferrer noopener" target="_blank">official OpenSCADA site</a>;</li>
+<ul><li> creating a new <a href="index.html" title="Special:MyLanguage/Documents">release page</a> or <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">update page</a> on the Wiki;</li>
+<li> creating a new news-page on the <a class="external text" href="http://oscada.org/en/main/%7Cofficial" rel="nofollow noreferrer noopener" target="_blank">OpenSCADA site</a>;</li>
 <li> creating a new post-link to the news-page on <a class="external text" href="https://www.facebook.com/Roman.Savochenko" rel="nofollow noreferrer noopener" target="_blank">FaceBook</a> and <a class="external text" href="https://www.linkedin.com/in/roman-savochenko-71b50272/" rel="nofollow noreferrer noopener" target="_blank">LinkedIn</a>;</li></ul></li>
 <li> Merging the Work branch changes or copying the whole Work branch tree to the LTS branch-tree.</li>
 <li> Making some LTS specific changes about the version rise:
@@ -351,15 +351,16 @@
 <li> Translating the release-update pages, updating the <a href="To_do.html" title="Special:MyLanguage/Works/To do">ToDo</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Works/Road_map" title="Special:MyLanguage/Works/Road map">RoadMap</a>.</li>
 <li> Generating the actual offline documentation using the service procedure "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
 <li> Committing the LTS tree changes to the repository and building that.</li>
-<li> Announcing the release-update.</li></ul>
+<li> Announcing the release-update.</li>
+<li> Updating the <a class="external text" href="http://oscada.org/en/main/download/" rel="nofollow noreferrer noopener" target="_blank">Download page</a>.</li></ul>
 <p><b><u>2. The testing and post-building week(s):</u></b><br />
 </p>
 <ul><li> Hot testing the release build.</li>
 <li> Finishing and fixing the ChangeLog translating and the documentation.</li>
 <li> Generating the actual offline documentation using the service procedure "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
-<li> Committing the release fixes to the repository and building that for the second build, and for each week of appearing critical fixes — the first week without the critical fixes means the final the LTS releasing, so, USERS, test closely the LTS release for not complain to it final build!</li></ul>
+<li> Committing the release fixes to the repository and building that for the second build, and for each week of appearing critical fixes — the first week without the critical fixes means the final the LTS releasing, so, USERS — test closely the LTS release for do not complain to it final build!</li></ul>
 </div>
-<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 60 bugs and appends VERY MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2954" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
+<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 60 bugs and appends VERY MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2958" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> <b><u>User significant actions on the update</u></b><br />
 </p>
 <ul><li> DAQ.System: ID of the automaticly generated DA parameters changed to: CPU - "CPU[{N}]", fs - "FS{MP}", hddstat - "DiskSt_{dev}", MEM - "MEM", netstat - "Net_{IF}", sensors - "Sensors", hddsmart - "DiskSMART", ups - "UPS", uptime - "UpTm_{U}".</li></ul>
@@ -447,7 +448,7 @@
 <li> Transport.SSL,Special.FLibSYS: using of MD5() moved to EVP_DigestInit_ex(), EVP_DigestUpdate(), EVP_DigestFinal_ex() for new versions.</li></ul></li>
 <li> configure.ac: In appending Qt6 that is appended by Qt6Sensors, Qt6WebEngineWidgets, Qt6MultimediaWidgets.
 <ul><li> Appended by checking Qt5WebEngineWidgets and Qt5MultimediaWidgets for support in UI.Vision.</li>
-<li> Appended by checking the declarations-functions clock_nanosleep, pthread_rwlock_timedwrlock, newlocale with improving the LibIntl detection, for very pure environments of MIPS with UCLibC.</li>
+<li> Appended by checking the declarations-functions clock_nanosleep, pthread_rwlock_timedwrlock, newlocale for very pure environments of MIPS with UCLibC.</li>
 <li> The parameters <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">--disable-WebKit</span> and <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">--disable-Phonon</span> renamed to <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">--disable-QtWebEngine</span> and <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">--disable-QtMultimediaEngine</span> respectively.</li>
 <li> The generic variables QtWebKit_{CFLAGS,LIBS} and phonon_{CFLAGS,LIBS} renamed to QtWebEngine_{CFLAGS,LIBS} and QtMultimediaEngine_{CFLAGS,LIBS} respectively.</li>
 <li> Most of the corresponding messages were improved.</li>
@@ -480,7 +481,7 @@
 <li> the keyboard combination separator "+" replaced by "|", that is "Qt::SHIFT|Qt::Key_F1";</li>
 <li> the event QEvent::KeyRelease in LineEdit apply replaced by QEvent::KeyPress;</li>
 <li> QTStarter: the generic library lib_qtgen appended by the function winFit() of specific windows fitting on mobile systems in common; appended by the attribute Qt::AA_ShareOpenGLContexts before the Qt application object for QtWebEngine work on Qt6;</li>
-<li> Vision: adaption to Qt WebEngineWidgets instead WebKit and to Qt MultimediaWidgets instead Phonon, and the primitive Document split for force using QTextBrowser in the development mode.</li></ul></li></ul>
+<li> Vision: adaption to Qt WebEngineWidgets instead WebKit and to Qt MultimediaWidgets instead Phonon, and the primitive Document split for force using QTextBrowser in the development mode. Restored in new action items of the library widgets appearance by placing the new actions to Menu before ToolBar.</li></ul></li></ul>
 <p><b><u><span id="TransportAddPrm" title="#TransportAddPrm">CONCEPTUAL &gt; Refactoring and unifying the Transports subsystem in the additional parameters management and expanding in using the connection time parameters for registering configuration parameters of external sources</span> </u></b><br />
 </p>
 <ul><li> the container configuration field "A_PRMS" of the additional parameters moved to the core library from the modules;</li>
@@ -580,6 +581,7 @@
 <p><b><u>SYS</u></b><br />
 </p>
 <ul><li> Building: configure.ac: Core library version risen to 3:14:0 and the program version risen to 0.9.7. The module version of the subsystem "DAQ" risen to 15, "Transports" risen to 20.</li>
+<li> FIX:DB,Transports,DAQ.BFN,UI.VCAEngine: Adapted for checking the TBDS::dataDel() success result to prevent hangs here on RO storages with fixing function TTable::fieldSQLDel() for true checking the function success.</li>
 <li> .,DAQ.{DAQGate,DCON,DiamondBoards,ICP_DAS,LogicLev,ModBus,OPC_UA,Siemens,SoundCard,System},Protocol.{ModBus,OPC_UA},UI.VCAEngine: Simplified significantly in support the selectable types, making that optional and with support the dynamic translation. Allowed also for specifying only list of values.</li>
 <li> .,Archive.DBArch,DAQ.{BFN,JavaLikeCalc,ModBus,OPC_UA},Protocol.UserProtocol,UI.{VCAEngine,Vision,WebUser}: The Generic Storage renamed from "*.*" to "&lt;gen&gt;":
 <ul><li> with naming the specific storages as "Generic Storage" and "Configuration File" everywhere through the new function TMess::labStorFromCode();</li>

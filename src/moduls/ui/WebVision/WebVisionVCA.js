@@ -1275,7 +1275,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			}
 			formObj.onkeydown = function(e)	{ e.stopImmediatePropagation(); return true; }
 			formObj.oncontextmenu = function(e) { e.stopImmediatePropagation(); return true; }
-			formObj.modify = function( )	{ return this.parentNode.isModify; }
+			formObj.modify = function( )	{ return this.parentNode.isModify ? true : false; }
 			formObj.setModify = function(on) {
 			    if(on && this.tmClearEdit)
 				this.tmClearEdit = this.parentNode.confirm ? tmClearEdit : tmConfirmEdit;
@@ -1289,7 +1289,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					this.parentNode.children[1].style.left = (parseInt(this.parentNode.children[1].style.left)-applySz)+'px';
 				    okImg.style.visibility = 'visible';
 				}
-				else { this.style.borderBottomColor = "red"; this.style.borderBottomWidth = "3px"; }
+				else this.style.borderLeft = "7px ridge red";
 
 				this.wdgLnk.perUpdtEn(true); this.tmClearEdit = this.parentNode.confirm ? tmClearEdit : tmConfirmEdit;
 			    }
@@ -1301,7 +1301,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    okImg.style.visibility = 'hidden';
 				    if(this.cldrDlg) this.cldrDlg.style.visibility = 'hidden';
 				}
-				else { this.style.borderBottomColor = this.style.borderTopColor; this.style.borderBottomWidth = this.style.borderTopWidth; }
+				else this.style.borderLeft = this.style.borderRight;
 
 				this.wdgLnk.perUpdtEn(false); this.tmClearEdit = 0;
 			    }
@@ -2225,6 +2225,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				formObj.sort = function(col, force) {
 				    if(force) this.sortCol = -col;
 				    col = Math.abs(col);
+				    if(!this.tHead.rows[0].cells[col-1]) return;
 				    isDesc = (Math.abs(this.sortCol) == col && this.sortCol && this.sortCol > 0);
 				    prcArr = Array.prototype.slice.call(this.tBodies[0].rows,0).sort(
 					    function(a,b) {

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-28 11:07+0200\n"
+"POT-Creation-Date: 2024-03-12 19:11+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -379,12 +379,12 @@ msgid ""
 "(%lld)!"
 msgstr ""
 
-#, c-format
 msgid ""
-"The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
+"The grid mode doesn't support inserting too old values %s.%06d (%s.%06d-%s."
+"%06d)."
 msgstr ""
-"Режим привязки к сетке не поддерживает вставку очень старых значений %lld "
-"(%lld-%lld)."
+"Режим привязки к сетке не поддерживает вставку очень старых значений %s.%06d (%s.%06d-%s."
+"%06d)."
 
 msgid "The grid mode doesn't support inserting too old values."
 msgstr "Режим привязки к сетке не поддерживает вставку очень старых значений."
@@ -939,9 +939,6 @@ msgstr "[ИмяТаблицы]"
 msgid "Attribute '%s' is not present!"
 msgstr "Атрибут '%s' отсутствует!"
 
-msgid "Element type is not selective!"
-msgstr "Тип элемента не выбираем!"
-
 msgid "Element type is not String!"
 msgstr "Тип элемента не строка!"
 
@@ -1138,28 +1135,6 @@ msgstr "Ошибка идентификатора!"
 
 msgid "Container element already connected!"
 msgstr "Элемент контейнера уже подключен!"
-
-msgid "Field is not String."
-msgstr "Поле не строка."
-
-msgid "Field is not Integer."
-msgstr "Поле не целое."
-
-msgid "Field is not Real."
-msgstr "Поле не вещественное."
-
-msgid "Field is not Boolean."
-msgstr "Поле не логическое."
-
-msgid "Field is not selective!"
-msgstr "Поле не выборочного типа!"
-
-msgid "Empty"
-msgstr "Пусто"
-
-#, c-format
-msgid "Error selecting! Value: '%s'."
-msgstr "Ошибка выбора! Значение: '%s'."
 
 #, c-format
 msgid ""
@@ -2992,9 +2967,6 @@ msgstr ""
 msgid "Archiving"
 msgstr "Архивация"
 
-msgid "Not selective type!"
-msgstr "Не выборочный тип!"
-
 #, c-format
 msgid "Error writing a value to the archive: %s"
 msgstr "Ошибка записи значения в архив: %s"
@@ -3159,6 +3131,34 @@ msgstr "Имя проекта установлено в:"
 
 msgid "already started."
 msgstr "уже запущен."
+
+#~ msgid "Element type is not selective!"
+#~ msgstr "Тип элемента не выбираем!"
+
+#~ msgid "Field is not String."
+#~ msgstr "Поле не строка."
+
+#~ msgid "Field is not Integer."
+#~ msgstr "Поле не целое."
+
+#~ msgid "Field is not Real."
+#~ msgstr "Поле не вещественное."
+
+#~ msgid "Field is not Boolean."
+#~ msgstr "Поле не логическое."
+
+#~ msgid "Field is not selective!"
+#~ msgstr "Поле не выборочного типа!"
+
+#~ msgid "Empty"
+#~ msgstr "Пусто"
+
+#, c-format
+#~ msgid "Error selecting! Value: '%s'."
+#~ msgstr "Ошибка выбора! Значение: '%s'."
+
+#~ msgid "Not selective type!"
+#~ msgstr "Не выборочный тип!"
 
 #~ msgid "Translation removed! Reload the base message."
 #~ msgstr "Перевод удалён! Перегрузите базовое сообщение."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-28 11:07+0200\n"
+"POT-Creation-Date: 2024-03-12 19:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -336,7 +336,7 @@ msgid "Number of the copying items achieved the limit %d for time range [%lld:%l
 msgstr ""
 
 #, c-format
-msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
+msgid "The grid mode doesn't support inserting too old values %s.%06d (%s.%06d-%s.%06d)."
 msgstr ""
 
 msgid "The grid mode doesn't support inserting too old values."
@@ -833,9 +833,6 @@ msgstr ""
 msgid "Attribute '%s' is not present!"
 msgstr ""
 
-msgid "Element type is not selective!"
-msgstr ""
-
 msgid "Element type is not String!"
 msgstr ""
 
@@ -1018,28 +1015,6 @@ msgid "Error ID!"
 msgstr ""
 
 msgid "Container element already connected!"
-msgstr ""
-
-msgid "Field is not String."
-msgstr ""
-
-msgid "Field is not Integer."
-msgstr ""
-
-msgid "Field is not Real."
-msgstr ""
-
-msgid "Field is not Boolean."
-msgstr ""
-
-msgid "Field is not selective!"
-msgstr ""
-
-msgid "Empty"
-msgstr ""
-
-#, c-format
-msgid "Error selecting! Value: '%s'."
 msgstr ""
 
 #, c-format
@@ -2492,9 +2467,6 @@ msgid ""
 msgstr ""
 
 msgid "Archiving"
-msgstr ""
-
-msgid "Not selective type!"
 msgstr ""
 
 #, c-format

@@ -71,12 +71,7 @@ if test $ac_cv_header_libintl_h = yes; then
     if test $XGETTEXT = false -o $MSGMERGE = false -o $MSGFMT = false; then
 	AC_MSG_ERROR([Some utilities of I18N gettext are not present! Install the gettext utilites package.]);
     fi
-    AC_CHECK_FUNC(bindtextdomain, [
-	AC_SEARCH_LIBS(libintl_bindtextdomain, [intl])
-    ], [
-	AC_DEFINE(HAVE_LIBINTL_H, 0, [No LibIntl in real, disabling])
-	ac_cv_header_libintl_h=no
-    ])
+    AC_SEARCH_LIBS(libintl_bindtextdomain, [intl])
 fi
 
 # Checking for typedefs, structures, and compiler characteristics
