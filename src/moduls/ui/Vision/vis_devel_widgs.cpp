@@ -1601,7 +1601,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 	    owner()->lb_menu[iM]->setIcon(QPixmap::fromImage(img));
 	}
 
-	//  Remove no present widgets
+	//  Remove not present widgets
 	for(iTopwl = 0; iTopwl < nit->childCount(); iTopwl++) {
 	    nit_w = nit->child(iTopwl);
 	    if(upd_wdg.empty()) iW = wlbN->childSize();
@@ -1653,7 +1653,6 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 	    nit_w->setText(1, _("Widget"));
 	    nit_w->setText(2, wdgId.c_str());
 
-
 	    //  Add widget's actions to toolbar and menu
 	    if(vca_lev != 3) {
 		QList<QAction*> use_act = owner()->lb_toolbar[iT]->actions();
@@ -1681,9 +1680,9 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 		    cur_act->setEnabled(false);
 		    cur_act->setCheckable(true);
 		    //    Add action to toolbar and menu
-		    owner()->actGrpWdgAdd->addAction(cur_act);
+		    owner()->lb_menu[iM]->addAction(cur_act);	//!!!! Must be first for Menu on Qt6
 		    owner()->lb_toolbar[iT]->addAction(cur_act);
-		    owner()->lb_menu[iM]->addAction(cur_act);
+		    owner()->actGrpWdgAdd->addAction(cur_act);
 		}
 		//   Update action
 		cur_act->setIcon(QPixmap::fromImage(img));
@@ -1763,7 +1762,7 @@ void WdgTree::ctrTreePopup( )
     popup.addSeparator();
     popup.addAction(owner()->actDBLoad);
     popup.addAction(owner()->actDBSave);
-	popup.addSeparator();
+    popup.addSeparator();
     if(owner()->actManualLib->isEnabled()) {
 	popup.addAction(owner()->actManualLib);
 	popup.addSeparator();

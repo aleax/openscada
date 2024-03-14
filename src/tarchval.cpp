@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchval.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -633,7 +633,11 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 	    return;
 	}
 	else if(npos < 0)
-	    throw TError(TError::Arch_Val_OldBufVl, "ValBuf", _("The grid mode doesn't support inserting too old values %lld (%lld-%lld)."), tm, beg, end);
+	    throw TError(TError::Arch_Val_OldBufVl, "ValBuf",
+			_("The grid mode doesn't support inserting too old values %s.%06d (%s.%06d-%s.%06d)."),
+			atm2s(tm/1000000,"%Y-%m-%dT%H:%M:%S").c_str(), int(tm%1000000),
+			atm2s(beg/1000000,"%Y-%m-%dT%H:%M:%S").c_str(), int(beg%1000000),
+			atm2s(end/1000000,"%Y-%m-%dT%H:%M:%S").c_str(), int(end%1000000));
 	else {
 	    TpVal fillVl = eval;
 	    if(fillLast && buf.grid->size()) fillVl = cur ? (*buf.grid)[cur-1] : (*buf.grid)[buf.grid->size()-1];

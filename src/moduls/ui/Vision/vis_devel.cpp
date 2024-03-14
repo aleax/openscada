@@ -1355,12 +1355,12 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
 	// Check for widget's library
 	req.clear()->setName("add");
 	string new_wdg;
-	if(!sid1.compare(0,4,"wlb_")) {
+	if(sid1.find("wlb_") == 0) {
 	    if(pElCnt == 1) req.setAttr("path", own_wdg+"/%2fwdg%2fwdg")->setAttr("id", w_id)->setText(w_nm);
 	    else req.setAttr("path", own_wdg+"/%2finclwdg%2fwdg")->setAttr("id", w_id)->setText(w_nm);
 	    new_wdg = own_wdg + "/wdg_";
 	}
-	else if(!sid1.compare(0,4,"prj_")) {
+	else if(sid1.find("prj_") == 0) {
 	    if(pnt.isNull()) {
 		req.setAttr("path", own_wdg+"/%2fpage%2fpage")->setAttr("id", w_id)->setText(w_nm);
 		new_wdg = own_wdg + "/pg_";
@@ -1441,16 +1441,16 @@ void VisDevelop::visualItDel( const string &itms, bool chNoWr )
 	string sid1 = TSYS::pathLev(it_own, 0);
 	//Check for widget's library
 	if(sid1.empty()) {
-	    if(!it_id.compare(0,4,"wlb_")) req.setAttr("path", "/%2fprm%2fcfg%2fwlb")->setAttr("id", it_id.substr(4));
-	    else if(!it_id.compare(0,4,"prj_")) req.setAttr("path","/%2fprm%2fcfg%2fprj")->setAttr("id",it_id.substr(4));
+	    if(it_id.find("wlb_") == 0) req.setAttr("path", "/%2fprm%2fcfg%2fwlb")->setAttr("id", it_id.substr(4));
+	    else if(it_id.find("prj_") == 0) req.setAttr("path","/%2fprm%2fcfg%2fprj")->setAttr("id",it_id.substr(4));
 	}
-	else if(!sid1.compare(0,4,"wlb_")) {
+	else if(sid1.find("wlb_") == 0) {
 	    if(pElCnt <= 2) req.setAttr("path", it_own+"/%2fwdg%2fwdg")->setAttr("id", it_id.substr(4));
 	    else req.setAttr("path", it_own+"/%2finclwdg%2fwdg")->setAttr("id", it_id.substr(4));
 	}
-	else if(!sid1.compare(0,4,"prj_")) {
+	else if(sid1.find("prj_") == 0) {
 	    if(pElCnt <= 2) req.setAttr("path", it_own+"/%2fpage%2fpage")->setAttr("id", it_id.substr(3));
-	    else if(!it_id.compare(0,3,"pg_")) req.setAttr("path", it_own+"/%2fpage%2fpage")->setAttr("id", it_id.substr(3));
+	    else if(it_id.find("pg_") == 0) req.setAttr("path", it_own+"/%2fpage%2fpage")->setAttr("id", it_id.substr(3));
 	    else req.setAttr("path", it_own+"/%2finclwdg%2fwdg")->setAttr("id", it_id.substr(4));
 	}
 

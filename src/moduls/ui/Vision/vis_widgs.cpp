@@ -806,7 +806,7 @@ void LineEdit::cancelSlot( )
 
 bool LineEdit::event( QEvent * e )
 {
-    if(e->type() == QEvent::KeyRelease && btFld) {
+    if(e->type() == QEvent::KeyPress && btFld) {	//!!!! QEvent::KeyRelease doesn't come in Qt6.4
 	QKeyEvent *keyEvent = (QKeyEvent*)e;
 	if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
 	    btFld->animateClick();
