@@ -332,35 +332,7 @@
 <li> Adaptation to work in the environment of the operating systems QNX and MS Windows.</li></ul>
 <h2><span class="mw-headline" id="Updates"><span class="mw-headline-number">7</span> Updates</span></h2>
 <h3><span class="mw-headline" id=".5B01.01.7532.2F01.03.2024.5D_The_SEVENTH_update"><span class="mw-headline-number">7.1</span> [01.01.7532/01.03.2024] The SEVENTH update</span></h3>
-<div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
-<ul><li> <b>State:</b> <span style="color:red">testing and post-building ...</span></li></ul>
-<p>The common releasing process for the users to estimate your expectations and for the developers to remind the tasks:<br />
-<b><u>1. The preparing and building week:</u></b><br />
-</p>
-<ul><li> Building the last Work SVN-revision for all environments of the irregular building to provide early and wide testing the coming LTS release.</li>
-<li> Announcing the releasing process start:
-<ul><li> creating a new <a href="index.html" title="Special:MyLanguage/Documents">release page</a> or <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">update page</a> on the Wiki;</li>
-<li> creating a new news-page on the <a class="external text" href="http://oscada.org/en/main/%7Cofficial" rel="nofollow noreferrer noopener" target="_blank">OpenSCADA site</a>;</li>
-<li> creating a new post-link to the news-page on <a class="external text" href="https://www.facebook.com/Roman.Savochenko" rel="nofollow noreferrer noopener" target="_blank">FaceBook</a> and <a class="external text" href="https://www.linkedin.com/in/roman-savochenko-71b50272/" rel="nofollow noreferrer noopener" target="_blank">LinkedIn</a>;</li></ul></li>
-<li> Merging the Work branch changes or copying the whole Work branch tree to the LTS branch-tree.</li>
-<li> Making some LTS specific changes about the version rise:
-<ul><li> updating <b>configure.ac</b> for version of the release-update and core library;</li>
-<li> updating <b>data/*.spec</b> and <b>data/{debian,debian_mod}/changelog</b> for the new version number and appending the files' changelog for new release-update entry.</li></ul></li>
-<li> Forming-appending the LTS ChangeLog by the changes from the Work ChangeLog, grouping the changes by the location and sorting them by the fixing status and the level, with combination new features under one item and without removing any different changes.</li>
-<li> Copying the significant changes from the formed LTS ChangeLog to the related page of the release-update, taking the changes in the level more or even than "!!".</li>
-<li> Translating the release-update pages, updating the <a href="To_do.html" title="Special:MyLanguage/Works/To do">ToDo</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Works/Road_map" title="Special:MyLanguage/Works/Road map">RoadMap</a>.</li>
-<li> Generating the actual offline documentation using the service procedure "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
-<li> Committing the LTS tree changes to the repository and building that.</li>
-<li> Announcing the release-update.</li>
-<li> Updating the <a class="external text" href="http://oscada.org/en/main/download/" rel="nofollow noreferrer noopener" target="_blank">Download page</a>.</li></ul>
-<p><b><u>2. The testing and post-building week(s):</u></b><br />
-</p>
-<ul><li> Hot testing the release build.</li>
-<li> Finishing and fixing the ChangeLog translating and the documentation.</li>
-<li> Generating the actual offline documentation using the service procedure "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
-<li> Committing the release fixes to the repository and building that for the second build, and for each week of appearing critical fixes — the first week without the critical fixes means the final the LTS releasing, so, USERS — test closely the LTS release for do not complain to it final build!</li></ul>
-</div>
-<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 60 bugs and appends VERY MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2958" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
+<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 60 bugs and appends VERY MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2960" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> <b><u>User significant actions on the update</u></b><br />
 </p>
 <ul><li> DAQ.System: ID of the automaticly generated DA parameters changed to: CPU - "CPU[{N}]", fs - "FS{MP}", hddstat - "DiskSt_{dev}", MEM - "MEM", netstat - "Net_{IF}", sensors - "Sensors", hddsmart - "DiskSMART", ups - "UPS", uptime - "UpTm_{U}".</li></ul>

@@ -1,3 +1,13 @@
+2024-03-25 Roman 0.9.7
+- !!!!:DOC: The "Quick start" manual completely revised and actualized for last 0.9.7 LTS changes.
+- FIX:LibsDB.vcaBase: wlb_Main.storeHouse: Switched to whole clean at change the user.
+    Item's list of columns for selection in the form elements moved to an independent container from the filters.
+    Appended of cleaning the current row selection in the data table at removing the item after apply the filter.
+- DAQ.DAQGate: Appended of reseting the remote archive detection flag to redetect forcibly at restart.
+- UI.WebVision: Appended of disable the text items from user resize.
+    Appended of apply the sort actions just at clicking on the detached floating header.
+
+
 2024-03-12 Roman 0.9.7
 - FIX:configure.ac: Returned back in detection LibIntl.
 - !!!!:FIX:Transports: Adapted for checking the TBDS::dataDel() success result to prevent hangs here on RO storages.

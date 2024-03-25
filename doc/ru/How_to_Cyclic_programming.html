@@ -3,15 +3,15 @@
 <html class="client-nojs" dir="ltr" lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Документы/Как сделать/Циклическое программирование - OpenSCADAWiki</title>
+<title>Документы/Как/Осуществять циклическое программирование - OpenSCADAWiki</title>
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../en/files/doc.css" rel="stylesheet" /></head>
 <body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
-			<h1 id="firstHeading" lang="ru">Документы/Как сделать/Циклическое программирование</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FHow+to%2FCyclic+programming&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/How_to/Cyclic_programming" title="Documents/How to/Cyclic programming">Documents/How to/Cyclic programming</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/How_to_Cyclic_programming.html" title="Documents/How to/Cyclic programming (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/How_to_Cyclic_programming.html" title="Документи/Як зробити/Циклічне програмування (100% translated)">Українська</a></div></div>
+			<h1 id="firstHeading" lang="ru">Документы/Как/Осуществять циклическое программирование</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FHow+to%2FCyclic+programming&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/How_to/Cyclic_programming" title="Documents/How to/Cyclic programming">Documents/How to/Cyclic programming</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/How_to_Cyclic_programming.html" title="Documents/How to/Cyclic programming (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/How_to_Cyclic_programming.html" title="Документи/Як/Здійснювати циклічне програмування (100% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Автор:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a></li></ul>
 </div>
@@ -20,20 +20,18 @@
 </p><p>Решение задачи выдержки большого интервала времени, более периодичности цикла, в системах реального времени осуществляется в два способа.
 </p><p>Первый способ заключается в декременте счётчика, установленного в значение временного интервала, в каждом цикле и на значение периодичности такта до значения &lt;=0, например, в OpenSCADA это реализуется таким образом:
 </p>
-<pre style="white-space: pre-wrap;">
-if((tm_cnt-=1/f_frq) &lt;= 0)  //Декремент
-{
-    tm_cnt = 10; //Установка счётчика в значение 10 секунд
-    //Выполнение других действий с периодичностью 10 секунд
-}</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="k">if</span><span class="p">((</span><span class="nx">tm_cnt</span><span class="o">-=</span><span class="mi">1</span><span class="o">/</span><span class="nx">f_frq</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>  <span class="c1">//Декремент</span>
+    <span class="nx">tm_cnt</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="c1">//Установка счётчика в значение 10 секунд</span>
+    <span class="c1">//Выполнение других действий с периодичностью 10 секунд</span>
+<span class="p">}</span>
+</pre></div>
 <p>Второй способ основан на абсолютном времени, т.е. в цикле осуществляется сравнение с текущим временем, например, в OpenSCADA это реализуется таким образом:
 </p>
-<pre style="white-space: pre-wrap;">
-if(SYS.time() &gt; tm_to)
-{
-    tm_to = SYS.time()+10; //Установка порога ожидания на 10 секунд более текущего времени
-    //Выполнение других действий с периодичностью 10 секунд
-}</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="k">if</span><span class="p">(</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">time</span><span class="p">()</span> <span class="o">&gt;</span> <span class="nx">tm_to</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">tm_to</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">time</span><span class="p">()</span><span class="o">+</span><span class="mi">10</span><span class="p">;</span> <span class="c1">//Установка порога ожидания на 10 секунд более текущего времени</span>
+    <span class="c1">//Выполнение других действий с периодичностью 10 секунд</span>
+<span class="p">}</span>
+</pre></div>
 <p>Второй способ является более надёжным поскольку в нём исключается проблема запаздывания срабатывания по причине возможного выполнения процедуры цикла более времени такта — потеря тактов-циклов. Хотя в правильно настроенных конфигурациях и задачах данный эффект не должен иметь место, а также, последние версии OpenSCADA в основном учитывают такие потери циклов в расчёте значения <i>f_frq</i>.
 </p>
 

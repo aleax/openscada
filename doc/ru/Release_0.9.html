@@ -332,35 +332,7 @@
 <li> Адаптацию к работе в окружении операционных систем QNX и MS Windows.</li></ul>
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">7</span> Обновления</span></h2>
 <h3><span class="mw-headline" id=".5B01.01.7532.2F01.03.2024.5D_.D0.A1.D0.95.D0.94.D0.AC.D0.9C.D0.9E.D0.95_.D0.BE.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5"><span class="mw-headline-number">7.1</span> [01.01.7532/01.03.2024] СЕДЬМОЕ обновление</span></h3>
-<div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
-<ul><li> <b>Состояние:</b> <span style="color: red">тестирование и после-сборки ...</span></li></ul>
-<p>Общий процесс выпуска, пользователям для оценки ваших ожиданий и разработчикам для напоминания задач:<br />
-<b><u>1. Неделя подготовки и сборки:</u></b><br />
-</p>
-<ul><li> Сборка последней Рабочей (Work) SVN-ревизии для всех окружений нерегулярной сборки чтобы обеспечить раннее и широкое тестирование предшествующего LTS релиза.</li>
-<li> Анонсирование начала процесса выпуска:
-<ul><li> создание новой <a href="index.html" title="Special:MyLanguage/Documents">страницы релиза</a> или <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">страницы обновления</a> на Wiki;</li>
-<li> создание новой новости-страницы на <a class="external text" href="http://oscada.org/en/main/%7Cофициальном" rel="nofollow noreferrer noopener" target="_blank">сайте OpenSCADA</a>;</li>
-<li> создание нового сообщения-ссылки на новость-страницу на <a class="external text" href="https://www.facebook.com/Roman.Savochenko" rel="nofollow noreferrer noopener" target="_blank">FaceBook</a> и <a class="external text" href="https://www.linkedin.com/in/roman-savochenko-71b50272/" rel="nofollow noreferrer noopener" target="_blank">LinkedIn</a>;</li></ul></li>
-<li> Объединение изменений Рабочей (Work) версии, или копирование целиком дерева Рабочей ветви, в LTS ветвь-дерево.</li>
-<li> Внесение некоторых изменений, специфических для LTS, на предмет поднятия версий:
-<ul><li> обновление <b>configure.ac</b> на предмет версии выпуска-обновления и библиотеки ядра;</li>
-<li> обновление <b>data/*.spec</b> и <b>data/{debian,debian_mod}/changelog</b> на предмет нового номера версии и дополнения протокола изменений файлов новыми записями выпуска-обновления.</li></ul></li>
-<li> Формирование-дополнение ПротоколаИзменений LTS изменениями из ПротоколаИзменений Work, группируя изменения по размещению и сортируя их по состоянию исправления и уровню, с комбинированием новых возможностей в одном элементе и без удаления любых отличных изменений.</li>
-<li> Копирование значительных изменений из сформированного ПротоколаИзменений LTS на соответствующую страницу релиза-обновления, беря изменения с уровнем более или равные "!!".</li>
-<li> Перевод страниц релиза-обновления, обновление "<a href="../en/To_do.html" title="Special:MyLanguage/Works/To do">Сделать (ToDo)</a>" и "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Works/Road_map" title="Special:MyLanguage/Works/Road map">Дорожная карта (RoadMap)</a>".</li>
-<li> Генерация актуальной внесетевой документации используя сервисную процедуру "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
-<li> Применение-выгрузка изменений LTS дерева в репозиторий и сборка этого.</li>
-<li> Анонсирование релиза-обновления.</li>
-<li> Обновление <a class="external text" href="http://oscada.org/ru/glavnaja/zagruzit/" rel="nofollow noreferrer noopener" target="_blank">страницы Загрузить</a>.</li></ul>
-<p><b><u>2. Неделя(и) тестирование и после-сборки:</u></b><br />
-</p>
-<ul><li> Горячее тестирование сборок релиза.</li>
-<li> Завершение и исправления перевода ПротоколаИзменений и документации.</li>
-<li> Генерация актуальной внесетевой документации используя сервисную процедуру "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
-<li> Применение-выгрузка исправлений релиза в репозиторий и сборка этого на предмет второй сборки, и для каждой недели исправления критических ошибок — первая неделя без критических исправлений будет означать завершение выпуска LTS, т.е., ПОЛЬЗОВАТЕЛИ — тестируйте тщательно LTS релиз чтобы потом не жаловаться на его конечную сборку!</li></ul>
-</div>
-<p>Это обновление <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релиза 0.9 LTS</a> исправляет около 60 ошибок и добавляет ОЧЕНЬ МНОГО улучшений с несколькими значительными-концептуальными, с которыми целиком можно ознакомиться в <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2958" rel="nofollow noreferrer noopener" target="_blank">протоколе изменений обновления</a>.
+<p>Это обновление <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релиза 0.9 LTS</a> исправляет около 60 ошибок и добавляет ОЧЕНЬ МНОГО улучшений с несколькими значительными-концептуальными, с которыми целиком можно ознакомиться в <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2960" rel="nofollow noreferrer noopener" target="_blank">протоколе изменений обновления</a>.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> <b><u>User significant actions on the update</u></b><br />
 </p>
 <ul><li> DAQ.System: ID of the automaticly generated DA parameters changed to: CPU - "CPU[{N}]", fs - "FS{MP}", hddstat - "DiskSt_{dev}", MEM - "MEM", netstat - "Net_{IF}", sensors - "Sensors", hddsmart - "DiskSMART", ups - "UPS", uptime - "UpTm_{U}".</li></ul>
