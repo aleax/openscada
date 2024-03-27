@@ -1,3 +1,19 @@
+2024-03-27 Roman (stable)
+- !!:DAQ.System: Switched to the soft mode of parameters automatic creation,
+    that is you allowed to create the source parameters automatically,
+    save forcibly need ones and next switch to the manual mode, than preventing continued scanning.
+
+
+2024-03-26 Roman (stable)
+- !!!!:DOC: The "Quick start" manual completely revised and actualized for last 0.9.7 LTS changes.
+- FIX:LibsDB.vcaBase: wlb_Main.storeHouse: Switched to whole clean at change the user.
+    Item's list of columns for selection in the form elements moved to an independent container from the filters.
+    Appended of cleaning the current row selection in the data table at removing the item after apply the filter.
+- DAQ.DAQGate: Appended of reseting the remote archive detection flag to redetect forcibly at restart.
+- UI.WebVision: Appended of disable the text items from user resize.
+    Appended of apply the sort actions just at clicking on the detached floating header.
+
+
 2024-03-14 Roman (stable)
 - FIX:configure.ac: Returned back in detection LibIntl.
 - Archive: The message "The grid mode doesn't support inserting too old values" expanded for show time in date format.

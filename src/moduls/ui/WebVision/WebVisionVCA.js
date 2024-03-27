@@ -1884,9 +1884,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				this.appendChild(tHd);
 
 				//  Adjusting the percent width columns
-				for(iH = 0, cO = null; iH < tHd.tHead.rows[0].cells.length; iH++)
+				for(iH = 0, cO = null; iH < tHd.tHead.rows[0].cells.length; iH++) {
+				    tHd.tHead.rows[0].cells[iH].onclick = function() { this.offsetParent.offsetParent.firstChild.sort(this.cellIndex+1); }
 				    if(tHd.tHead.rows[0].cells[iH].style.width.indexOf("%") >= 0)
 					(cO=tHd.tHead.rows[0].cells[iH]).style.width = tbl.tHead.rows[0].cells[iH].clientWidth+"px";
+				}
 				if(cO) cO.style.width = (parseInt(cO.style.width)-1)+"px";
 			    }
 			    if(tHd) tHd.style.top = this.scrollTop + 'px';
@@ -2170,7 +2172,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 			    if(Math.abs(maxRows-startRows) > 3 || (!startRows && formObj.tBodies[0].rows.length) ||
 				    ((formObj.tBodies[0].rows.length-startRows) > 0 && formObj.tBodies[0].rows.length.toString(10).length > startRows.toString(10).length) ||
-				    (formObj.tBodies[0].rows.length && formObj.tBodies[0].rows[0].cells.length > startCols))
+				     (formObj.tBodies[0].rows.length && formObj.tBodies[0].rows[0].cells.length > startCols))
 				toReFit = true;
 
 			    // Generic properties set

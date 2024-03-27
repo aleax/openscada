@@ -52,7 +52,7 @@
 #define MOD_NAME	trS("System DA")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"3.2.6"
+#define MOD_VER		"3.3.0"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides data acquisition from Operation System. Supported OS Linux data sources: CPU, Memory,\
  Sensors, Disk SMART, Disk Statistic, File System, Network, Power, UPS, Up Time etc.")
@@ -326,7 +326,7 @@ bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
 //* TMdPrm                                        *
 //*************************************************
 TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) :
-    TParamContr(name,tp_prm), daData(NULL), mAuto(false), mDA(NULL)
+    TParamContr(name,tp_prm), daData(NULL), mDA(NULL)
 {
 
 }
@@ -354,7 +354,6 @@ void TMdPrm::enable( )
     cfg("TYPE").setS(cfg("TYPE").getS());
     TParamContr::enable();
     ((TMdContr&)owner()).prmEn(id(), true);	//Put to process
-    if(autoC())	modifClr();
 }
 
 void TMdPrm::disable( )
@@ -363,23 +362,6 @@ void TMdPrm::disable( )
     ((TMdContr&)owner()).prmEn(id(), false);	//Remove from process
     setEval();
     TParamContr::disable();
-}
-
-void TMdPrm::load_( TConfig *cfg )
-{
-    if(!mAuto)	TParamContr::load_(cfg);
-}
-
-void TMdPrm::save_( )
-{
-    if(!mAuto)	TParamContr::save_();
-
-    //Save archives
-    vector<string> aLs;
-    vlList(aLs);
-    for(unsigned iA = 0; iA < aLs.size(); iA++)
-	if(!vlAt(aLs[iA]).at().arch().freeStat())
-	    vlAt(aLs[iA]).at().arch().at().save();
 }
 
 AutoHD<TVal> TMdPrm::vlAt( const string &name, bool noex ) const
@@ -516,7 +498,6 @@ void TMdPrm::setAddPrm( const string &prm, const string &val )
     }
 
     cfg("ADD_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
-    autoC(false);
 }
 
 bool TMdPrm::cfgChange( TCfg &co, const TVariant &pc )
@@ -524,7 +505,7 @@ bool TMdPrm::cfgChange( TCfg &co, const TVariant &pc )
     //Change TYPE parameter
     if(co.name() == "TYPE") { setType(co.getS()); return true; }
     if(mDA) mDA->cfgChange(this, co, pc);
-    if(!autoC()) modif();
+    modif();
     return true;
 }
 

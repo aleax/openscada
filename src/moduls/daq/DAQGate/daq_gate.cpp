@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.13.9"
+#define MOD_VER		"2.13.10"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -711,6 +711,8 @@ void *TMdContr::Task( void *icntr )
 			    for(unsigned iV = 0; iV < listV.size(); iV++) {
 				if(listV[iV] == "SHIFR") continue;
 				AutoHD<TVal> vl = prm.vlAt(listV[iV]);
+				if(firstCall && !vl.at().arch().freeStat() && !vl.at().hasArch())
+				    vl.at().setHasArchReq(false);	//!!!! Reset the remote archive detection flag to redetect forcibly at restart
 				if(sepReq && ((!vl.at().arch().freeStat() && !vl.at().hasArch()) ||	//!!!! Hiding the tag <el> at the remote archive presence
 										vl.at().reqFlg())) {
 				    prmNd->childAdd("el")->setAttr("id",listV[iV]);

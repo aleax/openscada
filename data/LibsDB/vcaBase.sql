@@ -13475,7 +13475,11 @@ function updProc(iR, dataTbl, clsLsO ) {
 		SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET "+updReq+" WHERE `"+dataTbl[0][0]+"`=''"+dataTbl[iR][0]+"'';", true);
 }
 
-if(f_start) {
+var wUser;
+
+if(f_start || wUser != this.ownerSess().reqUser()) {
+	wUser = this.ownerSess().reqUser(), f_start = true;
+
 	geomHOrig = 580;
 	toUpdate = toReport = false;
 	fMax = 5; fClrTo = -1;
@@ -13488,18 +13492,10 @@ if(f_start) {
 	btClassEdit_en = dataEditable && classEditable;
 	if(classFix.length)	classNm_text = class = classFix;
 	else classSel_en = true;
-	colVars = new Object();
+	colVars = new Object(), colLists = new Object();
 	btClassEdit_value = btEdit_en = btEdit_value = btItEdit_value = false;
-	wUser = "";
 	geomH = geomHOrig;
 	dataTbl_geomH = itDel_geomY - dataTbl_geomY + itDel_geomH;
-}
-
-if(wUser != this.ownerSess().reqUser()) {
-	wUser = this.ownerSess().reqUser();
-
-	btClassEdit_value = btEdit_value = btItEdit_en = btItEdit_value = false;
-	toUpdate = true; toCalcCycles = 1;
 }
 
 //Common events process
@@ -13508,12 +13504,12 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; )
 	else if(sval == "ws_BtToggleChange:/btEdit")	toUpdate = true;
 	else if(sval == "ws_CombChange:/classSel") {
 		class = ((tVl=classSel_value.match("\\((.+)\\)$")).length) ? tVl[1] : classSel_value;
-		toUpdate = true; colVars = new Object(); fClrTo = 0; dataTbl_value = "";
+		toUpdate = true; colVars = new Object(), colLists = new Object(); fClrTo = 0; dataTbl_value = "";
 		if(itEdFormOff != null)	itEdFormOff = -1;
 	}
 	else if(sval == "ws_LnAccept:/classEd") {
 		class = ((tVl=classEd_value.match("\\((.+)\\)$")).length) ? tVl[1] : classEd_value;
-		toUpdate = true; colVars = new Object();
+		toUpdate = true; colVars = new Object(), colLists = new Object();
 	}
 
 if((f_start || toUpdate) /*&& !classFix.length*/) {
@@ -13701,11 +13697,13 @@ if(f_start || toUpdate) {
 
 		//Updation the main table
 		// Where prepairing for the filter
+		noFilter = true;
 		for(wherePart = "", iF = 0; iF < fMax; iF++) {
 			if(!(tVl=this["fltr"+iF].attr("value")).length)	continue;
 			itVl = this["fltrCol"+iF].attr("value").match("\\((.+)\\)")[1];
 			wherePart += (wherePart.length?"AND":"") + " `"+itVl+"` REGEXP ''"+tVl+"'' ";
 			if(!colVars[itVl].isEVal())	colVars[itVl]["<lock>"] = true;
+			noFilter = false;
 		}
 		for(var iC in colVars)
 			if(colVars[iC]["<lock>"] == true)	delete colVars[iC]["<lock>"];
@@ -13717,7 +13715,7 @@ if(f_start || toUpdate) {
 		if(toReport)	tRep = "<body>\n"
 								"<h1>"+classNm_text+"</h1>\n"
 								"<table class=''data'' width=''100%'' export=''1''>\n";
-
+		noDataTbl_value = true;
 		for(iR = 0; iR < dataTbl.length; iR++) {
 			cntR = optR = "";
 			if(toReport) tRep += "<tr>";
@@ -13729,7 +13727,7 @@ if(f_start || toUpdate) {
 					if(itVl == "ID" && clsLsO["*"+itVl] == null)	opt += " width=''0px''";
 					else if((itVl.indexOf("SP_") == 0 && !(tVl=clsLsO[itVl.slice(3)]).isEVal()) || ((itVl == "ID" || itVl == "NAME" || itVl == "DSCR") && !(tVl=clsLsO["*"+itVl]).isEVal()))
 					{
-						if((tVl.fltr == "index" || tVl.fltr.indexOf("list") == 0) && colVars[itVl].isEVal()) {
+						if((tVl.fltr == "index" || tVl.fltr.indexOf("list") == 0) && colVars[itVl] == null) {
 							colVars[itVl] = new Object();
 							colVars[itVl].ls = new Object();
 							colVars[itVl].fltr = tVl.fltr;
@@ -13754,13 +13752,17 @@ if(f_start || toUpdate) {
 
 				//  ... representing
 				for(iC = 0; iC < dataTbl[iR].length; iC++) {
+					itVlCol = dataTbl[0][iC];
 					itVl = dataTbl[iR][iC];
 					opt = "";
 					if(itVl == "<NULL>")	itVl = "";
-					if((tVl1=itHighl(colVars[dataTbl[0][iC]],itVl)).length) {
+					if((tVl1=itHighl(colVars[itVlCol],itVl)).length) {
 						tVl = ((tVl=tVl1.parse(2,":")).length?" color=''"+tVl+"''":"") + ((tVl=tVl1.parse(3,":")).length?" font=''"+tVl+"''":"");
 						if(tVl1.parse(1,":")[0] == "1") optR += tVl; else opt += tVl;
 					}
+					if(noFilter)	colLists[itVlCol] = colVars[itVlCol].ls;
+					if(dataTbl_value.length && itVlCol == "ID" && itVl == dataTbl_value)	noDataTbl_value = false;
+				
 					if(!colTps[iC].isEVal())	cntR += "<"+colTps[iC]+opt+">"+SYS.strEncode(itVl,"HTML")+"</"+colTps[iC]+">";
 					else cntR += "<s"+opt+">"+SYS.strEncode(itVl,"HTML")+"</s>";
 					if(toReport)
@@ -13774,6 +13776,8 @@ if(f_start || toUpdate) {
 		}
 		dataTbl_items += "</tbl>\n";
 		if(toReport) { tRep += "</table>\n</body>\n"; go_report_report = tRep; tRep = ""; }
+
+		if(noDataTbl_value)	dataTbl_value = "";
 
 		//Filter''s selection list update
 		for(iF = 0; iF < fMax; iF++) {
@@ -13859,7 +13863,7 @@ if(f_start || toUpdate) {
 					if(celO.fltr.indexOf("list") == 0)
 						for(fCfgAdd = "", off = 0; (iFv=itVl.parse(0,celO.fltr[4],off)).length; )
 							fCfgAdd += (fCfgAdd.length?celO.fltr[4]:"") + iFv, fCfg += fCfgAdd + "\n";
-					for(var iFv in colVars[itVlId].ls)
+					for(var iFv in colLists[itVlId])
 						if(fCfg.indexOf(iFv) < 0)
 							fCfg += fCfgPref + iFv + "\n";
 					nwO.attrSet("cfg", fCfg);
@@ -13999,7 +14003,7 @@ if(fClrTo >= 0) {
 if(toCalcCycles > 0.1) {
 	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
 	toCalcCycles = max(0, toCalcCycles-1);
-}','','',-2,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1702841631);
+}','','',-2,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1711188205);
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_mnEls VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB
@@ -23921,7 +23925,7 @@ The frame provides currently and in future for next features:
   - detailed control panel-form of the selected item with the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.4.7
+Version: 1.4.10
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -23935,7 +23939,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - деталізована панель-форма керування обраним елементом зі специфічними полями.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.4.7
+Версія: 1.4.10
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');
@@ -30170,7 +30174,6 @@ INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e7','/
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e8','/wlb_Main/wdg_ResultGraph/wdg_e8',-1,'owner;perm;');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','e9','/wlb_Main/wdg_ResultGraph/wdg_e9',-1,'owner;perm;');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','name','/wlb_Main/wdg_ResultGraph/wdg_name',-1,'owner;perm;');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e1','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e1',-1,'');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e10','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e10',-1,'owner;');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e11','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e11',-1,'owner;');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e12','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e12',-1,'owner;');
@@ -30178,7 +30181,6 @@ INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e14','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e14',-1,'owner;');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e15','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e15',-1,'owner;');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e16','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e16',-1,'owner;');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e2','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e2',-1,'');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e3','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e3',-1,'owner;');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e4','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e4',-1,'owner;');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e5','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e5',-1,'owner;');
