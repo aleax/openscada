@@ -4068,6 +4068,118 @@ by9dFy7QvHYttbW1qKrqSZIkAG8inZa+afPLEsB8w8HzPPr7+zn7xRf88Ac/8BoaGjxNlrFcVwwP
 DgL8D/DygvQCp0+ffuxfm5srmHzR5AumiYkJxsbG6O7uJqxp7vPPPedWJxLS9PS06L561fumzc9X
 CbaxNN8cFUUlWyp0sEph/B0FEkBdYRqkvHXwoLRx40YlmUxKh372s0r+nyx/4xoQ+Tbjn/z4x3cX
 Yyy+HCCIOR4w8V1f9H8BC478DD85EAgAAAAASUVORK5CYII=');
+INSERT INTO wlb_Main_mime VALUES('weath04d','image/svg+xml;1.43262','PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEi
+IHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93
+d3cudzMub3JnLzE5OTkveGxpbmsiIGRhdGEtdi01ZWQzMTcxZT0iIiB3aWR0aD0iNTBweCIgaGVp
+Z2h0PSI1MHB4IiB2aWV3Qm94PSIwIDAgMTQ4IDE0OCIgY2xhc3M9Im93bS13ZWF0aGVyLWljb24i
+PjxwYXRoIGQ9Ik02NS4wMyA2MC41MTRjLjY0MiAwIDEuMjcuMDU3IDEuODg5LjE0M2ExNS40NzYg
+MTUuNDc2IDAgMDEtLjM0NC0zLjIzYzAtOC41MjQgNi45MS0xNS40MzcgMTUuNDM1LTE1LjQzNyA4
+LjI5NCAwIDE1LjA0MiA2LjU0NyAxNS40MDIgMTQuNzUyYTkuMjI0IDkuMjI0IDAgMDE2LjIwOC0y
+LjQwNCA5LjI2MyA5LjI2MyAwIDAxOS4yNjMgOS4yNjMgOS4xNjUgOS4xNjUgMCAwMS0uNjE5IDMu
+MzA1Yy43LS4xNCAxLjQyMy0uMjE4IDIuMTYxLS4yMTggNS45NyAwIDEwLjgwNiA0LjgzOSAxMC44
+MDYgMTAuODA1IDAgNS45Ny00LjgzNiAxMC44MDYtMTAuODA2IDEwLjgwNkg2NS4wMzFjLTcuNjc0
+IDAtMTMuODkzLTYuMjE5LTEzLjg5My0xMy44OTMgMC03LjY3MSA2LjIxOS0xMy44OTIgMTMuODkz
+LTEzLjg5MiIgZmlsbD0iIzNiM2M0MCI+PC9wYXRoPjxwYXRoIGQ9Ik0zOS4yNSA3My4wNWMuNzYg
+MCAxLjUwNS4wNyAyLjI0LjE3YTE4LjI5NiAxOC4yOTYgMCAwMS0uNDEtMy44MzRjMC0xMC4xMTQg
+OC4yLTE4LjMxIDE4LjMxMi0xOC4zMSA5Ljg0IDAgMTcuODQzIDcuNzY2IDE4LjI3IDE3LjVhMTAu
+OTM1IDEwLjkzNSAwIDAxNy4zNjYtMi44NTNjNi4wNjggMCAxMC45ODcgNC45MjIgMTAuOTg3IDEw
+Ljk5IDAgMS4zODItLjI2NyAyLjctLjczMiAzLjkxOGExMi44NjggMTIuODY4IDAgMDEyLjU2NC0u
+MjU2YzcuMDc4IDAgMTIuODE4IDUuNzM5IDEyLjgxOCAxMi44MTggMCA3LjA3OC01Ljc0IDEyLjgx
+Ny0xMi44MTggMTIuODE3SDM5LjI1Yy05LjEwMyAwLTE2LjQ4LTcuMzc4LTE2LjQ4LTE2LjQ4IDAt
+OS4xMDMgNy4zNzctMTYuNDggMTYuNDgtMTYuNDgiIGZpbGw9IiNlZmVmZWQiPjwvcGF0aD48L3N2
+Zz4=');
+INSERT INTO wlb_Main_mime VALUES('weath03d','image/svg+xml;0.870117','PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEi
+IHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93
+d3cudzMub3JnLzE5OTkveGxpbmsiIGRhdGEtdi01ZWQzMTcxZT0iIiB3aWR0aD0iNTBweCIgaGVp
+Z2h0PSI1MHB4IiB2aWV3Qm94PSIwIDAgMTQ4IDE0OCIgY2xhc3M9Im93bS13ZWF0aGVyLWljb24i
+PjxwYXRoIGQ9Ik00Ni41MzMgNjguNTA2Yy43NjIgMCAxLjUwNy4wNyAyLjI0LjE3YTE4LjM0IDE4
+LjM0IDAgMDEtLjQwOS0zLjgzNGMwLTEwLjExMiA4LjE5OC0xOC4zMSAxOC4zMTMtMTguMzEgOS44
+MzggMCAxNy44NDMgNy43NjUgMTguMjY5IDE3LjVhMTAuOTM1IDEwLjkzNSAwIDAxNy4zNjctMi44
+NTJjNi4wNjcgMCAxMC45ODYgNC45MjIgMTAuOTg2IDEwLjk4OSAwIDEuMzgyLS4yNjcgMi43LS43
+MzQgMy45MThhMTMuMSAxMy4xIDAgMDEyLjU2NS0uMjU2YzcuMDggMCAxMi44MTggNS43NCAxMi44
+MTggMTIuODE3IDAgNy4wOC01LjczOCAxMi44Mi0xMi44MTggMTIuODJINDYuNTMzYy05LjEwMyAw
+LTE2LjQ4MS03LjM4LTE2LjQ4MS0xNi40ODIgMC05LjEwMSA3LjM3OC0xNi40OCAxNi40ODEtMTYu
+NDgiIGZpbGw9IiNlZmVmZWQiPjwvcGF0aD48L3N2Zz4=');
+INSERT INTO wlb_Main_mime VALUES('weath01d','image/svg+xml;0.557617','PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEi
+IHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93
+d3cudzMub3JnLzE5OTkveGxpbmsiIGRhdGEtdi0zZTZlOWYxMj0iIiB3aWR0aD0iNTBweCIgaGVp
+Z2h0PSI1MHB4IiB2aWV3Qm94PSIwIDAgMTQ4IDE0OCIgY2xhc3M9Im93bS13ZWF0aGVyLWljb24i
+PjxwYXRoIGQ9Ik0xMTAuMTE3IDc0YzAgMTkuOTQ3LTE2LjE3IDM2LjExNy0zNi4xMTcgMzYuMTE3
+LTE5Ljk0NyAwLTM2LjExNy0xNi4xNy0zNi4xMTctMzYuMTE3IDAtMTkuOTQ3IDE2LjE3LTM2LjEx
+NyAzNi4xMTctMzYuMTE3IDE5Ljk0NyAwIDM2LjExNyAxNi4xNyAzNi4xMTcgMzYuMTE3IiBmaWxs
+PSIjZjE1ZDQ2Ij48L3BhdGg+PC9zdmc+');
+INSERT INTO wlb_Main_mime VALUES('weath10d','image/svg+xml;2.16016','PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEi
+IHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93
+d3cudzMub3JnLzE5OTkveGxpbmsiIGRhdGEtdi1iOGRkOWFjNj0iIiB3aWR0aD0iNTBweCIgaGVp
+Z2h0PSI1MHB4IiB2aWV3Qm94PSIwIDAgMTQ4IDE0OCIgY2xhc3M9Im93bS13ZWF0aGVyLWljb24i
+PjxwYXRoIGQ9Ik0xMTIuNDExIDU3Ljg3YzAgMTEuNDMzLTkuMjcgMjAuNzAyLTIwLjcgMjAuNzAy
+LTExLjQzNSAwLTIwLjcwMi05LjI3LTIwLjcwMi0yMC43MDIgMC0xMS40MzMgOS4yNjctMjAuNzAx
+IDIwLjcwMi0yMC43MDEgMTEuNDMgMCAyMC43IDkuMjY4IDIwLjcgMjAuNzAxIiBmaWxsPSIjZjE1
+ZDQ2Ij48L3BhdGg+PHBhdGggZD0iTTQ4Ljg3NCA2MS4yNDRjLjYxMiAwIDEuMjEuMDU1IDEuODA1
+LjEzN2ExNC42NzkgMTQuNjc5IDAgMDEtLjMzMi0zLjA4N2MwLTguMTUyIDYuNjA3LTE0Ljc1OSAx
+NC43NTktMTQuNzU5IDcuOTMgMCAxNC4zOCA2LjI2IDE0LjcyNSAxNC4xMDRhOC44MSA4LjgxIDAg
+MDE1LjkzNi0yLjI5OCA4Ljg1NCA4Ljg1NCAwIDAxOC44NTQgOC44NTYgOC43NzIgOC43NzIgMCAw
+MS0uNTkgMy4xNTcgMTAuNDI1IDEwLjQyNSAwIDAxMi4wNjUtLjIwN2M1LjcwNyAwIDEwLjMzMSA0
+LjYyNSAxMC4zMzEgMTAuMzMgMCA1LjcwNi00LjYyNCAxMC4zMzEtMTAuMzMgMTAuMzMxSDQ4Ljg3
+M2MtNy4zMzUgMC0xMy4yODUtNS45NDgtMTMuMjg1LTEzLjI4MnM1Ljk1LTEzLjI4MiAxMy4yODUt
+MTMuMjgyIiBmaWxsPSIjZWZlZmVkIj48L3BhdGg+PHBhdGggZD0iTTgzLjA1MiA5NS4xMzFsLjQy
+My0xLjEzYTIuMTcyIDIuMTcyIDAgMTAtNC4wNjktMS41MjNsLS40MjIgMS4xMzJhMi4xNzIgMi4x
+NzIgMCAxMDQuMDY4IDEuNTIxTTc3LjU0OCAxMDkuODQ1bDEuNDgzLTMuOTYyYTEuNTE3IDEuNTE3
+IDAgMDAtLjg5LTEuOTUzbC0xLjIyNi0uNDZhMS41MTcgMS41MTcgMCAwMC0xLjk1MS44OWwtMS40
+ODMgMy45NjVhMS41MTUgMS41MTUgMCAwMC44ODkgMS45NTFsMS4yMjYuNDU5YTEuNTE0IDEuNTE0
+IDAgMDAxLjk1Mi0uODlNNjguNTU1IDEwMC44M2wxLjc4MS00Ljc2NmExLjUxNiAxLjUxNiAwIDAw
+LS44OS0xLjk1M2wtMS4yMjYtLjQ1OGExLjUxNSAxLjUxNSAwIDAwLTEuOTUyLjg5bC0xLjc4MSA0
+Ljc2NWExLjUxNiAxLjUxNiAwIDAwLjg4OSAxLjk1MmwxLjIyNy40NmExLjUxNyAxLjUxNyAwIDAw
+MS45NTItLjg5TTY1Ljg2NCAxMDguMDIzbC4yNzItLjczYTIuMTczIDIuMTczIDAgMDAtNC4wNjgt
+MS41MjNsLS4yNzQuNzMyYTIuMTcyIDIuMTcyIDAgMDA0LjA3IDEuNTIxTTYwLjg4NSA4OS4wNzNs
+LjcyNC0xLjkzNWEyLjE3IDIuMTcgMCAxMC00LjA2OC0xLjUybC0uNzIzIDEuOTM0YTIuMTczIDIu
+MTczIDAgMTA0LjA2OCAxLjUyTTU1Ljg4NCAxMDIuNDVsMS43ODEtNC43NjNhMS41MTcgMS41MTcg
+MCAwMC0uODg5LTEuOTU1bC0xLjIyNy0uNDU4YTEuNTE5IDEuNTE5IDAgMDAtMS45NTMuODlsLTEu
+NzggNC43NjVhMS41MTYgMS41MTYgMCAwMC44OSAxLjk1MmwxLjIyNC40NmExLjUxOSAxLjUxOSAw
+IDAwMS45NTQtLjg5IiBmaWxsPSIjM2IzYzQwIj48L3BhdGg+PC9zdmc+');
+INSERT INTO wlb_Main_mime VALUES('weath02d','image/svg+xml;1.10742','PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEi
+IHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93
+d3cudzMub3JnLzE5OTkveGxpbmsiIGRhdGEtdi01ZWQzMTcxZT0iIiB3aWR0aD0iNTBweCIgaGVp
+Z2h0PSI1MHB4IiB2aWV3Qm94PSIwIDAgMTQ4IDE0OCIgY2xhc3M9Im93bS13ZWF0aGVyLWljb24i
+PjxwYXRoIGQ9Ik0xMjEuNjYgNjguMjdjMCAxNC4xODYtMTEuNSAyNS42ODctMjUuNjg3IDI1LjY4
+Ny0xNC4xODcgMC0yNS42ODctMTEuNS0yNS42ODctMjUuNjg4IDAtMTQuMTg2IDExLjUtMjUuNjg3
+IDI1LjY4Ny0yNS42ODcgMTQuMTg3IDAgMjUuNjg4IDExLjUgMjUuNjg4IDI1LjY4NyIgZmlsbD0i
+I2YxNWQ0NiI+PC9wYXRoPjxwYXRoIGQ9Ik00Mi44MiA3Mi40NTZjLjc2IDAgMS41MDUuMDcgMi4y
+NC4xN2ExOC4yNTYgMTguMjU2IDAgMDEtLjQxLTMuODMzYzAtMTAuMTEyIDguMi0xOC4zMSAxOC4z
+MTMtMTguMzEgOS44MzggMCAxNy44NDIgNy43NjUgMTguMjY5IDE3LjVhMTAuOTM4IDEwLjkzOCAw
+IDAxNy4zNjYtMi44NTNjNi4wNjcgMCAxMC45ODcgNC45MjIgMTAuOTg3IDEwLjk4OSAwIDEuMzgz
+LS4yNjcgMi43LS43MzEgMy45MThhMTIuOTY2IDEyLjk2NiAwIDAxMi41NjEtLjI1NWM3LjA4MSAw
+IDEyLjgyIDUuNzM4IDEyLjgyIDEyLjgxNyAwIDcuMDc4LTUuNzM5IDEyLjgyLTEyLjgyIDEyLjgy
+SDQyLjgyYy05LjEwMyAwLTE2LjQ4LTcuMzgtMTYuNDgtMTYuNDg0IDAtOS4xIDcuMzc3LTE2LjQ4
+IDE2LjQ4LTE2LjQ4IiBmaWxsPSIjZWZlZmVkIj48L3BhdGg+PC9zdmc+');
+INSERT INTO wlb_Main_mime VALUES('weath01n','image/svg+xml;0.561523','PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEi
+IHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93
+d3cudzMub3JnLzE5OTkveGxpbmsiIGRhdGEtdi0zZTZlOWYxMj0iIiB3aWR0aD0iNTBweCIgaGVp
+Z2h0PSI1MHB4IiB2aWV3Qm94PSIwIDAgMTQ4IDE0OCIgY2xhc3M9Im93bS13ZWF0aGVyLWljb24i
+PjxwYXRoIGQ9Ik0xMTAuMTE3IDc0YzAgMTkuOTQ3LTE2LjE3IDM2LjExNy0zNi4xMTcgMzYuMTE3
+LTE5Ljk0NyAwLTM2LjExNy0xNi4xNy0zNi4xMTctMzYuMTE3IDAtMTkuOTQ4IDE2LjE3LTM2LjEx
+NyAzNi4xMTctMzYuMTE3IDE5Ljk0NyAwIDM2LjExNyAxNi4xNjkgMzYuMTE3IDM2LjExNyIgZmls
+bD0iIzNiM2M0MCI+PC9wYXRoPjwvc3ZnPg==');
+INSERT INTO wlb_Main_mime VALUES('weath04n','image/svg+xml;1.43262','PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEi
+IHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93
+d3cudzMub3JnLzE5OTkveGxpbmsiIGRhdGEtdi01ZWQzMTcxZT0iIiB3aWR0aD0iNTBweCIgaGVp
+Z2h0PSI1MHB4IiB2aWV3Qm94PSIwIDAgMTQ4IDE0OCIgY2xhc3M9Im93bS13ZWF0aGVyLWljb24i
+PjxwYXRoIGQ9Ik02NS4wMyA2MC41MTRjLjY0MiAwIDEuMjcuMDU3IDEuODg5LjE0M2ExNS40NzYg
+MTUuNDc2IDAgMDEtLjM0NC0zLjIzYzAtOC41MjQgNi45MS0xNS40MzcgMTUuNDM1LTE1LjQzNyA4
+LjI5NCAwIDE1LjA0MiA2LjU0NyAxNS40MDIgMTQuNzUyYTkuMjI0IDkuMjI0IDAgMDE2LjIwOC0y
+LjQwNCA5LjI2MyA5LjI2MyAwIDAxOS4yNjMgOS4yNjMgOS4xNjUgOS4xNjUgMCAwMS0uNjE5IDMu
+MzA1Yy43LS4xNCAxLjQyMy0uMjE4IDIuMTYxLS4yMTggNS45NyAwIDEwLjgwNiA0LjgzOSAxMC44
+MDYgMTAuODA1IDAgNS45Ny00LjgzNiAxMC44MDYtMTAuODA2IDEwLjgwNkg2NS4wMzFjLTcuNjc0
+IDAtMTMuODkzLTYuMjE5LTEzLjg5My0xMy44OTMgMC03LjY3MSA2LjIxOS0xMy44OTIgMTMuODkz
+LTEzLjg5MiIgZmlsbD0iIzNiM2M0MCI+PC9wYXRoPjxwYXRoIGQ9Ik0zOS4yNSA3My4wNWMuNzYg
+MCAxLjUwNS4wNyAyLjI0LjE3YTE4LjI5NiAxOC4yOTYgMCAwMS0uNDEtMy44MzRjMC0xMC4xMTQg
+OC4yLTE4LjMxIDE4LjMxMi0xOC4zMSA5Ljg0IDAgMTcuODQzIDcuNzY2IDE4LjI3IDE3LjVhMTAu
+OTM1IDEwLjkzNSAwIDAxNy4zNjYtMi44NTNjNi4wNjggMCAxMC45ODcgNC45MjIgMTAuOTg3IDEw
+Ljk5IDAgMS4zODItLjI2NyAyLjctLjczMiAzLjkxOGExMi44NjggMTIuODY4IDAgMDEyLjU2NC0u
+MjU2YzcuMDc4IDAgMTIuODE4IDUuNzM5IDEyLjgxOCAxMi44MTggMCA3LjA3OC01Ljc0IDEyLjgx
+Ny0xMi44MTggMTIuODE3SDM5LjI1Yy05LjEwMyAwLTE2LjQ4LTcuMzc4LTE2LjQ4LTE2LjQ4IDAt
+OS4xMDMgNy4zNzctMTYuNDggMTYuNDgtMTYuNDgiIGZpbGw9IiNlZmVmZWQiPjwvcGF0aD48L3N2
+Zz4=');
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','El_text_alarm','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;alignment;text;',2);
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','box_alarm','/wlb_mnEls/wdg_El_Alarm','name;geomX;geomY;geomW;geomH;geomXsc;geomYsc;geomZ;fillColor;elLst;',2);
@@ -13482,7 +13594,7 @@ if(f_start || wUser != this.ownerSess().reqUser()) {
 
 	geomHOrig = 580;
 	toUpdate = toReport = false;
-	fMax = 5; fClrTo = -1;
+	fMax = 5; fClrTo = 0;
 	itEdFormMarg = 20;
 	itEdFormX = itEdFormMarg;
 	itEdFormY = this.lab_fltr.attr("geomY");
@@ -13767,7 +13879,7 @@ if(f_start || toUpdate) {
 					else cntR += "<s"+opt+">"+SYS.strEncode(itVl,"HTML")+"</s>";
 					if(toReport)
 						tRep += "<td style=''white-space: pre-wrap;"+((colTps[iC]=="t")?"text-align: left;":"")+"''>"+
-							SYS.strEncode(itVl,"HTML").replace(new RegExp("(http|https|ftp)://(\\S+)","g"),"<a target=''_blank'' href=''$1://$2''>$2</a>")+
+							SYS.strEncode(((tVl1=SYS.strEncode(itVl,"Limit",300))==itVl)?tVl1:tVl1+"...","HTML").replace(new RegExp("(http|https|ftp)://(\\S+)","g"),"<a target=''_blank'' href=''$1://$2''>$2</a>")+
 							"</td>";
 				}
 			}
@@ -13859,7 +13971,7 @@ if(f_start || toUpdate) {
 				if((celO.fltr == "index" || celO.fltr.indexOf("list") == 0) && nwO.attr("elType") == 0) {
 					nwO.attrSet("view", 1);
 					fCfg = "", fCfgPref = (celO.fltr == "index" || !itVl.length) ? "" :
-														itVl+((celO.fltr[4]==" ")?"":celO.fltr[4]+" ");
+														itVl+((celO.fltr[4]==" ")?" ":celO.fltr[4]+" ");
 					if(celO.fltr.indexOf("list") == 0)
 						for(fCfgAdd = "", off = 0; (iFv=itVl.parse(0,celO.fltr[4],off)).length; )
 							fCfgAdd += (fCfgAdd.length?celO.fltr[4]:"") + iFv, fCfg += fCfgAdd + "\n";
@@ -13936,8 +14048,12 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		toUpdate = true; toCalcCycles = 1;
 	}
 	else if((isTbl=(sval.slice(0,12)=="ws_TableEdit")) || (tVl=sval.match("^ws_(LnAccept|TxtAccept|ChkChange):/fItVal(.+)$")).length) {
-		if(isTbl) col = dataTbl[0][sval.parse(0,"_",13).toInt()], row = dataTbl[sval.parse(1,"_",13).toInt()+1][0], toVal = dataTbl_set;
-		else col = tVl[2], row = this.fItValID.attr("text"), toVal = this["fItVal"+col].attr("value");
+		if(isTbl)	col = dataTbl[0][sval.parse(0,"_",13).toInt()], row = dataTbl[sval.parse(1,"_",13).toInt()+1][0], toVal = dataTbl_set;
+		else {
+			col = tVl[2], row = this.fItValID.attr("text"), toVal = this["fItVal"+col].attr("value");
+			if(this["fItVal"+col].attr("view") == 1)	toUpdate = true;
+		}
+		if(toUpdate || colVars[col].fltr.parseLine(1).length || hasProc)	toUpdate = true, toCalcCycles = 1;
 		//this.messInfo("TEST 00: col="+col+", row="+row+", toVal="+toVal);
 		//SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET `"+dataTbl[0][col]+"`=''"+SYS.strEncode(dataTbl_set,"SQL")+"'' WHERE `"+dataTbl[0][0]+"`=''"+dataTbl[row+1][0]+"'';");
 		updReq = "`"+col+"`=''"+SYS.strEncode(toVal,"SQL")+"''";
@@ -13945,7 +14061,6 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 			if(itID[0] != "*" && clsLsO[itID].prc.length)
 				updReq += ", `SP_"+itID+"`=NULL";
 		SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET "+updReq+" WHERE `"+dataTbl[0][0]+"`=''"+row+"'';");
-		if(colVars[col].fltr.parseLine(1).length || hasProc)	toUpdate = true, toCalcCycles = 1;
 	}
 	else if(sval.slice(0,22) == "ws_CombChange:/fltrCol") {
 		fN = sval.slice(22).toInt();
@@ -13967,12 +14082,12 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		for(iR = 1; iR < dataTblOneReq.length; iR++) {
 			if(dataTblOneReq[iR][0] != dataTbl_value) continue;
 			for(iC = 0; iC < dataTblOneReq[iR].length; iC++) {
-				itVl = dataTblOneReq[0][iC];
-				if((itVl.indexOf("SP_") == 0 && !(tVl=clsLsO[itVl.slice(3)]).isEVal()) || ((itVl == "NAME" || itVl == "DSCR") && !(tVl=clsLsO["*"+itVl]).isEVal()))
-					itVl = tVl.name;
-				go_reportIt_report += "<span style=''font: bold 15px/25px Arial, sans-serif''>"+SYS.strEncode(itVl,"HTML")+":</span>";
+				itVlNm = dataTblOneReq[0][iC];
+				if((itVlNm.indexOf("SP_") == 0 && !(tVl=clsLsO[itVlNm.slice(3)]).isEVal()) || ((itVlNm == "NAME" || itVlNm == "DSCR") && !(tVl=clsLsO["*"+itVlNm]).isEVal()))
+					itVlNm = tVl.name;
+				if((itVl=dataTblOneReq[iR][iC]) == "<NULL>" || !itVl.length) continue;
+				go_reportIt_report += "<span style=''font: bold 15px/25px Arial, sans-serif''>"+SYS.strEncode(itVlNm,"HTML")+":</span>";
 				if(colTps[iC] == "t")	go_reportIt_report += "<br/>";
-				if((itVl=dataTblOneReq[iR][iC]) == "<NULL>") itVl = "";
 				go_reportIt_report += "<span style=''white-space: pre-wrap;"+((colTps[iC] == "t")?"":" margin-left: 3pt;")+"''>"+
 						SYS.strEncode(itVl,"HTML").replace(new RegExp("(http|https|ftp)://(\\S+)","g"),"<a target=''_blank'' href=''$1://$2''>$2</a>")+
 						"</span><br/>";
@@ -14003,7 +14118,127 @@ if(fClrTo >= 0) {
 if(toCalcCycles > 0.1) {
 	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
 	toCalcCycles = max(0, toCalcCycles-1);
-}','','',-2,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1711188205);
+}','','',-2,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1711651777);
+INSERT INTO wlb_Main VALUES('weather','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','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+isCurErr = (current == null);
+
+curSymb_src = isCurErr ? "" : "weath"+current.symbol;
+
+curTemp_arg0val = isCurErr ? 0 : current.t;
+
+title_arg0val = isCurErr ? "-" : current.city;
+title_arg1val = isCurErr ? "-" : current.country;
+
+curText_arg0val = isCurErr ? "-" : SYS.strftime(SYS.strptimegm(current.sunRise,"%Y-%m-%dT%H:%M:%S"), "%H:%M");
+curText_arg1val = isCurErr ? "-" : SYS.strftime(SYS.strptimegm(current.sunSet,"%Y-%m-%dT%H:%M:%S"), "%H:%M");
+curText_arg8val = isCurErr ? "-" : SYS.strftime(SYS.strptimegm(current.tm,"%Y-%m-%dT%H:%M:%S"), "%a, %d-%b-%Y %H:%M");
+curText_arg3val = isCurErr ? 0 : current.tFeel;
+curText_arg4val = isCurErr ? 0 : current.h;
+curText_arg6val = isCurErr ? 0 : current.windSpeed;
+curText_arg7val = isCurErr ? "-" : current.windDir;
+curText_arg2val = isCurErr ? 0 : current.windDirDeg;
+curText_arg5val = isCurErr ? 0 : current.p.toInt()-1000;
+
+isFCErr = (forecast == null);
+for(iD = 1; iD <= 10; iD++) {
+	fcO = forecast[iD-1];
+	this["fcD"+iD+"Symb"].attrSet("src", isFCErr?"":"weath"+fcO.symbol);
+	tipTool = tr("No data");
+	if(!isFCErr) {
+		tipTool = tr("On %1\n").replace("%1",SYS.strftime(SYS.strptimegm(fcO.tm,"%Y-%m-%d"),"%A, %d %B %Y"));
+		tipTool += tr("Temperature (°С) %1, min %2, max %3, morning %4, evening %5, night %6\n")
+								.replace("%1",fcO.t).replace("%2",fcO.tMin).replace("%3",fcO.tMax).replace("%4",fcO.tMorn).replace("%5",fcO.tEve).replace("%6",fcO.tNight);
+		tipTool += tr("Wind %1(%4°), speed %2m/s, pressure %3mB\n")
+								.replace("%1",fcO.windDir).replace("%2",fcO.windSpeed).replace("%3",(fcO.p.toInt()-1000).toString()).replace("%4",fcO.windDirDeg);
+		tipTool += tr("Feel temperature (°С) %1, morning %2, evening %3, night %4\n")
+								.replace("%1",fcO.tFeel).replace("%2",fcO.tFeelMorn).replace("%3",fcO.tFeelEve).replace("%4",fcO.tFeelNight);
+		tipTool += tr("Humidity %1%\n").replace("%1",fcO.h);
+		tipTool += tr("Sun rise %1, set %2\n").replace("%1",SYS.strftime(SYS.strptimegm(fcO.sunRise,"%Y-%m-%dT%H:%M:%S"),"%H:%M:%S"))
+								.replace("%2",SYS.strftime(SYS.strptimegm(fcO.sunSet,"%Y-%m-%dT%H:%M:%S"),"%H:%M:%S"));
+
+		for(iTm = 0; fcO.times != null && iTm < fcO.times.length; iTm++) {
+			fcTmO = fcO.times[iTm];
+			tipTool += tr("[%1-%2] %3 %4°C, feel %5°C; %6(%7°), %8m/s, %9mB; %A%\n").replace("%1",SYS.strftime(SYS.strptimegm(fcTmO.tmFrom,"%Y-%m-%dT%H:%M:%S"),"%H:%M"))
+								.replace("%2",SYS.strftime(SYS.strptimegm(fcTmO.tmTo,"%Y-%m-%dT%H:%M:%S"),"%H:%M"))
+								.replace("%3",fcTmO.symbolNm).replace("%4",fcTmO.t).replace("%5",fcTmO.tFeel)
+								.replace("%6",fcTmO.windDir).replace("%7",fcTmO.windDirDeg).replace("%8",fcTmO.windSpeed).replace("%9",(fcTmO.p.toInt()-1000).toString())
+								.replace("%A",fcTmO.h);
+
+			//tipTool += tr("Temperature (°С) %1, min %2, max %3, feel %4\n")
+			//					.replace("%1",fcTmO.t).replace("%2",fcTmO.tMin).replace("%3",fcTmO.tMax).replace("%4",fcTmO.tFeel);
+			//tipTool += tr("Wind %1(%4°), speed %2m/s, pressure %3hPa\n")
+			//					.replace("%1",fcTmO.windDir).replace("%2",fcTmO.windSpeed).replace("%3",fcTmO.p).replace("%4",fcTmO.windDirDeg);
+			//tipTool += tr("Humidity %1%\n").replace("%1",fcTmO.h);
+		}
+	}
+	this["fcD"+iD+"Symb"].attrSet("tipTool", tipTool);
+	this["fcD"+iD+"Text"].attrSet("arg0val", isFCErr?0:fcO.tMax);
+	this["fcD"+iD+"Text"].attrSet("arg1val", isFCErr?0:fcO.tMin);
+}','','',10000,'name;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;',1712057301);
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_mnEls VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB
@@ -23925,7 +24160,7 @@ The frame provides currently and in future for next features:
   - detailed control panel-form of the selected item with the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.4.10
+Version: 1.4.15
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -23939,7 +24174,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - деталізована панель-форма керування обраним елементом зі специфічними полями.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.4.10
+Версія: 1.4.15
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');
@@ -24289,6 +24524,262 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','en','1',40,'','','lab_fltr','','','
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','1',40,'','','fltr0','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','1',40,'','','fltrCol0','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','tipStatus','Go to form of the selected item.',32,'','','btItEdit','Перейти до форми обраного елементу.','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','180',32,'','','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','140',32,'','','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','backColor','lightgrey',32,'','','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','bordWidth','2',32,'','','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','bordColor','grey',32,'','','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','bordStyle','6',32,'','','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','2',32,'','','curSymb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','4',32,'','','curSymb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','60',32,'','','curSymb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','60',32,'','','curSymb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','backColor','',32,'','','curSymb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','bordWidth','0',32,'','','curSymb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','src','weath01d',40,'','','curSymb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','65',32,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','20',32,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','110',32,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','60',32,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','1',32,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','inHtml','1',32,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','text','<i style="color:red">%9</i>
+%7m/s %8(%3°), %6mB
+Humidity %5%
+Feel temperature %4°С
+Sun rise %1, set %2',32,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','numbArg','9',32,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg0tp','2',0,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg0val','',8,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg1tp','2',0,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg1val','',8,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg2tp','0',0,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg2val','0',8,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg2cfg','',0,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg3tp','1',0,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg3val','0',8,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg3cfg',';f;1',0,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg4tp','0',0,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg4val','0',8,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg4cfg','2',0,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg5val','0',8,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg5cfg','',0,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg6tp','1',0,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg6val','0',8,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg6cfg',';f;1',0,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg7tp','2',0,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg7val','W',8,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg7cfg','',0,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg8tp','2',0,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg8val','Date',8,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','3',32,'','','fcD1Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','62',32,'','','fcD1Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','35',32,'','','fcD1Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','35',32,'','','fcD1Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','2',32,'','','fcD1Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','backColor','',32,'','','fcD1Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','bordWidth','0',32,'','','fcD1Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','5',32,'','','fcD1Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','86',32,'','','fcD1Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','30',32,'','','fcD1Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','15',32,'','','fcD1Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','3',32,'','','fcD1Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','fcD1Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','alignment','10',32,'','','fcD1Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','text','%1/%2°С',32,'','','fcD1Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','numbArg','2',32,'','','fcD1Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg0tp','0',0,'','','fcD1Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg0cfg','',0,'','','fcD1Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg1tp','0',0,'','','fcD1Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg1cfg','',0,'','','fcD1Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','38',32,'','','fcD2Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','62',32,'','','fcD2Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','35',32,'','','fcD2Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','35',32,'','','fcD2Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','4',32,'','','fcD2Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','backColor','',32,'','','fcD2Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','bordWidth','0',32,'','','fcD2Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','40',32,'','','fcD2Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','85',32,'','','fcD2Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','30',32,'','','fcD2Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','15',32,'','','fcD2Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','5',32,'','','fcD2Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','alignment','10',32,'','','fcD2Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','text','%1/%2°С',32,'','','fcD2Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','numbArg','2',32,'','','fcD2Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','73',32,'','','fcD3Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','62',32,'','','fcD3Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','35',32,'','','fcD3Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','35',32,'','','fcD3Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','6',32,'','','fcD3Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','backColor','',32,'','','fcD3Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','bordWidth','0',32,'','','fcD3Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','75',32,'','','fcD3Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','85',32,'','','fcD3Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','30',32,'','','fcD3Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','15',32,'','','fcD3Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','7',32,'','','fcD3Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','alignment','10',32,'','','fcD3Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','text','%1/%2°С',32,'','','fcD3Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','numbArg','2',32,'','','fcD3Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','108',32,'','','fcD4Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','62',32,'','','fcD4Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','35',32,'','','fcD4Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','35',32,'','','fcD4Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','8',32,'','','fcD4Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','backColor','',32,'','','fcD4Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','bordWidth','0',32,'','','fcD4Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','110',32,'','','fcD4Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','85',32,'','','fcD4Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','30',32,'','','fcD4Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','15',32,'','','fcD4Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','9',32,'','','fcD4Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','alignment','10',32,'','','fcD4Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','text','%1/%2°С',32,'','','fcD4Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','numbArg','2',32,'','','fcD4Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','143',32,'','','fcD5Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','62',32,'','','fcD5Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','35',32,'','','fcD5Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','35',32,'','','fcD5Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','10',32,'','','fcD5Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','backColor','',32,'','','fcD5Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','bordWidth','0',32,'','','fcD5Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','145',32,'','','fcD5Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','85',32,'','','fcD5Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','30',32,'','','fcD5Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','15',32,'','','fcD5Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','11',32,'','','fcD5Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','alignment','10',32,'','','fcD5Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','text','%1/%2°С',32,'','','fcD5Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','numbArg','2',32,'','','fcD5Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','fit','1',32,'','','curSymb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','src','weath02d',32,'','','fcD1Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','fit','1',32,'','','fcD1Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','src','weath02d',32,'','','fcD2Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','fit','1',32,'','','fcD2Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','src','weath02d',32,'','','fcD3Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','fit','1',32,'','','fcD3Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','src','weath02d',32,'','','fcD4Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','fit','1',32,'','','fcD4Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','src','weath02d',32,'','','fcD5Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','fit','1',32,'','','fcD5Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','name','Weather',32,'','','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','fcD2Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','fcD3Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','fcD4Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','fcD5Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','0',32,'','','title','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','2',32,'','','title','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','180',32,'','','title','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','15',32,'','','title','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','12',32,'','','title','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','alignment','10',32,'','','title','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','text','%1, %2',32,'','','title','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','inHtml','1',32,'','','title','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','numbArg','2',32,'','','title','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg0tp','2',0,'','','title','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg0val','City',8,'','','title','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg1tp','2',0,'','','title','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg1val','Country',8,'','','title','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 11 1 0 1 0',32,'','','title','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','143',32,'','','fcD10Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','97',32,'','','fcD10Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','35',32,'','','fcD10Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','35',32,'','','fcD10Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','22',32,'','','fcD10Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','backColor','',32,'','','fcD10Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','src','weath02d',32,'','','fcD10Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','fit','1',32,'','','fcD10Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','145',32,'','','fcD10Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','120',32,'','','fcD10Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','30',32,'','','fcD10Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','15',32,'','','fcD10Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','21',32,'','','fcD10Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','fcD10Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','alignment','10',32,'','','fcD10Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','text','%1/%2°С',32,'','','fcD10Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','numbArg','2',32,'','','fcD10Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','3',32,'','','fcD6Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','97',32,'','','fcD6Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','35',32,'','','fcD6Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','35',32,'','','fcD6Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','14',32,'','','fcD6Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','backColor','',32,'','','fcD6Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','src','weath02d',32,'','','fcD6Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','fit','1',32,'','','fcD6Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','5',32,'','','fcD6Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','121',32,'','','fcD6Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','30',32,'','','fcD6Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','15',32,'','','fcD6Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','13',32,'','','fcD6Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','fcD6Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','alignment','10',32,'','','fcD6Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','text','%1/%2°С',32,'','','fcD6Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','numbArg','2',32,'','','fcD6Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','38',32,'','','fcD7Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','97',32,'','','fcD7Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','35',32,'','','fcD7Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','35',32,'','','fcD7Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','16',32,'','','fcD7Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','backColor','',32,'','','fcD7Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','src','weath02d',32,'','','fcD7Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','fit','1',32,'','','fcD7Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','40',32,'','','fcD7Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','120',32,'','','fcD7Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','30',32,'','','fcD7Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','15',32,'','','fcD7Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','15',32,'','','fcD7Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','fcD7Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','alignment','10',32,'','','fcD7Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','text','%1/%2°С',32,'','','fcD7Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','numbArg','2',32,'','','fcD7Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','73',32,'','','fcD8Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','97',32,'','','fcD8Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','35',32,'','','fcD8Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','35',32,'','','fcD8Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','18',32,'','','fcD8Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','backColor','',32,'','','fcD8Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','src','weath02d',32,'','','fcD8Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','fit','1',32,'','','fcD8Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','75',32,'','','fcD8Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','120',32,'','','fcD8Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','30',32,'','','fcD8Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','15',32,'','','fcD8Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','17',32,'','','fcD8Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','fcD8Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','alignment','10',32,'','','fcD8Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','text','%1/%2°С',32,'','','fcD8Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','numbArg','2',32,'','','fcD8Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','108',32,'','','fcD9Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','97',32,'','','fcD9Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','35',32,'','','fcD9Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','35',32,'','','fcD9Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','20',32,'','','fcD9Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','backColor','',32,'','','fcD9Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','src','weath02d',32,'','','fcD9Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','fit','1',32,'','','fcD9Symb','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','110',32,'','','fcD9Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','120',32,'','','fcD9Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','30',32,'','','fcD9Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','15',32,'','','fcD9Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','19',32,'','','fcD9Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','fcD9Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','alignment','10',32,'','','fcD9Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','text','%1/%2°С',32,'','','fcD9Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','numbArg','2',32,'','','fcD9Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','2',32,'','','curTemp','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','47',32,'','','curTemp','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','60',32,'','','curTemp','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomH','20',32,'','','curTemp','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomZ','23',32,'','','curTemp','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','alignment','10',32,'','','curTemp','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','text','%1°С',32,'','','curTemp','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 16',32,'','','curTemp','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','numbArg','1',32,'','','curTemp','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg0tp','1',0,'','','curTemp','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg0val','0',8,'','','curTemp','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg0cfg',';f;1',0,'','','curTemp','','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_doc_uio VALUES('docRepDay','lastDay','Last day',131073,'-1|',8,'','','','Останній день','','','Последний день','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepDay','lastHour','Last hour',131073,'-1|',8,'','','','Остання година','','','Последний час','','','','','');
@@ -28493,6 +28984,12 @@ INSERT INTO wlb_Main_uio VALUES('TextLab','err','Parameter: error',196613,'',10,
 INSERT INTO wlb_Main_uio VALUES('ImgLab','err','Parameter: error',196613,'',10,'Parameter|err','','','Параметр: помилка','','','Параметр: ошибка','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('TextLab','transTr','Transitive transl.',131072,'0',9,'','','','Транзитивний перекл.','','','Транзитивный перев.','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('storeHouse','report','Report',131205,'',8,'','','go_reportIt','Звіт','','','Отчёт','','','','','Извештај','');
+INSERT INTO wlb_Main_uio VALUES('weather','current','Weather: Current',131078,'<TVarObj>
+</TVarObj>
+',10,'Parameter|current','','','','','','','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('weather','forecast','Weather: Forecast',131078,'<TVarObj>
+</TVarObj>
+',10,'Parameter|forecast','','','','','','','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#IO_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_doc_io VALUES('docRepDay','name','Day report of the hour-averaged values',32,'','','','Добовий звіт середніх за годину значень','','Суточный отчёт среднечасовых значений','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepDay','geomZ','1',32,'','','doc','','','','','','','');
@@ -29970,6 +30467,30 @@ INSERT INTO wlb_Main_incl VALUES('RootPgSo','alarms','/wlb_originals/wdg_Protoco
 INSERT INTO wlb_Main_incl VALUES('grph_panel','curstimeBeg','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','go_reportIt','/wlb_originals/wdg_FormEl',-1,'en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','btItEdit','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;img;mode;font;');
+INSERT INTO wlb_Main_incl VALUES('weather','curSymb','/wlb_originals/wdg_Media',-1,'geomX;geomY;geomW;geomH;backColor;bordWidth;src;fit;');
+INSERT INTO wlb_Main_incl VALUES('weather','curText','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomZ;font;inHtml;text;numbArg;arg0tp;arg0val;arg1tp;arg1val;arg2tp;arg2val;arg2cfg;arg3tp;arg3val;arg3cfg;arg4tp;arg4val;arg4cfg;arg5val;arg5cfg;arg6tp;arg6val;arg6cfg;arg7tp;arg7val;arg7cfg;arg8tp;arg8val;');
+INSERT INTO wlb_Main_incl VALUES('weather','fcD1Symb','/wlb_originals/wdg_Media',-1,'geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;src;fit;');
+INSERT INTO wlb_Main_incl VALUES('weather','fcD1Text','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomZ;font;alignment;text;numbArg;arg0tp;arg0cfg;arg1tp;arg1cfg;');
+INSERT INTO wlb_Main_incl VALUES('weather','fcD2Symb','/wlb_originals/wdg_Media',-1,'geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;src;fit;');
+INSERT INTO wlb_Main_incl VALUES('weather','fcD2Text','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomZ;font;alignment;text;numbArg;');
+INSERT INTO wlb_Main_incl VALUES('weather','fcD3Symb','/wlb_originals/wdg_Media',-1,'geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;src;fit;');
+INSERT INTO wlb_Main_incl VALUES('weather','fcD3Text','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomZ;font;alignment;text;numbArg;');
+INSERT INTO wlb_Main_incl VALUES('weather','fcD4Symb','/wlb_originals/wdg_Media',-1,'geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;src;fit;');
+INSERT INTO wlb_Main_incl VALUES('weather','fcD4Text','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomZ;font;alignment;text;numbArg;');
+INSERT INTO wlb_Main_incl VALUES('weather','fcD5Symb','/wlb_originals/wdg_Media',-1,'geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;src;fit;');
+INSERT INTO wlb_Main_incl VALUES('weather','fcD5Text','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomZ;font;alignment;text;numbArg;');
+INSERT INTO wlb_Main_incl VALUES('weather','title','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomZ;font;alignment;inHtml;text;numbArg;arg0tp;arg0val;arg1tp;arg1val;');
+INSERT INTO wlb_Main_incl VALUES('weather','fcD10Symb','/wlb_originals/wdg_Media',-1,'geomX;geomY;geomW;geomH;geomZ;backColor;src;fit;');
+INSERT INTO wlb_Main_incl VALUES('weather','fcD10Text','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomZ;font;alignment;text;numbArg;');
+INSERT INTO wlb_Main_incl VALUES('weather','fcD6Symb','/wlb_originals/wdg_Media',-1,'geomX;geomY;geomW;geomH;geomZ;backColor;src;fit;');
+INSERT INTO wlb_Main_incl VALUES('weather','fcD6Text','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomZ;font;alignment;text;numbArg;');
+INSERT INTO wlb_Main_incl VALUES('weather','fcD7Symb','/wlb_originals/wdg_Media',-1,'geomX;geomY;geomW;geomH;geomZ;backColor;src;fit;');
+INSERT INTO wlb_Main_incl VALUES('weather','fcD7Text','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomZ;font;alignment;text;numbArg;');
+INSERT INTO wlb_Main_incl VALUES('weather','fcD8Symb','/wlb_originals/wdg_Media',-1,'geomX;geomY;geomW;geomH;geomZ;backColor;src;fit;');
+INSERT INTO wlb_Main_incl VALUES('weather','fcD8Text','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomZ;font;alignment;text;numbArg;');
+INSERT INTO wlb_Main_incl VALUES('weather','fcD9Symb','/wlb_originals/wdg_Media',-1,'geomX;geomY;geomW;geomH;geomZ;backColor;src;fit;');
+INSERT INTO wlb_Main_incl VALUES('weather','fcD9Text','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomZ;font;alignment;text;numbArg;');
+INSERT INTO wlb_Main_incl VALUES('weather','curTemp','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomZ;font;alignment;text;numbArg;arg0tp;arg0val;arg0cfg;');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_doc_incl VALUES('docRepDay','doc','/wlb_doc/wdg_doc/wdg_doc',-1,'perm;geomZ;tmpl;doc;bTime;time;process;n;');
 INSERT INTO wlb_doc_incl VALUES('docRepMonth','doc','/wlb_doc/wdg_doc/wdg_doc',-1,'perm;geomZ;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;');

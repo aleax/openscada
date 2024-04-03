@@ -1672,7 +1672,7 @@ string TSYS::strDecode( const string &in, TSYS::Code tp, const string &opt )
 			if(iSz+2 < in.size()) {
 			    sout += (char)strtol(in.substr(iSz+1,2).c_str(),NULL,16);
 			    iSz += 2;
-			}else sout += in[iSz];
+			} else sout += in[iSz];
 			break;
 		    default: sout += in[iSz];
 		}

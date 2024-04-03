@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_shapes.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1533,31 +1533,27 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val, const stri
 		}
 		if((uiPrmPos%A_TextArsSz) == A_TextArsCfg) shD->args[argN].setCfg(val.c_str());
 		reform = true;
-	    }else up = false;
+	    } else up = false;
     }
 
     //Text reformation
     if(reform && !w->allAttrLoad()) {
-	QString text = shD->text_tmpl.c_str();
+	string text = shD->text_tmpl, argT;
 	for(unsigned iA = 0; iA < shD->args.size(); iA++) {
+	    int off = 0,
+		wdth = s2i(TSYS::strSepParse(shD->args[iA].cfg(), 0, ';', &off));
 	    switch(shD->args[iA].val().typeId()) {
-		case QVariant::String:
-		    text = text.arg(shD->args[iA].val().toString(), vmax(-1000,vmin(1000,s2i(shD->args[iA].cfg()))));
-		    break;
 		case QVariant::Double: {
-		    int off = 0;
-		    int wdth = s2i(TSYS::strSepParse(shD->args[iA].cfg(),0,';',&off));
-		    string form = TSYS::strSepParse(shD->args[iA].cfg(),0,';',&off);
+		    string form = TSYS::strSepParse(shD->args[iA].cfg(), 0, ';', &off);
 		    int prec = s2i(TSYS::strSepParse(shD->args[iA].cfg(),0,';',&off));
-		    text = text.arg(shD->args[iA].val().toDouble(),vmax(-1000,vmin(1000,wdth)),form.empty()?0:form[0],vmax(0,prec),' ');
+		    argT = r2s(shD->args[iA].val().toDouble(), vmax(0,prec), form.empty()?'0':form[0]);
 		    break;
 		}
-		default:
-		    text = text.arg(shD->args[iA].val().toInt(), vmax(-1000,vmin(1000,s2i(shD->args[iA].cfg()))));
-		    break;
+		default: argT = shD->args[iA].val().toString().toStdString();	break;
 	    }
+	    text = TRegExp("%"+i2s(iA+1),"g").replace(text, ((argT.size()<wdth)?string(wdth-argT.size(),' '):"")+argT);
 	}
-	if(text != shD->text.c_str())	{ shD->text = text.toStdString(); up = true; }
+	if(text != shD->text)	{ shD->text = text; up = true; }
     }
 
     if(up) {

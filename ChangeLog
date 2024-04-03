@@ -1,3 +1,22 @@
+2024-04-03 Roman (stable)
+- !!!!:LibsDB.{OscadaLibs.tmplib_base,vcaBase.wlb_Main}:
+    Appended by a template "Weather (weather)" of implementation weather forecast initially based on openweathermap.org.
+    Appended by a widget "weather" of representing the weather data from the template "Weather (weather)".
+- LibsDB.OscadaLibs: tmplib_base.UPS: Improved in detection "No powernet" at very low input voltage and frequency.
+- FIX:LibsDB.vcaBase: wlb_Main.storeHouse: Fixed in the space separator of the selectable items.
+    Appended of reseting filters at the page restart or user change.
+    The whole-table report appended of limiting cells' text in 30 symbols, that is like to the edition table.
+    The item report appended by hiding empty fields.
+    Appended of updating the selection context of the form items at change such item value.
+- FIX:DAQ: TValFunc::get{S,I,R,B}() appended by code of casting the object TVarObj with EVAL/null converting.
+    FIX: Templates fixed-adapted to the dynamic translation in using the IO names.
+- FIX:UI.VCAEngine: Templates fixed-adapted to the dynamic translation in using the configuration template of the attributes.
+- FIX:UI.Vision: Fixed in display the parameter "As a page:" of entry ID and name dialogue of items creation only for project's items.
+    FIX: The primitive Text rewrote in processing the arguments for direct replacing marks %1, %2, ...,
+	since Qt doesn't trace the numbers missing.
+- FIX:UI.WebVision: Appended of support spaces in resource name of sources of the primitive Media.
+
+
 2024-03-27 Roman (stable)
 - !!:DAQ.System: Switched to the soft mode of parameters automatic creation,
     that is you allowed to create the source parameters automatically,

@@ -946,7 +946,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    medObj.src = this.attrs['src'];
 		else if(this.attrs['src'].indexOf("data:") == 0 && (fLine=this.attrs['src'].indexOf("\n")) >= 0)
 		    medObj.src = "data:"+this.attrs['src'].slice(5,fLine)+";base64,"+this.attrs['src'].slice(fLine+1);
-		else medObj.src = "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['src'];
+		else medObj.src = "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['src'].replace(/ /g,'%20');
 		medObj.hidden = !this.attrs['src'].length;
 	    }
 	    if(this.attrs['play'] && (toInit || this.attrsMdf["play"])) {

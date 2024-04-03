@@ -340,7 +340,8 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    if(ioPrev) {
 		string ioID = TSYS::strLabEnum(ioPrev->id());
 		while(ioId(ioID) >= 0) ioID = TSYS::strLabEnum(ioID);
-		ioAdd(new IO(ioID.c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~LockAttr),ioPrev->def().c_str()));
+		ioAdd(new IO(ioID.c_str(),TSYS::strLabEnum(trD(ioPrev->name())).c_str(),
+				ioPrev->type(),ioPrev->flg()&(~LockAttr),ioPrev->def().c_str()));
 	    } else ioAdd(new IO("new",trDSet("",_("New IO")),IO::Real,IO::Default));
 	    modif();
 	}
@@ -350,7 +351,8 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    if(ioPrev) {
 		string ioID = TSYS::strLabEnum(ioPrev->id());
 		while(ioId(ioID) >= 0) ioID = TSYS::strLabEnum(ioID);
-		ioIns(new IO(ioID.c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~LockAttr),ioPrev->def().c_str()), row);
+		ioIns(new IO(ioID.c_str(),TSYS::strLabEnum(trD(ioPrev->name())).c_str(),
+				ioPrev->type(),ioPrev->flg()&(~LockAttr),ioPrev->def().c_str()), row);
 	    } else ioIns(new IO("new",trDSet("",_("New IO")),IO::Real,IO::Default), row);
 	    modif();
 	}
@@ -614,7 +616,7 @@ void TPrmTempl::Impl::addLinksAttrs( TElem *attrsCntr )
 		    catch(TError &err){ mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }
 		else {
 		    attrsCntr->fldAt(fId).setFlg(flg);
-		    attrsCntr->fldAt(fId).setDescr(func()->io(iIO)->name().c_str());
+		    attrsCntr->fldAt(fId).setDescr(func()->io(iIO)->name()/*.c_str()*/);
 		    if((flg&TFld::Selectable)) {
 			attrsCntr->fldAt(fId).setValues(selVals);
 			attrsCntr->fldAt(fId).setSelNames(selNms);
@@ -623,7 +625,7 @@ void TPrmTempl::Impl::addLinksAttrs( TElem *attrsCntr )
 	    }
 
 	    if(!attrsCntr->fldPresent(func()->io(iIO)->id()))
-		attrsCntr->fldAdd(new TFld(func()->io(iIO)->id().c_str(),func()->io(iIO)->name().c_str(),tp,flg,"","",selVals,selNms));
+		attrsCntr->fldAdd(new TFld(func()->io(iIO)->id().c_str(),func()->io(iIO)->name()/*.c_str()*/,tp,flg,"","",selVals,selNms));
 
 	    als[func()->io(iIO)->id()] = true;
 	}

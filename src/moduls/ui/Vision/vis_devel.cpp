@@ -1709,9 +1709,11 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 		    req.setAttr("path", work_wdg_w+"/%2finclwdg%2fwdg");
 
 		    //  Requesting about as page
-		    dlg.edLay()->addWidget(new QLabel(_("As a page:"),&dlg), 2, 0);
-		    wAsPage = new QCheckBox(&dlg);
-		    dlg.edLay()->addWidget(wAsPage, 2, 1);
+		    if(d_elp.find("/prj_") == 0) {
+			dlg.edLay()->addWidget(new QLabel(_("As a page:"),&dlg), 2, 0);
+			wAsPage = new QCheckBox(&dlg);
+			dlg.edLay()->addWidget(wAsPage, 2, 1);
+		    }
 		}
 		d_el = "wdg_";
 	    }
@@ -1731,7 +1733,6 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	    return;
 	}
 	// Prepare new widget identifier
-	//  Remove digits from the end of the new identifier
 	if(wdst.empty()) {
 	    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	    else {

@@ -236,7 +236,7 @@ void VCASess::getReq( SSess &ses )
 		}
 
 	    string mime;
-	    ses.page = resGet(prmEl->second, ses.url, ses, &mime, start, &size);
+	    ses.page = resGet(TSYS::strDecode(prmEl->second,TSYS::HttpURL), ses.url, ses, &mime, start, &size);
 	    if((range.size() && size) || size > limUserFile_SZ)
 		ses.page = mod->pgCreator(ses.prt, ses.page, "206 Partial Content",
 		    "Content-Type: "+TSYS::strParse(mime,0,";")+"\x0D\x0A"+"Content-Range: bytes "+
