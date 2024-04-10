@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: freefunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1936,7 +1936,8 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 
     while(!(dt.flg&0x01)) {
 	//Calc time control mechanism
-	if(SYS->sysTm() > (dt.startTm+mMaxCalcTm)) {
+	bool hasTmJump = false;
+	if(SYS->sysTm(&hasTmJump,dt.startTm) > (dt.startTm+mMaxCalcTm) && !hasTmJump) {
 	    mess_err(nodePath().c_str(), _("Calculation time has been exceeded %d > %d+%d"), SYS->sysTm(), dt.startTm, mMaxCalcTm);
 	    dt.flg |= 0x09;
 	    return;

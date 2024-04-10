@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-12 19:11+0200\n"
+"POT-Creation-Date: 2024-04-08 22:21+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -379,12 +379,13 @@ msgid ""
 "(%lld)!"
 msgstr ""
 
+#, c-format
 msgid ""
 "The grid mode doesn't support inserting too old values %s.%06d (%s.%06d-%s."
 "%06d)."
 msgstr ""
-"Режим привязки к сетке не поддерживает вставку очень старых значений %s.%06d (%s.%06d-%s."
-"%06d)."
+"Режим привязки к сетке не поддерживает вставку очень старых значений %s.%06d "
+"(%s.%06d-%s.%06d)."
 
 msgid "The grid mode doesn't support inserting too old values."
 msgstr "Режим привязки к сетке не поддерживает вставку очень старых значений."
@@ -785,12 +786,13 @@ msgstr ""
 msgid "move row in position %s to %s."
 msgstr ""
 
-#, c-format
-msgid "load with forcibility %d."
+msgid "load"
 msgstr ""
 
-#, c-format
-msgid "save with forcibility %d."
+msgid " with forcibility"
+msgstr ""
+
+msgid "save"
 msgstr ""
 
 #, fuzzy, c-format

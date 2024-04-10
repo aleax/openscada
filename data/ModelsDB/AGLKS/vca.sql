@@ -6327,7 +6327,7 @@ CREATE TABLE IF NOT EXISTS 'wlb_AGLKS_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT D
 CREATE TABLE IF NOT EXISTS 'wlb_AGLKS_uio' ("IDW" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","IDC","ID"));
 INSERT INTO wlb_AGLKS_uio VALUES('comprEn','','pVar','Variable',131073,'<EVAL>|0;0|',10,'Parameter|var','','Переменная','','','','Змінна','','','');
 CREATE TABLE IF NOT EXISTS 'prj_AGLKS' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO prj_AGLKS VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',1000,1,'pgOpen;defUser;demoPlayProc;',1664089342);
+INSERT INTO prj_AGLKS VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',1000,1,'pgOpen;defUser;demoPlayProc;',1712643625);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so','1','','root',1,'','','',-1,5,'name;dscr;geomX;',1616334878);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1582550254);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1582550254);
@@ -6541,11 +6541,11 @@ c+XKlWuc9Q+SowNXJeuWHQAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',0,'JavaL
 if( pVar.isEVal() ) c1 = "grey";
 else c1 = (pVar<1) ? "red" : "green";','','',1000,'name;geomW;geomH;fillColor;elLst;c1;','');
 CREATE TABLE IF NOT EXISTS 'prj_AGLKS_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
-INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','statLine','','Status line items',131205,'',128,'','');
 INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','runWin','','Run window',131089,'0|0;1;2|Original size;Maximize;Full screen',128,'','');
 INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','keepAspectRatio','','Keep aspect ratio on scale',131072,'1',128,'','');
 INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','stBarNoShow','','Not show status bar',131072,'0',128,'','');
 INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','winPosCntrSave','','Windows position control and save',131072,'1',128,'','');
+INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','prjDoc','','Project document',131077,'AGLCS|Using/Model_AGLKS',0,'','');
 CREATE TABLE IF NOT EXISTS 'prj_AGLKS_stls' ("IDS" INTEGER DEFAULT '0' ,"ID" TEXT DEFAULT '' ,"VAL" TEXT DEFAULT '' ,"uk#VAL" TEXT DEFAULT '' ,"ru#VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDS","ID"));
 INSERT INTO prj_AGLKS_stls VALUES(0,'<Styles>','Default','Типове','Типовое');
 INSERT INTO prj_AGLKS_stls VALUES(0,'backColor','gray','','');

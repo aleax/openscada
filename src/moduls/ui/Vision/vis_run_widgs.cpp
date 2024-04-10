@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_run_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -256,6 +256,10 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos, b
 	    else if(attr.find("notifyVis"+mod->modId()) == 0)
 		mainWin()->ntfReg(s2i(attr.substr(9+mod->modId().size())), val, id(), true);
 	    else if(attr.find("notify") == 0)	mainWin()->ntfReg(s2i(attr.substr(6)), val, id(), false);
+	    else if(attr.find("prjDoc") == 0) {
+		mainWin()->actProjManual->setVisible(val.size());
+		mainWin()->actProjManual->setProperty("doc", val.c_str());
+	    }
 	    else break;
 	    return true;
 	case A_PG_NAME:	setWindowTitle(val.c_str());	break;

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_run.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1327,6 +1327,7 @@ void VisRun::usrStatus( const string &val, RunPageView *pg )
 	if(!itIco.empty()) {
 	    itIco = pg->resGet(itIco);
 	    ico_t.loadFromData((const uchar*)itIco.data(), itIco.size());
+	    if(!ico_t.isNull())	ico_t = ico_t.scaled(icoSize(2), icoSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 	}
 	userSt->setPixmap(QPixmap::fromImage(ico_t));
 
@@ -1668,9 +1669,6 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 
 	// Get and activate for specific attributes to the master-page
 	XMLNode reqSpc("CntrReqs"); reqSpc.setAttr("path", pg_it);
-	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fstatLine")->
-				     setAttr("aNm", _("Status line items"))->
-				     setAttr("aTp", i2s(TFld::String))->setAttr("aFlg", i2s(TFld::FullText));
 	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2frunWin")->
 				     setAttr("aNm", _("Running window"))->
 				     setAttr("aTp", i2s(TFld::Integer))->setAttr("aFlg", i2s(TFld::Selectable))->
@@ -1685,7 +1683,9 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fwinPosCntrSave")->
 				     setAttr("aNm", _("Control and save window positions"))->
 				     setAttr("aTp", i2s(TFld::Boolean));
+	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fstatLine");
 	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fuserSetVis");
+	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fprjDoc");
 	cntrIfCmd(reqSpc);
 
 	// Create widget view

@@ -719,7 +719,8 @@ void ConfApp::pageUp( )
 void ConfApp::pagePrev( )
 {
     if(!prev.size()) return;
-    next.insert(next.begin(), selPath);
+    XMLNode *tabN = root->childGet("area", tabs->currentIndex(), true);
+    next.insert(next.begin(), selPath+(tabN?"#"+tabN->attr("id"):""));
     string path = prev[0];
     prev.erase(prev.begin());
 
@@ -729,7 +730,8 @@ void ConfApp::pagePrev( )
 void ConfApp::pageNext( )
 {
     if(!next.size()) return;
-    prev.insert(prev.begin(), selPath);
+    XMLNode *tabN = root->childGet("area", tabs->currentIndex(), true);
+    prev.insert(prev.begin(), selPath+(tabN?"#"+tabN->attr("id"):""));
     string path = next[0];
     next.erase(next.begin());
 
@@ -1103,7 +1105,10 @@ void ConfApp::favGo( )
     }
     else try {
 	//Prev and next
-	if(selPath.size()) prev.insert(prev.begin(), selPath);
+	if(selPath.size()) {
+	    XMLNode *tabN = root->childGet("area", tabs->currentIndex(), true);
+	    prev.insert(prev.begin(), selPath+(tabN?"#"+tabN->attr("id"):""));
+	}
 	if((int)prev.size() >= queSz)	prev.pop_back();
 	next.clear();
 
@@ -1302,7 +1307,10 @@ void ConfApp::selectPage( const string &path, int tm )
 {
     try {
 	//Prev and next
-	if(selPath.size())		prev.insert(prev.begin(), selPath);
+	if(selPath.size()) {
+	    XMLNode *tabN = root->childGet("area", tabs->currentIndex(), true);
+	    prev.insert(prev.begin(), selPath+(tabN?"#"+tabN->attr("id"):""));
+	}
 	if((int)prev.size() >= queSz)	prev.pop_back();
 	next.clear();
 

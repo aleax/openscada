@@ -129,7 +129,7 @@ void VCASess::getReq( SSess &ses )
     }
     //Session/projects manual
     else if(wp_com == "manual") {
-	string fTp, fDoc = TUIS::docGet(proj()+"\n"+ses.lang, &fTp, TUIS::GetContent);
+	string fTp, fDoc = TUIS::docGet((ses.prm["doc"].size()?ses.prm["doc"]:proj())+"\n"+ses.lang, &fTp, TUIS::GetContent);
 	if(fDoc.size())	ses.page = mod->pgCreator(ses.prt, fDoc, "200 OK", "Content-Type: "+TUIS::mimeGet("."+fTp,""));
 	else ses.page = mod->pgCreator(ses.prt, mod->messPost(nodePath(), _("The project manual was not found!"),TWEB::Error), "404 Not Found");
     }

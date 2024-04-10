@@ -1,3 +1,28 @@
+2024-04-09 Roman (stable)
+- !!!:FIX:LibsDB.vcaBase: wlb_Main.{grpGraph,grpGraph10}: Procedure rewrote for unification to work with different elements,
+	so for use in all derivative frames like to wlb_Main.grpGraph10.
+    !!:wlb_Main.grpGraph10: Switched to inheritance from wlb_Main.grpGraph.
+    !!:wlb_Main.ElViewGraph: Appended of reading the dafault-static properties for clearing to them.
+	Some improved in processing the boolean type signals.
+	Improved in faster updating values after source changing.
+    FIX:wlb_Main.graphSelPrm: Fixed in translation "<Clear>" from the procedure.
+    FIX:wlb_Main.RootPgSo: The attribute "Procedure of the Demo play (demoPlayProc)" set to the type "Text (translate)".
+    wlb_Main.storeHouse: Some reordered in the Z coordinate for concealing of the form elements appearing and disappearing.
+- ModelsDB.{AGLKS.vca,Boiler.St}: Main page of the project appended by the attribute "Project document (prjDoc)"
+    with link to the document on OpenSCADA Wiki, and removed for the attribute "Status line items (statLine)" with it mark as optional.
+- SYS,DAQ.JavaLikeCalc: The sysTm() function appended by detection of time jumps after suspending
+	and what used in DAQ.JavaLikeCalc for preventing false messages "Calculation time has been exceeded ...".
+    Appended by the DEF_HTaskPer definition.
+- SYS: TCntrNode::cntrCmd(): The generic logging messages "load" and "save" some improved.
+- UI.{Vision,WebVision}: The specific attribute "Status line items (statLine)" marked as optional.
+- UI.QTCfg: The previous and next actions appended by information about the tab, like to favorites.
+- !:UI.{Vision,WebVision}: Appended by a specific attribute "Project document (fprjDoc)"
+	for customisation the document name and allowing WEB-pages in such role.
+- FIX:UI.Vision: Limiting icons size of the user fields in the status bar.
+- !!!:FIX:UI.WebVision: Appended of implementation the user fields in the status bar.
+    FIX: Columns sorting of the Table primitive from detached header prevented for non sortable tables.
+
+
 2024-04-03 Roman (stable)
 - !!!!:LibsDB.{OscadaLibs.tmplib_base,vcaBase.wlb_Main}:
     Appended by a template "Weather (weather)" of implementation weather forecast initially based on openweathermap.org.

@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/WebVision</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/WebVision.html" title="Модули/WebVision (94% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/WebVision.html" title="Модулі/WebVision (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/WebVision.html" title="Модули/WebVision (92% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/WebVision.html" title="Модулі/WebVision (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> </td>
 <td> Operation user interface (WEB)
 </td>
-<td> 6.9 </td>
+<td> 6.10 </td>
 <td> GPL2 </td>
 <td> ui_WebVision.so </td>
 <td> en,uk,ru,de </td>
@@ -54,8 +54,8 @@
 <dd> - expand the primitive "Diagram" by the mouse scaling operations;</dd>
 <dd> - implement own RTE-editor for the view Text of the primitive FormEl;</dd>
 <dd> - ElFigure: fix some properties loss (line width at the least) at the actions processing, in the way of the primitive code common refactoring;</dd>
-<dd> * expand the status-bar, with the functions:
-<dl><dd> - user status fields.</dd></dl></dd>
+<dd> + expand the status-bar, with the functions:
+<dl><dd> + user status fields.</dd></dl></dd>
 <dd> - ElFigure,Diagram: enable or make the anti aliasing, for the library GD;</dd>
 <dd> - implement the primitives "Diagram", "ElFigure" in the tag "SVG";</dd>
 <dd> - expand the variant "Animation" of the primitive "Media" in using the raw image files, like to PNG.</dd></dl>
@@ -138,7 +138,8 @@
 <li> the menu buttons of call the page printing and data exporting for:
 <ul><li> printing: Main Page, Documents;</li>
 <li> exporting: Documents (HTML,CSV), Tables (CSV).</li></ul></li>
-<li> manual on the VCA-project — calls, by a click, the manual on the visualization project for the file "<b>{ProjVCA_ID}.[pdf|html|odt]</b>" in <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">the document folder</a>.</li></ul></li>
+<li> manual on the VCA-project — calls by a click the manual on the visualization project for the file "<b>{ProjVCA_ID}.[pdf|html|odt]</b>" in <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">the document folder</a> or specified in the <a href="#SpecAttrs">"prjDoc" attribute</a>;</li>
+<li> panel of user statuses and actions when specified in the <a href="#SpecAttrs">"statLine" attribute</a>; mouse clicking left, right and double forms events to the main interface page.</li></ul></li>
 <li> In the main field of the status line various messages and assistance messages are displayed.</li></ul>
 <p>The module supports multi-language which one enabled by the <a href="../Program_manual.html#ConfigTr" title="Special:MyLanguage/Documents/Program manual">dynamic messages translation of OpenSCADA</a>. The gotten language passes by the module <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> and detects in way and by the order:
 </p>
@@ -234,11 +235,6 @@
 <th> Appointment
 </th></tr>
 <tr>
-<td> notify{N}, notifyVisWebVision{N} (page) </td>
-<td> Notification: type {N} </td>
-<td> Specifies a notifier and a procedure of the notification resource obtaining according to the <a href="../Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">"Signalling (Alarms)" conception</a>.
-</td></tr>
-<tr>
 <td> keepAspectRatio (main page) </td>
 <td> Keep aspect ratio on scale </td>
 <td> Keep aspect ratio of the pages on scale.
@@ -249,9 +245,28 @@
 <td> Hide the status bar of the main window.
 </td></tr>
 <tr>
-<td> userSetVis (main page, created manually, the type "String") </td>
+<td> notify{N}, notifyVisWebVision{N} (page) </td>
+<td> Notification: type {N} </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Create manually with the type "Text"!
+<p>Specifies a notifier and a procedure of the notification resource obtaining according to the <a href="../Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">"Signalling (Alarms)" conception</a>.
+</p>
+</td></tr>
+<tr>
+<td> statLine (main page) </td>
+<td> Status line items </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Create manually with the type "Text"!
+<p>Text field with description of the status line item in the string form "<b>{Id}:{Label}:{ToolTip}:{Color}:{Img}</b>", where:
+</p>
+<ul><li> "Id" — identifier, uses also to form events from the widget "stIt_{Id}".</li>
+<li> "Label" — visual label of the status element.</li>
+<li> "ToolTip" — context help about the element.</li>
+<li> "Color" — label color.</li>
+<li> "Img" — image of the status element, instead the label.</li></ul>
+</td></tr>
+<tr>
+<td> userSetVis (main page) </td>
 <td> Setting the user </td>
-<td>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Create manually with the type "String"!
 <p>Change the user or call a dialog to select it. Variants of the value:
 </p>
 <ul><li> "*" — call for a selecting dialog of the user; </li>
@@ -262,24 +277,39 @@
 </pre></div>
 </td></tr>
 <tr>
+<td> prjDoc (main page) </td>
+<td> Project document </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Create manually with the type "String"!
+<p>Specifying the project documentation of call from the status line's button with a possibility of disabling-concealing the button at empty value. The documentation specified in view "<b>{OffLine}|{OnLineOpenSCADAWiki}</b>", for example for the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">AGLCS project</a> — "AGLCS|Using/Model_AGLKS". The online part is used in first order at its specifying!
+</p>
+</td></tr>
+<tr>
 <td> vs_goHttpUrl (view "Button" of the primitive "FormEl") </td>
 <td> Go to the HTTP URL </td>
-<td> Go to the specified URL at the button press
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Create manually with the type "String"!
+<p>Go to the specified URL at the button press.
+</p>
 </td></tr>
 <tr>
 <td> vs_background (views "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" of the primitive "FormEl") </td>
 <td> Custom background </td>
-<td> Specifies for the custom background in the form <b>{color}-{transp} {image}</b>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Create manually with the type "String"!
+<p>Specifies for the custom background in the form <b>{color}-{transp} {image}</b>.
+</p>
 </td></tr>
 <tr>
 <td> vs_border (views "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" of the primitive "FormEl") </td>
 <td> Custom border </td>
-<td> Specifies for the custom border in the standard CSS-form <b>{wdth}px {style} {color}</b>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Create manually with the type "String"!
+<p>Specifies for the custom border in the standard CSS-form <b>{wdth}px {style} {color}</b>.
+</p>
 </td></tr>
 <tr>
 <td> vs_winTitle (the view "Box") </td>
 <td> Window title </td>
-<td> Dynamic window title value
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Create manually with the type "String"!
+<p>Dynamic window title value.
+</p>
 </td></tr></table>
 <p>Consider the implementation of each primitive in more detail.
 </p>
@@ -724,5 +754,5 @@ GROUNDS: At working with the board <a class="external" href="http://oscada.org/w
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/en">Modules/WebVision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2961</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/en">Modules/WebVision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2963</td></tr></table></body>
 </html>

@@ -483,9 +483,11 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 
 	//Get and activate for specific attributes to the master-page
 	servSet("/UI/VCAEngine"+this.addr, 'com=com', "<CntrReqs>"+
-	    "<activate path='/%2fserv%2fattr%2fkeepAspectRatio' aNm='Keep aspect ratio on scale' aTp='0'/>"+
-	    "<activate path='/%2fserv%2fattr%2fstBarNoShow' aNm='Do not show the status bar' aTp='0'/>"+
-	    "<activate path='/%2fserv%2fattr%2fuserSetVis'/>"+
+	    "<activate path='/%2fserv%2fattr%2fkeepAspectRatio' aNm='Keep aspect ratio on scale' aTp='0' />"+
+	    "<activate path='/%2fserv%2fattr%2fstBarNoShow' aNm='Do not show the status bar' aTp='0' />"+
+	    "<activate path='/%2fserv%2fattr%2fstatLine' />"+
+	    "<activate path='/%2fserv%2fattr%2fuserSetVis' />"+
+	    "<activate path='/%2fserv%2fattr%2fprjDoc' />"+
 	    "</CntrReqs>");
 
 	this.makeEl(servGet(pgId,'com=attrsBr'), false, true);
@@ -635,7 +637,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	var elStyle = '';
 	this.isVisible = true;
 	if(!(parseInt(this.attrs['en']) && (this.pg || parseInt(this.attrs['perm'])&SEC_RD)))
-	{ elStyle += 'visibility : hidden; '; this.isVisible = false; }
+	{ elStyle += 'visibility: hidden; '; this.isVisible = false; }
 	var geomX = parseFloat(this.attrs['geomX']);
 	var geomY = parseFloat(this.attrs['geomY']);
 	if(this.pg) { geomX = geomY = 0; elStyle += 'overflow: hidden; '; }
@@ -681,8 +683,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		masterPage.status.style.height = (masterPage.status.height-1)+"px";
 		masterPage.status.style.fontSize = Math.floor(masterPage.status.height*0.7)+"px";
 
+		//  Status creation
 		if(toCrtStBar) {
 		    stBar = "<table width='100%'><TR><td id='StatusBar' width='100%'/>";
+		    if(this.attrs['statLine'] != null)
+			stBar += "<td id='st_userFlds' class='vertalign' title='###User status fields.###' style='padding-left: 2px; padding-right: 2px;'/>";
 		    stBar += "<td id='st_man' title='###Field of getting the project manual.###'>"+
 				"<a href='"+location.pathname+"?com=manual' target='_blank'>"+
 				    "<img height='"+(masterPage.status.height-2)+"px' src='/"+MOD_ID+"/img_manual'/></a></td>";
@@ -706,8 +711,34 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    stBar += "</TR></table>";
 		    masterPage.status.innerHTML = stBar;
 		}
-
 		elStyle += "overflow: visible; ";
+
+		//  Status updating
+		if((tVl=this.attrs['prjDoc']) != null && this.attrsMdf['prjDoc']) {
+		    var st_man = masterPage.status.firstChild.rows[0].cells['st_man'];
+		    st_man.style.visibility = tVl.length ? 'visible' : 'hidden';
+		    st_man.firstChild.href = ((tVl=tVl.split('|')).length >= 2 && tVl[1].length)
+						? "http://oscada.org/wiki/Special:MyLanguage/"+tVl[1]
+						: location.pathname+"?com=manual"+(tVl[0].length?"&doc="+tVl[0]:"");
+		}
+		if((tVl=this.attrs['statLine']) != null && this.attrsMdf['statLine']) {
+		    var st_userFlds = masterPage.status.firstChild.rows[0].cells['st_userFlds'];
+		    tVl = tVl.split('\n');
+		    tVl2 = "";
+		    for(var i = 0; i < tVl.length; i++) {
+			if((tVl3=tVl[i].split(':')).length < 2)	continue;
+			if(tVl3.length < 4 || !tVl3[3].length) tVl3[3] = "black";
+			tVl4 =	"id='"+tVl3[0]+"' style='color: "+tVl3[3]+"; border: 1px solid "+tVl3[3]+"; ' "+
+				"onmousedown='setWAttrs(masterPage.addr,\"event\",\"key_mousePres\"+evMouseGet(event)+\":/stIt_\"+this.id);' "+
+				"onmouseup='setWAttrs(masterPage.addr,\"event\",\"key_mouseRels\"+evMouseGet(event)+\":/stIt_\"+this.id);' "+
+				"ondblclick='setWAttrs(masterPage.addr,\"event\",\"key_mouseDblClick:/stIt_\"+this.id);' ";
+			if(tVl3.length >= 3 && tVl3[2].length) tVl4 += "title='"+tVl3[2]+"' ";
+			tVl2 += (tVl3.length >= 2 && tVl3[1].length)
+				? "<span "+tVl4+">"+tVl3[1]+"</span>"
+				: "<img "+tVl4+"height='"+(masterPage.status.height-4)+"px' src='/"+MOD_ID+this.addr+"?com=res&val="+tVl3[4].replace(/ /g,'%20')+"' />";
+		    }
+		    st_userFlds.innerHTML = tVl2;
+		}
 	    }
 	}
 
@@ -1885,7 +1916,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 				//  Adjusting the percent width columns
 				for(iH = 0, cO = null; iH < tHd.tHead.rows[0].cells.length; iH++) {
-				    tHd.tHead.rows[0].cells[iH].onclick = function() { this.offsetParent.offsetParent.firstChild.sort(this.cellIndex+1); }
+				    tHd.tHead.rows[0].cells[iH].onclick = !tbl.sortCol ? null : function() { this.offsetParent.offsetParent.firstChild.sort(this.cellIndex+1); }
 				    if(tHd.tHead.rows[0].cells[iH].style.width.indexOf("%") >= 0)
 					(cO=tHd.tHead.rows[0].cells[iH]).style.width = tbl.tHead.rows[0].cells[iH].clientWidth+"px";
 				}

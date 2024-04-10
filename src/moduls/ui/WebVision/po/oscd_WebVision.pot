@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 08:35+0200\n"
+"POT-Creation-Date: 2024-04-08 22:31+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -199,6 +199,9 @@ msgid "Notificator %1"
 msgstr ""
 
 msgid "Field for printing and exporting data."
+msgstr ""
+
+msgid "User status fields."
 msgstr ""
 
 msgid "Field of getting the project manual."

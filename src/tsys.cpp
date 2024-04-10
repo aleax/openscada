@@ -50,6 +50,7 @@
 #define DEF_Id		"InitSt"
 #define DEF_StName	_("Initial Station")
 #define DEF_ClockRT	false
+#define DEF_HTaskPer	1
 #define DEF_User	"root"
 #define DEF_ConfFile	sysconfdir_full "/oscada.xml"
 #define DEF_WorkDB	DB_CFG
@@ -131,7 +132,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     mName(dataRes()), mNameB(dataRes()), mWorkDB(dataRes()), mSelDB(dataRes()), mMainCPUs(dataRes()),
     mTaskInvPhs(DEF_TaskInvPhs), mSaveAtExit(DEF_SaveAtExit), mSavePeriod(DEF_SavePeriod), mModifCalc(DEF_ModifCalc),
     rootModifCnt(0), sysModifFlgs(MDF_NONE), mStopSignal(0), mN_CPU(1),
-    mainPthr(0), mSysTm(0), mClockRT(DEF_ClockRT), mPrjCustMode(true), mPrjNm(dataRes()), mCfgCtx(NULL), mCfgCtxLast(NULL),
+    mainPthr(0), mSysTm(time(NULL)), mSysTmJump(0), mClockRT(DEF_ClockRT), mPrjCustMode(true), mPrjNm(dataRes()), mCfgCtx(NULL), mCfgCtxLast(NULL),
     mRdStLevel(DEF_RdStLevel), mRdRestConnTm(DEF_RdRestConnTm), mRdTaskPer(DEF_RdTaskPer), mRdPrimCmdTr(DEF_RdPrimCmdTr),
     trPassN(0), trChkAndFix(false), trChkAndFixMB(false)
 {
@@ -2528,8 +2529,11 @@ void *TSYS::ServTask( void * )
 void *TSYS::HPrTask( void * )
 {
     while(!TSYS::taskEndRun()) {
+	if((time(NULL)-SYS->mSysTm) > 10*DEF_HTaskPer)
+	    SYS->mSysTmJump = time(NULL);
 	SYS->mSysTm = time(NULL);
-	TSYS::taskSleep(1000000000);
+
+	TSYS::taskSleep(DEF_HTaskPer*1000000000ll);
     }
 
     return NULL;

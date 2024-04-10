@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 08:35+0200\n"
+"POT-Creation-Date: 2024-04-08 22:31+0300\n"
 "PO-Revision-Date: 2009-08-26 08:21+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -211,6 +211,9 @@ msgstr "Notifier %1"
 
 msgid "Field for printing and exporting data."
 msgstr "Feld zum Drucken und Exportieren von Daten."
+
+msgid "User status fields."
+msgstr "Benutzerstatusfelder."
 
 msgid "Field of getting the project manual."
 msgstr "Bereich zum Erhalten des Projekthandbuchs."
