@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -414,7 +414,7 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
 
 string TMess::translGetU( const string &base, const string &user, const string &src )
 {
-    if(!translDyn() && src.empty()) return base;
+    if(!translDyn() && src.empty()) return base.c_str();	//!!!! Only base without service space symbols
 
     return translGet(base, langCode(user), src);
 }

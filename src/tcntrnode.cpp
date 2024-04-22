@@ -228,7 +228,8 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 			    if(iA->find("key_") == 0)
 				rowV = iA->substr(4)+"="+opt->attr(*iA);
 		    }
-		    logMess = TSYS::strMess(_("set the cell ['%s':%s] to '%s'."), rowV.c_str(), opt->attr("col").c_str(), opt->text().c_str());
+		    logMess = TSYS::strMess(_("set the cell ['%s':%s] to '%s'."), rowV.c_str(), opt->attr("col").c_str(),
+				(((logMess=TSYS::strEncode(opt->text(),TSYS::Limit,"100"))==opt->text())?logMess:logMess+"...").c_str());
 		}
 		else if(opt->childSize() && opt->childGet(0)->name() == "fld") {
 		    logMess = _("command with arguments:");

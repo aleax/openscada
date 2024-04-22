@@ -4180,6 +4180,26 @@ MjU2YzcuMDc4IDAgMTIuODE4IDUuNzM5IDEyLjgxOCAxMi44MTggMCA3LjA3OC01Ljc0IDEyLjgx
 Ny0xMi44MTggMTIuODE3SDM5LjI1Yy05LjEwMyAwLTE2LjQ4LTcuMzc4LTE2LjQ4LTE2LjQ4IDAt
 OS4xMDMgNy4zNzctMTYuNDggMTYuNDgtMTYuNDgiIGZpbGw9IiNlZmVmZWQiPjwvcGF0aD48L3N2
 Zz4=');
+INSERT INTO wlb_Main_mime VALUES('weath10n','image/svg+xml;1.43262','PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEi
+IHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93
+d3cudzMub3JnLzE5OTkveGxpbmsiIGRhdGEtdi0zZTZlOWYxMj0iIiB3aWR0aD0iNTBweCIgaGVp
+Z2h0PSI1MHB4IiB2aWV3Qm94PSIwIDAgMTQ4IDE0OCIgY2xhc3M9Im93bS13ZWF0aGVyLWljb24i
+PjxwYXRoIGQ9Ik02NS4wMyA2MC41MTRjLjY0MiAwIDEuMjcuMDU3IDEuODg5LjE0M2ExNS40NzYg
+MTUuNDc2IDAgMDEtLjM0NC0zLjIzYzAtOC41MjQgNi45MS0xNS40MzcgMTUuNDM1LTE1LjQzNyA4
+LjI5NCAwIDE1LjA0MiA2LjU0NyAxNS40MDIgMTQuNzUyYTkuMjI0IDkuMjI0IDAgMDE2LjIwOC0y
+LjQwNCA5LjI2MyA5LjI2MyAwIDAxOS4yNjMgOS4yNjMgOS4xNjUgOS4xNjUgMCAwMS0uNjE5IDMu
+MzA1Yy43LS4xNCAxLjQyMy0uMjE4IDIuMTYxLS4yMTggNS45NyAwIDEwLjgwNiA0LjgzOSAxMC44
+MDYgMTAuODA1IDAgNS45Ny00LjgzNiAxMC44MDYtMTAuODA2IDEwLjgwNkg2NS4wMzFjLTcuNjc0
+IDAtMTMuODkzLTYuMjE5LTEzLjg5My0xMy44OTMgMC03LjY3MSA2LjIxOS0xMy44OTIgMTMuODkz
+LTEzLjg5MiIgZmlsbD0iIzNiM2M0MCI+PC9wYXRoPjxwYXRoIGQ9Ik0zOS4yNSA3My4wNWMuNzYg
+MCAxLjUwNS4wNyAyLjI0LjE3YTE4LjI5NiAxOC4yOTYgMCAwMS0uNDEtMy44MzRjMC0xMC4xMTQg
+OC4yLTE4LjMxIDE4LjMxMi0xOC4zMSA5Ljg0IDAgMTcuODQzIDcuNzY2IDE4LjI3IDE3LjVhMTAu
+OTM1IDEwLjkzNSAwIDAxNy4zNjYtMi44NTNjNi4wNjggMCAxMC45ODcgNC45MjIgMTAuOTg3IDEw
+Ljk5IDAgMS4zODItLjI2NyAyLjctLjczMiAzLjkxOGExMi44NjggMTIuODY4IDAgMDEyLjU2NC0u
+MjU2YzcuMDc4IDAgMTIuODE4IDUuNzM5IDEyLjgxOCAxMi44MTggMCA3LjA3OC01Ljc0IDEyLjgx
+Ny0xMi44MTggMTIuODE3SDM5LjI1Yy05LjEwMyAwLTE2LjQ4LTcuMzc4LTE2LjQ4LTE2LjQ4IDAt
+OS4xMDMgNy4zNzctMTYuNDggMTYuNDgtMTYuNDgiIGZpbGw9IiNlZmVmZWQiPjwvcGF0aD48L3N2
+Zz4=');
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','El_text_alarm','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;alignment;text;',2);
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','box_alarm','/wlb_mnEls/wdg_El_Alarm','name;geomX;geomY;geomW;geomH;geomXsc;geomYsc;geomZ;fillColor;elLst;',2);
@@ -9760,7 +9780,7 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 if(toCalcCycles > 0.1) {
 	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
 	toCalcCycles = max(0, toCalcCycles-1);
-}','','',-1,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1712585304);
+}','','',-1,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1713699319);
 INSERT INTO wlb_Main VALUES('graphSelPrm','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAD/klEQVRYhe2Z224bRRiA57gHr8/H2MEpLSCRovYGiXsE4qJ9gEq8RR+A
 23LDg0TiFSJ6Ty8hvSEJJSRqnMb2endnZ2dPPxdxTZq6jllMlkr+rmakmX//z/96ZjSLv/v+Bx9p
@@ -12192,7 +12212,7 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	else ev_rez += sval+"\n";
 }
 event = ev_rez;','','',1000,'perm;name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1570377057);
-INSERT INTO wlb_Main VALUES('grpGraph10','','/wlb_Main/wdg_grpGraph',0,'','','',-1,'name;geomW;',1712585304);
+INSERT INTO wlb_Main VALUES('grpGraph10','','/wlb_Main/wdg_grpGraph',0,'','','',-1,'name;geomW;',1712985511);
 INSERT INTO wlb_Main VALUES('anShow1s','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAWCAIAAAD/3A1jAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAG50lEQVRYhdVXWWwb1xW9bxYOOdzERRTFVbtEWRIlWY5dWbHdqI2auC3Q
 nyDoR4EW8H+B+qctYOjDRVC4CBAU7UdRFG4LNAWCRj8tWtiwnTiKHFkRJSaUrJUUtXARZXK4zsJZ
@@ -17564,15 +17584,15 @@ INSERT INTO wlb_Main_io VALUES('grpGraph','name','Graphics group',41,'','','','�
 INSERT INTO wlb_Main_io VALUES('grpGraph','dscr','The element is provided for simultaneous observation of trends and control the parameters in the signal object, includes both instances of the widget "Graphics group element (ElViewGraph)" of each parameter (up to 8) and the widget "Diagram" to monitor the parameters'' trends and browsing history, and also the scroll bar for fast navigation on allowed history of selected parameters for show.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.6.0
+Version: 1.6.1
 License: GPLv2',32,'','','','Елемент слугує для одночасного спостереження трендів та управління параметрами у об''єкті сигналізації, включає у себе як екземпляри віджету "Елемент групи графіків (ElViewGraph)" кожного параметру (до 8), так і віджет "Діаграма" для спостереження за графіками параметрів та перегляду історії, а також горизонтальну стрічку гортання для швидкої навігації за доступною історією обраних для відображення параметрів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.6.0
+Версія: 1.6.1
 Ліцензія: GPLv2','','Элемент служит для одновременного наблюдения трендов и управления параметрами в объекте сигнализации, включает в себя как экземпляры виджета "Элемент группы графиков (ElViewGraph)" каждого параметра (до 8), так и виджет "Диаграмма" для наблюдения за графиками параметров и просмотра истории, а также горизонтальную полосу прокрутки для быстрой навигации по доступной истории выбранных для отображения параметров.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.6.0
+Версия: 1.6.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','geomW','900',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','geomH','600',32,'','','','','','','','','','');
@@ -19162,7 +19182,7 @@ INSERT INTO wlb_Main_io VALUES('grpGraph','geomX','4',32,'','','trnd1','','','',
 INSERT INTO wlb_Main_io VALUES('grpGraph','geomY','104',32,'','','trnd1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','geomW','892',32,'','','trnd1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','geomH','477',32,'','','trnd1','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grpGraph','geomZ','8',32,'','','trnd1','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grpGraph','geomZ','100',32,'','','trnd1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','active','1',32,'','','trnd1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','trcPer','1',40,'','','trnd1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','tSek','0',40,'','','trnd1','','','','','','','');
@@ -19175,7 +19195,7 @@ INSERT INTO wlb_Main_io VALUES('grpGraph','prm0bordL','0',32,'','','trnd1','',''
 INSERT INTO wlb_Main_io VALUES('grpGraph','prm0bordU','0',32,'','','trnd1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','prm0color','mediumorchid',32,'','','trnd1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','prm0val',NULL,32,'','','trnd1','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grpGraph','curSek','1712585304',8,'','','trnd1','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grpGraph','curSek','1713699318',8,'','','trnd1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','curUSek','0',0,'','','trnd1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','prm1addr','',0,'','','trnd1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','prm1bordL','0',0,'','','trnd1','','','','','','','');
@@ -20967,7 +20987,7 @@ INSERT INTO wlb_Main_io VALUES('grpGraph','geomX','2',32,'','','arh','','','',''
 INSERT INTO wlb_Main_io VALUES('grpGraph','geomY','581',32,'','','arh','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','geomW','897',32,'','','arh','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','geomH','20',32,'','','arh','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grpGraph','geomZ','9',32,'','','arh','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grpGraph','geomZ','101',32,'','','arh','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','active','0',40,'','','arh','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','elType','7',32,'','','arh','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','value','0',8,'','','arh','','','','','','','');
@@ -21343,15 +21363,15 @@ INSERT INTO wlb_Main_io VALUES('grpGraph10','name','Graphics group 10',41,'','',
 INSERT INTO wlb_Main_io VALUES('grpGraph10','dscr','The element is provided for simultaneous observation of trends and control the parameters in the signal object, includes both instances of the widget "Graphics group element (ElViewGraph)" of each parameter (up to 10) and the widget "Diagram" to monitor the parameters'' trends and browsing history, and also the scroll bar for fast navigation on allowed history of selected parameters for show.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.6.0
+Version: 1.6.1
 License: GPLv2',32,'','','','Елемент слугує для одночасного спостереження трендів та управління параметрами у об''єкті сигналізації, включає у себе як екземпляри віджету "Елемент групи графіків (ElViewGraph)" кожного параметру (до 10), так і віджет "Діаграма" для спостереження за графіками параметрів та перегляду історії, а також горизонтальну стрічку гортання для швидкої навігації за доступною історією обраних для відображення параметрів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.6.0
+Версія: 1.6.1
 Ліцензія: GPLv2','','Элемент служит для одновременного наблюдения трендов и управления параметрами в объекте сигнализации, включает в себя как экземпляры виджета "Элемент группы графиков (ElViewGraph)" каждого параметра (до 10), так и виджет "Диаграмма" для наблюдения за графиками параметров и просмотра истории, а также горизонтальную полосу прокрутки для быстрой навигации по доступной истории выбранных для отображения параметров.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.6.0
+Версия: 1.6.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','geomW','1160',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','geomH','600',32,'','','','','','','','','','');
@@ -24653,12 +24673,12 @@ INSERT INTO wlb_Main_io VALUES('weather','arg0val','0',8,'','','curTemp','','','
 INSERT INTO wlb_Main_io VALUES('weather','arg0cfg',';f;1',0,'','','curTemp','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','geomX','1038',32,'','','el10','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','geomXsc','1.04',32,'','','el10','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grpGraph10','geomZ','13',32,'','','el10','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grpGraph10','geomZ','9',32,'','','el10','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','color','darkcyan',32,'','','el10','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','colorDef','darkcyan',96,'labColorGrph10','','el10','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','geomX','923',32,'','','el9','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','geomXsc','1.04',32,'','','el9','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grpGraph10','geomZ','12',32,'','','el9','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grpGraph10','geomZ','8',32,'','','el9','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','color','lightyellow',32,'','','el9','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','colorDef','lightyellow',96,'labColorGrph9','','el9','','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));

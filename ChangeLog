@@ -1,3 +1,14 @@
+2024-04-22 Roman (stable)
+- !!:LibsDB.OscadaLibs: The library tmplib_base appended by a template "Disk SMART (DiskSMART)" of representing disks' SMART.
+- FIX:LibsDB.vcaBase: The library wlb_Main appended by an extra icon 'weath10n' for the widget "Weather (weather)".
+    FIX:wlb_Main.grpGraph: Fixed in the geomZ for the "trnd1" and "arh" included widgets.
+    FIX:wlb_Main.grpGraph10: Fixed in the geomZ for the extra elements "el9" and "el10".
+- FIX:SYS: TMess: The function translGetU() fixed in cleaning service space symbols in non dynamic translation modes.
+    TCntrNode::cntrCmd(): The logging message of setting the table cells "set the cell ['%s':%s] to '%s'."
+	appended by value limiting in 100 symbols.
+- UI.WebVision: The Table view of the FormEl primitive is appended by borders highlight in the items selection.
+
+
 2024-04-09 Roman (stable)
 - !!!:FIX:LibsDB.vcaBase: wlb_Main.{grpGraph,grpGraph10}: Procedure rewrote for unification to work with different elements,
 	so for use in all derivative frames like to wlb_Main.grpGraph10.

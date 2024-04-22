@@ -15,7 +15,7 @@ The library was created to provide main templates of the DAQ-sources processing 
 Author: Roman Savochenko <roman@oscada.org>
 Used by: Most projects on OpenSCADA
 Founded: January 2006
-Version: 2.0.1
+Version: 2.2.0
 License: GPLv2
 DOC: Libs_Main|Libs/Main','Бібліотека основних шаблонів опрацювання DAQ-джерел та похідних сервісів.
 
@@ -24,7 +24,7 @@ DOC: Libs_Main|Libs/Main','Бібліотека основних шаблоні�
 Автор: Роман Савоченко <roman@oscada.org>
 Використано: Більшість проектів OpenSCADA
 Засновано: Січень 2006
-Версія: 2.0.1
+Версія: 2.2.0
 Ліцензія: GPLv2
 DOC: Libs_Main|Libs/Main','tmplib_base','Основная библиотека','Библиотека основных шаблонов обработки DAQ-источников и производных сервисов.
 
@@ -33,7 +33,7 @@ DOC: Libs_Main|Libs/Main','tmplib_base','Основная библиотека',
 Автор: Роман Савоченко <roman@oscada.org>
 Использовано: Большинство проектов OpenSCADA
 Основано: Январь 2006
-Версия: 2.0.1
+Версия: 2.2.0
 Лицензия: GPLv2
 DOC: Libs_Main|Libs/Main');
 INSERT INTO ParamTemplLibs VALUES('DevLib','Industrial devices','Промислові пристрої','The user protocol devices library created to provide access to industrial device''s data through network, like to common industrial automation devices and wide resources counters, with protocols simple enough to implement into the User Protocol module, using the presented complex protocols (ModBus, OPC_UA, HTTP) or directly on the internal like to Java language.
@@ -10432,6 +10432,117 @@ else {
 	if(tVl.length)	tErr += ": "+tVl;
 }
 f_err = tErr;','','',1712056091);
+INSERT INTO tmplib_base VALUES('DiskSMART','Disk SMART','','','','','',10,0,'JavaLikeCalc.JavaScript
+if(f_start)	{ srcPrm = false; items = new Object(); }
+
+alLev = 0;
+tErr = "";
+
+//Connect to source
+if(typeof(srcPrm) != "TCntrNode:TValue:TParamContr") srcPrm = SYS.DAQ.nodeAt(srcAddr,".");
+if(!srcPrm) { tErr = tr("No connection to source object"); alLev = 3; }
+else if(srcPrm.err.get() != 0)	 { tErr = tr("Source error")+": "+srcPrm.err.get().parse(1,":"); alLev = 3; }
+else {
+	//Attributes list get and "items" update
+	nLst = srcPrm.nodeList("a_");
+	for(i_n = 0; i_n < nLst.length; i_n++) {
+		aId = nLst[i_n].slice(2);
+		aNd = srcPrm[nLst[i_n]];
+		if(items[aId].isEVal()) {
+			items[aId] = itW = new Object();
+			itW.descr = aNd.descr();
+			if((tVl=defs.match("^"+aId+":([^\n]+)","m")).length)
+				itW.descr = tVl[1];
+
+			// Writeable check
+			//SYS.messInfo("UPS test", aId+": aNd.flg()="+aNd.flg());
+			if((itW.wr=!(aNd.flg()&0x04)) && aNd.flg()&0x01) {
+				itW.wr = "";
+				for(off = 0, pos = 0; (selId=aNd.values().parse(0,";",off)).length; pos++)
+					itW.wr += ((selId==(selNm=aNd.selNames().parse(pos,";")))?selId:(selNm+" ("+selId+")"))+";";
+			}
+			itW.alarm = 0;
+		}
+		itW = items[aId];
+		tvl = aNd.get();
+		if(aId == 5) {	//Realocated sectors count
+			if(tvl > 100)	{ itW.alarm = 2; tErr += tr("Too many realocated sectors")+"; "; }
+			else if(tvl)	{ itW.alarm = 1; tErr += tr("Some reallocated sectors are presented")+"; "; }
+			else itW.alarm = 0;
+		}
+		else if(aId == 190) {	//Airflow temperature
+			if(tvl > 255)	tvl = tvl&0xFF;
+			if(tvl > 70)		{ itW.alarm = 2; tErr += tr("Hard disk is overheated")+"; "; }
+			else if(tvl > 50) { itW.alarm = 1; tErr += tr("Temperature high")+"; "; }
+			else itW.alarm = 0;
+		}
+		else if(aId == 194) {	//Temperature
+			if(tvl > 255)	{ tvl = tvl&0xFF; itW.val = tvl; }
+			if(tvl > 70)		{ itW.alarm = 2; tErr += tr("Hard disk is overheated")+"; "; }
+			else if(tvl > 50) { itW.alarm = 1; tErr += tr("Temperature high")+"; "; }
+			else itW.alarm = 0;
+		}
+		else if(aId == 197) {	//Current pending sectors
+			if(tvl > 10) { itW.alarm = 2; tErr += tr("Too many pending sectors")+"; "; }
+			else if(tvl) { itW.alarm = 1; tErr += tr("Some pending sectors are presented")+"; "; }
+			else itW.alarm = 0;
+		}
+		itW.val = tvl;
+	}
+
+	//Alarms process and mark
+	//SYS.messInfo("HDDSMART", "TEST 00");
+	/*varS = 5;	//Realocated sectors count
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		if(tP.get() > 10) { items[varS].alarm = 2; tErr += tr("Too many realocated sectors")+"; "; }
+		else if(tP.get()) { items[varS].alarm = 1; tErr += tr("A realocated sectors present")+"; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = 190;	//Airflow temperature
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		tvl = tP.get();
+		if(tvl > 255) { tvl = tvl&0xFF; items[varS].val = tvl; }
+		if(tvl > 70) { items[varS].alarm = 2; tErr += tr("Hard disk overheated")+"; "; }
+		else if(tvl > 50) { items[varS].alarm = 1; tErr += tr("Temperature high")+"; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = 194;	//Temperature
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		tvl = tP.get();
+		if(tvl > 255) { tvl = tvl&0xFF; items[varS].val = tvl; }
+		if(tvl > 70) { items[varS].alarm = 2; tErr += tr("Hard disk overheated")+"; "; }
+		else if(tvl > 50) { items[varS].alarm = 1; tErr += tr("Temperature high")+"; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = 197;	//Current pending sectors
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		if(tP.get() > 10) { items[varS].alarm = 2; tErr += tr("Too many pending sectors")+"; "; }
+		else if(tP.get()) { items[varS].alarm = 1; tErr += tr("A pending sectors present")+"; "; }
+		else items[varS].alarm = 0;
+	}*/
+
+	//Set variables process
+	for(var aIt in items) {
+		it = items[aIt];
+		if(!it.set.isEVal()) {
+			aNd = srcPrm["a_"+it.id];
+			if(aNd.flg()&0x01 && (selV=it.set.match(".+\\((.+)\\)$")).length) it.set = selV[1];
+			aNd.set(it.set);
+			it.set = EVAL_REAL;
+		}
+		alLev = max(alLev, it.alarm);
+	}
+}
+
+//SYS.messInfo("UPS test", "tErr="+tErr+"; alLev="+alLev);
+tErr = tErr.length ? ""+alLev+":"+tErr : "0";
+
+//Alarms forming
+if(tErr.toInt() && tErr.toInt() != f_err.toInt())
+	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -(2+alLev), SHIFR);
+else if(f_err.toInt() && !tErr.toInt())
+	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
+f_err = tErr;','','',1712988429);
 CREATE TABLE IF NOT EXISTS 'flb_Controller' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO flb_Controller VALUES('prescr','Prescriptions manager (moved)','','','!!!!: Moved and replaced by the template PrescrTempl.manager. Will be removed soon
 Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
@@ -15689,6 +15800,12 @@ INSERT INTO Trs VALUES('Initial reading in pos=%1(%2)','','','');
 INSERT INTO Trs VALUES('No powernet','','','');
 INSERT INTO Trs VALUES('Scheduled currents call','','','');
 INSERT INTO Trs VALUES('Scheduled forecast call','','','');
+INSERT INTO Trs VALUES('Too many realocated sectors','','','');
+INSERT INTO Trs VALUES('Some reallocated sectors are presented','','','');
+INSERT INTO Trs VALUES('Hard disk is overheated','','','');
+INSERT INTO Trs VALUES('Too many pending sectors','','','');
+INSERT INTO Trs VALUES('Some pending sectors are presented','','','');
+INSERT INTO Trs VALUES('NORMA','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_base_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_base_io VALUES('digAlarm','in','Input',3,144,'Input|in',2,'Вхід','','Вход','','');
 INSERT INTO tmplib_base_io VALUES('simleBoard','in','Input',2,128,'Parameter|var',0,'Вхід','','Вход','','');
@@ -16020,6 +16137,13 @@ INSERT INTO tmplib_base_io VALUES('weather','schedCur','Scheduling at CRON of cu
 INSERT INTO tmplib_base_io VALUES('weather','schedFC','Scheduling at CRON of forecast update',0,64,'0 8 * * *',1,'','','','','');
 INSERT INTO tmplib_base_io VALUES('weather','current','Current',4,16,'',3,'','','','','');
 INSERT INTO tmplib_base_io VALUES('weather','forecast','Forecast',4,16,'',4,'','','','','');
+INSERT INTO tmplib_base_io VALUES('DiskSMART','srcAddr','Source object''s address',0,64,'',0,'','','','','');
+INSERT INTO tmplib_base_io VALUES('DiskSMART','items','All items',4,33,'',1,'','','','','');
+INSERT INTO tmplib_base_io VALUES('DiskSMART','defs','Item definitions',0,36,'',2,'','','','','');
+INSERT INTO tmplib_base_io VALUES('DiskSMART','this','The object',4,0,'',3,'','','','','');
+INSERT INTO tmplib_base_io VALUES('DiskSMART','SHIFR','Code',0,0,'',4,'','','','','');
+INSERT INTO tmplib_base_io VALUES('DiskSMART','NAME','Name',0,0,'',5,'','','','','');
+INSERT INTO tmplib_base_io VALUES('DiskSMART','DESCR','Description',0,0,'',6,'','','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_DevLib_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_DevLib_io VALUES('SCU750','transport','Transport',0,64,'SCU750',0,'Транспорт','','Транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('SCU750','addr','Device address (-1...255)',1,64,'1',1,'Адрес устройства (-1...255)','','Адреса пристрою (-1...255)','','');

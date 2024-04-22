@@ -31,6 +31,7 @@ var tmFullUpd = 5;			//Full tree updating time, seconds
 var tmAlrmUpd = 0.5;			//Alarms updating time, seconds
 var limTblItmCnt = 300;			//Limit of the table item content
 var tblCurClr = "lightblue";		//Table cursor color
+var tblCurBrd = "2px dotted red"	//Table cursor border
 
 /***************************************************
  * pathLev - Path parsing function.                *
@@ -2041,24 +2042,33 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			formObj.selIt = function(row, col) {
 			    //Restore saved
 			    if(this.svRow || this.svCol) {
-				if(!this.svRow)
-				    this.tHead.rows[0].cells[this.svCol].style.backgroundColor =
-						this.tHead.rows[0].cells[this.svCol].svBackgroundColor;
+				if(!this.svRow) {
+				    cO = this.tHead.rows[0].cells[this.svCol];
+				    cO.style.backgroundColor = cO.svBackgroundColor;
+				    cO.style.border = "";
+				}
 				for(iR = (this.svRow?this.svRow-1:0); iR <= (this.svRow?Math.min(this.svRow-1,this.tBodies[0].rows.length-1):this.tBodies[0].rows.length-1); iR++)
-				    for(iC = (this.svCol?this.svCol:0); iC <= (this.svCol?this.svCol:(this.tBodies[0].rows[iR].cells.length-1)); iC++)
-					this.tBodies[0].rows[iR].cells[iC].style.backgroundColor =
-						this.tBodies[0].rows[iR].cells[iC].svBackgroundColor;
+				    for(iC = (this.svCol?this.svCol:0); iC <= (this.svCol?this.svCol:(this.tBodies[0].rows[iR].cells.length-1)); iC++) {
+					cO = this.tBodies[0].rows[iR].cells[iC];
+					cO.style.backgroundColor = cO.svBackgroundColor;
+					cO.style.border = "";
+				    }
 			    }
 			    //Set new
 			    if(row || col) {
 				if(!row) {
-				    this.tHead.rows[0].cells[col].svBackgroundColor = this.tHead.rows[0].cells[col].style.backgroundColor;
-				    this.tHead.rows[0].cells[col].style.backgroundColor = tblCurClr;
+				    cO = this.tHead.rows[0].cells[col];
+				    cO.svBackgroundColor = cO.style.backgroundColor;
+				    cO.style.backgroundColor = tblCurClr;
+				    cO.style.border = tblCurBrd;
 				}
 				for(iR = (row?row-1:0); iR <= (row?row-1:this.tBodies[0].rows.length-1); iR++)
 				    for(iC = (col?col:0); iC <= (col?col:this.tBodies[0].rows[iR].cells.length-1); iC++) {
-					this.tBodies[0].rows[iR].cells[iC].svBackgroundColor = this.tBodies[0].rows[iR].cells[iC].style.backgroundColor;
-					this.tBodies[0].rows[iR].cells[iC].style.backgroundColor = tblCurClr;
+					cO = this.tBodies[0].rows[iR].cells[iC];
+					cO.svBackgroundColor = cO.style.backgroundColor;
+					cO.style.backgroundColor = tblCurClr;
+					if(!col || (row && col)) cO.style.borderTop = cO.style.borderBottom = tblCurBrd;
+					if(!row || (row && col)) cO.style.borderLeft = cO.style.borderRight = tblCurBrd;
 				    }
 			    }
 			    this.svRow = row; this.svCol = col;
