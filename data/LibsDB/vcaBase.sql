@@ -4200,6 +4200,26 @@ MjU2YzcuMDc4IDAgMTIuODE4IDUuNzM5IDEyLjgxOCAxMi44MTggMCA3LjA3OC01Ljc0IDEyLjgx
 Ny0xMi44MTggMTIuODE3SDM5LjI1Yy05LjEwMyAwLTE2LjQ4LTcuMzc4LTE2LjQ4LTE2LjQ4IDAt
 OS4xMDMgNy4zNzctMTYuNDggMTYuNDgtMTYuNDgiIGZpbGw9IiNlZmVmZWQiPjwvcGF0aD48L3N2
 Zz4=');
+INSERT INTO wlb_Main_mime VALUES('weath03n','image/svg+xml;1.43262','PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEi
+IHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93
+d3cudzMub3JnLzE5OTkveGxpbmsiIGRhdGEtdi01ZWQzMTcxZT0iIiB3aWR0aD0iNTBweCIgaGVp
+Z2h0PSI1MHB4IiB2aWV3Qm94PSIwIDAgMTQ4IDE0OCIgY2xhc3M9Im93bS13ZWF0aGVyLWljb24i
+PjxwYXRoIGQ9Ik02NS4wMyA2MC41MTRjLjY0MiAwIDEuMjcuMDU3IDEuODg5LjE0M2ExNS40NzYg
+MTUuNDc2IDAgMDEtLjM0NC0zLjIzYzAtOC41MjQgNi45MS0xNS40MzcgMTUuNDM1LTE1LjQzNyA4
+LjI5NCAwIDE1LjA0MiA2LjU0NyAxNS40MDIgMTQuNzUyYTkuMjI0IDkuMjI0IDAgMDE2LjIwOC0y
+LjQwNCA5LjI2MyA5LjI2MyAwIDAxOS4yNjMgOS4yNjMgOS4xNjUgOS4xNjUgMCAwMS0uNjE5IDMu
+MzA1Yy43LS4xNCAxLjQyMy0uMjE4IDIuMTYxLS4yMTggNS45NyAwIDEwLjgwNiA0LjgzOSAxMC44
+MDYgMTAuODA1IDAgNS45Ny00LjgzNiAxMC44MDYtMTAuODA2IDEwLjgwNkg2NS4wMzFjLTcuNjc0
+IDAtMTMuODkzLTYuMjE5LTEzLjg5My0xMy44OTMgMC03LjY3MSA2LjIxOS0xMy44OTIgMTMuODkz
+LTEzLjg5MiIgZmlsbD0iIzNiM2M0MCI+PC9wYXRoPjxwYXRoIGQ9Ik0zOS4yNSA3My4wNWMuNzYg
+MCAxLjUwNS4wNyAyLjI0LjE3YTE4LjI5NiAxOC4yOTYgMCAwMS0uNDEtMy44MzRjMC0xMC4xMTQg
+OC4yLTE4LjMxIDE4LjMxMi0xOC4zMSA5Ljg0IDAgMTcuODQzIDcuNzY2IDE4LjI3IDE3LjVhMTAu
+OTM1IDEwLjkzNSAwIDAxNy4zNjYtMi44NTNjNi4wNjggMCAxMC45ODcgNC45MjIgMTAuOTg3IDEw
+Ljk5IDAgMS4zODItLjI2NyAyLjctLjczMiAzLjkxOGExMi44NjggMTIuODY4IDAgMDEyLjU2NC0u
+MjU2YzcuMDc4IDAgMTIuODE4IDUuNzM5IDEyLjgxOCAxMi44MTggMCA3LjA3OC01Ljc0IDEyLjgx
+Ny0xMi44MTggMTIuODE3SDM5LjI1Yy05LjEwMyAwLTE2LjQ4LTcuMzc4LTE2LjQ4LTE2LjQ4IDAt
+OS4xMDMgNy4zNzctMTYuNDggMTYuNDgtMTYuNDgiIGZpbGw9IiNlZmVmZWQiPjwvcGF0aD48L3N2
+Zz4=');
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','El_text_alarm','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;alignment;text;',2);
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','box_alarm','/wlb_mnEls/wdg_El_Alarm','name;geomX;geomY;geomW;geomH;geomXsc;geomYsc;geomZ;fillColor;elLst;',2);
@@ -13516,6 +13536,7 @@ if(f_start || wUser != this.ownerSess().reqUser()) {
 	colVars = new Object(), colLists = new Object();
 	btClassEdit_value = btEdit_en = btEdit_value = btItEdit_value = false;
 	geomH = geomHOrig;
+	dataTbl_geomY = fltrCol0_geomY + fltrCol0_geomH;
 	dataTbl_geomH = itDel_geomY - dataTbl_geomY + itDel_geomH;
 }
 
@@ -14027,7 +14048,7 @@ if(fClrTo >= 0) {
 if(toCalcCycles > 0.1) {
 	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
 	toCalcCycles = max(0, toCalcCycles-1);
-}','','',-2,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1712384522);
+}','','',-2,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1714371601);
 INSERT INTO wlb_Main VALUES('weather','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAxCAIAAADldTjtAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAO
 KUlEQVRogdVa228bV3o/Z87cyRnebyJF8SJLsmRZchy7cSUncQyjDjbbNhssdrsLNFsUaNEWfSgK
 9F/xS9CgD3loUewiKFqk62w2XslO1rZs2bEki5JMihJ1o3jRkJwZzu30YWxqRMluI2eb7PdEHn7n
@@ -24051,7 +24072,7 @@ The frame provides currently and in future for next features:
   - detailed control panel-form of the selected item with the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.4.16
+Version: 1.4.17
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -24065,7 +24086,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - деталізована панель-форма керування обраним елементом зі специфічними полями.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.4.16
+Версія: 1.4.17
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');

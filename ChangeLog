@@ -1,3 +1,11 @@
+2024-04-30 Roman (stable)
+- FIX:LibsDB.vcaBase: The library wlb_Main appended by an extra icon 'weath03n' for the widget "Weather (weather)".
+    FIX:wlb_Main.storeHouse: Fixed in early setting the vertical position for the data table at changing the user.
+- FIX:Transports: Table of the OpenSCADA external hosts appended in encoding the hosts ID in a way of IDs of the OpenSCADA nodes
+    since their used next in IDs of the output transports.
+- FIX:UI.WebVision: The Table view of the FormEl primitive is fixed in processing the selection border and selection in whole after resort.
+
+
 2024-04-22 Roman (stable)
 - !!:LibsDB.OscadaLibs: The library tmplib_base appended by a template "Disk SMART (DiskSMART)" of representing disks' SMART.
 - FIX:LibsDB.vcaBase: The library wlb_Main appended by an extra icon 'weath10n' for the widget "Weather (weather)".

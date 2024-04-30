@@ -2189,6 +2189,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    tit.style.backgroundColor = getColor(wVl);
 					else tit.style.backgroundColor = null;
 					if(isSelected) tit.svBackgroundColor = tit.style.backgroundColor;
+					tit.style.border = null;
 					// Text font and color
 					if((tC && (wVl=tC.getAttribute("colorText"))) || (wVl=hit.outColorText) || (wVl=rClrTxt))
 					    tit.style.color = getColor(wVl);
@@ -2278,13 +2279,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    }
 					);
 				    for(iR = 0; iR < prcArr.length; ++iR) {
-					if(this.svRow && this.svRow == parseInt(prcArr[iR].cells[0].textContent)) {
-					    this.svRow = iR+1;
-					    prcArr[iR].cells[0].style.backgroundColor = prcArr[iR].cells[0].svBackgroundColor ? prcArr[iR].cells[0].svBackgroundColor : null;
-					}
+					if(this.svRow && this.svRow == parseInt(prcArr[iR].cells[0].textContent))
+					    this.svRow = -(iR+1);
 					prcArr[iR].cells[0].textContent = iR+1;
 					this.tBodies[0].appendChild(prcArr[iR]);
 				    }
+				    this.svRow = Math.abs(this.svRow);
 				    this.tHead.rows[0].cells[col-1].innerHTML = this.tHead.rows[0].cells[col-1].childNodes[0].textContent + "<span>&nbsp;"+(isDesc?"▲":"▼")+"</span>";
 				    if(this.sortCol && Math.abs(this.sortCol) != col)
 					this.tHead.rows[0].cells[Math.abs(this.sortCol)-1].innerText = this.tHead.rows[0].cells[Math.abs(this.sortCol)-1].childNodes[0].textContent;
