@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/How to/Live disk</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/How_to_Live_disk.html" title="Документы/Как/Создать Живой диск (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/How_to_Live_disk.html" title="Документи/Як/Створити Живий диск (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/How_to_Live_disk.html" title="Документы/Как/Создать Живой диск (92% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/How_to_Live_disk.html" title="Документи/Як/Створити Живий диск (100% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a></li></ul>
 </div>
@@ -80,7 +80,9 @@ dd <span class="k">if</span><span class="o">=</span>/dev/sr0 <span class="nv">of
 <h3><span class="mw-headline" id="Saving_the_working_data_of_the_live_disk_to_the_USB-Flash_partition"><span class="mw-headline-number">3</span> <span id="UserData" title="#UserData">Saving the working data of the live disk to the USB-Flash partition</span></span></h3>
 <p>The Live disk, as mentioned early, allow you full-featured work with saving the working data, and also updating the programs (excluding the system programs and the OS Linux kernel). Typically that possibility has sense only for USB, HDD, SSD storage.
 </p><p>In the case of Debian distributions, a separate section for storing work data, with the label "persistence", should always be created specially, and in the file "persistence.conf" on it also specify the file system or part of it to be reflected on the record (for example, "/home"). To reflect the entire root file system, you must write "/ union" in the file. As the file system of this partition, it is better to use "EXT4/3". To create a partition you can use the program partition manager, for example — <b>gparted</b>.
-</p><p>In the case of the ALTLinux (6) distribution, and the direct recording of the hybrid ISO image, such a section will be created at first startup. When creating a live disk on FAT and EXT, you need to create a separate partition labeled "alt-live-storage" and the file system "EXT3" that can be done in the partition manager program, for example — <b>gparted</b>.
+</p><p>ROOT is accessed here through <b>sudo</b> and password for the <i>user</i> set to "live".
+</p><p>In the case of the ALTLinux (6) distribution, and the direct recording of the hybrid ISO image, such a section will be created at first startup. When creating a live disk on FAT and EXT, you need to create a separate partition labelled "alt-live-storage" and the file system "EXT3" that can be done in the partition manager program, for example — <b>gparted</b>.
+</p><p>ROOT is accessed whether through <b>sudo</b> or <b>su</b> and there is no password.
 </p>
 <h3><span class="mw-headline" id="Booting"><span class="mw-headline-number">4</span> Booting</span></h3>
 <p>To boot from the resulting "live disk" you need to reboot the computer and at the very start of loading to the stationary OS press the key to enter the BIOS boot menu and select our media (fig. 1). On different computers, the enter key to the boot menu may differ and be one of the following: "F8", "F9", "F10", "F11" or "F12". On some computers you can only change the boot order in the BIOS itself.
@@ -98,5 +100,5 @@ dd <span class="k">if</span><span class="o">=</span>/dev/sr0 <span class="nv">of
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Live_disk/en">Documents/How_to/Live_disk/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2963</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Live_disk/en">Documents/How_to/Live_disk/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2966</td></tr></table></body>
 </html>

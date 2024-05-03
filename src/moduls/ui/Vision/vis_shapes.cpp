@@ -1604,6 +1604,7 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 	    if(shD->inHtml) {
 		QTextDocument td;
 		td.setPageSize(QSize(wdth,heigt));
+		td.setDocumentMargin(0);
 		QString htmlStl;
 		//htmlStl += QString("margin: 0; padding: 0; ");
 		if(shD->color.isValid())		htmlStl += QString("color: %1; ").arg(shD->color.name());

@@ -58,7 +58,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: September 2007
-Version: 2.1.36
+Version: 2.2.0
 License: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAA
 GXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAABTxJREFUeJzt2XFo3GcZwPHPZdFO
@@ -91,7 +91,7 @@ a2szNDQ003rWz1l8E6+v4549pu7vO8XPaqeq5K4XUXBF9j0PVV1f6D+L53+M5OTk5OTk5OTk5OTk
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Вересень 2007
-Версія: 2.1.36
+Версія: 2.2.0
 Ліцензія: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса и содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
 
@@ -99,7 +99,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основны�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Сентябрь 2007
-Версия: 2.1.36
+Версия: 2.2.0
 Лицензия: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements');
 INSERT INTO VCALibs VALUES('mnEls','Mnemo elements','Provides the mnemonic elements library of the user interface of the industrial automation.
@@ -14168,7 +14168,7 @@ for(iD = 1; iD <= 10; iD++) {
 	this["fcD"+iD+"Symb"].attrSet("tipTool", tipTool);
 	this["fcD"+iD+"Text"].attrSet("arg0val", isFCErr?0:fcO.tMax);
 	this["fcD"+iD+"Text"].attrSet("arg1val", isFCErr?0:fcO.tMin);
-}','','',10000,'name;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;',1712057301);
+}','','',10000,'name;dscr;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;',1714665339);
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_mnEls VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB
@@ -17569,6 +17569,114 @@ INSERT INTO Trs VALUES('Procedure','Процедура','','');
 INSERT INTO Trs VALUES('%1 item:','%1 елемент:','','');
 INSERT INTO Trs VALUES('Go to the Table','Перейти до Таблиці','','');
 INSERT INTO Trs VALUES('Go to the Item','Перейти до Елементу','','');
+INSERT INTO Trs VALUES('On %1
+','На %1
+','','');
+INSERT INTO Trs VALUES('Temperature (°С) %1, min %2, max %3, morning %4, evening %5, night %6
+','Температура (°С) %1, мінімум %2, максимум %3, ранок %4, вечір %5, ніч %6
+','','');
+INSERT INTO Trs VALUES('Wind %1(%4°), speed %2m/s, pressure %3mB
+','Вітер %1(%4°), швидкість %2м/с, тиск %3мБ
+','','');
+INSERT INTO Trs VALUES('Feel temperature (°С) %1, morning %2, evening %3, night %4
+','Відчувана температура (°С) %1, ранок %2, вечір %3, ніч %4
+','','');
+INSERT INTO Trs VALUES('Humidity %1%
+','Вологість %1%
+','','');
+INSERT INTO Trs VALUES('Sun rise %1, set %2
+','Сонце сх. %1, зах. %2
+','','');
+INSERT INTO Trs VALUES('[%1-%2] %3 %4°C, feel %5°C; %6(%7°), %8m/s, %9mB; %A%
+','[%1-%2] %3 %4°C, відчуття %5°C; %6(%7°), %8м/с, %9мБ; %A%
+','','');
+INSERT INTO Trs VALUES('ALARM OL','ТРИВОГА ВМ','','');
+INSERT INTO Trs VALUES('OL CHRG','ВМ ЗАРЯД','','');
+INSERT INTO Trs VALUES('OB DISCHRG','ВБ РОЗРЯД','','');
+INSERT INTO Trs VALUES('Shutdown imminent!','Вимкнення неминуче!','','');
+INSERT INTO Trs VALUES('Raw_Read_Error_Rate (1)','Рівень Помилок Читання (1)','','');
+INSERT INTO Trs VALUES('Power_Cycle_Count (12)','Кількість Циклів Живлення (12)','','');
+INSERT INTO Trs VALUES('SATA PHY error count (168)','Кільк. помилок SATA PHY (168)','','');
+INSERT INTO Trs VALUES('Bad Block Count (170)','Кількість Поганих Блоків (170)','','');
+INSERT INTO Trs VALUES('Max Erase Count (173)','Макс. Кількість Стирань (173)','','');
+INSERT INTO Trs VALUES('Power-Off_Retract_Count (192)','Кільк. Відкл. Живлення (192)','','');
+INSERT INTO Trs VALUES('Temperature_Celsius (194)','Температура Цельсій (194)','','');
+INSERT INTO Trs VALUES('CRC Error Count (218)','Кількість Помилок CRC (218)','','');
+INSERT INTO Trs VALUES('SSD Life Left (231)','Залишок Життя SSD (231)','','');
+INSERT INTO Trs VALUES('Host Writes GB (241)','Записів Хостом ГБ (241)','','');
+INSERT INTO Trs VALUES('Power_On_Hours (9)','Години Вкл. Живлення (9)','','');
+INSERT INTO Trs VALUES('Spin_Retry_Count (10)','Кількість Повторних Об. (10)','','');
+INSERT INTO Trs VALUES('End-to-End_Error (184)','Наскрізна Помилка (184)','','');
+INSERT INTO Trs VALUES('Reported_Uncorrect (187)','Повідомлень Некор. (187)','','');
+INSERT INTO Trs VALUES('Command_Timeout (188)','Час Очікування Команди (188)','','');
+INSERT INTO Trs VALUES('High_Fly_Writes (189)','Високо Пролітних Записів (189)','','');
+INSERT INTO Trs VALUES('Airflow_Temperature_Cel (190)','Темп. Пов. Потоку Целсій (190)','','');
+INSERT INTO Trs VALUES('G-Sense_Error_Rate (191)','Кільк. Помилок G-Чутлив. (191)','','');
+INSERT INTO Trs VALUES('Load_Cycle_Count (193)','Кільк. Циклів Навант. (193)','','');
+INSERT INTO Trs VALUES('Current_Pending_Sector (197)','Поточний Сектор Очік. (197)','','');
+INSERT INTO Trs VALUES('Offline_Uncorrectable (198)','Неможл. Виправл. Офлайн (198)','','');
+INSERT INTO Trs VALUES('UDMA_CRC_Error_Count (199)','Кільк. CRC Помилок UDMA (199)','','');
+INSERT INTO Trs VALUES('Spin_Up_Time (3)','Час Розкручування (3)','','');
+INSERT INTO Trs VALUES('Start_Stop_Count (4)','Кількість Запусків Зупинок (4)','','');
+INSERT INTO Trs VALUES('Reallocated_Sector_Ct (5)','Кільк. Переміщ. Секторів (5)','','');
+INSERT INTO Trs VALUES('Seek_Error_Rate (7)','Рейтинг Помилок Пошуку (7)','','');
+INSERT INTO Trs VALUES('Battery charge (percent of full)','Заряд батареї (відсоток від повного)','','');
+INSERT INTO Trs VALUES('Remaining battery level when UPS switches to LB (percent)','Залишок рівня заряду для перемикання ДБЖ у LB (відсоток)','','');
+INSERT INTO Trs VALUES('Battery level when UPS switches to Warning state (percent)','Рівень заряду для перемикання ДБЖ у стан Попередження (відсоток)','','');
+INSERT INTO Trs VALUES('Battery change date','Дата зміни батареї','','');
+INSERT INTO Trs VALUES('Battery runtime (seconds)','Час роботи від батареї (секунд)','','');
+INSERT INTO Trs VALUES('Battery chemistry','Хімічна основа батареї','','');
+INSERT INTO Trs VALUES('PbAc','СвинцКисл','','');
+INSERT INTO Trs VALUES('Toggle the UPS beeper','Перемкнути сигнал ДБЖ','','');
+INSERT INTO Trs VALUES('device.mfr','пристрій.вироб.','','');
+INSERT INTO Trs VALUES('device.model','пристрій.модель','','');
+INSERT INTO Trs VALUES('device.serial','пристрій.серія','','');
+INSERT INTO Trs VALUES('device.type','пристрій.тип','','');
+INSERT INTO Trs VALUES('Driver name','Назва драйверу','','');
+INSERT INTO Trs VALUES('driver.parameter.pollfreq','драйвер.параметр.частота опитування','','');
+INSERT INTO Trs VALUES('driver.parameter.pollinterval','драйвер.параметр.інтервал опитування','','');
+INSERT INTO Trs VALUES('driver.parameter.port','драйвер.параметр.порт','','');
+INSERT INTO Trs VALUES('Driver version - NUT release','Версія драйверу - реліз NUT','','');
+INSERT INTO Trs VALUES('driver.version.data','драйвер.версія.дані','','');
+INSERT INTO Trs VALUES('Internal driver version','Внутрішня версія драйверу','','');
+INSERT INTO Trs VALUES('Input line frequency (Hz)','Часота вхідної лінії (Гц)','','');
+INSERT INTO Trs VALUES('Input voltage (V)','Вхідна напруга (В)','','');
+INSERT INTO Trs VALUES('Nominal input voltage (V)','Номінальна вхідна напруга (В)','','');
+INSERT INTO Trs VALUES('Turn on the load immediately','Увімкнути навантаження негайно','','');
+INSERT INTO Trs VALUES('Turn on the load with a delay (seconds)','Увімкнути навантаження із затримкою (секунд)','','');
+INSERT INTO Trs VALUES('Output frequency (Hz)','Вихідна частота (Гц)','','');
+INSERT INTO Trs VALUES('Output voltage (V)','Вихідна напруга (В)','','');
+INSERT INTO Trs VALUES('Nominal output voltage (V)','Номінальна вихідна напруга (В)','','');
+INSERT INTO Trs VALUES('Turn off the load and return when power is back','Вимкнути навантаження та повернути із появою живлення','','');
+INSERT INTO Trs VALUES('Turn off the load and remain off','Вимкнути навантаження та залишити вимкненим','','');
+INSERT INTO Trs VALUES('Start a quick battery test','Запустити швидку перевірку батареї','','');
+INSERT INTO Trs VALUES('Internal UPS clock date','Дата внутрішнього годинника ДБЖ','','');
+INSERT INTO Trs VALUES('Interval to wait after shutdown with delay command (seconds)','Інтервал очікування після вимкнення із затримкою команди (секунд)','','');
+INSERT INTO Trs VALUES('Interval to wait before (re)starting the load (seconds)','Інтервал очікування до (пере)запуску навантаження (секунд)','','');
+INSERT INTO Trs VALUES('Load on UPS (percent of full)','Навантаження на ДБЖ (відсоток від повного)','','');
+INSERT INTO Trs VALUES('UPS manufacturer','Виробник ДБЖ','','');
+INSERT INTO Trs VALUES('UPS model','Модель ДБЖ','','');
+INSERT INTO Trs VALUES('Product ID for USB devices','ІД продукту USB пристрою','','');
+INSERT INTO Trs VALUES('UPS serial number','Серійний номер ДБЖ','','');
+INSERT INTO Trs VALUES('UPS status','Статус ДБЖ','','');
+INSERT INTO Trs VALUES('OL','ВМ','','');
+INSERT INTO Trs VALUES('Results of last self test','Результати останього самотестування','','');
+INSERT INTO Trs VALUES('Done and passed','Виконано та пройдено','','');
+INSERT INTO Trs VALUES('Time before the load will be shutdown (seconds)','Час до відімкнення навантаження (секунд)','','');
+INSERT INTO Trs VALUES('Time before the load will be started (seconds)','Час до запуску навантаження (секунд)','','');
+INSERT INTO Trs VALUES('Vendor ID for USB devices','ІД виробника USB пристрою','','');
+INSERT INTO Trs VALUES('OL BOOST','ВМ ПІДСИЛ','','');
+INSERT INTO Trs VALUES('UPS alarms','Тривоги ДБЖ','','');
+INSERT INTO Trs VALUES('ALARM OL CHRG LB OVER','ТРИВОГА ВМ ЗРД ЛБ КІНЕЦЬ','','');
+INSERT INTO Trs VALUES('OB DISCHRG LB','ВБ РЗРД ЛБ','','');
+INSERT INTO Trs VALUES('Replace battery!','Замініть батарею!','','');
+INSERT INTO Trs VALUES('ALARM OL CHRG BOOST','ТРИВОГА ВМ ЗРД ПІДСИЛ','','');
+INSERT INTO Trs VALUES('ALARM OL BOOST','ТРИВОГА ВМ ПІДСИЛ','','');
+INSERT INTO Trs VALUES('OL CHRG BOOST','ВМ ЗРД ПІДСИЛ','','');
+INSERT INTO Trs VALUES('OL CHRG TRIM','ВМ ЗРД УСІЧ','','');
+INSERT INTO Trs VALUES('UPS beeper status','Статус пищання ДБЖ','','');
+INSERT INTO Trs VALUES('OL TRIM','ВМ УСІЧ','','');
+INSERT INTO Trs VALUES('OB DISCHRG BOOST','ВБ РЗРД ПІДСИЛ','','');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#IO_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_Main_io VALUES('ElCadr','name','Element cadre',32,'','','','Елемент кадр','','Элемент кадр','','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','geomW','110',32,'','','','','','','','','','');
@@ -24449,9 +24557,9 @@ INSERT INTO wlb_Main_io VALUES('weather','geomH','60',32,'','','curSymb','','','
 INSERT INTO wlb_Main_io VALUES('weather','backColor','',32,'','','curSymb','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','bordWidth','0',32,'','','curSymb','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','src','weath01d',40,'','','curSymb','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','geomX','65',32,'','','curText','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','geomY','20',32,'','','curText','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','geomW','110',32,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomX','60',32,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','17',32,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomW','118',32,'','','curText','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomH','60',32,'','','curText','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomZ','1',32,'','','curText','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','inHtml','1',32,'','','curText','','','','','','','');
@@ -24459,7 +24567,11 @@ INSERT INTO wlb_Main_io VALUES('weather','text','<i style="color:red">%9</i>
 %7m/s %8(%3°), %6mB
 Humidity %5%
 Feel temperature %4°С
-Sun rise %1, set %2',32,'','','curText','','','','','','','');
+Sun rise %1, set %2',32,'','','curText','<i style="color:red">%9</i>
+%7м/с %8(%3°), %6мБ
+Вологість %5%
+Відчувана темпер. %4°С
+Сонце сх. %1, зах. %2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','numbArg','9',32,'','','curText','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','arg0tp','2',0,'','','curText','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','arg0val','',8,'','','curText','','','','','','','');
@@ -24480,10 +24592,10 @@ INSERT INTO wlb_Main_io VALUES('weather','arg6tp','1',0,'','','curText','','',''
 INSERT INTO wlb_Main_io VALUES('weather','arg6val','0',8,'','','curText','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','arg6cfg',';f;1',0,'','','curText','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','arg7tp','2',0,'','','curText','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','arg7val','W',8,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg7val','W',8,'','','curText','З','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','arg7cfg','',0,'','','curText','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','arg8tp','2',0,'','','curText','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','arg8val','Date',8,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg8val','Date',8,'','','curText','Дата','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomX','3',32,'','','fcD1Symb','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomY','62',32,'','','fcD1Symb','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomW','35',32,'','','fcD1Symb','','','','','','','');
@@ -24496,7 +24608,7 @@ INSERT INTO wlb_Main_io VALUES('weather','geomY','86',32,'','','fcD1Text','','',
 INSERT INTO wlb_Main_io VALUES('weather','geomW','30',32,'','','fcD1Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomH','15',32,'','','fcD1Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomZ','3',32,'','','fcD1Text','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','fcD1Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 8.5',32,'','','fcD1Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','alignment','10',32,'','','fcD1Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','text','%1/%2°С',32,'','','fcD1Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','numbArg','2',32,'','','fcD1Text','','','','','','','');
@@ -24512,7 +24624,7 @@ INSERT INTO wlb_Main_io VALUES('weather','geomZ','4',32,'','','fcD2Symb','','','
 INSERT INTO wlb_Main_io VALUES('weather','backColor','',32,'','','fcD2Symb','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','bordWidth','0',32,'','','fcD2Symb','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomX','40',32,'','','fcD2Text','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','geomY','85',32,'','','fcD2Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','86',32,'','','fcD2Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomW','30',32,'','','fcD2Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomH','15',32,'','','fcD2Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomZ','5',32,'','','fcD2Text','','','','','','','');
@@ -24527,7 +24639,7 @@ INSERT INTO wlb_Main_io VALUES('weather','geomZ','6',32,'','','fcD3Symb','','','
 INSERT INTO wlb_Main_io VALUES('weather','backColor','',32,'','','fcD3Symb','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','bordWidth','0',32,'','','fcD3Symb','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomX','75',32,'','','fcD3Text','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','geomY','85',32,'','','fcD3Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','86',32,'','','fcD3Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomW','30',32,'','','fcD3Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomH','15',32,'','','fcD3Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomZ','7',32,'','','fcD3Text','','','','','','','');
@@ -24542,7 +24654,7 @@ INSERT INTO wlb_Main_io VALUES('weather','geomZ','8',32,'','','fcD4Symb','','','
 INSERT INTO wlb_Main_io VALUES('weather','backColor','',32,'','','fcD4Symb','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','bordWidth','0',32,'','','fcD4Symb','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomX','110',32,'','','fcD4Text','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','geomY','85',32,'','','fcD4Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','86',32,'','','fcD4Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomW','30',32,'','','fcD4Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomH','15',32,'','','fcD4Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomZ','9',32,'','','fcD4Text','','','','','','','');
@@ -24557,7 +24669,7 @@ INSERT INTO wlb_Main_io VALUES('weather','geomZ','10',32,'','','fcD5Symb','','',
 INSERT INTO wlb_Main_io VALUES('weather','backColor','',32,'','','fcD5Symb','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','bordWidth','0',32,'','','fcD5Symb','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomX','145',32,'','','fcD5Text','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','geomY','85',32,'','','fcD5Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','geomY','86',32,'','','fcD5Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomW','30',32,'','','fcD5Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomH','15',32,'','','fcD5Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomZ','11',32,'','','fcD5Text','','','','','','','');
@@ -24575,11 +24687,11 @@ INSERT INTO wlb_Main_io VALUES('weather','src','weath02d',32,'','','fcD4Symb',''
 INSERT INTO wlb_Main_io VALUES('weather','fit','1',32,'','','fcD4Symb','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','src','weath02d',32,'','','fcD5Symb','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','fit','1',32,'','','fcD5Symb','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','name','Weather',32,'','','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','fcD2Text','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','fcD3Text','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','fcD4Text','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','fcD5Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','name','Weather',32,'','','','Погода','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 8.5',32,'','','fcD2Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 8.5',32,'','','fcD3Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 8.5',32,'','','fcD4Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 8.5',32,'','','fcD5Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomX','0',32,'','','title','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomY','2',32,'','','title','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomW','180',32,'','','title','','','','','','','');
@@ -24590,9 +24702,9 @@ INSERT INTO wlb_Main_io VALUES('weather','text','%1, %2',32,'','','title','','',
 INSERT INTO wlb_Main_io VALUES('weather','inHtml','1',32,'','','title','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','numbArg','2',32,'','','title','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','arg0tp','2',0,'','','title','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','arg0val','City',8,'','','title','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg0val','City',8,'','','title','Місто','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','arg1tp','2',0,'','','title','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','arg1val','Country',8,'','','title','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg1val','Country',8,'','','title','Країна','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','font','Arial 11 1 0 1 0',32,'','','title','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','curText','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomX','143',32,'','','fcD10Symb','','','','','','','');
@@ -24608,7 +24720,7 @@ INSERT INTO wlb_Main_io VALUES('weather','geomY','120',32,'','','fcD10Text','','
 INSERT INTO wlb_Main_io VALUES('weather','geomW','30',32,'','','fcD10Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomH','15',32,'','','fcD10Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomZ','21',32,'','','fcD10Text','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','fcD10Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 8.5',32,'','','fcD10Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','alignment','10',32,'','','fcD10Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','text','%1/%2°С',32,'','','fcD10Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','numbArg','2',32,'','','fcD10Text','','','','','','','');
@@ -24625,7 +24737,7 @@ INSERT INTO wlb_Main_io VALUES('weather','geomY','121',32,'','','fcD6Text','',''
 INSERT INTO wlb_Main_io VALUES('weather','geomW','30',32,'','','fcD6Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomH','15',32,'','','fcD6Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomZ','13',32,'','','fcD6Text','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','fcD6Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 8.5',32,'','','fcD6Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','alignment','10',32,'','','fcD6Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','text','%1/%2°С',32,'','','fcD6Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','numbArg','2',32,'','','fcD6Text','','','','','','','');
@@ -24642,7 +24754,7 @@ INSERT INTO wlb_Main_io VALUES('weather','geomY','120',32,'','','fcD7Text','',''
 INSERT INTO wlb_Main_io VALUES('weather','geomW','30',32,'','','fcD7Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomH','15',32,'','','fcD7Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomZ','15',32,'','','fcD7Text','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','fcD7Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 8.5',32,'','','fcD7Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','alignment','10',32,'','','fcD7Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','text','%1/%2°С',32,'','','fcD7Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','numbArg','2',32,'','','fcD7Text','','','','','','','');
@@ -24659,7 +24771,7 @@ INSERT INTO wlb_Main_io VALUES('weather','geomY','120',32,'','','fcD8Text','',''
 INSERT INTO wlb_Main_io VALUES('weather','geomW','30',32,'','','fcD8Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomH','15',32,'','','fcD8Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomZ','17',32,'','','fcD8Text','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','fcD8Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 8.5',32,'','','fcD8Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','alignment','10',32,'','','fcD8Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','text','%1/%2°С',32,'','','fcD8Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','numbArg','2',32,'','','fcD8Text','','','','','','','');
@@ -24676,7 +24788,7 @@ INSERT INTO wlb_Main_io VALUES('weather','geomY','120',32,'','','fcD9Text','',''
 INSERT INTO wlb_Main_io VALUES('weather','geomW','30',32,'','','fcD9Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomH','15',32,'','','fcD9Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomZ','19',32,'','','fcD9Text','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','font','Arial 9',32,'','','fcD9Text','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','font','Arial 8.5',32,'','','fcD9Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','alignment','10',32,'','','fcD9Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','text','%1/%2°С',32,'','','fcD9Text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','numbArg','2',32,'','','fcD9Text','','','','','','','');
@@ -24702,6 +24814,16 @@ INSERT INTO wlb_Main_io VALUES('grpGraph10','geomXsc','1.04',32,'','','el9','','
 INSERT INTO wlb_Main_io VALUES('grpGraph10','geomZ','8',32,'','','el9','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','color','lightyellow',32,'','','el9','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','colorDef','lightyellow',96,'labColorGrph9','','el9','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','wordWrap','0',32,'','','curText','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','dscr','The element is used to display weather data from parameters on the DAQ-template "Weather".
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0
+License: GPLv2',32,'','','','Елемент використовується для відображення даних погоди із параметрів на DAQ-шаблоні "Погода".
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0
+Ліцензія: GPLv2','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_doc_uio VALUES('docRepDay','lastDay','Last day',131073,'-1|',8,'','','','Останній день','','','Последний день','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepDay','lastHour','Last hour',131073,'-1|',8,'','','','Остання година','','','Последний час','','','','','');
@@ -28908,10 +29030,10 @@ INSERT INTO wlb_Main_uio VALUES('TextLab','transTr','Transitive transl.',131072,
 INSERT INTO wlb_Main_uio VALUES('storeHouse','report','Report',131205,'',8,'','','go_reportIt','Звіт','','','Отчёт','','','','','Извештај','');
 INSERT INTO wlb_Main_uio VALUES('weather','current','Weather: Current',131078,'<TVarObj>
 </TVarObj>
-',10,'Parameter|current','','','','','','','','','','','','');
+',10,'Parameter|current','','','Погода: поточне','','','','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('weather','forecast','Weather: Forecast',131078,'<TVarObj>
 </TVarObj>
-',10,'Parameter|forecast','','','','','','','','','','','','');
+',10,'Parameter|forecast','','','Погода: прогноз','','','','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#IO_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_doc_io VALUES('docRepDay','name','Day report of the hour-averaged values',32,'','','','Добовий звіт середніх за годину значень','','Суточный отчёт среднечасовых значений','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepDay','geomZ','1',32,'','','doc','','','','','','','');
@@ -30388,7 +30510,7 @@ INSERT INTO wlb_Main_incl VALUES('grph_panel','curstimeBeg','/wlb_originals/wdg_
 INSERT INTO wlb_Main_incl VALUES('storeHouse','go_reportIt','/wlb_originals/wdg_FormEl',-1,'en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','btItEdit','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;img;mode;font;');
 INSERT INTO wlb_Main_incl VALUES('weather','curSymb','/wlb_originals/wdg_Media',-1,'geomX;geomY;geomW;geomH;backColor;bordWidth;src;fit;');
-INSERT INTO wlb_Main_incl VALUES('weather','curText','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomZ;font;inHtml;text;numbArg;arg0tp;arg0val;arg1tp;arg1val;arg2tp;arg2val;arg2cfg;arg3tp;arg3val;arg3cfg;arg4tp;arg4val;arg4cfg;arg5val;arg5cfg;arg6tp;arg6val;arg6cfg;arg7tp;arg7val;arg7cfg;arg8tp;arg8val;');
+INSERT INTO wlb_Main_incl VALUES('weather','curText','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomZ;font;wordWrap;inHtml;text;numbArg;arg0tp;arg0val;arg1tp;arg1val;arg2tp;arg2val;arg2cfg;arg3tp;arg3val;arg3cfg;arg4tp;arg4val;arg4cfg;arg5val;arg5cfg;arg6tp;arg6val;arg6cfg;arg7tp;arg7val;arg7cfg;arg8tp;arg8val;');
 INSERT INTO wlb_Main_incl VALUES('weather','fcD1Symb','/wlb_originals/wdg_Media',-1,'geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;src;fit;');
 INSERT INTO wlb_Main_incl VALUES('weather','fcD1Text','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomZ;font;alignment;text;numbArg;arg0tp;arg0cfg;arg1tp;arg1cfg;');
 INSERT INTO wlb_Main_incl VALUES('weather','fcD2Symb','/wlb_originals/wdg_Media',-1,'geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;src;fit;');

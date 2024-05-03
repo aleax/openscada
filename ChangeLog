@@ -1,3 +1,15 @@
+2024-05-03 Roman (stable)
+- !!:LibsDB.{OscadaLibs.tmplib_base.{weather,DiskSMART},vcaBase.wlb_Main.weather: Documented and translated for Ukrainian.
+    LibsDB.vcaBase.wlb_Main.weather: Adjusted for even work both on UI.Vision and UI.WEBVision.
+    LibsDB.vcaBase.wlb_Main: Appended of the dynamic messages with Ukrainian translation for main ones of DiskSMART and UPS
+	during representing by "Object properties (objProps)".
+- data/{debian,debian_mod}/control: Appended by a variant libsensors-dev to libsensors4-dev for Ubuntu 24.04 and other modern
+    Debian distributions with transition from libsensors4-dev.
+- FIX:UI.Vision: The Text primitive in the HTML mode by QTextDocument appended by zero margin for corresponding with UI.WebVision.
+    Improved in some original messages.
+- FIX:UI.WebVision: line-height of CSS set to 1.2 for corresponding with UI.Vision.
+
+
 2024-04-30 Roman (stable)
 - FIX:LibsDB.vcaBase: The library wlb_Main appended by an extra icon 'weath03n' for the widget "Weather (weather)".
     FIX:wlb_Main.storeHouse: Fixed in early setting the vertical position for the data table at changing the user.

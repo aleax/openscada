@@ -2543,14 +2543,14 @@ void DevelWdgView::wdgPopup( )
 	}
 
 	// Make widget icon
-	QAction *actMakeIco = new QAction(parentWidget()->windowIcon(),_("Make up an icon from the widget"),this);
-	actMakeIco->setStatusTip(_("Press to make up an icon from the widget."));
+	QAction *actMakeIco = new QAction(parentWidget()->windowIcon(),_("Create icon from the widget"),this);
+	actMakeIco->setStatusTip(_("Press for creation icon from the widget."));
 	connect(actMakeIco, SIGNAL(triggered()), this, SLOT(makeIcon()));
 	popup.addAction(actMakeIco);
 
 	// Make widget image
-	QAction *actMakeImg = new QAction(_("Make up an image from the widget"),this);
-	actMakeImg->setStatusTip(_("Press to make up an image from the widget."));
+	QAction *actMakeImg = new QAction(_("Create image from the widget"),this);
+	actMakeImg->setStatusTip(_("Press for creation image from the widget."));
 	connect(actMakeImg, SIGNAL(triggered()), this, SLOT(makeImage()));
 	popup.addAction(actMakeImg);
 	popup.addSeparator();

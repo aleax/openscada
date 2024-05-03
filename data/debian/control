@@ -6,7 +6,7 @@ Maintainer: Roman Savochenko <roman@oscada.org>
 Homepage: http://oscada.org
 Build-Depends: debhelper (>= 5), dh-autoreconf, sqlite3, g++, autotools-dev, pkg-config, gettext, libgd-dev | libgd2-xpm-dev | libgd2-noxpm-dev, libpcre3-dev,
  libmysqlclient-dev | libmariadb-dev, libsqlite3-dev, firebird-dev, libpq-dev, libldap2-dev,
- libsensors4-dev, portaudio19-dev, bison, libsnmp-dev, libcomedi-dev,
+ libsensors-dev | libsensors4-dev, portaudio19-dev, bison, libsnmp-dev, libcomedi-dev,
  libssl-dev, libfftw3-dev,
  libqt4-dev | qtbase5-dev | qt6-base-dev, libqtwebkit-dev | libqt5webkit5-dev | qtwebengine5-dev | qt6-webengine-dev, libphonon-dev | libphonon4qt5-dev | qtmultimedia5-dev | qt6-multimedia-dev
 #libiodbc2-dev libldap2-dev

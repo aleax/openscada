@@ -27,7 +27,7 @@
 <tr>
 <td> <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">Основная библиотека</a>
 </td>
-<td> 2.1 </td>
+<td> 2.2 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_base </td>
 <td> en, uk, ru
@@ -71,12 +71,14 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <ul>
 <li class="toclevel-2"><a href="#Uninterruptible_Power_Supply_.28UPS.29"><span class="tocnumber">2.1</span> <span class="toctext">Uninterruptible Power Supply (UPS)</span></a></li>
 <li class="toclevel-2"><a href="#Network_devices_by_SNMP_.28SNMP.29"><span class="tocnumber">2.2</span> <span class="toctext">Network devices by SNMP (SNMP)</span></a></li>
+<li class="toclevel-2"><a href="#Disk_SMART_.28DiskSMART.29"><span class="tocnumber">2.3</span> <span class="toctext">Disk SMART (DiskSMART)</span></a></li>
 </ul>
 </li>
 <li class="toclevel-1 tocsection-3"><a href="#Services"><span class="tocnumber">3</span> <span class="toctext">Services</span></a>
 <ul>
 <li class="toclevel-2"><a href="#Notificator_by_SMS.2C_EMail-SMTP_.28ntf.29"><span class="tocnumber">3.1</span> <span class="toctext">Notificator by SMS, EMail-SMTP (ntf)</span></a></li>
 <li class="toclevel-2"><a href="#Initiative_connections_processing_for_the_associated_output_transports_.28initConAssociateTrs.29"><span class="tocnumber">3.2</span> <span class="toctext">Initiative connections processing for the associated output transports (initConAssociateTrs)</span></a></li>
+<li class="toclevel-2"><a href="#Weather_.28weather.29"><span class="tocnumber">3.3</span> <span class="toctext">Weather (weather)</span></a></li>
 </ul>
 </li>
 <li class="toclevel-1 tocsection-4"><a href="#For_WebUser"><span class="tocnumber">4</span> <span class="toctext">For WebUser</span></a>
@@ -2348,7 +2350,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <ul><li> collection of these attributes of the raw source into <b>items</b>;</li>
 <li> processing of properties of the attributes;</li>
 <li> control and transmitting of commands of the values setting;</li>
-<li> processing of the violation conditions at single attributes and at the object in whole, together with which these violations can be fixed in <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">the table of actual violations</a>, typically by <a href="User_API.html#SYS.DAQ" title="Special:MyLanguage/Documents/User API">the function alarmSet()</a>.</li></ul>
+<li> processing of the violation conditions at single attributes and at the object in whole, together with which these violations can be fixed in <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">the table of actual violations</a>, typically by the <a href="User_API.html#SYS.DAQ" title="Special:MyLanguage/Documents/User API">alarmSet() function</a>.</li></ul>
 <p>In addition to complex object templates, this object-control mechanism can be implemented by templates for implementing <a href="DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">the logical level of data access</a>, such as in <a href="Libs_Devices.html#IEC60870" title="Special:MyLanguage/Libs/Devices">IEC60870</a>.
 </p><p>To represent the data of the object-control mechanism, there currently provided the appropriate <a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Object properties frame</a>, which provides these properties as a table-list with illumination of the violations and the possibility to change the selected and accessible to edit row-properties.
 </p><p><br />
@@ -2601,15 +2603,15 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainUPSCfg.png" title="Configuration."><img alt="Configuration." height="172" src="../en/files/LibsMainUPSCfg.png" width="356" /></a></div>
 <p><b><u>Configuring and using</u></b><br />
 </p>
-<dl><dd>1. Create a source controller object into the module "<a href="../en/Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>" and set its Identifier like to "SYSData".</dd>
-<dd>2. Create a source parameter object into the previous controller object and set its Identifier like to "UPS".</dd>
-<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
-<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for it. Enable the parameter.</dd>
+<dl><dd>1. Create a source controller object in the module "<a href="../en/Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>" and set its identifier like to "SYSData".</dd>
+<dd>2. Create a source parameter object in the previous controller object and set its identifier like to "UPS".</dd>
+<dd>3. Create and start a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical parameter object</a> and select the template for it. Enable the parameter.</dd>
 <dd>5. In the tab "Template configuration" of the logical parameter object you need to set:
 <ul><li> <i>Source object's address</i> — to address of the source UPS parameter object (see to step 1) like to "System.SYSData.UPS".</li></ul></dd>
-<dd>6. RESULT: When running the controller object (where this parameter was created) and if it was not started, we must obtain, in the parameter attribute <i>items</i>, this object with all the attributes and their properties. In case of some violations, we will get the corresponding information in the attribute of the parameter <i>err</i>, for which you can adjust the attributes of the boundaries of the corresponding violations.</dd>
-<dd>7. Into the visual interfaces developing of the module <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> place the frame "<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Object properties</a>" to any page and link it to the parameter object, created into step 4.</dd>
-<dd>8. RESULT: Into runtime of the page you get a table with data of the object, notifications about violations into the header and the possibility to set of writable properties.</dd></dl>
+<dd>6. RESULT: When running the controller object (where this parameter was created) and if it was not started, we must obtain in the parameter attribute <i>items</i> this object with all the attributes and their properties. In case of some violations, we will get the corresponding information in the attribute of the parameter <i>err</i>, for which you can adjust the attributes of the boundaries of the corresponding violations.</dd>
+<dd>7. In the visual interfaces developing of the module <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> place the frame "<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Object properties</a>" to any page and link it to the parameter object, created in step 4.</dd>
+<dd>8. RESULT: In runtime of the page you get a table with data of the object, notifications about violations in the header and the possibility to set of writable properties.</dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -2761,16 +2763,155 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainSNMPCfg.png" title="Configuration."><img alt="Configuration." height="205" src="../en/files/LibsMainSNMPCfg.png" width="359" /></a></div>
 <p><b><u>Configuring and using</u></b><br />
 </p>
-<dl><dd>1. Create a source controller object into the module "<a href="Modules/SNMP.html" title="Special:MyLanguage/Modules/SNMP">SNMP</a>" and set its Identifier like to "SYSData".</dd>
-<dd>2. Create a source parameter object into the previous controller object and set its Identifier like to "DEV".</dd>
-<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
-<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for it. Enable the parameter.</dd>
+<dl><dd>1. Create a source controller object in the module "<a href="Modules/SNMP.html" title="Special:MyLanguage/Modules/SNMP">SNMP</a>" and set its identifier like to "SYSData".</dd>
+<dd>2. Create a source parameter object in the previous controller object and set its identifier like to "DEV".</dd>
+<dd>3. Create and start a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>4. Create a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical parameter object</a> and select the template for it. Enable the parameter.</dd>
 <dd>5. In the tab "Template configuration" of the logical parameter object you need to set:
 <ul><li> <i>Source object's address</i> — to address of the source SNMP device parameter object (see to step 1) like to "SNMP.SYSData.DEV".</li>
 <li> <i>Manual tables</i> — enter manually some static MIB-variables.</li></ul></dd>
-<dd>6. RESULT: When running the controller object (where this parameter was created) and if it was not started, we must obtain, in the parameter attribute <i>items</i>, this object with all the attributes and their properties. In case of some violations, we will get the corresponding information in the attribute of the parameter <i>err</i>, for which you can adjust the attributes of the boundaries of the corresponding violations.</dd>
-<dd>7. Into the visual interfaces developing of the module <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> place the frame "<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Object properties</a>" to any page and link it to the parameter object, created into step 4.</dd>
-<dd>8. RESULT: Into runtime of the page you get a table with data of the object, notifications about violations into the header and the possibility to set of writable properties.</dd></dl>
+<dd>6. RESULT: When running the controller object (where this parameter was created) and if it was not started, we must obtain in the parameter attribute <i>items</i> this object with all the attributes and their properties. In case of some violations, we will get the corresponding information in the attribute of the parameter <i>err</i>, for which you can adjust the attributes of the boundaries of the corresponding violations.</dd>
+<dd>7. In the visual interfaces developing of the module <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> place the frame "<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Object properties</a>" to any page and link it to the parameter object, created in step 4.</dd>
+<dd>8. RESULT: In runtime of the page you get a table with data of the object, notifications about violations in the header and the possibility to set of writable properties.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="DiskSMART" title="#DiskSMART"><h3><span class="mw-headline" id="Disk_SMART_.28DiskSMART.29"><span class="mw-headline-number">2.3</span> Disk SMART (<a href="Libs_Main.html#DiskSMART" title="Special:MyLanguage/Libs/Main">DiskSMART</a>)</span></h3></span>
+</td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainDiskSMARTOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="546" src="../en/files/LibsMainDiskSMARTOp.png" width="367" /></a></div>
+<p>Data combination of the disk SMART in a complex object of the attribute "All items". The template designed to use together with the DAQ-module "<a href="../en/Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>" in the part "Disk SMART" and to represent this data by the frame "<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Object properties</a>" as a complex object with properties and signalling at common errors. Some SMART attributes can be unknown or wrong for specified disk due to their missing in the disks DB, especially for modern SSD, so the template provides a feature to redefine names the attributes.
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> srcAddr </td>
+<td> Source object's address </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td>
+</td></tr>
+<tr>
+<td> items </td>
+<td> All items </td>
+<td> Object </td>
+<td> Output </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> defs </td>
+<td> Item definitions </td>
+<td> Text </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> The object </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> SHIFR </td>
+<td> Code </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> NAME </td>
+<td> Name </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Description </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainDiskSMARTCfg.png" title="Configuration."><img alt="Configuration." height="180" src="../en/files/LibsMainDiskSMARTCfg.png" width="365" /></a></div>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create a source controller object in the module "<a href="../en/Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>" and set its identifier like to "SYSData", set the property "Auto create active data sources" to "All sources" and start by setting "Running".</dd>
+<dd>2. Create and start a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>3. Create a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical parameter object</a> and select the template for it. Enable the parameter.</dd>
+<dd>4. In the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Source object's address</i> — to address of the source disk SMART parameter object like to "System.SYSData.DiskSMARTsda".</li></ul></dd>
+<dd>5. RESULT: When running the controller object (where this parameter was created) and if it was not started, we must obtain in the parameter attribute <i>items</i> this object with all the attributes and their properties. In case of some violations, we will get the corresponding information in the attribute of the parameter <i>err</i>.</dd>
+<dd>6. In the visual interfaces developing of the module <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> place the frame "<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Object properties</a>" to any page and link it to the parameter object, created in step 3.</dd>
+<dd>7. RESULT: In runtime of the page you get a table with data of the object, notifications about violations in the header and the possibility to redefine names of the SMART attributes.</dd></dl>
 <h2><span class="mw-headline" id="Services"><span class="mw-headline-number">3</span> Services</span></h2>
 <table class="wikitable">
 
@@ -3191,13 +3332,142 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <dl><dd>1. Create an input transport of receiving the initiative connections of <a href="Modules/Sockets.html#InTr" title="Special:MyLanguage/Modules/Sockets">the module "Sockets"</a> with the name like to "InitiateCons".</dd>
 <dd>2. Set the previously created transport to the needed address of opening the input socket and move it to the mode of creating the associative output transports, leaving the protocol field in empty.</dd>
 <dd>3. Provide a container of the data sources to which associative transports must be connected, which can be either a DAQ-module (such as "DAQ.ModBus"), or a logical controller (such as "DAQ.LogicLev.Sources"), or a parameter in it (such as "DAQ.LogicLev.PLC.Sources"), with logical level parameters representing the data source.</dd>
-<dd>4. For this template, create and run <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any available with the required scheduling properties.</dd>
-<dd>5. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select this template for it. Enable the parameter.</dd>
+<dd>4. For this template create and run a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical controller object</a> or use any available with the required scheduling properties.</dd>
+<dd>5. Create a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical parameter object</a> and select this template for it. Enable the parameter.</dd>
 <dd>6. In the tab "Template configuration" of the logical parameter object you need to set:
 <ul><li> <i>Input transport</i> — to value of the identifier of the input transport, created in the item 1, like to "InitiateCons;</li>
 <li> <i>Output transport timeouts</i> — increase the first digit for very slow connections and typical is normal in most situations</li>
 <li> <i>Source objects path</i> — set according to the item 3, for the first part, and to the control field path, for the second part, for example, and typically for for "ModBus", is — "ModBus:%2fcntr%2fcfg%2fADDR".</li></ul></dd>
-<dd>6. RESULT: Starting the controller object (where this parameter was created) and if it was not started, we should get, in the attribute <i>prcTr</i> of the parameter for information about the processed and therefore successfully transport-linked data sources. In case of some violations, we will get the corresponding information in the attribute <i>err</i> of the parameter. The absence of a representative object for the received identifier is placed in the protocol of messages.</dd></dl>
+<dd>6. RESULT: Starting the controller object (where this parameter was created) and when it was not started, we should get, in the attribute <i>prcTr</i> of the parameter for information about the processed and therefore successfully transport-linked data sources. In case of some violations, we will get the corresponding information in the attribute <i>err</i> of the parameter. The absence of a representative object for the received identifier is placed in the protocol of messages.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="weather" title="#weather"><h3><span class="mw-headline" id="Weather_.28weather.29"><span class="mw-headline-number">3.3</span> Weather (<a href="Libs_Main.html#weather" title="Special:MyLanguage/Libs/Main">weather</a>)</span></h3></span>
+</td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainWeatherOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="592" src="../en/files/LibsMainWeatherOp.png" width="419" /></a></div>
+<p>The template of acquiring weather data from different weather services in Internet and initially it is only <a class="external text" href="https://openweathermap.org/" rel="nofollow noreferrer noopener" target="_blank">Open Weather</a>. 
+</p><p>The weather data divided on current and forecast with their placing in corresponded objects, where current attributes placed directly in the root and forecast days (the "day" object) and times (the "time" object) inwardly corresponded day according to the current timezone. These data acquired at specified schedule independently for current and forecast, and by default the current ones are performed per hour when forecast ones per day. The data can be accessible by user both as directly and through a specially created widget of the <a href="Libs_Main_graphical_elements.html#weather" title="Special:MyLanguage/Libs/Main graphical elements">main library</a>.
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> schedCur </td>
+<td> Scheduling at CRON of current update </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0 8-20 * * *
+</td></tr>
+<tr>
+<td> schedFC </td>
+<td> Scheduling at CRON of forecast update </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0 8 * * *
+</td></tr>
+<tr>
+<td> city </td>
+<td> City ID </td>
+<td> String </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td> 709932
+</td></tr>
+<tr>
+<td> current </td>
+<td> Current </td>
+<td> Object </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> forecast </td>
+<td> Forecast </td>
+<td> Object </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Parameter </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainWeatherCfg.png" title="Configuration."><img alt="Configuration." height="219" src="../en/files/LibsMainWeatherCfg.png" width="422" /></a></div>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. For this template create and run a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical controller object</a> or use any available with the required scheduling properties.</dd>
+<dd>2. Create a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical parameter object</a> and select this template for it. Enable the parameter.</dd>
+<dd>3. In the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Scheduling at CRON of current update</i> — to value of need scheduling for current data acquiring in the <a href="User_API.html#CRON" title="Special:MyLanguage/Documents/User API">CRON format</a>, at empty the acquiring will be performed with period of execution the controller object;</li>
+<li> <i>Scheduling at CRON of forecast update</i> — to value of need scheduling for forecast data acquiring in the <a href="User_API.html#CRON" title="Special:MyLanguage/Documents/User API">CRON format</a>, at empty the acquiring will be performed with period of execution the controller object.</li></ul></dd>
+<dd>4. RESULT: Starting the controller object (where this parameter was created) and when it was not started, we should get the weather data in the attribute <i>Current (current)</i> and <i>Forecast (forecast)</i> and after setting your city code in the corresponded attribute. City code you can obtain from the <a class="external text" href="https://openweathermap.org/" rel="nofollow noreferrer noopener" target="_blank">official site</a> in the URL after searching your city in the site form.</dd></dl>
 <h2><span class="mw-headline" id="For_WebUser"><span class="mw-headline-number">4</span> <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">For WebUser</a></span></h2>
 <table class="wikitable">
 
@@ -3338,5 +3608,5 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/ru">Libs/Main/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2963</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/ru">Libs/Main/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2966</td></tr></table></body>
 </html>

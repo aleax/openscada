@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Библиотеки/Основные графические элементы</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FMain+graphical+elements&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Main_graphical_elements" title="Libs/Main graphical elements">Libs/Main graphical elements</a> and the translation is 86% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Main_graphical_elements.html" title="Libs/Main graphical elements (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main_graphical_elements.html" title="Бібліотеки/Основні графічні елементи (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FMain+graphical+elements&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Main_graphical_elements" title="Libs/Main graphical elements">Libs/Main graphical elements</a> and the translation is 85% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Main_graphical_elements.html" title="Libs/Main graphical elements (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main_graphical_elements.html" title="Бібліотеки/Основні графічні елементи (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -27,7 +27,7 @@
 <tr>
 <td> <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">Библиотека основных элементов интерфейса пользователя</a>
 </td>
-<td> 2.1 </td>
+<td> 2.2 </td>
 <td> GPLv2
 </td>
 <td> vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">GZip</a>) &gt; VCA.wlb_Main
@@ -71,6 +71,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <li class="toclevel-2"><a href="#.D0.9D.D0.B0.D1.80.D1.83.D1.88.D0.B5.D0.BD.D0.B8.D1.8F_.E2.80.94_.D0.B0.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D0.BE.D0.B5_.28alarmsAct.29"><span class="tocnumber">1.5</span> <span class="toctext">Нарушения — активное (alarmsAct)</span></a></li>
 <li class="toclevel-2"><a href="#.D0.A1.D0.B2.D0.BE.D0.B9.D1.81.D1.82.D0.B2.D0.B0_.D0.BE.D0.B1.D1.8A.D0.B5.D0.BA.D1.82.D0.B0_.28objProps.29"><span class="tocnumber">1.6</span> <span class="toctext">Свойства объекта (objProps)</span></a></li>
 <li class="toclevel-2"><a href="#.D0.9A.D0.B0.D0.BB.D0.B5.D0.BD.D0.B4.D0.B0.D1.80.D1.8C_.28calendar.29"><span class="tocnumber">1.7</span> <span class="toctext">Календарь (calendar)</span></a></li>
+<li class="toclevel-2"><a href="#Weather_.28weather.29"><span class="tocnumber">1.8</span> <span class="toctext">Weather (weather)</span></a></li>
 </ul>
 </li>
 <li class="toclevel-1"><a href="#.D0.9A.D0.BE.D1.80.D0.BD.D0.B5.D0.B2.D0.B0.D1.8F_.D1.81.D1.82.D1.80.D0.B0.D0.BD.D0.B8.D1.86.D0.B0_.28.D0.A1.D0.9E.29_.28RootPgSo.29"><span class="tocnumber">2</span> <span class="toctext">Корневая страница (СО) (RootPgSo)</span></a></li>
@@ -846,6 +847,55 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <td> Выбранное время </td>
 <td> Целое </td>
 <td> Время календаря в секундах от UNIX-эпохи.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="weather" title="#weather"><h3><span class="mw-headline" id="Weather_.28weather.29"><span class="mw-headline-number">1.8</span> Weather (<a href="Libs_Main_graphical_elements.html#weather" title="Special:MyLanguage/Libs/Main graphical elements">weather</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element on Figure 1.8 is used to display weather data from parameters on the DAQ-template "<a href="Libs_Main.html#weather" title="Special:MyLanguage/Libs/Main">Weather</a>".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:452px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_weather.png"><img class="thumbimage" height="149" src="../en/files/LibMainEls_weather.png" width="450" /></a>  <div class="thumbcaption">Fig.1.8. The element "Weather" in the development and runtime modes (left to right).</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+This widget can be used the developer to create mnemonic schemes with displaying the weather. To use it you need to add this widget to a mnemonic scheme, adjust for the horizontal, vertical size, by scaling, and link to the data source parameter at the DAQ-template "<a href="Libs_Main.html#weather" title="Special:MyLanguage/Libs/Main">Weather</a>".
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode, the current weather is displayed in the top and forecast displayed in the bottom with details on the images' tooltip.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Images for some weather conditions can be missed yet due to the images are still appended!
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Configuration </th>
+<th> Configuration template </th>
+<th> Description
+</th></tr>
+<tr>
+<td> current </td>
+<td> Weather: Current </td>
+<td> Object </td>
+<td> Input link </td>
+<td> Parameter|current </td>
+<td> The object with current data.
+</td></tr>
+<tr>
+<td> forecast </td>
+<td> Weather: Forecast </td>
+<td> Object </td>
+<td> Input link </td>
+<td> Parameter|forecast </td>
+<td> The object with forecast data.
 </td></tr></table>
 <p><br />
 </p>
@@ -3173,5 +3223,5 @@ The panel allows the user to:
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/ru">Libs/Main_graphical_elements/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2963</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/ru">Libs/Main_graphical_elements/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2966</td></tr></table></body>
 </html>
