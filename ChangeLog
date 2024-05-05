@@ -1,3 +1,65 @@
+2024-05-05 Roman 0.9.7
+- ModelsDB.{AGLKS.vca,Boiler.St}: Main page of the project appended by the attribute "Project document (prjDoc)"
+    with link to the document on OpenSCADA Wiki, and removed for the attribute "Status line items (statLine)" with it mark as optional.
+- !!!!:LibsDB.{OscadaLibs.tmplib_base,vcaBase.wlb_Main}:
+    !!!!:OscadaLibs.tmplib_base: Appended by a template "Weather (weather)" of implementation weather forecast
+	initially based on openweathermap.org with documenting and translating for Ukrainian.
+    !!!!:vcaBase.wlb_Main: Appended by a widget "weather" of representing the weather data from the template "Weather (weather)"
+	with documenting and translating for Ukrainian.
+    !!:OscadaLibs.tmplib_base: Appended by a template "Disk SMART (DiskSMART)" of representing disks' SMART
+	with documenting and translating for Ukrainian.
+    vcaBase.wlb_Main: Appended of the dynamic messages with Ukrainian translation for main ones of DiskSMART and UPS
+	during representing by "Object properties (objProps)".
+- LibsDB.OscadaLibs: tmplib_base.UPS: Improved in detection "No powernet" at very low input voltage and frequency.
+- !!!:FIX:LibsDB.vcaBase:
+    !!!:FIX: wlb_Main.grpGraph: Procedure rewrote for unification to work with different elements,
+	so for use in all derivative frames like to wlb_Main.grpGraph10.
+    !!:wlb_Main.grpGraph10: Switched to inheritance from wlb_Main.grpGraph.
+    !!:wlb_Main.ElViewGraph: Appended of reading the default-static properties for clearing to them.
+	Some improved in processing the boolean type signals.
+	Improved in faster updating values after source changing.
+    FIX:wlb_Main.storeHouse: Fixed in early setting the vertical position for the data table at changing the user.
+	FIX: Fixed in the space separator of the selectable items.
+	Appended of resetting filters at the page restart or user change.
+	The whole-table report appended of limiting cells' text in 30 symbols, that is like to the edition table.
+	The item report appended by hiding empty fields.
+	Appended of updating the selection context of the form items at change such item value.
+	Some reordered in the Z coordinate for concealing of the form elements appearing and disappearing.
+    FIX:wlb_Main.graphSelPrm: Fixed in translation "<Clear>" from the procedure.
+    FIX:wlb_Main.RootPgSo: The attribute "Procedure of the Demo play (demoPlayProc)" set to the type "Text (translate)".
+- data/{debian,debian_mod}/control: Appended by a variant libsensors-dev to libsensors4-dev for Ubuntu 24.04 and other modern
+    Debian distributions with transition from libsensors4-dev.
+- SYS,DAQ.JavaLikeCalc: The sysTm() function appended by detection of time jumps after suspending
+	and what used in DAQ.JavaLikeCalc for preventing false messages "Calculation time has been exceeded ...".
+    Appended by the DEF_HTaskPer definition.
+- FIX:SYS: TMess: The function translGetU() fixed in cleaning service zero symbols in non dynamic translation modes.
+    TCntrNode::cntrCmd(): The logging message of setting the table cells "set the cell ['%s':%s] to '%s'."
+	    appended by value limiting in 100 symbols.
+	The generic logging messages "load" and "save" some improved.
+- !!:FIX:DAQ: TValFunc::get{S,I,R,B}() appended by code of casting the object TVarObj with EVAL/null converting.
+    FIX: Templates fixed-adapted to the dynamic translation in using the IO names.
+    !!:System: Switched to the soft mode of parameters automatic creation,
+	that is you allowed to create the source parameters automatically,
+	save forcibly need ones and next switch to the manual mode, than preventing continued scanning.
+- FIX:Transports: Table of the OpenSCADA external hosts appended in encoding the hosts ID in a way of IDs of the OpenSCADA nodes
+    since their used next in IDs of the output transports.
+- UI.QTCfg: The previous and next actions appended by information about the tab, like to favorites.
+- !:UI.{Vision,WebVision}: Appended by a specific attribute "Project document (fprjDoc)"
+	for customisation the document name and allowing WEB-pages in such role.
+    The specific attribute "Status line items (statLine)" marked as optional.
+- FIX:UI.VCAEngine: Templates fixed-adapted to the dynamic translation in using the configuration template of the attributes.
+- FIX:UI.Vision: The Text primitive in the HTML mode by QTextDocument appended by zero margin for corresponding with UI.WebVision.
+	FIX: Rewrote in processing the arguments for direct replacing marks %1, %2, ..., since Qt doesn't trace the numbers missing.
+	Improved in some original messages.
+    FIX: Limiting icons size of the user fields in the status bar.
+    FIX: Fixed in display the parameter "As a page:" of entry ID and name dialogue of items creation only for project's items.
+- !!!:FIX:UI.WebVision: Appended of implementation the user fields in the status bar.
+    FIX: Columns sorting of the Table primitive from detached header prevented for non sortable tables.
+    FIX: Appended of support spaces in resource name of sources of the primitive Media.
+    FIX: line-height of CSS set to 1.2 for corresponding with UI.Vision.
+    The Table view of the FormEl primitive is appended by borders highlight in the items selection.
+
+
 2024-03-25 Roman 0.9.7
 - !!!!:DOC: The "Quick start" manual completely revised and actualized for last 0.9.7 LTS changes.
 - FIX:LibsDB.vcaBase: wlb_Main.storeHouse: Switched to whole clean at change the user.

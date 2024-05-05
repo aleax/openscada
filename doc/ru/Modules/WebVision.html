@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/WebVision</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FWebVision&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/WebVision" title="Modules/WebVision">Modules/WebVision</a> and the translation is 94% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/WebVision.html" title="Modules/WebVision (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/WebVision.html" title="Модулі/WebVision (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FWebVision&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/WebVision" title="Modules/WebVision">Modules/WebVision</a> and the translation is 92% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/WebVision.html" title="Modules/WebVision (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/WebVision.html" title="Модулі/WebVision (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> </td>
 <td> Рабочий пользовательский интерфейс (WEB)
 </td>
-<td> 6.9 </td>
+<td> 6.10 </td>
 <td> GPL2 </td>
 <td> ui_WebVision.so </td>
 <td> en,uk,ru,de </td>
@@ -54,8 +54,8 @@
 <dd> - expand the primitive "Diagram" by the mouse scaling operations;</dd>
 <dd> - implement own RTE-editor for the view Text of the primitive FormEl;</dd>
 <dd> - ElFigure: fix some properties loss (line width at the least) at the actions processing, in the way of the primitive code common refactoring;</dd>
-<dd> * expand the status-bar, with the functions:
-<dl><dd> - user status fields.</dd></dl></dd>
+<dd> + expand the status-bar, with the functions:
+<dl><dd> + user status fields.</dd></dl></dd>
 <dd> - ElFigure,Diagram: enable or make the anti aliasing, for the library GD;</dd>
 <dd> - implement the primitives "Diagram", "ElFigure" in the tag "SVG";</dd>
 <dd> - expand the variant "Animation" of the primitive "Media" in using the raw image files, like to PNG.</dd></dl>
@@ -139,7 +139,8 @@
 <li> the menu buttons of call the page printing and data exporting for:
 <ul><li> printing: Main Page, Documents;</li>
 <li> exporting: Documents (HTML,CSV), Tables (CSV).</li></ul></li>
-<li> manual on the VCA-project — calls, by a click, the manual on the visualization project for the file "<b>{ProjVCA_ID}.[pdf|html|odt]</b>" in <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">the document folder</a>.</li></ul></li>
+<li> manual on the VCA-project — calls by a click the manual on the visualization project for the file "<b>{ProjVCA_ID}.[pdf|html|odt]</b>" in <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">the document folder</a> or specified in the <a href="#SpecAttrs">"prjDoc" attribute</a>;</li>
+<li> panel of user statuses and actions when specified in the <a href="#SpecAttrs">"statLine" attribute</a>; mouse clicking left, right and double forms events to the main interface page.</li></ul></li>
 <li> In the main field of the status line various messages and assistance messages are displayed.</li></ul>
 <p>Модулем поддерживается многоязычность, которая включается <a href="../Program_manual.html#ConfigTr" title="Special:MyLanguage/Documents/Program manual">динамическим переводом сообщений OpenSCADA</a>. Полученный язык передаётся модулем <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> и определяется путём и в последовательности:
 </p>
@@ -225,62 +226,91 @@
 <td> Функция API объектной модели OpenSCADA </td>
 <td> Невизуальный виджет, на стороне исполнения, позволяющий включать вычислительные функции объектной модели OpenSCADA в СВУ.
 </td></tr></table>
-<p><span id="SpecAttrs" title="#SpecAttrs">Модулем визуализатора предоставляется и используется ряд специфических атрибутов</span> общего характера, информация о которых приведена в таблице. Эти атрибуты автоматически создаются визуализатором при их отсутствии и в момент первого запуска, или создаются пользователем в кадре указанной области, по необходимости.
+<p><span id="SpecAttrs" title="#SpecAttrs">The visualizer module provides and uses set of specific attributes</span> of the generic means, the information of which is given in the table. These attributes are automatically created by the visualizer in their absence and during the first run, or created by the user in the frame of the specified area, as needed.
 </p>
 <table class="wikitable">
 
 <tr>
-<th> Идентификатор (область) </th>
-<th> Имя </th>
-<th> Назначение
+<th> Identifier (area) </th>
+<th> Name </th>
+<th> Appointment
 </th></tr>
 <tr>
-<td> notify{N}, notifyVisWebVision{N} (страница) </td>
-<td> Уведомитель: тип {N} </td>
-<td> Определяет уведомитель и процедуру получения ресурса уведомления согласно <a href="../Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">концепции "Сигнализации (Алармы)"</a>.
+<td> keepAspectRatio (main page) </td>
+<td> Keep aspect ratio on scale </td>
+<td> Keep aspect ratio of the pages on scale.
 </td></tr>
 <tr>
-<td> keepAspectRatio (главная страница) </td>
-<td> Сохранять пропорцию при масштабировании </td>
-<td> Сохранять пропорцию страниц при масштабировании.
+<td> stBarNoShow (main page) </td>
+<td> Do not show the status bar </td>
+<td> Hide the status bar of the main window.
 </td></tr>
 <tr>
-<td> stBarNoShow (главная страница) </td>
-<td> Не показывать строку статуса </td>
-<td> Скрыть строку статуса главного окна.
-</td></tr>
-<tr>
-<td> userSetVis (главная страница, создаётся вручную, строковый тип) </td>
-<td> Установка пользователя </td>
-<td>
-<p>Изменение пользователя или вызов диалога для его выбора. Варианты значения:
+<td> notify{N}, notifyVisWebVision{N} (page) </td>
+<td> Notification: type {N} </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Create manually with the type "Text"!
+<p>Specifies a notifier and a procedure of the notification resource obtaining according to the <a href="../Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">"Signalling (Alarms)" conception</a>.
 </p>
-<ul><li> "*" — вызов диалога выбора пользователя; </li>
-<li> "$" — изменение пользователя на типового;</li>
-<li> "{пользователь}[:{пароль}]" — прямая смена на <i>пользователь</i> с <i>паролем</i>; для пустого пароля пользователь меняется только если его права меньше или равны; полезный пример смены на пользователя "user" после минуты неактивности:</li></ul>
+</td></tr>
+<tr>
+<td> statLine (main page) </td>
+<td> Status line items </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Create manually with the type "Text"!
+<p>Text field with description of the status line item in the string form "<b>{Id}:{Label}:{ToolTip}:{Color}:{Img}</b>", where:
+</p>
+<ul><li> "Id" — identifier, uses also to form events from the widget "stIt_{Id}".</li>
+<li> "Label" — visual label of the status element.</li>
+<li> "ToolTip" — context help about the element.</li>
+<li> "Color" — label color.</li>
+<li> "Img" — image of the status element, instead the label.</li></ul>
+</td></tr>
+<tr>
+<td> userSetVis (main page) </td>
+<td> Setting the user </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Create manually with the type "String"!
+<p>Change the user or call a dialog to select it. Variants of the value:
+</p>
+<ul><li> "*" — call for a selecting dialog of the user; </li>
+<li> "$" — change the user to the default one;</li>
+<li> "{user}[:{password}]" — direct change to <i>user</i> with <i>password</i>; for empty password, the user is changed only if its permission is lesser or equal; a useful example of changing to the "user" after one minute inactivity:</li></ul>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="k">if</span><span class="p">((</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">time</span><span class="p">()</span><span class="o">-</span><span class="k">this</span><span class="p">.</span><span class="nx">ownerSess</span><span class="p">().</span><span class="nx">userActTm</span><span class="p">())</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">)</span><span class="nx">userSetVis</span> <span class="o">=</span> <span class="s2">""</span><span class="p">;</span>
 <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">ownerSess</span><span class="p">().</span><span class="nx">reqUser</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">"user"</span><span class="p">)</span> <span class="nx">userSetVis</span> <span class="o">=</span> <span class="s2">"user"</span><span class="p">;</span>
 </pre></div>
 </td></tr>
 <tr>
-<td> vs_goHttpUrl (вид "Кнопка" примитива "FormEl") </td>
-<td> Переход по HTTP URL </td>
-<td> Переход на указанный URL по нажатию кнопки
+<td> prjDoc (main page) </td>
+<td> Project document </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Create manually with the type "String"!
+<p>Specifying the project documentation of call from the status line's button with a possibility of disabling-concealing the button at empty value. The documentation specified in view "<b>{OffLine}|{OnLineOpenSCADAWiki}</b>", for example for the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">AGLCS project</a> — "AGLCS|Using/Model_AGLKS". The online part is used in first order at its specifying!
+</p>
 </td></tr>
 <tr>
-<td> vs_background (виды "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" примитива "FormEl") </td>
-<td> Пользовательский фон </td>
-<td> Определяет пользовательский фон в форме <b>{color}-{transp} {image}</b>
+<td> vs_goHttpUrl (view "Button" of the primitive "FormEl") </td>
+<td> Go to the HTTP URL </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Create manually with the type "String"!
+<p>Go to the specified URL at the button press.
+</p>
 </td></tr>
 <tr>
-<td> vs_border (виды "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" примитива "FormEl") </td>
-<td> Пользовательская граница </td>
-<td> Определяет пользовательскую границу в стандартной форме CSS <b>{wdth}px {style} {color}</b>
+<td> vs_background (views "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" of the primitive "FormEl") </td>
+<td> Custom background </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Create manually with the type "String"!
+<p>Specifies for the custom background in the form <b>{color}-{transp} {image}</b>.
+</p>
 </td></tr>
 <tr>
-<td> vs_winTitle (вид "Box") </td>
-<td> Заголовок окна </td>
-<td> Значение динамического заголовка окна
+<td> vs_border (views "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" of the primitive "FormEl") </td>
+<td> Custom border </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Create manually with the type "String"!
+<p>Specifies for the custom border in the standard CSS-form <b>{wdth}px {style} {color}</b>.
+</p>
+</td></tr>
+<tr>
+<td> vs_winTitle (the view "Box") </td>
+<td> Window title </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Create manually with the type "String"!
+<p>Dynamic window title value.
+</p>
 </td></tr></table>
 <p>Рассмотрим реализацию каждого примитива более детально.
 </p>
@@ -725,5 +755,5 @@ GROUNDS: At working with the board <a class="external" href="http://oscada.org/w
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/ru">Modules/WebVision/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/ru">Modules/WebVision/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

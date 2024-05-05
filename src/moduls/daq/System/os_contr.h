@@ -58,9 +58,6 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	void autoC( bool val )	{ mAuto = val; }
-	bool autoC( )		{ return mAuto; }
-
 	// Set perameter type
 	void setType( const string &da_id );
 
@@ -84,9 +81,6 @@ class TMdPrm : public TParamContr
 
     protected:
 	//Methods
-	void load_( TConfig *cfg );
-	void save_( );
-
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	bool cfgChange( TCfg &co, const TVariant &pc );		//config change
 
@@ -98,7 +92,6 @@ class TMdPrm : public TParamContr
 
     private:
 	//Attributes
-	bool	mAuto;			//Autocreated
 	DA	*mDA;
 };
 

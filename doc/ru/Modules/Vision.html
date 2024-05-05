@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/Vision</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVision&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Vision" title="Modules/Vision">Modules/Vision</a> and the translation is 89% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Vision.html" title="Modules/Vision (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Vision.html" title="Модулі/Vision (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVision&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Vision" title="Modules/Vision">Modules/Vision</a> and the translation is 88% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Vision.html" title="Modules/Vision (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Vision.html" title="Модулі/Vision (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> </td>
 <td> Рабочий пользовательский интерфейс (Qt)
 </td>
-<td> 9.1 </td>
+<td> 9.2 </td>
 <td> GPL2 </td>
 <td> ui_Vision.so </td>
 <td> en,uk,ru,de </td>
@@ -477,23 +477,23 @@
 <li> "Руководство на 'Vision'" — вызов руководства на этот модуль.</li>
 <li> "Руководство на 'OpenSCADA 0.9.0'" — вызов руководства на OpenSCADA в целом.</li></ul></li>
 <li> "QTStarter" — Пункт меню, созданный модулем запуска модулей библиотеки Qt. Содержит кнопки запуска UI модулей OpenSCADA, основанных на библиотеке Qt. С помощью этого пункта можно открыть несколько экземпляров окон данного модуля или других модулей. В случае с режимом исполнения, это меню позволяет открыть окно разработки из исполнения, повторным вызовом данного модуля.</li></ul>
-<p>На строке статуса размещаются:
+<p>On the status line locates:
 </p>
-<ul><li> С правой стороны:
-<ul><li> часы, в полноэкранном режиме;</li>
-<li> текущая станция движка СВУ;</li>
-<li> текущий пользователь, от имени которого исполняется интерфейс СВУ — двойным кликом можно сменить этого пользователя, введя новое имя и пароль;</li>
-<li> текущий стиль интерфейса, который можно сменить двойным кликом;</li>
-<li> панель с кнопками:
-<ul><li> квитации нарушений — кликом можно сквитировать нарушения полностью или только нужный тип уведомления;</li>
-<li> экспорта и печати — кликом вызывает диалог экспорта и печати типового елемента или выбранного из меню, где экспорт для:
-<ul><li> "Страница" — страницу пользовательского интерфейса, в изображение;</li>
-<li> "Диаграмма" — диаграмму на пользовательском интерфейсе, в изображение и CSV;</li>
-<li> "Документ" — документ на пользовательском интерфейсе, в HTML и CSV для экспортных таблиц;</li>
-<li> "Таблица" — таблица вида "Таблица" примитива "FormEl" на пользовательском интерфейсе, в CSV и только для экспорта.</li></ul></li>
-<li> руководства на проект СВУ — кликом вызывает руководство на проект визуализации для файла "<b>{ProjVCA_ID}.[pdf|html|odt]</b>" в <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">каталоге документов</a>.</li></ul></li>
-<li> панель пользовательский действий, если определены <a href="#SpecAttrs">атрибутом "statLine"</a> — кликом левой, правой и двойным кликом формирует событие к главной странице интерфейса.</li></ul></li>
-<li> В главном поле строки статуса выводятся различные информационные сообщения и сообщения помощи.</li></ul>
+<ul><li> On the right side:
+<ul><li> the clock, in the full-screen mode;</li>
+<li> the current VCA engine station;</li>
+<li> the current user, on whose behalf the VCA interface is executed — by a double-clicking this user can be changed, typing of the new username and password;</li>
+<li> the current interface style, which can be changed by a double-clicking.</li>
+<li> the panel with buttons:
+<ul><li> alarms quietance — by a click the violations can be quieted completely or just the desired type of the notification;</li>
+<li> export and print — calls by a click for the dialog of exporting and printing the default element or selected from the menu, where the export for:
+<ul><li> "Page" — page of the user interface, to image;</li>
+<li> "Diagram" — diagram on the user interface, to image and CSV;</li>
+<li> "Document" — document on the user interface, to HTML and CSV for exporting tables;</li>
+<li> "Table" — table of the "Table" view of the primitive "FormEl" on the user interface, to CSV and only for export.</li></ul></li>
+<li> manual on the VCA-project — calls by a click the manual on the visualization project for the file "<b>{ProjVCA_ID}.[pdf|html|odt]</b>" in <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">the document folder</a> or specified in the <a href="#SpecAttrs">"prjDoc" attribute</a>.</li></ul></li>
+<li> panel of user statuses and actions when specified in the <a href="#SpecAttrs">"statLine" attribute</a>; mouse clicking left, right and double forms events to the main interface page.</li></ul></li>
+<li> In the main field of the status line various messages and assistance messages are displayed.</li></ul>
 <p>Режим исполнения (Runtime) в значительной степени поддерживает многоязычность, которая зависит от языка выбранного пользователя или окна исполнения, т.е. если вы измените пользователя то получите интерфейс исполнения на другом языке этого пользователя. Эта функция включается <a href="../Program_manual.html#ConfigTr" title="Special:MyLanguage/Documents/Program manual">динамическим переводом сообщений OpenSCADA</a>.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1039px;"><a class="image" href="http://oscada.org/wiki/File:Vision_run_ru.png"><img class="thumbimage" height="768" src="../files/Vision_run_ru.png" width="1037" /></a>  <div class="thumbcaption">Рис.3. Главное окно режима исполнения.</div></div></div></div>
@@ -583,23 +583,6 @@
 <th> Appointment
 </th></tr>
 <tr>
-<td> notify{N}, notifyVisVision{N} (page) </td>
-<td> Notification: type {N} </td>
-<td> Specifies a notifier and a procedure of the notification resource obtaining and the same notification, accordingly to the <a href="../Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">"Signalling (Alarms)" conception</a>. The notification performed in such priority — <b>notifyVisVision{N}</b> &gt; <b>{Qt|Phonon}</b> &gt; <b>notify{N}</b>. That is the <b>notifyVisVision{N}</b> is most priority, it overrides the <b>{Qt|Phonon}</b> notification and there you can implement very not ordinary notifications.
-</td></tr>
-<tr>
-<td> statLine (main page) </td>
-<td> Status line items </td>
-<td>
-<p>Text field with description of the status line item in the string form "<b>{Id}:{Label}:{ToolTip}:{Color}:{Img}</b>", where:
-</p>
-<ul><li> "Id" — identifier, uses also to form events from the widget "stIt_{Id}".</li>
-<li> "Label" — visual label of the status element.</li>
-<li> "ToolTip" — context help about the element.</li>
-<li> "Color" — label color.</li>
-<li> "Img" — image of the status element, instead the label.</li></ul>
-</td></tr>
-<tr>
 <td> runWin (main page) </td>
 <td> Window of the execution </td>
 <td>
@@ -625,33 +608,64 @@
 <td> Enabling the windows position control and save.
 </td></tr>
 <tr>
-<td> userSetVis (main page, created manually, the type "String") </td>
+<td> notify{N}, notifyVisVision{N} (page) </td>
+<td> Notification: type {N} </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Create manually with the type "Text"!
+<p>Specifies a notifier and a procedure of the notification resource obtaining and the same notification, accordingly to the <a href="../Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">"Signalling (Alarms)" conception</a>. The notification performed in such priority — <b>notifyVisVision{N}</b> &gt; <b>{Qt|Phonon}</b> &gt; <b>notify{N}</b>. That is the <b>notifyVisVision{N}</b> is most priority, it overrides the <b>{Qt|Phonon}</b> notification and there you can implement very not ordinary notifications.
+</p>
+</td></tr>
+<tr>
+<td> statLine (main page) </td>
+<td> Status line items </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Create manually with the type "Text"!
+<p>Text field with description of the status line item in the string form "<b>{Id}:{Label}:{ToolTip}:{Color}:{Img}</b>", where:
+</p>
+<ul><li> "Id" — identifier, uses also to form events from the widget "stIt_{Id}".</li>
+<li> "Label" — visual label of the status element.</li>
+<li> "ToolTip" — context help about the element.</li>
+<li> "Color" — label color.</li>
+<li> "Img" — image of the status element, instead the label.</li></ul>
+</td></tr>
+<tr>
+<td> userSetVis (main page) </td>
 <td> Setting the user </td>
-<td>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Create manually with the type "String"!
 <p>Change the user or call a dialog to select it. Variants of the value:
 </p>
 <ul><li> "*" — call for a selecting dialog of the user; </li>
 <li> "$" — change the user to the default one;</li>
 <li> "{user}[:{password}]" — direct change to <i>user</i> with <i>password</i>; for empty password, the user is changed only if its permission is lesser or equal and that is the local visualisation; a useful example of changing to the "user" after one minute inactivity:</li></ul>
-<pre style="white-space: pre-wrap;&nbsp;; margin-left: 20pt">
-if((SYS.time()-this.ownerSess().userActTm()) &lt; 60)userSetVis = "";
-else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user:user";
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="k">if</span><span class="p">((</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">time</span><span class="p">()</span><span class="o">-</span><span class="k">this</span><span class="p">.</span><span class="nx">ownerSess</span><span class="p">().</span><span class="nx">userActTm</span><span class="p">())</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">)</span><span class="nx">userSetVis</span> <span class="o">=</span> <span class="s2">""</span><span class="p">;</span>
+<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">ownerSess</span><span class="p">().</span><span class="nx">reqUser</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">"user"</span><span class="p">)</span> <span class="nx">userSetVis</span> <span class="o">=</span> <span class="s2">"user:user"</span><span class="p">;</span>
+</pre></div>
+</td></tr>
+<tr>
+<td> prjDoc (main page) </td>
+<td> Project document </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Create manually with the type "String"!
+<p>Specifying the project documentation of call from the status line's button with a possibility of disabling-concealing the button at empty value. The documentation specified in view "<b>{OffLine}|{OnLineOpenSCADAWiki}</b>", for example for the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">AGLCS project</a> — "AGLCS|Using/Model_AGLKS".
+</p>
 </td></tr>
 <tr>
 <td> vs_background (the views "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" of the primitive "FormEl") </td>
 <td> Custom background </td>
-<td> Specifies for the custom background in the form <b>{color}-{transp} {image}</b>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Create manually with the type "String"!
+<p>Specifies for the custom background in the form <b>{color}-{transp} {image}</b>.
+</p>
 </td></tr>
 <tr>
 <td> vs_border (the views "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" of the primitive "FormEl") </td>
 <td> Custom border </td>
-<td> Specifies for the custom border in the standard CSS-form <b>{wdth}px {style} {color}</b>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Create manually with the type "String"!
+<p>Specifies for the custom border in the standard CSS-form <b>{wdth}px {style} {color}</b>.
+</p>
 </td></tr>
 <tr>
 <td> vs_winTitle (the view "Box") </td>
 <td> Window title </td>
-<td> Dynamic window title value
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Create manually with the type "String"!
+<p>Dynamic window title value.
+</p>
 </td></tr></table>
 <p>Рассмотрим реализацию каждого примитива более детально.
 </p>
@@ -978,5 +992,5 @@ else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user:user";
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/ru">Modules/Vision/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/ru">Modules/Vision/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

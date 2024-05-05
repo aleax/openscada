@@ -228,7 +228,8 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 			    if(iA->find("key_") == 0)
 				rowV = iA->substr(4)+"="+opt->attr(*iA);
 		    }
-		    logMess = TSYS::strMess(_("set the cell ['%s':%s] to '%s'."), rowV.c_str(), opt->attr("col").c_str(), opt->text().c_str());
+		    logMess = TSYS::strMess(_("set the cell ['%s':%s] to '%s'."), rowV.c_str(), opt->attr("col").c_str(),
+				(((logMess=TSYS::strEncode(opt->text(),TSYS::Limit,"100"))==opt->text())?logMess:logMess+"...").c_str());
 		}
 		else if(opt->childSize() && opt->childGet(0)->name() == "fld") {
 		    logMess = _("command with arguments:");
@@ -282,8 +283,8 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 		else if(opt->attr("row").size())
 		    logMess = TSYS::strMess(_("move row in position %s to %s."), opt->attr("row").c_str(), opt->attr("to").c_str());
 	    }
-	    else if(aNm == "load") logMess = TSYS::strMess(_("load with forcibility %d."), s2i(opt->attr("force")));
-	    else if(aNm == "save") logMess = TSYS::strMess(_("save with forcibility %d."), s2i(opt->attr("force")));
+	    else if(aNm == "load") logMess = string(_("load")) + (s2i(opt->attr("force"))?_(" with forcibility"):"") + ".";
+	    else if(aNm == "save") logMess = string(_("save")) + (s2i(opt->attr("force"))?_(" with forcibility"):"") + ".";
 	    else if(aNm == "copy") logMess = TSYS::strMess(_("copy from '%s' to '%s'."), opt->attr("src").c_str(), opt->attr("dst").c_str());
 	    else if(s2i(opt->attr("primaryCmd"))) {
 		string rowV = opt->attr("row");

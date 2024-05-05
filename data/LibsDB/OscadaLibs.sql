@@ -15,7 +15,7 @@ The library was created to provide main templates of the DAQ-sources processing 
 Author: Roman Savochenko <roman@oscada.org>
 Used by: Most projects on OpenSCADA
 Founded: January 2006
-Version: 2.0.1
+Version: 2.2.0
 License: GPLv2
 DOC: Libs_Main|Libs/Main','Бібліотека основних шаблонів опрацювання DAQ-джерел та похідних сервісів.
 
@@ -24,7 +24,7 @@ DOC: Libs_Main|Libs/Main','Бібліотека основних шаблоні�
 Автор: Роман Савоченко <roman@oscada.org>
 Використано: Більшість проектів OpenSCADA
 Засновано: Січень 2006
-Версія: 2.0.1
+Версія: 2.2.0
 Ліцензія: GPLv2
 DOC: Libs_Main|Libs/Main','tmplib_base','Основная библиотека','Библиотека основных шаблонов обработки DAQ-источников и производных сервисов.
 
@@ -33,7 +33,7 @@ DOC: Libs_Main|Libs/Main','tmplib_base','Основная библиотека',
 Автор: Роман Савоченко <roman@oscada.org>
 Использовано: Большинство проектов OpenSCADA
 Основано: Январь 2006
-Версия: 2.0.1
+Версия: 2.2.0
 Лицензия: GPLv2
 DOC: Libs_Main|Libs/Main');
 INSERT INTO ParamTemplLibs VALUES('DevLib','Industrial devices','Промислові пристрої','The user protocol devices library created to provide access to industrial device''s data through network, like to common industrial automation devices and wide resources counters, with protocols simple enough to implement into the User Protocol module, using the presented complex protocols (ModBus, OPC_UA, HTTP) or directly on the internal like to Java language.
@@ -10046,7 +10046,7 @@ License: GPLv2','Об''єднання даних Джерела Безпереб
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: ТОВ "ДІЯ"
-Версія: 1.3.1
+Версія: 1.3.2
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	{ srcPrm = false; items = new Object(); alDelay_ = 0; }
 
@@ -10081,7 +10081,7 @@ else {
 
 	//Alarms process and mark
 	varS = "ups_status";
-	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
+	if((tP=srcPrm[varS]) != null && (tVl=tP.get()) != null) {
 		if(tVl == "OB")	{ items[varS].alarm = 1; tErr += tr("Status")+" \""+tr("On battery")+"\"; "; }
 		else if(tVl == "LB")	{ items[varS].alarm = 2; tErr += tr("Status")+" \""+tr("Low battery")+"\"; "; }
 		else if(tVl == "SD")	{ items[varS].alarm = 2; tErr += tr("Status")+" \""+tr("Shutdown load")+"\"; "; }
@@ -10089,43 +10089,48 @@ else {
 		else items[varS].alarm = 0;
 	}
 	varS = "battery_packs";
-	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
+	if((tP=srcPrm[varS]) != null && (tVl=tP.get()) != null) {
 		if(tVl.toInt() == 0)	{ items[varS].alarm = 2; tErr += tr("None of good battery present")+"; "; }
 		else items[varS].alarm = 0;
 	}
 	varS = "battery_charge";
-	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
+	if((tP=srcPrm[varS]) != null && (tVl=tP.get()) != null) {
 		if(tVl.toReal() < bChL) { items[varS].alarm = 1; tErr += tr("Battery charge low")+"; "; }
 		else if(tVl.toReal() < bChLL) { items[varS].alarm = 2; tErr += tr("Battery charge critical")+"; "; }
 		else items[varS].alarm = 0;
 	}
 	varS = "battery_packs_bad";
-	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
+	if((tP=srcPrm[varS]) != null && (tVl=tP.get()) != null) {
 		if(tVl.toInt())	{ items[varS].alarm = 1; tErr += tr("Bad %1 batteries present").replace("%1",tVl); }
 		else items[varS].alarm = 0;
 	}
+	noPower = false;
 	varS = "input_voltage";
-	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
-		if(tVl.toReal() > 10 && tVl.toReal() < inVL) { items[varS].alarm = 1; tErr += tr("Input voltage low")+"; "; }
-		else if(tVl.toReal() > inVH) { items[varS].alarm = 1; tErr += tr("Input voltage high")+"; "; }
+	if((tP=srcPrm[varS]) != null && (tVl=tP.get()) != null) {
+		tVl = tVl.toReal();
+		if(tVl < 0.1*inVL)	{ items[varS].alarm = 2; tErr += tr("No powernet")+"; "; noPower = true; }
+		else if(tVl < inVL)	{ items[varS].alarm = 1; tErr += tr("Input voltage low")+"; "; }
+		else if(tVl > inVH)	{ items[varS].alarm = 1; tErr += tr("Input voltage high")+"; "; }
 		else items[varS].alarm = 0;
 	}
 	varS = "input_frequency";
-	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
-		if(tVl.toReal() < inFLL) { items[varS].alarm = 2; tErr += tr("Input frequency too low")+"; "; }
-		else if(tVl.toReal() > inFHH)	{ items[varS].alarm = 2; tErr += tr("Input frequency too high")+"; "; }
-		else if(tVl.toReal() < inFL) { items[varS].alarm = 1; tErr += tr("Input frequency low")+"; "; }
-		else if(tVl.toReal() > inFH) { items[varS].alarm = 1; tErr += tr("Input frequency high")+"; "; }
+	if((tP=srcPrm[varS]) != null && (tVl=tP.get()) != null) {
+		tVl = tVl.toReal();
+		if(tVl < 0.1*inFLL)		{ items[varS].alarm = 2; if(!noPower) tErr += tr("No powernet")+"; "; }
+		else if(tVl < inFLL)	{ items[varS].alarm = 2; tErr += tr("Input frequency too low")+"; "; }
+		else if(tVl > inFHH)	{ items[varS].alarm = 2; tErr += tr("Input frequency too high")+"; "; }
+		else if(tVl < inFL)		{ items[varS].alarm = 1; tErr += tr("Input frequency low")+"; "; }
+		else if(tVl > inFH)		{ items[varS].alarm = 1; tErr += tr("Input frequency high")+"; "; }
 		else items[varS].alarm = 0;
 	}
 	varS = "ups_load";
-	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
+	if((tP=srcPrm[varS]) != null && (tVl=tP.get()) != null) {
 		if(tVl.toReal() > loadHH)		{ items[varS].alarm = 2; tErr += tr("UPS overloaded")+"; "; }
 		else if(tVl.toReal() > loadH)	{ items[varS].alarm = 1; tErr += tr("UPS load high")+"; "; }
 		else items[varS].alarm = 0;
 	}
 	varS = "ups_temperature";
-	if(!(tP=srcPrm[varS]).isEVal() && !(tVl=tP.get()).isEVal()) {
+	if((tP=srcPrm[varS]) != null && (tVl=tP.get()) != null) {
 		if(tVl.toReal() > tHH) 		{ items[varS].alarm = 2; tErr += tr("UPS overheated")+"; "; }
 		else if(tVl.toReal() > tH)	{ items[varS].alarm = 1; tErr += tr("Temperature high")+"; "; }
 		else items[varS].alarm = 0;
@@ -10161,7 +10166,7 @@ else {
 	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
-}','','',1686920815);
+}','','',1711718569);
 INSERT INTO tmplib_base VALUES('initConAssociateTrs','Initiative connections processing for the associated output transports','Опрацювання ініціативних підключень щодо асоційованих вихідних транспортів','Обработка инициативных подключений на предмет ассоциированных выходных транспортов','
 The template of processing input initiative connections was created to provide the last link of implementation and support for conception of data acquisition in the passive mode and the initiative connection, that is — the control of associative connections, created by the input transport at each connection.
 
@@ -10305,6 +10310,260 @@ HTTPvars["Content-Type"] = SYS.UI.mimeGet(reqF);
 if(!fOff && fSz < fSzLim)	return "200 OK";
 HTTPvars["Content-Range"] = "bytes "+fOff+"-"+(fOff+page.length-1)+"/"+fSz;
 return "206 Partial Content";','','',1702149894);
+INSERT INTO tmplib_base VALUES('weather','Weather','Погода','','The template of acquiring weather data from different weather services in Internet and initially it is only Open Weather (https://openweathermap.org/).
+
+The weather data divided on current and forecast with their placing in corresponded objects, where current attributes placed directly in the root and forecast days (the "day" object) and times (the "time" object) inwardly corresponded day according to the current timezone. These data acquired at specified schedule independently for current and forecast, and by default the current ones are performed per hour when forecast ones per day. The data can be accessible by user both as directly and through a specially created widget of the main library.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0
+License: GPLv2','Шаблон отримання даних погоди з різних погодних служб у Інтернет і первинно лише Open Weather (https://openweathermap.org/).
+
+Погодні дані діляться на поточні і прогноз із їх розміщенням у відповідних об''єктах, де поточні атрибути розташовуються прямо у корені та прогноз на день (об''єкт "day") і час (об''єкт "time") всередині відповідного дня згідно до поточної часової зони. Ці дані отримуються за відповідним розкладом незалежно для поточних і прогнозу, та типово поточні запитуються щогодинно, а прогноз один раз на день. Дані можуть бути доступні користувачу як прямо, так і посередництвом спеціально-створеного віджету основної бібліотеки.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0
+Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
+if(f_start) {
+	transport = "Sockets.weather:api.openweathermap.org:80";
+	APPID = "ba3444a90f0c5863879bdb495edf8989";	//MeeCast ID
+
+	schedCurTrueTm = schedFCTrueTm = 1;
+	current = new Object(), forecast = new Array();
+}
+
+tErr = "";
+
+if(!(tr=SYS.Transport.outAt(transport)) || !tr.start(true))
+	tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else {
+	//Requesting current day data
+	if(!schedCur.length || schedCur == null || SYS.time() >= SYS.cron(schedCur,schedCurTrueTm)) {
+		req = SYS.XMLNode("GET");
+		req.setAttr("URI", "/data/2.5/weather?id="+city+"&mode=xml&units=metric&APPID="+APPID);
+		if(!(tErr=tr.messIO(req,"HTTP")).toInt() && !(tErr=(respTree=SYS.XMLNode()).load(req.text())).toInt()) {
+			schedCurTrueTm = SYS.time();
+			current = new Object();
+			current.city = respTree.childGet("city").attr("name");
+			current.country = respTree.childGet("city").childGet("country").text();
+			current.sunRise = respTree.childGet("city").childGet("sun").attr("rise");
+			current.sunSet = respTree.childGet("city").childGet("sun").attr("set");
+			current.tm = respTree.childGet("lastupdate").attr("value");
+			current.t = respTree.childGet("temperature").attr("value");
+			current.tMin = respTree.childGet("temperature").attr("min");
+			current.tMax = respTree.childGet("temperature").attr("max");
+			current.tFeel = respTree.childGet("feels_like").attr("value");
+			current.h = respTree.childGet("humidity").attr("value");
+			current.p = respTree.childGet("pressure").attr("value");
+			current.windSpeed = respTree.childGet("wind").childGet("speed").attr("value");
+			current.windDir = respTree.childGet("wind").childGet("direction").attr("code");
+			current.windDirDeg = respTree.childGet("wind").childGet("direction").attr("value");
+			current.symbol = respTree.childGet("weather").attr("icon");
+			current.symbolNm = respTree.childGet("weather").attr("value");
+		}
+	}
+
+	//Requesting forecast
+	if(!schedFC.length || schedFC == null || SYS.time() >= SYS.cron(schedFC,schedFCTrueTm)) {
+		req = SYS.XMLNode("GET");
+		//Daily
+		req.setAttr("URI", "/data/2.5/forecast/daily?id="+city+"&mode=xml&units=metric&cnt=10&APPID="+APPID);
+		if(!tErr.toInt() && !(tErr=tr.messIO(req,"HTTP")).toInt() && !(tErr=(respTree=SYS.XMLNode()).load(req.text())).toInt()) {
+			schedFCTrueTm = SYS.time();
+			forecastN = respTree.childGet("forecast");
+			forecast = new Array();
+			for(iTm = 0; (timeN=forecastN.childGet("time",iTm)); iTm++) {
+				forecast.push(dayO=new Object());
+				dayO.tm = timeN.attr("day");
+				dayO.sunRise = timeN.childGet("sun").attr("rise");
+				dayO.sunSet = timeN.childGet("sun").attr("set");
+				dayO.t = timeN.childGet("temperature").attr("day");
+				dayO.tMin = timeN.childGet("temperature").attr("min");
+				dayO.tMax = timeN.childGet("temperature").attr("max");
+				dayO.tNight = timeN.childGet("temperature").attr("night");
+				dayO.tEve = timeN.childGet("temperature").attr("eve");
+				dayO.tMorn = timeN.childGet("temperature").attr("morn");
+				dayO.tFeel = timeN.childGet("feels_like").attr("day");
+				dayO.tFeelNight = timeN.childGet("feels_like").attr("night");
+				dayO.tFeelEve = timeN.childGet("feels_like").attr("eve");
+				dayO.tFeelMorn = timeN.childGet("feels_like").attr("morn");
+				dayO.h = timeN.childGet("humidity").attr("value");
+				dayO.p = timeN.childGet("pressure").attr("value");
+				dayO.windSpeed = timeN.childGet("windSpeed").attr("mps");
+				dayO.windDir = timeN.childGet("windDirection").attr("code");
+				dayO.windDirDeg = timeN.childGet("windDirection").attr("deg");
+				dayO.symbol = timeN.childGet("symbol").attr("var");
+				dayO.symbolNm = timeN.childGet("symbol").attr("name");
+			}
+
+			//Per time
+			req.clear(true).setAttr("URI", "/data/2.5/forecast?id="+city+"&mode=xml&units=metric&APPID="+APPID);
+			if(forecast.length && !(tErr=tr.messIO(req,"HTTP")).toInt() && !(tErr=(respTree=SYS.XMLNode()).load(req.text())).toInt()) {
+				forecastN = respTree.childGet("forecast");
+				iDay = 0, dayO = forecast[iDay], dayO.times = forecastTimes = new Array();
+				for(iTm = 0; (timeN=forecastN.childGet("time",iTm)); iTm++) {
+					timeO = new Object();
+					timeO.tmFrom = timeN.attr("from");
+					timeO.tmTo = timeN.attr("to");
+					timeO.t = timeN.childGet("temperature").attr("value");
+					timeO.tMin = timeN.childGet("temperature").attr("min");
+					timeO.tMax = timeN.childGet("temperature").attr("max");
+					timeO.tFeel = timeN.childGet("feels_like").attr("value");
+					timeO.h = timeN.childGet("humidity").attr("value");
+					timeO.p = timeN.childGet("pressure").attr("value");
+					timeO.windSpeed = timeN.childGet("windSpeed").attr("mps");
+					timeO.windDir = timeN.childGet("windDirection").attr("code");
+					timeO.windDirDeg = timeN.childGet("windDirection").attr("deg");
+					timeO.symbol = timeN.childGet("symbol").attr("var");
+					timeO.symbolNm = timeN.childGet("symbol").attr("name");
+
+					while(SYS.strftime(SYS.strptimegm(timeO.tmFrom,"%Y-%m-%dT%H:%M:%S"),"%Y-%m-%d") != dayO.tm) {
+							//timeO.tmFrom.indexOf(dayO.tm+"T") < 0) {
+						iDay++;
+						if(iDay >= forecast.length)	{ iDay = 0; break; }
+						dayO = forecast[iDay], dayO.times = forecastTimes = new Array();
+					}
+					forecastTimes.push(timeO);
+				}
+			}
+		}
+	}
+}
+
+//Error set
+if(!tErr.length)	tErr = "0";
+if(tErr.toInt()) {
+	if(tr != null && tr.start()) tr.start(false);
+	if(f_err != tErr)
+		SYS.messDebug("/WEATH/"+this.cfg("SHIFR"), tr("Error")+": "+tErr);
+}
+else {
+	tVl = "";
+	if(schedCur.length && schedCur != null)
+		tVl += tr("Scheduled currents call")+" "+SYS.strftime(SYS.cron(schedCur,schedCurTrueTm))+". ";
+	if(schedFC.length && schedFC != null)
+		tVl += tr("Scheduled forecast call")+" "+SYS.strftime(SYS.cron(schedFC,schedFCTrueTm))+". ";
+	if(tVl.length)	tErr += ": "+tVl;
+}
+f_err = tErr;','','',1714665270);
+INSERT INTO tmplib_base VALUES('DiskSMART','Disk SMART','Дисковий SMART','','Data combination of the disk SMART in a complex object of the attribute "All items". The template designed to use together with the DAQ-module "System" in the part "Disk SMART" and to represent this data by the frame "Object properties" as a complex object with properties and signalling at common errors. Some SMART attributes can be unknown or wrong for specified disk due to their missing in the disks DB, especially for modern SSD, so the template provides a feature to redefine names the attributes.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0
+License: GPLv2','Об''єднання даних дискового SMART у комплексному об''єкті атрибуту "Всі елементи". Шаблон розроблено для використання із модулем джерела даних "Система" у частині "SMART Диску" та представлення цих даних кадром "Властивості об''єкту" як комплексний об''єкт із властивостями і сигналізацією за загальних помилок. Деякі атрибути SMART можуть бути невідомими або помилковими для визначеного диску через їх відсутність у БД дисків, особливо для сучасних SSD, тож шаблоном надається властивість перевизначення назв атрибутів.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0
+Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
+if(f_start)	{ srcPrm = false; items = new Object(); }
+
+alLev = 0;
+tErr = "";
+
+//Connect to source
+if(typeof(srcPrm) != "TCntrNode:TValue:TParamContr") srcPrm = SYS.DAQ.nodeAt(srcAddr,".");
+if(!srcPrm) { tErr = tr("No connection to source object"); alLev = 3; }
+else if(srcPrm.err.get() != 0)	 { tErr = tr("Source error")+": "+srcPrm.err.get().parse(1,":"); alLev = 3; }
+else {
+	//Attributes list get and "items" update
+	nLst = srcPrm.nodeList("a_");
+	for(i_n = 0; i_n < nLst.length; i_n++) {
+		aId = nLst[i_n].slice(2);
+		aNd = srcPrm[nLst[i_n]];
+		if(items[aId].isEVal()) {
+			items[aId] = itW = new Object();
+			itW.descr = aNd.descr();
+			if((tVl=defs.match("^"+aId+":([^\n]+)","m")).length)
+				itW.descr = tVl[1];
+
+			// Writeable check
+			//SYS.messInfo("UPS test", aId+": aNd.flg()="+aNd.flg());
+			if((itW.wr=!(aNd.flg()&0x04)) && aNd.flg()&0x01) {
+				itW.wr = "";
+				for(off = 0, pos = 0; (selId=aNd.values().parse(0,";",off)).length; pos++)
+					itW.wr += ((selId==(selNm=aNd.selNames().parse(pos,";")))?selId:(selNm+" ("+selId+")"))+";";
+			}
+			itW.alarm = 0;
+		}
+		itW = items[aId];
+		tvl = aNd.get();
+		if(aId == 5) {	//Realocated sectors count
+			if(tvl > 100)	{ itW.alarm = 2; tErr += tr("Too many realocated sectors")+"; "; }
+			else if(tvl)	{ itW.alarm = 1; tErr += tr("Some reallocated sectors are presented")+"; "; }
+			else itW.alarm = 0;
+		}
+		else if(aId == 190) {	//Airflow temperature
+			if(tvl > 255)	tvl = tvl&0xFF;
+			if(tvl > 70)		{ itW.alarm = 2; tErr += tr("Hard disk is overheated")+"; "; }
+			else if(tvl > 50) { itW.alarm = 1; tErr += tr("Temperature high")+"; "; }
+			else itW.alarm = 0;
+		}
+		else if(aId == 194) {	//Temperature
+			if(tvl > 255)	{ tvl = tvl&0xFF; itW.val = tvl; }
+			if(tvl > 70)		{ itW.alarm = 2; tErr += tr("Hard disk is overheated")+"; "; }
+			else if(tvl > 50) { itW.alarm = 1; tErr += tr("Temperature high")+"; "; }
+			else itW.alarm = 0;
+		}
+		else if(aId == 197) {	//Current pending sectors
+			if(tvl > 10) { itW.alarm = 2; tErr += tr("Too many pending sectors")+"; "; }
+			else if(tvl) { itW.alarm = 1; tErr += tr("Some pending sectors are presented")+"; "; }
+			else itW.alarm = 0;
+		}
+		itW.val = tvl;
+	}
+
+	//Alarms process and mark
+	//SYS.messInfo("HDDSMART", "TEST 00");
+	/*varS = 5;	//Realocated sectors count
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		if(tP.get() > 10) { items[varS].alarm = 2; tErr += tr("Too many realocated sectors")+"; "; }
+		else if(tP.get()) { items[varS].alarm = 1; tErr += tr("A realocated sectors present")+"; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = 190;	//Airflow temperature
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		tvl = tP.get();
+		if(tvl > 255) { tvl = tvl&0xFF; items[varS].val = tvl; }
+		if(tvl > 70) { items[varS].alarm = 2; tErr += tr("Hard disk overheated")+"; "; }
+		else if(tvl > 50) { items[varS].alarm = 1; tErr += tr("Temperature high")+"; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = 194;	//Temperature
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		tvl = tP.get();
+		if(tvl > 255) { tvl = tvl&0xFF; items[varS].val = tvl; }
+		if(tvl > 70) { items[varS].alarm = 2; tErr += tr("Hard disk overheated")+"; "; }
+		else if(tvl > 50) { items[varS].alarm = 1; tErr += tr("Temperature high")+"; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = 197;	//Current pending sectors
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		if(tP.get() > 10) { items[varS].alarm = 2; tErr += tr("Too many pending sectors")+"; "; }
+		else if(tP.get()) { items[varS].alarm = 1; tErr += tr("A pending sectors present")+"; "; }
+		else items[varS].alarm = 0;
+	}*/
+
+	//Set variables process
+	for(var aIt in items) {
+		it = items[aIt];
+		if(!it.set.isEVal()) {
+			aNd = srcPrm["a_"+it.id];
+			if(aNd.flg()&0x01 && (selV=it.set.match(".+\\((.+)\\)$")).length) it.set = selV[1];
+			aNd.set(it.set);
+			it.set = EVAL_REAL;
+		}
+		alLev = max(alLev, it.alarm);
+	}
+}
+
+//SYS.messInfo("UPS test", "tErr="+tErr+"; alLev="+alLev);
+tErr = tErr.length ? ""+alLev+":"+tErr : "0";
+
+//Alarms forming
+if(tErr.toInt() && tErr.toInt() != f_err.toInt())
+	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -(2+alLev), SHIFR);
+else if(f_err.toInt() && !tErr.toInt())
+	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
+f_err = tErr;','','',1714665209);
 CREATE TABLE IF NOT EXISTS 'flb_Controller' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO flb_Controller VALUES('prescr','Prescriptions manager (moved)','','','!!!!: Moved and replaced by the template PrescrTempl.manager. Will be removed soon
 Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
@@ -15124,7 +15383,7 @@ INSERT INTO Trs VALUES('Status','Статус','Статус','Статус');
 INSERT INTO Trs VALUES('On battery','Від батареї','От батареи','');
 INSERT INTO Trs VALUES('Low battery','Батарею розряджено','Батарея разряжена','');
 INSERT INTO Trs VALUES('Shutdown load','Скид навантаження','Сброс нагрузки','');
-INSERT INTO Trs VALUES('ALARM','АВАРІЯ','АВАРИЯ','');
+INSERT INTO Trs VALUES('ALARM','ТРИВОГА','ТРЕВОГА','');
 INSERT INTO Trs VALUES('None good battery present','Відсутні хорощі батареї','Отсутствуют хорошие батареи','');
 INSERT INTO Trs VALUES('Battery charge low','Низький заряд батареї','Низкий заряд батареи','');
 INSERT INTO Trs VALUES('Battery charge critical','Критичний заряд батареї','Критический заряд батареи','');
@@ -15216,7 +15475,7 @@ INSERT INTO Trs VALUES('Long length (%1) of the message.','','','');
 INSERT INTO Trs VALUES('KS error.','','','');
 INSERT INTO Trs VALUES('KS error','','','');
 INSERT INTO Trs VALUES('Request error.','','','');
-INSERT INTO Trs VALUES('Serial output transport ''%1'' error.','','','');
+INSERT INTO Trs VALUES('Serial output transport ''%1'' error.','Помилка вихідного послідовного транспорту ''%1''.','','');
 INSERT INTO Trs VALUES('Request: TRANSL_TEMP.','','','');
 INSERT INTO Trs VALUES('No connection','','','');
 INSERT INTO Trs VALUES('Output transport ''%1'' error.','','','');
@@ -15329,7 +15588,7 @@ INSERT INTO Trs VALUES('MAIL FROM error: %1.','Помилка MAIL FROM: %1.','�
 INSERT INTO Trs VALUES('RCPT TO error: %1.','Помилка RCPT TO: %1.','Ошибка RCPT TO: %1.','');
 INSERT INTO Trs VALUES('DATA error: %1.','Помилка даних: %1.','Ошибка данных: %1.','');
 INSERT INTO Trs VALUES('DATA send error: %1.','Помилка надсилання даних: %1.','Ошибка отправки данных: %1.','');
-INSERT INTO Trs VALUES('Alarm','Сигнал','Сигнал','Аларм');
+INSERT INTO Trs VALUES('Alarm','Тривога','Тревога','Аларм');
 INSERT INTO Trs VALUES('Norm','Норма','Норма','Норма');
 INSERT INTO Trs VALUES('Sent %1. In queue %2.','Надіслано %1. У черзі %2.','Отправлено %1. В очереди %2.','');
 INSERT INTO Trs VALUES('Error: %1.','Помилка: %1.','Ошибка: %1.','');
@@ -15559,6 +15818,15 @@ INSERT INTO Trs VALUES('No data, reconnection. Switch to the first screen of the
 INSERT INTO Trs VALUES('Reconnects %1, left %2s.','','','');
 INSERT INTO Trs VALUES('Missed by an error - ','','','');
 INSERT INTO Trs VALUES('Initial reading in pos=%1(%2)','','','');
+INSERT INTO Trs VALUES('No powernet','Відсутня мережа','','');
+INSERT INTO Trs VALUES('Scheduled currents call','План запиту поточного','','');
+INSERT INTO Trs VALUES('Scheduled forecast call','План запиту прогнозу','','');
+INSERT INTO Trs VALUES('Too many realocated sectors','Забагато переміщених секторів','','');
+INSERT INTO Trs VALUES('Some reallocated sectors are presented','Дещо переміщених секторів присутньо','','');
+INSERT INTO Trs VALUES('Hard disk is overheated','Жорсткий диск перегрітий','','');
+INSERT INTO Trs VALUES('Too many pending sectors','Забагато секторів у очікувані','','');
+INSERT INTO Trs VALUES('Some pending sectors are presented','Дещо секторів у очікувані присутньо','','');
+INSERT INTO Trs VALUES('NORMA','НОРМА','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_base_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_base_io VALUES('digAlarm','in','Input',3,144,'Input|in',2,'Вхід','','Вход','','');
 INSERT INTO tmplib_base_io VALUES('simleBoard','in','Input',2,128,'Parameter|var',0,'Вхід','','Вход','','');
@@ -15884,6 +16152,19 @@ INSERT INTO tmplib_base_io VALUES('fileServerHTTP','page','WWW-page',0,1,'',3,'W
 INSERT INTO tmplib_base_io VALUES('fileServerHTTP','HTTPvars','HTTP variables',4,1,'',4,'HTTP змінні','','','','');
 INSERT INTO tmplib_base_io VALUES('fileServerHTTP','baseD','Base directory',0,64,'/data/share_res/local/Lib/',5,'Базовий каталог','','','','');
 INSERT INTO tmplib_base_io VALUES('fileServerHTTP','fSzSolidLim','File size limit for solid reading, else enables the partial content',2,64,'10e6',6,'Обмеження на розмір файлу для читання цілком, інакше вмикається вміст частками','','','','');
+INSERT INTO tmplib_base_io VALUES('weather','city','City ID',0,32,'709932',2,'ІД Міста','','','','');
+INSERT INTO tmplib_base_io VALUES('weather','this','Parameter',4,0,'0',5,'Параметр','','','','');
+INSERT INTO tmplib_base_io VALUES('weather','schedCur','Scheduling at CRON of current update',0,64,'0 8-20 * * * ',0,'Планування за CRON оновлення поточних даних','','','','');
+INSERT INTO tmplib_base_io VALUES('weather','schedFC','Scheduling at CRON of forecast update',0,64,'0 8 * * *',1,'Планування за CRON оновлення прогнозованих даних','','','','');
+INSERT INTO tmplib_base_io VALUES('weather','current','Current',4,16,'',3,'Поточне','','','','');
+INSERT INTO tmplib_base_io VALUES('weather','forecast','Forecast',4,16,'',4,'Прогноз','','','','');
+INSERT INTO tmplib_base_io VALUES('DiskSMART','srcAddr','Source object''s address',0,64,'',0,'Адреса вихідного об''єкту','','','','');
+INSERT INTO tmplib_base_io VALUES('DiskSMART','items','All items',4,33,'',1,'Всі елементи','','','','');
+INSERT INTO tmplib_base_io VALUES('DiskSMART','defs','Item definitions',0,36,'',2,'Визначення елементів','','','','');
+INSERT INTO tmplib_base_io VALUES('DiskSMART','this','The object',4,0,'',3,'Об''єкт','','','','');
+INSERT INTO tmplib_base_io VALUES('DiskSMART','SHIFR','Code',0,0,'',4,'Шифр','','','','');
+INSERT INTO tmplib_base_io VALUES('DiskSMART','NAME','Name',0,0,'',5,'Назва','','','','');
+INSERT INTO tmplib_base_io VALUES('DiskSMART','DESCR','Description',0,0,'',6,'Опис','','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_DevLib_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_DevLib_io VALUES('SCU750','transport','Transport',0,64,'SCU750',0,'Транспорт','','Транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('SCU750','addr','Device address (-1...255)',1,64,'1',1,'Адрес устройства (-1...255)','','Адреса пристрою (-1...255)','','');

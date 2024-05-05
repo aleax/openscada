@@ -332,7 +332,7 @@
 <li> Adaptation to work in the environment of the operating systems QNX and MS Windows.</li></ul>
 <h2><span class="mw-headline" id="Updates"><span class="mw-headline-number">7</span> Updates</span></h2>
 <h3><span class="mw-headline" id=".5B01.01.7532.2F01.03.2024.5D_The_SEVENTH_update"><span class="mw-headline-number">7.1</span> [01.01.7532/01.03.2024] The SEVENTH update</span></h3>
-<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 60 bugs and appends VERY MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2960" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
+<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 60 bugs and appends VERY MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2967" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> <b><u>User significant actions on the update</u></b><br />
 </p>
 <ul><li> DAQ.System: ID of the automaticly generated DA parameters changed to: CPU - "CPU[{N}]", fs - "FS{MP}", hddstat - "DiskSt_{dev}", MEM - "MEM", netstat - "Net_{IF}", sensors - "Sensors", hddsmart - "DiskSMART", ups - "UPS", uptime - "UpTm_{U}".</li></ul>
@@ -342,12 +342,13 @@
 <p><b><u><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Automation Linux distributive of the project OpenSCADA</a></u></b><br />
 </p>
 <ul><li> appending Debian 12 as the distributive base;</li>
-<li> updating TDE to 14.1.1 with stabilising up to the level of 14.0.13;</li>
+<li> moving of building the Debian 11,10,9 base to the Debian 12 environment;</li>
+<li> updating TDE to 14.1.1 and next to 14.1.2, with stabilising up to the level of 14.0.13;</li>
 <li> prevents optionally the system tray from show program icons with different WMID but equal names like to BlueMan;</li>
 <li> prevents the very flooding in "~/.xsession-errors" by the debug messages like to "[FIXME] UNCLASSIFIED DEVICE name: ...";</li>
-<li> HWLib: using in calculation Ah from Wh of the Designed Voltage instead the Current Voltage for accordance with the capacity information on the battery;</li>
-<li> KRDC: restoring the normal functioning from 14.0.13;</li>
-<li> KRFB: fixing KRFB crashes just the client disconnect;</li>
+<li> disabling of using Security Cards for authentication in the kdesktop lock dialog, due to it became unusable;</li>
+<li> HWLib: using in calculation Ah from Wh of the Designed Voltage instead the Current Voltage for accordance with the capacity information on the battery; prevented from freezing in the Hardware Manager;</li>
+<li> KRDC, KRFB: restoring the normal functioning from 14.0.13;</li>
 <li> KXKB-KLayouts: Fixing regressions in loss-clean the system keyboard layouts;</li>
 <li> TDESVN: preventing crashes at accessing DB from KPart;</li>
 <li> Krusader: fixing of unpacking *.tar.xz and *.txz, so completing of implementation the XZ support there;</li>
@@ -364,6 +365,8 @@
 </p>
 <ul><li> the "<a href="Quick_start.html" title="Special:MyLanguage/Documents/Quick start">Quick start</a>" manual completely revised and actualized for the last LTS changes;</li>
 <li> appending the <a href="Libs_Devices.html" title="Special:MyLanguage/Libs/Devices">Industrial devices library page</a> by description <a href="#tmplib_DevLibExt">new templates</a>;</li>
+<li> appending the <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">Main library page</a> by description <a href="#tmplib_baseExt">new templates</a>;</li>
+<li> appending the <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">Main elements library of the user interface page</a> by description <a href="#wlb_MainExt">new widgets</a>;</li>
 <li> complete revision and actualising to the last LTS changes for pages of the modules: <a href="Modules/System.html" title="Special:MyLanguage/Modules/System">DAQ.System</a>, <a href="Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">Transport.SSL</a>;</li>
 <li> started the new subproject <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/NetGear_R6220" title="Special:MyLanguage/Using/NetGear R6220">NETGEAR R6220</a> with OpenSCADA building and adaption to MIPS.</li></ul>
 <p><b><u>New and significantly updated parts</u></b><br />
@@ -374,7 +377,7 @@
 <dl><dd> (<a href="#TransportAddPrm">Refactoring and unifying the Transports subsystem ...</a>)</dd></dl>
 <ul><li> OpenSCADA "DAQ" subsystem: 14 =&gt; <b>15</b></li></ul>
 <dl><dd> (<a href="#DAQPrmTypes">Unification of conception the parameter types</a>)</dd></dl>
-<ul><li> DAQ.System: 2.4 =&gt; <b style="color: red">3.2</b></li></ul>
+<ul><li> DAQ.System: 2.4 =&gt; <b style="color: red">3.3</b></li></ul>
 <dl><dd> (<a href="#SystemExt">Complete refactoring and expanding for ...</a>)</dd></dl>
 <ul><li> DAQ.LogicLev: 2.7 =&gt; <b>2.9</b></li>
 <li> DAQ.DAQGate: 2.11 =&gt; <b>2.13</b></li>
@@ -394,13 +397,19 @@
 <ul><li> UI.QTStarter: 5.14 =&gt; <b style="color: red">6.0</b></li></ul>
 <dl><dd> (<a href="#BuildD12Qt6SSL3">Unification the building with adaption to Qt6, QtWebEngine, QtMultimediaEngine, ...</a>)</dd></dl>
 <ul><li> UI.VCAEngine: 7.11 =&gt; <b>7.13</b></li>
-<li> UI.Vision: 8.6 =&gt; <b style="color: red">9.1</b></li></ul>
+<li> UI.Vision: 8.6 =&gt; <b style="color: red">9.2</b></li></ul>
 <dl><dd> (<a href="#BuildD12Qt6SSL3">Unification the building with adaption to Qt6, QtWebEngine, QtMultimediaEngine, ...</a>)</dd></dl>
 <ul><li> UI.WebCfgD: 2.4 =&gt; <b>2.5</b></li>
-<li> UI.WebVision: 6.8 =&gt; <b>6.9</b></li>
+<li> UI.WebVision: 6.8 =&gt; <b>6.10</b></li>
 <li> LibsDB.OscadaLibs.DevLib: 2.6 =&gt; <b style="color: red">3.0</b></li></ul>
 <dl><dd> (<a href="#tmplib_DevLibExt">Appending by many templates with documenting</a>)</dd></dl>
-<ul><li> LibsDB.vcaBase.Main.storeHouse: 1.3 =&gt; <b>1.4</b></li></ul>
+<ul><li> LibsDB.OscadaLibs.Main: 2.0 =&gt; <b>2.2</b></li></ul>
+<dl><dd> (<a href="#tmplib_baseExt">Appending by several templates with documenting</a>)</dd></dl>
+<ul><li> LibsDB.vcaBase.Main: 2.0 =&gt; <b>2.1</b></li></ul>
+<dl><dd> (<a href="#wlb_MainExt">Appending by several widgets with documenting</a>)
+<ul><li> storeHouse: 1.3 =&gt; <b>1.4</b></li>
+<li> grpGraph, grpGraph10: 1.5 =&gt; <b>1.6</b></li>
+<li> ElViewGraph: 1.4 =&gt; <b>1.5</b></li></ul></dd></dl>
 <p><b><u><span id="BuildD12Qt6SSL3" title="#BuildD12Qt6SSL3">CONCEPTUAL &gt; Unification the building with adaption to Debian 12, Qt6, QtWebEngine, QtMultimediaEngine, OpenSSL3, MIPS</span> </u></b><br />
 </p>
 <ul><li> FIX: Finished in true building with the core library only in static:
@@ -428,7 +437,7 @@
 <li> acinclude.m4: The AutoConf macro AX_LIB_Qt expanded by Qt6 support and improved in MOC and RCC detection for Qt5.
 <ul><li> Some messages improved.</li></ul></li>
 <li> data/{debian,debian_mod}/compat: The level was risen up to 7 for default building at modern Debian distributives.</li>
-<li> data/{debian,debian_mod}/control: Appended by the dependency variants qt6-base-dev, qt6-webengine-dev, qt6-multimedia-dev and qtwebengine5-dev, qtmultimedia5-dev.</li>
+<li> data/{debian,debian_mod}/control: Appended by the dependency variants qt6-base-dev, qt6-webengine-dev, qt6-multimedia-dev and qtwebengine5-dev, qtmultimedia5-dev. Appended by the dependency variant libsensors-dev to libsensors4-dev.</li>
 <li> ResRW::{resRequestW,resRequestR}(): Appended of using the timed version at the definition HAVE_DECL_PTHREAD_RWLOCK_TIMEDWRLOCK.</li>
 <li> TSYS::atime2str(),SYS.strftime(): Appended of using the localized data at the definition HAVE_DECL_NEWLOCALE.</li>
 <li> TSYS::{sysSleep,taskSleep}(): Appended of using the clocked sleep at the definition HAVE_DECL_CLOCK_NANOSLEEP.</li>
@@ -477,17 +486,18 @@
 <li> FIX:.,FSArch: The values archiving appended by limiting the writing operations at limUserIts_N (1e6) entries for tracing of consuming all memory in some cases.</li></ul></li></ul>
 <p><b><u><span id="MessTrFix7" title="#MessTrFix7">CONCEPTUAL &gt; Messages Translation (fixes of the <a href="Release_0.9.html#MessTrFix" title="Special:MyLanguage/Documents/Release 0.9">conceptual changes of the previous updates</a>) </span> </u></b><br />
 </p>
-<ul><li> FIX:SYS,DB: TMess::translGet() fixed in detecting the system prestored messages at setting empty translation messages.
+<ul><li> FIX:SYS,DB: TMess::translGet() fixed in detecting the system prestored messages at setting empty translation messages and the function TMess::translGetU() fixed in cleaning service zero symbols in non dynamic translation modes.
 <ul><li> DB: TTable::fieldSQLSet() adapted to clearing the message base and all translations at zeroing a translation, for clear messages edition in the dynamic translation mode and from non base language.</li></ul></li>
 <li> SYS,DB.{SQLite,MySQL,PostgreSQL,FireBird},Protocol.HTTP: The messages translation adapted mostly for language codes more of 2 (two) symbols.</li>
 <li> Protocol.HTTP,UI.{WebUser,WebVision}: Finished in adapting for dynamic translation the station name with unification the User API function pgCreator() for using language from objFuncCall().
 <ul><li> Protocol.HTTP: Path from TSYS::ico() used for obtaining translated icons.</li></ul></li>
 <li> SYS,UI.{Vision,WebVision}: The function TSYS::atime2str() appended by the date translation and it is used in building the time scale of the primitive Diagram of VCA.</li>
 <li> FIX:DB: Allowed in true writing of user changes in the Dynamic Translation Mode on non Base Language, by early checking for dynamic data.</li>
-<li> FIX:DAQ: The DAQ-Templates finished in adapting to translation string type values at their editing and using in the Template Configuration Tab.
+<li> FIX:DAQ: The DAQ-Templates finished in adapting to translation string type values at their editing and using in the Template Configuration Tab and fixed-adapted to the dynamic translation in using the IO names.
 <ul><li> FIX:DAQGate: Fixed in the values sending of the translatable fields not in the internal translation structure.</li></ul></li>
 <li> Protocol: HTTP: Adapted for dynamic translation the station name and processing encoded file names of images.
 <ul><li> UserProtocol: Fixed-adapted for the dynamic translation of the IO names.</li></ul></li>
+<li> FIX:UI.VCAEngine: Templates fixed-adapted to the dynamic translation in using the configuration template of the attributes.</li>
 <li> FIX:UI.WebUser: Fixed in translation the page name in the index.</li>
 <li> FIX:UI.WebVision: Fixed in dynamic translation the user name on the index page.</li></ul>
 <p><b><u>OpenSCADA libraries and projects</u></b><br />
@@ -501,25 +511,35 @@
 <li> Sockets.{testRelease,testRelease1,testRelease2}: disabled by default.</li></ul></li>
 <li> LibsDB.OscadaLibs:
 <ul><li> <span id="tmplib_DevLibExt" title="#tmplib_DevLibExt">tmplib_DevLib</span>: The library appended by the templates with documenting:
-<ul><li> from VPF: Incubator, VSE002, "FF LE-03MB CT (FF_LE)", Ergomera 625(ergomera625);</li>
+<ul><li> from VPF: Incubator, VSE002, "FF LE-03MB CT (FF_LE)", "Ergomera 625(ergomera625)";</li>
 <li> from Blue Star Group: "Goboy 1M (Goboy1M)", "AutoPILOT PRO Flow Computers (AutoPILOT)", "AutoPILOT OLD Flow Computers (AutoPILOT_old)", "Corrector BK (CorBK)", "Tancy Data (TDS)", "UltraMag", "Enron, Daniel (enronDaniel)", FlowGAS.</li></ul></li>
-<li> tmplib_base: Appended by a new template for WebUser "HTTP File Server (fileServerHTTP)" with implementing the HTTP File Server in OpenSCADA, currently that is only reading resources with support partiality.
+<li> <span id="tmplib_baseExt" title="#tmplib_baseExt">tmplib_base</span>: Appended by a new template for WebUser "HTTP File Server (fileServerHTTP)" with implementing the HTTP File Server in OpenSCADA, currently that is only reading resources with support partiality; and the new templates "Weather (weather)", "Disk SMART (DiskSMART)".
 <ul><li> digAlarm,manInUnif,anUnif,pidUnifImp,anUnifSt,pidUnif,codeState,SNMP,UPS: The NAME IO set to the type "String (translate)" and the DESCR IO to the type "Text (translate)".</li></ul></li>
 <li> tmplib_LowDevLib: Appended by the template "BT: ATORCH UC96".
 <ul><li> RDTech: Nondouble commands set to send the command twicely for stable applying by the device, postcommand delay set to 0.2 and moved in common.</li></ul></li>
 <li> tmplib_base.ntf: Expanded by a possibility of specifying messages to exclude from the notification.</li></ul></li>
 <li> LibsDB.vcaBase:
-<ul><li> wlb_Main.storeHouse: Expanded by creating the item edition form in the main frame after hiding the main table and other.
+<ul><li> <span id="wlb_MainExt" title="#wlb_MainExt">wlb_Main</span>: The library appended by the widget "Weather (weather)" with documenting.
+<ul><li> storeHouse: Expanded by creating the item edition form in the main frame after hiding the main table and other.
 <ul><li> FIX: Prevented of &lt;EVAL&gt; for &lt;NULL&gt; cells in the item report.</li>
 <li> FIX: Guaranteed in filling the report dialogs by generating the opening events from the procedure.</li>
+<li> FIX: Fixed in early setting the vertical position for the data table at changing the user.</li>
 <li> The text fields of the single-item report were cleared from the left margin for texts.</li>
 <li> The reports appended by processing the links as the external ones.</li>
-<li> Expanded by processing ID (index) also as other standard fields "NAME", "DSCR" — to control the field visibility.</li></ul></li>
-<li> FIX:Main.alarmsSt: Fixed in the alarms_focus variable accessing after removing of forcing the "focus" attribute, which replaced by this.alarms.attr("focus").</li>
-<li> FIX:wlb_doc.docRepInstVals: Restored in translation values of title and parameter's dimension, name.</li>
-<li> FIX:wlb_doc.docUsersSet: Appended by encoding the value fields also, due to there can be not just digits now.</li>
+<li> Expanded by processing ID (index) also as other standard fields "NAME", "DSCR" — to control the field visibility.</li>
+<li> Appended of resetting filters at the page restart or user change.</li>
+<li> The whole-table report appended of limiting cells' text in 30 symbols, that is like to the edition table.</li>
+<li> The item report appended by hiding empty fields.</li>
+<li> Appended of updating the selection context of the form items at change such item value.</li></ul></li>
+<li> grpGraph: Procedure rewrote for unification to work with different elements, so for use in all derivative frames like to grpGraph10.</li>
+<li> grpGraph10: Switched to inheritance from grpGraph.</li>
+<li> FIX:alarmsSt: Fixed in the alarms_focus variable accessing after removing of forcing the "focus" attribute, which replaced by this.alarms.attr("focus").</li>
 <li> tmplSO: Some cleaned for items of the ResultGraph page.</li>
-<li> wlb_Main.ResultGraph: The attribute "grpName" set to the "String (translate)" type.</li></ul></li>
+<li> ResultGraph: The attribute "grpName" set to the "String (translate)" type.</li>
+<li> ElViewGraph: Appended of reading the default-static properties for clearing to them.</li></ul></li>
+<li> wlb_doc:
+<ul><li> FIX:docRepInstVals: Restored in translation values of title and parameter's dimension, name.</li>
+<li> FIX:docUsersSet: Appended by encoding the value fields also, due to there can be not just digits now.</li></ul></li></ul></li>
 <li> LibsDB.vcaTest: Finished in renaming CPULoad to CPU and MemInfo to MEM.</li></ul>
 <p><b><u>API</u></b><br />
 <i>!!!!:Changes</i>:
@@ -542,6 +562,7 @@
 </p>
 <ul><li> SYS: The new definition DB_GEN "&lt;gen&gt;".
 <ul><li> Appended sysClk(), setSysClk() for receiving the CPU frequency from DAQ.System.</li>
+<li> The sysTm() function appended by arguments for detection of time jumps after suspending.</li>
 <li> TMess: The new function labStorFromCode() of names the specific storages.</li>
 <li> TElem: Appended by the function contN() of obtaining for counter of the connected containers.</li></ul></li>
 <li> DAQ: TVal: Appended by the function setTime() and by a new flag AttrFlg::NoSave for preventing of marking as modified at the attribute change.
@@ -552,7 +573,9 @@
 <li> TTransportIn: Appended by the function prm(), conPrm(), clearConPrm(). Appended by the UserAPI function conPrm() and setConPrm() (for compatibility) and in accordance with ones in TTransportOut.</li></ul></li></ul>
 <p><b><u>SYS</u></b><br />
 </p>
-<ul><li> Building: configure.ac: Core library version risen to 3:14:0 and the program version risen to 0.9.7. The module version of the subsystem "DAQ" risen to 15, "Transports" risen to 20.</li>
+<ul><li> Building:
+<ul><li> configure.ac: Core library version risen to 3:14:0 and the program version risen to 0.9.7. The module version of the subsystem "DAQ" risen to 15, "Transports" risen to 20.</li>
+<li> Appended for building to Debian 12 and Ubuntu 24.04 LTS.</li></ul></li>
 <li> FIX:DB,Transports,DAQ.BFN,UI.VCAEngine: Adapted for checking the TBDS::dataDel() success result to prevent hangs here on RO storages with fixing function TTable::fieldSQLDel() for true checking the function success.</li>
 <li> .,DAQ.{DAQGate,DCON,DiamondBoards,ICP_DAS,LogicLev,ModBus,OPC_UA,Siemens,SoundCard,System},Protocol.{ModBus,OPC_UA},UI.VCAEngine: Simplified significantly in support the selectable types, making that optional and with support the dynamic translation. Allowed also for specifying only list of values.</li>
 <li> .,Archive.DBArch,DAQ.{BFN,JavaLikeCalc,ModBus,OPC_UA},Protocol.UserProtocol,UI.{VCAEngine,Vision,WebUser}: The Generic Storage renamed from "*.*" to "&lt;gen&gt;":
@@ -567,6 +590,7 @@
 <p><b><u>DAQ</u></b><br />
 </p>
 <ul><li> .,*: Moved in the DAQ sources to fix table names of different parameter types and adapted to the <span id="DAQPrmTypes" title="#DAQPrmTypes">unified conception the parameter types</span>, that is the configuration fields are hidden now when their are standard ones and it scheduled to be cleaned in whole in v1.0.</li>
+<li> FIX: TValFunc::get{S,I,R,B}() appended by code of casting the object TVarObj with EVAL/null converting.</li>
 <li> <span id="SystemExt" title="#SystemExt">System</span>: Completely refactored and expanded for:
 <ul><li> expanding the CPU DA by CPU information and frequency from different sources, including CPUFreq with the control;</li>
 <li> appending a new DA Power as an interface to Linux Power and DA Process as an interface to Linux processes;</li>
@@ -574,7 +598,8 @@
 <li> unification the DA interface calls DA::init(), DA::deInit(), DA::makeActiveDA() with moving most DA modules to call the unified code and implementing for them only the unified function dList();</li>
 <li> the DA interface class appended by the new signs: isDynamic(), hasSubTypes();</li>
 <li> appending a mode of the data generic updating from the Service Cycle and the Controller DA Task, by the new function updGen();</li>
-<li> ID of the automaticly generated DA parameters changed to: CPU - "CPU[{N}]", fs - "FS{MP}", hddstat - "DiskSt_{dev}", MEM - "MEM", netstat - "Net_{IF}", sensors - "Sensors", hddsmart - "DiskSMART", ups - "UPS", uptime - "UpTm_{U}".</li></ul></li>
+<li> ID of the automaticly generated DA parameters changed to: CPU - "CPU[{N}]", fs - "FS{MP}", hddstat - "DiskSt_{dev}", MEM - "MEM", netstat - "Net_{IF}", sensors - "Sensors", hddsmart - "DiskSMART", ups - "UPS", uptime - "UpTm_{U}";</li>
+<li> switched to the soft mode of parameters automatic creation, that is you allowed to create the source parameters automatically, save forcibly need ones and next switch to the manual mode, than preventing continued scanning.</li></ul></li>
 <li> FIX:DAQGate: Time of the requesting archive increased for 1 (one) microsecond to prevent of spare values requesting and their direct rewriting to the archives.
 <ul><li> Improved in work with remote host without the time sync:
 <ul><li> the values can be in future up to one hour;</li>
@@ -612,7 +637,8 @@
 </p>
 <ul><li> VCAEngine,Vision,WebVision: Appended by support of data built-in to resource marked attributes, primarily for the source attribute of the Media primitive.</li>
 <li> FIX:Vision: Adapted for obtaining named list of the storages.</li>
-<li> FIX:VCAEngine: Prevented from connection the attribute "focus" of any included widget to the calculation IOs and appended by processing the exceptions of accessing those IOs for missing included widgets. FIX: Attr::setS() improved in the critical section processing.</li></ul>
+<li> FIX:VCAEngine: Prevented from connection the attribute "focus" of any included widget to the calculation IOs and appended by processing the exceptions of accessing those IOs for missing included widgets. FIX: Attr::setS() improved in the critical section processing.</li>
+<li> FIX:WebVision: Appended of implementation the user fields in the status bar.</li></ul>
 <h3><span class="mw-headline" id=".5B01.01.7531.2F01.03.2023.5D_The_SIXTH_update"><span class="mw-headline-number">7.2</span> [01.01.7531/01.03.2023] The SIXTH update</span></h3>
 <p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 70 bugs and appends MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2892" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
 </p><p><b><u><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Automation Linux distributive of the project OpenSCADA</a></u></b><br />
@@ -2046,5 +2072,5 @@ FIX: The "Translations" tab expansion and fixing for:
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/en">Documents/Release_0.9/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/en">Documents/Release_0.9/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

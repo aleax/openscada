@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Бібліотеки/Основні графічні елементи</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FMain+graphical+elements&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Main_graphical_elements" title="Libs/Main graphical elements">Libs/Main graphical elements</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Main_graphical_elements.html" title="Libs/Main graphical elements (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Main_graphical_elements.html" title="Библиотеки/Основные графические элементы (88% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FMain+graphical+elements&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Main_graphical_elements" title="Libs/Main graphical elements">Libs/Main graphical elements</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Main_graphical_elements.html" title="Libs/Main graphical elements (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Main_graphical_elements.html" title="Библиотеки/Основные графические элементы (85% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -27,7 +27,7 @@
 <tr>
 <td> <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">Бібліотека основних елементів інтерфейсу користувача</a>
 </td>
-<td> 2.1 </td>
+<td> 2.2 </td>
 <td> GPLv2
 </td>
 <td> vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">GZip</a>) &gt; VCA.wlb_Main
@@ -71,6 +71,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <li class="toclevel-2"><a href="#.D0.9F.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D0.BD.D1.8F_.E2.80.94_.D0.B0.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D0.B5_.28alarmsAct.29"><span class="tocnumber">1.5</span> <span class="toctext">Порушення — активне (alarmsAct)</span></a></li>
 <li class="toclevel-2"><a href="#.D0.92.D0.BB.D0.B0.D1.81.D1.82.D0.B8.D0.B2.D0.BE.D1.81.D1.82.D1.96_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82.D1.83_.28objProps.29"><span class="tocnumber">1.6</span> <span class="toctext">Властивості об'єкту (objProps)</span></a></li>
 <li class="toclevel-2"><a href="#.D0.9A.D0.B0.D0.BB.D0.B5.D0.BD.D0.B4.D0.B0.D1.80_.28calendar.29"><span class="tocnumber">1.7</span> <span class="toctext">Календар (calendar)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.9F.D0.BE.D0.B3.D0.BE.D0.B4.D0.B0_.28weather.29"><span class="tocnumber">1.8</span> <span class="toctext">Погода (weather)</span></a></li>
 </ul>
 </li>
 <li class="toclevel-1"><a href="#.D0.9A.D0.BE.D1.80.D0.B5.D0.BD.D0.B5.D0.B2.D0.B0_.D1.81.D1.82.D0.BE.D1.80.D1.96.D0.BD.D0.BA.D0.B0_.28.D0.A1.D0.9E.29_.28RootPgSo.29"><span class="tocnumber">2</span> <span class="toctext">Коренева сторінка (СО) (RootPgSo)</span></a></li>
@@ -852,6 +853,55 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <table class="wikitable">
 
 <tr>
+<td> <span id="weather" title="#weather"><h3><span class="mw-headline" id=".D0.9F.D0.BE.D0.B3.D0.BE.D0.B4.D0.B0_.28weather.29"><span class="mw-headline-number">1.8</span> Погода (<a href="Libs_Main_graphical_elements.html#weather" title="Special:MyLanguage/Libs/Main graphical elements">weather</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<p>Елемент на рисунку 1.8 використовується для відображення даних погоди із параметрів на DAQ-шаблоні "<a href="Libs_Main.html#weather" title="Special:MyLanguage/Libs/Main">Погода</a>".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:452px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_weather_uk.png"><img class="thumbimage" height="156" src="files/LibMainEls_weather_uk.png" width="450" /></a>  <div class="thumbcaption">Рис.1.8. Елемент "Погода" у режимі розробки та виконання (зліва праворуч).</div></div></div></div>
+<p><b><u>Використання — розробка</u></b><br />
+Цей віджет може бути використано розробником при створені мнемосхем з відображенням погоди. Для використання потрібно додати цей віджет на мнемосхему, підлаштувати горизонтальний, вертикальний розмір масштабом та зв'язати з параметром джерела даних за DAQ-шаблоном "<a href="Libs_Main.html#weather" title="Special:MyLanguage/Libs/Main">Погода</a>".
+</p><p><b><u>Використання — виконання</u></b><br />
+У режимі виконання відображається поточна погода на горі і прогноз знизу з деталізацією у спливаючій підказці на зображені.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Все ще можуть бути відсутні зображення для деяких погодних умов оскільки вони продовжують додаватися!
+</p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Конфігурація </th>
+<th> Конфігураційний шаблон </th>
+<th> Опис
+</th></tr>
+<tr>
+<td> current </td>
+<td> Погода: поточне </td>
+<td> Об'єкт </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|current </td>
+<td> Об'єкт із поточними даними.
+</td></tr>
+<tr>
+<td> forecast </td>
+<td> Погода: прогноз </td>
+<td> Об'єкт </td>
+<td> Вхідний зв'язок </td>
+<td> Parameter|forecast </td>
+<td> Об'єкт із прогнозованими даними.
+</td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
 <td> <span id="RootPgSo" title="#RootPgSo"><h2><span class="mw-headline" id=".D0.9A.D0.BE.D1.80.D0.B5.D0.BD.D0.B5.D0.B2.D0.B0_.D1.81.D1.82.D0.BE.D1.80.D1.96.D0.BD.D0.BA.D0.B0_.28.D0.A1.D0.9E.29_.28RootPgSo.29"><span class="mw-headline-number">2</span> Коренева сторінка (СО) (<a href="Libs_Main_graphical_elements.html#RootPgSo" title="Special:MyLanguage/Libs/Main graphical elements">RootPgSo</a>)</span></h2></span>
 </td>
 <td> 2.7 </td>
@@ -1008,16 +1058,17 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <table class="wikitable">
 
 <tr>
-<td> <span id="grpGraph" title="#grpGraph"><h3><span class="mw-headline" id=".D0.93.D1.80.D1.83.D0.BF.D0.B0_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.96.D0.B2_.28grpGraph.29.3B_.D0.93.D1.80.D1.83.D0.BF.D0.B0_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.96.D0.B2_10_.28grpGraph10.29"><span class="mw-headline-number">3.1</span> Група графіків (<a href="Libs_Main_graphical_elements.html#grpGraph" title="Special:MyLanguage/Libs/Main graphical elements">grpGraph</a>); Група графіків 10 (<a href="Libs_Main_graphical_elements.html#grpGraph" title="Special:MyLanguage/Libs/Main graphical elements">grpGraph10</a>)</span></h3></span> </td>
-<td> 1.4 </td>
+<td> <span id="grpGraph" title="#grpGraph"><h3><span class="mw-headline" id=".D0.93.D1.80.D1.83.D0.BF.D0.B0_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.96.D0.B2_.28grpGraph.29.3B_.D0.93.D1.80.D1.83.D0.BF.D0.B0_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.96.D0.B2_10_.28grpGraph10.29"><span class="mw-headline-number">3.1</span> Група графіків (<a href="Libs_Main_graphical_elements.html#grpGraph" title="Special:MyLanguage/Libs/Main graphical elements">grpGraph</a>); Група графіків 10 (<a href="Libs_Main_graphical_elements.html#grpGraph" title="Special:MyLanguage/Libs/Main graphical elements">grpGraph10</a>)</span></h3></span>
+</td>
+<td> 1.6 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
 <td> -1 мс (предок)
 </td></tr></table>
-<p>Елемент-кадр, представлений на рисунку 3.1, слугує для одночасного спостереження трендів та управління параметрами у об'єкті сигналізації, включає у себе як екземпляри віджету "<a href="#ElViewGraph">Елемент групи графіків</a>" кожного параметру (до 8 або 10), так і віджет "Діаграма" для спостереження за графіками параметрів та перегляду історії, а також горизонтальну стрічку гортання для швидкої навігації за доступною історією обраних для відображення параметрів.
+<p>Елемент-кадр представлений на рисунку 3.1 слугує для одночасного спостереження трендів та управління параметрами у об'єкті сигналізації, включає у себе екземпляри віджету "<a href="#ElViewGraph">Елемент групи графіків</a>" кожного параметру (до 8 або 10) і віджет "Діаграма" для спостереження за графіками параметрів та перегляду історії, а також горизонтальну стрічку гортання для швидкої навігації за доступною історією обраних для відображення параметрів. Варіант у 10 трендів успадковано від базового варіанту у 8 трендів і ви можете створити власні варіанти спадкуючи базу і додати більше елементів групи графіків.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1162px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grpGraphD_uk.png"><img class="thumbimage" height="600" src="files/LibMainEls_grpGraphD_uk.png" width="1160" /></a>  <div class="thumbcaption">Рис.3.1a. Кадр "Група графіків" у режимі розробки.</div></div></div></div>
 <p><b><u>Використання — розробка</u></b><br />
@@ -1080,11 +1131,12 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <table class="wikitable">
 
 <tr>
-<td> <span id="ElViewGraph" title="#ElViewGraph"><h4><span class="mw-headline" id=".D0.95.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82_.D0.B3.D1.80.D1.83.D0.BF.D0.B8_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.96.D0.B2_.28ElViewGraph.29"><span class="mw-headline-number">3.1.1</span> Елемент групи графіків (<a href="Libs_Main_graphical_elements.html#ElViewGraph" title="Special:MyLanguage/Libs/Main graphical elements">ElViewGraph</a>)</span></h4></span> </td>
-<td> 1.3 </td>
+<td> <span id="ElViewGraph" title="#ElViewGraph"><h4><span class="mw-headline" id=".D0.95.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82_.D0.B3.D1.80.D1.83.D0.BF.D0.B8_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.96.D0.B2_.28ElViewGraph.29"><span class="mw-headline-number">3.1.1</span> Елемент групи графіків (<a href="Libs_Main_graphical_elements.html#ElViewGraph" title="Special:MyLanguage/Libs/Main graphical elements">ElViewGraph</a>)</span></h4></span>
+</td>
+<td> 1.5 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
 <td> 2000 мс
@@ -1093,7 +1145,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ElViewGraphD_uk.png"><img class="thumbimage" height="60" src="files/LibMainEls_ElViewGraphD_uk.png" width="400" /></a>  <div class="thumbcaption">Рис.3.1.1a. Віджет "Елемент групи графіків" у режимі розробки.</div></div></div></div>
 <p><b><u>Використання — розробка</u></b><br />
-Хоча даний віджет не призначено для самостійного використання, у відриві від <a href="#grpGraph">групи графіків</a>, використовувати його можна, наприклад, помістивши на мнемосхему та встановивши зв'язок з параметром джерела даних.
+Хоча даний віджет не призначено для самостійного використання у відриві від <a href="#grpGraph">групи графіків</a>, використовувати його можна, наприклад, помістивши на мнемосхему та встановивши зв'язок з параметром джерела даних.
 </p><p><b><u>Використання — виконання</u></b><br />
 У режимі виконання, у основному полі елементу, відображається назва параметру, режим регулятору (тільки для регулятору), поточне значення-змінна та одиниця виміру цього параметру; які, залежно від наявності порушення, відображаються кольором стилю: <i>labColorGood</i>, <i>labColorWarning</i>, <i>labColorAlarm</i>. За апаратних помилок та недостовірності даних, останнє значення відображається сірим кольором.
 </p><p>Окрім безпосередньо доступних візуальних даних, надається низка елементів контролю:
@@ -1106,7 +1158,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <li> "Показати один" — одиночний показ графіку обраного параметру у його рідній шкалі, шляхом приховування решти елементів у групі.</li>
 <li> "Показати все" — показ всіх графіків параметрів у групі.</li>
 <li> "Обчислення" — виклик <a href="#graphCalc">діалогу обчислення</a> над видимими даними обраного параметру.</li>
-<li> "Обрати" — виклик <a href="#graphSelPrm">діалогу обрання</a> параметру з переліку доступних для обрання, атрибут "Вибір: параметри дозволені для обрання" кадру-власника. Цей пункт доступний тільки у випадку наявності переліку обрання.</li></ul></li></ul>
+<li> "Обрати" — виклик <a href="#graphSelPrm">діалогу обрання</a> параметру з переліку доступних для обрання — атрибут "Вибір: параметри дозволені для обрання" кадру-власника. Цей пункт доступний тільки у випадку наявності переліку обрання. З діалогу користувач також може очистити параметр, і що для статично перед-встановлених параметрів передбачає повернення до статичного параметру.</li></ul></li></ul>
 <p>Віджет зберігає обраний користувачем параметр у таблиці сеансу проекту та завантажує параметр при наступному запуску, включно з кольором тренду, типове значення якого зазвичай береться зі стилю.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Віджет наразі підтримує функціювання із дуже великим значенням "Період опрацювання" та це значення наразі встановлено для спадкування від батьківського віджету/сторінки/сеансу (значення -1). Це можливе завдяки механізму раннього опрацювання подій та можливості контролю періодичності опрацювання із процедури.
 </p>
@@ -3172,5 +3224,5 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/uk">Libs/Main_graphical_elements/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/uk">Libs/Main_graphical_elements/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

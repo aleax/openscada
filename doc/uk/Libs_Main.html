@@ -27,7 +27,7 @@
 <tr>
 <td> <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">Основна бібліотека</a>
 </td>
-<td> 2.1 </td>
+<td> 2.2 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_base </td>
 <td> en, uk, ru
@@ -71,12 +71,14 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <ul>
 <li class="toclevel-2"><a href="#.D0.94.D0.B6.D0.B5.D1.80.D0.B5.D0.BB.D0.BE_.D0.91.D0.B5.D0.B7.D0.BF.D0.B5.D1.80.D0.B5.D0.B1.D1.96.D0.B9.D0.BD.D0.BE.D0.B3.D0.BE_.D0.96.D0.B8.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.28UPS.29"><span class="tocnumber">2.1</span> <span class="toctext">Джерело Безперебійного Живлення (UPS)</span></a></li>
 <li class="toclevel-2"><a href="#.D0.9C.D0.B5.D1.80.D0.B5.D0.B6.D0.B5.D0.B2.D1.96_.D0.BF.D1.80.D0.B8.D1.81.D1.82.D1.80.D0.BE.D1.97_.D0.B7.D0.B0_SNMP_.28SNMP.29"><span class="tocnumber">2.2</span> <span class="toctext">Мережеві пристрої за SNMP (SNMP)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.94.D0.B8.D1.81.D0.BA.D0.BE.D0.B2.D0.B8.D0.B9_SMART_.28DiskSMART.29"><span class="tocnumber">2.3</span> <span class="toctext">Дисковий SMART (DiskSMART)</span></a></li>
 </ul>
 </li>
 <li class="toclevel-1 tocsection-3"><a href="#.D0.A1.D0.B5.D1.80.D0.B2.D1.96.D1.81.D0.B8"><span class="tocnumber">3</span> <span class="toctext">Сервіси</span></a>
 <ul>
 <li class="toclevel-2"><a href="#.D0.A1.D0.BF.D0.BE.D0.B2.D1.96.D1.89.D1.83.D0.B2.D0.B0.D1.87_.D0.B7.D0.B0_SMS.2C_EMail-SMTP_.28ntf.29"><span class="tocnumber">3.1</span> <span class="toctext">Сповіщувач за SMS, EMail-SMTP (ntf)</span></a></li>
 <li class="toclevel-2"><a href="#.D0.9E.D0.BF.D1.80.D0.B0.D1.86.D1.8E.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D1.96.D0.BD.D1.96.D1.86.D1.96.D0.B0.D1.82.D0.B8.D0.B2.D0.BD.D0.B8.D1.85_.D0.BF.D1.96.D0.B4.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D1.8C_.D1.89.D0.BE.D0.B4.D0.BE_.D0.B0.D1.81.D0.BE.D1.86.D1.96.D0.B9.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.85_.D0.B2.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D0.B8.D1.85_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.96.D0.B2_.28initConAssociateTrs.29"><span class="tocnumber">3.2</span> <span class="toctext">Опрацювання ініціативних підключень щодо асоційованих вихідних транспортів (initConAssociateTrs)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.9F.D0.BE.D0.B3.D0.BE.D0.B4.D0.B0_.28weather.29"><span class="tocnumber">3.3</span> <span class="toctext">Погода (weather)</span></a></li>
 </ul>
 </li>
 <li class="toclevel-1 tocsection-4"><a href="#.D0.94.D0.BB.D1.8F_WebUser"><span class="tocnumber">4</span> <span class="toctext">Для WebUser</span></a>
@@ -502,9 +504,9 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainAnUnifCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="448" src="files/LibsMainAnUnifCfg_uk.png" width="446" /></a></div>
 <p><b><u>Конфігурація та використання</u></b><br />
 </p>
-<dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
+<dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь який наявний з потрібними властивостями планування.</dd>
 <dd>2. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
-<dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
+<dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру ви маєте встановити:
 <ul><li> <i>Вхід</i> — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу</a>.</li>
 <li> <i>Вхідна процедура обробки</i> — сформувати для складної передобробки та повної генерації-імітації аналогового входу на внутрішній мові програмування OpenSCADA. Є необов'язковою та має визначатися за складних випадків, наприклад:</li></ul>
 <dl><dd><ul><li> проста та прозора попередня обробка з приведення відсотків навантаження ДБЖ до потужності, що можна виконати і за допомогою <b>iMult</b>:</li></ul></dd></dl></dd></dl>
@@ -983,9 +985,9 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainManInUnifCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="298" src="files/LibsMainManInUnifCfg_uk.png" width="439" /></a></div>
 <p><b><u>Конфігурація та використання</u></b><br />
 </p>
-<dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
+<dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь який наявний з потрібними властивостями планування.</dd>
 <dd>2. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
-<dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
+<dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру ви маєте встановити:
 <ul><li> <i>Вхід/Вихід</i> — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу ВВ</a>, або не прив'язувати для автономного режиму.</li>
 <li> <i>Мінімум та максимум шкали модуля</i> — має вказуватися у випадку значного розходження апаратної шкали із загальною, для прикладу дивіться шаблон "<a href="#anUnif">Аналоговий сигнал, уніфікований</a>".</li>
 <li> <i>Додаток та множник до входу</i> — використати для простої лінійної корекції входу, для прикладу дивіться шаблон "<a href="#anUnif">Аналоговий сигнал, уніфікований</a>".</li>
@@ -1168,9 +1170,9 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainDigitBlockUnifCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="298" src="files/LibsMainDigitBlockUnifCfg_uk.png" width="403" /></a></div>
 <p><b><u>Конфігурація та використання</u></b><br />
 </p>
-<dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
+<dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь який наявний з потрібними властивостями планування.</dd>
 <dd>2. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
-<dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
+<dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру ви маєте встановити:
 <ul><li> Всі стани та команди — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу</a>.</li>
 <li> <i>Час утримання команди, секунди</i> — встановити у потрібне значення утримання або у 0 для вимкнення цієї функції.</li></ul></dd>
 <dd>4. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати оперативні дані у вкладці "Атрибути", для: станів та команд.</dd>
@@ -1372,9 +1374,9 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainDigAlarmCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="312" src="files/LibsMainDigAlarmCfg_uk.png" width="411" /></a></div>
 <p><b><u>Конфігурація та використання</u></b><br />
 </p>
-<dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
+<dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь який наявний з потрібними властивостями планування.</dd>
 <dd>2. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
-<dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
+<dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру ви маєте встановити:
 <ul><li> "Сигнал "{st}:{lev}:{mess}" — визначити критерій формування порушення, залишити порожнім для вимкнення генерації порушень.</li>
 <li> "Інверсія стану" — встановити для інвертування репрезентативних атрибутів, тобто "st_open" встановити за "in" рівного <b>false</b>.</li>
 <li> "Вхід" — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу</a>.</li>
@@ -1422,7 +1424,7 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <ul><li> Пряме отримання, за посиланням, коду стану та команди (тільки читання), а також встановлення тексту стану згідно до переліку станів <i>stats</i>.</li>
 <li> Опрацювання тексту команди <i>com_text</i> на предмет пошуку її у загальному переліку команд <i>coms</i> та видача отриманого коду команди на вихід.</li>
 <li> Формування із загальному переліку команд <i>coms</i> переліку команд для обрання у <i>digComs</i>.</li>
-<li> Складна обробка та повна генерація-імітація коду стану, а також обробка коду або тексту команди для цільових дій, на внутрішній мові програмування OpenSCADA у конфігураційному ВВ <b>inProc</b>, де Ви можете оперувати наступними сервісними параметрами:</li></ul>
+<li> Складна обробка та повна генерація-імітація коду стану, а також обробка коду або тексту команди для цільових дій, на внутрішній мові програмування OpenSCADA у конфігураційному ВВ <b>inProc</b>, де ви можете оперувати наступними сервісними параметрами:</li></ul>
 <dl><dd><ul><li> <i>in</i> [IN|OUT] — ВВ коду статусу;</li>
 <li> <i>text</i> [OUT] — пряме встановлення тексту статусу;</li>
 <li> <i>coms</i> [IN] — перелік наявних команд, відповідного ВВ;</li>
@@ -1610,9 +1612,9 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainCodeStateCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="298" src="files/LibsMainCodeStateCfg_uk.png" width="326" /></a></div>
 <p><b><u>Конфігурація та використання</u></b><br />
 </p>
-<dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
+<dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь який наявний з потрібними властивостями планування.</dd>
 <dd>2. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
-<dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
+<dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру ви маєте встановити:
 <ul><li> <i>Вхід</i> та <i>Вихід</i> — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу</a>.</li>
 <li> <i>Вхідна процедура обробки</i> — сформувати для обробки та повної генерації-імітації входу, та видачі специфічного виходу, на внутрішній мові програмування OpenSCADA. Наприклад:</li></ul>
 <dl><dd><ul><li> повне створення коду статусу та формування порушення:</li></ul></dd></dl></dd></dl>
@@ -2209,9 +2211,9 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainPidUnifCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="883" src="files/LibsMainPidUnifCfg_uk.png" width="425" /></a></div>
 <p><b><u>Конфігурація та використання</u></b><br />
 </p>
-<dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
+<dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь який наявний з потрібними властивостями планування.</dd>
 <dd>2. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
-<dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
+<dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру ви маєте встановити:
 <ul><li> <i>Вхід</i> — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" аналогового сигналу</a>.</li>
 <li> <i>Завдання</i>, <i>Ручний ввід</i>, <i>Вихід</i>, <i>Режим: автомат</i>, <i>Режим: каскад</i>, <i>Шкала: мінімум</i>, <i>Шкала: максимум</i>, <i>Kп</i>, <i>Tі</i>, <i>Кп диференціалу</i>, <i>Tд</i>, <i>T фільтру диференціалу, мілісекунд</i>, <i>Нечутливість</i>, <i>Верхня границя виходу</i>, <i>Нижня границя виходу</i>, <i>Коефіцієнт входу 1</i>, <i>Коефіцієнт входу 2</i>, <i>Коефіцієнт входу 3</i>, <i>Коефіцієнт входу 4</i> — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом ПІД-регулятору</a>.</li>
 <li> <i>Додаток та множник до входу</i> — використати для простої лінійної корекції входу, для прикладу дивіться шаблон "<a href="#anUnif">Аналоговий сигнал, уніфікований</a>".</li>
@@ -2603,11 +2605,11 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 </p>
 <dl><dd>1. Створити об'єкт контролеру джерела у модулі "<a href="Modules/System.html" title="Special:MyLanguage/Modules/System">Система</a>" та встановити його Ідентифікатор на кшталт "SYSData".</dd>
 <dd>2. Створити об'єкт параметру джерела у попередньо створеному об'єкті контролера та встановити його Ідентифікатор на кшталт "UPS".</dd>
-<dd>3. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
+<dd>3. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь який наявний з потрібними властивостями планування.</dd>
 <dd>4. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
-<dd>5. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
+<dd>5. У вкладці "Конфігурація шаблону" об'єкту логічного параметру ви маєте встановити:
 <ul><li> <i>Адреса вихідного об'єкту</i> — у адресу об'єкту вихідного параметру ДБЖ (дивіться крок 1), на кшталт "System.SYSData.UPS".</li></ul></dd>
-<dd>6. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати, у атрибуті параметру <i>items</i>, цей об'єкт з усіма атрибутами та їх властивостями. У випадку деяких порушень отримаємо відповідну інформацію у атрибуті параметру <i>err</i>, стосовно чого ви можете налаштувати атрибути границь відповідних порушень.</dd>
+<dd>6. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати у атрибуті параметру <i>items</i> цей об'єкт з усіма атрибутами та їх властивостями. У випадку деяких порушень отримаємо відповідну інформацію у атрибуті параметру <i>err</i>, стосовно чого ви можете налаштувати атрибути границь відповідних порушень.</dd>
 <dd>7. У візуальному інтерфейсі розробки модуля <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> розташуйте кадр "<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Властивості об'єкту</a>" до будь-якої сторінки та зв'яжіть його із об'єктом цього параметру, створеного на кроці 4.</dd>
 <dd>8. РЕЗУЛЬТАТ: При виконанні сторінки ви отримаєте таблицю з даними об'єкту, повідомленням про порушення у заголовку та об'єкті сигналізації та можливістю встановлення властивостей доступних до запису.</dd></dl>
 <p><br />
@@ -2763,14 +2765,153 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 </p>
 <dl><dd>1. Створити об'єкт контролеру джерела у модулі "<a href="Modules/SNMP.html" title="Special:MyLanguage/Modules/SNMP">SNMP</a>" та встановити його Ідентифікатор на кшталт "SYSData".</dd>
 <dd>2. Створити об'єкт параметру джерела у попередньо створеному об'єкті контролера та встановити його Ідентифікатор на кшталт "DEV".</dd>
-<dd>3. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
+<dd>3. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь який наявний з потрібними властивостями планування.</dd>
 <dd>4. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
-<dd>5. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
+<dd>5. У вкладці "Конфігурація шаблону" об'єкту логічного параметру ви маєте встановити:
 <ul><li> <i>Адреса вихідного об'єкту</i> — у адресу об'єкту параметру вихідного пристрою SNMP (дивіться крок 1), на кшталт "SNMP.SYSData.DEV";</li>
 <li> <i>Ручні таблиці</i> — вручну введіть деякі статичні MIB-змінні.</li></ul></dd>
-<dd>6. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати, у атрибуті параметру <i>items</i>, цей об'єкт з усіма атрибутами та їх властивостями. У випадку деяких порушень отримаємо відповідну інформацію у атрибуті параметру <i>err</i>, стосовно чого ви можете налаштувати атрибути границь відповідних порушень.</dd>
+<dd>6. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати у атрибуті параметру <i>items</i> цей об'єкт з усіма атрибутами та їх властивостями. У випадку деяких порушень отримаємо відповідну інформацію у атрибуті параметру <i>err</i>, стосовно чого ви можете налаштувати атрибути границь відповідних порушень.</dd>
 <dd>7. У візуальному інтерфейсі розробки модуля <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> розташуйте <a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">кадр "Властивості об'єкту"</a> до будь-якої сторінки та зв'яжіть його із об'єктом цього параметру, створеного на кроці 4.</dd>
 <dd>8. РЕЗУЛЬТАТ: При виконанні сторінки ви отримаєте таблицю з даними об'єкту, повідомленням про порушення у заголовку та об'єкті сигналізації та можливістю встановлення властивостей доступних до запису.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="DiskSMART" title="#DiskSMART"><h3><span class="mw-headline" id=".D0.94.D0.B8.D1.81.D0.BA.D0.BE.D0.B2.D0.B8.D0.B9_SMART_.28DiskSMART.29"><span class="mw-headline-number">2.3</span> Дисковий SMART (<a href="Libs_Main.html#DiskSMART" title="Special:MyLanguage/Libs/Main">DiskSMART</a>)</span></h3></span>
+</td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainDiskSMARTOp_uk.png" title="Результат та оперативні налаштування."><img alt="Результат та оперативні налаштування." height="547" src="files/LibsMainDiskSMARTOp_uk.png" width="382" /></a></div>
+<p>Об'єднання даних дискового SMART у комплексному об'єкті атрибуту "Всі елементи". Шаблон розроблено для використання із модулем джерела даних "<a href="Modules/System.html" title="Special:MyLanguage/Modules/System">Система</a>" у частині "SMART Диску" та представлення цих даних <a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">кадром "Властивості об'єкту"</a> як комплексний об'єкт із властивостями і сигналізацією за загальних помилок. Деякі атрибути SMART можуть бути невідомими або помилковими для визначеного диску через їх відсутність у БД дисків, особливо для сучасних SSD, тож шаблоном надається властивість перевизначення назв атрибутів.
+</p><p><b><u>ВВ шаблону</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Атрибут </th>
+<th> Конфігурація </th>
+<th> Значення
+</th></tr>
+<tr>
+<td> srcAddr </td>
+<td> Адреса вихідного об'єкту </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td>
+</td></tr>
+<tr>
+<td> items </td>
+<td> Всі елементи </td>
+<td> Об'єкт </td>
+<td> Вихід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> defs </td>
+<td> Визначення елементів </td>
+<td> Текст </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Об'єкт </td>
+<td> Об'єкт </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> SHIFR </td>
+<td> Шифр </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> NAME </td>
+<td> Назва </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> DESCR </td>
+<td> Опис </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Помилка функції </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Прапорець запуску функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Прапорець зупинки функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення функції, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 1000
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainDiskSMARTCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="187" src="files/LibsMainDiskSMARTCfg_uk.png" width="383" /></a></div>
+<p><b><u>Конфігурація та використання</u></b><br />
+</p>
+<dl><dd>1. Створити об'єкт контролеру джерела у модулі "<a href="Modules/System.html" title="Special:MyLanguage/Modules/System">Система</a>" та встановити його Ідентифікатор на кшталт "SYSData", встановити властивість "Авт. створювати активні джерела даних" у "Всі джерела" і запустити встановленням "Виконується".</dd>
+<dd>2. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь який наявний з потрібними властивостями планування.</dd>
+<dd>3. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
+<dd>4. У вкладці "Конфігурація шаблону" об'єкту логічного параметру ви маєте встановити:
+<ul><li> <i>Адреса вихідного об'єкту</i> — у адресу об'єкту вихідного параметру диску SMART на кшталт "System.SYSData.DiskSMARTsda".</li></ul></dd>
+<dd>5. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати у атрибуті параметру <i>items</i> цей об'єкт з усіма атрибутами та їх властивостями. У випадку деяких порушень отримаємо відповідну інформацію у атрибуті параметру <i>err</i>.</dd>
+<dd>6. У візуальному інтерфейсі розробки модуля <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> розташуйте кадр "<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">Властивості об'єкту</a>" до будь якої сторінки та зв'яжіть його із об'єктом цього параметру, створеного на кроці 3.</dd>
+<dd>7. РЕЗУЛЬТАТ: При виконанні сторінки ви отримаєте таблицю з даними об'єкту, повідомленням про порушення у заголовку та об'єкті сигналізації і можливістю перевизначити назви атрибутів SMART.</dd></dl>
 <h2><span class="mw-headline" id=".D0.A1.D0.B5.D1.80.D0.B2.D1.96.D1.81.D0.B8"><span class="mw-headline-number">3</span> Сервіси</span></h2>
 <table class="wikitable">
 
@@ -3191,13 +3332,142 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <dl><dd>1. Створити вхідний транспорт прийняття ініціативних підключень у <a href="Modules/Sockets.html#InTr" title="Special:MyLanguage/Modules/Sockets">модулі "Сокети"</a> із назвою на кшталт "InitiateCons".</dd>
 <dd>2. Встановити, для попередньо створеного транспорту, потрібну адресу відкриття вхідного сокету та перевести його у режим створення асоціативних вихідних транспортів, залишивши поле протоколу порожнім.</dd>
 <dd>3. Передбачити контейнер джерел даних до яких асоціативні транспорти мають під'єднуватися, який може бути або DAQ-модулем (як то "DAQ.ModBus"), або логічним контролером (як то "DAQ.LogicLev.Sources"), чи параметром у ньому (як то "DAQ.LogicLev.PLC.Sources"), із вмістом параметрів логічного рівня, що представляють джерело даних.</dd>
-<dd>4. Для цього шаблону, створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь-який наявний з потрібними властивостями планування.</dd>
+<dd>4. Для цього шаблону створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь який наявний з потрібними властивостями планування.</dd>
 <dd>5. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
 <dd>6. У вкладці "Конфігурація шаблону" об'єкту логічного параметру треба встановити:
 <ul><li> <i>Вхідний транспорт</i> — у значення ідентифікатору вхідного транспорту, створеного у пункті 1, на кшталт "InitiateCons;</li>
 <li> <i>Таймаути вихідних транспортів</i> — збільшити першу цифру для дуже повільних підключень та типове є нормальним для більшості ситуацій;</li>
 <li> <i>Шлях об'єктів джерела</i> — встановити згідно до пункту 3, для першої частини, та у шлях до контрольного поля, для другої частини, наприклад, та типово для "ModBus", це — "ModBus:%2fcntr%2fcfg%2fADDR".</li></ul></dd>
-<dd>6. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати, у атрибуті параметру <i>prcTr</i> інформацію о вдало опрацьованих, а відтак і вдало пов'язаних із транспортом джерелах даних. У випадку деяких порушень отримаємо відповідну інформацію у атрибуті параметру <i>err</i>. Інформація про відсутність представницького об'єкту для отриманого ідентифікатору поміщається у протоколі порушень.</dd></dl>
+<dd>6. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати у атрибуті параметру <i>prcTr</i> інформацію щодо вдало опрацьованих, а відтак і вдало пов'язаних із транспортом, джерелах даних. У випадку деяких порушень отримаємо відповідну інформацію у атрибуті параметру <i>err</i>. Інформація про відсутність представницького об'єкту для отриманого ідентифікатору поміщається у протоколі порушень.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="weather" title="#weather"><h3><span class="mw-headline" id=".D0.9F.D0.BE.D0.B3.D0.BE.D0.B4.D0.B0_.28weather.29"><span class="mw-headline-number">3.3</span> Погода (<a href="Libs_Main.html#weather" title="Special:MyLanguage/Libs/Main">weather</a>)</span></h3></span>
+</td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainWeatherOp_uk.png" title="Результат та оперативні налаштування."><img alt="Результат та оперативні налаштування." height="596" src="files/LibsMainWeatherOp_uk.png" width="412" /></a></div>
+<p>Шаблон отримання даних погоди з різних погодних служб у Інтернет і первинно лише <a class="external text" href="https://openweathermap.org/" rel="nofollow noreferrer noopener" target="_blank">Open Weather</a>. 
+</p><p>Погодні дані діляться на поточні і прогноз із їх розміщенням у відповідних об'єктах, де поточні атрибути розташовуються прямо у корені та прогноз на день (об'єкт "day") і час (об'єкт "time") всередині відповідного дня згідно до поточної часової зони. Ці дані отримуються за відповідним розкладом незалежно для поточних і прогнозу, та типово поточні запитуються щогодинно, а прогноз один раз на день. Дані можуть бути доступні користувачу як прямо, так і посередництвом спеціально-створеного віджету <a href="Libs_Main_graphical_elements.html#weather" title="Special:MyLanguage/Libs/Main graphical elements">основної бібліотеки</a>.
+</p><p><b><u>ВВ шаблону</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Ідентифікатор </th>
+<th> Ім'я </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Атрибут </th>
+<th> Конфігурація </th>
+<th> Значення
+</th></tr>
+<tr>
+<td> schedCur </td>
+<td> Планування за CRON оновлення поточних даних </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 0 8-20 * * *
+</td></tr>
+<tr>
+<td> schedFC </td>
+<td> Планування за CRON оновлення прогнозованих даних </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 0 8 * * *
+</td></tr>
+<tr>
+<td> city </td>
+<td> ІД Міста </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td> 709932
+</td></tr>
+<tr>
+<td> current </td>
+<td> Поточне </td>
+<td> Об'єкт </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> forecast </td>
+<td> Прогноз </td>
+<td> Об'єкт </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Параметр </td>
+<td> Об'єкт </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Прапорець запуску функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення функції, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Прапорець зупинки функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Помилка функції </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainWeatherCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="218" src="files/LibsMainWeatherCfg_uk.png" width="531" /></a></div>
+<p><b><u>Конфігурація та використання</u></b><br />
+</p>
+<dl><dd>1. Для цього шаблону створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь який наявний з потрібними властивостями планування.</dd>
+<dd>2. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього. Ввімкнути параметр.</dd>
+<dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру треба встановити:
+<ul><li> <i>Планування за CRON оновлення поточних даних</i> — у значення необхідного планування для отримання поточних даних у <a href="User_API.html#CRON" title="Special:MyLanguage/Documents/User API">форматі CRON</a>, за порожнього отримання здійснюватиметься із періодом виконання об'єкту контролеру;</li>
+<li> <i>Планування за CRON оновлення прогнозованих даних</i> — у значення необхідного планування для отримання прогнозованих даних у <a href="User_API.html#CRON" title="Special:MyLanguage/Documents/User API">форматі CRON</a>, за порожнього отримання здійснюватиметься із періодом виконання об'єкту контролеру.</li></ul></dd>
+<dd>4. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати у атрибуті параметру <i>Поточне (current)</i> і <i>Прогноз (forecast)</i> та після встановлення кода вашого міста у відповідному атрибуті. Код міста ви можете отримати із <a class="external text" href="https://openweathermap.org/" rel="nofollow noreferrer noopener" target="_blank">офіційного сайту</a> у адресі (URL) після пошуку вашого міста у формі сайту.</dd></dl>
 <h2><span class="mw-headline" id=".D0.94.D0.BB.D1.8F_WebUser"><span class="mw-headline-number">4</span> <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">Для WebUser</a></span></h2>
 <table class="wikitable">
 
@@ -3339,5 +3609,5 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/uk">Libs/Main/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/uk">Libs/Main/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

@@ -1250,8 +1250,8 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 			if(!(wdg.at().attrAt(alist[iA]).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst))) continue;
 			    //|| (!shwAttr && wdg.at().attrAt(alist[iA]).at().flgSelf()&Attr::CfgConst)) continue;
 			// Get attributes
-			bool shwTmpl = wdg.at().attrAt(alist[iA]).at().cfgTempl().size();
-			if(shwTmpl)	grpprm = TSYS::strSepParse(wdg.at().attrAt(alist[iA]).at().cfgTempl(),0,'|');
+			bool shwTmpl = trD(wdg.at().attrAt(alist[iA]).at().cfgTempl()).size();
+			if(shwTmpl)	grpprm = TSYS::strSepParse(trD(wdg.at().attrAt(alist[iA]).at().cfgTempl()), 0, '|');
 
 			if(!shwAttr && wdg.at().attrAt(alist[iA]).at().flgSelf()&Attr::CfgConst && shwTmpl)	continue;
 
@@ -1309,13 +1309,13 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	string nattr = TSYS::strSepParse(a_path.substr(14), 1, '.');
 	if(nattr.size()) srcwdg = wdgAt(nwdg);
 	else nattr = nwdg;
-	string p_nm = TSYS::strSepParse(srcwdg.at().attrAt(nattr).at().cfgTempl(), 0, '|');
+	string p_nm = TSYS::strSepParse(trD(srcwdg.at().attrAt(nattr).at().cfgTempl()), 0, '|');
 
 	// Search the first not config and not empty value field if default field is config or empty.
 	if(srcwdg.at().attrAt(nattr).at().flgSelf()&Attr::CfgConst || srcwdg.at().attrAt(nattr).at().cfgVal().empty()) {
 	    srcwdg.at().attrList(aLs);
 	    for(unsigned iA = 0; iA < aLs.size(); iA++)
-		if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(aLs[iA]).at().cfgTempl(),0,'|') &&
+		if(p_nm == TSYS::strSepParse(trD(srcwdg.at().attrAt(aLs[iA]).at().cfgTempl()),0,'|') &&
 		    !(srcwdg.at().attrAt(aLs[iA]).at().flgSelf()&Attr::CfgConst) &&
 		    srcwdg.at().attrAt(aLs[iA]).at().cfgVal().size())
 		{ nattr = aLs[iA]; break; }
@@ -1337,7 +1337,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	    srcwdg.at().attrList(aLs);
 	    for(unsigned iA = 0; iA < aLs.size(); iA++)
 		if(srcwdg.at().attrAt(aLs[iA]).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
-		    p_nm == TSYS::strSepParse(srcwdg.at().attrAt(aLs[iA]).at().cfgTempl(),0,'|'))
+		    p_nm == TSYS::strSepParse(trD(srcwdg.at().attrAt(aLs[iA]).at().cfgTempl()),0,'|'))
 		{
 		    sel = srcwdg.at().attrAt(aLs[iA]).at().cfgVal();
 		    rez += (rez.size()?", ":"")+sel;
@@ -1372,11 +1372,11 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 
 	    srcwdg.at().attrList(aLs);
 	    for(unsigned iA = 0; iA < aLs.size(); iA++)
-		if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(aLs[iA]).at().cfgTempl(),0,'|') &&
+		if(p_nm == TSYS::strSepParse(trD(srcwdg.at().attrAt(aLs[iA]).at().cfgTempl()),0,'|') &&
 		    !(srcwdg.at().attrAt(aLs[iA]).at().flgSelf()&Attr::CfgConst))
 		{
 		    srcwdg.at().attrAt(aLs[iA]).at().setCfgVal(cfg_val);
-		    string p_attr = TSYS::strSepParse(srcwdg.at().attrAt(aLs[iA]).at().cfgTempl(), 1, '|');
+		    string p_attr = TSYS::strSepParse(trD(srcwdg.at().attrAt(aLs[iA]).at().cfgTempl()), 1, '|');
 		    if(!prm.freeStat() || !dstwdg.freeStat()) {
 			if((!prm.freeStat() && prm.at().vlPresent(p_attr)) ||
 				(!dstwdg.freeStat() && dstwdg.at().attrPresent(p_attr)))
@@ -1397,11 +1397,11 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	if(!(srcwdg.at().attrAt(nattr).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut))) {
 	    if(!is_pl) throw TError(nodePath(), _("The variable is not a link"));
 	    vector<string> aLs;
-	    string p_nm = TSYS::strSepParse(srcwdg.at().attrAt(nattr).at().cfgTempl(),0,'|');
+	    string p_nm = TSYS::strSepParse(trD(srcwdg.at().attrAt(nattr).at().cfgTempl()),0,'|');
 	    srcwdg.at().attrList(aLs);
 	    unsigned iA;
 	    for(iA = 0; iA < aLs.size(); iA++)
-		if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(aLs[iA]).at().cfgTempl(),0,'|') &&
+		if(p_nm == TSYS::strSepParse(trD(srcwdg.at().attrAt(aLs[iA]).at().cfgTempl()),0,'|') &&
 		    !(srcwdg.at().attrAt(aLs[iA]).at().flgSelf()&Attr::CfgConst))
 		{ nattr = aLs[iA]; break; }
 	    if(iA >= aLs.size()) throw TError(nodePath(), _("The variable is not a link"));

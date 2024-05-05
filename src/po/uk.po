@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-12 19:11+0200\n"
+"POT-Creation-Date: 2024-04-08 22:21+0300\n"
 "PO-Revision-Date: 2020-10-25 10:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team:  <uk@li.org>\n"
@@ -187,8 +187,7 @@ msgid "Redundancy"
 msgstr "Резервування"
 
 msgid "Overtime of the reserve history reload at start, days"
-msgstr ""
-"Глибина примусового перевантаження історії резерву при запуску, в добах."
+msgstr "Глибина примусового перевантаження історії резерву при запуску, в добах."
 
 msgid "Message archivers"
 msgstr "Архіватори повідомлень"
@@ -384,6 +383,7 @@ msgstr ""
 "Кількість копійованих елементів досягнула обмеження %d для діапазону [%lld:"
 "%lld](%lld)!"
 
+#, c-format
 msgid ""
 "The grid mode doesn't support inserting too old values %s.%06d (%s.%06d-%s."
 "%06d)."
@@ -552,8 +552,7 @@ msgid "Last read buffer"
 msgstr "Останнє читання буферу"
 
 #, c-format
-msgid ""
-"Number of the setting items achieved the limit %d for time range [%lld:%lld]!"
+msgid "Number of the setting items achieved the limit %d for time range [%lld:%lld]!"
 msgstr ""
 "Кількість встановлюваних елементів досягнула обмеження %d для діапазону "
 "[%lld:%lld]!"
@@ -654,8 +653,7 @@ msgstr "Таблиці у БД, але не відкриті на цей час.
 msgid "Load the program from this DB"
 msgstr "Завантажити програму з цієї БД"
 
-msgid ""
-"Codepage of data in the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
+msgid "Codepage of data in the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr "Кодування даних у БД. Наприклад: UTF-8, KOI8-R, KOI8-U ... ."
 
 msgid ""
@@ -790,13 +788,14 @@ msgstr "пересування елементу у позиції %s в %s."
 msgid "move row in position %s to %s."
 msgstr "пересування рядку у позиції %s в %s."
 
-#, c-format
-msgid "load with forcibility %d."
-msgstr "завантаження із примусовістю %d."
+msgid "load"
+msgstr "завантаження"
 
-#, c-format
-msgid "save with forcibility %d."
-msgstr "збереження із примусовістю %d."
+msgid " with forcibility"
+msgstr " із примусовістю"
+
+msgid "save"
+msgstr "збереження"
 
 #, c-format
 msgid "copy from '%s' to '%s'."
@@ -1264,8 +1263,7 @@ msgstr "Загальне Сховище"
 msgid "Configuration File"
 msgstr "Конфігураційний Файл"
 
-msgid ""
-"Storage address in the format \"{DB module}.{DB name}\" or the common ones."
+msgid "Storage address in the format \"{DB module}.{DB name}\" or the common ones."
 msgstr "Адреса сховища у форматі \"{Модуль БД}.{Ім'я БД}\" або загальне."
 
 #, c-format
@@ -1528,8 +1526,7 @@ msgstr "2:Збір зупинено."
 msgid "Parameter: "
 msgstr "Параметр: "
 
-msgid ""
-"The type changing leads to lose some data of the specific configurations."
+msgid "The type changing leads to lose some data of the specific configurations."
 msgstr "Зміна типу потягне за собою втрату даних специфічних конфігурацій."
 
 msgid "Inclusion"
@@ -2102,8 +2099,7 @@ msgid "Error writing the configuration file '%s': %s"
 msgstr "Помилка запису до конфігураційного файлу '%s': %s"
 
 #, c-format
-msgid ""
-"Impossible to hold the project lock! Seems the project '%s' already running."
+msgid "Impossible to hold the project lock! Seems the project '%s' already running."
 msgstr "Неможливо захопити замок проєкту! Схоже проєкт '%s' вже виконується."
 
 msgid "Loading."
@@ -2711,8 +2707,7 @@ msgid "User;System;User and System"
 msgstr "Корист.;Системн.;Корист. та Системн."
 
 msgid "Initial connection identifier to what bind for control."
-msgstr ""
-"Ідентифікатор ініціативного підключення до якого зв'язуватися для керування."
+msgstr "Ідентифікатор ініціативного підключення до якого зв'язуватися для керування."
 
 msgid "New external host"
 msgstr "Новий зовнішній хост"
@@ -3136,30 +3131,3 @@ msgstr "Встановлено назву проєкту у:"
 msgid "already started."
 msgstr "вже запущено."
 
-#~ msgid "Element type is not selective!"
-#~ msgstr "Тип елементу не вибірковий!"
-
-#~ msgid "Field is not String."
-#~ msgstr "Поле не рядок."
-
-#~ msgid "Field is not Integer."
-#~ msgstr "Поле не ціле."
-
-#~ msgid "Field is not Real."
-#~ msgstr "Поле не реальне."
-
-#~ msgid "Field is not Boolean."
-#~ msgstr "Поле не логічне."
-
-#~ msgid "Field is not selective!"
-#~ msgstr "Поле не вибіркового типу!"
-
-#~ msgid "Empty"
-#~ msgstr "Порожньо"
-
-#, c-format
-#~ msgid "Error selecting! Value: '%s'."
-#~ msgstr "Помилка вибору! Значення: '%s'."
-
-#~ msgid "Not selective type!"
-#~ msgstr "Не вибірковий тип!"

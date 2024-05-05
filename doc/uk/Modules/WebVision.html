@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/WebVision</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FWebVision&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/WebVision" title="Modules/WebVision">Modules/WebVision</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/WebVision.html" title="Modules/WebVision (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/WebVision.html" title="Модули/WebVision (94% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FWebVision&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/WebVision" title="Modules/WebVision">Modules/WebVision</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/WebVision.html" title="Modules/WebVision (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/WebVision.html" title="Модули/WebVision (92% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> </td>
 <td> Робочий користувацький інтерфейс (WEB)
 </td>
-<td> 6.9 </td>
+<td> 6.10 </td>
 <td> GPL2 </td>
 <td> ui_WebVision.so </td>
 <td> en,uk,ru,de </td>
@@ -54,8 +54,8 @@
 <dd> - розширити примітив "Діаграма" операціями масштабування мишею;</dd>
 <dd> - реалізувати власний RTE-редактор для вигляду Text примітиву FormEl;</dd>
 <dd> - ElFigure: виправити втрату деяких властивостей (щонайменш товщину лінії) при опрацюванні дій, у процесі загальної переробки коду примітиву;</dd>
-<dd> * доповнити панель статусу, функціями:
-<dl><dd> - користувацькі поля статусу.</dd></dl></dd>
+<dd> + доповнити панель статусу, функціями:
+<dl><dd> + користувацькі поля статусу.</dd></dl></dd>
 <dd> - ElFigure,Diagram: ввімкнути або реалізувати згладжування, для бібліотеки GD;</dd>
 <dd> - реалізувати примітиви "Діаграма", "ElFigure" тегом "SVG";</dd>
 <dd> - розширити варіант "Анімація" примітиву "Медіа" використанням RAW файлів зображень, на кшталт PNG.</dd></dl>
@@ -139,7 +139,8 @@
 <li> кнопка меню із виклику друку та експорту даних сторінки для:
 <ul><li> друку: Основної Сторінки, Документів;</li>
 <li> експорту: Документів (HTML,CSV), Таблиць (CSV).</li></ul></li>
-<li> підручнику на проєкт СВУ — кліком викликає підручник на проєкт візуалізації щодо файлу "<b>{ProjVCA_ID}.[pdf|html|odt]</b>" у <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">теці документів</a>.</li></ul></li>
+<li> підручнику на проєкт СВУ — кліком викликає підручник на проєкт візуалізації щодо файлу "<b>{ProjVCA_ID}.[pdf|html|odt]</b>" у <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">теці документів</a> або визначеного у <a href="#SpecAttrs"> атрибуті "prjDoc"</a>;</li>
+<li> панель користувацьких статусів і дій за визначенням у <a href="#SpecAttrs">атрибуті "statLine"</a>; клацання лівою, правою та подвійним миші формує події до головної сторінки інтерфейсу.</li></ul></li>
 <li> У головному полі рядка статусу виводяться різні інформаційні повідомлення та повідомлення допомоги.</li></ul>
 <p>Модуль підтримує багатомовність, яка вмикається <a href="../Program_manual.html#ConfigTr" title="Special:MyLanguage/Documents/Program manual">динамічним перекладом повідомлень OpenSCADA</a>. Отримана мова передається модулем <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> та визначається шляхом та у послідовності:
 </p>
@@ -235,11 +236,6 @@
 <th> Призначення
 </th></tr>
 <tr>
-<td> notify{N}, notifyVisWebVision{N} (сторінка) </td>
-<td> Сповіщувач: тип {N} </td>
-<td> Визначає сповіщувач та процедуру отримання ресурсу сповіщення згідно до <a href="../Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">концепції "Сигналізації (Аларми)"</a>.
-</td></tr>
-<tr>
 <td> keepAspectRatio (головна сторінка) </td>
 <td> Зберігати пропорцію при масштабуванні </td>
 <td> Зберігати пропорцію сторінок при масштабуванні.
@@ -250,9 +246,28 @@
 <td> Приховати рядок статусу головного вікна.
 </td></tr>
 <tr>
-<td> userSetVis (головна сторінка, створюється вручну, строковий тип) </td>
+<td> notify{N}, notifyVisWebVision{N} (сторінка) </td>
+<td> Сповіщувач: тип {N} </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Створити вручну із типом "Текст"!
+<p>Визначає сповіщувач та процедуру отримання ресурсу сповіщення згідно до <a href="../Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">концепції "Сигналізації (Аларми)"</a>.
+</p>
+</td></tr>
+<tr>
+<td> statLine (головна сторінка) </td>
+<td> Елементи рядку статусу </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Створити вручну із типом "Текст"!
+<p>Текстове поле з описом елементів рядка статусу користувача, у форматі рядка "<b>{Id}:{Label}:{ToolTip}:{Color}:{Img}</b>", де:
+</p>
+<ul><li> "Id" — ідентифікатор, використовується також для формування повідомлень від віджету "stIt_{Id}".</li>
+<li> "Label" — візуальна мітка елементу статусу.</li>
+<li> "ToolTip" — спливаюча підказка стосовно елементу.</li>
+<li> "Color" — колір мітки.</li>
+<li> "Img" — зображення елементу статусу, замість мітки.</li></ul>
+</td></tr>
+<tr>
+<td> userSetVis (головна сторінка) </td>
 <td> Встановлення користувача </td>
-<td>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Створити вручну із типом "Рядок"!
 <p>Зміна користувача або виклик діалогу для його обрання. Варіанти значення:
 </p>
 <ul><li> "*" — виклик діалогу обрання користувача;</li>
@@ -263,24 +278,39 @@
 </pre></div>
 </td></tr>
 <tr>
+<td> prjDoc (головна сторінка) </td>
+<td> Документ проєкту </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Створити вручну із типом "Рядок"!
+<p>Визначення документу проєкту виклику кнопкою рядка статусу із можливістю вимкнення-приховання кнопки за порожнього значення. Документ визначається у вигляді "<b>{OffLine}|{OnLineOpenSCADAWiki}</b>", до прикладу для <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">проєкту АГЛКС</a> — "AGLCS|Using/Model_AGLKS". Мережева частина використовується у першу чергу за її визначення.
+</p>
+</td></tr>
+<tr>
 <td> vs_goHttpUrl (вигляд "Кнопка" примітиву "FormEl") </td>
 <td> Перехід за HTTP URL </td>
-<td> Перехід на визначений URL за натисканням кнопки
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Створити вручну із типом "Рядок"!
+<p>Перехід на визначений URL за натисканням кнопки.
+</p>
 </td></tr>
 <tr>
 <td> vs_background (види "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" примітиву "FormEl") </td>
 <td> Користувацький фон </td>
-<td> Визначає користувацький фон у формі <b>{color}-{transp} {image}</b>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Створити вручну із типом "Рядок"!
+<p>Визначає користувацький фон у формі <b>{color}-{transp} {image}</b>.
+</p>
 </td></tr>
 <tr>
 <td> vs_border (види "Line edit", "Text edit", "Combo box", "List", "Tree", "Table" примітиву "FormEl") </td>
 <td> Користувацька границя </td>
-<td> Визначає користувацьку границю у стандартній формі CSS <b>{wdth}px {style} {color}</b>
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Створити вручну із типом "Рядок"!
+<p>Визначає користувацьку границю у стандартній формі CSS <b>{wdth}px {style} {color}</b>.
+</p>
 </td></tr>
 <tr>
 <td> vs_winTitle (вид "Box") </td>
 <td> Заголовок вікна </td>
-<td> Значення динамічного заголовку вікна
+<td> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Створити вручну із типом "Рядок"!
+<p>Значення динамічного заголовку вікна.
+</p>
 </td></tr></table>
 <p>Розглянемо реалізацію кожного примітиву більш детально.
 </p>
@@ -725,5 +755,5 @@ GROUNDS: At working with the board <a class="external" href="http://oscada.org/w
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/uk">Modules/WebVision/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebVision/uk">Modules/WebVision/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

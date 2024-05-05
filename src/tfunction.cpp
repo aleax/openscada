@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tfunction.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -578,7 +578,8 @@ string TValFunc::getS( unsigned id )
 	case IO::Integer: { int64_t tvl = getI(id);return (tvl!=EVAL_INT) ? ll2s(tvl) : EVAL_STR; }
 	case IO::Real:	  { double tvl = getR(id); return (tvl!=EVAL_REAL) ? r2s(tvl) : EVAL_STR; }
 	case IO::Boolean: { char tvl = getB(id);   return (tvl!=EVAL_BOOL) ? i2s((bool)tvl) : EVAL_STR; }
-	case IO::Object:  return getO(id).at().getStrXML();
+	case IO::Object:  { AutoHD<TVarObj> tvl = getO(id); return (tvl.at().objName() == "EVAL") ? EVAL_STR : tvl.at().getStrXML(); }
+	//case IO::Object:  return getO(id).at().getStrXML();
 	case IO::String: {
 	    mRes.lock();
 	    string tvl(mVal[id].val.s->data(), mVal[id].val.s->size());
@@ -597,6 +598,7 @@ int64_t TValFunc::getI( unsigned id )
 	case IO::String:  { string tvl = getS(id); return (tvl!=EVAL_STR) ? s2ll(tvl) : EVAL_INT; }
 	case IO::Real:	  { double tvl = getR(id); return (tvl!=EVAL_REAL) ? (int64_t)tvl : EVAL_INT; }
 	case IO::Boolean: { char tvl = getB(id);   return (tvl!=EVAL_BOOL) ? (bool)tvl : EVAL_INT; }
+	case IO::Object:  { AutoHD<TVarObj> tvl = getO(id); return (tvl.at().objName() == "EVAL") ? EVAL_INT : 1; }
 	case IO::Integer: return mVal[id].val.i;
     }
 
@@ -610,6 +612,7 @@ double TValFunc::getR( unsigned id )
 	case IO::String:  { string tvl = getS(id); return (tvl!=EVAL_STR) ? s2r(tvl) : EVAL_REAL; }
 	case IO::Integer: { int64_t tvl = getI(id);return (tvl!=EVAL_INT) ? tvl : EVAL_REAL; }
 	case IO::Boolean: { char tvl = getB(id);   return (tvl!=EVAL_BOOL) ? (bool)tvl : EVAL_REAL; }
+	case IO::Object:  { AutoHD<TVarObj> tvl = getO(id); return (tvl.at().objName() == "EVAL") ? EVAL_REAL : 1; }
 	case IO::Real:    return mVal[id].val.r;
     }
 
@@ -623,6 +626,7 @@ char TValFunc::getB( unsigned id )
 	case IO::String:  { string tvl = getS(id); return (tvl!=EVAL_STR) ? (bool)s2i(tvl) : EVAL_BOOL; }
 	case IO::Integer: { int64_t tvl = getI(id);return (tvl!=EVAL_INT) ? (bool)tvl : EVAL_BOOL; }
 	case IO::Real:    { double tvl = getR(id); return (tvl!=EVAL_REAL) ? (bool)tvl : EVAL_BOOL; }
+	case IO::Object:  { AutoHD<TVarObj> tvl = getO(id); return (tvl.at().objName() == "EVAL") ? EVAL_BOOL : true; }
 	case IO::Boolean:  return mVal[id].val.b;
     }
 

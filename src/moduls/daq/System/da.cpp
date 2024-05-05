@@ -89,10 +89,10 @@ void DA::makeActiveDA( TMdContr *aCntr, const string &dIdPref, const string &dNm
 	    aCntr->add(itprm, 0);
 	    AutoHD<TMdPrm> dprm = aCntr->at(itprm);
 	    dprm.at().setName(dNmPref.size() ? dNmPref.c_str() : _("System"));
-	    dprm.at().autoC(true);
 	    dprm.at().cfg("TYPE").setS(id());
 	    dprm.at().cfg("EN").setB(true);
 	    if(aCntr->enableStat()) dprm.at().enable();
+	    dprm.at().modifClr();
 	}
 
 	return;
@@ -121,10 +121,10 @@ void DA::makeActiveDA( TMdContr *aCntr, const string &dIdPref, const string &dNm
 	aCntr->add(itprm, 0);
 	AutoHD<TMdPrm> dprm = aCntr->at(itprm);
 	dprm.at().setName((dNmPref.size()?dNmPref+": ":"") + itNm);
-	dprm.at().autoC(true);
 	dprm.at().cfg("TYPE").setS(id());
 	dprm.at().cfg("SUBT").setS(itId);
 	dprm.at().cfg("EN").setB(true);
 	if(aCntr->enableStat()) dprm.at().enable();
+	dprm.at().modifClr();
     }
 }

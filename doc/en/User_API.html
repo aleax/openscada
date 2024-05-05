@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/User API</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/User_API.html" title="Документация/API пользователя (86% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/User_API.html" title="Документація/API користувача (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/User_API.html" title="Документация/API пользователя (84% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/User_API.html" title="Документація/API користувача (100% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
@@ -383,11 +383,11 @@ Where:
 <li> <i>int childSize( )</i> — quantity of the included nodes.</li>
 <li> <i>XMLNodeObj childAdd( ElTp no = XMLNodeObj ); XMLNodeObj childAdd( string no )</i> — addition of the object <i>no</i> as the included one. <i>no</i> may be the direct object-result of the function "SYS.XMLNode()", and the string with the name of a new tag. Returns the included node.</li>
 <li> <i>XMLNodeObj childIns( int id, ElTp no = XMLNodeObj ); XMLNodeObj childIns( int id, string no )</i> — insert of the object <i>no</i> as the included one to the position <i>id</i>. <i>no</i> may be the direct object-result of the function "SYS.XMLNode()", and the string with the name of a new tag. Returns the embedded node.</li>
-<li> <i>XMLNodeObj childDel( int id )</i> — deletes the included node from the position <i>id</i>. Returns the current node.</li>
-<li> <i>XMLNodeObj childGet( int id )</i> — gets the included node in the position <i>id</i>.</li>
-<li> <i>XMLNodeObj childGet( string name, int num = 0 )</i> — gets the included node with the tag <i>name</i> and the position number <i>num</i>.</li>
-<li> <i>XMLNodeObj parent( )</i> — gets the parent node.</li>
-<li> <i>string load( string str, bool file = false, int flg = 0, string cp = "UTF-8" )</i> — loads the XML from the string <i>str</i> or from the file with the path in <i>str</i> if the <i>file</i> equal "true", with the source encoding <i>cp</i>. Where <i>flg</i> — loading flags:</li></ul>
+<li> <i>XMLNodeObj childDel( int id )</i> — deletes the included node from the position <i>id</i>. Returns current node.</li>
+<li> <i>XMLNodeObj childGet( int id )</i> — gets the included node in the position <i>id</i>. Returns <b>0</b> at missing one.</li>
+<li> <i>XMLNodeObj childGet( string name, int num = 0 )</i> — gets the included node with the tag <i>name</i> and the position number <i>num</i>. Returns <b>0</b> at missing one.</li>
+<li> <i>XMLNodeObj parent( )</i> — gets the parent node. Returns <b>false</b> at missing one.</li>
+<li> <i>string load( string str, bool file = false, int flg = 0, string cp = "UTF-8" )</i> — loads the XML from the string <i>str</i> or from the file with the path in <i>str</i> if the <i>file</i> equal "true", with the source encoding <i>cp</i>. Returns a string with error in the format "<b>{errCod}:{errText}</b>", which is "0" for successful loading. Where <i>flg</i> — loading flags:</li></ul>
 <dl><dd><dl><dd>0x01 — full loading, with texts and comments blocks into special nodes;</dd>
 <dd>0x02 — does not remove spaces from the begin and end of the tag text.</dd></dl></dd></dl>
 <ul><li> <i>string save( int flg = 0, string path = "", string cp = "UTF-8" )</i> — saves the XML tree to the string or to the file <i>path</i> with the formatting flags <i>flg</i> and target encoding <i>cp</i>. Returns the XML text or the error code. The following formatting options <i>flg</i> are provided:</li></ul>
@@ -772,7 +772,7 @@ Where:
 <span class="c1">//Wait for all the message tail by timeout and empty result</span>
 <span class="k">while</span><span class="p">((</span><span class="nx">trez</span><span class="o">=</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">Transport</span><span class="p">.</span><span class="nx">Serial</span><span class="p">.</span><span class="nx">out_ttyUSB0</span><span class="p">.</span><span class="nx">messIO</span><span class="p">(</span><span class="s2">""</span><span class="p">)).</span><span class="nx">length</span><span class="p">)</span> <span class="nx">rez</span> <span class="o">+=</span> <span class="nx">trez</span><span class="p">;</span>
 </pre></div></li>
-<li><i>string messIO( XMLNodeObj req, string prt );</i> — sends the requests <i>req</i> to the protocol <i>prt</i> to perform a communication session through the transport and in assistance of the protocol.
+<li><i>string messIO( XMLNodeObj req, string prt );</i> — sends the request <i>req</i> to the protocol <i>prt</i> to perform a communication session through the transport and in assistance of the protocol. Returns a string with error in the format "<b>{errCod}:{errText}</b>" which empty for successful request.
 <div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">req</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">XMLNode</span><span class="p">(</span><span class="s2">"TCP"</span><span class="p">);</span>
 <span class="nx">req</span><span class="p">.</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"id"</span><span class="p">,</span><span class="s2">"test"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"reqTm"</span><span class="p">,</span><span class="mi">500</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"node"</span><span class="p">,</span><span class="mi">1</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"reqTry"</span><span class="p">,</span><span class="mi">2</span><span class="p">).</span><span class="nx">setText</span><span class="p">(</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">strFromCharCode</span><span class="p">(</span><span class="mh">0x03</span><span class="p">,</span><span class="mh">0x00</span><span class="p">,</span><span class="mh">0x00</span><span class="p">,</span><span class="mh">0x00</span><span class="p">,</span><span class="mh">0x05</span><span class="p">));</span>
 <span class="nx">SYS</span><span class="p">.</span><span class="nx">Transport</span><span class="p">.</span><span class="nx">Sockets</span><span class="p">.</span><span class="nx">out_testModBus</span><span class="p">.</span><span class="nx">messIO</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="s2">"ModBus"</span><span class="p">);</span>
@@ -892,7 +892,7 @@ Where:
 <tr>
 <td> <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">Main library</a>
 </td>
-<td> 2.1 </td>
+<td> 2.2 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_base </td>
 <td> en, uk, ru
@@ -952,7 +952,7 @@ Where:
 <tr>
 <td> <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">Main elements library of the user interface</a>
 </td>
-<td> 2.1 </td>
+<td> 2.2 </td>
 <td> GPLv2
 </td>
 <td> vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">GZip</a>) &gt; VCA.wlb_Main
@@ -1018,5 +1018,5 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/en">Documents/User_API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/en">Documents/User_API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
 </html>

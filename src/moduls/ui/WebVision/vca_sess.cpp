@@ -129,7 +129,7 @@ void VCASess::getReq( SSess &ses )
     }
     //Session/projects manual
     else if(wp_com == "manual") {
-	string fTp, fDoc = TUIS::docGet(proj()+"\n"+ses.lang, &fTp, TUIS::GetContent);
+	string fTp, fDoc = TUIS::docGet((ses.prm["doc"].size()?ses.prm["doc"]:proj())+"\n"+ses.lang, &fTp, TUIS::GetContent);
 	if(fDoc.size())	ses.page = mod->pgCreator(ses.prt, fDoc, "200 OK", "Content-Type: "+TUIS::mimeGet("."+fTp,""));
 	else ses.page = mod->pgCreator(ses.prt, mod->messPost(nodePath(), _("The project manual was not found!"),TWEB::Error), "404 Not Found");
     }
@@ -236,7 +236,7 @@ void VCASess::getReq( SSess &ses )
 		}
 
 	    string mime;
-	    ses.page = resGet(prmEl->second, ses.url, ses, &mime, start, &size);
+	    ses.page = resGet(TSYS::strDecode(prmEl->second,TSYS::HttpURL), ses.url, ses, &mime, start, &size);
 	    if((range.size() && size) || size > limUserFile_SZ)
 		ses.page = mod->pgCreator(ses.prt, ses.page, "206 Partial Content",
 		    "Content-Type: "+TSYS::strParse(mime,0,";")+"\x0D\x0A"+"Content-Range: bytes "+

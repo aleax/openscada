@@ -256,7 +256,10 @@ class TSYS : public TCntrNode
 	int	nCPU( )		{ return mN_CPU; }
 	float	sysClk( )	{ return mSysclc; }	//In MHz
 	void	setSysClk( float vl )	{ mSysclc = vl; }
-	time_t	sysTm( ) volatile	{ return mSysTm ? mSysTm : time(NULL); }	//System time fast access, from updated cell
+	time_t	sysTm( bool *hasJump = NULL, time_t last = 0 ) {	//System time fast access with detection the time jumps
+	    if(hasJump) *hasJump = (last < mSysTmJump);
+	    return mSysTm;
+	}
 	static int64_t curTime( clockid_t clc = CLOCK_REALTIME );	//Current system time, microseconds
 	static uint64_t curTimeN( clockid_t clc = CLOCK_REALTIME );	//Current system time, nanoseconds
 
@@ -489,7 +492,7 @@ class TSYS : public TCntrNode
 	int		mN_CPU;
 	pthread_t	mainPthr;
 	float		mSysclc;
-	volatile time_t	mSysTm;
+	time_t		mSysTm, mSysTmJump;
 	bool		mClockRT;	//Used clock REALTIME, else it is MONOTONIC
 
 	bool		mPrjCustMode;

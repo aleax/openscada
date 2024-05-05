@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-10 09:30+0200\n"
+"POT-Creation-Date: 2024-05-02 13:57+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1404,16 +1404,16 @@ msgstr "Вхід до редагування віджету"
 msgid "Press to enter the widget editing."
 msgstr "Натиснути для входу до редагування віджету."
 
-msgid "Make up an icon from the widget"
+msgid "Create icon from the widget"
 msgstr "Створити іконку з віджета"
 
-msgid "Press to make up an icon from the widget."
+msgid "Press for creation icon from the widget."
 msgstr "Натиснути для створення іконки з віджета."
 
-msgid "Make up an image from the widget"
+msgid "Create image from the widget"
 msgstr "Створити зображення з віджету"
 
-msgid "Press to make up an image from the widget."
+msgid "Press for creation image from the widget."
 msgstr "Натиснути для створення зображення з віджету."
 
 msgid "Zoom in (+10%)"
@@ -1816,9 +1816,6 @@ msgstr "Поле відображення використаного стилю 
 
 msgid "Double click to change the style."
 msgstr "Подвійно клікнути для зміни користувача."
-
-msgid "Status line items"
-msgstr "Елементи рядку статусу"
 
 msgid "Running window"
 msgstr "Вікно виконання"
@@ -2338,5 +2335,8 @@ msgstr "Час ініціалізації '%s': %f мс."
 msgid "Input dialog of Vision"
 msgstr "Діалог вводу Vision"
 
-#~ msgid "Loading the picture"
-#~ msgstr "Завантаження картинки"
+#~ msgid "Status line items"
+#~ msgstr "Елементи рядку статусу"
+
+#~ msgid "Project document"
+#~ msgstr "Документ проєкту"

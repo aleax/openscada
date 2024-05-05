@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 08:35+0200\n"
+"POT-Creation-Date: 2024-05-02 13:57+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1280,16 +1280,16 @@ msgstr ""
 msgid "Press to enter the widget editing."
 msgstr ""
 
-msgid "Make up an icon from the widget"
+msgid "Create icon from the widget"
 msgstr ""
 
-msgid "Press to make up an icon from the widget."
+msgid "Press for creation icon from the widget."
 msgstr ""
 
-msgid "Make up an image from the widget"
+msgid "Create image from the widget"
 msgstr ""
 
-msgid "Press to make up an image from the widget."
+msgid "Press for creation image from the widget."
 msgstr ""
 
 msgid "Zoom in (+10%)"
@@ -1679,9 +1679,6 @@ msgid "Field for displaying the used interface style."
 msgstr ""
 
 msgid "Double click to change the style."
-msgstr ""
-
-msgid "Status line items"
 msgstr ""
 
 msgid "Running window"

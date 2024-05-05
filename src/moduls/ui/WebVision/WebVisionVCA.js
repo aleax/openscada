@@ -31,6 +31,7 @@ var tmFullUpd = 5;			//Full tree updating time, seconds
 var tmAlrmUpd = 0.5;			//Alarms updating time, seconds
 var limTblItmCnt = 300;			//Limit of the table item content
 var tblCurClr = "lightblue";		//Table cursor color
+var tblCurBrd = "2px dotted red"	//Table cursor border
 
 /***************************************************
  * pathLev - Path parsing function.                *
@@ -483,9 +484,11 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 
 	//Get and activate for specific attributes to the master-page
 	servSet("/UI/VCAEngine"+this.addr, 'com=com', "<CntrReqs>"+
-	    "<activate path='/%2fserv%2fattr%2fkeepAspectRatio' aNm='Keep aspect ratio on scale' aTp='0'/>"+
-	    "<activate path='/%2fserv%2fattr%2fstBarNoShow' aNm='Do not show the status bar' aTp='0'/>"+
-	    "<activate path='/%2fserv%2fattr%2fuserSetVis'/>"+
+	    "<activate path='/%2fserv%2fattr%2fkeepAspectRatio' aNm='Keep aspect ratio on scale' aTp='0' />"+
+	    "<activate path='/%2fserv%2fattr%2fstBarNoShow' aNm='Do not show the status bar' aTp='0' />"+
+	    "<activate path='/%2fserv%2fattr%2fstatLine' />"+
+	    "<activate path='/%2fserv%2fattr%2fuserSetVis' />"+
+	    "<activate path='/%2fserv%2fattr%2fprjDoc' />"+
 	    "</CntrReqs>");
 
 	this.makeEl(servGet(pgId,'com=attrsBr'), false, true);
@@ -635,7 +638,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	var elStyle = '';
 	this.isVisible = true;
 	if(!(parseInt(this.attrs['en']) && (this.pg || parseInt(this.attrs['perm'])&SEC_RD)))
-	{ elStyle += 'visibility : hidden; '; this.isVisible = false; }
+	{ elStyle += 'visibility: hidden; '; this.isVisible = false; }
 	var geomX = parseFloat(this.attrs['geomX']);
 	var geomY = parseFloat(this.attrs['geomY']);
 	if(this.pg) { geomX = geomY = 0; elStyle += 'overflow: hidden; '; }
@@ -681,8 +684,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		masterPage.status.style.height = (masterPage.status.height-1)+"px";
 		masterPage.status.style.fontSize = Math.floor(masterPage.status.height*0.7)+"px";
 
+		//  Status creation
 		if(toCrtStBar) {
 		    stBar = "<table width='100%'><TR><td id='StatusBar' width='100%'/>";
+		    if(this.attrs['statLine'] != null)
+			stBar += "<td id='st_userFlds' class='vertalign' title='###User status fields.###' style='padding-left: 2px; padding-right: 2px;'/>";
 		    stBar += "<td id='st_man' title='###Field of getting the project manual.###'>"+
 				"<a href='"+location.pathname+"?com=manual' target='_blank'>"+
 				    "<img height='"+(masterPage.status.height-2)+"px' src='/"+MOD_ID+"/img_manual'/></a></td>";
@@ -706,8 +712,34 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    stBar += "</TR></table>";
 		    masterPage.status.innerHTML = stBar;
 		}
-
 		elStyle += "overflow: visible; ";
+
+		//  Status updating
+		if((tVl=this.attrs['prjDoc']) != null && this.attrsMdf['prjDoc']) {
+		    var st_man = masterPage.status.firstChild.rows[0].cells['st_man'];
+		    st_man.style.visibility = tVl.length ? 'visible' : 'hidden';
+		    st_man.firstChild.href = ((tVl=tVl.split('|')).length >= 2 && tVl[1].length)
+						? "http://oscada.org/wiki/Special:MyLanguage/"+tVl[1]
+						: location.pathname+"?com=manual"+(tVl[0].length?"&doc="+tVl[0]:"");
+		}
+		if((tVl=this.attrs['statLine']) != null && this.attrsMdf['statLine']) {
+		    var st_userFlds = masterPage.status.firstChild.rows[0].cells['st_userFlds'];
+		    tVl = tVl.split('\n');
+		    tVl2 = "";
+		    for(var i = 0; i < tVl.length; i++) {
+			if((tVl3=tVl[i].split(':')).length < 2)	continue;
+			if(tVl3.length < 4 || !tVl3[3].length) tVl3[3] = "black";
+			tVl4 =	"id='"+tVl3[0]+"' style='color: "+tVl3[3]+"; border: 1px solid "+tVl3[3]+"; ' "+
+				"onmousedown='setWAttrs(masterPage.addr,\"event\",\"key_mousePres\"+evMouseGet(event)+\":/stIt_\"+this.id);' "+
+				"onmouseup='setWAttrs(masterPage.addr,\"event\",\"key_mouseRels\"+evMouseGet(event)+\":/stIt_\"+this.id);' "+
+				"ondblclick='setWAttrs(masterPage.addr,\"event\",\"key_mouseDblClick:/stIt_\"+this.id);' ";
+			if(tVl3.length >= 3 && tVl3[2].length) tVl4 += "title='"+tVl3[2]+"' ";
+			tVl2 += (tVl3.length >= 2 && tVl3[1].length)
+				? "<span "+tVl4+">"+tVl3[1]+"</span>"
+				: "<img "+tVl4+"height='"+(masterPage.status.height-4)+"px' src='/"+MOD_ID+this.addr+"?com=res&val="+tVl3[4].replace(/ /g,'%20')+"' />";
+		    }
+		    st_userFlds.innerHTML = tVl2;
+		}
 	    }
 	}
 
@@ -860,7 +892,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    if(elMargin) { elStyle += 'padding: '+elMargin+'px; '; elMargin = 0; }
 	    //if(parseInt(this.attrs['orient']) == 0) {
 		var txtAlign = parseInt(this.attrs['alignment']);
-		var spanStyle = "display: table-cell; width: "+geomW+"px; height: "+geomH+"px; line-height: 1; white-space: "+(parseInt(this.attrs["wordWrap"])?"pre-wrap":"pre")+"; ";
+		var spanStyle = "display: table-cell; width: "+geomW+"px; height: "+geomH+"px; line-height: 1.2; white-space: "+(parseInt(this.attrs["wordWrap"])?"pre-wrap":"pre")+"; ";
 		switch(txtAlign&0x3) {
 		    case 0: spanStyle += 'text-align: left; ';		break;
 		    case 1: spanStyle += 'text-align: right; ';		break;
@@ -946,7 +978,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    medObj.src = this.attrs['src'];
 		else if(this.attrs['src'].indexOf("data:") == 0 && (fLine=this.attrs['src'].indexOf("\n")) >= 0)
 		    medObj.src = "data:"+this.attrs['src'].slice(5,fLine)+";base64,"+this.attrs['src'].slice(fLine+1);
-		else medObj.src = "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['src'];
+		else medObj.src = "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['src'].replace(/ /g,'%20');
 		medObj.hidden = !this.attrs['src'].length;
 	    }
 	    if(this.attrs['play'] && (toInit || this.attrsMdf["play"])) {
@@ -1885,7 +1917,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 				//  Adjusting the percent width columns
 				for(iH = 0, cO = null; iH < tHd.tHead.rows[0].cells.length; iH++) {
-				    tHd.tHead.rows[0].cells[iH].onclick = function() { this.offsetParent.offsetParent.firstChild.sort(this.cellIndex+1); }
+				    tHd.tHead.rows[0].cells[iH].onclick = !tbl.sortCol ? null : function() { this.offsetParent.offsetParent.firstChild.sort(this.cellIndex+1); }
 				    if(tHd.tHead.rows[0].cells[iH].style.width.indexOf("%") >= 0)
 					(cO=tHd.tHead.rows[0].cells[iH]).style.width = tbl.tHead.rows[0].cells[iH].clientWidth+"px";
 				}
@@ -2010,24 +2042,33 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			formObj.selIt = function(row, col) {
 			    //Restore saved
 			    if(this.svRow || this.svCol) {
-				if(!this.svRow)
-				    this.tHead.rows[0].cells[this.svCol].style.backgroundColor =
-						this.tHead.rows[0].cells[this.svCol].svBackgroundColor;
+				if(!this.svRow) {
+				    cO = this.tHead.rows[0].cells[this.svCol];
+				    cO.style.backgroundColor = cO.svBackgroundColor;
+				    cO.style.border = "";
+				}
 				for(iR = (this.svRow?this.svRow-1:0); iR <= (this.svRow?Math.min(this.svRow-1,this.tBodies[0].rows.length-1):this.tBodies[0].rows.length-1); iR++)
-				    for(iC = (this.svCol?this.svCol:0); iC <= (this.svCol?this.svCol:(this.tBodies[0].rows[iR].cells.length-1)); iC++)
-					this.tBodies[0].rows[iR].cells[iC].style.backgroundColor =
-						this.tBodies[0].rows[iR].cells[iC].svBackgroundColor;
+				    for(iC = (this.svCol?this.svCol:0); iC <= (this.svCol?this.svCol:(this.tBodies[0].rows[iR].cells.length-1)); iC++) {
+					cO = this.tBodies[0].rows[iR].cells[iC];
+					cO.style.backgroundColor = cO.svBackgroundColor;
+					cO.style.border = "";
+				    }
 			    }
 			    //Set new
 			    if(row || col) {
 				if(!row) {
-				    this.tHead.rows[0].cells[col].svBackgroundColor = this.tHead.rows[0].cells[col].style.backgroundColor;
-				    this.tHead.rows[0].cells[col].style.backgroundColor = tblCurClr;
+				    cO = this.tHead.rows[0].cells[col];
+				    cO.svBackgroundColor = cO.style.backgroundColor;
+				    cO.style.backgroundColor = tblCurClr;
+				    cO.style.border = tblCurBrd;
 				}
 				for(iR = (row?row-1:0); iR <= (row?row-1:this.tBodies[0].rows.length-1); iR++)
 				    for(iC = (col?col:0); iC <= (col?col:this.tBodies[0].rows[iR].cells.length-1); iC++) {
-					this.tBodies[0].rows[iR].cells[iC].svBackgroundColor = this.tBodies[0].rows[iR].cells[iC].style.backgroundColor;
-					this.tBodies[0].rows[iR].cells[iC].style.backgroundColor = tblCurClr;
+					cO = this.tBodies[0].rows[iR].cells[iC];
+					cO.svBackgroundColor = cO.style.backgroundColor;
+					cO.style.backgroundColor = tblCurClr;
+					if(!col || (row && col)) cO.style.borderTop = cO.style.borderBottom = tblCurBrd;
+					if(!row || (row && col)) cO.style.borderLeft = cO.style.borderRight = tblCurBrd;
 				    }
 			    }
 			    this.svRow = row; this.svCol = col;
@@ -2148,6 +2189,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    tit.style.backgroundColor = getColor(wVl);
 					else tit.style.backgroundColor = null;
 					if(isSelected) tit.svBackgroundColor = tit.style.backgroundColor;
+					tit.style.border = null;
 					// Text font and color
 					if((tC && (wVl=tC.getAttribute("colorText"))) || (wVl=hit.outColorText) || (wVl=rClrTxt))
 					    tit.style.color = getColor(wVl);
@@ -2237,13 +2279,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    }
 					);
 				    for(iR = 0; iR < prcArr.length; ++iR) {
-					if(this.svRow && this.svRow == parseInt(prcArr[iR].cells[0].textContent)) {
-					    this.svRow = iR+1;
-					    prcArr[iR].cells[0].style.backgroundColor = prcArr[iR].cells[0].svBackgroundColor ? prcArr[iR].cells[0].svBackgroundColor : null;
-					}
+					if(this.svRow && this.svRow == parseInt(prcArr[iR].cells[0].textContent))
+					    this.svRow = -(iR+1);
 					prcArr[iR].cells[0].textContent = iR+1;
 					this.tBodies[0].appendChild(prcArr[iR]);
 				    }
+				    this.svRow = Math.abs(this.svRow);
 				    this.tHead.rows[0].cells[col-1].innerHTML = this.tHead.rows[0].cells[col-1].childNodes[0].textContent + "<span>&nbsp;"+(isDesc?"▲":"▼")+"</span>";
 				    if(this.sortCol && Math.abs(this.sortCol) != col)
 					this.tHead.rows[0].cells[Math.abs(this.sortCol)-1].innerText = this.tHead.rows[0].cells[Math.abs(this.sortCol)-1].childNodes[0].textContent;
