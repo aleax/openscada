@@ -1,13 +1,13 @@
 # OpenSCADA.UI.Vision translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.Vision package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2005-2022.
+# Roman Savochenko <roman@oscada.org>, 2005-2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-02 13:57+0300\n"
+"POT-Creation-Date: 2024-05-13 08:18+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -898,7 +898,7 @@ msgstr ""
 "Зберегти зміни у БД перед виходом?"
 
 msgid ""
-"%1 v%2.\n"
+"%1 v%2 on Qt v%12.\n"
 "%3\n"
 "Author: %4\n"
 "License: %5\n"
@@ -909,7 +909,7 @@ msgid ""
 "Author: %10\n"
 "Web site: %11"
 msgstr ""
-"%1 v%2.\n"
+"%1 v%2 на Qt v%12.\n"
 "%3\n"
 "Автор: %4\n"
 "Ліцензія: %5\n"

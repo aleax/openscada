@@ -1060,7 +1060,7 @@ void VisDevelop::quitSt( )
 
 void VisDevelop::about( )
 {
-    QString mess = _("%1 v%2.\n%3\nAuthor: %4\nLicense: %5\n\n"
+    QString mess = _("%1 v%2 on Qt v%12.\n%3\nAuthor: %4\nLicense: %5\n\n"
 		     "%6 v%7.\n%8\nLicense: %9\nAuthor: %10\nWeb site: %11");
 
 #undef _
@@ -1069,7 +1069,8 @@ void VisDevelop::about( )
     QMessageBox::about(this, windowTitle(), mess.
 	    arg(_(mod->modInfo("Name"))).arg(mod->modInfo("Version").c_str()).arg(_(mod->modInfo("Description"))).
 	    arg(_(mod->modInfo("Author"))).arg(mod->modInfo("License").c_str()).
-	    arg(PACKAGE_NAME).arg(VERSION).arg(_(PACKAGE_DESCR)).arg(PACKAGE_LICENSE).arg(_(PACKAGE_AUTHOR)).arg(PACKAGE_SITE));
+	    arg(PACKAGE_NAME).arg(VERSION).arg(_(PACKAGE_DESCR)).arg(PACKAGE_LICENSE).arg(_(PACKAGE_AUTHOR)).arg(PACKAGE_SITE).
+	    arg(QT_VERSION_STR));
 
 #undef _
 #define _(mess) mod->I18N(mess, lang().c_str()).c_str()

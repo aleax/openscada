@@ -332,7 +332,7 @@
 <li> Адаптацію до роботи в оточені операційних систем QNX та MS Windows.</li></ul>
 <h2><span class="mw-headline" id=".D0.9E.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">7</span> Оновлення</span></h2>
 <h3><span class="mw-headline" id=".5B01.01.7532.2F01.03.2024.5D_.D0.A1.D0.AC.D0.9E.D0.9C.D0.95_.D0.BE.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">7.1</span> [01.01.7532/01.03.2024] СЬОМЕ оновлення</span></h3>
-<p>Це оновлення <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релізу 0.9 LTS</a> виправляє біля 60 помилок та додає ДУЖЕ БАГАТО удосконалень із декількома значними-концептуальними, з якими цілком можна ознайомитися у <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2960" rel="nofollow noreferrer noopener" target="_blank">протоколі змін оновлення</a>.
+<p>Це оновлення <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релізу 0.9 LTS</a> виправляє біля 60 помилок та додає ДУЖЕ БАГАТО удосконалень із декількома значними-концептуальними, з якими цілком можна ознайомитися у <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2967" rel="nofollow noreferrer noopener" target="_blank">протоколі змін оновлення</a>.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> <b><u>Важливі дії користувача за оновленням</u></b><br />
 </p>
 <ul><li> DAQ.System: ІД автоматично генерованих параметрів DA змінено у: CPU - "CPU[{N}]", fs - "FS{MP}", hddstat - "DiskSt_{dev}", MEM - "MEM", netstat - "Net_{IF}", sensors - "Sensors", hddsmart - "DiskSMART", ups - "UPS", uptime - "UpTm_{U}".</li></ul>
@@ -342,12 +342,13 @@
 <p><b><u><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Linux Дистрибутив Автоматизації проєкту OpenSCADA</a></u></b><br />
 </p>
 <ul><li> додання Debian 12 у якості бази дистрибутиву;</li>
-<li> оновлення TDE до 14.1.1 із стабілізацію до рівня 14.0.13;</li>
+<li> переведення складання бази Debian 11,10,9 у оточення Debian 12;</li>
+<li> оновлення TDE до 14.1.1 і потім 14.1.2 із стабілізацію до рівня 14.0.13;</li>
 <li> опціональне запобігання системного лотку щодо відображення піктограм програм із відмінним WMID але однаковою назвою на кшталт BlueMan;</li>
 <li> запобігання значному наповненню "~/.xsession-errors" зневаджувальними повідомленнями на кшталт "[FIXME] UNCLASSIFIED DEVICE name: ...";</li>
-<li> HWLib: використання Проєктної Напруги у розрахунку АмперГодин із ВатГодин замість Поточної Напруги, для відповідності із інформацією про ємність, яку вказано на батареї;</li>
-<li> KRDC: відновлення нормального функціювання із 14.0.13;</li>
-<li> KRFB: виправлення падінь KRFB одразу після від'єднання клієнту;</li>
+<li> відімкнення використання Карт Безпеки для автентифікації у діалозі блокування kdesktop, оскільки ним стало неможливо користуватися;</li>
+<li> HWLib: використання Проєктної Напруги у розрахунку АмперГодин із ВатГодин замість Поточної Напруги, для відповідності із інформацією про ємність, яку вказано на батареї; попереджено замерзанню у Менеджері Пристроїв;</li>
+<li> KRDC, KRFB: відновлення нормального функціювання із 14.0.13;</li>
 <li> KXKB-KLayouts: Виправлення регресій у втраті-очищені системних розкладок клавіатури;</li>
 <li> TDESVN: запобігання падінням при доступі до БД із KPart;</li>
 <li> Krusader: виправлення розпакування *.tar.xz і *.txz, чим завершення реалізації підтримки XZ;</li>
@@ -364,6 +365,8 @@
 </p>
 <ul><li> посібник "<a href="Quick_start.html" title="Special:MyLanguage/Documents/Quick start">Швидкий старт</a>" цілковито відревізовано та актуалізовано щодо останніх змін у LTS;</li>
 <li> доповнення <a href="Libs_Devices.html" title="Special:MyLanguage/Libs/Devices">сторінки бібліотеки Промислових пристроїв</a> описом <a href="#tmplib_DevLibExt">нових шаблонів</a>;</li>
+<li> доповнення <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">сторінки бібліотеки Основна</a> описом <a href="#tmplib_baseExt">нових шаблонів</a>;</li>
+<li> доповнення <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">сторінки бібліотеки основних елементів інтерфейсу користувача</a> описом <a href="#wlb_MainExt">нових віджетів</a>;</li>
 <li> цілковита ревізія і актуалізація щодо останніх змін у LTS для сторінок модулів: <a href="Modules/System.html" title="Special:MyLanguage/Modules/System">DAQ.System</a>, <a href="Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">Transport.SSL</a>;</li>
 <li> початок нового підпроєкту <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/NetGear_R6220" title="Special:MyLanguage/Using/NetGear R6220">NETGEAR R6220</a> зі складання і адаптації OpenSCADA до MIPS.</li></ul>
 <p><b><u>Нові та значно оновлені частини</u></b><br />
@@ -374,7 +377,7 @@
 <dl><dd> (<a href="#TransportAddPrm">Перегляд і уніфікація підсистеми Транспортів ...</a>)</dd></dl>
 <ul><li> Підсистеми "Збір Даних" OpenSCADA: 14 =&gt; <b>15</b></li></ul>
 <dl><dd> (<a href="#DAQPrmTypes">Уніфікація концепції типів параметрів</a>)</dd></dl>
-<ul><li> DAQ.System: 2.4 =&gt; <b style="color: red">3.2</b></li></ul>
+<ul><li> DAQ.System: 2.4 =&gt; <b style="color: red">3.3</b></li></ul>
 <dl><dd> (<a href="#SystemExt">Цілковитий перегляд і розширення щодо ...</a>)</dd></dl>
 <ul><li> DAQ.LogicLev: 2.7 =&gt; <b>2.9</b></li>
 <li> DAQ.DAQGate: 2.11 =&gt; <b>2.13</b></li>
@@ -394,13 +397,19 @@
 <ul><li> UI.QTStarter: 5.14 =&gt; <b style="color: red">6.0</b></li></ul>
 <dl><dd> (<a href="#BuildD12Qt6SSL3">Уніфікація складання із адаптацією до Qt6, QtWebEngine, QtMultimediaEngine, ...</a>)</dd></dl>
 <ul><li> UI.VCAEngine: 7.11 =&gt; <b>7.13</b></li>
-<li> UI.Vision: 8.6 =&gt; <b style="color: red">9.1</b></li></ul>
+<li> UI.Vision: 8.6 =&gt; <b style="color: red">9.2</b></li></ul>
 <dl><dd> (<a href="#BuildD12Qt6SSL3">Уніфікація складання із адаптацією до Qt6, QtWebEngine, QtMultimediaEngine, ...</a>)</dd></dl>
 <ul><li> UI.WebCfgD: 2.4 =&gt; <b>2.5</b></li>
-<li> UI.WebVision: 6.8 =&gt; <b>6.9</b></li>
+<li> UI.WebVision: 6.8 =&gt; <b>6.10</b></li>
 <li> LibsDB.OscadaLibs.DevLib: 2.6 =&gt; <b style="color: red">3.0</b></li></ul>
 <dl><dd> (<a href="#tmplib_DevLibExt">Доповнення багатьма шаблонами із документуванням</a>)</dd></dl>
-<ul><li> LibsDB.vcaBase.Main.storeHouse: 1.3 =&gt; <b>1.4</b></li></ul>
+<ul><li> LibsDB.OscadaLibs.Main: 2.0 =&gt; <b>2.2</b></li></ul>
+<dl><dd> (<a href="#tmplib_baseExt">Доповнення декількома шаблонами із документуванням</a>)</dd></dl>
+<ul><li> LibsDB.vcaBase.Main: 2.0 =&gt; <b>2.1</b></li></ul>
+<dl><dd> (<a href="#wlb_MainExt">Доповнення декількома віджетами із документуванням</a>)
+<ul><li> storeHouse: 1.3 =&gt; <b>1.4</b></li>
+<li> grpGraph, grpGraph10: 1.5 =&gt; <b>1.6</b></li>
+<li> ElViewGraph: 1.4 =&gt; <b>1.5</b></li></ul></dd></dl>
 <p><b><u><span id="BuildD12Qt6SSL3" title="#BuildD12Qt6SSL3">КОНЦЕПТУАЛЬНЕ &gt; Уніфікація складання із адаптацією до Debian 12, Qt6, QtWebEngine, QtMultimediaEngine, OpenSSL3, MIPS</span> </u></b><br />
 </p>
 <ul><li> FIX: Завершено правильне складання із бібліотекою ядра лише статично:
@@ -428,7 +437,7 @@
 <li> acinclude.m4: AutoConf макрос AX_LIB_Qt розширено підтримкою Qt6 та вдосконалено виявлення MOC і RCC для Qt5.
 <ul><li> Покращено деякі повідомлення.</li></ul></li>
 <li> data/{debian,debian_mod}/compat: Рівень збільшено до 7 для складання на сучасний дистрибутивах Debian по замовченню.</li>
-<li> data/{debian,debian_mod}/control: Доповнено варіантами залежностей qt6-base-dev, qt6-webengine-dev, qt6-multimedia-dev і qtwebengine5-dev, qtmultimedia5-dev.</li>
+<li> data/{debian,debian_mod}/control: Доповнено варіантами залежностей qt6-base-dev, qt6-webengine-dev, qt6-multimedia-dev і qtwebengine5-dev, qtmultimedia5-dev. Доповнено варіантом залежності libsensors-dev до libsensors4-dev.</li>
 <li> ResRW::{resRequestW,resRequestR}(): Доповнено використанням версії за часом із визначенням HAVE_DECL_PTHREAD_RWLOCK_TIMEDWRLOCK.</li>
 <li> TSYS::atime2str(),SYS.strftime(): Доповнено використанням локалізованої дати із визначенням HAVE_DECL_NEWLOCALE.</li>
 <li> TSYS::{sysSleep,taskSleep}(): Доповнено використанням сну за годинником при визначені HAVE_DECL_CLOCK_NANOSLEEP.</li>
@@ -477,17 +486,18 @@
 <li> FIX:.,FSArch: Архівування значень доповнено обмеженням операцій запису у limUserIts_N (1e6) елементів для відстеження споживання усієї пам'яті у певних випадках.</li></ul></li></ul>
 <p><b><u><span id="MessTrFix7" title="#MessTrFix7">КОНЦЕПТУАЛЬНЕ &gt; Переклад Повідомлень (виправлення <a href="Release_0.9.html#MessTrFix" title="Special:MyLanguage/Documents/Release 0.9">концептуальних змін попередніх оновлень</a>) </span> </u></b><br />
 </p>
-<ul><li> FIX:SYS,DB: TMess::translGet() виправлено у виявлені передзбережених системних повідомлень при встановлені порожніх повідомлень.
+<ul><li> FIX:SYS,DB: TMess::translGet() виправлено у виявлені передзбережених системних повідомлень при встановлені порожніх повідомлень і функцію TMess::translGetU() виправлено у очищені сервісних нульових символів у нединамічних режимах перекладу.
 <ul><li> Бази Даних: TTable::fieldSQLSet() адаптовано до очищення базового повідомлення і всіх перекладів при обнулені перекладу, для очищення редагованого повідомлення у динамічному режимі перекладу і не від базової мови.</li></ul></li>
 <li> SYS,DB.{SQLite,MySQL,PostgreSQL,FireBird},Protocol.HTTP: Переважно адаптовано переклад повідомлень до кодів мов більше за 2 (два) символи.</li>
 <li> Protocol.HTTP,UI.{WebUser,WebVision}: Завершено адаптацію до динамічного перекладу ім'я станції із уніфікацією функції Користувацького API pgCreator() щодо використання мови із objFuncCall().
 <ul><li> Protocol.HTTP: Шлях із TSYS::ico() використано для отримання перекладених піктограм.</li></ul></li>
 <li> SYS,UI.{Vision,WebVision}: Функцію TSYS::atime2str() доповнено перекладом дати і вона використана у побудові шкали часу примітиву СВУ Діаграма.</li>
 <li> FIX:Бази Даних: Дозволено правильний запис змін користувача у Динамічному Режимі Перекладу на Небазовій Мові, шляхом ранньої перевірки щодо динамічних даних.</li>
-<li> FIX:Збір Даних: Завершено адаптацію DAQ-Шаблонів до перекладу значень строкового типу при їх редагуванні і використанні у вкладці Конфігурації Шаблону.
+<li> FIX:Збір Даних: Завершено адаптацію DAQ-Шаблонів до перекладу значень строкового типу при їх редагуванні і використанні у вкладці Конфігурації Шаблону та виправлено-адаптовано до динамічного перекладу у використання назв ВВ.
 <ul><li> FIX:DAQGate: Виправлено надсилання значень перекладуваних полів не у внутрішній структурі перекладу.</li></ul></li>
 <li> Транспортні Протоколи: HTTP: Адаптовано до динамічного перекладу назви станції і опрацювання кодованих назв файлів зображень.
 <ul><li> UserProtocol: Виправлено-адаптовано до динамічного перекладу назв ВВ.</li></ul></li>
+<li> FIX:UI.VCAEngine: Шаблони виправлено-адаптовано до динамічного перекладу у використанні конфігураційного шаблону атрибутів.</li>
 <li> FIX:UI.WebUser: Виправлено переклад назви сторінки у індексі.</li>
 <li> FIX:UI.WebVision: Виправлено динамічний переклад ім'я користувача на сторінці індексу.</li></ul>
 <p><b><u>OpenSCADA бібліотеки та проєкти</u></b><br />
@@ -501,25 +511,35 @@
 <li> Sockets.{testRelease,testRelease1,testRelease2}: вимкнено по замовченню.</li></ul></li>
 <li> LibsDB.OscadaLibs:
 <ul><li> <span id="tmplib_DevLibExt" title="#tmplib_DevLibExt">tmplib_DevLib</span>: Бібліотеку доповнено шаблонами із документуванням:
-<ul><li> від ВПФ: Incubator, VSE002, "FF LE-03MB CT (FF_LE)", Ergomera 625(ergomera625);</li>
+<ul><li> від ВПФ: Incubator, VSE002, "FF LE-03MB CT (FF_LE)", "Ergomera 625(ergomera625)";</li>
 <li> від Blue Star Group: "Goboy 1M (Goboy1M)", "AutoPILOT PRO Flow Computers (AutoPILOT)", "AutoPILOT OLD Flow Computers (AutoPILOT_old)", "Corrector BK (CorBK)", "Tancy Data (TDS)", "UltraMag", "Enron, Daniel (enronDaniel)", FlowGAS.</li></ul></li>
-<li> tmplib_base: Доповнено новим шаблоном для WebUser — "HTTP Файловий Сервер (fileServerHTTP)", із реалізацією HTTP Файлового Серверу у OpenSCADA, наразі лише читання ресурсів із підтримкою частковості.
+<li> <span id="tmplib_baseExt" title="#tmplib_baseExt">tmplib_base</span>: Доповнено новим шаблоном для WebUser — "HTTP Файловий Сервер (fileServerHTTP)", із реалізацією HTTP Файлового Серверу у OpenSCADA, наразі лише читання ресурсів із підтримкою частковості; і нові шаблони "Погода (weather)", "Дисковий SMART (DiskSMART)".
 <ul><li> digAlarm,manInUnif,anUnif,pidUnifImp,anUnifSt,pidUnif,codeState,SNMP,UPS: ВВ NAME встановлено у тип "Рядок (переклад)" і ВВ DESCR у тип "Текст (переклад)".</li></ul></li>
 <li> tmplib_LowDevLib: Доповнено шаблоном "BT: ATORCH UC96".
 <ul><li> RDTech: Недублюючі команди встановлено до надсилання двічі задля стабільного застосування пристроєм, післякомандну затримку встановлено у 0.2 і переміщено на загал.</li></ul></li>
 <li> tmplib_base.ntf: Розширено можливістю визначення повідомлень для виключення зі сповіщення.</li></ul></li>
 <li> LibsDB.vcaBase:
-<ul><li> wlb_Main.storeHouse: Розширено створенням форми редагування елементу у головному кадрі після приховання основної таблиці та решти.
+<ul><li> <span id="wlb_MainExt" title="#wlb_MainExt">wlb_Main</span>: Бібліотеку доповнено віджетом "Погода (weather)" із документуванням.
+<ul><li> storeHouse: Розширено створенням форми редагування елементу у головному кадрі після приховання основної таблиці та решти.
 <ul><li> FIX: Попереджено &lt;EVAL&gt; для &lt;NULL&gt; клітинок у звіті елементу.</li>
 <li> FIX: Гарантовано заповнення діалогів звітів генерацією подій відкриття із процедури.</li>
+<li> FIX: Виправлено раннє встановлення вертикальної позиції таблиці даних при зміні користувача.</li>
 <li> Текстові поля звіту одного елементу очищено від лівого відступу для текстів.</li>
 <li> Звіти доповнено опрацюванням посилань, як зовнішні виклики.</li>
-<li> Розширено опрацюванням ІД (індексу) таким чином, як решта стандартних полів "NAME", "DSCR" — для контролю видимістю поля.</li></ul></li>
-<li> FIX:Main.alarmsSt: Виправлено доступ до змінної alarms_focus після видалення примусовості атрибуту "focus", що замінено на this.alarms.attr("focus").</li>
-<li> FIX:wlb_doc.docRepInstVals: Відновлено переклад значень заголовку та одиниці виміру і назви параметру.</li>
-<li> FIX:wlb_doc.docUsersSet: Доповнено також кодуванням полів значень, оскільки зараз тут можуть бути не лише цифри.</li>
+<li> Розширено опрацюванням ІД (індексу) таким чином, як решта стандартних полів "NAME", "DSCR" — для контролю видимістю поля.</li>
+<li> Додано скидання фільтрів при перезапуску сторінки або зміні користувача.</li>
+<li> Звіт із повної таблиці доповнено обмеженням тексту клітинок у 30 символів, тобто як у таблиці редагування.</li>
+<li> Звіт із елементу доповнено прихованням порожніх полів.</li>
+<li> Доповнено оновленням контексту обрання елементів форми при зміні значення цього елементу.</li></ul></li>
+<li> grpGraph: Переписано процедуру для уніфікації роботи із різними елементами, тож для використання у всіх похідних кадрах на кшталт "grpGraph10".</li>
+<li> grpGraph10: Переключено на спадкування від grpGraph.</li>
+<li> FIX:alarmsSt: Виправлено доступ до змінної alarms_focus після видалення примусовості атрибуту "focus", що замінено на this.alarms.attr("focus").</li>
 <li> tmplSO: Дещо очищено щодо елементів сторінки РезультуючіГрафіки.</li>
-<li> wlb_Main.ResultGraph: Атрибут "grpName" встановлено у тип "Рядок (переклад)".</li></ul></li>
+<li> ResultGraph: Атрибут "grpName" встановлено у тип "Рядок (переклад)".</li>
+<li> ElViewGraph: Доповнено читанням типових-статичних властивостей для очищення до них.</li></ul></li>
+<li> wlb_doc:
+<ul><li> FIX:docRepInstVals: Відновлено переклад значень заголовку та одиниці виміру і назви параметру.</li>
+<li> FIX:docUsersSet: Доповнено також кодуванням полів значень, оскільки зараз тут можуть бути не лише цифри.</li></ul></li></ul></li>
 <li> LibsDB.vcaTest: Завершено із перейменуванням CPULoad у CPU і MemInfo у MEM.</li></ul>
 <p><b><u>API</u></b><br />
 <i>!!!!:Зміни</i>:
@@ -542,6 +562,7 @@
 </p>
 <ul><li> Система: Нове визначення DB_GEN "&lt;gen&gt;".
 <ul><li> Додано sysClk(), setSysClk() для отримання частоти ЦП із DAQ.System.</li>
+<li> Функцію sysTm() доповнено аргументами виявлення стрибків часу після засинання.</li>
 <li> TMess: Нова функція labStorFromCode() імен специфічних сховищ.</li>
 <li> TElem: Доповнено функцією contN() отримання лічильнику підключених контейнерів.</li></ul></li>
 <li> Збір Даних: TVal: Доповнено функцією setTime() і новим прапорцем AttrFlg::NoSave для запобігання позначення модифікованим при зміні атрибуту.
@@ -552,7 +573,9 @@
 <li> TTransportIn: Доповнено функцією prm(), conPrm(), clearConPrm(). Доповнено функцією КористувацькогоAPI conPrm() і setConPrm() (для сумісності) і відповідно до таких у TTransportOut.</li></ul></li></ul>
 <p><b><u>Система</u></b><br />
 </p>
-<ul><li> Складання: configure.ac: Підняття версії бібліотеки ядра до 3:14:0 і версії програми до 0.9.7. Підняття версії модулів підсистеми "Збір Даних" до 15, "Транспорти" до 20.</li>
+<ul><li> Складання:
+<ul><li> configure.ac: Підняття версії бібліотеки ядра до 3:14:0 і версії програми до 0.9.7. Підняття версії модулів підсистеми "Збір Даних" до 15, "Транспорти" до 20.</li>
+<li> Доповнено складанням для Debian 12 і Ubuntu 24.04 LTS.</li></ul></li>
 <li> FIX:DB,Transports,DAQ.BFN,UI.VCAEngine: Адаптовано до перевірки вдалого результату TBDS::dataDel() для запобігання зависань на сховищах лише для читання із виправленням функції TTable::fieldSQLDel() щодо коректної перевірки успішності функції.</li>
 <li> .,DAQ.{DAQGate,DCON,DiamondBoards,ICP_DAS,LogicLev,ModBus,OPC_UA,Siemens,SoundCard,System},Protocol.{ModBus,OPC_UA},UI.VCAEngine: Значно спрощено у підтримці типів обрання, встановивши опціональним і з підтримкою динамічного перекладу. Дозволено також визначення лише переліку значень.</li>
 <li> .,Archive.DBArch,DAQ.{BFN,JavaLikeCalc,ModBus,OPC_UA},Protocol.UserProtocol,UI.{VCAEngine,Vision,WebUser}: Загальне сховище перейменовано із "*.*" у "&lt;gen&gt;":
@@ -567,6 +590,7 @@
 <p><b><u>Збір Даних</u></b><br />
 </p>
 <ul><li> .,*: Переведено у джерелах Збору Даних на фіксовані назви таблиць різних типів параметрів і адаптовано до <span id="DAQPrmTypes" title="#DAQPrmTypes">уніфікованої концепції типів параметрів</span>, тобто конфігураційні поля наразі приховуються коли вони стандартні і їх заплановано до цілковитого видалення у v1.0.</li>
+<li> FIX: TValFunc::get{S,I,R,B}() доповнено кодом приведення об'єкту TVarObj із перетворенням EVAL/null.</li>
 <li> <span id="SystemExt" title="#SystemExt">System</span>: Цілковито переглянуто і розширено щодо:
 <ul><li> розширення ЦП (CPU) DA інформацією ЦП і частотою із різних джерел, включаючи CPUFreq із контролем;</li>
 <li> додання нового DA Живлення (Power) у якості інтерфейсу до Потужність Linux і DA Процес (Process) у якості інтерфейсу до Linux процесів;</li>
@@ -574,7 +598,8 @@
 <li> уніфікація викликів DA інтерфейсу DA::init(), DA::deInit(), DA::makeActiveDA() із переведенням більшості DA модулів на виклик уніфікованого коду і реалізацію для них лише уніфікованої функції dList();</li>
 <li> інтерфейсний клас DA доповнено новими ознаками: isDynamic(), hasSubTypes();</li>
 <li> додання режиму загального оновлення даних із Сервісного Циклу і Завдання DA Контролеру, новою функцією updGen();</li>
-<li> ІД автоматично генерованих параметрів DA змінено у: CPU - "CPU[{N}]", fs - "FS{MP}", hddstat - "DiskSt_{dev}", MEM - "MEM", netstat - "Net_{IF}", sensors - "Sensors", hddsmart - "DiskSMART", ups - "UPS", uptime - "UpTm_{U}".</li></ul></li>
+<li> ІД автоматично генерованих параметрів DA змінено у: CPU - "CPU[{N}]", fs - "FS{MP}", hddstat - "DiskSt_{dev}", MEM - "MEM", netstat - "Net_{IF}", sensors - "Sensors", hddsmart - "DiskSMART", ups - "UPS", uptime - "UpTm_{U}";</li>
+<li> переключено у м'який режим автоматичного створення параметрів, тобто ви можете створити джерельні параметри автоматично, примусово зберегти необхідні, а потім перемкнути у ручний режим, чим запобігти продовженню сканування.</li></ul></li>
 <li> FIX:DAQGate: Час запиту архіву збільшується на 1 (одну) мікросекунду для запобігання запиту зайвих значень і їх прямому перезапису у архівах.
 <ul><li> Покращено роботу із віддаленим хостом без синхронізації часу:
 <ul><li> значення можуть бути у майбутньому до години;</li>
@@ -612,7 +637,8 @@
 </p>
 <ul><li> VCAEngine,Vision,WebVision: Доповнено підтримкою вбудування даних до атрибутів, позначених ресурсом, первинно для атрибуту джерела примітиву Медіа.</li>
 <li> FIX:Vision: Адаптовано до отримання іменованого переліку сховищ.</li>
-<li> FIX:VCAEngine: Виключено підключення атрибуту "focus" будь якого вкладеного віджету до ВВ обчислення і доповнено обробкою виключень доступу до таких ВВ для відсутніх вкладених віджетів. FIX: Attr::setS() вдосконалено опрацювання критичної секції.</li></ul>
+<li> FIX:VCAEngine: Виключено підключення атрибуту "focus" будь якого вкладеного віджету до ВВ обчислення і доповнено обробкою виключень доступу до таких ВВ для відсутніх вкладених віджетів. FIX: Attr::setS() вдосконалено опрацювання критичної секції.</li>
+<li> FIX:WebVision: Доповнено реалізацією користувацьких полів у рядку статусу.</li></ul>
 <h3><span class="mw-headline" id=".5B01.01.7531.2F01.03.2023.5D_.D0.A8.D0.9E.D0.A1.D0.A2.D0.95_.D0.BE.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">7.2</span> [01.01.7531/01.03.2023] ШОСТЕ оновлення</span></h3>
 <p>Це оновлення <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релізу 0.9 LTS</a> виправляє біля 70 помилок та додає БАГАТО удосконалень із декількома значними-концептуальними, з якими цілком можна ознайомитися у <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2892" rel="nofollow noreferrer noopener" target="_blank">протоколі змін оновлення</a>.
 </p><p><b><u><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Linux Дистрибутив Автоматизації проєкту OpenSCADA</a></u></b><br />

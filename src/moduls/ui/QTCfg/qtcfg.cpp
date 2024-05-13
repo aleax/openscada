@@ -1229,7 +1229,7 @@ void ConfApp::stHistCall( )
 
 void ConfApp::about( )
 {
-    string mess = _("%s v%s.\n%s\nAuthor: %s\nLicense: %s\n\n"
+    string mess = _("%s v%s on Qt v%s.\n%s\nAuthor: %s\nLicense: %s\n\n"
 		    "%s v%s.\n%s\nLicense: %s\nAuthor: %s\nWeb site: %s");
 
 #undef _
@@ -1237,7 +1237,7 @@ void ConfApp::about( )
 
     QMessageBox::about(this, windowTitle(),
 	TSYS::strMess(mess.c_str(),
-	    _(mod->modInfo("Name")),mod->modInfo("Version").c_str(),_(mod->modInfo("Description")),
+	    _(mod->modInfo("Name")),mod->modInfo("Version").c_str(),QT_VERSION_STR,_(mod->modInfo("Description")),
 	    _(mod->modInfo("Author")),mod->modInfo("License").c_str(),
 	    PACKAGE_NAME,VERSION,_(PACKAGE_DESCR),PACKAGE_LICENSE,_(PACKAGE_AUTHOR),PACKAGE_SITE).c_str());
 
@@ -1301,6 +1301,16 @@ void ConfApp::selectItem( )
 	    if(CtrTree->horizontalScrollBar()) CtrTree->horizontalScrollBar()->setValue(saveVl);
 	}*/
     }
+}
+
+bool ConfApp::eventFilter( QObject *obj, QEvent *event )
+{
+    if(event->type() == QEvent::Wheel && qobject_cast<QComboBox*>(obj) /*&& !((QComboBox*)obj)->hasFocus()*/) {
+	event->ignore();
+	return true;
+    }
+
+    return false;
 }
 
 void ConfApp::selectPage( const string &path, int tm )
@@ -1874,7 +1884,10 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		val_w->setObjectName(br_path.c_str());
 		val_w->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 		val_w->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed));
+		//val_w->setFocusPolicy(Qt::StrongFocus);
 		connect(val_w, SIGNAL(activated(int)), this, SLOT(combBoxActivate(int)));
+
+		val_w->installEventFilter(this);
 	    }
 
 	    if(t_s.attr("dscr").size()) {
@@ -2180,6 +2193,8 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    if(t_s.attr("dest") == "sel_ed") {
 			val_w->setMinimumSize(100, 0);
 			val_w->setType(LineEdit::Combo);
+			//val_w->workWdg()->setFocusPolicy(Qt::StrongFocus);
+			val_w->workWdg()->installEventFilter(this);
 		    }
 		    else if(tp == "dec" || tp == "hex" || tp == "oct") {
 			val_w->setFixedWidth(QFontMetrics(val_w->workWdg()->font()).size(Qt::TextSingleLine,"0000000000").width()+30);

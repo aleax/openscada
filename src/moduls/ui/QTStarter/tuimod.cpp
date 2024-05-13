@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTStarter file: tuimod.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -65,7 +65,7 @@
 #define MOD_NAME	trS("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"6.0.5"
+#define MOD_VER		"6.0.6"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -1408,7 +1408,7 @@ void StartDialog::updatePrjList( bool force, const string &stage )
 
 void StartDialog::about( )
 {
-    string mess = _("%s v%s.\n%s\nAuthor: %s\nLicense: %s\n\n"
+    string mess = _("%s v%s on Qt v%s.\n%s\nAuthor: %s\nLicense: %s\n\n"
 		    "%s v%s.\n%s\nLicense: %s\nAuthor: %s\nWeb site: %s");
 
 #undef _
@@ -1416,7 +1416,7 @@ void StartDialog::about( )
 
     QMessageBox::about(this, windowTitle(),
 	TSYS::strMess(mess.c_str(),
-	    _(mod->modInfo("Name")), mod->modInfo("Version").c_str(), _(mod->modInfo("Description")),
+	    _(mod->modInfo("Name")), mod->modInfo("Version").c_str(), QT_VERSION_STR, _(mod->modInfo("Description")),
 	    _(mod->modInfo("Author")), mod->modInfo("License").c_str(),
 	    PACKAGE_NAME, VERSION, _(PACKAGE_DESCR), PACKAGE_LICENSE, _(PACKAGE_AUTHOR), PACKAGE_SITE).c_str());
 

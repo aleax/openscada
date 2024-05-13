@@ -1,3 +1,9 @@
+2024-05-13 Roman (stable)
+- UI.{QTStarter,QTCfg,Vision}: The "About ..." help item appended by Qt version.
+- UI.{QTCfg,Vision}: The ComboBox fields appended by locking mouse wheel forcibly for QTCfg and at no focus for Vision in runtime,
+    and all these to prevent changes at generic page scroll.
+
+
 2024-05-03 Roman (stable)
 - !!:LibsDB.{OscadaLibs.tmplib_base.{weather,DiskSMART},vcaBase.wlb_Main.weather: Documented and translated for Ukrainian.
     LibsDB.vcaBase.wlb_Main.weather: Adjusted for even work both on UI.Vision and UI.WEBVision.
@@ -23,7 +29,7 @@
 - FIX:LibsDB.vcaBase: The library wlb_Main appended by an extra icon 'weath10n' for the widget "Weather (weather)".
     FIX:wlb_Main.grpGraph: Fixed in the geomZ for the "trnd1" and "arh" included widgets.
     FIX:wlb_Main.grpGraph10: Fixed in the geomZ for the extra elements "el9" and "el10".
-- FIX:SYS: TMess: The function translGetU() fixed in cleaning service space symbols in non dynamic translation modes.
+- FIX:SYS: TMess: The function translGetU() fixed in cleaning service zero symbols in non dynamic translation modes.
     TCntrNode::cntrCmd(): The logging message of setting the table cells "set the cell ['%s':%s] to '%s'."
 	appended by value limiting in 100 symbols.
 - UI.WebVision: The Table view of the FormEl primitive is appended by borders highlight in the items selection.
@@ -33,7 +39,7 @@
 - !!!:FIX:LibsDB.vcaBase: wlb_Main.{grpGraph,grpGraph10}: Procedure rewrote for unification to work with different elements,
 	so for use in all derivative frames like to wlb_Main.grpGraph10.
     !!:wlb_Main.grpGraph10: Switched to inheritance from wlb_Main.grpGraph.
-    !!:wlb_Main.ElViewGraph: Appended of reading the dafault-static properties for clearing to them.
+    !!:wlb_Main.ElViewGraph: Appended of reading the default-static properties for clearing to them.
 	Some improved in processing the boolean type signals.
 	Improved in faster updating values after source changing.
     FIX:wlb_Main.graphSelPrm: Fixed in translation "<Clear>" from the procedure.
@@ -60,7 +66,7 @@
     Appended by a widget "weather" of representing the weather data from the template "Weather (weather)".
 - LibsDB.OscadaLibs: tmplib_base.UPS: Improved in detection "No powernet" at very low input voltage and frequency.
 - FIX:LibsDB.vcaBase: wlb_Main.storeHouse: Fixed in the space separator of the selectable items.
-    Appended of reseting filters at the page restart or user change.
+    Appended of resetting filters at the page restart or user change.
     The whole-table report appended of limiting cells' text in 30 symbols, that is like to the edition table.
     The item report appended by hiding empty fields.
     Appended of updating the selection context of the form items at change such item value.
@@ -84,7 +90,7 @@
 - FIX:LibsDB.vcaBase: wlb_Main.storeHouse: Switched to whole clean at change the user.
     Item's list of columns for selection in the form elements moved to an independent container from the filters.
     Appended of cleaning the current row selection in the data table at removing the item after apply the filter.
-- DAQ.DAQGate: Appended of reseting the remote archive detection flag to redetect forcibly at restart.
+- DAQ.DAQGate: Appended of resetting the remote archive detection flag to redetect forcibly at restart.
 - UI.WebVision: Appended of disable the text items from user resize.
     Appended of apply the sort actions just at clicking on the detached floating header.
 
