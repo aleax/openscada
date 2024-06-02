@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebUser file: web_user.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.6.13"
+#define MOD_VER		"1.6.14"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -766,7 +766,10 @@ void UserPg::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/up/st/timestamp" && ctrChkNode(opt))	opt->setText(i2s(timeStamp()));
     else if(a_path == "/up/cfg/PROGLang") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(progLang());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setProgLang(opt->text());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
+	    if(enableStat()) setEnable(false);
+	    setProgLang(opt->text());
+	}
     }
     else if(a_path == "/plang/list" && ctrChkNode(opt)) {
 	TCntrNode::cntrCmdProc(opt);

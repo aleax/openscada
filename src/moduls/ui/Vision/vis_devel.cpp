@@ -631,23 +631,23 @@ void VisDevelop::messUpd( )
     actWhatIs->setStatusTip(_("Press for requesting information about the user interface elements."));
     //Page, project, widget and this library actions
     // Load item from db
-    actDBLoad->setText(_("Load from DB"));
-    actDBLoad->setToolTip(_("Load the item data from DB"));
-    actDBLoad->setWhatsThis(_("The button for loading the item data from the DB"));
-    actDBLoad->setStatusTip(_("Press for loading the item data from the DB."));
-    actDBLoadF->setText(_("Load from DB forcibly"));
-    actDBLoadF->setToolTip(_("Load the item data from DB forcibly"));
-    actDBLoadF->setWhatsThis(_("The button for loading the item data from the DB forcibly, not only when it changed"));
-    actDBLoadF->setStatusTip(_("Press for loading the item data from the DB forcibly, not only when it changed."));
+    actDBLoad->setText(_("Load"));
+    actDBLoad->setToolTip(_("Load the item data"));
+    actDBLoad->setWhatsThis(_("The button for loading the item data from storage"));
+    actDBLoad->setStatusTip(_("Press for loading the item data from storage."));
+    actDBLoadF->setText(_("Load forcibly"));
+    actDBLoadF->setToolTip(_("Load the item data forcibly"));
+    actDBLoadF->setWhatsThis(_("The button for loading the item data from storage forcibly, not only when it changed"));
+    actDBLoadF->setStatusTip(_("Press for loading the item data from storage forcibly, not only when it changed."));
     // Save item to db
-    actDBSave->setText(_("Save to DB"));
-    actDBSave->setToolTip(_("Save the item data to DB"));
-    actDBSave->setWhatsThis(_("The button for saving the item data to the DB"));
-    actDBSave->setStatusTip(_("Press for saving the item data to the DB."));
-    actDBSaveF->setText(_("Save to DB forcibly"));
-    actDBSaveF->setToolTip(_("Save the item data to DB forcibly"));
-    actDBSaveF->setWhatsThis(_("The button for saving the item data to the DB forcibly, not only when it changed"));
-    actDBSaveF->setStatusTip(_("Press for saving the item data to the DB forcibly, not only when it changed."));
+    actDBSave->setText(_("Save"));
+    actDBSave->setToolTip(_("Save the item data"));
+    actDBSave->setWhatsThis(_("The button for saving the item data to storage"));
+    actDBSave->setStatusTip(_("Press for saving the item data to storage."));
+    actDBSaveF->setText(_("Save forcibly"));
+    actDBSaveF->setToolTip(_("Save the item data forcibly"));
+    actDBSaveF->setWhatsThis(_("The button for saving the item data to storage forcibly, not only when it changed"));
+    actDBSaveF->setStatusTip(_("Press for saving the item data to storage forcibly, not only when it changed."));
     // Start up the project execution
     actPrjRun->setText(_("Run project"));
     actPrjRun->setToolTip(_("Run the project execution for the selected item"));
@@ -1018,7 +1018,7 @@ bool VisDevelop::exitModifChk( )
 	req.setAttr("path","/%2fgen%2fsavePeriod");
 	if(!cntrIfCmd(req,true)) saveExit |= s2i(req.text());
 	if(!saveExit)
-	    switch(QMessageBox::information(this,_("Saving of the visual items"),_("Some visual items have been changed.\nSave the changes to the DB before exiting?"),
+	    switch(QMessageBox::information(this,_("Saving of the visual items"),_("Some visual items have been changed.\nSave the changes to storage before exiting?"),
 		QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Yes))
 	    {
 		case QMessageBox::Yes:
@@ -1060,7 +1060,7 @@ void VisDevelop::quitSt( )
 
 void VisDevelop::about( )
 {
-    QString mess = _("%1 v%2.\n%3\nAuthor: %4\nLicense: %5\n\n"
+    QString mess = _("%1 v%2 on Qt v%12.\n%3\nAuthor: %4\nLicense: %5\n\n"
 		     "%6 v%7.\n%8\nLicense: %9\nAuthor: %10\nWeb site: %11");
 
 #undef _
@@ -1069,7 +1069,8 @@ void VisDevelop::about( )
     QMessageBox::about(this, windowTitle(), mess.
 	    arg(_(mod->modInfo("Name"))).arg(mod->modInfo("Version").c_str()).arg(_(mod->modInfo("Description"))).
 	    arg(_(mod->modInfo("Author"))).arg(mod->modInfo("License").c_str()).
-	    arg(PACKAGE_NAME).arg(VERSION).arg(_(PACKAGE_DESCR)).arg(PACKAGE_LICENSE).arg(_(PACKAGE_AUTHOR)).arg(PACKAGE_SITE));
+	    arg(PACKAGE_NAME).arg(VERSION).arg(_(PACKAGE_DESCR)).arg(PACKAGE_LICENSE).arg(_(PACKAGE_AUTHOR)).arg(PACKAGE_SITE).
+	    arg(QT_VERSION_STR));
 
 #undef _
 #define _(mess) mod->I18N(mess, lang().c_str()).c_str()
@@ -1212,8 +1213,8 @@ void VisDevelop::itDBLoad( )
 
     //Request to confirm
     InputDlg dlg(this, actDBLoad->icon(),
-	    QString(_("Are you sure of loading visual items '%1' from the DB?")).arg(QString(own_wdg.c_str()).replace(";","; ")),
-	    _("Loading the visual items data from the DB"), false, false);
+	    QString(_("Are you sure of loading visual items '%1' from storage?")).arg(QString(own_wdg.c_str()).replace(";","; ")),
+	    _("Loading the visual items data from storage"), false, false);
     if(dlg.exec() == QDialog::Accepted) {
 	string cur_wdg;
 	for(int iOff = 0; (cur_wdg=TSYS::strSepParse(own_wdg,0,';',&iOff)).size(); ) {
@@ -1237,9 +1238,9 @@ void VisDevelop::itDBSave( )
     if(!own_wdg.empty()) {
 	//Request to confirm
 	InputDlg dlg(this, actDBSave->icon(),
-		(own_wdg == "/" ? QString(_("Are you sure of saving all modifications to the DB?")) :
-		QString(_("Are you sure of saving the visual items '%1' to the DB?")).arg(QString(own_wdg.c_str()).replace(";","; "))),
-		_("Saving the visual items data to the DB"), false, false);
+		(own_wdg == "/" ? QString(_("Are you sure of saving all modifications to storage?")) :
+		QString(_("Are you sure of saving the visual items '%1' to storage?")).arg(QString(own_wdg.c_str()).replace(";","; "))),
+		_("Saving the visual items data to storage"), false, false);
 	if(dlg.exec() == QDialog::Accepted) {
 	    string cur_wdg;
 	    for(int iOff = 0; (cur_wdg=TSYS::strSepParse(own_wdg,0,';',&iOff)).size(); ) {

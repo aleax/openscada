@@ -494,23 +494,23 @@ void ConfApp::messUpd( )
     actNext->setWhatsThis(_("The button for going to the forward page"));
     actNext->setStatusTip(_("Press for going to the forward page."));
     // Load item from db
-    actDBLoad->setText(_("Load from DB"));
-    actDBLoad->setToolTip(_("Load the item data from DB"));
-    actDBLoad->setWhatsThis(_("The button for loading the item data from DB"));
-    actDBLoad->setStatusTip(_("Press for loading the item data from DB."));
-    actDBLoadF->setText(_("Load from DB forcibly"));
-    actDBLoadF->setToolTip(_("Load the item data from DB forcibly"));
-    actDBLoadF->setWhatsThis(_("The button for loading the item data from DB forcibly, not only when it changed"));
-    actDBLoadF->setStatusTip(_("Press for loading the item data from DB forcibly, not only when it changed."));
+    actDBLoad->setText(_("Load"));
+    actDBLoad->setToolTip(_("Load the item data"));
+    actDBLoad->setWhatsThis(_("The button for loading the item data from storage"));
+    actDBLoad->setStatusTip(_("Press for loading the item data from storage."));
+    actDBLoadF->setText(_("Load forcibly"));
+    actDBLoadF->setToolTip(_("Load the item data forcibly"));
+    actDBLoadF->setWhatsThis(_("The button for loading the item data from storage forcibly, not only when it changed"));
+    actDBLoadF->setStatusTip(_("Press for loading the item data from storage forcibly, not only when it changed."));
     // Save item to db
-    actDBSave->setText(_("Save to DB"));
-    actDBSave->setToolTip(_("Save the item data to DB"));
-    actDBSave->setWhatsThis(_("The button for saving the item data to DB"));
-    actDBSave->setStatusTip(_("Press for saving the item data to DB."));
-    actDBSaveF->setText(_("Save to DB forcibly"));
-    actDBSaveF->setToolTip(_("Save the item data to DB forcibly"));
-    actDBSaveF->setWhatsThis(_("The button for saving the item data to DB forcibly, not only when it changed"));
-    actDBSaveF->setStatusTip(_("Press for saving the item data to DB forcibly, not only when it changed."));
+    actDBSave->setText(_("Save"));
+    actDBSave->setToolTip(_("Save the item data"));
+    actDBSave->setWhatsThis(_("The button for saving the item data to storage"));
+    actDBSave->setStatusTip(_("Press for saving the item data to storage."));
+    actDBSaveF->setText(_("Save forcibly"));
+    actDBSaveF->setToolTip(_("Save the item data forcibly"));
+    actDBSaveF->setWhatsThis(_("The button for saving the item data to storage forcibly, not only when it changed"));
+    actDBSaveF->setStatusTip(_("Press for saving the item data to storage forcibly, not only when it changed."));
     // Add an item
     actItAdd->setText(_("&Add"));
     actItAdd->setToolTip(_("Add item"));
@@ -629,7 +629,7 @@ bool ConfApp::exitModifChk( )
 	if(!cntrIfCmd(req))	saveExit |= s2i(req.text());
 	if(!saveExit) {
 	    int ret = QMessageBox::information(this,_("Saving the changes"),
-		_("Some changes were made!\nSave the changes to the DB before exiting?"),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Yes);
+		_("Some changes were made!\nSave the changes to storage before exiting?"),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Yes);
 	    switch(ret) {
 		case QMessageBox::Yes:
 		    req.clear()->setName("save")->setAttr("path","/"+SYS->id()+"/%2fobj")->setAttr("primaryCmd", "1");
@@ -1229,7 +1229,7 @@ void ConfApp::stHistCall( )
 
 void ConfApp::about( )
 {
-    string mess = _("%s v%s.\n%s\nAuthor: %s\nLicense: %s\n\n"
+    string mess = _("%s v%s on Qt v%s.\n%s\nAuthor: %s\nLicense: %s\n\n"
 		    "%s v%s.\n%s\nLicense: %s\nAuthor: %s\nWeb site: %s");
 
 #undef _
@@ -1237,7 +1237,7 @@ void ConfApp::about( )
 
     QMessageBox::about(this, windowTitle(),
 	TSYS::strMess(mess.c_str(),
-	    _(mod->modInfo("Name")),mod->modInfo("Version").c_str(),_(mod->modInfo("Description")),
+	    _(mod->modInfo("Name")),mod->modInfo("Version").c_str(),QT_VERSION_STR,_(mod->modInfo("Description")),
 	    _(mod->modInfo("Author")),mod->modInfo("License").c_str(),
 	    PACKAGE_NAME,VERSION,_(PACKAGE_DESCR),PACKAGE_LICENSE,_(PACKAGE_AUTHOR),PACKAGE_SITE).c_str());
 
@@ -1301,6 +1301,16 @@ void ConfApp::selectItem( )
 	    if(CtrTree->horizontalScrollBar()) CtrTree->horizontalScrollBar()->setValue(saveVl);
 	}*/
     }
+}
+
+bool ConfApp::eventFilter( QObject *obj, QEvent *event )
+{
+    if(event->type() == QEvent::Wheel && qobject_cast<QComboBox*>(obj) /*&& !((QComboBox*)obj)->hasFocus()*/) {
+	event->ignore();
+	return true;
+    }
+
+    return false;
 }
 
 void ConfApp::selectPage( const string &path, int tm )
@@ -1874,7 +1884,10 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		val_w->setObjectName(br_path.c_str());
 		val_w->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 		val_w->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Fixed));
+		//val_w->setFocusPolicy(Qt::StrongFocus);
 		connect(val_w, SIGNAL(activated(int)), this, SLOT(combBoxActivate(int)));
+
+		val_w->installEventFilter(this);
 	    }
 
 	    if(t_s.attr("dscr").size()) {
@@ -2180,6 +2193,8 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    if(t_s.attr("dest") == "sel_ed") {
 			val_w->setMinimumSize(100, 0);
 			val_w->setType(LineEdit::Combo);
+			//val_w->workWdg()->setFocusPolicy(Qt::StrongFocus);
+			val_w->workWdg()->installEventFilter(this);
 		    }
 		    else if(tp == "dec" || tp == "hex" || tp == "oct") {
 			val_w->setFixedWidth(QFontMetrics(val_w->workWdg()->font()).size(Qt::TextSingleLine,"0000000000").width()+30);

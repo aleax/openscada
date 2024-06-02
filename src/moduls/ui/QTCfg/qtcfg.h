@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: qtcfg.h
 /***************************************************************************
- *   Copyright (C) 2004-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2004-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -212,6 +212,8 @@ class ConfApp: public QMainWindow
 
 private:
     //Methods
+    bool eventFilter( QObject *object, QEvent *event );
+
     // Page display
     void selectPage( const string &path, int tm = 0 );
     void pageDisplay( const string &path );

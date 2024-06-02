@@ -1,13 +1,13 @@
 # OpenSCADA.UI.QTStarter translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.QTStarter package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2005-2022.
+# Roman Savochenko <roman@oscada.org>, 2005-2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-06 19:44+0300\n"
+"POT-Creation-Date: 2024-05-13 08:07+0300\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -232,11 +232,11 @@ msgid ""
 "version 3.0 is appropriate for the development of Qt applications where you "
 "wish to use such applications in combination with software subject to the "
 "terms of the GNU GPL version 3.0 or where you are otherwise willing to "
-"comply with the terms of the GNU GPL version 3.0.</p><p>Please see <a href="
-"\"http://qt.digia.com/product/licensing\">qt.digia.com/product/licensing</a> "
-"for an overview of Qt licensing.</p><p>Copyright (C) 2012 Digia Plc and/or "
-"its subsidiary(-ies).</p><p>Qt is a Digia product. See <a href=\"http://qt."
-"digia.com/\">qt.digia.com</a> for more information.</p>"
+"comply with the terms of the GNU GPL version 3.0.</p><p>Please see <a "
+"href=\"http://qt.digia.com/product/licensing\">qt.digia.com/product/"
+"licensing</a> for an overview of Qt licensing.</p><p>Copyright (C) 2012 "
+"Digia Plc and/or its subsidiary(-ies).</p><p>Qt is a Digia product. See <a "
+"href=\"http://qt.digia.com/\">qt.digia.com</a> for more information.</p>"
 msgstr ""
 
 msgid "Hu&e:"
@@ -780,9 +780,8 @@ msgstr "ВИКОНАННЯ"
 msgid "%d backups"
 msgstr "%d рез.копій"
 
-#, c-format
 msgid ""
-"%s v%s.\n"
+"%s v%s on Qt v%s.\n"
 "%s\n"
 "Author: %s\n"
 "License: %s\n"
@@ -793,7 +792,7 @@ msgid ""
 "Author: %s\n"
 "Web site: %s"
 msgstr ""
-"%s v%s.\n"
+"%s v%s на Qt v%s.\n"
 "%s\n"
 "Автор: %s\n"
 "Ліцензія: %s\n"

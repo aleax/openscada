@@ -1,3 +1,14 @@
+2024-06-02 Roman 0.9.7.1
+- FIX:LibsDB.OscadaLibs: tmplib_base.weather: Fixed in guaranty receiving the hourly data at the connection problems.
+- FIX:DAQ.JavaLikeCalk: Some improved in the translation.
+- FIX:UI.{QTStarter,QTCfg,Vision}: The "About ..." help item appended by Qt version.
+    FIX:QTCfg,Vision: The messages "Load from DB" and "Save to DB" renamed to "Load" and "Save"
+	    and with "storage" instead "DB" in full messages.
+	The ComboBox fields appended by locking mouse wheel forcibly for QTCfg and at no focus for Vision in runtime,
+	    and all these to prevent changes at generic page scroll.
+- FIX:UI.WebUser: Appended of disabling the page node at changing language/template.
+
+
 2024-05-05 Roman 0.9.7
 - ModelsDB.{AGLKS.vca,Boiler.St}: Main page of the project appended by the attribute "Project document (prjDoc)"
     with link to the document on OpenSCADA Wiki, and removed for the attribute "Status line items (statLine)" with it mark as optional.

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_dlgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -893,7 +893,7 @@ void LibProjProp::closeEvent( QCloseEvent *ce )
     bool notApplyPresent = false;
     for(int iIt = 0; !notApplyPresent && iIt < lnEdWs.size(); ++iIt) notApplyPresent = lnEdWs[iIt]->isEdited();
     for(int iIt = 0; !notApplyPresent && iIt < txtEdWs.size(); ++iIt) notApplyPresent = txtEdWs[iIt]->isEdited();
-    bool isApply = (notApplyPresent && QMessageBox::information(this,_("Saving the changes"),_("Some changes were made!\nSave the changes to the DB before the closing?"),
+    bool isApply = (notApplyPresent && QMessageBox::information(this,_("Saving the changes"),_("Some changes were made!\nSave the changes to storage before closing?"),
 	    QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply) == QMessageBox::Apply);
     for(int iIt = 0; iIt < lnEdWs.size(); ++iIt)
 	if(lnEdWs[iIt]->isEdited()) isApply ? lnEdWs[iIt]->applySlot() : lnEdWs[iIt]->cancelSlot();
@@ -1832,7 +1832,7 @@ void VisItProp::closeEvent( QCloseEvent *ce )
     bool notApplyPresent = false;
     for(int iIt = 0; !notApplyPresent && iIt < lnEdWs.size(); ++iIt)  notApplyPresent = lnEdWs[iIt]->isEdited();
     for(int iIt = 0; !notApplyPresent && iIt < txtEdWs.size(); ++iIt) notApplyPresent = txtEdWs[iIt]->isEdited();
-    bool isApply = (notApplyPresent && QMessageBox::information(this,_("Saving the changes"),_("Some changes were made!\nSave the changes to the DB before the closing?"),
+    bool isApply = (notApplyPresent && QMessageBox::information(this,_("Saving the changes"),_("Some changes were made!\nSave the changes to storage before closing?"),
 	    QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply) == QMessageBox::Apply);
     for(int iIt = 0; iIt < lnEdWs.size(); ++iIt)
 	if(lnEdWs[iIt]->isEdited()) isApply ? lnEdWs[iIt]->applySlot() : lnEdWs[iIt]->cancelSlot();

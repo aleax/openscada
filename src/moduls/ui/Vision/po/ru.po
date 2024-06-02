@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-02 13:57+0300\n"
+"POT-Creation-Date: 2024-05-23 17:18+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -286,65 +286,80 @@ msgstr "Кнопка запроса информации о GUI элемента
 msgid "Press for requesting information about the user interface elements."
 msgstr "Нажать для запроса информации о GUI элементах."
 
-msgid "Load from DB"
-msgstr "Загрузить из БД"
+#, fuzzy
+msgid "Load"
+msgstr "Загрузить данные"
 
-msgid "Load the item data from DB"
+#, fuzzy
+msgid "Load the item data"
 msgstr "Загрузить данные элемента из БД"
 
-msgid "The button for loading the item data from the DB"
+#, fuzzy
+msgid "The button for loading the item data from storage"
 msgstr "Кнопка загрузки данных элемента из БД"
 
-msgid "Press for loading the item data from the DB."
+#, fuzzy
+msgid "Press for loading the item data from storage."
 msgstr "Нажать для загрузки данных элемента из БД."
 
-msgid "Load from DB forcibly"
+#, fuzzy
+msgid "Load forcibly"
 msgstr "Принудительно загрузить из БД"
 
-msgid "Load the item data from DB forcibly"
+#, fuzzy
+msgid "Load the item data forcibly"
 msgstr "Принудительно загрузить данные элемента из БД"
 
+#, fuzzy
 msgid ""
-"The button for loading the item data from the DB forcibly, not only when it "
+"The button for loading the item data from storage forcibly, not only when it "
 "changed"
 msgstr ""
 "Кнопка принудительной загрузки данных элемента из БД, не только когда "
 "изменено"
 
+#, fuzzy
 msgid ""
-"Press for loading the item data from the DB forcibly, not only when it "
+"Press for loading the item data from storage forcibly, not only when it "
 "changed."
 msgstr ""
 "Нажать для принудительной загрузки данных элемента из БД, не только когда "
 "изменено."
 
-msgid "Save to DB"
-msgstr "Сохранить в БД"
+msgid "Save"
+msgstr ""
 
-msgid "Save the item data to DB"
+#, fuzzy
+msgid "Save the item data"
 msgstr "Сохранить данные элемента в БД"
 
-msgid "The button for saving the item data to the DB"
+#, fuzzy
+msgid "The button for saving the item data to storage"
 msgstr "Кнопка сохранения данных элемента в БД"
 
-msgid "Press for saving the item data to the DB."
+#, fuzzy
+msgid "Press for saving the item data to storage."
 msgstr "Нажать для сохранения данных элемента в БД"
 
-msgid "Save to DB forcibly"
+#, fuzzy
+msgid "Save forcibly"
 msgstr "Принудительно сохранить в БД"
 
-msgid "Save the item data to DB forcibly"
+#, fuzzy
+msgid "Save the item data forcibly"
 msgstr "Принудительно сохранить данные элемента в БД"
 
+#, fuzzy
 msgid ""
-"The button for saving the item data to the DB forcibly, not only when it "
+"The button for saving the item data to storage forcibly, not only when it "
 "changed"
 msgstr ""
 "Кнопка принудительного сохранения данных элемента в БД, не только когда "
 "изменено"
 
+#, fuzzy
 msgid ""
-"Press for saving the item data to the DB forcibly, not only when it changed."
+"Press for saving the item data to storage forcibly, not only when it changed."
 msgstr ""
 "Нажать для принудительного сохранения данных элемента в БД, не только когда "
 "изменено."
@@ -886,15 +901,16 @@ msgstr "Очень большие (48x48)"
 msgid "Saving of the visual items"
 msgstr "Сохранение визуальных элементов"
 
+#, fuzzy
 msgid ""
 "Some visual items have been changed.\n"
-"Save the changes to the DB before exiting?"
+"Save the changes to storage before exiting?"
 msgstr ""
 "Некоторые визуальные элементы были изменены.\n"
 "Сохранить изменения в БД при выходе?"
 
 msgid ""
-"%1 v%2.\n"
+"%1 v%2 on Qt v%12.\n"
 "%3\n"
 "Author: %4\n"
 "License: %5\n"
@@ -905,7 +921,7 @@ msgid ""
 "Author: %10\n"
 "Web site: %11"
 msgstr ""
-"%1 v%2.\n"
+"%1 v%2 на Qt v%12.\n"
 "%3\n"
 "Автор: %4\n"
 "Лицензия: %5\n"
@@ -922,19 +938,24 @@ msgstr "Руководство"
 msgid "The manual '%1' was not found offline or online!"
 msgstr "Не найдено руководства '%1' локально или удалённо!"
 
-msgid "Are you sure of loading visual items '%1' from the DB?"
+#, fuzzy
+msgid "Are you sure of loading visual items '%1' from storage?"
 msgstr "Вы действительно желаете загрузить визуальные элементы '%1' из БД?"
 
-msgid "Loading the visual items data from the DB"
+#, fuzzy
+msgid "Loading the visual items data from storage"
 msgstr "Загрузка данных визуальных элементов из БД"
 
-msgid "Are you sure of saving all modifications to the DB?"
+#, fuzzy
+msgid "Are you sure of saving all modifications to storage?"
 msgstr "Вы действительно желаете сохранить все изменения в БД?"
 
-msgid "Are you sure of saving the visual items '%1' to the DB?"
+#, fuzzy
+msgid "Are you sure of saving the visual items '%1' to storage?"
 msgstr "Вы действительно желаете сохранить визуальные элементы '%1' в БД?"
 
-msgid "Saving the visual items data to the DB"
+#, fuzzy
+msgid "Saving the visual items data to storage"
 msgstr "Сохранение данных визуальных элементов в БД"
 
 msgid "Enter the identifier and the name of the new project."
@@ -1171,9 +1192,10 @@ msgstr "Ошибка загрузки изображения иконки '%1'."
 msgid "Saving the changes"
 msgstr "Сохранение изменений"
 
+#, fuzzy
 msgid ""
 "Some changes were made!\n"
-"Save the changes to the DB before the closing?"
+"Save the changes to storage before closing?"
 msgstr ""
 "Некоторые изменения не приняты!\n"
 "Сохранить изменения в БД перед закрытием?"
@@ -2334,6 +2356,12 @@ msgstr "Время инициализации '%s': %f мс."
 
 msgid "Input dialog of Vision"
 msgstr "Диалог ввода Vision"
+
+#~ msgid "Load from DB"
+#~ msgstr "Загрузить из БД"
+
+#~ msgid "Save to DB"
+#~ msgstr "Сохранить в БД"
 
 #~ msgid "Status line items"
 #~ msgstr "Элементы строки статусов"

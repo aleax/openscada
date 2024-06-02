@@ -315,6 +315,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		    case FL_DATE_TM:	tp = LineEdit::DateTime;break;
 		}
 		if(wdg->type() != tp) { wdg->setType(tp); mk_new = true; }
+		if(shD->view == FL_COMBO) wdg->workWdg()->setFocusPolicy(Qt::StrongFocus);
 		wdg->setCfg(shD->cfg.c_str());	//Cfg
 		wdg->setFont(elFnt);		//Font
 		setValue(w, shD->value, true);	//Value
@@ -412,6 +413,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		if(!wdg || !qobject_cast<QComboBox*>(wdg)) {
 		    if(wdg) wdg->deleteLater();
 		    shD->addrWdg = wdg = new QComboBox(w);
+		    wdg->setFocusPolicy(Qt::StrongFocus);
 		    if(runW) connect(wdg, SIGNAL(currentIndexChanged(int)), this, SLOT(comboChange(int)));
 		    mk_new = true;
 		}
@@ -1133,6 +1135,11 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	    case QEvent::MouseButtonDblClick:
 	    case QEvent::MouseButtonPress:
 	    case QEvent::MouseButtonRelease: QApplication::sendEvent(w, event);	break;
+	    case QEvent::Wheel:
+		if(qobject_cast<QComboBox*>(object) && !((QComboBox*)object)->hasFocus()) {
+		    event->ignore();
+		    return true;
+		}
 	    default:	break;
 	}
     }

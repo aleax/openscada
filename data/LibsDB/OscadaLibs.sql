@@ -298,11 +298,10 @@ INSERT INTO flb_servProc_io VALUES('archPackFStests','archiver','Archiver addres
 INSERT INTO flb_servProc_io VALUES('wacko2media','ndb','MySQL DB id',0,0,'wiki',0,0,'','','','');
 INSERT INTO flb_servProc_io VALUES('wacko2media','wpg','Wiki page',0,0,'HomePageUk/Doc/SQLite',0,1,'','','','');
 INSERT INTO flb_servProc_io VALUES('wacko2media','rez','Result',0,6,'',0,2,'Результат','','Результат','');
-INSERT INTO flb_servProc_io VALUES('docOffLine','resDir','Results directory',0,0,'/home/roman/ext/OpenSCADA/openscada_0.9/doc/',0,2,'','','','');
+INSERT INTO flb_servProc_io VALUES('docOffLine','resDir','Results directory',0,0,'/home/roman/ext/OpenSCADA/Work/doc/',0,2,'','','','');
 INSERT INTO flb_servProc_io VALUES('docOffLine','pages','Pages list
 Rows in the form "{wiki}:{langs}:{dest}".',0,4,'Documents:en,uk,ru:index.html
 Documents/Release_0.9:en,uk,ru:Release_0.9.html
-Documents/Release_0.9/Updating_0.8.0_LTS:en,uk,ru:Updating_0.8.0.html
 Works/Technical_Support/Agreement:en,uk,ru:Technical_Support_Agreement.html
 About:en,uk,ru:About.html
 Documents/Terms:en,uk,ru:Terms.html
@@ -10315,13 +10314,13 @@ INSERT INTO tmplib_base VALUES('weather','Weather','Погода','','The templa
 The weather data divided on current and forecast with their placing in corresponded objects, where current attributes placed directly in the root and forecast days (the "day" object) and times (the "time" object) inwardly corresponded day according to the current timezone. These data acquired at specified schedule independently for current and forecast, and by default the current ones are performed per hour when forecast ones per day. The data can be accessible by user both as directly and through a specially created widget of the main library.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.0
+Version: 1.0.1
 License: GPLv2','Шаблон отримання даних погоди з різних погодних служб у Інтернет і первинно лише Open Weather (https://openweathermap.org/).
 
 Погодні дані діляться на поточні і прогноз із їх розміщенням у відповідних об''єктах, де поточні атрибути розташовуються прямо у корені та прогноз на день (об''єкт "day") і час (об''єкт "time") всередині відповідного дня згідно до поточної часової зони. Ці дані отримуються за відповідним розкладом незалежно для поточних і прогнозу, та типово поточні запитуються щогодинно, а прогноз один раз на день. Дані можуть бути доступні користувачу як прямо, так і посередництвом спеціально-створеного віджету основної бібліотеки.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.0
+Версія: 1.0.1
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	transport = "Sockets.weather:api.openweathermap.org:80";
@@ -10368,7 +10367,6 @@ else {
 		//Daily
 		req.setAttr("URI", "/data/2.5/forecast/daily?id="+city+"&mode=xml&units=metric&cnt=10&APPID="+APPID);
 		if(!tErr.toInt() && !(tErr=tr.messIO(req,"HTTP")).toInt() && !(tErr=(respTree=SYS.XMLNode()).load(req.text())).toInt()) {
-			schedFCTrueTm = SYS.time();
 			forecastN = respTree.childGet("forecast");
 			forecast = new Array();
 			for(iTm = 0; (timeN=forecastN.childGet("time",iTm)); iTm++) {
@@ -10424,6 +10422,7 @@ else {
 					}
 					forecastTimes.push(timeO);
 				}
+				schedFCTrueTm = SYS.time();
 			}
 		}
 	}
