@@ -494,23 +494,23 @@ void ConfApp::messUpd( )
     actNext->setWhatsThis(_("The button for going to the forward page"));
     actNext->setStatusTip(_("Press for going to the forward page."));
     // Load item from db
-    actDBLoad->setText(_("Load from DB"));
-    actDBLoad->setToolTip(_("Load the item data from DB"));
-    actDBLoad->setWhatsThis(_("The button for loading the item data from DB"));
-    actDBLoad->setStatusTip(_("Press for loading the item data from DB."));
-    actDBLoadF->setText(_("Load from DB forcibly"));
-    actDBLoadF->setToolTip(_("Load the item data from DB forcibly"));
-    actDBLoadF->setWhatsThis(_("The button for loading the item data from DB forcibly, not only when it changed"));
-    actDBLoadF->setStatusTip(_("Press for loading the item data from DB forcibly, not only when it changed."));
+    actDBLoad->setText(_("Load"));
+    actDBLoad->setToolTip(_("Load the item data"));
+    actDBLoad->setWhatsThis(_("The button for loading the item data from storage"));
+    actDBLoad->setStatusTip(_("Press for loading the item data from storage."));
+    actDBLoadF->setText(_("Load forcibly"));
+    actDBLoadF->setToolTip(_("Load the item data forcibly"));
+    actDBLoadF->setWhatsThis(_("The button for loading the item data from storage forcibly, not only when it changed"));
+    actDBLoadF->setStatusTip(_("Press for loading the item data from storage forcibly, not only when it changed."));
     // Save item to db
-    actDBSave->setText(_("Save to DB"));
-    actDBSave->setToolTip(_("Save the item data to DB"));
-    actDBSave->setWhatsThis(_("The button for saving the item data to DB"));
-    actDBSave->setStatusTip(_("Press for saving the item data to DB."));
-    actDBSaveF->setText(_("Save to DB forcibly"));
-    actDBSaveF->setToolTip(_("Save the item data to DB forcibly"));
-    actDBSaveF->setWhatsThis(_("The button for saving the item data to DB forcibly, not only when it changed"));
-    actDBSaveF->setStatusTip(_("Press for saving the item data to DB forcibly, not only when it changed."));
+    actDBSave->setText(_("Save"));
+    actDBSave->setToolTip(_("Save the item data"));
+    actDBSave->setWhatsThis(_("The button for saving the item data to storage"));
+    actDBSave->setStatusTip(_("Press for saving the item data to storage."));
+    actDBSaveF->setText(_("Save forcibly"));
+    actDBSaveF->setToolTip(_("Save the item data forcibly"));
+    actDBSaveF->setWhatsThis(_("The button for saving the item data to storage forcibly, not only when it changed"));
+    actDBSaveF->setStatusTip(_("Press for saving the item data to storage forcibly, not only when it changed."));
     // Add an item
     actItAdd->setText(_("&Add"));
     actItAdd->setToolTip(_("Add item"));
@@ -629,7 +629,7 @@ bool ConfApp::exitModifChk( )
 	if(!cntrIfCmd(req))	saveExit |= s2i(req.text());
 	if(!saveExit) {
 	    int ret = QMessageBox::information(this,_("Saving the changes"),
-		_("Some changes were made!\nSave the changes to the DB before exiting?"),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Yes);
+		_("Some changes were made!\nSave the changes to storage before exiting?"),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Yes);
 	    switch(ret) {
 		case QMessageBox::Yes:
 		    req.clear()->setName("save")->setAttr("path","/"+SYS->id()+"/%2fobj")->setAttr("primaryCmd", "1");

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvariant.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1316,14 +1316,18 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 	if(rez.freeStat()) return TVariant();
 	return AutoHD<TVarObj>(rez);
     }
-    // TArrayObj<XMLNodeObj> getElementsBy( string tag, string attrVal = "", string attr = "id" ) -
+    // TArrayObj<XMLNodeObj> getElementsBy( string tag, string attrVal = "", string attr = "id", int limit = 0, int from = 0 ) -
     //    get elements array from the tree by <tag> and attribute <attr> value <attrVal>.
     //  tag - tag name, empty for all;
     //  attrVal - attribute value to find, empty for pass;
-    //  attr - attribute name to find it value.
+    //  attr - attribute name to find it value;
+    //  limit - up to the specified items;
+    //  from - from the specified item.
     if(id == "getElementsBy" && prms.size()) {
 	TArrayObj *rez = new TArrayObj();
-	getElementsBy(prms[0].getS(), ((prms.size() >= 3) ? prms[2].getS() : "id"), ((prms.size() >= 2)?prms[1].getS():""), rez);
+	unsigned from = (prms.size() >= 5) ? prms[4].getI() : 0;
+	getElementsBy(prms[0].getS(), ((prms.size() >= 3) ? prms[2].getS() : "id"), ((prms.size() >= 2)?prms[1].getS():""), rez,
+			((prms.size() >= 4) ? prms[3].getI() : 0), &from);
 	return rez;
     }
 
@@ -1372,14 +1376,17 @@ AutoHD<XMLNodeObj> XMLNodeObj::getElementBy( const string &attr, const string &v
     return rez;
 }
 
-void XMLNodeObj::getElementsBy( const string &tag, const string &attr, const string &val, TArrayObj *rez )
+void XMLNodeObj::getElementsBy( const string &tag, const string &attr, const string &val, TArrayObj *rez, unsigned limit, unsigned *from )
 {
     if(!tag.size() && (!attr.size() || !val.size()))	return;
-    if((!tag.size() || tag == name()) && (!attr.size() || !val.size() || propGet(attr).getS() == val)) rez->arSet(-1, this);
+    if((!tag.size() || tag == name()) && (!attr.size() || !val.size() || propGet(attr).getS() == val)) {
+	if(!from || *from == 0) rez->arSet(-1, this);
+	else if(from && *from)	(*from)--;
+    }
 
     dataM.lock();
-    for(unsigned iCh = 0; iCh < childSize(); iCh++)
-	childGet(iCh).at().getElementsBy(tag, attr, val, rez);
+    for(unsigned iCh = 0; iCh < childSize() && (!limit || rez->arSize() < limit); iCh++)
+	childGet(iCh).at().getElementsBy(tag, attr, val, rez, limit, from);
     dataM.unlock();
 }
 

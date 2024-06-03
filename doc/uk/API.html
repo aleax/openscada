@@ -357,7 +357,7 @@ Information variables of the program:
 <li> <i>static bool taskEndRun( );</i> — Check for the task endrun by signal <i>SIGUSR1</i>.</li>
 <li> <i>static const STask&amp; taskDescr( );</i> — Get reference to the task's descriptor.</li>
 <li> <i>static int sysSleep( float tm );</i> — System sleep in seconds up to nanoseconds (1e-9).</li>
-<li> <i>time_t sysTm( );</i> — System time fast access, from updated cell</li>
+<li> <i>time_t sysTm( bool *hasJump = NULL, time_t last = 0 );</i> — System time fast access from updating cell and with a function of detection time jumps <i>hasJump</i> from <i>last</i> used time.</li>
 <li> <i>static int64_t curTime( clockid_t clc = CLOCK_REALTIME );</i> — The clock <i>clc</i> time in microseconds from the beginning of the era (01.01.1970).</li>
 <li> <i>static uint64_t curTimeN( clockid_t clc = CLOCK_REALTIME );</i> — The clock <i>clc</i> time in nanoseconds from the beginning of the era (01.01.1970).</li>
 <li> <i>string prjUserDir( );</i> — Directory of the user projects.</li>
@@ -4230,7 +4230,7 @@ Options for XML-file loading (enum — XMLNode::LoadFlgs):
 <li> <i>XMLNode* childGet( const string &amp;name, const int numb = 0, bool noex = false ) const;</i> — Getting of the included <i>numb</i> indexed tag by the tag's name <i>name</i>. <i>noex</i> indicates the prohibition of the generation of exception in the case of absence of the tag.</li>
 <li> <i>XMLNode* childGet( const string &amp;attr, const string &amp;vl, bool noex = false ) const;</i> — Getting the included <i>numb</i> indexed tag by its value <i>vl</i> of the attribute <i>attr</i>. <i>noex</i> indicates the prohibition of the generation of exception in the case of absence of the tag.</li>
 <li> <i>XMLNode* getElementBy( const string &amp;attr, const string &amp;val );</i> — Included node search by the value <i>val</i> of the attribute <i>attr</i>.</li>
-<li> <i>void getElementsBy( const string &amp;tag, const string &amp;attr, const string &amp;val, TArrayObj *rez );</i> — get elements array <i>rez</i> from the tree by <i>tag</i> (empty for all) and attribute <i>attr</i> value <i>val</i> (empty for pass).</li>
+<li> <i>void getElementsBy( const string &amp;tag, const string &amp;attr, const string &amp;val, TArrayObj *rez, unsigned limit = 0, unsigned *from = NULL );</i> — get elements array <i>rez</i> from the tree by <i>tag</i> (empty for all) and attribute <i>attr</i> value <i>val</i> (empty for pass), also starting the tag number <i>from</i> and limiting them number in <i>limit</i> (zero for no limit).</li>
 <li> <i>XMLNode* parent( );</i> — Parent tag of the tag.</li>
 <li> <i>XMLNode* root( );</i> — Root tag of the tag.</li></ul>
 <h3><span class="mw-headline" id="Error_exception_.28TError.29"><span class="mw-headline-number">16.2</span> <span id="TError" title="#TError">Error exception (TError)</span></span></h3>
@@ -4994,5 +4994,5 @@ Error codes (enum — TError::Codes):
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/uk">Documents/API/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2966</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/uk">Documents/API/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2970</td></tr></table></body>
 </html>

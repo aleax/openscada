@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-13 08:18+0300\n"
+"POT-Creation-Date: 2024-05-23 17:18+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -238,52 +238,52 @@ msgstr ""
 msgid "Press for requesting information about the user interface elements."
 msgstr ""
 
-msgid "Load from DB"
+msgid "Load"
 msgstr ""
 
-msgid "Load the item data from DB"
+msgid "Load the item data"
 msgstr ""
 
-msgid "The button for loading the item data from the DB"
+msgid "The button for loading the item data from storage"
 msgstr ""
 
-msgid "Press for loading the item data from the DB."
+msgid "Press for loading the item data from storage."
 msgstr ""
 
-msgid "Load from DB forcibly"
+msgid "Load forcibly"
 msgstr ""
 
-msgid "Load the item data from DB forcibly"
+msgid "Load the item data forcibly"
 msgstr ""
 
-msgid "The button for loading the item data from the DB forcibly, not only when it changed"
+msgid "The button for loading the item data from storage forcibly, not only when it changed"
 msgstr ""
 
-msgid "Press for loading the item data from the DB forcibly, not only when it changed."
+msgid "Press for loading the item data from storage forcibly, not only when it changed."
 msgstr ""
 
-msgid "Save to DB"
+msgid "Save"
 msgstr ""
 
-msgid "Save the item data to DB"
+msgid "Save the item data"
 msgstr ""
 
-msgid "The button for saving the item data to the DB"
+msgid "The button for saving the item data to storage"
 msgstr ""
 
-msgid "Press for saving the item data to the DB."
+msgid "Press for saving the item data to storage."
 msgstr ""
 
-msgid "Save to DB forcibly"
+msgid "Save forcibly"
 msgstr ""
 
-msgid "Save the item data to DB forcibly"
+msgid "Save the item data forcibly"
 msgstr ""
 
-msgid "The button for saving the item data to the DB forcibly, not only when it changed"
+msgid "The button for saving the item data to storage forcibly, not only when it changed"
 msgstr ""
 
-msgid "Press for saving the item data to the DB forcibly, not only when it changed."
+msgid "Press for saving the item data to storage forcibly, not only when it changed."
 msgstr ""
 
 msgid "Run project"
@@ -804,7 +804,7 @@ msgstr ""
 
 msgid ""
 "Some visual items have been changed.\n"
-"Save the changes to the DB before exiting?"
+"Save the changes to storage before exiting?"
 msgstr ""
 
 msgid ""
@@ -826,19 +826,19 @@ msgstr ""
 msgid "The manual '%1' was not found offline or online!"
 msgstr ""
 
-msgid "Are you sure of loading visual items '%1' from the DB?"
+msgid "Are you sure of loading visual items '%1' from storage?"
 msgstr ""
 
-msgid "Loading the visual items data from the DB"
+msgid "Loading the visual items data from storage"
 msgstr ""
 
-msgid "Are you sure of saving all modifications to the DB?"
+msgid "Are you sure of saving all modifications to storage?"
 msgstr ""
 
-msgid "Are you sure of saving the visual items '%1' to the DB?"
+msgid "Are you sure of saving the visual items '%1' to storage?"
 msgstr ""
 
-msgid "Saving the visual items data to the DB"
+msgid "Saving the visual items data to storage"
 msgstr ""
 
 msgid "Enter the identifier and the name of the new project."
@@ -1061,7 +1061,7 @@ msgstr ""
 
 msgid ""
 "Some changes were made!\n"
-"Save the changes to the DB before the closing?"
+"Save the changes to storage before closing?"
 msgstr ""
 
 msgid "No rows selected."

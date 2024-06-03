@@ -9711,14 +9711,14 @@ selSingle = 0;
 selAll = false;
 
 //Events process
-for(evRez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	if(ev_cur == "key_presComma:/trnd1")			trnd1_tSek -= trnd1_tSize/2;
-	else if(ev_cur == "key_presPeriod:/trnd1")	trnd1_tSek += trnd1_tSize/2;
-	else if(ev_cur == "ws_SliderChange:/arh")		trnd1_tSek = arh_value*trnd1_tSize;
-	else if(ev_cur.search("usr_single:/el") == 0) selSingle = ev_cur.slice(14).toInt();
-	else if(ev_cur.search("usr_all:/el") == 0)	selAll = true;
-	else evRez += (ev_cur+"\n");
-	//SYS.messDebug("Trend","Event: "+ev_cur);
+for(evRez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	if(evCur == "key_presComma:/trnd1")			trnd1_tSek -= trnd1_tSize/2;
+	else if(evCur == "key_presPeriod:/trnd1")	trnd1_tSek += trnd1_tSize/2;
+	else if(evCur == "ws_SliderChange:/arh")		trnd1_tSek = arh_value*trnd1_tSize;
+	else if(evCur.search("usr_single:/el") == 0) selSingle = evCur.slice(14).toInt();
+	else if(evCur.search("usr_all:/el") == 0)	selAll = true;
+	else evRez += (evCur+"\n");
+	//SYS.messDebug("Trend","Event: "+evCur);
 }
 event = evRez;
 
@@ -10318,11 +10318,11 @@ curTm = SYS.time();
 if(!trnd1_tSek) trnd1_tSek = curTm;
 
 //Events process
-for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//Special.FLibSYS.messPut("Trend",0,"Event: "+ev_cur);
-	if(ev_cur == "key_presSC#3b:/trnd1")			trnd1_tSek -= trnd1_tSize/2;
-	else if(ev_cur == "key_presSC#3c:/trnd1")	trnd1_tSek += trnd1_tSize/2;
-	else ev_rez += (ev_cur+"\n");
+for(off = 0, ev_rez = ""; (evCur=event.parse(0,"\n",off)).length; ) {
+	//Special.FLibSYS.messPut("Trend",0,"Event: "+evCur);
+	if(evCur == "key_presSC#3b:/trnd1")			trnd1_tSek -= trnd1_tSize/2;
+	else if(evCur == "key_presSC#3c:/trnd1")	trnd1_tSek += trnd1_tSize/2;
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;
 
@@ -10815,9 +10815,9 @@ else Text3_text = Text3_text.parse(0,"\n");
 
 //Events process
 prevTime = time;
-for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo("Trend control","Event: "+ev_cur);
-	if(ev_cur == "ws_LnAccept:/size" || ev_cur == "ws_CombChange:/tmTp") {
+for(off = 0, ev_rez = ""; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo("Trend control","Event: "+evCur);
+	if(evCur == "ws_LnAccept:/size" || evCur == "ws_CombChange:/tmTp") {
 		szVal = size_value;
 		if(tmTp_value == tr("m"))			szVal = szVal*60;
 		else if(tmTp_value == tr("h"))	szVal = szVal*60*60;
@@ -10828,23 +10828,23 @@ for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; ) {
 		else if(tmTp_value.search("\\d+"+tr("d")) >= 0)	szVal = tmTp_value.toInt()*24*60*60;
 		time += 1;
 	}
-	else if(ev_cur == "ws_LnAccept:/dateBeg") { szVal = max(1, date_value-dateBeg_value); time += 1; }
-	else if(ev_cur == "ws_LnAccept:/date") time = min(curTm, max(szVal,date_value));
-	else if(ev_cur == "ws_BtPress:/curtime") {	
+	else if(evCur == "ws_LnAccept:/dateBeg") { szVal = max(1, date_value-dateBeg_value); time += 1; }
+	else if(evCur == "ws_LnAccept:/date") time = min(curTm, max(szVal,date_value));
+	else if(evCur == "ws_BtPress:/curtime") {	
 		if(n == 0) time = curTm;
 		else vCur = aCur;
 	}
-	else if(ev_cur == "ws_BtPress:/prev") {
+	else if(evCur == "ws_BtPress:/prev") {
 		if(n == 0) time = min(curTm, max(szVal,time-szVal));
 		else vCur = -2;
 	}
-	else if(ev_cur == "ws_BtPress:/next") {
+	else if(evCur == "ws_BtPress:/next") {
 		if(n == 0) time = min(curTm, max(szVal,time+szVal)); 
 		else vCur = -1;
 	}
-	else if(ev_cur == "ws_BtPress:/prev1") time = min(curTm, max(5*szVal,time-5*szVal));
-	else if(ev_cur == "ws_BtPress:/next1") time = min(curTm, max(5*szVal,time+5*szVal));
-	else ev_rez += (ev_cur+"\n");
+	else if(evCur == "ws_BtPress:/prev1") time = min(curTm, max(5*szVal,time-5*szVal));
+	else if(evCur == "ws_BtPress:/next1") time = min(curTm, max(5*szVal,time+5*szVal));
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;
 
@@ -10918,9 +10918,9 @@ if(f_start) {
 }
 
 //Events process
-for(/*ev_rez = "", */off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo("Trend control", "Event: "+ev_cur);
-	if(ev_cur == "ws_LnAccept:/size" || ev_cur == "ws_CombChange:/tmTp") {
+for(/*ev_rez = "", */off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo("Trend control", "Event: "+evCur);
+	if(evCur == "ws_LnAccept:/size" || evCur == "ws_CombChange:/tmTp") {
 		tSzPrev = tSize;
 		tSize = size_value;
 		if(tmTp_value == tr("m"))			tSize = tSize*60;
@@ -10932,38 +10932,38 @@ for(/*ev_rez = "", */off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 		else if(tmTp_value.search("\\d+"+tr("d")) >= 0)	tSize = tmTp_value.toInt()*24*60*60;
 		//if(tSize < tSzPrev && curSek < tSek && curSek > (tSek-tSzPrev)) tSek = curSek;
 	}
-	else if(ev_cur == "ws_LnAccept:/dateBeg")	{
+	else if(evCur == "ws_LnAccept:/dateBeg")	{
 		tSzPrev = tSize; tSize = max(1, date_value-dateBeg_value);
 		//if(tSize < tSzPrev && curSek < tSek && curSek > (tSek-tSzPrev)) tSek = curSek;
 	}
-	else if(ev_cur == "ws_BtPress:/curstimeBeg")	{ tSize = max(1, tSek-curSek); }
-	else if(ev_cur == "ws_LnAccept:/date")		{ tSek = date_value; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/curtime")	{ tSek = curSek = curTm; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/curstime")	{ tSek = curSek; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/prev")		{ tSek -= tSize/2; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/prev1")		{ tSek -= 5*tSize; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/next")		{ tSek += tSize/2; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/next1")		{ tSek += 5*tSize; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_CombChange:/arch")	valArch=(arch_value==tr("All")) ? "" : arch_value;
-	else if(ev_cur == "ws_CombChange:/type")	{ type = (type_value==tr("Spectrum"))?1:((type_value==tr("XY"))?2:0); if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/zoomIn")		{ sclVer *= 0.9; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/zoomOut")	{ sclVer *= 1.1; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/zoomOffUp")	{ sclVerOff += sclVer/10; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/zoomOffDown")	{ sclVerOff -= sclVer/10; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/zoomDef")	{ sclVer = 100, sclVerOff = 0; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/xZoomIn")	sclHor *= 0.9;
-	else if(ev_cur == "ws_BtPress:/xZoomOut")	sclHor *= 1.1;
-	else if(ev_cur == "ws_BtPress:/xZoomOffRight")sclHorOff += sclHor/10;
-	else if(ev_cur == "ws_BtPress:/xZoomOffLeft") sclHorOff -= sclHor/10;
-	else if(ev_cur == "ws_BtPress:/xZoomDef")	sclHor = 100, sclHorOff = 0;
-	else if(ev_cur == "ws_BtToggleChange:/selWin") {
+	else if(evCur == "ws_BtPress:/curstimeBeg")	{ tSize = max(1, tSek-curSek); }
+	else if(evCur == "ws_LnAccept:/date")		{ tSek = date_value; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/curtime")	{ tSek = curSek = curTm; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/curstime")	{ tSek = curSek; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/prev")		{ tSek -= tSize/2; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/prev1")		{ tSek -= 5*tSize; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/next")		{ tSek += tSize/2; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/next1")		{ tSek += 5*tSize; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_CombChange:/arch")	valArch=(arch_value==tr("All")) ? "" : arch_value;
+	else if(evCur == "ws_CombChange:/type")	{ type = (type_value==tr("Spectrum"))?1:((type_value==tr("XY"))?2:0); if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/zoomIn")		{ sclVer *= 0.9; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/zoomOut")	{ sclVer *= 1.1; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/zoomOffUp")	{ sclVerOff += sclVer/10; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/zoomOffDown")	{ sclVerOff -= sclVer/10; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/zoomDef")	{ sclVer = 100, sclVerOff = 0; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/xZoomIn")	sclHor *= 0.9;
+	else if(evCur == "ws_BtPress:/xZoomOut")	sclHor *= 1.1;
+	else if(evCur == "ws_BtPress:/xZoomOffRight")sclHorOff += sclHor/10;
+	else if(evCur == "ws_BtPress:/xZoomOffLeft") sclHorOff -= sclHor/10;
+	else if(evCur == "ws_BtPress:/xZoomDef")	sclHor = 100, sclHorOff = 0;
+	else if(evCur == "ws_BtToggleChange:/selWin") {
 		if(selWin_value && !sclWinCtx.isEVal()) {
 			sclWinCtx.tSek = tSek; sclWinCtx.tSize = tSize; sclWinCtx.sclVer = sclVer; sclWinCtx.sclVerOff = sclVerOff; }
 		else if(!selWin_value && !sclWinCtx.isEVal() && !sclWinCtx.tSek.isEVal()) {
 			tSek = sclWinCtx.tSek; tSize = sclWinCtx.tSize; sclVer = sclWinCtx.sclVer; sclVerOff = sclWinCtx.sclVerOff; }
 		sclWin = selWin_value;
 	}
-	//else ev_rez += (ev_cur+"\n");
+	//else ev_rez += (evCur+"\n");
 }
 event = "";//ev_rez;
 
@@ -11185,15 +11185,15 @@ progLbUpdt = progSelPrg = progSelCom = progSelTp = false;
 var comOp = "";
 
 //Events for commands process
-for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo(this.nodePath(),"Event: "+ev_cur);
-	if(ev_cur == "ws_BtPress:/progAdd") {
+for(ev_rez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo(this.nodePath(),"Event: "+evCur);
+	if(evCur == "ws_BtPress:/progAdd") {
 		if(!progNm_value.length) progNm_value = tr("New program");
 		SYS.BD.nodeAt(dbDB,".").SQLReq("INSERT INTO "+dbProgs+" (name) VALUES (''"+progNm_value+"'');");
 		lib_value = progNm_value;
 		progLbUpdt = progSelPrg = progSelCom = true; prog_value = "";
 	}
-	else if(ev_cur == "ws_BtPress:/progCopy") {
+	else if(evCur == "ws_BtPress:/progCopy") {
 		if(!progNm_value.length) progNm_value = tr("New program");
 		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
 		if(rez.length > 1) {
@@ -11202,27 +11202,27 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 			progLbUpdt = progSelPrg = progSelCom = true; prog_value = "";
 		}
 	}
-	else if(ev_cur == "ws_BtPress:/progRename") {
+	else if(evCur == "ws_BtPress:/progRename") {
 		SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET name=''"+progNm_value+"'' WHERE name=''"+lib_value+"'';");
 		lib_value = progNm_value;
 		progLbUpdt = progSelPrg = progSelCom = true; prog_value = "";
 	}
-	else if(ev_cur == "dlg_Apply:/progDel" && lib_value.length) {
-	//else if(ev_cur == "ws_BtPress:/progDel" && lib_value.length) {
+	else if(evCur == "dlg_Apply:/progDel" && lib_value.length) {
+	//else if(evCur == "ws_BtPress:/progDel" && lib_value.length) {
 		SYS.BD.nodeAt(dbDB,".").SQLReq("DELETE FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
 		lib_value = "";
 		progLbUpdt = progSelPrg = true;
 	}
-	else if(ev_cur == "ws_TreeChange:/lib")	{ progSelPrg = progSelCom = true; prog_value = ""; }
-	else if(ev_cur == "ws_BtPress:/comAdd")	comOp = "add";
-	else if(ev_cur == "ws_BtPress:/comIns")	comOp = "ins";
-	else if(ev_cur == "ws_BtPress:/comInAdd")	comOp = "inAdd";
-	else if(ev_cur == "ws_BtPress:/comDel") comOp = "del";
-	else if(ev_cur == "ws_BtPress:/comUp")	comOp = "up";
-	else if(ev_cur == "ws_BtPress:/comDwn") comOp = "dwn";
-	else if(ev_cur == "ws_TreeChange:/prog"){ progSelCom = true; save_active = false; }
-	else if(ev_cur == "ws_CombChange:/type"){ progSelTp = true; save_active = true; }
-	else if(ev_cur == "ws_BtPress:/save" && prog_value.length) {
+	else if(evCur == "ws_TreeChange:/lib")	{ progSelPrg = progSelCom = true; prog_value = ""; }
+	else if(evCur == "ws_BtPress:/comAdd")	comOp = "add";
+	else if(evCur == "ws_BtPress:/comIns")	comOp = "ins";
+	else if(evCur == "ws_BtPress:/comInAdd")	comOp = "inAdd";
+	else if(evCur == "ws_BtPress:/comDel") comOp = "del";
+	else if(evCur == "ws_BtPress:/comUp")	comOp = "up";
+	else if(evCur == "ws_BtPress:/comDwn") comOp = "dwn";
+	else if(evCur == "ws_TreeChange:/prog"){ progSelCom = true; save_active = false; }
+	else if(evCur == "ws_CombChange:/type"){ progSelTp = true; save_active = true; }
+	else if(evCur == "ws_BtPress:/save" && prog_value.length) {
 		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
 		if(rez.length > 1) {
 			comTree = selNd = SYS.XMLNode("prg"); comTree.load(rez[1][0]);
@@ -11251,7 +11251,7 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 		}
 		save_active = false;
 	}
-	else if(ev_cur == "ws_BtPress:/progExport" && lib_value.length) {
+	else if(evCur == "ws_BtPress:/progExport" && lib_value.length) {
 		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
 		if(rez.length > 1) {
 			expTree = SYS.XMLNode("OpenSCADA_Prescr");
@@ -11260,8 +11260,8 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 			progExport_value = tr("Prescription-Program")+" (*.prscr)|"+tr("Prescription file")+"|"+lib_value.replace("/","_")+".prscr\n"+expTree.save(0x05);
 		}
 	} 
-	//else if(ev_cur == "ws_BtPress:/progImport")
-	else if(ev_cur == "ws_BtLoad:/progImport" && progImport_value.length && (pCtx=progImport_value.indexOf("\n")) > 0)
+	//else if(evCur == "ws_BtPress:/progImport")
+	else if(evCur == "ws_BtLoad:/progImport" && progImport_value.length && (pCtx=progImport_value.indexOf("\n")) > 0)
 	{
 		expTree = SYS.XMLNode("OpenSCADA_Prescr");
 		expTree.load(progImport_value.slice(pCtx+1));
@@ -11277,15 +11277,15 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 		}
 		progLbUpdt = progSelPrg = progSelCom = true;
 	}
-	else if(ev_cur == "ws_LnAccept:/name" || ev_cur == "ws_TxtAccept:/descr" || ev_cur == "ws_ChkChange:/backgrnd" || (rez=ev_cur.match("ws_LnAccept:\\/arg(\\d)")).length)	save_active = true;
-	else if((rez=ev_cur.match("ws_FocusOut:\\/arg(\\d)")).length) {
+	else if(evCur == "ws_LnAccept:/name" || evCur == "ws_TxtAccept:/descr" || evCur == "ws_ChkChange:/backgrnd" || (rez=evCur.match("ws_LnAccept:\\/arg(\\d)")).length)	save_active = true;
+	else if((rez=evCur.match("ws_FocusOut:\\/arg(\\d)")).length) {
 		argObj = this["arg"+rez[1]];
 		argVal = argObj.attr("value");
 		if(!argObj.attr("min").isEVal()) argVal = max(argVal,argObj.attr("min"));
 		if(!argObj.attr("max").isEVal()) argVal = min(argVal,argObj.attr("max"));
 		argObj.attrSet("value",argVal);
 	}
-	else ev_rez += (ev_cur+"\n");
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;
 
@@ -11571,24 +11571,24 @@ if(pTxt.length) {
 prCnt++;
 
 //Events for commands process
-for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
-	if(ev_cur == "ws_TreeChange:/lib") {
+for(ev_rez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messDebug("Prescription edit control","Event: "+evCur);
+	if(evCur == "ws_TreeChange:/lib") {
 		prog_vCur = prog_aCur;
 		prExtProg = lib_value;
 	}
-	else if(ev_cur == "ws_BtPress:/btStart") {
+	else if(evCur == "ws_BtPress:/btStart") {
 		if(prExtMode <= 0)	prExtMode = 1;
 		else if(prExtMode == 1)	prExtMode = 2;
 		prog_vCur = prog_aCur;
 	}
-	else if(ev_cur == "ws_BtRelease:/btStart")	prExtMode = 1;
-	else if(ev_cur == "ws_BtPress:/btStop" && prExtMode >= 0) {
+	else if(evCur == "ws_BtRelease:/btStart")	prExtMode = 1;
+	else if(evCur == "ws_BtPress:/btStop" && prExtMode >= 0) {
 		prExtMode = prExtCurCom = 0;
 		prog_vCur = prog_aCur;
 	}
-	else if(ev_cur == "ws_BtPress:/btPass" && (prExtMode == 1 || prExtMode == 2))	prExtMode = 3;
-	else ev_rez += (ev_cur+"\n");
+	else if(evCur == "ws_BtPress:/btPass" && (prExtMode == 1 || prExtMode == 2))	prExtMode = 3;
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;
 
@@ -11756,19 +11756,19 @@ if(pTxt.length)	prog_doc = pTxt;
 prCnt++;
 
 //Events for commands process
-for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo("Prescription edit control","Event: "+ev_cur);
-	//if(ev_cur == "ws_CombChange:/lib") prExtProg = lib_name;
-	//if(ev_cur.slice(0,11) == "ws_BtMenu=/")	prExtProg = ev_cur.slice(11).parse(0,":");
-	if(ev_cur == "dlg_Apply:/lib")	prExtProg = lib_selValue;
-	else if(ev_cur == "ws_BtPress:/btStart") {
+for(ev_rez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo("Prescription edit control","Event: "+evCur);
+	//if(evCur == "ws_CombChange:/lib") prExtProg = lib_name;
+	//if(evCur.slice(0,11) == "ws_BtMenu=/")	prExtProg = evCur.slice(11).parse(0,":");
+	if(evCur == "dlg_Apply:/lib")	prExtProg = lib_selValue;
+	else if(evCur == "ws_BtPress:/btStart") {
 		if(prExtMode <= 0)			prExtMode = 1;
 		else if(prExtMode == 1)	prExtMode = 2;
 	}
-	else if(ev_cur == "ws_BtRelease:/btStart")	prExtMode = 1;
-	else if(ev_cur == "ws_BtPress:/btStop" && prExtMode >= 0)	prExtMode = prExtCurCom = 0;
-	else if(ev_cur == "ws_BtPress:/btPass" && (prExtMode == 1 || prExtMode == 2))	prExtMode = 3;
-	else ev_rez += (ev_cur+"\n");
+	else if(evCur == "ws_BtRelease:/btStart")	prExtMode = 1;
+	else if(evCur == "ws_BtPress:/btStop" && prExtMode >= 0)	prExtMode = prExtCurCom = 0;
+	else if(evCur == "ws_BtPress:/btPass" && (prExtMode == 1 || prExtMode == 2))	prExtMode = 3;
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;
 
@@ -11798,14 +11798,14 @@ fTmesx+A5VC1tNP0J8aBQtX491Eek73kLMcwDDEtTJqqtecmAAA8SimeAONAfwWK5AEAlMvlWNaB
 if(f_start) mess_text = elMess;
 
 //Events for commands process
-for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
-	if(ev_cur == "ws_BtPress:/apply") {
+for(off = 0, ev_rez = ""; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messDebug("Prescription edit control","Event: "+evCur);
+	if(evCur == "ws_BtPress:/apply") {
 		elEvent += "dlg_Apply\n";
 		this.attrSet("pgOpen",false);
 	}
-	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
-	else ev_rez += (ev_cur+"\n");
+	else if(evCur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1664089765);
 INSERT INTO wlb_Main VALUES('treeSelect','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAeCAIAAAATj48OAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
@@ -11830,14 +11830,14 @@ fTmesx+A5VC1tNP0J8aBQtX491Eek73kLMcwDDEtTJqqtecmAAA8SimeAONAfwWK5AEAlMvlWNaB
 if(f_start) { select_items = elItems; select_value = selValue; }
 
 //Events for commands process
-for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo("Prescription edit control","Event: "+ev_cur);
-	if(ev_cur == "ws_BtPress:/apply") {
+for(off = 0, ev_rez = ""; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo("Prescription edit control","Event: "+evCur);
+	if(evCur == "ws_BtPress:/apply") {
 		if(select_value.length)	{ selValue = select_value; elEvent += "dlg_Apply\n"; }
 		this.attrSet("pgOpen", false);
 	}
-	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
-	else ev_rez += ev_cur + "\n";
+	else if(evCur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
+	else ev_rez += evCur + "\n";
 }
 event = ev_rez;','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1664089765);
 INSERT INTO wlb_Main VALUES('TextLab','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAXCAIAAAA0gN7GAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
@@ -12332,19 +12332,19 @@ if(f_start || (cntr%(f_frq*3600*24)) == 0)	{	//By day
 }
 
 //Events process
-for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo("MnCntr","Event: "+ev_cur);
-	if(ev_cur == "ws_BtPress:/curDay")	selTime = SYS.time();
-	else if(ev_cur == "ws_CombChange:/year")
+for(ev_rez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo("MnCntr","Event: "+evCur);
+	if(evCur == "ws_BtPress:/curDay")	selTime = SYS.time();
+	else if(evCur == "ws_CombChange:/year")
 		selTime = SYS.mktime(0, 0, 0, selDay, selMonth, year_value, 0, 0, isDst);
-	else if(ev_cur == "ws_CombChange:/month")
+	else if(evCur == "ws_CombChange:/month")
 		selTime = SYS.mktime(0, 0, 0, selDay, (month_value.match("\\((\\d+)\\)","")[1].toInt()-1), selYear, 0, 0, isDst);
-	else if(ev_cur.indexOf("key_mousePresLeft:/w") == 0) {
-		weekWdg = this.wdgAt(ev_cur.slice(19));
+	else if(evCur.indexOf("key_mousePresLeft:/w") == 0) {
+		weekWdg = this.wdgAt(evCur.slice(19));
 		if(weekWdg.attr("text").length)
 			selTime = SYS.mktime(0, 0, 0, weekWdg.attr("text"), selMonth, selYear, 0, 0, isDst);
 	}
-	else ev_rez += (ev_cur+"\n");
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;
 
@@ -13233,13 +13233,13 @@ if(sesUer != this.ownerSess().reqUser()) {
 }
 
 //Events for commands process
-for(ev_rez = "", offEv = 0; (ev_cur=event.parse(0,"\n",offEv)).length; ) {
-	//this.messInfo("Event: "+ev_cur);
-	if(ev_cur == "ws_ListChange:/lib") {
+for(ev_rez = "", offEv = 0; (evCur=event.parse(0,"\n",offEv)).length; ) {
+	//this.messInfo("Event: "+evCur);
+	if(evCur == "ws_ListChange:/lib") {
 		userSel = SYS.mtime();
 		userSelVl = ((userSelVl=lib_value.match("\\((.+)\\)$")).length > 1) ? userSelVl[1] : "";
 	}
-	if(ev_cur == "ws_BtPress:/userAdd") {
+	if(evCur == "ws_BtPress:/userAdd") {
 		if(!userNm_value.length) userNm_value = tr("NewUser");
 		req = SYS.XMLNode("add").setAttr("path","/sub_Security/%2fbr%2fusr_").setText(userNm_value);
 		if(!SYS.cntrReq(req).toInt()) {
@@ -13257,7 +13257,7 @@ for(ev_rez = "", offEv = 0; (ev_cur=event.parse(0,"\n",offEv)).length; ) {
 
 		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/%2fobj"));	//To save all users and groups
 	}
-	else if(ev_cur == "dlg_Apply:/userDel" && userSelVl.length) {
+	else if(evCur == "dlg_Apply:/userDel" && userSelVl.length) {
 		req = SYS.XMLNode("del").setAttr("path","/sub_Security/%2fbr%2fusr_").setText(userSelVl);
 		rez = SYS.cntrReq(req);
 		SYS.messNote("OP:"+this.ownerSess().user()+":{Page}."+this.attr("id"), title_text+" : "+tr("Deleted user \"%1\"").replace("%1",userNm_value));
@@ -13267,26 +13267,26 @@ for(ev_rez = "", offEv = 0; (ev_cur=event.parse(0,"\n",offEv)).length; ) {
 
 		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/%2fobj"));	//To save all groups
 	}
-	else if(ev_cur == "ws_LnAccept:/fullName" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl))) {
+	else if(evCur == "ws_LnAccept:/fullName" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl))) {
 		oIt.cfgSet("DESCR", fullName_value);
 		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/usr_"+userSelVl+"/%2fobj"));
 		SYS.messNote("OP:"+this.ownerSess().user()+":{Page}."+this.attr("id"), title_text+" : "+tr("Set the user \"%1\" for").replace("%1",userSelVl)+" "+tr("Full name")+" : : "+fullName_value);
 		lib_value_ = fullName_value + " ("+userSelVl+")";
 		userLbUpdt = userSel = SYS.mtime()+500;
 	}
-	else if(ev_cur == "ws_TxtAccept:/descr" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl))) {
+	else if(evCur == "ws_TxtAccept:/descr" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl))) {
 		oIt.cfgSet("LONGDESCR", descr_value);
 		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/usr_"+userSelVl+"/%2fobj"));
 		SYS.messNote("OP:"+this.ownerSess().user()+":{Page}."+this.attr("id"), title_text+" : "+tr("Set the user \"%1\" for").replace("%1",userSelVl)+" "+tr("Description")+" : : "+descr_value);
 		userSel = SYS.mtime()+500;
 	}
-	else if(ev_cur == "ws_LnAccept:/pass" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl))) {
+	else if(evCur == "ws_LnAccept:/pass" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl))) {
 		oIt.cfgSet("PASS", pass_value);
 		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/usr_"+userSelVl+"/%2fobj")); 
 		SYS.messNote("OP:"+this.ownerSess().user()+":{Page}."+this.attr("id"), title_text+" : "+tr("Set the user \"%1\" for").replace("%1",userSelVl)+" "+tr("Password")+" : : "+tr("CHANGED"));
 		userSel = SYS.mtime()+500;
 	}
-	else if(ev_cur == "ws_TableChangeSel:/grp" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl)) &&
+	else if(evCur == "ws_TableChangeSel:/grp" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl)) &&
 			grp_value.length && (oIt1=SYS.Security.nodeAt(grp_value))) {
 		grp_value = grp_value.slice(4);
 		SYS.messNote("OP:"+this.ownerSess().user()+":{Page}."+this.attr("id"), title_text+" : "+tr("Set the user \"%1\" for").replace("%1",userSelVl)+" "+(oIt1.user(userSelVl)?tr("Group uncheck"):tr("Group check"))+" : : "+grp_value);
@@ -13297,7 +13297,7 @@ for(ev_rez = "", offEv = 0; (ev_cur=event.parse(0,"\n",offEv)).length; ) {
 		//SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/usr_"+userSelVl+"/%2fobj")); 
 		userSel = SYS.mtime()+500;
 	}
-	else ev_rez += (ev_cur+"\n");
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;
 
@@ -13456,9 +13456,9 @@ vLOCe7sYo6q6azKzXlVDCOiS8zw64F8cQOMAGgfQOIDGATQOoHEAjQNoHEDjABoH0DiAxgE0DqBx
 AI0DaBxA4wAaB9A4gMYBtMsP9OM4ppTQGQfinFsnS3sW9x6K7mUbNIiXdUm9mdVa0YUHpulRnZ/b
 3XeSy/bdyu31EZF9zT9OVjILd/qtqAAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
 //Events for commands process
-for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	if(ev_cur == "ws_BtPress:/apply")	this.attrSet("pgOpen",false);
-	else ev_rez += ev_cur + "\n";
+for(off = 0, ev_rez = ""; (evCur=event.parse(0,"\n",off)).length; ) {
+	if(evCur == "ws_BtPress:/apply")	this.attrSet("pgOpen",false);
+	else ev_rez += evCur + "\n";
 }
 event = ev_rez;','','',500,'owner;name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1677086092);
 INSERT INTO wlb_Main VALUES('storeHouse','iVBORw0KGgoAAAANSUhEUgAAAEAAAAApCAIAAAAK8LgbAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAB
@@ -15726,9 +15726,9 @@ if(f_start) {
 
 curMin = curHour = curDay = curMonth = curYear = 0;
 
-for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; )
-	if(ev_cur == "ws_FocusIn:/doc")	ev_rez += "ws_FocusIn";
-	else ev_rez += ev_cur;
+for(off = 0, ev_rez = ""; (evCur=event.parse(0,"\n",off)).length; )
+	if(evCur == "ws_FocusIn:/doc")	ev_rez += "ws_FocusIn";
+	else ev_rez += evCur;
 event = ev_rez;
 
 //Build the document dynamically
@@ -15811,9 +15811,9 @@ if(f_stop)	return;
 
 curMin = curHour = curDay = curMonth = curYear = 0;
 
-for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; )
-	if(ev_cur == "ws_FocusIn:/doc")	ev_rez += "ws_FocusIn";
-	else ev_rez += ev_cur;
+for(off = 0, ev_rez = ""; (evCur=event.parse(0,"\n",off)).length; )
+	if(evCur == "ws_FocusIn:/doc")	ev_rez += "ws_FocusIn";
+	else ev_rez += evCur;
 event = ev_rez;
 
 //Build the document dynamically
@@ -16126,11 +16126,11 @@ if(f_start) {
 	return;
 }
 
-for(off = 0; (ev_cur=event.parse(0,"\n",off)).length; )
-	//this.messInfo("ev_cur="+ev_cur);
-	if(ev_cur == "ws_CombChange:/year")	toBuild = true;
-	else if(ev_cur == "ws_CombChange:/set_item")	set_val_active = set_item_value.length;
-	else if(ev_cur == "ws_LnAccept:/set_val") {
+for(off = 0; (evCur=event.parse(0,"\n",off)).length; )
+	//this.messInfo("evCur="+evCur);
+	if(evCur == "ws_CombChange:/year")	toBuild = true;
+	else if(evCur == "ws_CombChange:/set_item")	set_val_active = set_item_value.length;
+	else if(evCur == "ws_LnAccept:/set_val") {
 		// Writing the manual input values to the value or message archive
 		for(pO = false, iP = 0; iP < params.length; iP++) {
 			if((pO=params[iP]).name != set_item_value)	continue;
@@ -16487,15 +16487,15 @@ progLbUpdt = progSelPrg = progSelCom = progSelTp = false;
 var comOp = "";
 
 //Events for commands process
-for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo(this.nodePath(),"Event: "+ev_cur);
-	if(ev_cur == "ws_BtPress:/progAdd") {
+for(ev_rez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo(this.nodePath(),"Event: "+evCur);
+	if(evCur == "ws_BtPress:/progAdd") {
 		if(!progNm_value.length) progNm_value = tr("New program");
 		SYS.BD.nodeAt(dbDB,".").SQLReq("INSERT INTO "+dbProgs+" (name) VALUES (''"+progNm_value+"'');");
 		lib_value = progNm_value;
 		progLbUpdt = progSelPrg = progSelCom = true; prog_value = "";
 	}
-	else if(ev_cur == "ws_BtPress:/progCopy") {
+	else if(evCur == "ws_BtPress:/progCopy") {
 		if(!progNm_value.length) progNm_value = tr("New program");
 		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
 		if(rez.length > 1) {
@@ -16504,27 +16504,27 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 			progLbUpdt = progSelPrg = progSelCom = true; prog_value = "";
 		}
 	}
-	else if(ev_cur == "ws_BtPress:/progRename") {
+	else if(evCur == "ws_BtPress:/progRename") {
 		SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET name=''"+progNm_value+"'' WHERE name=''"+lib_value+"'';");
 		lib_value = progNm_value;
 		progLbUpdt = progSelPrg = progSelCom = true; prog_value = "";
 	}
-	else if(ev_cur == "dlg_Apply:/progDel" && lib_value.length) {
-	//else if(ev_cur == "ws_BtPress:/progDel" && lib_value.length) {
+	else if(evCur == "dlg_Apply:/progDel" && lib_value.length) {
+	//else if(evCur == "ws_BtPress:/progDel" && lib_value.length) {
 		SYS.BD.nodeAt(dbDB,".").SQLReq("DELETE FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
 		lib_value = "";
 		progLbUpdt = progSelPrg = true;
 	}
-	else if(ev_cur == "ws_TreeChange:/lib")	{ progSelPrg = progSelCom = true; prog_value = ""; }
-	else if(ev_cur == "ws_BtPress:/comAdd")	comOp = "add";
-	else if(ev_cur == "ws_BtPress:/comIns")	comOp = "ins";
-	else if(ev_cur == "ws_BtPress:/comInAdd")	comOp = "inAdd";
-	else if(ev_cur == "ws_BtPress:/comDel") comOp = "del";
-	else if(ev_cur == "ws_BtPress:/comUp")	comOp = "up";
-	else if(ev_cur == "ws_BtPress:/comDwn") comOp = "dwn";
-	else if(ev_cur == "ws_TreeChange:/prog"){ progSelCom = true; save_active = false; }
-	else if(ev_cur == "ws_CombChange:/type"){ progSelTp = true; save_active = true; }
-	else if(ev_cur == "ws_BtPress:/save" && prog_value.length) {
+	else if(evCur == "ws_TreeChange:/lib")	{ progSelPrg = progSelCom = true; prog_value = ""; }
+	else if(evCur == "ws_BtPress:/comAdd")	comOp = "add";
+	else if(evCur == "ws_BtPress:/comIns")	comOp = "ins";
+	else if(evCur == "ws_BtPress:/comInAdd")	comOp = "inAdd";
+	else if(evCur == "ws_BtPress:/comDel") comOp = "del";
+	else if(evCur == "ws_BtPress:/comUp")	comOp = "up";
+	else if(evCur == "ws_BtPress:/comDwn") comOp = "dwn";
+	else if(evCur == "ws_TreeChange:/prog"){ progSelCom = true; save_active = false; }
+	else if(evCur == "ws_CombChange:/type"){ progSelTp = true; save_active = true; }
+	else if(evCur == "ws_BtPress:/save" && prog_value.length) {
 		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
 		if(rez.length > 1) {
 			comTree = selNd = SYS.XMLNode("prg"); comTree.load(rez[1][0]);
@@ -16553,7 +16553,7 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 		}
 		save_active = false;
 	}
-	else if(ev_cur == "ws_BtPress:/progExport" && lib_value.length) {
+	else if(evCur == "ws_BtPress:/progExport" && lib_value.length) {
 		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
 		if(rez.length > 1) {
 			expTree = SYS.XMLNode("OpenSCADA_Prescr");
@@ -16562,8 +16562,8 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 			progExport_value = tr("Prescription-Program")+" (*.prscr)|"+tr("Prescription file")+"|"+lib_value.replace("/","_")+".prscr\n"+expTree.save(0x05);
 		}
 	} 
-	//else if(ev_cur == "ws_BtPress:/progImport")
-	else if(ev_cur == "ws_BtLoad:/progImport" && progImport_value.length && (pCtx=progImport_value.indexOf("\n")) > 0)
+	//else if(evCur == "ws_BtPress:/progImport")
+	else if(evCur == "ws_BtLoad:/progImport" && progImport_value.length && (pCtx=progImport_value.indexOf("\n")) > 0)
 	{
 		expTree = SYS.XMLNode("OpenSCADA_Prescr");
 		expTree.load(progImport_value.slice(pCtx+1));
@@ -16579,15 +16579,15 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 		}
 		progLbUpdt = progSelPrg = progSelCom = true;
 	}
-	else if(ev_cur == "ws_LnAccept:/name" || ev_cur == "ws_TxtAccept:/descr" || ev_cur == "ws_ChkChange:/backgrnd" || (rez=ev_cur.match("ws_LnAccept:\\/arg(\\d)")).length)	save_active = true;
-	else if((rez=ev_cur.match("ws_FocusOut:\\/arg(\\d)")).length) {
+	else if(evCur == "ws_LnAccept:/name" || evCur == "ws_TxtAccept:/descr" || evCur == "ws_ChkChange:/backgrnd" || (rez=evCur.match("ws_LnAccept:\\/arg(\\d)")).length)	save_active = true;
+	else if((rez=evCur.match("ws_FocusOut:\\/arg(\\d)")).length) {
 		argObj = this["arg"+rez[1]];
 		argVal = argObj.attr("value");
 		if(!argObj.attr("min").isEVal()) argVal = max(argVal,argObj.attr("min"));
 		if(!argObj.attr("max").isEVal()) argVal = min(argVal,argObj.attr("max"));
 		argObj.attrSet("value",argVal);
 	}
-	else ev_rez += (ev_cur+"\n");
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;
 
@@ -16873,24 +16873,24 @@ if(pTxt.length) {
 prCnt++;
 
 //Events for commands process
-for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
-	if(ev_cur == "ws_TreeChange:/lib") {
+for(ev_rez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messDebug("Prescription edit control","Event: "+evCur);
+	if(evCur == "ws_TreeChange:/lib") {
 		prog_vCur = prog_aCur;
 		prExtProg = lib_value;
 	}
-	else if(ev_cur == "ws_BtPress:/btStart") {
+	else if(evCur == "ws_BtPress:/btStart") {
 		if(prExtMode <= 0)	prExtMode = 1;
 		else if(prExtMode == 1)	prExtMode = 2;
 		prog_vCur = prog_aCur;
 	}
-	else if(ev_cur == "ws_BtRelease:/btStart")	prExtMode = 1;
-	else if(ev_cur == "ws_BtPress:/btStop" && prExtMode >= 0) {
+	else if(evCur == "ws_BtRelease:/btStart")	prExtMode = 1;
+	else if(evCur == "ws_BtPress:/btStop" && prExtMode >= 0) {
 		prExtMode = prExtCurCom = 0;
 		prog_vCur = prog_aCur;
 	}
-	else if(ev_cur == "ws_BtPress:/btPass" && (prExtMode == 1 || prExtMode == 2))	prExtMode = 3;
-	else ev_rez += (ev_cur+"\n");
+	else if(evCur == "ws_BtPress:/btPass" && (prExtMode == 1 || prExtMode == 2))	prExtMode = 3;
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;
 
@@ -17058,19 +17058,19 @@ if(pTxt.length)	prog_doc = pTxt;
 prCnt++;
 
 //Events for commands process
-for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo("Prescription edit control","Event: "+ev_cur);
-	//if(ev_cur == "ws_CombChange:/lib") prExtProg = lib_name;
-	//if(ev_cur.slice(0,11) == "ws_BtMenu=/")	prExtProg = ev_cur.slice(11).parse(0,":");
-	if(ev_cur == "dlg_Apply:/lib")	prExtProg = lib_selValue;
-	else if(ev_cur == "ws_BtPress:/btStart") {
+for(ev_rez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo("Prescription edit control","Event: "+evCur);
+	//if(evCur == "ws_CombChange:/lib") prExtProg = lib_name;
+	//if(evCur.slice(0,11) == "ws_BtMenu=/")	prExtProg = evCur.slice(11).parse(0,":");
+	if(evCur == "dlg_Apply:/lib")	prExtProg = lib_selValue;
+	else if(evCur == "ws_BtPress:/btStart") {
 		if(prExtMode <= 0)			prExtMode = 1;
 		else if(prExtMode == 1)	prExtMode = 2;
 	}
-	else if(ev_cur == "ws_BtRelease:/btStart")	prExtMode = 1;
-	else if(ev_cur == "ws_BtPress:/btStop" && prExtMode >= 0)	prExtMode = prExtCurCom = 0;
-	else if(ev_cur == "ws_BtPress:/btPass" && (prExtMode == 1 || prExtMode == 2))	prExtMode = 3;
-	else ev_rez += (ev_cur+"\n");
+	else if(evCur == "ws_BtRelease:/btStart")	prExtMode = 1;
+	else if(evCur == "ws_BtPress:/btStop" && prExtMode >= 0)	prExtMode = prExtCurCom = 0;
+	else if(evCur == "ws_BtPress:/btPass" && (prExtMode == 1 || prExtMode == 2))	prExtMode = 3;
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;
 

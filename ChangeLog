@@ -1,3 +1,15 @@
+2024-06-03 Roman (stable)
+- FIX:LibsDB.OscadaLibs: tmplib_base.weather: Fixed in guaranty receiving the hourly data at the connection problems.
+- FIX:DAQ.JavaLikeCalk: Some improved in the translation.
+- LibsDB.vcaBase: wlb_Main.{grpGraph,grpCadr,doc_panel,grph_panel,prescrEdit,prescrRun,prescrRunSimple,accept,treeSelect,calendar,
+	userManager,alarmsStReport,docRepDay,docRepMonth,docRepYear},wlb_prescr.{prescrEdit,prescrRun,prescrRunSimple}:
+    The variable ev_cur renamed to evCur.
+- SYS: XMLNodeObj::getElementsBy() and its UserAPI variant expanded by arguments "limit" and "from" of the XML-tree partial processing.
+- FIX:UI.{QTCfg,Vision}: The messages "Load from DB" and "Save to DB" renamed to "Load" and "Save"
+    and with "storage" instead "DB" in full messages.
+- FIX:UI.WebUser: Appended of disabling the page node at changing language/template.
+
+
 2024-05-13 Roman (stable)
 - UI.{QTStarter,QTCfg,Vision}: The "About ..." help item appended by Qt version.
 - UI.{QTCfg,Vision}: The ComboBox fields appended by locking mouse wheel forcibly for QTCfg and at no focus for Vision in runtime,

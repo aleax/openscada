@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/API</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint nomobile" dir="ltr" lang="en">This page contains <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Documents/API&amp;oldid=85475&amp;diff=87043" rel="nofollow noreferrer noopener" target="_blank">changes</a></span> which are not marked for translation.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/API.html" title="Документы/API (2% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../uk/API.html" title="Документи/API (32% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/API.html" title="Документы/API (2% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../uk/API.html" title="Документи/API (32% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
@@ -4245,7 +4245,7 @@ Options for XML-file loading (enum — XMLNode::LoadFlgs):
 <li> <i>XMLNode* childGet( const string &amp;name, const int numb = 0, bool noex = false ) const;</i> — Getting of the included <i>numb</i> indexed tag by the tag's name <i>name</i>. <i>noex</i> indicates the prohibition of the generation of exception in the case of absence of the tag.</li>
 <li> <i>XMLNode* childGet( const string &amp;attr, const string &amp;vl, bool noex = false ) const;</i> — Getting the included <i>numb</i> indexed tag by its value <i>vl</i> of the attribute <i>attr</i>. <i>noex</i> indicates the prohibition of the generation of exception in the case of absence of the tag.</li>
 <li> <i>XMLNode* getElementBy( const string &amp;attr, const string &amp;val );</i> — Included node search by the value <i>val</i> of the attribute <i>attr</i>.</li>
-<li> <i>void getElementsBy( const string &amp;tag, const string &amp;attr, const string &amp;val, TArrayObj *rez );</i> — get elements array <i>rez</i> from the tree by <i>tag</i> (empty for all) and attribute <i>attr</i> value <i>val</i> (empty for pass).</li>
+<li> <i>void getElementsBy( const string &amp;tag, const string &amp;attr, const string &amp;val, TArrayObj *rez, unsigned limit = 0, unsigned *from = NULL );</i> — get elements array <i>rez</i> from the tree by <i>tag</i> (empty for all) and attribute <i>attr</i> value <i>val</i> (empty for pass), also starting the tag number <i>from</i> and limiting them number in <i>limit</i> (zero for no limit).</li>
 <li> <i>XMLNode* parent( );</i> — Parent tag of the tag.</li>
 <li> <i>XMLNode* root( );</i> — Root tag of the tag.</li></ul>
 <h3><span class="mw-headline" id="Error_exception_.28TError.29"><span class="mw-headline-number">16.2</span> <span id="TError" title="#TError">Error exception (TError)</span></span></h3>
@@ -5009,5 +5009,5 @@ Error codes (enum — TError::Codes):
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2966</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2970</td></tr></table></body>
 </html>

@@ -404,7 +404,7 @@
 <dd>0x200 — does not encode the attribute;</dd>
 <dd>0x400 — shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F] and wrong UTF-8.</dd></dl></dd></dl>
 <ul><li> <i>XMLNodeObj getElementBy( string val, string attr = "id" )</i> — gets an element from the tree by the attribute <i>attr</i> in value <i>val</i>.</li>
-<li> <i>TArrayObj&lt;XMLNodeObj&gt; getElementsBy( string tag, string attrVal = "", string attr = "id" )</i> — gets an elements array from the tree by the <i>tag</i> (empty for all) and attribute <i>attr</i> in value <i>attrVal</i> (empty for pass).</li></ul>
+<li> <i>TArrayObj&lt;XMLNodeObj&gt; getElementsBy( string tag, string attrVal = "", string attr = "id", int limit = 0, int from = 0 )</i> — gets an elements array from the tree by the <i>tag</i> (empty for all) and attribute <i>attr</i> in value <i>attrVal</i> (empty for pass), also starting the tag number <i>from</i> and limiting them number in <i>limit</i> (zero for no limit).</li></ul>
 <h2><span class="mw-headline" id="Program-system_.28SYS.29"><span class="mw-headline-number">3</span> <span id="SYS" title="#SYS">Program-system (SYS)</span></span></h2>
 <p>Object functions:
 </p>
@@ -1018,5 +1018,5 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/ru">Documents/User_API/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2966</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/ru">Documents/User_API/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2970</td></tr></table></body>
 </html>
