@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-13 08:00+0300\n"
+"POT-Creation-Date: 2024-06-02 23:04+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -102,52 +102,52 @@ msgstr ""
 msgid "Press for going to the forward page."
 msgstr ""
 
-msgid "Load from DB"
+msgid "Load"
 msgstr ""
 
-msgid "Load the item data from DB"
+msgid "Load the item data"
 msgstr ""
 
-msgid "The button for loading the item data from DB"
+msgid "The button for loading the item data from storage"
 msgstr ""
 
-msgid "Press for loading the item data from DB."
+msgid "Press for loading the item data from storage."
 msgstr ""
 
-msgid "Load from DB forcibly"
+msgid "Load forcibly"
 msgstr ""
 
-msgid "Load the item data from DB forcibly"
+msgid "Load the item data forcibly"
 msgstr ""
 
-msgid "The button for loading the item data from DB forcibly, not only when it changed"
+msgid "The button for loading the item data from storage forcibly, not only when it changed"
 msgstr ""
 
-msgid "Press for loading the item data from DB forcibly, not only when it changed."
+msgid "Press for loading the item data from storage forcibly, not only when it changed."
 msgstr ""
 
-msgid "Save to DB"
+msgid "Save"
 msgstr ""
 
-msgid "Save the item data to DB"
+msgid "Save the item data"
 msgstr ""
 
-msgid "The button for saving the item data to DB"
+msgid "The button for saving the item data to storage"
 msgstr ""
 
-msgid "Press for saving the item data to DB."
+msgid "Press for saving the item data to storage."
 msgstr ""
 
-msgid "Save to DB forcibly"
+msgid "Save forcibly"
 msgstr ""
 
-msgid "Save the item data to DB forcibly"
+msgid "Save the item data forcibly"
 msgstr ""
 
-msgid "The button for saving the item data to DB forcibly, not only when it changed"
+msgid "The button for saving the item data to storage forcibly, not only when it changed"
 msgstr ""
 
-msgid "Press for saving the item data to DB forcibly, not only when it changed."
+msgid "Press for saving the item data to storage forcibly, not only when it changed."
 msgstr ""
 
 msgid "&Add"
@@ -366,7 +366,7 @@ msgstr ""
 
 msgid ""
 "Some changes were made!\n"
-"Save the changes to the DB before exiting?"
+"Save the changes to storage before exiting?"
 msgstr ""
 
 msgid "No edited container is present."

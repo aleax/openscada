@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-13 08:00+0300\n"
+"POT-Creation-Date: 2024-06-02 23:04+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -100,63 +100,79 @@ msgstr "Кнопка перехода на следующую страницу"
 msgid "Press for going to the forward page."
 msgstr "Нажать для перехода на следующую страницу."
 
-msgid "Load from DB"
-msgstr "Загрузить из БД"
+msgid "Load"
+msgstr ""
 
-msgid "Load the item data from DB"
+#, fuzzy
+msgid "Load the item data"
 msgstr "Загрузить данные элемента из БД"
 
-msgid "The button for loading the item data from DB"
+#, fuzzy
+msgid "The button for loading the item data from storage"
 msgstr "Кнопка загрузки данных элемента из БД"
 
-msgid "Press for loading the item data from DB."
+#, fuzzy
+msgid "Press for loading the item data from storage."
 msgstr "Нажать для загрузки данных элемента из БД."
 
-msgid "Load from DB forcibly"
+#, fuzzy
+msgid "Load forcibly"
 msgstr "Принудительно загрузить из БД"
 
-msgid "Load the item data from DB forcibly"
+#, fuzzy
+msgid "Load the item data forcibly"
 msgstr "Принудительно загрузить данные элемента из БД"
 
+#, fuzzy
 msgid ""
-"The button for loading the item data from DB forcibly, not only when it "
+"The button for loading the item data from storage forcibly, not only when it "
 "changed"
 msgstr ""
 "Кнопка принудительной загрузки данных элемента из БД, не только когда "
 "изменено"
 
+#, fuzzy
 msgid ""
-"Press for loading the item data from DB forcibly, not only when it changed."
+"Press for loading the item data from storage forcibly, not only when it "
+"changed."
 msgstr ""
 "Нажать для принудительной загрузки данных элемента из БД, не только когда "
 "изменено."
 
-msgid "Save to DB"
-msgstr "Сохранить в БД"
+msgid "Save"
+msgstr ""
 
-msgid "Save the item data to DB"
+#, fuzzy
+msgid "Save the item data"
 msgstr "Сохранить данные элемента в БД"
 
-msgid "The button for saving the item data to DB"
+#, fuzzy
+msgid "The button for saving the item data to storage"
 msgstr "Кнопка сохранения данных элемента в БД"
 
-msgid "Press for saving the item data to DB."
+#, fuzzy
+msgid "Press for saving the item data to storage."
 msgstr "Нажать для сохранения данных элемента в БД."
 
-msgid "Save to DB forcibly"
+#, fuzzy
+msgid "Save forcibly"
 msgstr "Принудительно сохранить в БД"
 
-msgid "Save the item data to DB forcibly"
+#, fuzzy
+msgid "Save the item data forcibly"
 msgstr "Принудительно сохранить данные элемента в БД"
 
+#, fuzzy
 msgid ""
-"The button for saving the item data to DB forcibly, not only when it changed"
+"The button for saving the item data to storage forcibly, not only when it "
+"changed"
 msgstr ""
 "Кнопка принудительного сохранения данных элемента в БД, не только когда "
 "изменено"
 
+#, fuzzy
 msgid ""
-"Press for saving the item data to DB forcibly, not only when it changed."
+"Press for saving the item data to storage forcibly, not only when it changed."
 msgstr ""
 "Нажать для принудительного сохранения данных элемента в БД, не только когда "
 "изменено."
@@ -383,9 +399,10 @@ msgstr "Кнопка вызова истории строки статуса."
 msgid "Saving the changes"
 msgstr "Сохранение изменений."
 
+#, fuzzy
 msgid ""
 "Some changes were made!\n"
-"Save the changes to the DB before exiting?"
+"Save the changes to storage before exiting?"
 msgstr ""
 "Были сделаны некоторые изменения.\n"
 "Сохранить изменения в БД при выходе?"
@@ -454,6 +471,7 @@ msgstr "Список сообщений строки статуса:"
 msgid "Status messages"
 msgstr "Сообщения статуса"
 
+#, c-format
 msgid ""
 "%s v%s on Qt v%s.\n"
 "%s\n"
@@ -832,3 +850,9 @@ msgstr "QTCfg диалог"
 
 msgid "Selecting the identifier and the name of the node"
 msgstr "Выбор идентификатора и имени узла"
+
+#~ msgid "Load from DB"
+#~ msgstr "Загрузить из БД"
+
+#~ msgid "Save to DB"
+#~ msgstr "Сохранить в БД"

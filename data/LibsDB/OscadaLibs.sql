@@ -298,10 +298,11 @@ INSERT INTO flb_servProc_io VALUES('archPackFStests','archiver','Archiver addres
 INSERT INTO flb_servProc_io VALUES('wacko2media','ndb','MySQL DB id',0,0,'wiki',0,0,'','','','');
 INSERT INTO flb_servProc_io VALUES('wacko2media','wpg','Wiki page',0,0,'HomePageUk/Doc/SQLite',0,1,'','','','');
 INSERT INTO flb_servProc_io VALUES('wacko2media','rez','Result',0,6,'',0,2,'Результат','','Результат','');
-INSERT INTO flb_servProc_io VALUES('docOffLine','resDir','Results directory',0,0,'/home/roman/ext/OpenSCADA/Work/doc/',0,2,'','','','');
+INSERT INTO flb_servProc_io VALUES('docOffLine','resDir','Results directory',0,0,'/home/roman/ext/OpenSCADA/openscada_0.9/doc/',0,2,'','','','');
 INSERT INTO flb_servProc_io VALUES('docOffLine','pages','Pages list
 Rows in the form "{wiki}:{langs}:{dest}".',0,4,'Documents:en,uk,ru:index.html
 Documents/Release_0.9:en,uk,ru:Release_0.9.html
+Documents/Release_0.9/Updating_0.8.0_LTS:en,uk,ru:Updating_0.8.0.html
 Works/Technical_Support/Agreement:en,uk,ru:Technical_Support_Agreement.html
 About:en,uk,ru:About.html
 Documents/Terms:en,uk,ru:Terms.html

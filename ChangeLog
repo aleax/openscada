@@ -1,4 +1,9 @@
 2024-06-02 Roman 0.9.7.1
+- FIX:LibsDB.OscadaLibs: Restoring place of the offline documentation.
+- UI.QTCfg: Updating the translation.
+
+
+2024-06-02 Roman 0.9.7.1
 - FIX:LibsDB.OscadaLibs: tmplib_base.weather: Fixed in guaranty receiving the hourly data at the connection problems.
 - FIX:DAQ.JavaLikeCalk: Some improved in the translation.
 - FIX:UI.{QTStarter,QTCfg,Vision}: The "About ..." help item appended by Qt version.
