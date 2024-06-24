@@ -2245,12 +2245,11 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 
 	int64_t c_tm = buf.begin();
 	if(buf.end() && buf.begin())
-	    while(c_tm <= buf.end()) {
+	    for(time_t stTm = SYS->sysTm(); c_tm <= buf.end() && (SYS->sysTm()-stTm) < prmInterf_TM; c_tm++) {
 	        string val = buf.getS(&c_tm, true);
 		if(n_tm) n_tm->childIns(0,"el")->setText(i2s(c_tm/1000000));
 		if(n_tm) n_utm->childIns(0,"el")->setText(i2s(c_tm%1000000));
 		if(n_val)n_val->childIns(0,"el")->setText(val);
-		c_tm++;
 	    }
     }
     else if(a_path == "/val/trend" && ctrChkNode(opt,"get",R_R_R_,"root",SARH_ID,SEC_RD)) {

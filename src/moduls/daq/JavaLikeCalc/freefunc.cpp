@@ -1550,10 +1550,10 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    if(beg >= end) return string("");
 		    return vl.getS().substr(beg,end-beg);
 		}
-		// Array split( string sep, int limit ) - return the array of strings separated by <sep> with the limit of the number of elements <limit>.
-		//  sep - items separator
-		//  limit - items limit
-		// Array split( RegExp pat, int limit ) - return the array of strings separated by RegExp pattern <pat> with the limit of the number of elements <limit>.
+		// Array split( string sep, int limit = 0 ) - return the array of strings separated by <sep> with the limit of the number of elements <limit>.
+		//  sep - items separator;
+		//  limit - items limit, 0 - for no limit.
+		// Array split( RegExp pat, int limit = 0 ) - return the array of strings separated by RegExp pattern <pat> with the limit of the number of elements <limit>.
 		//  pat - regular expression pattern.
 		if(prop == "split" && prms.size()) {
 		    //  Use RegExp for split
@@ -1563,7 +1563,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    //  Use simple string separator
 		    TArrayObj *rez = new TArrayObj();
 		    for(size_t posB = 0, posC, iP = 0; true; iP++) {
-			if(prms.size() > 1 && rez->size() >= prms[1].getI()) break;
+			if(prms.size() > 1 && prms[1].getI() && rez->size() >= prms[1].getI()) break;
 			posC = vl.getS().find(prms[0].getS(),posB);
 			if(posC != posB) rez->arSet(iP, vl.getS().substr(posB,posC-posB));
 			if(posC == string::npos) break;

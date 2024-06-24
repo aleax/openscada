@@ -40,13 +40,13 @@ INSERT INTO ParamTemplLibs VALUES('DevLib','Industrial devices','Промисл�
 
 Author: Roman Savochenko <roman@oscada.org>, Constantine (IrmIngeneer) (2018), Arsen Zakojan (2017), Ruslan Yarmoliuk (2017)
 Founded: January 2010
-Version: 3.0.0
+Version: 3.0.1
 License: GPLv2
 DOC: Libs_Devices|Libs/Devices','Бібліотеку пристроїв користувацьких протоколів створено для надання доступу до даних промислових пристроїв через мережу із доволі простим протоколом, на кшталт пристроїв загальної промислової автоматики та лічильників різних ресурсів, із протоколом достатньо простим до реалізації у модулі користувацького протоколу, з використанням наявних комплексних протоколів (ModBus, OPC_UA, HTTP) або безпосередньо на внутрішній мові подібній до Java.
 
 Автор: Роман Савоченко <roman@oscada.org>, Константин (IrmIngeneer) (2018), Арсен Закоян (2017), Руслан Ярмолюк (2017)
 Засновано: Січень 2010
-Версія: 3.0.0
+Версія: 3.0.1
 Ліцензія: GPLv2
 DOC: Libs_Devices|Libs/Devices','tmplib_DevLib','Промышленные устройства','');
 INSERT INTO ParamTemplLibs VALUES('PrescrTempl','Prescriptions','Рецепти','The library is created to provide an environment of execution of scenarios of the technological operations — prescriptions, and frames of the user interface about them, including the frame of creation/edition the prescriptions and two frames of the execution control and reporting — "Prescription — run" and "Prescription — run, simple". The library is built on the basis primitives of the widgets and the internal programming language JavaLikeCalc, including templates and commands.
@@ -94,7 +94,7 @@ The template''s names and their parameters are available in languages: English, 
 
 Author: Roman Savochenko <roman@oscada.org>, Arcadiy Kisel (2017)
 Founded: Jul 2016
-Version: 1.5.0
+Version: 1.6.1
 License: GPLv2
 DOC: Libs_LowLevelDevices|Libs/LowLevelDevices','Бібліотека шаблонів надання доступу до даних пристроїв низькорівневих шин.
 
@@ -104,7 +104,7 @@ DOC: Libs_LowLevelDevices|Libs/LowLevelDevices','Бібліотека шабло
 
 Автор: Роман Савоченко <roman@oscada.org>, Аркадій Кисіль (2017)
 Засновано: Липень 2016
-Версія: 1.5.0
+Версія: 1.6.1
 Ліцензія: GPLv2
 DOC: Libs_LowLevelDevices|Libs/LowLevelDevices','tmplib_LowDevLib','Низкоуровневые устройства','Библиотека шаблонов предоставления доступа к данным устройств низкоуровневых шин.
 
@@ -114,7 +114,7 @@ DOC: Libs_LowLevelDevices|Libs/LowLevelDevices','tmplib_LowDevLib','Низкоу
 
 Автор: Роман Савоченко <roman@oscada.org>, Аркадий Кысиль (2017)
 Основано: Июль 2016
-Версия: 1.5.0
+Версия: 1.6.1
 Лицензия: GPLv2
 DOC: Libs_LowLevelDevices|Libs/LowLevelDevices');
 CREATE TABLE IF NOT EXISTS 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
@@ -5910,7 +5910,7 @@ The main data are ones transferred by the packages with indexed parameters: B16 
 Author: Roman Savochenko <roman@oscada.org>
 Total complexity: 3.0 HD
 Sponsored by: Vinnica Poultry Farm
-Version: 1.0.0
+Version: 1.1.0
 License: GPLv2','','',240,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(data, toWait) {
@@ -5957,6 +5957,7 @@ function setEVAL( )
 
 if(f_start || f_stop)	{
 	cntRecon = 0;
+	initSeq_ = "";
 	toInit = true;
 	custSign_ = "";
 	custSignO = null;
@@ -5986,20 +5987,24 @@ tErr = stStr = "";
 
 if(!(tr=SYS.Transport.outAt(transport)) || !tr.start(true))
 	tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
-else if(toInit) {
-	cntPkgB16 = cntPkgB20 = 0;
+else if(toInit || initSeq != initSeq_) {
+	cntPkgB8 = cntPkgB12 = cntPkgB20 = 0;
 	pkgTm = SYS.time();
 
 	//Restarting
 	tr.start(false); tr.start(true);
 
-	req(SYS.strEncode("2c 00 00 00 00 00 00 ff 03 00 00 00 00 00 00 00 "
-		"00 00 00 00 00 00 00 00 00 00 ff ff ff fe 42 01 "
-		"00 00 00 00"),
+	if(!initSeq.length)
+		initSeq = "2c 00 00 00 00 00 00 ff 03 00 00 00 00 00 00 00 "
+			"00 00 00 00 00 00 00 00 00 00 ff ff ff fe 42 01 "
+			"00 00 00 00";
+
+	req(SYS.strEncode(initSeq),
 		SYS.strEncode("00 00 00 00 2c 00 00 00 00 00 00 00"));
 
 	buf = ""; bOff = 0;
 	toInit = false;
+	initSeq_ = initSeq;
 }
 //No data - reconnect
 else if((SYS.time()-pkgTm) > tmCon) { toInit = true; pkgTm = SYS.time(); setEVAL(); cntRecon++; }
@@ -6014,36 +6019,55 @@ else {
 			buf = ""; bOff = 0;
 			break;
 		}
-		p16 = buf.indexOf(SYS.strFromCharCode(0x6A,0x00), bOff);
-		p20 = buf.indexOf(SYS.strFromCharCode(0x66,0x00), bOff);
-		if(p20 >= 0 || p16 >= 0) {
-			if(p20 >= 0 && buf.length >= (p20+20) && (p16 < 0 || p20 < p16)) {
-				cntPkgB20++;
-				io = Special.FLibSYS.IO(buf);
-				io.pos = p20+2; fId = io.read("uint16", 1);
-				vBuf["B20_"+fId+"_1"] = io.read("float", 1);
-				vBuf["B20_"+fId+"_2"] = io.read("float", 1);
-				vBuf["B20_"+fId+"_3"] = io.read("float", 1);
-				vBuf["B20_"+fId+"_4"] = io.read("float", 1);
-				bOff = p20+20;
-			}
-			else if(p16 >= 0 && buf.length >= (p16+16)) {
-				cntPkgB16++;
-				io = Special.FLibSYS.IO(buf);
-				io.pos = p16+2;	vBuf["B16_"+io.read("uint16",1)] = io.read("float", 1);
-				io.pos += 2;	vBuf["B16_"+io.read("uint16",1)] = io.read("float", 1);
-				bOff = p16+16;
-			}
-			else { buf = "", bOff = 0; continue; }	//Not whole package, but the buffer cleaning
+		if((buf.length-bOff) < 20)	continue;	//Wait more data
+		sign = buf.slice(bOff, bOff+2);
+		if(sign == "\x6A\x00") {			//B8
+			cntPkgB8++;
+			io = Special.FLibSYS.IO(buf);
+			io.pos = bOff+2;	vBuf["B8_"+io.read("uint16",1)] = io.read("float", 1);
+			bOff += 8;
 		}
-		else buf = "", bOff = 0;
+		else if(sign == "\x74\x00") {	//B8_2
+			cntPkgB8++;
+			io = Special.FLibSYS.IO(buf);
+			io.pos = bOff+2;	vBuf["B8_"+io.read("uint16",1)+"_2"] = io.read("float", 1);
+			bOff += 8;
+		}
+		else if(sign == "\x6E\x00") {	//B8_3
+			cntPkgB8++;
+			io = Special.FLibSYS.IO(buf);
+			io.pos = bOff+2;	vBuf["B8_"+io.read("uint16",1)+"_3"] = io.read("float", 1);
+			bOff += 8;
+		}
+		else if(sign == "\x6F\x00" || sign == "\x71\x00") {	//B12
+			cntPkgB12++;
+			io = Special.FLibSYS.IO(buf);
+			io.pos = bOff+2; fId = io.read("uint16", 1);
+			vBuf["B12_"+fId+"_1"] = io.read("float", 1);
+			vBuf["B12_"+fId+"_2"] = io.read("float", 1);
+			bOff += 12;
+		}
+		else if(sign == "\x66\x00") {	//B20
+			cntPkgB20++;
+			io = Special.FLibSYS.IO(buf);
+			io.pos = bOff+2; fId = io.read("uint16", 1);
+			vBuf["B20_"+fId+"_1"] = io.read("float", 1);
+			vBuf["B20_"+fId+"_2"] = io.read("float", 1);
+			vBuf["B20_"+fId+"_3"] = io.read("float", 1);
+			vBuf["B20_"+fId+"_4"] = io.read("float", 1);
+			bOff += 20;
+		}
+		else {
+			SYS.messInfo("/VSE002/"+this.nodePath(), "Unknown package: "+SYS.strDecode(buf.slice(bOff,bOff+32),"Bin"," "));
+			buf = "", bOff = 0; continue;
+		}
 	}
 
 	buf = buf.slice(bOff); bOff = 0;
 
 	for(var iV in vBuf) setVal(iV, vBuf[iV]);
 
-	stStr = "Buffer="+buf.length+"; packages 16B="+cntPkgB16+", 20B="+cntPkgB20+"; reconnections="+cntRecon+", time="+SYS.strftime(pkgTm)+", left to reset="+(tmCon-(SYS.time()-pkgTm));
+	stStr = "Buffer="+buf.length+"; packages 8B="+cntPkgB8+", 12B="+cntPkgB12+", 20B="+cntPkgB20+"; reconnections="+cntRecon+", time="+SYS.strftime(pkgTm)+", left to reset="+(tmCon-(SYS.time()-pkgTm));
 }
 
 //Error set
@@ -6054,7 +6078,7 @@ if(tErr.toInt()) {
 		SYS.messDebug("/VSE002/"+this.cfg("SHIFR"), tr("Error")+": "+tErr);
 	if(stStr.length)	tErr += " " + stStr;
 } else if(stStr.length)	tErr += ":" + stStr;
-f_err = tErr;','','',1707747850);
+f_err = tErr;','','',1719161021);
 INSERT INTO tmplib_DevLib VALUES('Goboy1M','Goboy 1M','','','The template implements support for Goboy 1M Gas Counters.
 
 Communication protocol of the devices is based on ModBus but it implements only nonstandard functions.
@@ -16837,11 +16861,11 @@ INSERT INTO tmplib_DevLib_io VALUES('Incubator','this','Object',4,0,'',6,'Объ
 INSERT INTO tmplib_DevLib_io VALUES('VSE002','transport','Transport',0,64,'Sockets.VSE:10.63.42.224:3321',0,'Транспорт','','Транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('VSE002','tmCon','Reconnection time, in seconds',1,64,'10',1,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('VSE002','custSign','User signals
-in the format — "{code}:{id}:{mult}"',0,36,'',2,'','','Корист. сигнали
+in the format — "{code}:{id}:{mult}"',0,36,'',3,'','','Корист. сигнали
 У форматі — "{code}:{id}:{mult}"','','');
-INSERT INTO tmplib_DevLib_io VALUES('VSE002','tr','Output transport',4,1,'',3,'Выходной транспорт','','Вихідний транспорт','','');
-INSERT INTO tmplib_DevLib_io VALUES('VSE002','custSignO','Object of the user signals',4,1,'',4,'','','Об''єкт корист. сигналів','','');
-INSERT INTO tmplib_DevLib_io VALUES('VSE002','this','Object',4,0,'',5,'Объект','','Об''єкт','','');
+INSERT INTO tmplib_DevLib_io VALUES('VSE002','tr','Output transport',4,1,'',4,'Выходной транспорт','','Вихідний транспорт','','');
+INSERT INTO tmplib_DevLib_io VALUES('VSE002','custSignO','Object of the user signals',4,1,'',5,'','','Об''єкт корист. сигналів','','');
+INSERT INTO tmplib_DevLib_io VALUES('VSE002','this','Object',4,0,'',6,'Объект','','Об''єкт','','');
 INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','transport','Transport',0,64,'Serial.goboy',0,'Транспорт','','Transport','','');
 INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','addr','Device address [0...247]',1,64,'1',1,'Адрес устройства [0...247]','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',2,'','','','','');
@@ -17040,6 +17064,9 @@ INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','vWork','Volume: work (history)',2
 INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','vResult','Volume: resume (history)',2,16,'',12,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','arhs','Archives object',4,1,'',13,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','this','Object',4,0,'',14,'Объект','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('VSE002','initSeq','Initiation sequence',0,68,'2c 00 00 00 00 00 00 ff 03 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 ff ff ff fe 42 01
+00 00 00 00',2,'','','Ініціююча послідовність','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_LowDevLib_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '0' ,"FLAGS" INTEGER DEFAULT '0' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '0' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_LowDevLib_io VALUES('1602A','transport','Transport of the I2C, Serial (i2c) or
 GPIO address with function put(), mostly it''s BCM2835 (DAQ.BCM2835.pi.pi)',0,64,'i2c',0,'','','','','');
@@ -17161,7 +17188,7 @@ INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','grpClear','Group clear',3,32,''
 INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','dev','Device to bind
 Like to "98:D3:31:F8:52:29" for binding by "rfcomm bind {N} 98:D3:31:F8:52:29".',0,64,'',1,'Пристрій для зв''язування
 На кшталт "98:D3:31:F8:52:29" для зв''язування за допомогою "rfcomm bind {N} 98:D3:31:F8:52:29".','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','transport','Transport',0,64,'Serial.UC96:/dev/rfcomm0:9600||1000:40-20',0,'Транспорт','Транспорт','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','transport','Transport',0,64,'Serial.UC96:/dev/rfcomm1:9600||1000:40-20',0,'Транспорт','Транспорт','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','dev','Device to bind
 Like to "58:F4:04:33:D5:FD" for binding by "rfcomm bind {N} 58:F4:04:33:D5:FD".',0,64,'',1,'Пристрій для зв''язування
 На кшталт "58:F4:04:33:D5:FD" для зв''язування за допомогою "rfcomm bind {N} 58:F4:04:33:D5:FD".','','','','');
@@ -17176,6 +17203,21 @@ INSERT INTO tmplib_LowDevLib_io VALUES('UC96','this','Object',4,0,'',12,'Об''�
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','W','Watts',2,16,'',5,'Вати','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','noDataTm','No data detection time, seconds',1,64,'60',2,'Час виявлення відсутності даних, секунд','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','R','Resistance, Om',2,16,'',6,'Опір, Ом','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','transport','Transport',0,64,'Serial.S1BP:/dev/rfcomm2:9600||1000:40-20',0,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','dev','Device to bind
+Like to "40:2B:6D:EF:48:A7" for binding by "rfcomm bind {N} 40:2B:6D:EF:48:A7".',0,64,'',1,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','noDataTm','No data detection time, seconds',1,64,'60',2,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','V','Volts',2,16,'',3,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','A','Amperes',2,16,'',4,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','W','Watts',2,16,'',5,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','T','Temperature, °С',1,16,'',9,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','Tm','Time, seconds',1,16,'',10,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','clear','Clear',3,32,'',11,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','this','Object',4,0,'',13,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','KWh','Capacity, KWh',2,16,'',6,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','Hz','Frequency, Hz',2,16,'',7,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','Pf','Factor, Pf',2,16,'',8,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','power','Power mode switch Off/Auto/On',3,32,'',12,'Power mode switch Off/Auto/On','','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_tests_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_tests_io VALUES('ai_simple','val_cod','Value''s source code',1,128,'',0,'Вихідний код значення','','Исходный код значения','','');
 INSERT INTO tmplib_tests_io VALUES('ai_simple','val','Value',2,16,'0',1,'Значення','','Значение','','Вредност');
@@ -19596,7 +19638,7 @@ The device sends data packages not at a request and just after establishing the 
 
 Author: Roman Savochenko <roman@oscada.org>
 Total complexity: 0.3 HD
-Version: 1.0.0
+Version: 1.0.1
 License: GPLv2','Шаблон BlueTooth інтерфейсу ATORCH UC96.
 
 ATORCH UC96 є недорогим пристроєм вимірювання прохідної потужності на USB із багатьма інтерфейсами і підтримкою достатньої колекції властивостей, як і контролем через Bluetooth. Цей шаблон реалізує лише команду очищення даних і збір даних через Bluetooth інтерфейс пристрою.
@@ -19605,7 +19647,7 @@ ATORCH UC96 є недорогим пристроєм вимірювання пр
 
 Автор: Роман Савоченко <roman@oscada.org>
 Загальна працемісткість: 0.3 ЛД
-Версія: 1.0.0
+Версія: 1.0.1
 Ліцензія: GPLv2',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	isBound = -1;
@@ -19678,5 +19720,74 @@ if(tErr.length) {
 	f_err = tErr + " ";
 	V = A = W = R = T = Ah = Wh = Tm = EVAL;
 } else f_err = "0:";
-f_err += tr("Reconnects %1, left %2s.").replace("%1",conCntr.toString()).replace("%2",(noDataTm-(SYS.time()-dataTm)).toString());','',1700566287);
+f_err += tr("Reconnects %1, left %2s.").replace("%1",conCntr.toString()).replace("%2",(noDataTm-(SYS.time()-dataTm)).toString());','',1718391021);
+INSERT INTO tmplib_LowDevLib VALUES('S1BP','BT: ATORCH S1BP','','ATORCH S1BP BlueTooth interface template.
+...','',10,0,'JavaLikeCalc.JavaScript
+if(f_start) {
+	isBound = -1;
+	tr = false;
+	dataTm = SYS.time();
+	V = A = W = R = T = Ah = Wh = Tm = EVAL;
+	clear = power = false;
+	conCntr = 0;
+}
+
+tErr = "";
+
+if(f_stop || (tr && (SYS.time()-dataTm) > noDataTm)) {
+	conCntr++;
+	dataTm = SYS.time();
+	if(tr) tr.start(false);
+	if(isBound >= 0)	{ SYS.system("rfcomm release "+isBound, true); isBound = -1; }
+
+	tErr = "2:"+tr("No data, reconnection. Switch to the first screen of the device for the data receive!");
+	V = A = W = KWh = Hz = Pf = T = Tm = EVAL;
+}
+else {
+	if(isBound < 0 && dev.match("^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$").length &&
+			(tVl=transport.match("/dev/rfcomm(\\d)")).length && SYS.system("rfcomm bind "+tVl[1]+" "+dev,true) == 0)
+		isBound = tVl[1];
+
+	if(!(tr=SYS.Transport.outAt(transport)) || !tr.start(true))
+		tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+	else {
+		for(ibuf = tr.messIO("",-10e-3); ibuf.length && ibuf.length < 36 &&
+				ibuf.slice(-6,-1) != "\x3C\x00\x00\x00\x00" && (rd=tr.messIO()).length; )
+			ibuf += rd;
+
+		while(ibuf.length)
+			if(ibuf.slice(0,5) == "\xFF\x55\x01\x01\x00" && ibuf.length >= 36 &&
+				ibuf.slice(30,30+5) == "\x3C\x00\x00\x00\x00")
+			{
+				dataTm = SYS.time();
+				data = ibuf.slice(0, 36);
+				//SYS.messInfo("/UC96/"+this.cfg("SHIFR"), tr("Data")+": "+SYS.strDecode(data,"Bin"," "));
+
+				io = Special.FLibSYS.IO(data, "", "b");
+				io.pos = 5;
+				V = io.read("uint16",1)/10;
+				io.pos -= 1;
+				A = (io.read("uint32",1)&0xFFFFFF)/1000;
+				io.pos -= 1;
+				W = (io.read("uint32",1)&0xFFFFFF)/10;
+				KWh = io.read("uint32",1)/100;
+				io.pos += 3;
+				Hz = io.read("uint16",1)/10;
+				Pf = io.read("uint16",1)/1000;
+				T = io.read("uint16",1);
+				Tm = io.read("uint16",1)*3600 + io.read("uint8",1)*60 + io.read("uint8",1);
+
+				ibuf = ibuf.slice(36);
+			} else ibuf = "";
+
+		if(clear) { clear = false; tr.messIO("\xff\x55\x11\x03\x01\x00\x00\x00\x00\x51", 0, 0); }
+		if(power) { power = false; tr.messIO("\xff\x55\x11\x03\x02\x00\x00\x00\x00\x52", 0, 0); }
+	}
+}
+
+if(tErr.length) {
+	f_err = tErr + " ";
+	V = A = W = KWh = Hz = Pf = T = Tm = EVAL;
+} else f_err = "0:";
+f_err += tr("Reconnects %1, left %2s.").replace("%1",conCntr.toString()).replace("%2",(noDataTm-(SYS.time()-dataTm)).toString());','',1718433912);
 COMMIT;

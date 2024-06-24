@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"5.6.10"
+#define MOD_VER		"5.6.12"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -122,13 +122,13 @@ void TpContr::postEnable( int flag )
     //Lib's db structure
     lb_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
     lb_el.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    lb_el.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::TransltText,"300"));
+    lb_el.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     lb_el.fldAdd(new TFld("DB",trS("Database"),TFld::String,TFld::NoFlag,"30"));			//????[v1.0] Remove
 
     //Function's structure
     fnc_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
     fnc_el.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    fnc_el.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::TransltText,"300"));
+    fnc_el.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     fnc_el.fldAdd(new TFld("START",trS("To start"),TFld::Boolean,TFld::NoFlag,"1","1"));
     fnc_el.fldAdd(new TFld("MAXCALCTM",trS("Maximum calculate time, seconds"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
     fnc_el.fldAdd(new TFld("PR_TR",trS("Completely translate the program"),TFld::Boolean,TFld::NoFlag,"1","0"));

@@ -548,7 +548,7 @@ void TController::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Controller: ")+name(),RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Controller: ")+trD(name()),RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("branches",opt,-1,"/br","",R_R_R_);
 	if(ctrMkNode("area",opt,-1,"/cntr",_("Controller"))) {
 	    if(ctrMkNode("area",opt,-1,"/cntr/st",_("State"))) {
