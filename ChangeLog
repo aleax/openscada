@@ -1,4 +1,10 @@
 2024-06-23 Roman (stable)
+- !!:SYS,DAQ.{BlockCalc,JavaLikeCalc},Protocol.{ModBus,OPC_UA,UserProtocol},UI.{VCAEngine,WebUser}:
+    Appended by the limiting option limObjDscr_SZ for description configuration fields (DESCR)
+	with default value 1000 and range [300...1000000].
+
+
+2024-06-23 Roman (stable)
 - !!!!:FIX:LibsDB.OscadaLibs: The library tmplib_LowDevLib appended by the template "BT: ATORCH S1BP6".
     !!!:FIX:DevLib.VSE002: Rewrote in the packages sequential reading mode,
 	    that is detection all packages with notifying unknown.

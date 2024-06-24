@@ -62,7 +62,7 @@ TArchiveS::TArchiveS( ) :
     elMess.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     elMess.fldAdd(new TFld("MODUL",trS("Module(plugin) name"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     elMess.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    elMess.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
+    elMess.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     elMess.fldAdd(new TFld("START",trS("To start"),TFld::Boolean,0,"1"));
     elMess.fldAdd(new TFld("CATEG",trS("Messages categories"),TFld::String,0,"100"));
     elMess.fldAdd(new TFld("LEVEL",trS("Messages level"),TFld::Integer,TFld::Selectable,"1","0",
@@ -75,7 +75,7 @@ TArchiveS::TArchiveS( ) :
     elVal.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     elVal.fldAdd(new TFld("MODUL",trS("Module(plugin) name"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     elVal.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    elVal.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
+    elVal.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     elVal.fldAdd(new TFld("START",trS("To start"),TFld::Boolean,0,"1","0"));
     elVal.fldAdd(new TFld("ADDR",trS("Address"),TFld::String,0,"100"));
     elVal.fldAdd(new TFld("V_PER",trS("Period of the values, seconds"),TFld::Real,0,"12.6","1","0;100000"));
@@ -85,7 +85,7 @@ TArchiveS::TArchiveS( ) :
     //Value archive DB structure
     elAval.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limArchID_SZ).c_str()));
     elAval.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    elAval.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
+    elAval.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     elAval.fldAdd(new TFld("START",trS("To start"),TFld::Boolean,0,"1","0"));
     elAval.fldAdd(new TFld("SrcMode",trS("Source"),TFld::Integer,TFld::Selectable,"1","0",
 	TSYS::strMess("%d;%d;%d",TVArchive::Passive,TVArchive::DAQAttr,TVArchive::ActiveAttr),

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebUser file: web_user.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.6.13"
+#define MOD_VER		"1.6.14"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -88,7 +88,7 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mDefPg(DEF_DefPg)
     //User page DB structure
     mUPgEl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     mUPgEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mUPgEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
+    mUPgEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     mUPgEl.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,0,"1","0") );
     mUPgEl.fldAdd(new TFld("PROG",trS("Procedure"),TFld::String,TFld::FullText/*|TFld::TransltText*/,"1000000"));
     mUPgEl.fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec));

@@ -47,7 +47,7 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
     //Node DB structure
     mNodeEl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     mNodeEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mNodeEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
+    mNodeEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     mNodeEl.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,0,"1","0"));
     mNodeEl.fldAdd(new TFld("ADDR",trS("Address"),TFld::Integer,0,"3","1","1;247"));
     mNodeEl.fldAdd(new TFld("InTR",trS("Input transport"),TFld::String,0,i2s(limObjID_SZ).c_str(),"*"));

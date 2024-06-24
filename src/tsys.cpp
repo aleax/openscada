@@ -72,6 +72,9 @@
 #define DEF_limObjNm_SZ		100
 #define MIN_limObjNm_SZ		100
 #define MAX_limObjNm_SZ		200
+#define DEF_limObjDscr_SZ	1000
+#define MIN_limObjDscr_SZ	300
+#define MAX_limObjDscr_SZ	1000000
 #define DEF_limArchID_SZ	50
 #define MIN_limArchID_SZ	50
 #define MAX_limArchID_SZ	90
@@ -109,6 +112,7 @@ using namespace OSCADA;
 //Default values of the global limits
 uint8_t	OSCADA::limObjID_SZ = DEF_limObjID_SZ;
 uint8_t	OSCADA::limObjNm_SZ = DEF_limObjNm_SZ;
+uint8_t	OSCADA::limObjDscr_SZ = DEF_limObjDscr_SZ;
 uint8_t	OSCADA::limArchID_SZ = DEF_limArchID_SZ;
 int	OSCADA::limUserFile_SZ = DEF_limUserFile_SZ;
 int	OSCADA::limUserIts_N = DEF_limUserIts_N;
@@ -623,6 +627,7 @@ string TSYS::optDescr( )
 	"			 Change that once before use on DBs with the fixed type \"char({N})\"!\n"
 	"limObjNm_SZ	[*100...200] NAME size of the OpenSCADA objects.\n"
 	"		WARNING! Change that once before use on DBs with the fixed type \"char({N})\"!\n"
+	"limObjDscr_SZ	[300...*1000...1000000] DESCR size of the OpenSCADA objects.\n"
 	"limArchID_SZ	[*50...90] ID size of the value archive objects.\n"
 	"		WARNING! Increase it only, else you can get problems on Archive.FSArch!\n"
 	"			 Change that once before use on DBs with the fixed type \"char({N})\"!\n"
@@ -797,6 +802,7 @@ void TSYS::cfgPrmLoad( )
     //Global limits
     limObjID_SZ = vmax(MIN_limObjID_SZ, vmin(MAX_limObjID_SZ,s2i(TBDS::genPrmGet(nodePath()+"limObjID_SZ",i2s(DEF_limObjID_SZ)))));
     limObjNm_SZ = vmax(MIN_limObjNm_SZ, vmin(MAX_limObjNm_SZ,s2i(TBDS::genPrmGet(nodePath()+"limObjNm_SZ",i2s(DEF_limObjNm_SZ)))));
+    limObjDscr_SZ = vmax(MIN_limObjDscr_SZ, vmin(MAX_limObjDscr_SZ,s2i(TBDS::genPrmGet(nodePath()+"limObjDscr_SZ",i2s(DEF_limObjDscr_SZ)))));
     limArchID_SZ = vmax(MIN_limArchID_SZ, vmin(MAX_limArchID_SZ,s2i(TBDS::genPrmGet(nodePath()+"limArchID_SZ",i2s(DEF_limArchID_SZ)))));
     limUserFile_SZ = vmax(MIN_limUserFile_SZ, vmin(MAX_limUserFile_SZ,s2i(TBDS::genPrmGet(nodePath()+"limUserFile_SZ",i2s(DEF_limUserFile_SZ)))));
     limUserIts_N = vmax(MIN_limUserIts_N, vmin(MAX_limUserIts_N,s2i(TBDS::genPrmGet(nodePath()+"limUserIts_N",i2s(DEF_limUserIts_N)))));

@@ -40,7 +40,7 @@ TTypeDAQ::TTypeDAQ( const string &id ) : TModule(id)
 
     fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
+    fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     fldAdd(new TFld("ENABLE",trS("To enable"),TFld::Boolean,0,"1","0"));
     fldAdd(new TFld("START",trS("To start"),TFld::Boolean,0,"1","0"));
     fldAdd(new TFld("MESS_LEV",trS("Messages level"),TFld::Integer,0,"1","3"));
@@ -185,7 +185,7 @@ TTypeParam::TTypeParam( const char *iid, const char *iname, const char *idb, boo
     fldAdd(new TFld("SHIFR",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     fldAdd(new TFld("OWNER",trS("Owner"),TFld::String,TCfg::Key|TCfg::NoVal|TFld::NoWrite,i2s(limObjID_SZ*5).c_str()));
     fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
+    fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,TCfg::NoVal,"1","0"));
     fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec|TCfg::NoVal));
 }

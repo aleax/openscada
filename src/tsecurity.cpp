@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsecurity.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,7 +42,7 @@ TSecurity::TSecurity( ) : TSubSYS(SSEC_ID, false)
     //User BD structure
     userEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     userEl.fldAdd(new TFld("DESCR",trS("Full name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    userEl.fldAdd(new TFld("LONGDESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
+    userEl.fldAdd(new TFld("LONGDESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     userEl.fldAdd(new TFld("PASS",trS("Password"),TFld::String,0,"100"));
     userEl.fldAdd(new TFld("LANG",trS("Language"),TFld::String,0,"50"));
     userEl.fldAdd(new TFld("PICTURE",trS("User picture"),TFld::String,0,"100000"));
@@ -50,7 +50,7 @@ TSecurity::TSecurity( ) : TSubSYS(SSEC_ID, false)
     //Group BD structure
     grpEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     grpEl.fldAdd(new TFld("DESCR",trS("Full name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    grpEl.fldAdd(new TFld("LONGDESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
+    grpEl.fldAdd(new TFld("LONGDESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     grpEl.fldAdd(new TFld("USERS",trS("Users"),TFld::String,0,"1000000"));
 }
 

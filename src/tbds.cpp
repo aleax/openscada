@@ -42,7 +42,7 @@ TBDS::TBDS( ) : TSubSYS(SDB_ID, true), mTblLifeTime(DEF_TblLifeTime)
     elDB.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     elDB.fldAdd(new TFld("TYPE",trS("DB type (module)"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     elDB.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    elDB.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"2000"));
+    elDB.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     elDB.fldAdd(new TFld("ADDR",trS("Address"),TFld::String,TFld::NoFlag,"1000"));
     elDB.fldAdd(new TFld("CODEPAGE",trS("Code page"),TFld::String,TFld::NoFlag,"20"));
     elDB.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,TFld::NoFlag,"1","1"));

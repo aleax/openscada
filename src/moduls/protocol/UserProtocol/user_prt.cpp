@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.UserProtocol file: user_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.6.6"
+#define MOD_VER		"1.6.7"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -80,7 +80,7 @@ TProt::TProt( string name ) : TProtocol(MOD_ID)
     // User protocol DB structure
     mUPrtEl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     mUPrtEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mUPrtEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
+    mUPrtEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     mUPrtEl.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,0,"1","0"));
     mUPrtEl.fldAdd(new TFld("DAQTmpl",trS("Representative DAQ template"),TFld::String,TFld::NoFlag,"50"));
     mUPrtEl.fldAdd(new TFld("WaitReqTm",trS("Timeout of a request waiting, milliseconds"),TFld::Integer,TFld::NoFlag,"6","0"));

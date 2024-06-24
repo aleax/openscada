@@ -1,12 +1,12 @@
 # OpenSCADA core translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA package.
 #
-# Roman Savochenko <roman@oscada.org>, 2003-2023.
+# Roman Savochenko <roman@oscada.org>, 2003-2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 22:21+0300\n"
+"POT-Creation-Date: 2024-06-23 20:38+0300\n"
 "PO-Revision-Date: 2020-10-25 10:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team:  <uk@li.org>\n"
@@ -187,7 +187,8 @@ msgid "Redundancy"
 msgstr "Резервування"
 
 msgid "Overtime of the reserve history reload at start, days"
-msgstr "Глибина примусового перевантаження історії резерву при запуску, в добах."
+msgstr ""
+"Глибина примусового перевантаження історії резерву при запуску, в добах."
 
 msgid "Message archivers"
 msgstr "Архіватори повідомлень"
@@ -536,8 +537,8 @@ msgstr ""
 "буферу - тільки прямий запис."
 
 msgid ""
-"Selection of a priority of the archiver for using in the source mode \"All"
-"\". Set to zero for full the selection disabling."
+"Selection of a priority of the archiver for using in the source mode "
+"\"All\". Set to zero for full the selection disabling."
 msgstr ""
 "Пріоритет обрання архіватору для режиму використання джерела \"Всі\". "
 "Встановити у нуль для повного виключення із обрання."
@@ -552,7 +553,8 @@ msgid "Last read buffer"
 msgstr "Останнє читання буферу"
 
 #, c-format
-msgid "Number of the setting items achieved the limit %d for time range [%lld:%lld]!"
+msgid ""
+"Number of the setting items achieved the limit %d for time range [%lld:%lld]!"
 msgstr ""
 "Кількість встановлюваних елементів досягнула обмеження %d для діапазону "
 "[%lld:%lld]!"
@@ -653,7 +655,8 @@ msgstr "Таблиці у БД, але не відкриті на цей час.
 msgid "Load the program from this DB"
 msgstr "Завантажити програму з цієї БД"
 
-msgid "Codepage of data in the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
+msgid ""
+"Codepage of data in the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr "Кодування даних у БД. Наприклад: UTF-8, KOI8-R, KOI8-U ... ."
 
 msgid ""
@@ -1263,7 +1266,8 @@ msgstr "Загальне Сховище"
 msgid "Configuration File"
 msgstr "Конфігураційний Файл"
 
-msgid "Storage address in the format \"{DB module}.{DB name}\" or the common ones."
+msgid ""
+"Storage address in the format \"{DB module}.{DB name}\" or the common ones."
 msgstr "Адреса сховища у форматі \"{Модуль БД}.{Ім'я БД}\" або загальне."
 
 #, c-format
@@ -1329,8 +1333,8 @@ msgid ""
 "  0         - standard userspace priority;\n"
 "  1...99    - realtime priority level (round-robin), often allowed only for "
 "\"root\";\n"
-"  100...199 - realtime priority level (FIFO), often allowed only for \"root"
-"\"."
+"  100...199 - realtime priority level (FIFO), often allowed only for "
+"\"root\"."
 msgstr ""
 "Рівень пріоритету задачі (-1...199), де:\n"
 "  -1        - мінімальний пріоритет, фонова політика;\n"
@@ -1526,7 +1530,8 @@ msgstr "2:Збір зупинено."
 msgid "Parameter: "
 msgstr "Параметр: "
 
-msgid "The type changing leads to lose some data of the specific configurations."
+msgid ""
+"The type changing leads to lose some data of the specific configurations."
 msgstr "Зміна типу потягне за собою втрату даних специфічних конфігурацій."
 
 msgid "Inclusion"
@@ -1862,7 +1867,6 @@ msgstr "КіБ"
 msgid "B"
 msgstr "Б"
 
-#, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"
@@ -1944,6 +1948,7 @@ msgid ""
 "limObjNm_SZ\t[*100...200] NAME size of the OpenSCADA objects.\n"
 "\t\tWARNING! Change that once before use on DBs with the fixed type "
 "\"char({N})\"!\n"
+"limObjDscr_SZ\t[300...*1000...1000000] DESCR size of the OpenSCADA objects.\n"
 "limArchID_SZ\t[*50...90] ID size of the value archive objects.\n"
 "\t\tWARNING! Increase it only, else you can get problems on Archive.FSArch!\n"
 "\t\t\t Change that once before use on DBs with the fixed type "
@@ -2048,6 +2053,7 @@ msgstr ""
 "limObjNm_SZ\t[*100...200] Розмір НАЗВИ об'єктів OpenSCADA.\n"
 "\t\tУВАГА! Змініть це лише одноразово перед використанням на БД із "
 "фіксованим типом \"char({N})\"!\n"
+"limObjDscr_SZ\t[300...*1000...1000000] Розмір ОПИСУ об'єктів OpenSCADA.\n"
 "limArchID_SZ\t[*50...90] Розмір ІД об'єктів архіву значень.\n"
 "\t\tУВАГА! Лише збільшуйте його, інакше можете отримати проблеми у Archive."
 "FSArch!\n"
@@ -2099,7 +2105,8 @@ msgid "Error writing the configuration file '%s': %s"
 msgstr "Помилка запису до конфігураційного файлу '%s': %s"
 
 #, c-format
-msgid "Impossible to hold the project lock! Seems the project '%s' already running."
+msgid ""
+"Impossible to hold the project lock! Seems the project '%s' already running."
 msgstr "Неможливо захопити замок проєкту! Схоже проєкт '%s' вже виконується."
 
 msgid "Loading."
@@ -2707,7 +2714,8 @@ msgid "User;System;User and System"
 msgstr "Корист.;Системн.;Корист. та Системн."
 
 msgid "Initial connection identifier to what bind for control."
-msgstr "Ідентифікатор ініціативного підключення до якого зв'язуватися для керування."
+msgstr ""
+"Ідентифікатор ініціативного підключення до якого зв'язуватися для керування."
 
 msgid "New external host"
 msgstr "Новий зовнішній хост"
@@ -3130,4 +3138,3 @@ msgstr "Встановлено назву проєкту у:"
 
 msgid "already started."
 msgstr "вже запущено."
-

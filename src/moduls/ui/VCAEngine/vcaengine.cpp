@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.13.4"
+#define MOD_VER		"7.13.5"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -110,7 +110,7 @@ void Engine::postEnable( int flag )
     //Make lib's DB structure: Libs(__ID__, NAME, DSCR, DB_TBL, ICO)
     lbwdg_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,"30"));
     lbwdg_el.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    lbwdg_el.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
+    lbwdg_el.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     lbwdg_el.fldAdd(new TFld("DB_TBL",trS("DB table"),TFld::String,TFld::NoFlag,"30"));	//????[v1.0] Remove
     lbwdg_el.fldAdd(new TFld("ICO",trS("Icon"),TFld::String,TFld::NoFlag,"100000"));
 
@@ -159,7 +159,7 @@ void Engine::postEnable( int flag )
     //Make project's DB structure: Projs(__ID__, NAME, DSCR, DB_TBL, ICO, USER, GRP, PERMIT, PER, FLGS, STYLE)
     prj_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,"30"));
     prj_el.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    prj_el.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
+    prj_el.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     prj_el.fldAdd(new TFld("DB_TBL",trS("DB table"),TFld::String,TFld::NoFlag,"30"));	//????[v1.0] Remove
     prj_el.fldAdd(new TFld("ICO",trS("Icon"),TFld::String,TFld::NoFlag,"100000"));
     prj_el.fldAdd(new TFld("USER",trS("User"),TFld::String,TFld::NoFlag,i2s(limObjID_SZ).c_str(),"root"));
