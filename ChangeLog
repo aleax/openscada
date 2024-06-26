@@ -1,3 +1,18 @@
+2024-06-26 Roman 0.9.7.2
+- !!!:FIX:LibsDB.OscadaLibs: DevLib.VSE002: Rewrote in the packages sequential reading mode,
+	    that is detection all packages with notifying unknown.
+	The B16 packages' data renamed to B8 and appended by signatures "74 00" and "6E 00".
+	Appended implementation the B12 packages with signatures "6F 00" and "71 00".
+	Appended by configuring the initiate sequence.
+    LowDevLib.UC96: Default serial-port address changed to /dev/rfcomm1.
+- FIX:Archive: Values requesting in the control interface tab "Values" of the value archive appended
+    by the time limit in prmInterf_TM (7) to prevent hangs (long processing) on very big ranges.
+- !:FIX:DAQ: Fixing-finishing the dynamic translation for title of the controller and parameter object.
+- FIX:DAQ.JavaLikeCalc: Fixed in processing default value of the limit argument of the UserAPI function string.split().
+- FIX:UI.WebVision: Fields of the Text primitive improved in vertical centering for single line of the non HTML mode,
+    for which there is set "line-height: 1.0".
+
+
 2024-06-02 Roman 0.9.7.1
 - FIX:LibsDB.OscadaLibs: Restoring place of the offline documentation.
 - UI.QTCfg: Updating the translation.

@@ -461,7 +461,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TValue::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter: ")+name(),RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter: ")+trD(name()),RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("branches",opt,-1,"/br","",R_R_R_);
 	if(ctrMkNode("area",opt,0,"/prm",_("Parameter"))) {
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
