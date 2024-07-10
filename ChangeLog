@@ -1,4 +1,16 @@
 2024-07-10 Roman (stable)
+- !!!!:FIX:SYS: The commandline options appended by getting default value from the environmet variable "OSCADA_{cmd}",
+	what enabled by the environmet variable OSCADA_CMD_EN.
+    FIX: Fixed type of the limit variable limObjDscr_SZ.
+- !!!!:Transport.{Sockets,SSL}: TTransSock::getAddr() renamed to TTransSock::addrGet()
+	and the address resolving moved to a new function TTransSock::addrResolve() with direct resolving the static addresses
+	and dynamic resolving by gethostbyname() due to getaddrinfo() has problems with reenteranting and global lock causes
+	long hungs on all addresses at problems with DNS. Also appended a commandline option --getaddrinfo to enable it for yourself.
+    !!:Transport.SSL: Input part of the transports switched to use unified TTransSock::addrResolve()
+	for precursory resolving all dynamic addresses and pass ready static adresses to BIO_new_accept().
+
+
+2024-07-10 Roman (stable)
 - !!!!:FIX:LibsDB.OscadaLibs.DevLib.VSE002: Fixed in non reconnection at leaving partial data in the buffer.
 - FIX:DAQ: TController::alarmSet(): TSYS::curTime() used instead TSYS::sysTm() to set single source.
 - !:FIX:UI.Vision: Prevented fullscreen mode fault in some XOrg conditions, when the fullscreen Qt-flag occasionally cleared,

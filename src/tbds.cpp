@@ -698,6 +698,7 @@ string TBDS::genPrmGet( const string &path, const string &oval, const string &us
 	elSYS.fldAdd(new TFld("val","Value"  ,TFld::String,TFld::TransltText,"1000"));
     }
 
+    bool isOK = false;
     string rez = oval;
 
     TConfig db_el(&elSYS);
@@ -705,9 +706,17 @@ string TBDS::genPrmGet( const string &path, const string &oval, const string &us
     db_el.cfg("id").setS(path);
     db_el.cfg("val").setNoTransl(!(flags&UseTranslation));
     try {
-	if(dataGet(fullDBSYS(),"prm:"+path,db_el,flags))
+	if(dataGet(fullDBSYS(),"prm:"+path,db_el,flags)) {
 	    rez = db_el.cfg("val").getS();
+	    isOK = true;
+	}
     } catch(TError &err) { }
+
+    //Get from environment variable
+    if(!isOK && SYS->f_useEnv) {
+	char *rezV = getenv(("OSCADA_"+TSYS::path2sepstr(path,'_')).c_str());
+	if(rezV) rez = rezV;
+    }
 
     return rez;
 }

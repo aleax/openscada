@@ -112,7 +112,7 @@ using namespace OSCADA;
 //Default values of the global limits
 uint8_t	OSCADA::limObjID_SZ = DEF_limObjID_SZ;
 uint8_t	OSCADA::limObjNm_SZ = DEF_limObjNm_SZ;
-uint8_t	OSCADA::limObjDscr_SZ = DEF_limObjDscr_SZ;
+unsigned OSCADA::limObjDscr_SZ = DEF_limObjDscr_SZ;
 uint8_t	OSCADA::limArchID_SZ = DEF_limArchID_SZ;
 int	OSCADA::limUserFile_SZ = DEF_limUserFile_SZ;
 int	OSCADA::limUserIts_N = DEF_limUserIts_N;
@@ -138,7 +138,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     rootModifCnt(0), sysModifFlgs(MDF_NONE), mStopSignal(0), mN_CPU(1),
     mainPthr(0), mSysTm(time(NULL)), mSysTmJump(0), mClockRT(DEF_ClockRT), mPrjCustMode(true), mPrjNm(dataRes()), mCfgCtx(NULL), mCfgCtxLast(NULL),
     mRdStLevel(DEF_RdStLevel), mRdRestConnTm(DEF_RdRestConnTm), mRdTaskPer(DEF_RdTaskPer), mRdPrimCmdTr(DEF_RdPrimCmdTr),
-    trPassN(0), trChkAndFix(false), trChkAndFixMB(false)
+    trPassN(0), trChkAndFix(false), trChkAndFixMB(false), f_useEnv(false)
 {
     srand(TSYS::curTime()%1000000);
     mWorkDB = DEF_WorkDB;
@@ -186,6 +186,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     for(int argPos = 0; (argCom=getCmdOpt(argPos,&argVl)).size(); )
 	mCmdOpts[strEncode(argCom,ToLower)] = argVl;
     mCmdOpts[""] = argv[0];
+    f_useEnv = (getenv("OSCADA_CMD_EN") != NULL && s2i(getenv("OSCADA_CMD_EN")));	//Get default commandline options from the environment variables
 
     //Early starting the service task
     taskCreate("SYS_Service", 0, TSYS::ServTask, NULL, 10);
@@ -689,7 +690,11 @@ string TSYS::getCmdOpt_( int &curPos, string *argVal, int argc, char **argv )
 bool TSYS::cmdOptPresent( const string &opt )
 {
     MtxAlloc res(dataRes(), true);
-    return mCmdOpts.find(strEncode(opt,ToLower)) != mCmdOpts.end();
+
+    bool rez = (mCmdOpts.find(strEncode(opt,ToLower)) != mCmdOpts.end());
+    if(!rez && f_useEnv) rez = (getenv(("OSCADA_"+opt).c_str()) != NULL);
+
+    return rez;
 }
 
 string TSYS::cmdOpt( const string &opt, const string &setVl )
@@ -701,8 +706,13 @@ string TSYS::cmdOpt( const string &opt, const string &setVl )
 
     //Get value
     map<string, string>::iterator iOpt = mCmdOpts.find(strEncode(opt,ToLower));
-    if(iOpt == mCmdOpts.end()) return "";
-    return iOpt->second.size() ? iOpt->second : "";	// "1";
+    if(iOpt != mCmdOpts.end())	return iOpt->second;
+    else if(f_useEnv) {
+	char *rez = getenv(("OSCADA_"+opt).c_str());
+	if(rez) return rez;
+    }
+
+    return "";
 }
 
 int TSYS::permCrtFiles( bool exec )

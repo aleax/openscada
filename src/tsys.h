@@ -97,7 +97,7 @@ namespace OSCADA
 //Global configurable Limits
 extern uint8_t	limObjID_SZ;	//[*20..50] ID size of the OpenSCADA objects.
 extern uint8_t	limObjNm_SZ;	//[*100...200] NAME size of the OpenSCADA objects.
-extern uint8_t	limObjDscr_SZ;	//[300...*1000...1000000] DESCR size of the OpenSCADA objects.
+extern unsigned	limObjDscr_SZ;	//[300...*1000...1000000] DESCR size of the OpenSCADA objects.
 extern uint8_t	limArchID_SZ;	//[50...90] ID size of the value archive objects, limObjID_SZ + 1.5*limObjID_SZ.
 extern int	limUserFile_SZ;	//[1MB...*10MB...1000MB] The files size limit at loading and processing in the userspace
 				//	and the part size of the big files transferring.
@@ -422,6 +422,9 @@ class TSYS : public TCntrNode
 	//Public attributes
 	AutoHD<TModule>	mainThr;	//A module to call into the main thread
 
+	// Generic system flags
+	unsigned f_useEnv	:1;	//Use environment variable OSCADA_{cmd} for default commadline options and generic parameters,
+					//  sets itself by OSCADA_CMD_EN.
 
     protected:
 	//Protected methods

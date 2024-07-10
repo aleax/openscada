@@ -250,7 +250,8 @@ class TTransSock: public TTypeTransport
 	TTransportIn  *In( const string &name, const string &idb );
 	TTransportOut *Out( const string &name, const string &idb );
 
-	static string getAddr( const sockaddr_storage &addr );
+	static string addrResolve( const string &host, const string &port, vector<sockaddr_storage> &addrs, bool isServer = false );
+	static string addrGet( const sockaddr_storage &addr );
 
 	string outAddrHelp( );
 	string outTimingsHelp( bool noAdd = false );
@@ -261,12 +262,15 @@ class TTransSock: public TTypeTransport
 	//Attributes
 	SSL_CTX		*ctxIn, *ctxOut;
 
+	uint8_t		use_getaddrinfo;
+
     protected:
 	void load_( );
 
     private:
 	//Methods
 	void preDisable( int flag );
+	string optDescr( );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 

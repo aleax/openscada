@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Sockets file: socket.h
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -258,14 +258,23 @@ class TTransSock: public TTypeTransport
 	TTransportIn  *In( const string &name, const string &idb );
 	TTransportOut *Out( const string &name, const string &idb );
 
-	static string getAddr( const sockaddr_storage &addr );
+	static string addrResolve( const string &host, const string &port, vector<sockaddr_storage> &addrs,
+				    int type = S_TCP, bool isServer = false );
+	static string addrGet( const sockaddr_storage &addr );
 
 	string outAddrHelp( );
 	static string outTimingsHelp( bool noAdd = false );
 	static string outAttemptsHelp( bool noAdd = false );
 
+	//Attributes
+	uint8_t	use_getaddrinfo;
+
     protected:
 	void load_( );
+
+    private:
+	//Methods
+	string optDescr( );
 };
 
 extern TTransSock *mod;

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-17 23:26+0200\n"
+"POT-Creation-Date: 2024-07-09 09:00+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -29,6 +29,22 @@ msgstr ""
 "Stellt Transport basierend auf der Secure-Sockets-Schicht bereit. Abhängig "
 "von der Bibliotheksversion wird OpenSSL verwendet und SSL-TLS unterstützt."
 
+#, c-format
+msgid ""
+"======================= Module <%s:%s> options =======================\n"
+"    --getaddrinfo[=<lev>] Use getaddrinfo() for resolving all addresses.\n"
+"                        <lev> - level of using:\n"
+"                                1(default) - with global resource locking;\n"
+"                                2 - without the locking.\n"
+"\n"
+msgstr ""
+"======================= Module <%s:%s> options =======================\n"
+"    --getaddrinfo[=<lev>] Verwenden Sie getaddrinfo() zum Auflösen aller Adressen.\n"
+"                        <lev> - Nutzungsniveau:\n"
+"                                1 (Standard) - mit globaler Ressourcensperre;\n"
+"                                2 - ohne die Verriegelung.\n"
+"\n"
+
 msgid "State"
 msgstr "Staats"
 
@@ -37,6 +53,41 @@ msgstr "Serverchiffren"
 
 msgid "Client ciphers"
 msgstr "Client-Chiffren"
+
+#, c-format
+msgid "Port '%s' is wrong."
+msgstr "Port „%s“ ist falsch."
+
+#, c-format
+msgid "Host '%s' is not found."
+msgstr "Host „%s“ wurde nicht gefunden."
+
+#, c-format
+msgid "The requested name '%s' has no IP address."
+msgstr "Der angeforderte Name „%s“ hat keine IP-Adresse."
+
+#, c-format
+msgid "A non-recoverable name server error occurred while '%s'."
+msgstr "Während „%s“ ist ein nicht behebbarer Nameserverfehler aufgetreten."
+
+#, c-format
+msgid "A temporary error occurred on an authoritative name server for '%s'."
+msgstr "Auf einem autoritativen Nameserver für „%s“ ist ein temporärer Fehler aufgetreten."
+
+#, c-format
+msgid "The requested name '%s' is resolved to very many addresses."
+msgstr "Der angeforderte Name „%s“ wird in sehr viele Adressen aufgelöst."
+
+#, c-format
+msgid "Unknown error %d from gethostbyname() for '%s'."
+msgstr "Unbekannter Fehler %d von gethostbyname() für „%s“."
+
+#, c-format
+msgid "Error the address '%s': '%s (%d)'"
+msgstr "Fehler bei der Adresse '%s': '%s (%d)'"
+
+msgid "sockaddr to large."
+msgstr "sockaddr zu groß."
 
 msgid ""
 "SSL output transport has the address format \"{addr}[,{addrN}]:{port}\", "
@@ -97,8 +148,7 @@ msgstr "Die Hostadresse '%s'. "
 
 #, c-format
 msgid "Connections %d, opened %d, last %s, closed by the limit %d. "
-msgstr ""
-"Verbindungen %d, geöffnet %d, zuletzt %s, geschlossen durch das Limit %d. "
+msgstr "Verbindungen %d, geöffnet %d, zuletzt %s, geschlossen durch das Limit %d. "
 
 #, c-format
 msgid "Traffic in %s, out %s. "
@@ -332,13 +382,6 @@ msgid "Response time %s[%s]. "
 msgstr "Reaktionszeit %s[%s]. "
 
 #, c-format
-msgid "Error the address '%s': '%s (%d)'"
-msgstr "Fehler bei der Adresse '%s': '%s (%d)'"
-
-msgid "sockaddr to large."
-msgstr "sockaddr zu groß."
-
-#, c-format
 msgid "Error creating TCP socket: %s!"
 msgstr "Fehler Schaffung TCP-Socket: %s!"
 
@@ -426,3 +469,4 @@ msgstr "Zeitabstände"
 
 msgid "Attempts"
 msgstr "Versuche"
+

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-17 23:26+0200\n"
+"POT-Creation-Date: 2024-07-09 09:00+0300\n"
 "PO-Revision-Date: 2008-10-13 19:06+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -28,6 +28,22 @@ msgstr ""
 "Надає транспорт, заснований на безпечному шарі сокетів. Використано OpenSSL "
 "та підтримуються SSL-TLS залежно від версії бібліотеки."
 
+#, c-format
+msgid ""
+"======================= Module <%s:%s> options =======================\n"
+"    --getaddrinfo[=<lev>] Use getaddrinfo() for resolving all addresses.\n"
+"                        <lev> - level of using:\n"
+"                                1(default) - with global resource locking;\n"
+"                                2 - without the locking.\n"
+"\n"
+msgstr ""
+"======================= Опції модуля <%s:%s> =============================\n"
+"    --getaddrinfo[=<lev>] Використати getaddrinfo() для вирішення усіх адрес.\n"
+"                        <lev> - рівень використання:\n"
+"                                1(типово) - із глобальним блокуванням ресурсу;\n"
+"                                2 - без блокування.\n"
+"\n"
+
 msgid "State"
 msgstr "Стан"
 
@@ -36,6 +52,41 @@ msgstr "Серверні шифри"
 
 msgid "Client ciphers"
 msgstr "Клієнтські шифри"
+
+#, c-format
+msgid "Port '%s' is wrong."
+msgstr "Порт '%s' помилковий."
+
+#, c-format
+msgid "Host '%s' is not found."
+msgstr "Адреси '%s' не знайдено."
+
+#, c-format
+msgid "The requested name '%s' has no IP address."
+msgstr "Запитане ім'я '%s' не має IP адрес."
+
+#, c-format
+msgid "A non-recoverable name server error occurred while '%s'."
+msgstr "Виникла невідновлювана помилка серверу для '%s'."
+
+#, c-format
+msgid "A temporary error occurred on an authoritative name server for '%s'."
+msgstr "Виникла тимчасова помилка на сервері назв для '%s'."
+
+#, c-format
+msgid "The requested name '%s' is resolved to very many addresses."
+msgstr "Запитана назва '%s' вирішується у надто багато адрес."
+
+#, c-format
+msgid "Unknown error %d from gethostbyname() for '%s'."
+msgstr "Невідома помилка %d від gethostbyname() для '%s'."
+
+#, c-format
+msgid "Error the address '%s': '%s (%d)'"
+msgstr "Помилка адреси '%s': '%s (%d)'"
+
+msgid "sockaddr to large."
+msgstr "sockaddr дуже великий."
 
 msgid ""
 "SSL output transport has the address format \"{addr}[,{addrN}]:{port}\", "
@@ -92,8 +143,7 @@ msgstr "Адреса хосту '%s'. "
 
 #, c-format
 msgid "Connections %d, opened %d, last %s, closed by the limit %d. "
-msgstr ""
-"Підключень %d, відкрито %d, останнє %s, закрито з'єднань за лімітом %d. "
+msgstr "Підключень %d, відкрито %d, останнє %s, закрито з'єднань за лімітом %d. "
 
 #, c-format
 msgid "Traffic in %s, out %s. "
@@ -126,8 +176,7 @@ msgstr "Помилка запису файлу '%s'."
 msgid ""
 "Specify a certificate file or directly the certificates and private key with "
 "password!"
-msgstr ""
-"Визначте файл сертифікатів або прямо сертифікати і приватний ключ із паролем!"
+msgstr "Визначте файл сертифікатів або прямо сертифікати і приватний ключ із паролем!"
 
 msgid "Connected"
 msgstr "Під'єднано"
@@ -324,13 +373,6 @@ msgid "Response time %s[%s]. "
 msgstr "Час відповіді %s[%s]. "
 
 #, c-format
-msgid "Error the address '%s': '%s (%d)'"
-msgstr "Помилка адреси '%s': '%s (%d)'"
-
-msgid "sockaddr to large."
-msgstr "sockaddr дуже великий."
-
-#, c-format
 msgid "Error creating TCP socket: %s!"
 msgstr "Помилка створення TCP сокету: %s!"
 
@@ -418,3 +460,4 @@ msgstr "Інтервали часу"
 
 msgid "Attempts"
 msgstr "Спроб"
+

@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/Program manual</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Program_manual.html" title="Документы/Руководство по программе (92% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Program_manual.html" title="Документы/Руководство по программе (91% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
@@ -1505,6 +1505,7 @@
 </div>
 <p>Let's examine the structure of the configuration file in detail. One configuration file can contain the configuration of several stations in the sections <i>&lt;station id="SimulatorStation"/&gt;</i>. The "id" attribute specifies the station identifier — class of the station. Use of this or that section of the station is indicated by the command line parameter <i>--station=SimulatorStation</i> when starting. The section of the station directly contains station parameters and subsystem sections. Section configuration parameters are written as <i>&lt;prm id="StName"&gt;AGLKS&lt;/prm&gt; </i>, where the "id" attribute specifies the parameter ID, and in the body of the "prm" tag, the value "AGLKS" for the parameter is specified. The list of available parameters and their description for the station and all other sections can be obtained from the console by starting OpenSCADA with the parameter <i>--help</i>.
 </p><p>The subsystem sections <i>&lt;node id="sub_DAQ" /&gt;</i> contain: subsystem parameters, module sections, and table sections for reflections of the data of databases in the configuration file. Module sections <i>&lt;node id="mod_DiamondBoards" /&gt; </i> contain individual module parameters and table sections for reflections of the data of databases in the configuration file.
+</p><p>Default values of the command-line options and generic parameters you can pass through environment variables in form "OSCADA_{OPT}={VAL}" after enabling by the environment variable OSCADA_CMD_EN, like to — <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">OSCADA_CMD_EN=1 OSCADA_log=0 OSCADA_limObjDscr_SZ=1000 OSCADA_sub_UI_mod_QTStarter_Style=Fusion ./openscada_AGLKS</span>. That is you can prepare individual default environment of OpenSCADA execution for your system in whole in a file of the folder <b>/etc/profile.d/</b> or for concrete user in the file <b>{USER-HOME}/.profile</b>.
 </p><p>The sections of the tables of reflection of the data of databases are provided for placement in the configuration file records of DB tables for the OpenSCADA components. Let's examine the table of the input transports "Transport_in" of the subsystem "Transports" <i>&lt;node id="sub_Transport"&gt;</i> from the above provided example of the configuration file. The table contains three records with the fields: ID, MODULE, NAME, DESCRIPT, ADDR, PROT, START. After starting with this section and in general without the DB in the subsystem "Transports" of the module "Sockets" you'll see three input transports. The formats of the table structures of the main components are included into the demo configuration file — models of technological processes. For details of the structure of the database tables refer to the documentation of the corresponding modules or simply save the desired object to the configuration file.
 </p>
 <div class="mw-collapsible mw-collapsed">
@@ -1598,16 +1599,20 @@ TblLifeTime  &lt;seconds&gt;  Opened tables lifetime (by default 600 seconds).
 ======================= Subsystem "Transports" options ==================
 
 ======================= Module &lt;Transport:Sockets&gt; options =======================
----- Parameters of the module section '/sub_Transport/mod_Sockets/' of the configuration file ----
-OutLifeTime  &lt;seconds&gt;  Output transports lifetime (by default 0 seconds), 0 to disable the function.
+    --getaddrinfo[=&lt;lev&gt;] Use getaddrinfo() for resolving all addresses.
+                        &lt;lev&gt; - level of using:
+                                1(default) - with global resource locking;
+                                2 - without the locking.
 
 ======================= Module &lt;Transport:Serial&gt; options =======================
 ---- Parameters of the module section '/sub_Transport/mod_Serial/' of the configuration file ----
 OutLifeTime  &lt;seconds&gt;  Output transports lifetime (by default 0 seconds), 0 to disable the function.
 
 ======================= Module &lt;Transport:SSL&gt; options =======================
----- Parameters of the module section '/sub_Transport/mod_SSL/' of the configuration file ----
-OutLifeTime  &lt;seconds&gt;  Output transports lifetime (by default 0 seconds), 0 to disable the function.
+    --getaddrinfo[=&lt;lev&gt;] Use getaddrinfo() for resolving all addresses.
+                        &lt;lev&gt; - level of using:
+                                1(default) - with global resource locking;
+                                2 - without the locking.
 
 =============== Subsystem "Transport Protocols" options =================
 
@@ -1905,5 +1910,5 @@ service openscada-lts-server start
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2970</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2977</td></tr></table></body>
 </html>
