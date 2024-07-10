@@ -5910,7 +5910,7 @@ The main data are ones transferred by the packages with indexed parameters: B16 
 Author: Roman Savochenko <roman@oscada.org>
 Total complexity: 3.0 HD
 Sponsored by: Vinnica Poultry Farm
-Version: 1.1.0
+Version: 1.1.1
 License: GPLv2','','',240,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(data, toWait) {
@@ -6011,7 +6011,7 @@ else if((SYS.time()-pkgTm) > tmCon) { toInit = true; pkgTm = SYS.time(); setEVAL
 //Passive filtering
 else {
 	for(vBuf = new Object(), data = "", stTime = SYS.time(); (tErr=req(data)).toInt() == 0 && (data.length || bOff < buf.length); ) {
-		pkgTm = SYS.time();
+		if(data.length) pkgTm = SYS.time();
 		buf += data; data = "";
 		if((SYS.time()-stTime) > 5)	break;
 		if(buf.length > 100000 /*|| (SYS.time()-stTime) > 5*/) {
@@ -6078,7 +6078,7 @@ if(tErr.toInt()) {
 		SYS.messDebug("/VSE002/"+this.cfg("SHIFR"), tr("Error")+": "+tErr);
 	if(stStr.length)	tErr += " " + stStr;
 } else if(stStr.length)	tErr += ":" + stStr;
-f_err = tErr;','','',1719161021);
+f_err = tErr;','','',1720582647);
 INSERT INTO tmplib_DevLib VALUES('Goboy1M','Goboy 1M','','','The template implements support for Goboy 1M Gas Counters.
 
 Communication protocol of the devices is based on ModBus but it implements only nonstandard functions.

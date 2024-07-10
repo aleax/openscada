@@ -3780,7 +3780,7 @@ void ShapeDiagram::tracing( )
 {
     WdgView *w = (WdgView*)((QTimer*)sender())->parent();
     RunWdgView *runW = qobject_cast<RunWdgView*>(((QTimer*)sender())->parent());
-    if(runW && runW->mainWin()->winClose) return;
+    if(runW && runW->mainWin()->f_winClose) return;
     ShpDt *shD = (ShpDt*)w->shpData;
 
     if(!w->isEnabled()) return;
@@ -4712,7 +4712,7 @@ void ShapeProtocol::tracing( )
 {
     WdgView *w = (WdgView *)((QTimer*)sender())->parent();
     RunWdgView *runW = qobject_cast<RunWdgView*>(((QTimer*)sender())->parent());
-    if(runW && runW->mainWin()->winClose) return;
+    if(runW && runW->mainWin()->f_winClose) return;
     ShpDt *shD = (ShpDt*)w->shpData;
     if(!w->isEnabled()) return;
 

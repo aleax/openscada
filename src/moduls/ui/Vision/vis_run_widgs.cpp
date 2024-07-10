@@ -225,7 +225,7 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos, b
 	case A_NO_ID:
 	    // User's status line items
 	    if(attr == "statLine")		mainWin()->usrStatus(val, dynamic_cast<RunPageView*>(this));
-	    else if(attr == "runWin" && !mainWin()->isResizeManual && (!mainWin()->masterPg() || this == mainWin()->masterPg())) {
+	    else if(attr == "runWin" && !mainWin()->f_resizeManual && (!mainWin()->masterPg() || this == mainWin()->masterPg())) {
 		switch(s2i(val)) {
 		    case 0:
 			if(s2i(SYS->cmdOpt("showWin")))	break;

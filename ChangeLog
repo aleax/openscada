@@ -1,3 +1,12 @@
+2024-07-10 Roman (stable)
+- !!!!:FIX:LibsDB.OscadaLibs.DevLib.VSE002: Fixed in non reconnection at leaving partial data in the buffer.
+- FIX:DAQ: TController::alarmSet(): TSYS::curTime() used instead TSYS::sysTm() to set single source.
+- !:FIX:UI.Vision: Prevented fullscreen mode fault in some XOrg conditions, when the fullscreen Qt-flag occasionally cleared,
+    that is the flag was doubled internally. Reproduced often with Qt6 on Debian 12.
+- !:FIX:UI.WebVision: The Button primitive expanded for adaptive "line-height: 1.2" or "line-height: 1.0" depending name multiline.
+    FIX: Custom Fields fixed in processing fifth field emptiness.
+
+
 2024-06-23 Roman (stable)
 - !!:SYS,DAQ.{BlockCalc,JavaLikeCalc},Protocol.{ModBus,OPC_UA,UserProtocol},UI.{VCAEngine,WebUser}:
     Appended by the limiting option limObjDscr_SZ for description configuration fields (DESCR)
