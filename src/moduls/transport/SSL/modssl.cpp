@@ -588,7 +588,7 @@ void TSocketIn::start( )
 		BIO_get_ssl(bio, &ssl);
 		SSL_set_mode(ssl, SSL_MODE_AUTO_RETRY);
 
-		abio = BIO_new_accept(connAddr.c_str());
+		abio = BIO_new_accept((char*)connAddr.c_str());
 
 		//BIO_ctrl(abio,BIO_C_SET_ACCEPT,1,(void*)"a");
 		//BIO_set_nbio(abio,1);

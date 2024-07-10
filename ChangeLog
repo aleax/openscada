@@ -1,4 +1,8 @@
 2024-07-10 Roman (stable)
+- FIX:Transport.SSL: Fix building for old systems.
+
+
+2024-07-10 Roman (stable)
 - !!!!:FIX:SYS: The commandline options appended by getting default value from the environmet variable "OSCADA_{cmd}",
 	what enabled by the environmet variable OSCADA_CMD_EN.
     FIX: Fixed type of the limit variable limObjDscr_SZ.
