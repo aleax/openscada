@@ -1,3 +1,7 @@
+2024-07-20 Roman (stable)
+- FIX:DAQ.System: The CPU DA source appended by the "nice" part in item of the whole load.
+
+
 2024-07-10 Roman (stable)
 - FIX:Transport.SSL: Fix building for old systems.
 
