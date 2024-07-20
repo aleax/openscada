@@ -56,7 +56,7 @@
 #define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.6.0"
+#define MOD_VER		"4.6.1"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and supported SSL-TLS depending on the library version.")
@@ -271,7 +271,7 @@ string TTransSock::addrResolve( const string &host, const string &port, vector<s
 	struct servent servbuf, *sp;
 	int stPort = s2i(port);
 	if(stPort == 0 && getservbyname_r(port.c_str(),"tcp",&servbuf,sBuf,sizeof(sBuf),&sp) == 0 && sp)
-	    stPort = sp->s_port;
+	    stPort = htons(sp->s_port);
 	if(stPort == 0) return TSYS::strMess(_("Port '%s' is wrong."), port.c_str());
 
 	// Checking directly for static addresses

@@ -375,31 +375,46 @@ void Session::uiCmd( const string &com, const string &prm, SessWdg *src )
     try {
 	// Go to the destination page
 	string curPtEl, cpgAddr = "/ses_"+id();
-	AutoHD<SessPage> cpg;
+	AutoHD<SessPage> cpg, cpg_;
 	for(unsigned iEl = 0; (curPtEl=TSYS::pathLev(prm,iEl++)).size(); ) {
 	    string opPg;
 	    if(curPtEl.find("pg_") == 0) opPg = curPtEl.substr(3);
 	    else if(curPtEl == "*" || (curPtEl == "$" && (com == "next" || com == "prev"))) {
 		vector<string> pls;
+		int iL;
 		if(cpg.freeStat()) list(pls); else cpg.at().pageList(pls);
 		if(pls.empty())	return;
 		string curEl = TSYS::pathLev(pBase, iEl);
 		if(curEl.empty()) {
 		    if(curPtEl == "$")	return;
-		    opPg = pls[0];
+		    for(iL = 0; iL < (int)pls.size(); iL++) {
+			opPg = pls[iL];
+			cpg_ = cpg.freeStat() ? at(opPg) : cpg.at().pageAt(opPg);
+			if(SYS->security().at().access(reqUser(),SEC_RD,
+					TSYS::strParse(cpg_.at().attrAt("owner").at().getS(),0,":"),TSYS::strParse(cpg_.at().attrAt("owner").at().getS(),1,":"),
+					cpg_.at().attrAt("perm").at().getI()))
+			    break;
+		    }
+		    if(iL >= (int)pls.size()) opPg = pls[0];
 		}
 		else {
 		    curEl = curEl.substr(3);
-		    int iL;
 		    for(iL = 0; iL < (int)pls.size(); iL++)
 			if(curEl == pls[iL]) break;
 		    if(iL < (int)pls.size()) {
 			if(curPtEl == "$") {
-			    if(com == "next") iL++;
-			    if(com == "prev") iL--;
-			    iL = (iL < 0) ? (int)pls.size()-1 : (iL >= (int)pls.size()) ? 0 : iL;
-			    opPg = pls[iL];
-			    if(opPg == curEl) return;
+			    while(true) {
+				if(com == "next") iL++;
+				if(com == "prev") iL--;
+				iL = (iL < 0) ? (int)pls.size()-1 : (iL >= (int)pls.size()) ? 0 : iL;
+				opPg = pls[iL];
+				if(opPg == curEl) return;
+				cpg_ = cpg.freeStat() ? at(opPg) : cpg.at().pageAt(opPg);
+				if(SYS->security().at().access(reqUser(),SEC_RD,
+					TSYS::strParse(cpg_.at().attrAt("owner").at().getS(),0,":"),TSYS::strParse(cpg_.at().attrAt("owner").at().getS(),1,":"),
+					cpg_.at().attrAt("perm").at().getI()))
+				    break;
+			    };
 			}
 			else opPg = curEl;
 		    }

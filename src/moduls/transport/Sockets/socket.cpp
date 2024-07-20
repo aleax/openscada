@@ -73,7 +73,7 @@
 #define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.9.0"
+#define MOD_VER		"4.9.1"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov(2014)")
 #define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -157,7 +157,7 @@ string TTransSock::addrResolve( const string &host, const string &port, vector<s
 	struct servent servbuf, *sp;
 	int stPort = s2i(port);
 	if(stPort == 0 && getservbyname_r(port.c_str(),(type==S_UDP)?"udp":"tcp",&servbuf,sBuf,sizeof(sBuf),&sp) == 0 && sp)
-	    stPort = sp->s_port;
+	    stPort = htons(sp->s_port);
 	if(stPort == 0) return TSYS::strMess(_("Port '%s' is wrong."), port.c_str());
 
 	// Checking directly for static addresses

@@ -1,4 +1,10 @@
 2024-07-20 Roman (stable)
+- LibsDB.vcaBase: wlb_Main.RootPgSo: Direct pages list append by checking the pages permission.
+- FIX:Transport.{Sockets,SSL}: Corrected in obtaining true bytes sequence after getservbyname_r().
+- UI.VCAEngine: Session::uiCmd() and its UserAPI variant append by the permission checking of the listing and group pages.
+
+
+2024-07-20 Roman (stable)
 - FIX:DAQ.System: The CPU DA source appended by the "nice" part in item of the whole load.
 
 
