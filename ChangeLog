@@ -1,4 +1,12 @@
 2024-08-12 Roman (stable)
+- !!!!:LibsDB.OscadaLibs: The library tmplib_DevLib appended by the template "Ergomera 125 (ergomera125)" with initial
+	implementation the own protocol.
+    !!: The library tmplib_LowDevLib_io appended by the template "1-Wire (1W)" merged from 1W_DS9097 and 1W_DS9097U before
+	appending I2C Drivers.
+- Transport.Serial: All options in the address field marked optional.
+
+
+2024-08-12 Roman (stable)
 - FIX:LibsDB.vcaBase: wlb_Main.storeHouse: Some improved in generic items placing at geomZ.
 - FIX:data/{debian/control,openscada.spec,openscada_mod_ALT.spec,openscada_mod_RH.spec}: Fixed in the word "built".
 - FIX:Archive: The word "DB" renamed to "storage".
