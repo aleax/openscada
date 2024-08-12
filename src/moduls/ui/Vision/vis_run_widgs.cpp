@@ -546,7 +546,7 @@ bool RunWdgView::event( QEvent *event )
 	default: break;
     }
 
-    //Try put mouse event to next level widget into this container
+    //Try put mouse event to next level widget in this container
     if(!qobject_cast<RunPageView*>(this) && trToUnderlay) {
 	//(event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonDblClick))
 	bool isOk = false;
@@ -566,7 +566,13 @@ bool RunWdgView::event( QEvent *event )
 			curp = wdg->mapFromGlobal(cursor().pos());
 		    }
 		}
-		return QApplication::sendEvent(wdg, event);
+
+		QMouseEvent *smev = dynamic_cast<QMouseEvent*>(event);
+		if(!smev || !wdg->childAt(curp)) return QApplication::sendEvent(wdg, event);
+
+		// For mouse events we change the local position corresponding to the widget.
+		QMouseEvent mev(smev->type(), curp, smev->globalPosition(), smev->button(), smev->buttons(), smev->modifiers());
+		QApplication::sendEvent(wdg->childAt(curp), &mev);
 	    }
 	}
 	return QApplication::sendEvent(parentWidget(), event);

@@ -2134,7 +2134,7 @@ fi
 - Update spec to build for ALTLinux Sisyphus.
 
 * Wed Mar 26 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
-- Rebuilded for support x86_64 several distributives and some build system bugs is fixed.
+- Rebuilt for support x86_64 several distributives and some build system bugs is fixed.
 
 * Sun Mar 23 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
 - menu files included.

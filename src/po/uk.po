@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-23 20:38+0300\n"
+"POT-Creation-Date: 2024-08-11 17:06+0300\n"
 "PO-Revision-Date: 2020-10-25 10:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team:  <uk@li.org>\n"
@@ -187,8 +187,7 @@ msgid "Redundancy"
 msgstr "Резервування"
 
 msgid "Overtime of the reserve history reload at start, days"
-msgstr ""
-"Глибина примусового перевантаження історії резерву при запуску, в добах."
+msgstr "Глибина примусового перевантаження історії резерву при запуску, в добах."
 
 msgid "Message archivers"
 msgstr "Архіватори повідомлень"
@@ -318,16 +317,16 @@ msgstr "Видалити усе без джерела - пасивні"
 msgid "Remove all with error source - missing source"
 msgstr "Видалити усе із помилкою джерела - джерело відсутнє"
 
-msgid "Remove all lost archives - empty DB"
-msgstr "Видалити усі втрачені архіви - порожня БД"
+msgid "Remove all lost archives - empty storage"
+msgstr "Видалити усі втрачені архіви - порожнє сховище"
 
 #, c-format
 msgid ""
 "all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost "
-"(empty DB) %d"
+"(empty storage) %d"
 msgstr ""
 "загалом %d, увімкнено %d; без джерела (пасивне) %d, помилка (відсутнє "
-"джерело) %d, втрачене (порожня БД) %d"
+"джерело) %d, втрачене (порожнє сховище) %d"
 
 msgid "<High level>"
 msgstr "<Високий рівень>"
@@ -553,8 +552,7 @@ msgid "Last read buffer"
 msgstr "Останнє читання буферу"
 
 #, c-format
-msgid ""
-"Number of the setting items achieved the limit %d for time range [%lld:%lld]!"
+msgid "Number of the setting items achieved the limit %d for time range [%lld:%lld]!"
 msgstr ""
 "Кількість встановлюваних елементів досягнула обмеження %d для діапазону "
 "[%lld:%lld]!"
@@ -655,8 +653,7 @@ msgstr "Таблиці у БД, але не відкриті на цей час.
 msgid "Load the program from this DB"
 msgstr "Завантажити програму з цієї БД"
 
-msgid ""
-"Codepage of data in the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
+msgid "Codepage of data in the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr "Кодування даних у БД. Наприклад: UTF-8, KOI8-R, KOI8-U ... ."
 
 msgid ""
@@ -1266,8 +1263,7 @@ msgstr "Загальне Сховище"
 msgid "Configuration File"
 msgstr "Конфігураційний Файл"
 
-msgid ""
-"Storage address in the format \"{DB module}.{DB name}\" or the common ones."
+msgid "Storage address in the format \"{DB module}.{DB name}\" or the common ones."
 msgstr "Адреса сховища у форматі \"{Модуль БД}.{Ім'я БД}\" або загальне."
 
 #, c-format
@@ -1530,8 +1526,7 @@ msgstr "2:Збір зупинено."
 msgid "Parameter: "
 msgstr "Параметр: "
 
-msgid ""
-"The type changing leads to lose some data of the specific configurations."
+msgid "The type changing leads to lose some data of the specific configurations."
 msgstr "Зміна типу потягне за собою втрату даних специфічних конфігурацій."
 
 msgid "Inclusion"
@@ -1867,6 +1862,7 @@ msgstr "КіБ"
 msgid "B"
 msgstr "Б"
 
+#, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"
@@ -2105,8 +2101,7 @@ msgid "Error writing the configuration file '%s': %s"
 msgstr "Помилка запису до конфігураційного файлу '%s': %s"
 
 #, c-format
-msgid ""
-"Impossible to hold the project lock! Seems the project '%s' already running."
+msgid "Impossible to hold the project lock! Seems the project '%s' already running."
 msgstr "Неможливо захопити замок проєкту! Схоже проєкт '%s' вже виконується."
 
 msgid "Loading."
@@ -2714,8 +2709,7 @@ msgid "User;System;User and System"
 msgstr "Корист.;Системн.;Корист. та Системн."
 
 msgid "Initial connection identifier to what bind for control."
-msgstr ""
-"Ідентифікатор ініціативного підключення до якого зв'язуватися для керування."
+msgstr "Ідентифікатор ініціативного підключення до якого зв'язуватися для керування."
 
 msgid "New external host"
 msgstr "Новий зовнішній хост"
@@ -3138,3 +3132,4 @@ msgstr "Встановлено назву проєкту у:"
 
 msgid "already started."
 msgstr "вже запущено."
+

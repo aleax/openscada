@@ -461,7 +461,7 @@ ln -s %_defaultdocdir/%name-docUK-%version %buildroot/%_datadir/openscada/docs/u
 - Update spec to build for ALTLinux Sisyphus.
 
 * Wed Mar 26 2008 Roman Savochenko <roman@oscada.org>
-- Rebuilded for support x86_64 several distributives and some build system bugs is fixed.
+- Rebuilt for support x86_64 several distributives and some build system bugs is fixed.
 
 * Sun Mar 23 2008 Roman Savochenko <roman@oscada.org>
 - menu files included

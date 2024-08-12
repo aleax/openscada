@@ -1,3 +1,14 @@
+2024-08-12 Roman (stable)
+- FIX:LibsDB.vcaBase: wlb_Main.storeHouse: Some improved in generic items placing at geomZ.
+- FIX:data/{debian/control,openscada.spec,openscada_mod_ALT.spec,openscada_mod_RH.spec}: Fixed in the word "built".
+- FIX:Archive: The word "DB" renamed to "storage".
+- Transport: Using the variables "ReqTm", "ReqMode", "ToTmOut", "InBufSz", "ReqAnsw" moved to the individual space
+    of the transport object.
+- FIX:DAQ.DAQGate: Some fixed in Ukrainian translation.
+- FIX:DAQ.System: Preventing the error status of the Sensors Source at presence direct sources.
+- FIX:UI.Vision: Improved in transporting mouse events to the underlying active widgets like to form elements.
+
+
 2024-07-20 Roman (stable)
 - LibsDB.vcaBase: wlb_Main.RootPgSo: Direct pages list append by checking the pages permission.
 - FIX:Transport.{Sockets,SSL}: Corrected in obtaining true bytes sequence after getservbyname_r().

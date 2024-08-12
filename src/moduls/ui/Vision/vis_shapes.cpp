@@ -4734,7 +4734,7 @@ bool ShapeProtocol::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	    case QEvent::MouseButtonPress:
 	    case QEvent::MouseButtonRelease:
 	    case QEvent::MouseButtonDblClick:
-		QApplication::sendEvent(w,event);
+		QApplication::sendEvent(w, event);
 		return true;
 	    default: break;
 	}

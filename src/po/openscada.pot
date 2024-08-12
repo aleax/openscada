@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-23 20:38+0300\n"
+"POT-Creation-Date: 2024-08-11 17:06+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -277,11 +277,11 @@ msgstr ""
 msgid "Remove all with error source - missing source"
 msgstr ""
 
-msgid "Remove all lost archives - empty DB"
+msgid "Remove all lost archives - empty storage"
 msgstr ""
 
 #, c-format
-msgid "all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost (empty DB) %d"
+msgid "all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost (empty storage) %d"
 msgstr ""
 
 msgid "<High level>"
