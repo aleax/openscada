@@ -32,7 +32,8 @@
 #include "vis_shapes.h"
 
 #if QT_VERSION < 0x060000
-# define MiddleButton	MidButton
+# define MiddleButton		MidButton
+# define globalPosition()	globalPos()
 #endif
 
 #undef _
