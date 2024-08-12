@@ -14048,7 +14048,7 @@ if(fClrTo >= 0) {
 if(toCalcCycles > 0.1) {
 	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
 	toCalcCycles = max(0, toCalcCycles-1);
-}','','',-2,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1714371601);
+}','','',-2,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1723382203);
 INSERT INTO wlb_Main VALUES('weather','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAxCAIAAADldTjtAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAO
 KUlEQVRogdVa228bV3o/Z87cyRnebyJF8SJLsmRZchy7cSUncQyjDjbbNhssdrsLNFsUaNEWfSgK
 9F/xS9CgD3loUewiKFqk62w2XslO1rZs2bEki5JMihJ1o3jRkJwZzu30YWxqRMluI2eb7PdEHn7n
@@ -24180,7 +24180,7 @@ The frame provides currently and in future for next features:
   - detailed control panel-form of the selected item with the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.4.17
+Version: 1.4.18
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -24194,7 +24194,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - деталізована панель-форма керування обраним елементом зі специфічними полями.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.4.17
+Версія: 1.4.18
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');
@@ -24238,7 +24238,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','214',32,'','','fltr2','',''
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','57',32,'','','fltr2','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','558',32,'','','fltr2','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','16',32,'','','fltr2','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','9',32,'','','fltr2','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','1006',32,'','','fltr2','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','0',40,'','','fltr2','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','value','',8,'','','fltr2','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','view','1',32,'','','fltr2','','','','','','','');
@@ -24250,7 +24250,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','214',32,'','','fltr3','',''
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','74',32,'','','fltr3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','558',32,'','','fltr3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','16',32,'','','fltr3','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','1006',32,'','','fltr3','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','1008',32,'','','fltr3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','0',40,'','','fltr3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','value','',8,'','','fltr3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','view','1',32,'','','fltr3','','','','','','','');
@@ -24297,7 +24297,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','60',32,'','','fltrCol2','',
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','57',32,'','','fltrCol2','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','150',32,'','','fltrCol2','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','16',32,'','','fltrCol2','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','10',32,'','','fltrCol2','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','1005',32,'','','fltrCol2','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',32,'','','fltrCol2','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','elType','4',32,'','','fltrCol2','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','value','Disabled',8,'','','fltrCol2','Вимкнено','','Выключено','','','','');
@@ -24309,7 +24309,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','60',32,'','','fltrCol3','',
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','74',32,'','','fltrCol3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','150',32,'','','fltrCol3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','16',32,'','','fltrCol3','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','1005',32,'','','fltrCol3','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','1007',32,'','','fltrCol3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',32,'','','fltrCol3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','elType','4',32,'','','fltrCol3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','value','Disabled',8,'','','fltrCol3','Вимкнено','','Выключено','','','','');
@@ -24333,7 +24333,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','864',32,'','','go_report','
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','3',32,'','','go_report','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','35',32,'','','go_report','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','35',32,'','','go_report','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','6',32,'','','go_report','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','993',32,'','','go_report','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Prepare and call a report of all visible',32,'','','go_report','Приготувати та викликати звіт усього видимого','','Приготовить и вызвать отчёт всего видимого','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',40,'','','go_report','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','elType','3',32,'','','go_report','','','','','','','');
@@ -24448,7 +24448,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',40,'','','btClassEdit','','
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','702',32,'','','btClassEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','20',32,'','','btClassEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','20',32,'','','btClassEdit','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','20',32,'','','btClassEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','25',32,'','','btClassEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','contextMenu','',32,'','','btClassEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',40,'','','btClassEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','elType','3',32,'','','btClassEdit','','','','','','','');
@@ -24463,7 +24463,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','779',32,'','','btEdit','','
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','16',32,'','','btEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','22',32,'','','btEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','22',32,'','','btEdit','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','20',32,'','','btEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','990',32,'','','btEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','contextMenu','',32,'','','btEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',40,'','','btEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','elType','3',32,'','','btEdit','','','','','','','');
@@ -24517,7 +24517,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','828',32,'','','go_reportIt'
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','3',32,'','','go_reportIt','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','35',32,'','','go_reportIt','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','35',32,'','','go_reportIt','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','21',32,'','','go_reportIt','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','992',32,'','','go_reportIt','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Prepare and call a report for the selected record',32,'','','go_reportIt','Приготувати та викликати звіт обраного запису','','Приготовить и вызвать отчёт выбранной записи','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','0',40,'','','go_reportIt','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','elType','3',32,'','','go_reportIt','','','','','','','');
@@ -24529,7 +24529,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','803',32,'','','btItEdit',''
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','16',32,'','','btItEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','22',32,'','','btItEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','22',32,'','','btItEdit','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','22',32,'','','btItEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','991',32,'','','btItEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','',40,'','','btItEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',40,'','','btItEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','elType','3',32,'','','btItEdit','','','','','','','');
@@ -24595,7 +24595,7 @@ INSERT INTO wlb_Main_io VALUES('weather','arg7tp','2',0,'','','curText','','',''
 INSERT INTO wlb_Main_io VALUES('weather','arg7val','W',8,'','','curText','З','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','arg7cfg','',0,'','','curText','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','arg8tp','2',0,'','','curText','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('weather','arg8val','Date',8,'','','curText','Дата','','','','','','');
+INSERT INTO wlb_Main_io VALUES('weather','arg8val','Date',8,'','','curText','Дата','','Дата','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomX','3',32,'','','fcD1Symb','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomY','62',32,'','','fcD1Symb','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('weather','geomW','35',32,'','','fcD1Symb','','','','','','','');

@@ -321,16 +321,16 @@ msgstr "Alle ohne Quelle entfernen - passiv"
 msgid "Remove all with error source - missing source"
 msgstr "Alle mit Fehlerquelle entfernen – fehlende Quelle"
 
-msgid "Remove all lost archives - empty DB"
-msgstr "Entfernen Sie alle verlorenen Archive – leere Datenbank"
+msgid "Remove all lost archives - empty storage"
+msgstr "Entfernen Sie alle verlorenen Archive – Leerspeicher"
 
 #, c-format
 msgid ""
 "all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost "
-"(empty DB) %d"
+"(empty storage) %d"
 msgstr ""
 "alle %d, aktiviert %d; Keine Quelle (passiv) %d, Fehler (fehlende Quelle) "
-"%d, verloren(leerer DB) %d"
+"%d, verloren(Leerspeicher) %d"
 
 msgid "<High level>"
 msgstr "<Hohes Niveau>"

@@ -1084,7 +1084,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		"tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","va_","idSz",i2s(limArchID_SZ).c_str());
 	    ctrMkNode("comm",opt,-1,"/v_arch/delSrcNo",_("Remove all with no source - passive"),RWRW__,"root",SARH_ID);
 	    ctrMkNode("comm",opt,-1,"/v_arch/delSrcErr",_("Remove all with error source - missing source"),RWRW__,"root",SARH_ID);
-	    ctrMkNode("comm",opt,-1,"/v_arch/delLost",_("Remove all lost archives - empty DB"),RWRW__,"root",SARH_ID);
+	    ctrMkNode("comm",opt,-1,"/v_arch/delLost",_("Remove all lost archives - empty storage"),RWRW__,"root",SARH_ID);
 	}
 	return;
     }
@@ -1216,7 +1216,8 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    if(vo.at().srcMode() == TVArchive::Passive)	srcNoCnt++;
 	    if(vo.at().DB().empty())	lostCnt++;
 	}
-	opt->setText(TSYS::strMess(_("all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost (empty DB) %d"),list.size(),eCnt,srcNoCnt,srcErrCnt,lostCnt));
+	opt->setText(TSYS::strMess(_("all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost (empty storage) %d"),
+					list.size(),eCnt,srcNoCnt,srcErrCnt,lostCnt));
     }
     else if(a_path.find("/v_arch/del") == 0 && ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR)) {
 	bool SrcNo = (a_path.find("delSrcNo") != string::npos);

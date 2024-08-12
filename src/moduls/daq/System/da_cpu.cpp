@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_cpu.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -71,7 +71,7 @@ void CPU::updGen( bool cntr )
 	    float sum = (user+nice+sys+idle) - (load[unit+1].user+load[unit+1].nice+load[unit+1].sys+load[unit+1].idle);
 	    if(sum == 0) continue;
 
-	    resLoad += r2s(100*(float(user+sys-load[unit+1].user-load[unit+1].sys))/sum) + ";";
+	    resLoad += r2s(100*(float(user+sys+nice-load[unit+1].user-load[unit+1].sys-load[unit+1].nice))/sum) + ";";
 	    resSys += r2s(100*(float(sys-load[unit+1].sys))/sum) + ";";
 	    resUser += r2s(100*(float(user-load[unit+1].user))/sum) + ";";
 	    resIdle += r2s(100*(float(idle-load[unit+1].idle))/sum) + ";";

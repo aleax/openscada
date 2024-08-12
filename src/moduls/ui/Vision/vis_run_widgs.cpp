@@ -32,7 +32,8 @@
 #include "vis_shapes.h"
 
 #if QT_VERSION < 0x060000
-# define MiddleButton	MidButton
+# define MiddleButton		MidButton
+# define globalPosition()	globalPos()
 #endif
 
 #undef _
@@ -225,7 +226,7 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos, b
 	case A_NO_ID:
 	    // User's status line items
 	    if(attr == "statLine")		mainWin()->usrStatus(val, dynamic_cast<RunPageView*>(this));
-	    else if(attr == "runWin" && !mainWin()->isResizeManual && (!mainWin()->masterPg() || this == mainWin()->masterPg())) {
+	    else if(attr == "runWin" && !mainWin()->f_resizeManual && (!mainWin()->masterPg() || this == mainWin()->masterPg())) {
 		switch(s2i(val)) {
 		    case 0:
 			if(s2i(SYS->cmdOpt("showWin")))	break;
@@ -546,7 +547,7 @@ bool RunWdgView::event( QEvent *event )
 	default: break;
     }
 
-    //Try put mouse event to next level widget into this container
+    //Try put mouse event to next level widget in this container
     if(!qobject_cast<RunPageView*>(this) && trToUnderlay) {
 	//(event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonDblClick))
 	bool isOk = false;
@@ -566,7 +567,13 @@ bool RunWdgView::event( QEvent *event )
 			curp = wdg->mapFromGlobal(cursor().pos());
 		    }
 		}
-		return QApplication::sendEvent(wdg, event);
+
+		QMouseEvent *smev = dynamic_cast<QMouseEvent*>(event);
+		if(!smev || !wdg->childAt(curp)) return QApplication::sendEvent(wdg, event);
+
+		// For mouse events we change the local position corresponding to the widget.
+		QMouseEvent mev(smev->type(), curp, smev->globalPosition(), smev->button(), smev->buttons(), smev->modifiers());
+		QApplication::sendEvent(wdg->childAt(curp), &mev);
 	    }
 	}
 	return QApplication::sendEvent(parentWidget(), event);

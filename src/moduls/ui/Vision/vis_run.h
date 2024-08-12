@@ -229,8 +229,9 @@ class VisRun : public QMainWindow
 	void ntfReg( int8_t tp, const string &props, const string &pgCrtor, bool prior = true );
 
 	//Public attributes
-	bool winClose;					//Closing window flag
-	bool isResizeManual;				//Manual resizing flag
+	unsigned f_winClose	:1;			//Closing window flag
+	unsigned f_resizeManual :1;			//Manual resizing flag
+	unsigned f_updPage	:1;
 
 	float	updTmMax, planePer;
 
@@ -355,7 +356,6 @@ class VisRun : public QMainWindow
 	deque<RunPageView*>	cachePg;	//Pages cache
 	map<string,CacheEl>	mCacheRes;	//Resources cache
 
-	bool		updPage;
 	SCADAHost	*host;
 };
 

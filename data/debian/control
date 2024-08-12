@@ -21,7 +21,7 @@ Description: Open SCADA system project
  Protocol.SelfSystem, Protocol.UserProtocol,
  Special.FLibComplex1, Special.FLibSYS.
  .
- External modules (as the shared libraries) builded and included to the package:
+ External modules (as the shared libraries) built and included to the package:
  DB.MySQL, DB.PostgreSQL, DB.FireBird, DB.LDAP,
  DAQ.BlockCalc, DAQ.DAQGate, DAQ.System, DAQ.ModBus, DAQ.DCON, DAQ.MMS,
  DAQ.OPC_UA, DAQ.SNMP, DAQ.DiamondBoards(i386), DAQ.Comedi,

@@ -1,3 +1,21 @@
+2024-08-12 Roman 0.9.7.3
+- !!!!:FIX:LibsDB.OscadaLibs.DevLib.VSE002: Fixed in non reconnection at leaving partial data in the buffer.
+- FIX:LibsDB.vcaBase: wlb_Main.storeHouse: Some improved in generic items placing at geomZ.
+- FIX:data/{debian/control,openscada.spec,openscada_mod_ALT.spec,openscada_mod_RH.spec}: Fixed in the word "built".
+- FIX:DAQ: TController::alarmSet(): TSYS::curTime() used instead TSYS::sysTm() to set single source.
+    FIX:System: The CPU DA source appended by the "nice" part in item of the whole load.
+	Preventing the error status of the Sensors Source at presence direct sources.
+    FIX:DAQGate: Some fixed in Ukrainian translation.
+- FIX:Archive: The word "DB" renamed to "storage".
+- Transport: Using the variables "ReqTm", "ReqMode", "ToTmOut", "InBufSz", "ReqAnsw" moved to the individual space
+    of the transport object.
+- !:FIX:UI.Vision: Prevented fullscreen mode fault in some XOrg conditions, when the fullscreen Qt-flag occasionally cleared,
+	that is the flag was doubled internally. Reproduced often with Qt6 on Debian 12.
+    FIX: Improved in transporting mouse events to the underlying active widgets like to form elements.
+- !:FIX:UI.WebVision: The Button primitive expanded for adaptive "line-height: 1.2" or "line-height: 1.0" depending name multiline.
+    FIX: Custom Fields fixed in processing fifth field emptiness.
+
+
 2024-06-26 Roman 0.9.7.2
 - !!!:FIX:LibsDB.OscadaLibs: DevLib.VSE002: Rewrote in the packages sequential reading mode,
 	    that is detection all packages with notifying unknown.

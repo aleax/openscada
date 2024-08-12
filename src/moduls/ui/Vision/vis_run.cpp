@@ -93,14 +93,14 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
 #if QT_VERSION < 0x050000
     QMainWindow(QDesktopWidget().screen(iScr)),
 #endif
-    winClose(false), isResizeManual(false), updTmMax(0), planePer(0),
+    f_winClose(false), f_resizeManual(false), f_updPage(false), updTmMax(0), planePer(0),
 #ifndef QT_NO_PRINTER
     prPg(NULL), prDiag(NULL), prDoc(NULL),
 #endif
     fileDlg(NULL),
     conErr(NULL), crSessForce(icrSessForce), mKeepAspectRatio(true), mWinPosCntrSave(false), prjSes_it(iprjSes_it),
     master_pg(NULL), mPeriod(1000), mConId(0), mScreen(iScr), wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), expTblCnt(1), x_scale(1), y_scale(1),
-    mAlrmSt(0xFFFFFF), alrLevSet(false), ntfSet(0), alrmUpdCnt(0), updPage(false), host(NULL)
+    mAlrmSt(0xFFFFFF), alrLevSet(false), ntfSet(0), alrmUpdCnt(0), host(NULL)
 {
 #if QT_VERSION >= 0x050000
     if(qApp->screens().size() > 1 && iScr < qApp->screens().size() && windowHandle())
@@ -288,7 +288,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
 
 VisRun::~VisRun( )
 {
-    winClose = true;
+    f_winClose = true;
 
     endRunTimer->stop();
     updateTimer->stop();
@@ -411,7 +411,7 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob, bool main )
 		TSYS::sysSleep(0.01);
 	    }
 	host->inHostReq--;
-	if(winClose && !host->inHostReq) close();
+	if(f_winClose && !host->inHostReq) close();
 
 	rez = s2i(node.attr("rez"));
     }
@@ -476,7 +476,7 @@ QString VisRun::getFileName( const QString &caption, const QString &dir, const Q
 
 void VisRun::closeEvent( QCloseEvent* ce )
 {
-    winClose = true;
+    f_winClose = true;
 
     //Call for next processing by the events handler for the real closing after release all background requests
     if(host && host->inHostReq) { ce->ignore(); /*QCoreApplication::postEvent(this, new QCloseEvent());*/ return; }
@@ -510,7 +510,7 @@ void VisRun::resizeEvent( QResizeEvent *ev )
     if(masterPg()) {
 	float x_scale_old = x_scale;
 	float y_scale_old = y_scale;
-	if(windowState()&(Qt::WindowMaximized|Qt::WindowFullScreen)) {
+	if(windowState()&(Qt::WindowMaximized|Qt::WindowFullScreen) || aFullScr()->isChecked()) {
 	    x_scale = (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(masterPg()->sizeOrigF().width()*masterPg()->xScale());
 	    y_scale = (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(masterPg()->sizeOrigF().height()*masterPg()->yScale());
 	    if(x_scale > 1 && x_scale < 1.02) x_scale = 1;
@@ -1409,7 +1409,7 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
     mConId = s2i(req.attr("conId"));
     bool toRestore = master_pg;
     if(openPgs.size()) openPgs = "/ses_"+work_sess+openPgs;
-    if(toRestore) isResizeManual = true;
+    if(toRestore) f_resizeManual = true;
 
     //Prepare group for parameters request and apply
     setWindowTitle(QString(_("Running project: %1")).arg(src_prj.c_str()));	//Default title
@@ -1488,7 +1488,7 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 
 void VisRun::fullUpdatePgs( )
 {
-    isResizeManual = true;
+    f_resizeManual = true;
 
     for(unsigned iP = 0; iP < pgList.size(); iP++) {
 	RunPageView *pg = master_pg->findOpenPage(pgList[iP]);
@@ -1908,12 +1908,12 @@ void VisRun::cacheResSet( const string &res, const string &val )
 
 void VisRun::updatePage( )
 {
-    if(winClose || updPage) return;
+    if(f_winClose || f_updPage) return;
 
     int rez;
     int64_t d_cnt = TSYS::curTime();
 
-    updPage = true;
+    f_updPage = true;
 
     //Pages update
     XMLNode req("openlist");
@@ -1972,7 +1972,7 @@ void VisRun::updatePage( )
 	mess_warning(mod->nodePath().c_str(),_("Restore the session creation for '%s'."),prjSes_it.c_str());
 	updateTimer->stop();
 	initSess(prjSes_it, crSessForce);
-	updPage = false;
+	f_updPage = false;
 	return;
     }
 
@@ -2034,7 +2034,7 @@ void VisRun::updatePage( )
     }
 
     wPrcCnt++;
-    updPage = isResizeManual = false;
+    f_updPage = f_resizeManual = false;
 }
 
 #undef _

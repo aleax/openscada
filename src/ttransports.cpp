@@ -1742,32 +1742,31 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	load_();
     }
     else if(a_path == "/req/tm" && ctrChkNode(opt,"get",R_R___,"root",STR_ID,SEC_RD))
-	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ReqTm",DEF_ReqTm,opt->attr("user")));
+	opt->setText(TBDS::genPrmGet(nodePath()+"ReqTm",DEF_ReqTm,opt->attr("user")));
     else if(a_path == "/req/mode") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ReqMode",DEF_ReqMode,opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"ReqMode",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"ReqMode",DEF_ReqMode,opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	TBDS::genPrmSet(nodePath()+"ReqMode",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/req/toTmOut") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ToTmOut",DEF_ToTmOut,opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"ToTmOut",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"ToTmOut",DEF_ToTmOut,opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	TBDS::genPrmSet(nodePath()+"ToTmOut",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/req/inBufSz") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))
-	    opt->setText(TBDS::genPrmGet(owner().nodePath()+"InBufSz",i2s(DEF_InBufSz),opt->attr("user")));
+	    opt->setText(TBDS::genPrmGet(nodePath()+"InBufSz",i2s(DEF_InBufSz),opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))
-	    TBDS::genPrmSet(owner().nodePath()+"InBufSz", i2s(vmax(0,vmin(prmStrBuf_SZ,s2i(opt->text())))), opt->attr("user"));
+	    TBDS::genPrmSet(nodePath()+"InBufSz", i2s(vmax(0,vmin(prmStrBuf_SZ,s2i(opt->text())))), opt->attr("user"));
     }
     else if(a_path == "/req/req") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ReqReq","",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"ReqReq","",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR)) {
-	    int mode = s2i(TBDS::genPrmGet(owner().nodePath()+"ReqMode",DEF_ReqMode,opt->attr("user")));
+	    int mode = s2i(TBDS::genPrmGet(nodePath()+"ReqMode",DEF_ReqMode,opt->attr("user")));
 	    switch(mode) {
 		case 0:
-		    TBDS::genPrmSet(owner().nodePath()+"ReqReq",
-			TSYS::strDecode(TSYS::strEncode(opt->text(),TSYS::Bin),TSYS::Bin," "), opt->attr("user"));
+		    TBDS::genPrmSet(nodePath()+"ReqReq", TSYS::strDecode(TSYS::strEncode(opt->text(),TSYS::Bin),TSYS::Bin," "), opt->attr("user"));
 		    break;
 		default:
-		    TBDS::genPrmSet(owner().nodePath()+"ReqReq",opt->text(), opt->attr("user"));
+		    TBDS::genPrmSet(nodePath()+"ReqReq", opt->text(), opt->attr("user"));
 		    break;
 	    }
 	}
@@ -1776,16 +1775,16 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path == "/req/answ") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ReqAnsw","",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"ReqAnsw",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"ReqAnsw","",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	TBDS::genPrmSet(nodePath()+"ReqAnsw",opt->text(),opt->attr("user"));
 	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",STR_ID,SEC_RD)) {
 	    opt->setAttr("font",SYS->ui().at().fontSnthHglCode());
 	}
     }
     else if(a_path == "/req/send" && ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR)) {
 	string answ;
-	int mode = s2i(TBDS::genPrmGet(owner().nodePath()+"ReqMode",DEF_ReqMode,opt->attr("user")));
-	string req = TBDS::genPrmGet(owner().nodePath()+"ReqReq","",opt->attr("user"));
+	int mode = s2i(TBDS::genPrmGet(nodePath()+"ReqMode",DEF_ReqMode,opt->attr("user")));
+	string req = TBDS::genPrmGet(nodePath()+"ReqReq", "", opt->attr("user"));
 
 	switch(mode) {
 	    case 0:	req = TSYS::strEncode(req,TSYS::Bin);	break;
@@ -1808,7 +1807,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 
 	int64_t stm = TSYS::curTime();
 	try {
-	    int inBufSz = s2i(TBDS::genPrmGet(owner().nodePath()+"InBufSz",i2s(DEF_InBufSz),opt->attr("user")));
+	    int inBufSz = s2i(TBDS::genPrmGet(nodePath()+"InBufSz",i2s(DEF_InBufSz),opt->attr("user")));
 	    char buf[inBufSz];
 	    if(!startStat()) start();
 	    MtxAlloc resN(reqRes(), true);
@@ -1817,17 +1816,17 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 		if(req.size()) answ.assign(buf, resp_len);
 		else answ.append(buf, resp_len);
 
-		bool ToTmOut = (bool)s2i(TBDS::genPrmGet(owner().nodePath()+"ToTmOut",DEF_ToTmOut,opt->attr("user")));
+		bool ToTmOut = (bool)s2i(TBDS::genPrmGet(nodePath()+"ToTmOut",DEF_ToTmOut,opt->attr("user")));
 		while(ToTmOut && resp_len > 0 && ((TSYS::curTime()-stm)/1000000) < prmInterf_TM) {
 		    try { resp_len = messIO(NULL, 0, buf, inBufSz); } catch(TError &err) { break; }
 		    answ.append(buf, resp_len);
 		}
 	    }
 
-	    TBDS::genPrmSet(owner().nodePath()+"ReqTm", tm2s(1e-6*(TSYS::curTime()-stm)), opt->attr("user"));
-	    TBDS::genPrmSet(owner().nodePath()+"ReqAnsw", (mode==0)?TSYS::strDecode(answ,TSYS::Bin,"<text>"):answ, opt->attr("user"));
+	    TBDS::genPrmSet(nodePath()+"ReqTm", tm2s(1e-6*(TSYS::curTime()-stm)), opt->attr("user"));
+	    TBDS::genPrmSet(nodePath()+"ReqAnsw", (mode==0)?TSYS::strDecode(answ,TSYS::Bin,"<text>"):answ, opt->attr("user"));
 	} catch(TError &err) {
-	    TBDS::genPrmSet(owner().nodePath()+"ReqTm", tm2s(1e-6*(TSYS::curTime()-stm)), opt->attr("user"));
+	    TBDS::genPrmSet(nodePath()+"ReqTm", tm2s(1e-6*(TSYS::curTime()-stm)), opt->attr("user"));
 	    throw;
 	}
     }

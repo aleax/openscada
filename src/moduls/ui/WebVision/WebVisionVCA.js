@@ -729,6 +729,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    for(var i = 0; i < tVl.length; i++) {
 			if((tVl3=tVl[i].split(':')).length < 2)	continue;
 			if(tVl3.length < 4 || !tVl3[3].length) tVl3[3] = "black";
+			if(tVl3.length < 5) tVl3[4] = "";
 			tVl4 =	"id='"+tVl3[0]+"' style='color: "+tVl3[3]+"; border: 1px solid "+tVl3[3]+"; ' "+
 				"onmousedown='setWAttrs(masterPage.addr,\"event\",\"key_mousePres\"+evMouseGet(event)+\":/stIt_\"+this.id);' "+
 				"onmouseup='setWAttrs(masterPage.addr,\"event\",\"key_mouseRels\"+evMouseGet(event)+\":/stIt_\"+this.id);' "+
@@ -1699,10 +1700,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			var imgObj = formObj.childNodes.length ? formObj.childNodes[0] : this.place.ownerDocument.createElement('img');
 			var spanObj = formObj.childNodes.length ? formObj.childNodes[1] : this.place.ownerDocument.createElement('span');
 
-			spanObj.style.cssText = "display: table-cell; height: "+(geomH-2*stdBordWidth)+"px; line-height: 1; text-align: center; white-space: pre-line; word-break: break-word; width: "+(geomW-2*stdBordWidth)+"px; ";
+			spanObj.style.cssText = "display: table-cell; height: "+(geomH-2*stdBordWidth)+"px; text-align: center; white-space: pre-line; word-break: break-word; width: "+(geomW-2*stdBordWidth)+"px; ";
 			if(toInit || this.attrsMdf['name']) {
 			    spanObj.disabled = !this.attrs['name'].length;
 			    spanObj.innerText = this.attrs['name'].replace('\\n','\n') + (this.place.isMenu?" ▾":"");
+			    spanObj.style.lineHeight = (this.attrs['name'].indexOf("\\n") < 0) ? 1.0 : 1.2;
 			}
 			if(toInit || this.attrsMdf['img'] || this.attrsMdf['name']) {
 			    imgObj.hidden = !this.attrs['img'].length;
@@ -1724,7 +1726,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    formObj.appendChild(spanObj);
 			}
 		    }
-		    else if(toInit || this.attrsMdf['name'])	formObj.innerText = this.attrs['name'].replace('\\n','\n') + (this.place.isMenu?" ▾":"");
+		    else if(toInit || this.attrsMdf['name']) {
+			formObj.innerText = this.attrs['name'].replace('\\n','\n') + (this.place.isMenu?" ▾":"");
+			formObj.style.lineHeight = (this.attrs['name'].indexOf("\\n") < 0) ? 1.0 : 1.2;
+		    }
 
 		    if(this.place.checkable) {
 			if(parseInt(this.attrs['value'])) formObj.classList.add("pressed"); else formObj.classList.remove("pressed");

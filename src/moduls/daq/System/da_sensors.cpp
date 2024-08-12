@@ -79,6 +79,7 @@ void Sensors::getVal( TMdPrm *prm )
 		if(!prm->vlPresent((s_id=string(sRez->d_name)+"_temp")))
 		    fldAdd(new TFld(s_id.c_str(),string(sRez->d_name)+" temp",TFld::Real,TFld::NoWrite));
 		prm->vlAt(s_id).at().setR(1e-3*s2r(s_val), 0, true);
+		devOK = true;
 	    }
 
 	closedir(IdDir);
@@ -95,6 +96,7 @@ void Sensors::getVal( TMdPrm *prm )
 			if(!prm->vlPresent((s_id=string(sRez->d_name)+"_"+sRez2->d_name)))
 			    fldAdd(new TFld(s_id.c_str(),string(sRez->d_name)+" "+sRez2->d_name,TFld::Real,TFld::NoWrite));
 			prm->vlAt(s_id).at().setR(1e-3*s2r(s_val), 0, true);
+			devOK = true;
 		    }
 		}
 		closedir(IdDir2);

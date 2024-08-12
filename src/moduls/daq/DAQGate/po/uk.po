@@ -102,7 +102,7 @@ msgstr "Витрачено часу %s[%s]. "
 
 #, c-format
 msgid "Remote time %s. "
-msgstr "Віддалений час '%s. "
+msgstr "Віддалений час %s. "
 
 #, c-format
 msgid "Station '%s' - ERROR, restoring in %.3g s. "

@@ -6930,7 +6930,6 @@ void VCADocument::getReq( SSess &ses )
 	    XMLNode *curNode = &xproc;
 	    vector<unsigned> treeStk;
 	    treeStk.push_back(0);
-	    int tblCnt = 0;
 	    while(curNode->parent() || treeStk.back() < curNode->childSize()) {
 		if(treeStk.back() < curNode->childSize()) {
 		    curNode = curNode->childGet(treeStk.back());
