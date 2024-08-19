@@ -1,7 +1,7 @@
 
 //OpenSCADA OPC_UA implementation library file: libOPC_UA.cpp
 /******************************************************************************
- *   Copyright (C) 2009-2022 by Roman Savochenko, <roman@oscada.org>	      *
+ *   Copyright (C) 2009-2024 by Roman Savochenko, <roman@oscada.org>	      *
  *									      *
  *   This library is free software; you can redistribute it and/or modify     *
  *   it under the terms of the GNU Lesser General Public License as	      *
@@ -2536,7 +2536,7 @@ void Client::Subscr::monitoredItemDel( int32_t mItId, bool localDeactivation, bo
 	    //Processing the result
 	    for(unsigned iCh = 0; iCh < req.childSize(); ++iCh) {
 		XML_N *chO = req.childGet(iCh);
-		if(str2uint(chO->attr("statusCode")) == 0 && mItId == str2uint(chO->attr("mIt"))) {
+		if(str2uint(chO->attr("statusCode")) == 0 && mItId == str2int(chO->attr("mIt"))) {
 		    mItems[mItId].nd = NodeId();
 		    mItems[mItId].active = false;
 		    mItems[mItId].st = 0;

@@ -439,7 +439,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char f
     //Save to config
     if(isCfgCtx || (path.size() && (ibdn.empty() || TSYS::strParse(ibdn,0,".") == DB_GEN || toChangeExistsCfg || TSYS::strParse(bdn,0,".") == DB_CFG))) {
 	ResAlloc res(SYS->cfgRes());
-	XMLNode *nd = NULL, *wel = NULL, *fnd;
+	XMLNode *nd = NULL, *wel = NULL, *fnd = NULL;
 	vector<string> cf_el;
 	bool isPrm = (path.find("prm:") == 0);
 	string vnm;
@@ -620,7 +620,7 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, char f
 		TCfg &u_cfg = cfg.cfg(cf_el[iEl]);
 	        if(u_cfg.isKey() && (u_cfg.keyUse() || flags&UseAllKeys) && u_cfg.getS() != el->attr(cf_el[iEl])) break;
 	    }
-	    if(iEl == cf_el.size()) {
+	    if(iEl == (int)cf_el.size()) {
 		SYS->modifCfg(true);
 		nd->childDel(iFld--);
 		SYS->modifCfg();

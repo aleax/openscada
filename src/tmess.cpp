@@ -244,7 +244,7 @@ void TMess::setLangBase( const string &vl )
     if((!tvl.empty() && tvl.size() < 2) || tvl == "POSIX" || tvl == "C") tvl = "en";
     //else tvl = tvl.substr(0, 2);
 
-    mLangBase = tvl + ((off<vl.size())?";" + vl.substr(off):"");
+    mLangBase = tvl + ((off<(int)vl.size())?";" + vl.substr(off):"");
 
     SYS->sysModifFlgs |= TSYS::MDF_TR;
     SYS->modif();

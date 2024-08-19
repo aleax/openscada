@@ -791,7 +791,7 @@ void VisRun::exportDef( )
 		rpg->shapeList("Diagram", lstDiagr);
 		rpg->shapeList("FormEl",lstTbls);
 		//Getting only tables
-		for(int iW = 0; iW < lstTbls.size(); iW++) {
+		for(int iW = 0; iW < (int)lstTbls.size(); iW++) {
 		    if((rwdg=findOpenWidget(lstTbls[iW])) && qobject_cast<QTableWidget*>(((ShapeFormEl::ShpDt*)rwdg->shpData)->addrWdg))
 			continue;
 		    lstTbls.erase(lstTbls.begin()+iW);
@@ -1098,7 +1098,7 @@ void VisRun::exportTable( const string &itbl )
 		rpg->shapeList("FormEl",lst);
 
 	//Getting only tables
-	for(int iW = 0; iW < lst.size(); iW++) {
+	for(int iW = 0; iW < (int)lst.size(); iW++) {
 	    if((rwdg=findOpenWidget(lst[iW])) && qobject_cast<QTableWidget*>(((ShapeFormEl::ShpDt*)rwdg->shpData)->addrWdg))
 		continue;
 	    lst.erase(lst.begin()+iW);
@@ -1193,11 +1193,9 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
     }
     if(req.attr("userIsRoot").size()) setWinMenu(s2i(req.attr("userIsRoot")));
     else setWinMenu(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
-    int oldConId = mConId;
     mConId = s2i(req.attr("conId"));
 
     req.clear()->setName("CntrReqs")->setAttr("path","");
-    //req.childAdd("disconnect")->setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess())->setAttr("conId", i2s(oldConId));
     req.childAdd("get")->setAttr("path","/ses_"+workSess()+"/%2fobj%2fcfg%2fstyle");
     if(!cntrIfCmd(req)) setStyle(s2i(req.childGet(0)->text()));
 

@@ -265,6 +265,6 @@ bool UPS::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 void UPS::dList( vector<string> &list, TMdPrm *prm )
 {
     string dls = upsList(prm?prm->cfg("SUBT").getS():"localhost:3493"), tVl;
-    for(int off = 0; (tVl=TSYS::strParse(dls,0,";",&off)).size() || off < dls.size(); )
+    for(int off = 0; (tVl=TSYS::strParse(dls,0,";",&off)).size() || off < (int)dls.size(); )
 	list.push_back(tVl);
 }

@@ -65,7 +65,7 @@
 #define MOD_NAME	trS("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"6.0.6"
+#define MOD_VER		"6.0.7"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -972,7 +972,7 @@ void StApp::makeStarterMenu( QWidget *mn, const QString &lang )
     if(!mn) {
 	QMainWindow *w = dynamic_cast<QMainWindow*>(sender());
 	if(!w) return;
-	for(unsigned iAct = 0; iAct < w->menuBar()->actions().length() && !mn; ++iAct)
+	for(unsigned iAct = 0; (int)iAct < w->menuBar()->actions().length() && !mn; ++iAct)
 		if(w->menuBar()->actions()[iAct]->text() == "QTStarter")
 		    mn = w->menuBar()->actions()[iAct]->menu();
 	if(!mn) { mn = new QMenu("QTStarter"); w->menuBar()->addMenu((QMenu*)mn); }
@@ -988,7 +988,7 @@ void StApp::makeStarterMenu( QWidget *mn, const QString &lang )
 
 	    //Search for need action
 	    QAction *act = NULL;
-	    for(unsigned iAct = 0; iAct < mn->actions().length() && !act; ++iAct)
+	    for(unsigned iAct = 0; (int)iAct < mn->actions().length() && !act; ++iAct)
 		if(mn->actions()[iAct]->objectName() == list[iL].c_str())
 		    act = mn->actions()[iAct];
 

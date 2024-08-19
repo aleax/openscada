@@ -125,7 +125,7 @@ void Proc::getVal( TMdPrm *prm )
 	rdVls.clear();
 	if((f=fopen(("/proc/"+i2s(*iPid)+"/status").c_str(),"r"))) {
 	    while(fgets(buf,sizeof(buf),f) != NULL)
-		for(int iFld = 0; iFld < fldSize(); ++iFld)
+		for(int iFld = 0; iFld < (int)fldSize(); ++iFld)
 		    if(rdVls.find((pNm=fldAt(iFld).name())) == rdVls.end() && sscanf(buf,TSYS::strMess("%s: %%ld",pNm.c_str()).c_str(),&tVl))
 			rdVls[pNm] = true, rdSum[pNm] += tVl;
 
@@ -139,7 +139,7 @@ void Proc::getVal( TMdPrm *prm )
 	prm->vlAt(iSum->first).at().setI(iSum->second, 0, true);
 
     //Setting EVAL
-    for(int iFld = 0; iFld < fldSize(); ++iFld)
+    for(int iFld = 0; iFld < (int)fldSize(); ++iFld)
 	if(rdSum.find((pNm=fldAt(iFld).name())) == rdSum.end())
 	    prm->vlAt(pNm).at().setI(EVAL_INT, 0, true);
 }

@@ -3009,7 +3009,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 
 		    XMLNode *nd = ctrMkNode("fld", opt, -1, ("/exec/io/"+io(iIO)->id()).c_str(), nprm1,
 						((io(iIO)->flg()&IO::Return)?R_R_R_:RWRW__), "root", grp);
-		    if(nd && nOff < nprm.size()) nd->setAttr("help",nprm.substr(nOff));
+		    if(nd && nOff < (int)nprm.size()) nd->setAttr("help",nprm.substr(nOff));
 		}
 	return;
     }

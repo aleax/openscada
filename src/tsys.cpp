@@ -114,8 +114,8 @@ uint8_t	OSCADA::limObjID_SZ = DEF_limObjID_SZ;
 uint8_t	OSCADA::limObjNm_SZ = DEF_limObjNm_SZ;
 unsigned OSCADA::limObjDscr_SZ = DEF_limObjDscr_SZ;
 uint8_t	OSCADA::limArchID_SZ = DEF_limArchID_SZ;
-int	OSCADA::limUserFile_SZ = DEF_limUserFile_SZ;
-int	OSCADA::limUserIts_N = DEF_limUserIts_N;
+unsigned OSCADA::limUserFile_SZ = DEF_limUserFile_SZ;
+unsigned OSCADA::limUserIts_N = DEF_limUserIts_N;
 unsigned OSCADA::limCacheIts_N = DEF_limCacheIts_N;
 unsigned OSCADA::limCacheIts_TM = DEF_limCacheIts_TM;
 
@@ -131,14 +131,14 @@ TSYS	*OSCADA::SYS = NULL;
 pthread_key_t TSYS::sTaskKey;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
-    isLoaded(false), mRunning(false), isServPrc(false), mFinalKill(false),
+    f_useEnv(false), isLoaded(false), mRunning(false), isServPrc(false), mFinalKill(false),
     mUser(DEF_User), mConfFile(DEF_ConfFile), mId(DEF_Id), mModDir(DEF_ModPath), mIcoDir(DEF_IcoDir), mDocDir(DEF_DocDir),
     mName(dataRes()), mNameB(dataRes()), mWorkDB(dataRes()), mSelDB(dataRes()), mMainCPUs(dataRes()),
     mTaskInvPhs(DEF_TaskInvPhs), mSaveAtExit(DEF_SaveAtExit), mSavePeriod(DEF_SavePeriod), mModifCalc(DEF_ModifCalc),
     rootModifCnt(0), sysModifFlgs(MDF_NONE), mStopSignal(0), mN_CPU(1),
     mainPthr(0), mSysTm(time(NULL)), mSysTmJump(0), mClockRT(DEF_ClockRT), mPrjCustMode(true), mPrjNm(dataRes()), mCfgCtx(NULL), mCfgCtxLast(NULL),
     mRdStLevel(DEF_RdStLevel), mRdRestConnTm(DEF_RdRestConnTm), mRdTaskPer(DEF_RdTaskPer), mRdPrimCmdTr(DEF_RdPrimCmdTr),
-    trPassN(0), trChkAndFix(false), trChkAndFixMB(false), f_useEnv(false)
+    trPassN(0), trChkAndFix(false), trChkAndFixMB(false)
 {
     srand(TSYS::curTime()%1000000);
     mWorkDB = DEF_WorkDB;
@@ -1658,7 +1658,7 @@ string TSYS::strDecode( const string &in, TSYS::Code tp, const string &opt )
     switch(tp) {
 	case TSYS::ShieldSymb:
 	    sout.reserve(in.size());
-	    for(iSz = 0; iSz < (int)in.size(); iSz++)
+	    for(iSz = 0; iSz < in.size(); iSz++)
 		if(in[iSz] == '\\' && iSz < ((int)in.size()-1)) {
 		    switch(in[iSz+1]) {
 			case 'b':	sout += '\b';	break;

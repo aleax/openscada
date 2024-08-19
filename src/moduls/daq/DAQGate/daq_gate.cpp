@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.13.11"
+#define MOD_VER		"2.13.12"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -223,7 +223,7 @@ void TMdContr::sync( bool onlyPrmLs )
 
     //Remote station scaning. Controllers and parameters scaning
     for(map<string,StHd>::iterator st = mStatWork.begin(); st != mStatWork.end() && toSync; ++st)
-	for(int cpOff = 0; (cpEl=TSYS::strLine(cfg("CNTRPRM").getS(),0,&cpOff)).size() || cpOff < cfg("CNTRPRM").getS().size(); )
+	for(int cpOff = 0; (cpEl=TSYS::strLine(cfg("CNTRPRM").getS(),0,&cpOff)).size() || cpOff < (int)cfg("CNTRPRM").getS().size(); )
 	    try {
 		// Parse parameters list
 		int pOff = 0;
@@ -482,7 +482,7 @@ void TMdContr::start_( )
     //Controllers initialisation for messaging
     map<string, bool> cntrLstMA;
     string cpEl, curPat_, daqTp, cntrId;
-    for(int cpOff = 0; (cpEl=TSYS::strLine(cfg("CNTRPRM").getS(),0,&cpOff)).size() || cpOff < cfg("CNTRPRM").getS().size(); ) {
+    for(int cpOff = 0; (cpEl=TSYS::strLine(cfg("CNTRPRM").getS(),0,&cpOff)).size() || cpOff < (int)cfg("CNTRPRM").getS().size(); ) {
 	daqTp  = TSYS::strParse(cpEl, 0, ".");
 	cntrId = TSYS::strParse(cpEl, 1, ".");
 	if(daqTp.size() && cntrId.size()) cntrLstMA[daqTp+"/"+cntrId] = true;

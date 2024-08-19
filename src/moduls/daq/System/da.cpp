@@ -49,7 +49,7 @@ void DA::init( TMdPrm *prm, bool update )
     for(unsigned iL = 0; iL < list.size(); iL++) {
 	int off = 0;
 	mpls += (tVl=TSYS::strParse(TSYS::strParse(list[iL],0,";",&off),0,SEP_SUBID)) + ";";
-	mplsNm += ((off < list[iL].size()) ? list[iL].substr(off) : tVl) + ";";
+	mplsNm += ((off < (int)list[iL].size()) ? list[iL].substr(off) : tVl) + ";";
     }
     MtxAlloc res(prm->dataRes(), true);
     if(mpls == mplsNm) { cSubt.fld().setValues(""); cSubt.fld().setSelNames(mpls); }
@@ -104,7 +104,7 @@ void DA::makeActiveDA( TMdContr *aCntr, const string &dIdPref, const string &dNm
 	string itId = TSYS::strParse(list[iIt], 0, ";", &off), itId2, itNm;
 	if((itNm=TSYS::strParse(itId,0,SEP_SUBID)) != itId) { itId2 = TSYS::strParse(itId,1,SEP_SUBID); itId = itNm; }
 	else itId2 = itId;
-	itNm = (off < list[iIt].size()) ? list[iIt].substr(off) : itId;
+	itNm = (off < (int)list[iIt].size()) ? list[iIt].substr(off) : itId;
 
 	aCntr->list(pLs);
 

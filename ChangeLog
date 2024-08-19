@@ -1,3 +1,9 @@
+2024-08-19 Roman (stable)
+- !:SYS,DAQ.{DAQGate,JavaLikeCalc,OPC_UA.libOPC_UA,System},Protocol.ModBus,Transport.
+	SSL,UI.{QTCfg,QTStarter,Vision,WebCfgD,WebVision}: The source code some cleaned from building warnings.
+- SYS Type of the limit variables limUserFile_SZ, limUserIts_N changed to unsigned.
+
+
 2024-08-12 Roman (stable)
 - FIX:UI.Vision: Fixed in building on Qt4 and Qt5.
 

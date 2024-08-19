@@ -178,7 +178,7 @@ TVariant TTransportS::prm( string &cnt, const string &iid, const TVariant &val, 
 	    if(!toWr) {
 		itN->setAttr("tp", i2s(val.type()));
 		if((src=TSYS::strLine(iid,0,&off)).size()) itN->setAttr("nm", src);
-		if(off < iid.size()) itN->setAttr("help", iid.substr(off));
+		if(off < (int)iid.size()) itN->setAttr("help", iid.substr(off));
 	    }
 	    itN->setText(val.getS());
 	}
@@ -199,7 +199,7 @@ string TTransportS::cntrCmdPrm( XMLNode *opt, const string &path, const string &
 	XMLNode *srcN = NULL;
 	for(int iSrc = 0; (srcN=prmNd.childGet("SRC",iSrc,true)); ++iSrc)
 	    if(ctrMkNode("area",opt,-1,(path+srcN->attr("id")).c_str(),TSYS::strMess(_("For %s"),srcN->attr("id").c_str())))
-		for(int iP = 0; iP < srcN->childSize(); ++iP) {
+		for(int iP = 0; iP < (int)srcN->childSize(); ++iP) {
 		    XMLNode *pN = srcN->childGet(iP);
 		    string pTp = "str";
 		    switch(s2i(pN->attr("tp"))) {
@@ -893,8 +893,8 @@ void TTypeTransport::perSYSCall( unsigned int cnt )
 //* TTransportIn				 *
 //************************************************
 TTransportIn::TTransportIn( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), runSt(false), mId(cfg("ID")), mStart(cfg("START").getBd()), mDB(idb), associateTrRes(true),
-    mLogLen(0), mLogItLim(1000), mLogTp(TTransportS::LTP_BinaryText), mLogAgrTm(prmWait_TM), mLogLstDt(0), mLogLstDtTm(0), mLogFHD(-1)
+    TConfig(el), runSt(false), associateTrRes(true), mId(cfg("ID")), mStart(cfg("START").getBd()), mDB(idb),
+    mLogLen(0), mLogItLim(1000), mLogTp(TTransportS::LTP_BinaryText), mLogAgrTm(prmWait_TM), mLogLstDt(0), mLogFHD(-1), mLogLstDtTm(0)
 {
     mId = iid;
 }
@@ -1379,7 +1379,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 //************************************************
 TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), runSt(false), mDefTimeouts(true), mLstReqTm(0), mId(cfg("ID")), mDB(idb), mStartTm(0), mReqRes(true),
-    mLogLen(0), mLogItLim(1000), mLogTp(TTransportS::LTP_BinaryText), mLogAgrTm(prmWait_TM), mLogLstDt(0), mLogLstDtTm(0), mLogFHD(-1)
+    mLogLen(0), mLogItLim(1000), mLogTp(TTransportS::LTP_BinaryText), mLogAgrTm(prmWait_TM), mLogLstDt(0), mLogFHD(-1), mLogLstDtTm(0)
 {
     mId = iid;
 }

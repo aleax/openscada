@@ -449,11 +449,11 @@ void TCfg::setR( double ival )
 	case TVariant::Integer:	setI((ival==EVAL_REAL) ? EVAL_INT : (int64_t)ival);	break;
 	case TVariant::Boolean:	setB((ival==EVAL_REAL) ? EVAL_BOOL : (bool)ival);	break;
 	case TVariant::Real: {
-	    double tVal, tMinV, tMaxV;
+	    double tMinV = 0, tMaxV = 0;
 	    if(!(mFld->flg()&TFld::Selectable) && mFld->values().size() &&
 		    (tMinV=s2r(TSYS::strParse(mFld->values(),0,";"))) < (tMaxV=s2r(TSYS::strParse(mFld->values(),1,";"))))
 		ival = vmin(tMaxV, vmax(tMinV,ival));
-	    tVal = TVariant::getR();
+	    double tVal = TVariant::getR();
 	    TVariant::setR(ival);
 	    bool mInCfgCh_ = mInCfgCh;
 	    try {
@@ -479,11 +479,11 @@ void TCfg::setI( int64_t ival )
 	case TVariant::Real:	setR((ival==EVAL_INT) ? EVAL_REAL : ival);	break;
 	case TVariant::Boolean:	setB((ival==EVAL_INT) ? EVAL_BOOL : (bool)ival);break;
 	case TVariant::Integer: {
-	    int64_t tVal, tMinV, tMaxV;
+	    int64_t tMinV = 0, tMaxV = 0;
 	    if(!(mFld->flg()&TFld::Selectable) && mFld->values().size() &&
 		    (tMinV=s2ll(TSYS::strParse(mFld->values(),0,";"))) < (tMaxV=s2ll(TSYS::strParse(mFld->values(),1,";"))))
 		ival = vmin(tMaxV, vmax(tMinV,ival));
-	    tVal = TVariant::getI();
+	    int64_t tVal = TVariant::getI();
 	    TVariant::setI(ival);
 	    bool mInCfgCh_ = mInCfgCh;
 	    try {

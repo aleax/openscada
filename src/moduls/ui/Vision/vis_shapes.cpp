@@ -1558,7 +1558,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val, const stri
 		}
 		default: argT = shD->args[iA].val().toString().toStdString();	break;
 	    }
-	    text = TRegExp("%"+i2s(iA+1),"g").replace(text, ((argT.size()<wdth)?string(wdth-argT.size(),' '):"")+argT);
+	    text = TRegExp("%"+i2s(iA+1),"g").replace(text, (((int)argT.size()<wdth)?string(wdth-argT.size(),' '):"")+argT);
 	}
 	if(text != shD->text)	{ shD->text = text; up = true; }
     }

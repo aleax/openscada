@@ -42,7 +42,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.5.9"
+#define MOD_VER		"2.5.10"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript.")
 #define LICENSE		"GPL2"
@@ -413,7 +413,7 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 	    string  newNodeId = TSYS::pathLevEnd(req.attr("dst"),0,true,&off), newNodeTarg, newNodeParent;
 	    if(off >= 0) newNodeParent = req.attr("dst").substr(0, off);
 	    off = newNodeId.find("_");
-	    if(off != string::npos) { newNodeTarg = newNodeId.substr(0, off+1); newNodeId = newNodeId.substr(off+1); }
+	    if(off != (int)string::npos) { newNodeTarg = newNodeId.substr(0, off+1); newNodeId = newNodeId.substr(off+1); }
 	    reqExt.setAttr("path", "/"+req.attr("statNm")+newNodeParent+"/%2fbr%2f"+newNodeTarg);
 	    reqExt.setAttr("id", newNodeId)->setText(newNodeId);
 	    if(mod->cntrIfCmd(reqExt,ses.user)) req.setAttr("rez", reqExt.attr("rez"))->setText(reqExt.text());

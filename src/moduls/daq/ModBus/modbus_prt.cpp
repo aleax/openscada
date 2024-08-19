@@ -809,8 +809,8 @@ void Node::loadIO( )
 	    //Clearing not saved IO
 	    for(int iIO = 0, iP = 0; iIO < ioSize(); iIO++) {
 		if(io(iIO)->id() == "f_frq" || io(iIO)->id() == "f_start" || io(iIO)->id() == "f_stop") continue;
-		for(iP = 0; iP < u_pos.size() && u_pos[iP] != io(iIO)->id(); iP++) ;
-		if(iP >= u_pos.size()) { ioDel(iIO); iIO--; }
+		for(iP = 0; iP < (int)u_pos.size() && u_pos[iP] != io(iIO)->id(); iP++) ;
+		if(iP >= (int)u_pos.size()) { ioDel(iIO); iIO--; }
 	    }
 
 	    //Remove holes
