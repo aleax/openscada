@@ -56,7 +56,7 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1"><a href="#BT:_RDTech_UM24C.2C_UM25C_and_UM34C_.28RDTech.29"><span class="tocnumber">1</span> <span class="toctext">BT: RDTech UM24C, UM25C and UM34C (RDTech)</span></a></li>
-<li class="toclevel-1"><a href="#BT:_ATORCH_UC96_.28UC96.29"><span class="tocnumber">2</span> <span class="toctext">BT: ATORCH UC96 (UC96)</span></a></li>
+<li class="toclevel-1"><a href="#BT:_ATORCH_UC96.2C_UD24_.28UC96.29"><span class="tocnumber">2</span> <span class="toctext">BT: ATORCH UC96, UD24 (UC96)</span></a></li>
 <li class="toclevel-1"><a href="#One_Wire_by_DS9097_.281W_DS9097.29"><span class="tocnumber">3</span> <span class="toctext">One Wire by DS9097 (1W_DS9097)</span></a></li>
 <li class="toclevel-1"><a href="#One_Wire_by_DS9097U_.281W_DS9097U.29"><span class="tocnumber">4</span> <span class="toctext">One Wire by DS9097U (1W_DS9097U)</span></a></li>
 <li class="toclevel-1"><a href="#I2C:_PCF8591_.28PCF8591.29"><span class="tocnumber">5</span> <span class="toctext">I2C: PCF8591 (PCF8591)</span></a></li>
@@ -398,9 +398,9 @@ rfcomm <span class="nb">bind </span><span class="m">0</span> 98:D3:31:F8:52:29  
 <table class="wikitable">
 
 <tr>
-<td> <span id="UC96" title="#UC96"><h3><span class="mw-headline" id="BT:_ATORCH_UC96_.28UC96.29"><span class="mw-headline-number">2</span> BT: ATORCH UC96 (<a href="Libs_LowLevelDevices.html#UC96" title="Special:MyLanguage/Libs/LowLevelDevices">UC96</a>)</span></h3></span>
+<td> <span id="UC96" title="#UC96"><h3><span class="mw-headline" id="BT:_ATORCH_UC96.2C_UD24_.28UC96.29"><span class="mw-headline-number">2</span> BT: ATORCH UC96, UD24 (<a href="Libs_LowLevelDevices.html#UC96" title="Special:MyLanguage/Libs/LowLevelDevices">UC96</a>)</span></h3></span>
 </td>
-<td> 1.0 </td>
+<td> 1.1 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en,uk
@@ -408,8 +408,8 @@ rfcomm <span class="nb">bind </span><span class="m">0</span> 98:D3:31:F8:52:29  
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsLowLevDevsUC96.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="478" src="../en/files/LibsLowLevDevsUC96.png" width="246" /></a></div>
-<p>ATORCH UC96 BlueTooth interface template.
-</p><p>The ATORCH UC96 are low-cost USB pass-through power measurement device with many interfaces and supporting a decent number of collection features, as well as control via Bluetooth. This template implements only the clearing data command and data collection by the device's Bluetooth interface.<br />
+<p>ATORCH UC96, UD24 BlueTooth interface template.
+</p><p>The ATORCH UC96, UD24 are low-cost USB pass-through power measurement device with many interfaces and supporting a decent number of collection features, as well as control via Bluetooth. This template implements only the clearing data command and data collection by the device's Bluetooth interface.<br />
 <a class="image" href="http://oscada.org/wiki/File:ATORCH_UC96.jpg"><img alt="ATORCH UC96.jpg" height="382" src="../en/files/ATORCH_UC96.jpg" width="500" /></a>
 </p><p>The device sends data packages not at a request and just after establishing the connection, that is broadcasting with one second period. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> The device may not to send the data packages at enable not in the first screen, so you need to switch the first screen for the data appearance. The data can be missed also after suspending the PC, so this template in the first time implements the data missing detection and reconnection.
 </p>
@@ -2313,5 +2313,5 @@ DS3231;DS1307
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/LowLevelDevices/ru">Libs/LowLevelDevices/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2982</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/LowLevelDevices/ru">Libs/LowLevelDevices/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2989</td></tr></table></body>
 </html>

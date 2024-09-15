@@ -4776,12 +4776,12 @@ else {
 
 if(t_err.toInt()) { f_err = t_err; type = P = EVAL; }
 else f_err = "0";','','',1603038629);
-INSERT INTO tmplib_DevLib VALUES('mbBase','ModBus base','','','ModBus base template of the protocol implementing on the Logical Level. Designed mostly to use in the base of creation specific ModBus-based protocols for the standard-part registers'' access (function 3 for reading and function 16 for writing) and appending the new protocol specific part. The template was designed to work both under control of the controller objects of the module ModBus and LogicLev and can be managed from the template of the initiative connections processing for assigned output transports.
+INSERT INTO tmplib_DevLib VALUES('mbBase','ModBus base','','','ModBus base template of the protocol implementing on the Logical Level. Designed mostly to use in the base of creation specific ModBus-based protocols for the standard-part registers'' access (function 3, 4 for reading and function 16 for writing) and appending the new protocol specific part. The template was designed to work both under control of the controller objects of the module ModBus and LogicLev and can be managed from the template of the initiative connections processing for assigned output transports.
 
 Author: Roman Savochenko <roman@oscada.org>
 Total complexity: 0.5 HD
 Sponsored by, for whole complexity: Elyor Turaboev, BLUE STAR GROUP Ltd
-Version: 1.2.1
+Version: 1.3.0
 License: GPLv2','','',30,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(PDU) {
@@ -4789,7 +4789,7 @@ function req(PDU) {
 	if(!transport.length)	return this.cntr().messIO(PDU);
 
 	// For other logical level
-	reqO = SYS.XMLNode(mbType).setAttr("id","Goboy").setAttr("node",addr).setText(PDU);
+	reqO = SYS.XMLNode(mbType).setAttr("id","MBBase").setAttr("node",addr).setText(PDU);
 	if((rez=tr.messIO(reqO,"ModBus")).length)	return "10:"+rez;
 	PDU = reqO.text();
 
@@ -4799,7 +4799,7 @@ function req(PDU) {
 if(f_start) {
 	transport_ = transport;
 	tr = EVAL;
-	dt = new Object();
+	dt = new Object(); dtI = new Object();
 	items_ = "";
 }
 
@@ -4807,8 +4807,11 @@ if(f_start) {
 if(items != items_) {
 	items_ = items;
 	// Mark for check to deletion needs
-	for(var iDt in dt)
-		if(iDt != "10000") dt[iDt].mark = false;
+	for(iSp = 0; iSp < 2; iSp++) {
+		dtW = (iSp == 1) ? dtI : dt;
+		for(var iDt in dtW)
+			if(iDt != "10000") dtW[iDt].mark = false;
+	}
 	// Append/Update present ones
 	for(off = 0; (sIt=items.parseLine(0,off)).length || off < items.length; ) {
 		if(!sIt.length || sIt[0] == "#")	continue;
@@ -4821,7 +4824,9 @@ if(items != items_) {
 		itO.id = sIt.parse(0, ":", off1);
 		itO.nm = sIt.slice(off1);
 		if(!itO.nm.length) itO.nm = itO.id;
-		dt[itO.addr.toString(16,5)] = itO;
+		if(itO.md.indexOf("i") >= 0)
+			dtI[itO.addr.toString(16,5)] = itO;
+		else dt[itO.addr.toString(16,5)] = itO;
 		if(itO.tp == "u" || itO.tp == "i" || itO.tp == "u2" || itO.tp == "i2")	{ wTp = "integer"; itO.sz = 2; }
 		else if(itO.tp == "u4" || itO.tp == "i4")	{ wTp = "integer"; itO.sz = 4; }
 		else if(itO.tp == "s")	{ wTp = "string"; itO.sz = 16; }
@@ -4834,15 +4839,18 @@ if(items != items_) {
 			this.attrAdd(itO.id, itO.nm, wTp);
 			if(itO.wr)	itO.val = this[itO.id].get();
 			itO.mark = true;
-			//SYS.messInfo("/ED","itO="+itO.id+"; tmpAddr="+tmpAddr+"; addr="+itO.addr);
+			//SYS.messInfo("/MB/"+this.cfg("SHIFR"),"itO="+itO.id+"; tmpAddr="+tmpAddr+"; addr="+itO.addr);
 		}
 	}
-	dt["10000"] = EVAL;
+	dt["10000"] = EVAL; dtI["10000"] = EVAL;
 	// Check, remove item and set to EVAL the attribute
-	for(var iDt in dt) {
-		if(iDt == "10000" || dt[iDt].mark)	continue;
-		this[dt[iDt].id].set(EVAL, 0, 0, true);
-		delete dt[iDt];
+	for(iSp = 0; iSp < 2; iSp++) {
+		dtW = (iSp == 1) ? dtI : dt;
+		for(var iDt in dtW) {
+			if(iDt == "10000" || dtW[iDt].mark)	continue;
+			this[dtW[iDt].id].set(EVAL, 0, 0, true);
+			delete dtW[iDt];
+		}
 	}
 }
 
@@ -4901,55 +4909,59 @@ else {
 			else	Special.FLibSYS.floatSplitWord(tVl, w1, w2);
 			PDU.wr(w1, "uint16").wr(w2, "uint16");
 		}
-		//SYS.messInfo("/ED","reqPDU="+SYS.strDecode(PDU.string,"Bin"," "));
+		//SYS.messInfo("/MB/"+this.cfg("SHIFR"),"reqPDU="+SYS.strDecode(PDU.string,"Bin"," "));
 		if(!req(PDU.string).toInt())	itO.val = tVl;
-		//SYS.messInfo("/ED","respPDU="+SYS.strDecode(PDU.string,"Bin"," "));
+		//SYS.messInfo("/MB/"+this.cfg("SHIFR"),"respPDU="+SYS.strDecode(PDU.string,"Bin"," "));
 	}
 
 	//Same requests for the data
-	blk = new Array();
-	for(var iDt in dt) {
-		isEOL = (iDt == "10000");
-		itO = dt[iDt];
-		//SYS.messInfo("/ED","iDt="+iDt+"; isEOL="+isEOL);
-		if(!isEOL && (!blk.length || (
-				(itO.addr-blk[0].addr+1+floor((itO.sz-2)/2)) <= floor(maxBlkSz/2) && (fragMerge || (itO.addr-blk[blk.length-1].addr-floor((blk[blk.length-1].sz-2)/2)) <= 1) ))) {
-			if(itO.rd) blk.push(itO);
-			continue;
-		}
-		//Send request for this block
-		if(blk.length) {
-			regN = (blk[blk.length-1].addr - blk[0].addr) + 1 + floor((blk[blk.length-1].sz-2)/2);
-			PDU = SYS.strFromCharCode(3, (blk[0].addr>>8)&0xFF, blk[0].addr&0xFF, 0, regN);
-			//SYS.messInfo("/ED","reqPDU="+SYS.strDecode(PDU,"Bin"," "));
-			if((tErr=req(PDU)).toInt()) break;
-			//SYS.messInfo("/ED","respPDU="+SYS.strDecode(PDU,"Bin"," "));
-			io = Special.FLibSYS.IO(PDU, "", "b");
-			rF = io.read("uint8", 1); rN = io.read("uint8", 1);
-			if(rF != 3 || (io.length-2) != rN) { tErr = "10:"+tr("Inconsistent respond''s length."); break; }
-			for(iB = 0; iB < blk.length; iB++) {
-				itO1 = blk[iB];
-				io.pos = 2 + (itO1.addr-blk[0].addr)*2;
-				if(itO1.tp == "u" || itO1.tp == "u2")			tVl = io.read("uint16", 1);
-				else if(itO1.tp == "i" || itO1.tp == "i2")	tVl = io.read("int16", 1);
-				else if(itO1.tp == "u4")
-					tVl = itO1.rev ? io.read("uint16", 1)*65536 + io.read("uint16", 1) :
-											io.read("uint16", 1) + io.read("uint16", 1)*65536;
-				else if(itO1.tp == "i4")
-					tVl = itO1.rev ? io.read("int16", 1)*65536 + io.read("uint16", 1) :
-											io.read("uint16", 1) + io.read("int16", 1)*65536;
-				else if(itO1.tp == "s")	tVl = io.read("char", blk[0].sz);
-				else {
-					w1 = io.read("uint16", 1); w2 = io.read("uint16", 1);
-					tVl = itO1.rev ? Special.FLibSYS.floatMergeWord(w2, w1) :
-											Special.FLibSYS.floatMergeWord(w1, w2);
-					//tVl = io.read("float", 1, "l");
-				}
-				if(itO1.wr && itO1.val != this[itO1.id].get())	{ itO1.val = tVl; continue; }
-				this[itO1.id].set(tVl, 0, 0, true);
-				itO1.val = tVl;
+	for(iSp = 0; iSp < 2; iSp++) {
+		dtW = (iSp == 1) ? dtI : dt;
+
+		blk = new Array();
+		for(var iDt in dtW) {
+			isEOL = (iDt == "10000");
+			itO = dtW[iDt];
+			//SYS.messInfo("/MB/"+this.cfg("SHIFR"),"iDt="+iDt+"; isEOL="+isEOL);
+			if(!isEOL && (!blk.length || (
+					(itO.addr-blk[0].addr+1+floor((itO.sz-2)/2)) <= floor(maxBlkSz/2) && (fragMerge || (itO.addr-blk[blk.length-1].addr-floor((blk[blk.length-1].sz-2)/2)) <= 1) ))) {
+				if(itO.rd) blk.push(itO);
+				continue;
 			}
-			blk = new Array(); blk.push(itO);
+			//Send request for this block
+			if(blk.length) {
+				regN = (blk[blk.length-1].addr - blk[0].addr) + 1 + floor((blk[blk.length-1].sz-2)/2);
+				PDU = SYS.strFromCharCode((iSp==1)?4:3, (blk[0].addr>>8)&0xFF, blk[0].addr&0xFF, 0, regN);
+				//SYS.messInfo("/MB/"+this.cfg("SHIFR"), "reqPDU="+SYS.strDecode(PDU,"Bin"," "));
+				if((tErr=req(PDU)).toInt()) break;
+				//SYS.messInfo("/MB/"+this.cfg("SHIFR"), "respPDU="+SYS.strDecode(PDU,"Bin"," "));
+				io = Special.FLibSYS.IO(PDU, "", "b");
+				rF = io.read("uint8", 1); rN = io.read("uint8", 1);
+				if(/*rF != 3 ||*/ (io.length-2) != rN) { tErr = "10:"+tr("Inconsistent respond''s length."); break; }
+				for(iB = 0; iB < blk.length; iB++) {
+					itO1 = blk[iB];
+					io.pos = 2 + (itO1.addr-blk[0].addr)*2;
+					if(itO1.tp == "u" || itO1.tp == "u2")			tVl = io.read("uint16", 1);
+					else if(itO1.tp == "i" || itO1.tp == "i2")	tVl = io.read("int16", 1);
+					else if(itO1.tp == "u4")
+						tVl = itO1.rev ? io.read("uint16", 1)*65536 + io.read("uint16", 1) :
+												io.read("uint16", 1) + io.read("uint16", 1)*65536;
+					else if(itO1.tp == "i4")
+						tVl = itO1.rev ? io.read("int16", 1)*65536 + io.read("uint16", 1) :
+											io.read("uint16", 1) + io.read("int16", 1)*65536;
+					else if(itO1.tp == "s")	tVl = io.read("char", blk[0].sz);
+					else {
+						w1 = io.read("uint16", 1); w2 = io.read("uint16", 1);
+						tVl = itO1.rev ? Special.FLibSYS.floatMergeWord(w2, w1) :
+												Special.FLibSYS.floatMergeWord(w1, w2);
+						//tVl = io.read("float", 1, "l");
+					}
+					if(itO1.wr && itO1.val != this[itO1.id].get())	{ itO1.val = tVl; continue; }
+					this[itO1.id].set(tVl, 0, 0, true);
+					itO1.val = tVl;
+				}
+				blk = new Array(); blk.push(itO);
+			}
 		}
 	}
 }
@@ -4958,13 +4970,16 @@ if(!tErr.length)	tErr = "0";
 if(tErr.toInt()) {
 	if(!tr.isEVal() && tr.start()) tr.start(false);
 	if(f_err != tErr)
-		for(var iDt in dt) {
-			itO = dt[iDt];
-			if(iDt == "10000")	continue;
-			this[itO.id].set(EVAL, 0, 0, true);
+		for(iSp = 0; iSp < 2; iSp++) {
+			dtW = (iSp == 1) ? dtI : dt;
+			for(var iDt in dtW) {
+				itO = dtW[iDt];
+				if(iDt == "10000")	continue;
+				this[itO.id].set(EVAL, 0, 0, true);
+			}
 		}
 }
-f_err = tErr;','','',1707471627);
+f_err = tErr;','','',1726384559);
 INSERT INTO tmplib_DevLib VALUES('SLOT','Slot LTD devices','','','The template implements support for counters and correctors of the "SLOT" LTD production. The devices protocol is flexible and uniform for implementation of reading all available archives also as setting the configuration fields, but currently there was need only for reading the hourly archives, so the template reads the daily and hourly archives and some set of the instantaneous parameters.
 
 The template includes also code for connect the counters through modems using the AT-commands.
@@ -17002,11 +17017,11 @@ INSERT INTO tmplib_DevLib_io VALUES('mbBase','mbType','ModBus type [RTU|ASCII|TC
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','maxBlkSz','ModBus maximum block size [10...200]',1,64,'200',3,'Максимальный размер блока ModBus [10...200]','','Максимальний розмір блоку ModBus [10...200]','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','fragMerge','ModBus blocks merging',3,64,'1',4,'Объединение блоков ModBus','','Поєднання блоків ModBus','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','items','Items set
-Rows in the form "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".',0,36,'#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr=":[rw~]*:" color="red"/><rule expr=":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)" color="blue"/><rule expr="^(u|i|u2|i2|u4|i4|r|s)" color="darkorange"/><rule expr="\\:" color="blue"/></SnthHgl>
+Rows in the form "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~|i}:{id}[:{nm}]".',0,36,'#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr=":[rw~i]*:" color="red"/><rule expr=":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)" color="blue"/><rule expr="^(u|i|u2|i2|u4|i4|r|s)" color="darkorange"/><rule expr="\\:" color="blue"/></SnthHgl>
 
 ',5,'Набор элементов
-Строки в формате "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".','','Набір елементів
-Рядки у форматі "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".','','');
+Строки в формате "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~|i}:{id}[:{nm}]".','','Набір елементів
+Рядки у форматі "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~|i}:{id}[:{nm}]".','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','tr','Output transport',4,0,'',6,'Выходной транспорт','','Вихідний транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','this','Object',4,0,'',7,'Объект','','Об''єкт','','');
 INSERT INTO tmplib_DevLib_io VALUES('MTP4D','zeroP','Set zero',3,32,'',4,'Установить ноль','','Встановити нуль','','');
@@ -17558,13 +17573,14 @@ INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','Pf','Factor, Pf',2,16,'',8,'','',
 INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','power','Power mode switch Off/Auto/On',3,32,'',12,'','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('1W','transport','Transport of the One Wire bus, Serial',0,64,'1Wire:/dev/ttyS0',0,'','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('1W','tmResc','Rescan period, s',2,64,'60',1,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W','tryEVAL','Tries after which set value to EVAL',1,64,'3',2,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W','tryEVAL','Tries after which set value to EVAL',1,64,'3',3,'','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('1W','adapter','Adapter type
 0 - DS9097
-1 - DS9097U',1,16,'-1',3,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W','power','Power, for temperature',3,16,'',4,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W','this','Object',4,0,'',6,'','Объект','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W','isData','In data mode',3,0,'0',5,'','','','','');
+1 - DS9097U',1,16,'-1',4,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W','power','Power, for temperature',3,16,'',5,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W','this','Object',4,0,'',7,'','Объект','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W','isData','In data mode',3,0,'0',6,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W','onlyAddAtScan','Only add attributes at scan',3,64,'0',2,'','','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_tests_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_tests_io VALUES('ai_simple','val_cod','Value''s source code',1,128,'',0,'Вихідний код значення','','Исходный код значения','','');
 INSERT INTO tmplib_tests_io VALUES('ai_simple','val','Value',2,16,'0',1,'Значення','','Значение','','Вредност');
@@ -19977,24 +19993,24 @@ if(tErr.length) {
 	grps = EVAL;
 }
 else f_err = "0";','',1700566043);
-INSERT INTO tmplib_LowDevLib VALUES('UC96','BT: ATORCH UC96','','ATORCH UC96 BlueTooth interface template.
+INSERT INTO tmplib_LowDevLib VALUES('UC96','BT: ATORCH UC96, UD24','','ATORCH UC96, UD24 BlueTooth interface template.
 
-The ATORCH UC96 are low-cost USB pass-through power measurement device with many interfaces and supporting a decent number of collection features, as well as control via Bluetooth. This template implements only the clearing data command and data collection by the device''s Bluetooth interface.
+The ATORCH UC96, UD24 are low-cost USB pass-through power measurement device with many interfaces and supporting a decent number of collection features, as well as control via Bluetooth. This template implements only the clearing data command and data collection by the device''s Bluetooth interface.
 
 The device sends data packages not at a request and just after establishing the connection, that is broadcasting with one second period. The device may not to send the data packages at enable not in the first screen, so you need to switch the first screen for the data appearance. The data can be missed also after suspending the PC, so this template in the first time implements the data missing detection and reconnection.
 
 Author: Roman Savochenko <roman@oscada.org>
 Total complexity: 0.3 HD
-Version: 1.0.1
-License: GPLv2','Шаблон BlueTooth інтерфейсу ATORCH UC96.
+Version: 1.1.0
+License: GPLv2','Шаблон BlueTooth інтерфейсу ATORCH UC96, UD24.
 
-ATORCH UC96 є недорогим пристроєм вимірювання прохідної потужності на USB із багатьма інтерфейсами і підтримкою достатньої колекції властивостей, як і контролем через Bluetooth. Цей шаблон реалізує лише команду очищення даних і збір даних через Bluetooth інтерфейс пристрою.
+ATORCH UC96, UD24 є недорогим пристроєм вимірювання прохідної потужності на USB із багатьма інтерфейсами і підтримкою достатньої колекції властивостей, як і контролем через Bluetooth. Цей шаблон реалізує лише команду очищення даних і збір даних через Bluetooth інтерфейс пристрою.
 
 Пристрій надсилає пакети даних не за запитом, тобто розсилає із періодом у одну секунду. Пристрій може не надсилати пакети даних при увімкнені не на першому екрані, тож вам необхідно перемкнутися на перший екран для появи даних. Дані також можуть бути відсутні після присипляння ПК, тож цей шаблон першим реалізує виявлення відсутності даних і перепідключення.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Загальна працемісткість: 0.3 ЛД
-Версія: 1.0.1
+Версія: 1.1.0
 Ліцензія: GPLv2',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	isBound = -1;
@@ -20025,12 +20041,13 @@ else {
 		tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
 	else {
 		for(ibuf = tr.messIO("",-10e-3); ibuf.length && ibuf.length < 36 &&
-				ibuf.slice(-9,-1) != "\x3C\x0C\x80\x00\x00\x03\x20\x00" && (rd=tr.messIO()).length; )
+				(ibuf.slice(-9,-1) != "\x3C\x0C\x80\x00\x00\x03\x20\x00" || ibuf.slice(-4,-1) != "\x03\xDD\x00") &&
+				(rd=tr.messIO()).length; )
 			ibuf += rd;
 
 		while(ibuf.length)
 			if(ibuf.slice(0,5) == "\xFF\x55\x01\x03\x00" && ibuf.length >= 36 &&
-				ibuf.slice(27,27+8) == "\x3C\x0C\x80\x00\x00\x03\x20\x00")
+				(ibuf.slice(27,27+8) == "\x3C\x0C\x80\x00\x00\x03\x20\x00" || ibuf.slice(32,32+3) == "\x03\xDD\x00"))
 			{
 				dataTm = SYS.time();
 				data = ibuf.slice(0, 36);
@@ -20067,7 +20084,7 @@ if(tErr.length) {
 	f_err = tErr + " ";
 	V = A = W = R = T = Ah = Wh = Tm = EVAL;
 } else f_err = "0:";
-f_err += tr("Reconnects %1, left %2s.").replace("%1",conCntr.toString()).replace("%2",(noDataTm-(SYS.time()-dataTm)).toString());','',1718391021);
+f_err += tr("Reconnects %1, left %2s.").replace("%1",conCntr.toString()).replace("%2",(noDataTm-(SYS.time()-dataTm)).toString());','',1726385135);
 INSERT INTO tmplib_LowDevLib VALUES('S1BP','BT: ATORCH S1BP','','ATORCH S1BP BlueTooth interface template.
 ...','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
@@ -20400,11 +20417,12 @@ else {
 			}
 		}
 		//Check for removed devices
-		for(devID in devLs)
-			if(!(dO=devLs[devID]).isEVal() && dO.tmSc != tmSc) {
-				setEVAL(dO.dP);
-				devLs[devID] = EVAL;
-			}
+		if(!onlyAddAtScan)
+			for(devID in devLs)
+				if(!(dO=devLs[devID]).isEVal() && dO.tmSc != tmSc) {
+					setEVAL(dO.dP);
+					devLs[devID] = EVAL;
+				}
 	}
 	else {
 		//Process devices for reading current value and set modifable
@@ -20663,5 +20681,5 @@ else {
 	}
 }
 
-f_err = t_err;','',1722791189);
+f_err = t_err;','',1726227027);
 COMMIT;

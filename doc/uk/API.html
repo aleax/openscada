@@ -357,7 +357,7 @@ Information variables of the program:
 <li> <i>static bool taskEndRun( );</i> — Check for the task endrun by signal <i>SIGUSR1</i>.</li>
 <li> <i>static const STask&amp; taskDescr( );</i> — Get reference to the task's descriptor.</li>
 <li> <i>static int sysSleep( float tm );</i> — System sleep in seconds up to nanoseconds (1e-9).</li>
-<li> <i>time_t sysTm( bool *hasJump = NULL, time_t last = 0 );</i> — System time fast access from updating cell and with a function of detection time jumps <i>hasJump</i> from <i>last</i> used time.</li>
+<li> <i>time_t sysTm( );</i> <i>time_t sysTmJmp( bool *hasJump = NULL, time_t last = 0 );</i> — System time fast access from updating cell and with a function of detection time jumps <i>hasJump</i> from <i>last</i> used time.</li>
 <li> <i>static int64_t curTime( clockid_t clc = CLOCK_REALTIME );</i> — The clock <i>clc</i> time in microseconds from the beginning of the era (01.01.1970).</li>
 <li> <i>static uint64_t curTimeN( clockid_t clc = CLOCK_REALTIME );</i> — The clock <i>clc</i> time in nanoseconds from the beginning of the era (01.01.1970).</li>
 <li> <i>string prjUserDir( );</i> — Directory of the user projects.</li>
@@ -2462,7 +2462,7 @@ Error values for the different data types (definition):
 </p><p>Контейнер дозволяє зібрати до одного запиту декілька інформаційних структур та динамічних частин, оптимізуючи таким чином час запиту, особливо на високолатентних мережевих інтерфейсах.
 </p><p>Загальний Інтерфейс Управління будується із окремих вузлів динамічного дерева. Ієрархічне спадкування від об'єкту <a href="#TCntrNode">#TCntrNode</a> дозволяє реалізовувати багаторівневе доповнення конфігурації Інтерфейсу Управління. Вигляд динамічного дерева вузлів наведено на рисунку 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_uk.png"><img class="thumbimage" height="361" src="files/800px-Oscada_UserOM_uk.png" srcset="/wiki/images/3/39/Oscada_UserOM_uk.png 1.5x, /wiki/images/3/39/Oscada_UserOM_uk.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM_uk.png" title="Enlarge" /></div>Fig.8. Приклад динамічного дерева вузлів в OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_uk.png"><img class="thumbimage" height="361" src="files/800px-Oscada_UserOM_uk.png" srcset="/wiki/images/3/39/Oscada_UserOM_uk.png 1.5x, /wiki/images/3/39/Oscada_UserOM_uk.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM_uk.png" title="Enlarge"></a></div>Fig.8. Приклад динамічного дерева вузлів в OpenSCADA.</div></div></div></div>
 <p>Вузли, що містять дані для Інтерфейсу Управління, також мають підключатися у динамічне дерево об'єктів.
 </p><p>Підключення вузла у динамічне дерево відбувається наступним чином:
 </p>
@@ -4995,5 +4995,5 @@ Error codes (enum — TError::Codes):
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/uk">Documents/API/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2982</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/uk">Documents/API/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2989</td></tr></table></body>
 </html>

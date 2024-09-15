@@ -56,7 +56,7 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1"><a href="#BT:_RDTech_UM24C.2C_UM25C_.D1.82.D0.B0_UM34C_.28RDTech.29"><span class="tocnumber">1</span> <span class="toctext">BT: RDTech UM24C, UM25C та UM34C (RDTech)</span></a></li>
-<li class="toclevel-1"><a href="#BT:_ATORCH_UC96_.28UC96.29"><span class="tocnumber">2</span> <span class="toctext">BT: ATORCH UC96 (UC96)</span></a></li>
+<li class="toclevel-1"><a href="#BT:_ATORCH_UC96.2C_UD24_.28UC96.29"><span class="tocnumber">2</span> <span class="toctext">BT: ATORCH UC96, UD24 (UC96)</span></a></li>
 <li class="toclevel-1"><a href="#One_Wire_by_DS9097_.281W_DS9097.29"><span class="tocnumber">3</span> <span class="toctext">One Wire by DS9097 (1W_DS9097)</span></a></li>
 <li class="toclevel-1"><a href="#One_Wire_by_DS9097U_.281W_DS9097U.29"><span class="tocnumber">4</span> <span class="toctext">One Wire by DS9097U (1W_DS9097U)</span></a></li>
 <li class="toclevel-1"><a href="#I2C:_PCF8591_.28PCF8591.29"><span class="tocnumber">5</span> <span class="toctext">I2C: PCF8591 (PCF8591)</span></a></li>
@@ -391,16 +391,16 @@ rfcomm <span class="nb">bind </span><span class="m">0</span> 98:D3:31:F8:52:29  
 <dd>4. У вкладці "Конфігурація шаблону" об'єкту логічного параметру ви маєте встановити:
 <ul><li> <i>Транспорт</i> — адресу автоматично створюваного транспорту із його параметрами після ":", відповідно до <a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">формату адреси функції SYS.Transport.outAt()</a>, де адреса пристрою відповідає команді <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">rfcomm bind 0</span> у пункті 1.</li>
 <li> <i>Пристрій для зв'язування</i> — тут можна встановити адресу Bluetooth пристрою у вигляді "98:D3:31:F8:52:29" для виклику команди <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">rfcomm bind {N} </span> при запуску шаблону, де <i>N</i> відповідно береться із адреси попереднього пункту.</li></ul>
-<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Команда <b>rfcomm</b> зазвичай не доступна для виклику непривілейованим користувачем та якщо ви все-ж бажаєте викликати її таким користувачем, то маєте встановити їй ознаку <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">chmod u+s /usr/bin/rfcomm</span> від привілейованого користувача.</dd></dl></dd>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Команда <b>rfcomm</b> зазвичай недоступна для виклику непривілейованим користувачем та якщо ви все-ж бажаєте викликати її таким користувачем, то маєте встановити їй ознаку <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">chmod u+s /usr/bin/rfcomm</span> від привілейованого користувача.</dd></dl></dd>
 <dd>5. РЕЗУЛЬТАТ: Об'єкт логічного параметру здійснюватиме збір даних та відстежуватиме модифікацію записуваних властивостей.</dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
 
 <tr>
-<td> <span id="UC96" title="#UC96"><h3><span class="mw-headline" id="BT:_ATORCH_UC96_.28UC96.29"><span class="mw-headline-number">2</span> BT: ATORCH UC96 (<a href="Libs_LowLevelDevices.html#UC96" title="Special:MyLanguage/Libs/LowLevelDevices">UC96</a>)</span></h3></span>
+<td> <span id="UC96" title="#UC96"><h3><span class="mw-headline" id="BT:_ATORCH_UC96.2C_UD24_.28UC96.29"><span class="mw-headline-number">2</span> BT: ATORCH UC96, UD24 (<a href="Libs_LowLevelDevices.html#UC96" title="Special:MyLanguage/Libs/LowLevelDevices">UC96</a>)</span></h3></span>
 </td>
-<td> 1.0 </td>
+<td> 1.1 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en,uk
@@ -408,8 +408,8 @@ rfcomm <span class="nb">bind </span><span class="m">0</span> 98:D3:31:F8:52:29  
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsLowLevDevsUC96_uk.png" title="Результат оперативного встановлення."><img alt="Результат оперативного встановлення." height="475" src="files/LibsLowLevDevsUC96_uk.png" width="252" /></a></div>
-<p>Шаблон BlueTooth інтерфейсу ATORCH UC96.
-</p><p>ATORCH UC96 є недорогим пристроєм вимірювання прохідної потужності на USB із багатьма інтерфейсами і підтримкою достатньої колекції властивостей, як і контролем через Bluetooth. Цей шаблон реалізує лише команду очищення даних і збір даних через Bluetooth інтерфейс пристрою.<br />
+<p>Шаблон BlueTooth інтерфейсу ATORCH UC96, UD24.
+</p><p>ATORCH UC96, UD24 є недорогим пристроєм вимірювання прохідної потужності на USB із багатьма інтерфейсами і підтримкою достатньої колекції властивостей, як і контролем через Bluetooth. Цей шаблон реалізує лише команду очищення даних і збір даних через Bluetooth інтерфейс пристрою.<br />
 <a class="image" href="http://oscada.org/wiki/File:ATORCH_UC96.jpg"><img alt="ATORCH UC96.jpg" height="382" src="../en/files/ATORCH_UC96.jpg" width="500" /></a>
 </p><p>Пристрій надсилає пакети даних не за запитом, тобто розсилає із періодом у одну секунду. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Пристрій може не надсилати пакети даних при увімкнені не на першому екрані, тож вам необхідно перемкнутися на перший екран для появи даних. Дані також можуть бути відсутні після присипляння ПК, тож цей шаблон першим реалізує виявлення відсутності даних і перепідключення.
 </p>
@@ -592,7 +592,7 @@ rfcomm <span class="nb">bind </span><span class="m">0</span> 98:D3:31:F8:52:29  
 <dd>4. У вкладці "Конфігурація шаблону" об'єкту логічного параметру ви маєте встановити:
 <ul><li> <i>Транспорт</i> — адресу автоматично створюваного транспорту із його параметрами після ":", відповідно до <a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">формату адреси функції SYS.Transport.outAt()</a>, де адреса пристрою відповідає команді <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">rfcomm bind 0</span>.</li>
 <li> <i>Пристрій для зв'язування</i> — тут можна встановити адресу Bluetooth пристрою у вигляді "58:F4:04:33:D5:FD" для виклику команди <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">rfcomm bind {N} </span> при запуску шаблону, де <i>N</i> відповідно береться із адреси попереднього пункту.</li></ul>
-<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Команда <b>rfcomm</b> зазвичай не доступна для виклику непривілейованим користувачем та якщо ви все-ж бажаєте викликати її таким користувачем, то маєте встановити їй ознаку <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">chmod u+s /usr/bin/rfcomm</span> від привілейованого користувача.</dd></dl>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Команда <b>rfcomm</b> зазвичай недоступна для виклику непривілейованим користувачем та якщо ви все-ж бажаєте викликати її таким користувачем, то маєте встановити їй ознаку <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">chmod u+s /usr/bin/rfcomm</span> від привілейованого користувача.</dd></dl>
 <ul><li> <i>Час виявлення відсутності даних</i> — тут ви можете встановити час виявлення відсутності даних.</li></ul></dd>
 <dd>5. РЕЗУЛЬТАТ: Об'єкт логічного параметру здійснюватиме збір даних та відстежуватиме модифікацію записуваних властивостей.</dd></dl>
 <p><br />
@@ -2313,5 +2313,5 @@ DS3231;DS1307
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/LowLevelDevices/uk">Libs/LowLevelDevices/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2982</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/LowLevelDevices/uk">Libs/LowLevelDevices/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2989</td></tr></table></body>
 </html>
