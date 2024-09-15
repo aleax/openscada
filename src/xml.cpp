@@ -289,7 +289,7 @@ void XMLNode::saveNode( unsigned flg, string &xml, const string &cp ) const
     }
 
     if(childEmpty() && mText.empty())
-	xml.append((((flg&XHTMLHeader)&&(name()=="script"||name()=="div"))?"></"+name()+">":" />") + ((flg&(BrOpenPast|BrClosePast))?"\n":""));
+	xml.append((((flg&XHTMLHeader)&&(name()=="script"||name()=="div"||name()=="a"))?"></"+name()+">":" />") + ((flg&(BrOpenPast|BrClosePast))?"\n":""));
     else {
 	xml.append((flg&BrOpenPast) ? ">\n" : ">");
 	//Save text
