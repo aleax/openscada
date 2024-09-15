@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.13.12"
+#define MOD_VER		"2.13.13"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -100,7 +100,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("WR_ASYNCH",trS("Asynchronous writing"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fldAdd(new TFld("GATH_MESS_LEV",trS("Level of requested messages"),TFld::Integer,TFld::Selectable,"1","1",
 	"-1;0;1;2;3;4;5;6;7",trS("==Disable==;Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X])")));
-    fldAdd(new TFld("SYNCPER",trS("Synchronization time with the remote station, seconds"),TFld::Integer,TFld::NoFlag,"4","0","-1;1000"));
+    fldAdd(new TFld("SYNCPER",trS("Synchronization time with the remote station, seconds"),TFld::Integer,TFld::NoFlag,"4","0","-1;9999"));
     fldAdd(new TFld("STATIONS",trS("Remote station"),TFld::String,TFld::NoFlag,"100"));
     fldAdd(new TFld("CNTRPRM",trS("List of the remote controller objects and parameters"),TFld::String,TFld::FullText,"200"));
     fldAdd(new TFld("ALLOW_DEL_PA",trS("Allow the automatic removal of parameters and attributes"),TFld::Boolean,TFld::NoFlag,"1","0"));

@@ -1,3 +1,13 @@
+2024-09-15 Roman (stable)
+- SYS,DAQ.JavaLikeCalc: The sysTm() function split to sysTmJmp() for the original sysTm() was maximum fast without jumps detection.
+- DAQ: The TValFunc::mCalc flag moved from a bit to a separate bool attribute,
+    since access here must be maximum fast.
+- DAQ.DAQGate: The configuration field "Synchronization time with the remote station, seconds"
+    expanded in the range to [-1...9999].
+- FIX:UI.Vision: The table fitting of the view Table of the primitive FormEl fixed in shrink the last column
+    at resetting setStretchLastSection() to false on Qt4.
+
+
 2024-08-19 Roman (stable)
 - !:SYS,DAQ.{DAQGate,JavaLikeCalc,OPC_UA.libOPC_UA,System},Protocol.ModBus,Transport.
 	SSL,UI.{QTCfg,QTStarter,Vision,WebCfgD,WebVision}: The source code some cleaned from building warnings.

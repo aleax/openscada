@@ -255,9 +255,10 @@ class TSYS : public TCntrNode
 	static void sighandler( int signal, siginfo_t *siginfo, void *context );
 
 	int	nCPU( )		{ return mN_CPU; }
-	float	sysClk( )	{ return mSysclc; }	//In MHz
+	float	sysClk( )	{ return mSysclc; }			//In MHz
 	void	setSysClk( float vl )	{ mSysclc = vl; }
-	time_t	sysTm( bool *hasJump = NULL, time_t last = 0 ) {	//System time fast access with detection the time jumps
+	time_t	sysTm( ) volatile	{ return mSysTm; }		//System time fast access
+	time_t	sysTmJmp( bool *hasJump = NULL, time_t last = 0 ) {	//System time fast access with detection the time jumps
 	    if(hasJump) *hasJump = (last < mSysTmJump);
 	    return mSysTm;
 	}

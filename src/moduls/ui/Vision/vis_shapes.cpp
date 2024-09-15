@@ -1056,7 +1056,7 @@ void ShapeFormEl::tableFit( WdgView *w )
 		    wdg->setColumnWidth(iC, busyColsWdth);
 	}
     }
-    wdg->horizontalHeader()->setStretchLastSection(wdg->property("colsWdthFit").toBool());
+    if(wdg->property("colsWdthFit").toBool()) wdg->horizontalHeader()->setStretchLastSection(true);
 
     wdg->resizeRowsToContents();
     for(int iRW = 0; iRW < wdg->rowCount(); iRW++)
