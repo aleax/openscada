@@ -1,4 +1,9 @@
 2024-09-26 Roman (stable)
+- DAQ: The function execution form added by the measuring minimum and maximum and combined
+    in the measuring information and the calculation quantity.
+
+
+2024-09-26 Roman (stable)
 - FIX:LibsDB.vcaBase: wlb_Main.storeHouse: RO value of the ID field in the data form mode shortened twicely.
 - {Protocol,DAQ}.ModBus: The data requesting improved in the TCP variant for waiting tail to any first package size,
     that is not only the MBAP header in 7 bytes size.

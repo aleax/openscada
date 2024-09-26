@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-11 17:06+0300\n"
+"POT-Creation-Date: 2024-09-26 09:08+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1200,11 +1200,8 @@ msgstr "По умолчанию"
 msgid "Execute"
 msgstr "Исполнить"
 
-msgid "Number of calculations"
-msgstr "Количество исполнения"
-
-msgid "Spent time"
-msgstr "Затрачено времени"
+msgid "Executions, spent time"
+msgstr ""
 
 msgid "Text"
 msgstr "Текст"
@@ -3134,6 +3131,12 @@ msgstr "Имя проекта установлено в:"
 
 msgid "already started."
 msgstr "уже запущен."
+
+#~ msgid "Number of calculations"
+#~ msgstr "Количество исполнения"
+
+#~ msgid "Spent time"
+#~ msgstr "Затрачено времени"
 
 #~ msgid "Element type is not selective!"
 #~ msgstr "Тип элемента не выбираем!"
