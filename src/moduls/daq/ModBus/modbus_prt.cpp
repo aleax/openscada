@@ -273,24 +273,24 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 	    //Send request
 	    int resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm);
-	    rez.assign(buf,resp_len);
-	    if(rez.size() < 7)	err = i2s(TError::Tr_ErrResponse)+":"+_("Error of the server response");
-	    else if(TSYS::getUnalign16(rez.data()) != tid)
-		err = i2s(TError::Tr_ErrResponse)+":"+TSYS::strMess(_("The response Transaction ID %d is not suitable to the request one %d."),
-								TSYS::getUnalign16(rez.data()), (int)tid);
-	    else {
-		unsigned resp_sz = (unsigned short)(rez[4]<<8) | (unsigned char)rez[5];
+	    rez.assign(buf, resp_len);
 
-		//Wait tail
-		while(rez.size() < (resp_sz+6) && rez.size() < MODBUS_FRM_LIM) {
-		    resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), reqTm);
-		    if(!resp_len) throw TError(nodePath(), _("Not full response"));
-		    rez.append(buf, resp_len);
-		}
-		if(rez.size() >= MODBUS_FRM_LIM)
-		    throw TError(nodePath(), i2s(TError::Tr_ErrResponse)+":"+_("Error of the response: Too large."));
-		pdu = rez.substr(7);
-	    }
+	    //Wait tail
+	    while(rez.size() && (rez.size() < 7 || rez.size() < (((unsigned short)(rez[4]<<8)|(unsigned char)rez[5])+6)) &&
+		    rez.size() < MODBUS_FRM_LIM && (resp_len=tro.messIO(NULL,0,buf,sizeof(buf),reqTm)))
+		rez.append(buf, resp_len);
+
+	    if(rez.empty())
+		err = _("No response");
+	    else if(rez.size() < (((unsigned short)(rez[4]<<8)|(unsigned char)rez[5])+6))
+		err = _("Not full response");
+	    else if(TSYS::getUnalign16(rez.data()) != tid)
+		err = TSYS::strMess(_("The response Transaction ID %d is not suitable to the request one %d."),
+					TSYS::getUnalign16(rez.data()), (int)tid);
+	    else if(rez.size() >= MODBUS_FRM_LIM)
+		err = _("Error of the response: Too large.");
+	    else pdu = rez.substr(7);
+	    if(err.size()) err = i2s(TError::Tr_ErrResponse) + ":" + err;
 	}
 	else if(prt == "RTU") {		// Modbus/RTU protocol process
 	    if(tro.isNetwork())	tro.setTimings("5:0.1", true);
@@ -389,7 +389,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     } catch(TError &er) { err = i2s(TError::Tr_ErrDevice)+":"+_("Device error: ") + er.mess; }
 
     io.setText(err.empty()?pdu:"");
-    if(!err.empty()) io.setAttr("err",err);
+    if(!err.empty()) io.setAttr("err", err);
 
     //Prepare log
     if(prtLen() || debugCat.size()) {

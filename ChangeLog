@@ -1,3 +1,9 @@
+2024-09-26 Roman (stable)
+- FIX:LibsDB.vcaBase: wlb_Main.storeHouse: RO value of the ID field in the data form mode shortened twicely.
+- {Protocol,DAQ}.ModBus: The data requesting improved in the TCP variant for waiting tail to any first package size,
+    that is not only the MBAP header in 7 bytes size.
+
+
 2024-09-15 Roman (stable)
 - !!!:LibsDB.OscadaLibs: tmplib_DevLib.mbBase: Expanded for support Input Registers by function 4.
     !!!: tmplib_LowDevLib.UC96: Expanded for support ATORCH UD24.

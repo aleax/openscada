@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-24 16:22+0300\n"
+"POT-Creation-Date: 2024-09-26 09:25+0300\n"
 "PO-Revision-Date: 2010-10-10 23:11+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -390,15 +390,15 @@ msgstr "Reale Position"
 msgid "Error of searching and a new node creation."
 msgstr "Fehler beim Suchen und eine neue Node-Erstellung."
 
-msgid "Error of the server response"
-msgstr "Fehler der Serverantwort"
+msgid "No response"
+msgstr "Keine Antwort"
+
+msgid "Not full response"
+msgstr "Nicht voll antworten"
 
 #, c-format
 msgid "The response Transaction ID %d is not suitable to the request one %d."
 msgstr "Die Antworttransaktions-ID %d ist nicht für die Anforderung %d geeignet."
-
-msgid "Not full response"
-msgstr "Nicht voll antworten"
 
 msgid "Error of the response: Too large."
 msgstr "Fehler in der Antwort: Zu groß."
