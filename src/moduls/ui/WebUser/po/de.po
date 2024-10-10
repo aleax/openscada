@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebUser 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-27 09:02+0200\n"
+"POT-Creation-Date: 2024-10-10 08:52+0300\n"
 "PO-Revision-Date: 2010-10-25 09:57+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: <de@li.org>\n"
@@ -63,8 +63,8 @@ msgstr "Fehler beim Starten der WWW-Seite '%s'."
 msgid "Present WWW-pages of the users."
 msgstr "Präsentieren Sie WWW-Seiten der Benutzer."
 
-msgid "The page is not present"
-msgstr "Die Seite ist nicht vorhanden"
+msgid "Page is not present"
+msgstr "Seite ist nicht vorhanden"
 
 #, c-format
 msgid "Error the page '%s': %s"
@@ -124,6 +124,9 @@ msgstr "Dieses Objekt"
 
 msgid "Protocol's object"
 msgstr "Protokollobjekt"
+
+msgid "Transport's object"
+msgstr "Transportobjekt"
 
 msgid "Scheduling the next service call"
 msgstr "Terminierung des nächsten Serviceeinsatzes"

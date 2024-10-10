@@ -326,7 +326,7 @@ string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcod
     const string &htmlHeadEls, const string &forceTmplFile, const string &lang )
 {
     /*if(httpattrs.size() && httpattrs.find("Content-Type: text/html") == string::npos)
-	return "HTTP/1.0 " + rcode + "\x0D\x0A"
+	return "HTTP/1.1 " + rcode + "\x0D\x0A"
 	    "Server: " + PACKAGE_STRING + "\x0D\x0A"
 	    "Accept-Ranges: bytes\x0D\x0A"
 	    "Content-Length: " + i2s(cnt.size()) + "\x0D\x0A" +

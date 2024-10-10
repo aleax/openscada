@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.6.14"
+#define MOD_VER		"2.0.3"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -78,10 +78,8 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mDefPg(DEF_DefPg)
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 
     //Reg export functions
-    modFuncReg(new ExpFunc("void HTTP_GET(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
-	"GET command processing from HTTP protocol!",(void(TModule::*)( )) &TWEB::HTTP_GET));
-    modFuncReg(new ExpFunc("void HTTP_POST(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
-	"POST command processing from HTTP protocol!",(void(TModule::*)( )) &TWEB::HTTP_POST));
+    modFuncReg(new ExpFunc("void HTTP(const string&,const string&,string&,vector<string>&,const string&,TProtocolIn*);",
+	"HTTP protocol",(void(TModule::*)( )) &TWEB::HTTP));
 
     mPgU = grpAdd("up_");
 
@@ -202,7 +200,7 @@ void TWEB::perSYSCall( unsigned int cnt )
 
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr )
 {
-    return  "HTTP/1.0 " + rcode + "\x0D\x0A"
+    return  "HTTP/1.1 " + rcode + "\x0D\x0A"
 	    "Date: " + atm2s(time(NULL),"%a, %d %b %Y %T %Z") + "\x0D\x0A"
 	    "Server: " + PACKAGE_STRING + "\x0D\x0A"
 	    "Accept-Ranges: bytes\x0D\x0A"
@@ -211,75 +209,26 @@ string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const
 	    addattr + "\x0D\x0A";
 }
 
-string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode, const string &httpattrs,
+string TWEB::pgCreator( TProtocolIn *prt, const string &cnt, const string &rcode, const string &httpattrs,
     const string &htmlHeadEls, const string &forceTmplFile, const string &lang )
 {
     vector<TVariant> prms;
     prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile);
 
-    return iprt->objFuncCall("pgCreator", prms, "root\n"+lang).getS();
+    return prt->objFuncCall("pgCreator", prms, "root\n"+lang).getS();
 }
 
-bool TWEB::pgAccess( TProtocolIn *iprt, const string &URL )
+bool TWEB::pgAccess( TProtocolIn *prt, const string &URL )
 {
     vector<TVariant> prms; prms.push_back(URL);
-    return iprt->objFuncCall("pgAccess", prms, "root").getB();
+    return prt->objFuncCall("pgAccess", prms, "root").getB();
 }
 
-void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
+void TWEB::HTTP( const string &meth, const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *prt )
 {
-    string rez, sender = TSYS::strLine(iprt->srcAddr(), 0);
+    string rez, sender = prt->srcAddr();	//TSYS::strLine(prt->srcAddr(), 0);
     AutoHD<UserPg> up, tup;
 
-    SSess ses(TSYS::strDecode(urli,TSYS::HttpURL), sender, user, vars, page);
-
-    TrCtxAlloc trCtx;
-    if(Mess->translDyn()) trCtx.hold(ses.user+"\n"+ses.lang);
-
-    try {
-	//Find user protocol for using
-	vector<string> upLs;
-	uPgList(upLs);
-	string uPg = TSYS::pathLev(ses.url, 0);
-	if(uPg.empty()) uPg = defPg();
-	for(unsigned iUp = 0; iUp < upLs.size(); iUp++) {
-	    tup = uPgAt(upLs[iUp]);
-	    if(!tup.at().enableStat() /*|| tup.at().workProg().empty()*/) continue;
-	    if(uPg == upLs[iUp]) { up = tup; break; }
-	}
-	if(up.freeStat()) {
-	    if(uPg == "*") {
-		page =	"<table class='work'>\n"
-			// " <tr><td class='content'><p>"+_("Welcome to the WWW-pages of the OpenSCADA users.")+"</p></td></tr>\n"
-			" <tr><th>"+string(_("Present WWW-pages of the users."))+"</th></tr>\n"
-			" <tr><td class='content'><ul>\n";
-		for(unsigned iP = 0; iP < upLs.size(); iP++)
-		    if(uPgAt(upLs[iP]).at().enableStat() && pgAccess(iprt,sender+"/" MOD_ID "/"+upLs[iP]+"/"))
-			page += "   <li><a href='"+upLs[iP]+"/'>"+trD(uPgAt(upLs[iP]).at().name())+"</a></li>\n";
-		page += "</ul></td></tr></table>\n";
-
-		page = pgCreator(iprt, page, "200 OK", "", "", "", ses.lang);
-		return;
-	    }
-	    else if(!(uPg=defPg()).empty() && uPg != "*") up = uPgAt(uPg);
-	    else throw TError(nodePath(), _("The page is not present"));
-	}
-
-	up.at().HTTP("GET", ses, iprt);
-
-	page = ses.page;
-
-    } catch(TError &err) {
-	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Error the page '%s': %s"),urli.c_str(),err.mess.c_str())+"</div>\n",
-			       "404 Not Found", "", "", "", ses.lang);
-    }
-}
-
-void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
-{
-    string rez, sender = TSYS::strLine(iprt->srcAddr(), 0);
-    AutoHD<UserPg> up, tup;
-    map<string,string>::iterator prmEl;
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL), sender, user, vars, page);
 
     TrCtxAlloc trCtx;
@@ -297,16 +246,29 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 	    if(uPg == upLs[iUp]) { up = tup; break; }
 	}
 	if(up.freeStat()) {
-	    if(!(uPg=defPg()).empty() && uPg != "*") up = uPgAt(uPg);
-	    else throw TError(nodePath(), _("The page is not present"));
+	    if(meth == "GET" && uPg == "*") {
+		page =	"<table class='work'>\n"
+			// " <tr><td class='content'><p>"+_("Welcome to the WWW-pages of the OpenSCADA users.")+"</p></td></tr>\n"
+			" <tr><th>"+string(_("Present WWW-pages of the users."))+"</th></tr>\n"
+			" <tr><td class='content'><ul>\n";
+		for(unsigned iP = 0; iP < upLs.size(); iP++)
+		    if(uPgAt(upLs[iP]).at().enableStat() && pgAccess(prt,sender+"/" MOD_ID "/"+upLs[iP]+"/"))
+			page += "   <li><a href='"+upLs[iP]+"/'>"+trD(uPgAt(upLs[iP]).at().name())+"</a></li>\n";
+		page += "</ul></td></tr></table>\n";
+
+		page = pgCreator(prt, page, "200 OK", "", "", "", ses.lang);
+		return;
+	    }
+	    else if(!(uPg=defPg()).empty() && uPg != "*") up = uPgAt(uPg);
+	    else throw TError(nodePath(), _("Page is not present"));
 	}
 
-	up.at().HTTP("POST", ses, iprt);
+	up.at().HTTP(meth, ses, prt);
 
 	page = ses.page;
 
     } catch(TError &err) {
-	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Error the page '%s': %s"),url.c_str(),err.mess.c_str())+"</div>\n",
+	page = pgCreator(prt, "<div class='error'>"+TSYS::strMess(_("Error the page '%s': %s"),url.c_str(),err.mess.c_str())+"</div>\n",
 			       "404 Not Found", "", "", "", ses.lang);
     }
 }
@@ -353,7 +315,7 @@ UserPg::UserPg( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), TPrmTempl::Impl(this, ("WebUserPg_"+iid).c_str()), cntReq(0), isDAQTmpl(false),
     mId(cfg("ID")), mAEn(cfg("EN").getBd()), mEn(false), mTimeStamp(cfg("TIMESTAMP").getId()), mDB(idb),
     ioRez(-1), ioHTTPreq(-1), ioUrl(-1), ioPage(-1), ioSender(-1), ioUser(-1),
-    ioHTTPvars(-1), ioURLprms(-1), ioCnts(-1), ioThis(-1), ioPrt(-1), ioSchedCall(-1),
+    ioHTTPvars(-1), ioURLprms(-1), ioCnts(-1), ioThis(-1), ioPrt(-1), ioTrIn(-1), ioSchedCall(-1),
     chkLnkNeed(false)
 {
     mId = iid;
@@ -427,7 +389,7 @@ void UserPg::setProgLang( const string &ilng )	{ cfg("PROG").setS(ilng+"\n"+prog
 
 void UserPg::setProg( const string &iprg )	{ cfg("PROG").setS(progLang()+"\n"+iprg); modif(); }
 
-void UserPg::HTTP( const string &req, SSess &s, TProtocolIn *iprt )
+void UserPg::HTTP( const string &req, SSess &s, TProtocolIn *prt )
 {
     string tstr, httpIt;
     map<string,string>::iterator prmEl;
@@ -459,42 +421,49 @@ void UserPg::HTTP( const string &req, SSess &s, TProtocolIn *iprt )
 		AutoHD<TArrayObj>(getO(ioCnts)).at().propSet(i2s(ic),xo);
 	    }
 	}
-	if(ioThis >= 0) setO(ioThis, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
-	if(ioPrt >= 0) setO(ioPrt, new TCntrNodeObj(AutoHD<TCntrNode>(iprt),"root"));
+	if(ioThis >= 0)	setO(ioThis, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
+	if(ioPrt >= 0)	setO(ioPrt, new TCntrNodeObj(AutoHD<TCntrNode>(prt),"root"));
+	if(ioTrIn >= 0)	setO(ioTrIn, new TCntrNodeObj(AutoHD<TCntrNode>(&prt->srcTr().at()),"root"));
+	setS(ioRez, "200 OK");
 
 	//Call processing
 	setMdfChk(true);
 	calc();
 
 	//Get outputs
-	if(ioThis >= 0) setO(ioThis, new TEValObj());
-	if(ioPrt >= 0) setO(ioPrt, new TEValObj());
+	if(ioThis >= 0)	setO(ioThis, new TEValObj());
+	if(ioPrt >= 0)	setO(ioPrt, new TEValObj());
+	if(ioTrIn >= 0)	setO(ioTrIn, new TEValObj());
 	outputLinks();
 
 	string rez = getS(ioRez);
 	s.page = getS(ioPage);
 	if(s.page.size() > limUserFile_SZ) setS(ioPage, "");	//Freeing the memory for very big data
 
-	//HTTP properties prepare
-	AutoHD<TVarObj> hVars = getO(ioHTTPvars);
-	vector<string> sls;
-	hVars.at().propList(sls);
-	bool cTp = false;
-	for(unsigned iL = 0; iL < sls.size(); iL++) {
-	    tstr = hVars.at().propGet(sls[iL]).getS();
-	    if(sls[iL] == "Date" || sls[iL] == "Server" || sls[iL] == "Accept-Ranges" || sls[iL] == "Content-Length" ||
-		(sls[iL] != "Content-Type" && (prmEl=s.vars.find(sls[iL])) != s.vars.end() && prmEl->second == tstr)) continue;
-	    if(sls[iL] == "Content-Type") cTp = true;
-	    httpIt += sls[iL] + ": " + tstr + "\x0D\x0A";
-	}
+	if(rez.empty())	s.page = "";	//For empty result we send no response, seems its wrote directly
+	else {
+	    //HTTP properties prepare
+	    AutoHD<TVarObj> hVars = getO(ioHTTPvars);
+	    vector<string> sls;
+	    hVars.at().propList(sls);
+	    bool cTp = false;
+	    for(unsigned iL = 0; iL < sls.size(); iL++) {
+		tstr = hVars.at().propGet(sls[iL]).getS();
+		if(sls[iL] == "Date" || sls[iL] == "Server" || sls[iL] == "Accept-Ranges" || sls[iL] == "Content-Length" ||
+		    (sls[iL] != "Content-Type" && (prmEl=s.vars.find(sls[iL])) != s.vars.end() && prmEl->second == tstr)) continue;
+		if(sls[iL] == "Content-Type") cTp = true;
+		httpIt += sls[iL] + ": " + tstr + "\x0D\x0A";
+	    }
 
-	s.page = mod->httpHead(rez, s.page.size(), (cTp?"":"text/html"), httpIt) + s.page;
+	    s.page = mod->httpHead(rez, s.page.size(), (cTp?"":"text/html"), httpIt) + s.page;
+	}
 
 	cntReq++;
 
     } catch(TError &err) {
 	if(func() && ioThis >= 0) setO(ioThis, new TEValObj());
-	if(func() && ioPrt >= 0) setO(ioPrt, new TEValObj());
+	if(func() && ioPrt >= 0)  setO(ioPrt, new TEValObj());
+	if(func() && ioTrIn >= 0) setO(ioTrIn, new TEValObj());
 	throw;
     }
 }
@@ -506,7 +475,7 @@ void UserPg::perSYSCall( )
 
     int schedCall = 0;
     if(ioSchedCall < 0 || !(schedCall=getI(ioSchedCall))) return;
-    setI(ioSchedCall, (schedCall=vmax(0,schedCall-SERV_TASK_PER)));
+    setI(ioSchedCall, (schedCall=vmax(0,schedCall-prmServTask_PER)));
     if(schedCall)	return;
 
     try {
@@ -519,9 +488,10 @@ void UserPg::perSYSCall( )
 	if(ioUser >= 0) setS(ioUser, "");
 	setO(ioHTTPvars, new TVarObj());
 	if(ioURLprms >= 0) setO(ioURLprms, new TVarObj());
-	if(ioCnts >= 0) setO(ioCnts, new TArrayObj());
-	if(ioThis >= 0) setO(ioThis, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
-	if(ioPrt >= 0) setO(ioPrt, new TEValObj());
+	if(ioCnts >= 0)	setO(ioCnts, new TArrayObj());
+	if(ioThis >= 0)	setO(ioThis, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
+	if(ioPrt >= 0)	setO(ioPrt, new TEValObj());
+	if(ioTrIn >= 0)	setO(ioTrIn, new TEValObj());
 
 	//Call processing
 	setMdfChk(true);
@@ -586,8 +556,8 @@ void UserPg::saveIO( )
 	TConfig cf(&owner().uPgIOEl());
 	cf.cfg("PG_ID").setS(id(), true);
 	for(int iIO = 0; iIO < func()->ioSize(); iIO++) {
-	    if(iIO == ioRez || iIO == ioHTTPreq || iIO == ioUrl || iIO == ioPage || iIO == ioSender || iIO == ioUser ||
-		iIO == ioHTTPvars || iIO == ioURLprms || iIO == ioCnts || iIO == ioThis || iIO == ioPrt || iIO == ioSchedCall ||
+	    if(iIO == ioRez || iIO == ioHTTPreq || iIO == ioUrl || iIO == ioPage || iIO == ioSender || iIO == ioUser || iIO == ioHTTPvars ||
+		iIO == ioURLprms || iIO == ioCnts || iIO == ioThis || iIO == ioPrt || iIO == ioTrIn || iIO == ioSchedCall ||
 		func()->io(iIO)->flg()&TPrmTempl::LockAttr) continue;
 	    cf.cfg("ID").setS(func()->io(iIO)->id());
 	    cf.cfg("VALUE").setNoTransl(func()->io(iIO)->type() != IO::String || (func()->io(iIO)->flg()&TPrmTempl::CfgLink));
@@ -646,6 +616,7 @@ void UserPg::setEnable( bool vl )
 		if((ioCnts=func()->ioId("cnts")) >= 0 && func()->io(ioCnts)->type() != IO::Object)	ioCnts = -1;
 		if((ioThis=func()->ioId("this")) >= 0 && func()->io(ioThis)->type() != IO::Object)	ioThis = -1;
 		if((ioPrt=func()->ioId("prt")) >= 0 && func()->io(ioPrt)->type() != IO::Object)		ioPrt = -1;
+		if((ioTrIn=func()->ioId("tr")) >= 0 && func()->io(ioTrIn)->type() != IO::Object)	ioTrIn = -1;
 		if((ioSchedCall=func()->ioId("schedCall")) >= 0 && func()->io(ioSchedCall)->type() != IO::Integer) ioSchedCall = -1;
 
 		if(!(ioRez >= 0 && ioHTTPreq >= 0 && ioUrl >= 0 && ioPage >= 0 && ioHTTPvars >=0))
@@ -667,6 +638,7 @@ void UserPg::setEnable( bool vl )
 	    ioCnts	= funcIO.ioAdd(new IO("cnts",trS("Content items"),IO::Object,IO::Default));
 	    ioThis	= funcIO.ioAdd(new IO("this",trS("This object"),IO::Object,IO::Default));
 	    ioPrt	= funcIO.ioAdd(new IO("prt",trS("Protocol's object"),IO::Object,IO::Default));
+	    ioTrIn	= funcIO.ioAdd(new IO("tr",trS("Transport's object"),IO::Object,IO::Default));
 	    ioSchedCall	= funcIO.ioAdd(new IO("schedCall",trS("Scheduling the next service call"),IO::Integer,IO::Output));
 
 	    string workProg = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().

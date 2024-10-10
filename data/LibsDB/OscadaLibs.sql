@@ -10577,23 +10577,26 @@ if(tErr.length)	f_err = tErr;
 else f_err = "0";','','',1657998607);
 INSERT INTO tmplib_base VALUES('fileServerHTTP','WebUser: HTTP File Server','WebUser: HTTP Файловий Сервер','','The template for implementing a HTTP File Server directly in OpenSCADA, which is suitable one at missing a full-featured one for functions of servicing file requests from OpenSCADA Web-interfaces.
 
-Currently there implemented only requesting files by the GET request of HTTP. There are supported also the Partial Content requests in single range and with forcing to this mode at some configured file size. ￼That is work properly only for video and audio files and doesn''t work for other files especially documents, so you have to configure the file size limit for solid reading in maximum size of your documents. For proper working the Partial Content requests we need to implement the HTTP request HEAD in the module Protocol.HTTP before implementing here!
+Currently there implemented only requesting files by the GET request of HTTP. There are supported also chunks and the Partial Content requests in single range and with forcing to this mode at some configured file size.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.0
+Version: 1.1.1
 License: GPLv2','Шаблон для реалізації Файлового Серверу HTTP безпосередньо в OpenSCADA, який корисний за відсутності повнофункціонального для функцій обслуговування файлових запитів із OpenSCADA Web-інтерфейсів.
 
-Наразі реалізовано лише запити файлів HTTP запитом GET. Також реалізуються запити Часток Контенту за одним діапазоном зі змушуванням до цього режиму за певного налаштованого розміру файлу. Належним чином працює лише для відео і аудіо файлів і не працює для інших файлів, особливо документів, тож ви маєте налаштувати обмеження на розмір файлів для цілковитого читання у максимальний розмір ваших документів. Для належного функціювання запитів Часток Контенту ми маємо реалізувати HTTP запит HEAD у модулі Protocol.HTTP перед реалізацією тут!
+Наразі реалізовано лише запити файлів HTTP запитом GET. Також реалізуються шматки і запити Часток Контенту за одним діапазоном зі змушуванням до цього режиму за певного налаштованого розміру файлу.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.0
+Версія: 1.1.1
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
+if(HTTPreq != "GET") { rez = ""; return; }
+
 offPath = 0; url.parsePath(0, 0, offPath);
 reqF = url.slice(offPath);
 if(!(fSz=SYS.fileSize(baseD+reqF)))	{
 	page = "<center><h1>The file ''%1'' not found!</h1></center>".replace("%1", reqF);
 	HTTPvars["Content-Type"] = "text/html;charset=UTF-8";
-	return "404 Not Found";
+	rez = "404 Not Found";
+	return;
 }
 
 fSzLim = max(10e3, fSzSolidLim);	//File''s block size for reading
@@ -10605,12 +10608,31 @@ if(HTTPvars["Range"] != null) {
 }
 //SYS.messInfo("FileHTTP", "fOff="+fOff);
 
-page = SYS.fileRead(baseD+reqF, fOff, fSzLim);
+HTTPvars["Content-Type"] = tVl = SYS.UI.mimeGet(reqF);
 
-HTTPvars["Content-Type"] = SYS.UI.mimeGet(reqF);
-if(!fOff && fSz < fSzLim)	return "200 OK";
-HTTPvars["Content-Range"] = "bytes "+fOff+"-"+(fOff+page.length-1)+"/"+fSz;
-return "206 Partial Content";','','',1702149894);
+//Simple data in single package
+if(!fOff && fSz < fSzLim)	{
+	page = SYS.fileRead(baseD+reqF, fOff, fSzLim);
+	rez = "200 OK";
+	return;
+}
+
+//Range at request or force for audio and video
+if(fOff || tVl.indexOf("audio/") >= 0 || tVl.indexOf("video/") >= 0) {
+	page = SYS.fileRead(baseD+reqF, fOff, fSzLim);
+	HTTPvars["Content-Range"] = "bytes "+fOff+"-"+(fOff+page.length-1)+"/"+fSz;
+	rez = "206 Partial Content";
+	return;
+}
+
+//By chunks with direct writing
+tr.writeTo(sender, prt.pgCreator("","200 OK","Content-Type: "+tVl+"\x0D\x0ATransfer-Encoding: chunked"));
+for(fOff = 0; fOff < fSz; fOff += page.length) {
+	page = SYS.fileRead(baseD+reqF, fOff, fSzLim);
+	tr.writeTo(sender, page.length.toString(16)+"\x0D\x0A"+page+"\x0D\x0A");
+}
+tr.writeTo(sender, "0\x0D\x0A\x0D\x0A");
+rez = "";','','',1728323456);
 INSERT INTO tmplib_base VALUES('weather','Weather','Погода','','The template of acquiring weather data from different weather services in Internet and initially it is only Open Weather (https://openweathermap.org/).
 
 The weather data divided on current and forecast with their placing in corresponded objects, where current attributes placed directly in the root and forecast days (the "day" object) and times (the "time" object) inwardly corresponded day according to the current timezone. These data acquired at specified schedule independently for current and forecast, and by default the current ones are performed per hour when forecast ones per day. The data can be accessible by user both as directly and through a specially created widget of the main library.
@@ -16455,10 +16477,10 @@ INSERT INTO tmplib_base_io VALUES('ntf','messCatExcl','Message exclusion categor
 INSERT INTO tmplib_base_io VALUES('fileServerHTTP','rez','Result',0,0,'200 OK',0,'Результат','','Результат','','');
 INSERT INTO tmplib_base_io VALUES('fileServerHTTP','HTTPreq','HTTP request',0,0,'',1,'HTTP запит','','','','');
 INSERT INTO tmplib_base_io VALUES('fileServerHTTP','url','URL',0,0,'',2,'','','','','');
-INSERT INTO tmplib_base_io VALUES('fileServerHTTP','page','WWW-page',0,1,'',3,'WWW-сторінка','','','','');
-INSERT INTO tmplib_base_io VALUES('fileServerHTTP','HTTPvars','HTTP variables',4,1,'',4,'HTTP змінні','','','','');
-INSERT INTO tmplib_base_io VALUES('fileServerHTTP','baseD','Base directory',0,64,'/data/share_res/local/Lib/',5,'Базовий каталог','','','','');
-INSERT INTO tmplib_base_io VALUES('fileServerHTTP','fSzSolidLim','File size limit for solid reading, else enables the partial content',2,64,'10e6',6,'Обмеження на розмір файлу для читання цілком, інакше вмикається вміст частками','','','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','page','WWW-page',0,1,'',4,'WWW-сторінка','','','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','HTTPvars','HTTP variables',4,1,'',5,'HTTP змінні','','','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','baseD','Base directory',0,64,'/data/share_res/local/Lib/',6,'Базовий каталог','','','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','fSzSolidLim','File size limit for solid reading, else enables the partial content',2,64,'10e6',7,'Обмеження на розмір файлу для читання цілком, інакше вмикається вміст частками','','','','');
 INSERT INTO tmplib_base_io VALUES('weather','city','City ID',0,32,'709932',2,'ІД Міста','','','','');
 INSERT INTO tmplib_base_io VALUES('weather','this','Parameter',4,0,'0',5,'Параметр','','Параметр','','');
 INSERT INTO tmplib_base_io VALUES('weather','schedCur','Scheduling at CRON of current update',0,64,'0 8-20 * * * ',0,'Планування за CRON оновлення поточних даних','','','','');
@@ -16472,6 +16494,9 @@ INSERT INTO tmplib_base_io VALUES('DiskSMART','this','The object',4,0,'',3,'Об
 INSERT INTO tmplib_base_io VALUES('DiskSMART','SHIFR','Code',0,0,'',4,'Шифр','','Шифр','','');
 INSERT INTO tmplib_base_io VALUES('DiskSMART','NAME','Name',0,0,'',5,'Назва','','Имя','','');
 INSERT INTO tmplib_base_io VALUES('DiskSMART','DESCR','Description',0,0,'',6,'Опис','','Описание','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','tr','Transport',4,1,'',8,'Транспорт','','','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','prt','Protocol',4,1,'',9,'Протокол','','','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','sender','Sender',0,0,'',3,'Відправник','','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_DevLib_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_DevLib_io VALUES('SCU750','transport','Transport',0,64,'SCU750',0,'Транспорт','','Транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('SCU750','addr','Device address (-1...255)',1,64,'1',1,'Адрес устройства (-1...255)','','Адреса пристрою (-1...255)','','');
@@ -17546,16 +17571,16 @@ INSERT INTO tmplib_LowDevLib_io VALUES('UC96','dev','Device to bind
 Like to "58:F4:04:33:D5:FD" for binding by "rfcomm bind {N} 58:F4:04:33:D5:FD".',0,64,'',1,'Пристрій для зв''язування
 На кшталт "58:F4:04:33:D5:FD" для зв''язування за допомогою "rfcomm bind {N} 58:F4:04:33:D5:FD".','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','V','Volts',2,16,'',3,'Вольти','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','A','Amperes',2,16,'',4,'Ампери','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','T','Temperature, °С',1,16,'',7,'Температура, °С','Температура, °С','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Ah','Capacity, Ah',2,16,'',8,'Ємність, Аг','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Wh','Capacity, Wh',2,16,'',9,'Ємність, ВтГ','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Tm','Time, seconds',1,16,'',10,'Час, секунди','Время, секунд','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','clear','Clear',3,32,'',11,'Очистити','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','this','Object',4,0,'',12,'Об''єкт','Объект','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','W','Watts',2,16,'',5,'Вати','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','A','Amperes',2,16,'',6,'Ампери','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','T','Temperature, °С',1,16,'',9,'Температура, °С','Температура, °С','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Ah','Capacity, Ah',2,16,'',10,'Ємність, Аг','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Wh','Capacity, Wh',2,16,'',11,'Ємність, ВтГ','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Tm','Time, seconds',1,16,'',12,'Час, секунди','Время, секунд','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','clear','Clear',3,32,'',15,'Очистити','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','this','Object',4,0,'',16,'Об''єкт','Объект','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','W','Watts',2,16,'',7,'Вати','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','noDataTm','No data detection time, seconds',1,64,'60',2,'Час виявлення відсутності даних, секунд','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','R','Resistance, Om',2,16,'',6,'Опір, Ом','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','R','Resistance, Om',2,16,'',8,'Опір, Ом','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','transport','Transport',0,64,'Serial.S1BP:/dev/rfcomm2:9600||1000:40-20',0,'','Транспорт','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','dev','Device to bind
 Like to "40:2B:6D:EF:48:A7" for binding by "rfcomm bind {N} 40:2B:6D:EF:48:A7".',0,64,'',1,'','','','','');
@@ -17581,6 +17606,10 @@ INSERT INTO tmplib_LowDevLib_io VALUES('1W','power','Power, for temperature',3,1
 INSERT INTO tmplib_LowDevLib_io VALUES('1W','this','Object',4,0,'',7,'','Объект','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('1W','isData','In data mode',3,0,'0',6,'','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('1W','onlyAddAtScan','Only add attributes at scan',3,64,'0',2,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Vup','Volts maximum',2,16,'',4,'Вольти максимум','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Vdwn','Volts minimum',2,16,'',5,'Вольти мінімум','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Dplus','Data+, V',2,16,'',13,'Дата+, В','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Dminus','Data-, V',2,16,'',14,'Дата-, В','','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_tests_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_tests_io VALUES('ai_simple','val_cod','Value''s source code',1,128,'',0,'Вихідний код значення','','Исходный код значения','','');
 INSERT INTO tmplib_tests_io VALUES('ai_simple','val','Value',2,16,'0',1,'Значення','','Значение','','Вредност');
@@ -20001,7 +20030,7 @@ The device sends data packages not at a request and just after establishing the 
 
 Author: Roman Savochenko <roman@oscada.org>
 Total complexity: 0.3 HD
-Version: 1.1.0
+Version: 1.2.0
 License: GPLv2','Шаблон BlueTooth інтерфейсу ATORCH UC96, UD24.
 
 ATORCH UC96, UD24 є недорогим пристроєм вимірювання прохідної потужності на USB із багатьма інтерфейсами і підтримкою достатньої колекції властивостей, як і контролем через Bluetooth. Цей шаблон реалізує лише команду очищення даних і збір даних через Bluetooth інтерфейс пристрою.
@@ -20010,13 +20039,13 @@ ATORCH UC96, UD24 є недорогим пристроєм вимірюванн�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Загальна працемісткість: 0.3 ЛД
-Версія: 1.1.0
+Версія: 1.2.0
 Ліцензія: GPLv2',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	isBound = -1;
 	tr = false;
 	dataTm = SYS.time();
-	V = A = W = R = T = Ah = Wh = Tm = EVAL;
+	V = Vup = Vdwn = A = W = R = T = Ah = Wh = Tm = Dplus = Dminus = EVAL;
 	clear = false;
 	conCntr = 0;
 }
@@ -20030,7 +20059,7 @@ if(f_stop || (tr && (SYS.time()-dataTm) > noDataTm)) {
 	if(isBound >= 0)	{ SYS.system("rfcomm release "+isBound, true); isBound = -1; }
 
 	tErr = "2:"+tr("No data, reconnection. Switch to the first screen of the device for the data receive!");
-	V = A = W = R = T = Ah = Wh = Tm = EVAL;
+	V = Vup = Vdwn = A = W = R = T = Ah = Wh = Tm = Dplus = Dminus = EVAL;
 }
 else {
 	if(isBound < 0 && dev.match("^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$").length &&
@@ -20041,13 +20070,13 @@ else {
 		tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
 	else {
 		for(ibuf = tr.messIO("",-10e-3); ibuf.length && ibuf.length < 36 &&
-				(ibuf.slice(-9,-1) != "\x3C\x0C\x80\x00\x00\x03\x20\x00" || ibuf.slice(-4,-1) != "\x03\xDD\x00") &&
+				(ibuf.slice(-4,-1) != "\x03\x20\x00" || ibuf.slice(-4,-1) != "\x03\xDD\x00") &&
 				(rd=tr.messIO()).length; )
 			ibuf += rd;
 
 		while(ibuf.length)
 			if(ibuf.slice(0,5) == "\xFF\x55\x01\x03\x00" && ibuf.length >= 36 &&
-				(ibuf.slice(27,27+8) == "\x3C\x0C\x80\x00\x00\x03\x20\x00" || ibuf.slice(32,32+3) == "\x03\xDD\x00"))
+				(ibuf.slice(32,32+3) == "\x03\x20\x00" || ibuf.slice(32,32+3) == "\x03\xDD\x00"))
 			{
 				dataTm = SYS.time();
 				data = ibuf.slice(0, 36);
@@ -20061,9 +20090,13 @@ else {
 				io.pos -= 1;
 				Ah = (io.read("uint32",1)&0xFFFFFF)/1000;
 				Wh = io.read("uint32",1)/100;
-				io.pos += 4;
+				Dminus = io.read("uint16",1)/100;
+				Dplus = io.read("uint16",1)/100;
 				T = io.read("uint16",1);
 				Tm = io.read("uint16",1)*3600 + io.read("uint8",1)*60 + io.read("uint8",1);
+				io.pos += 1;
+				Vup = io.read("uint16",1)/100;
+				Vdwn = io.read("uint16",1)/100;
 
 				W = V*A;
 				R = A ? V/A : 9999;
@@ -20082,9 +20115,9 @@ else {
 
 if(tErr.length) {
 	f_err = tErr + " ";
-	V = A = W = R = T = Ah = Wh = Tm = EVAL;
+	V = Vup = Vdwn = A = W = R = T = Ah = Wh = Tm = Dplus = Dminus = EVAL;
 } else f_err = "0:";
-f_err += tr("Reconnects %1, left %2s.").replace("%1",conCntr.toString()).replace("%2",(noDataTm-(SYS.time()-dataTm)).toString());','',1726385135);
+f_err += tr("Reconnects %1, left %2s.").replace("%1",conCntr.toString()).replace("%2",(noDataTm-(SYS.time()-dataTm)).toString());','',1728026831);
 INSERT INTO tmplib_LowDevLib VALUES('S1BP','BT: ATORCH S1BP','','ATORCH S1BP BlueTooth interface template.
 ...','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {

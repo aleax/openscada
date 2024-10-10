@@ -113,8 +113,8 @@ class TSocketIn: public TTransportIn
 
 	void start( );
 	void stop( );
-	void check( unsigned int cnt );	//Some periodic tests and checkings like to the certificate file update
-					//?!?! and the initiative connection
+	void check( unsigned int cnt );	//Some periodic tests and checkings like to the certificate file update and the initiative connection
+	int writeTo( const string &sender, const string &data );
 
 	unsigned forksPerHost( const string &sender );
 
@@ -162,7 +162,7 @@ class TSocketIn: public TTransportIn
 
 	bool		clFree;			//Clients stopped
 	//vector<pthread_t>	clId;		//Client's pids
-	vector<SSockIn*> clId;			//Client's control object, by sockets FD
+	map<int, SSockIn*> clId;		//Client's control object, by sockets FD
 	map<string, int> clS;			//Clients (senders) counters
 
 	// Status atributes

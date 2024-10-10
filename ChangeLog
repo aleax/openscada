@@ -1,3 +1,31 @@
+2024-10-10 Roman (stable)
+- !!!:FIX:LibsDB.OscadaLibs.tmplib_base.fileServerHTTP: Expanded of big data transferring in chunks
+	by the direct writing function writeTo(), that performed for non video files.
+	For that appended by the attributes: Transport (tr), Protocol (prt) and Sender (sender).
+    FIX: Fixed in returning the result through direct writing to the 'rez' attribute for templates.
+- !!:LibsDB.OscadaLibs.tmplib_LowDevLib_io.UC96: Expanded by reading:
+    Volts maximum (Vup), Volts minimum (Vdwn), Data+ (Dplus), Data- (Dminus).
+- FIX:LibsDB.vcaBase: wlb_Main.RootPgSo: Improved by pause the demo-procedures execution at no requests on WEB,
+    so preventing of opening all pages before real close.
+- Transport.{Sockets,SSL},Protocol.SelfSystem: Switched to the limit parameter prmStrBuf_SZ in the buffer size
+    instead direct value or such definition.
+- Protocol.UserProtocol,UI.WebUser: Switched to the limit parameter prmServTask_PER instead such definition.
+- Protocol.HTTP,UI.{WebUser,WebCfg}: Switched to "HTTP/1.1".
+- !!:Transports: The IO log items appended by whole package (or agregation) size
+	and the agregation default time set to 1.
+    !!: SSL: Appended of implementation TTransportIn::writeTo() with moving to map in holding the SSockIn structure.
+    Sockets: Some improved in implementation TTransportIn::writeTo() with disabling wrToRes.
+- !!:Protocol.HTTP: Appended by the generic function of transition any methods to WEB-modules - HTTP().
+- UI.QTCfg: Switched to the limit parameter limObjID_SZ instead such definition.
+- UI.Vision: Switched to the global parameter prmWait_TM instead such definition.
+- !!:UI.WebUser: Switched to the generic function HTTP() of transition from Protocol.HTTP.
+    !: Appended by an optional attribute "Transport (tr)" of the processing procedures and templates,
+	taken from the protocol object.
+    !: The attribute "Result (rez)" allowed in empty value to prevent sending any response,
+	meaning direct writing by TTransportIn::writeTo().
+    FIX: Fixed containing the socket identifier in the second line of the attribute "Sender (sender)".
+
+
 2024-09-26 Roman (stable)
 - DAQ: The function execution form added by the measuring minimum and maximum and combined
     in the measuring information and the calculation quantity.

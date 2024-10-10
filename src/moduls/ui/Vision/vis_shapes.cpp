@@ -1958,7 +1958,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		shD->chkTimer = new QTimer(w);
 		shD->chkTimer->setSingleShot(false);
 		connect(shD->chkTimer, SIGNAL(timeout()), this, SLOT(chkTimer()));
-		shD->chkTimer->start(STD_WAIT_TM*1000);
+		shD->chkTimer->start(prmWait_TM*1000);
 
 # if HAVE_MULTIMEDIA
 		if(!shD->addrWdg) {

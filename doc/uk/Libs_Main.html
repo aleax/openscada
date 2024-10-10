@@ -38,7 +38,7 @@
 <ul><li> <b>Засновано:</b> Січень 2006</li>
 <li> <b>Спонсоровано:</b> залежно від елементу ...</li>
 <li> <b>Використано:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">більшість проектів на OpenSCADA</a></li></ul>
-<dl><dd>- завершити реалізацію запиту Часток Вмісту у <a href="Libs_Main.html#fileServerHTTP" title="Special:MyLanguage/Libs/Main">WebUser: HTTP Файловий Сервер</a> після підтримки  запиту HEAD у <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a>.</dd></dl>
+<dl><dd>+ завершити реалізацію запиту Часток Вмісту (шматків) у <a href="Libs_Main.html#fileServerHTTP" title="Special:MyLanguage/Libs/Main">WebUser: HTTP Файловий Сервер</a> після підтримки  запиту HEAD у <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> (загальна функція переведення).</dd></dl>
 </td></tr></table>
 <p>Бібліотеку створено для надання основних шаблонів опрацювання DAQ-джерел та похідних сервісів.
 </p><p>Назви шаблонів та їх параметрів доступні на мовах: Англійська, Українська та mRussian. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу <i>tr()</i> та переклад цих повідомлень також доступний Англійською, Українською та mRussian.
@@ -3474,7 +3474,7 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <tr>
 <td> <span id="fileServerHTTP" title="#fileServerHTTP"><h3><span class="mw-headline" id="WebUser:_HTTP_.D0.A4.D0.B0.D0.B9.D0.BB.D0.BE.D0.B2.D0.B8.D0.B9_.D0.A1.D0.B5.D1.80.D0.B2.D0.B5.D1.80_.28fileServerHTTP.29"><span class="mw-headline-number">4.1</span> WebUser: HTTP Файловий Сервер (<a href="Libs_Main.html#fileServerHTTP" title="Special:MyLanguage/Libs/Main">fileServerHTTP</a>)</span></h3></span>
 </td>
-<td> 1.0 </td>
+<td> 1.1 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk 
@@ -3482,7 +3482,7 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
 <p>Шаблон для реалізації Файлового Серверу HTTP безпосередньо в OpenSCADA, який корисний за відсутності повнофункціонального для функцій обслуговування файлових запитів із OpenSCADA Web-інтерфейсів.
-</p><p>Наразі реалізовано лише запити файлів HTTP запитом GET. Також реалізуються запити Часток Контенту за одним діапазоном зі змушуванням до цього режиму за певного налаштованого розміру файлу. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Належним чином працює лише для відео і аудіо файлів і не працює для інших файлів, особливо документів, тож ви маєте налаштувати обмеження на розмір файлів для цілковитого читання у максимальний розмір ваших документів. Для належного функціювання запитів Часток Контенту ми маємо реалізувати HTTP запит HEAD у модулі <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> перед реалізацією тут!
+</p><p>Наразі реалізовано лише запити файлів HTTP запитом GET. Також реалізуються шматки і запити Часток Контенту за одним діапазоном зі змушуванням до цього режиму за певного налаштованого розміру файлу.
 </p><p><b><u>ВВ шаблону</u></b><br />
 </p>
 <table class="wikitable">
@@ -3524,6 +3524,15 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <td>
 </td></tr>
 <tr>
+<td> sender </td>
+<td> Відправник </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
 <td> page </td>
 <td> WWW-сторінка </td>
 <td> Рядок </td>
@@ -3553,11 +3562,29 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <tr>
 <td> fSzSolidLim </td>
 <td> Обмеження на розмір файлу для читання цілком, інакше вмикається вміст частками </td>
-<td>	Реальний </td>
+<td> Реальний </td>
 <td> Вхід </td>
 <td> Не атрибут </td>
 <td> Константа </td>
 <td> 10e6
+</td></tr>
+<tr>
+<td> tr </td>
+<td> Транспорт </td>
+<td> Об'єкт </td>
+<td> Вихід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> prt </td>
+<td> Протокол </td>
+<td> Об'єкт </td>
+<td> Вихід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
 </td></tr>
 <tr>
 <td> f_start </td>
@@ -3609,5 +3636,5 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/uk">Libs/Main/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2989</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/uk">Libs/Main/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2992</td></tr></table></body>
 </html>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebUser 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-27 09:02+0200\n"
+"POT-Creation-Date: 2024-10-10 08:52+0300\n"
 "PO-Revision-Date: 2010-03-16 16:43+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -60,7 +60,7 @@ msgstr "Помилка запуску WWW-сторінки '%s'."
 msgid "Present WWW-pages of the users."
 msgstr "Наявні WWW-сторінки користувачів."
 
-msgid "The page is not present"
+msgid "Page is not present"
 msgstr "Сторінка відсутня"
 
 #, c-format
@@ -121,6 +121,9 @@ msgstr "Цей об'єкт"
 
 msgid "Protocol's object"
 msgstr "Об'єкт протоколу"
+
+msgid "Transport's object"
+msgstr "Об'єкт транспорту"
 
 msgid "Scheduling the next service call"
 msgstr "Планування сервісного виклику"

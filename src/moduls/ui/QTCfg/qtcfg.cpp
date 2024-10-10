@@ -2293,7 +2293,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, val_r);
 		val_r->setText((string("<b>")+TSYS::strEncode(sval,TSYS::Html)+"</b>").c_str());
 
-		if(QString(sval.c_str()).toStdWString().size() < s2u(OBJ_ID_SZ))
+		if(QString(sval.c_str()).toStdWString().size() < limObjID_SZ)
 		    val_r->setFixedWidth(1.2*QFontMetrics(val_r->font()).size(Qt::TextSingleLine,sval.c_str()).width());
 		else { val_r->setMinimumWidth(10); val_r->setMaximumWidth(100000); }
 

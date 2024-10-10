@@ -38,7 +38,7 @@
 <ul><li> <b>Founded:</b> January 2006</li>
 <li> <b>Sponsored by:</b> depending on the item ...</li>
 <li> <b>Used by:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">most projects on OpenSCADA</a></li></ul>
-<dl><dd>- finish of implementation the Partial Content requests in <a href="Libs_Main.html#fileServerHTTP" title="Special:MyLanguage/Libs/Main">WebUser: HTTP File Server</a> after support the HEAD request in <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a>.</dd></dl>
+<dl><dd>+ finish of implementation the Partial Content requests (chunks) in <a href="Libs_Main.html#fileServerHTTP" title="Special:MyLanguage/Libs/Main">WebUser: HTTP File Server</a> after support the HEAD request in <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> (generic function of transition).</dd></dl>
 </td></tr></table>
 <p>Библиотека создана для предоставления основных шаблонов обработки DAQ-источников и производных сервисов.
 </p><p>Названия элементов и их параметров доступны на языках: Английский, Украинский и mRussian. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода <i>tr()</i> и перевод этих сообщений также доступен Английским, Украинским и mRussian.
@@ -3474,7 +3474,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <tr>
 <td> <span id="fileServerHTTP" title="#fileServerHTTP"><h3><span class="mw-headline" id="WebUser:_HTTP_File_Server_.28fileServerHTTP.29"><span class="mw-headline-number">4.1</span> WebUser: HTTP File Server (<a href="Libs_Main.html#fileServerHTTP" title="Special:MyLanguage/Libs/Main">fileServerHTTP</a>)</span></h3></span>
 </td>
-<td> 1.0 </td>
+<td> 1.1 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk 
@@ -3482,7 +3482,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
 <p>The template for implementing a HTTP File Server directly in OpenSCADA, which is suitable one at missing a full-featured one for functions of servicing file requests from OpenSCADA Web-interfaces.
-</p><p>Currently there implemented only requesting files by the GET request of HTTP. There are supported also the Partial Content requests in single range and with forcing to this mode at some configured file size. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> That is work properly only for video and audio files and doesn't work for other files especially documents, so you have to configure the file size limit for solid reading in maximum size of your documents. For proper working the Partial Content requests we need to implement the HTTP request HEAD in the module <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> before implementing here!
+</p><p>Currently there implemented only requesting files by the GET request of HTTP. There are supported also chunks and the Partial Content requests in single range and with forcing to this mode at some configured file size.
 </p><p><b><u>Template IOs</u></b><br />
 </p>
 <table class="wikitable">
@@ -3524,6 +3524,15 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <td>
 </td></tr>
 <tr>
+<td> sender </td>
+<td> Sender </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
 <td> page </td>
 <td> WWW-page </td>
 <td> String </td>
@@ -3558,6 +3567,24 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <td> Not attribute </td>
 <td> Constant </td>
 <td> 10e6
+</td></tr>
+<tr>
+<td> tr </td>
+<td> Transport </td>
+<td> Object </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> prt </td>
+<td> Protocol </td>
+<td> Object </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
 </td></tr>
 <tr>
 <td> f_start </td>
@@ -3608,5 +3635,5 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/ru">Libs/Main/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2989</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/ru">Libs/Main/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2992</td></tr></table></body>
 </html>

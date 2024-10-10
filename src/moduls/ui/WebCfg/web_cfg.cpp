@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebCfg file: web_cfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2004-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.0.3"
+#define MOD_VER		"2.0.4"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the WEB-based configurator of the OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -119,7 +119,7 @@ void TWEB::modStop( )	{ runSt = false; }
 
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr )
 {
-    return  "HTTP/1.0 "+rcode+"\x0D\x0A"
+    return  "HTTP/1.1 "+rcode+"\x0D\x0A"
 	    "Server: "+PACKAGE_STRING+"\x0D\x0A"
 	    "Accept-Ranges: bytes\x0D\x0A"
 	    "Content-Length: "+i2s(cln)+"\x0D\x0A"

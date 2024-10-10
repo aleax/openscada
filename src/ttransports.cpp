@@ -894,7 +894,7 @@ void TTypeTransport::perSYSCall( unsigned int cnt )
 //************************************************
 TTransportIn::TTransportIn( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), runSt(false), associateTrRes(true), mId(cfg("ID")), mStart(cfg("START").getBd()), mDB(idb),
-    mLogLen(0), mLogItLim(1000), mLogTp(TTransportS::LTP_BinaryText), mLogAgrTm(prmWait_TM), mLogLstDt(0), mLogFHD(-1), mLogLstDtTm(0)
+    mLogLen(0), mLogItLim(1000), mLogTp(TTransportS::LTP_BinaryText), mLogAgrTm(1), mLogLstDt(0), mLogFHD(-1), mLogLstDtTm(0)
 {
     mId = iid;
 }
@@ -1354,7 +1354,8 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);
-		resLog += TSYS::strMess("[%s.%06d] ",atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S").c_str(),int(itTm%1000000)) + itDscr;
+		resLog += TSYS::strMess("[%s.%06d] ",atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S").c_str(),int(itTm%1000000)) +
+			    itDscr + ((off<(int)mLog[iL].size()) ? " ("+TSYS::cpct2str(mLog[iL].size()-off)+")" : "");
 		if(mLogTp == TTransportS::LTP_Binary || mLogTp == TTransportS::LTP_BinaryText)
 		    resLog += ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off,mLogItLim),TSYS::Bin,(mLogTp==TTransportS::LTP_Binary)?" ":"<text>"):"")
 			   + (((mLog[iL].size()-off)>mLogItLim)?(string("\n...<")+_("CUT")+" "+TSYS::cpct2str(mLog[iL].size()-off-mLogItLim)+">"):string("")) + "\n\n";
@@ -1379,7 +1380,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 //************************************************
 TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), runSt(false), mDefTimeouts(true), mLstReqTm(0), mId(cfg("ID")), mDB(idb), mStartTm(0), mReqRes(true),
-    mLogLen(0), mLogItLim(1000), mLogTp(TTransportS::LTP_BinaryText), mLogAgrTm(prmWait_TM), mLogLstDt(0), mLogFHD(-1), mLogLstDtTm(0)
+    mLogLen(0), mLogItLim(1000), mLogTp(TTransportS::LTP_BinaryText), mLogAgrTm(1), mLogLstDt(0), mLogFHD(-1), mLogLstDtTm(0)
 {
     mId = iid;
 }
@@ -1855,7 +1856,8 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);
-		resLog += TSYS::strMess("[%s.%06d] ",atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S").c_str(),int(itTm%1000000)) + itDscr;
+		resLog += TSYS::strMess("[%s.%06d] ",atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S").c_str(),int(itTm%1000000)) +
+		    itDscr + ((off<(int)mLog[iL].size()) ? " ("+TSYS::cpct2str(mLog[iL].size()-off)+")" : "");
 		if(mLogTp == TTransportS::LTP_Binary || mLogTp == TTransportS::LTP_BinaryText)
 		    resLog += ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off,mLogItLim),TSYS::Bin,(mLogTp==TTransportS::LTP_Binary)?" ":"<text>"):"")
 			   + (((mLog[iL].size()-off)>mLogItLim)?(string("\n...<")+_("CUT")+" "+TSYS::cpct2str(mLog[iL].size()-off-mLogItLim)+">"):string("")) + "\n\n";

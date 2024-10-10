@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-27 09:02+0200\n"
+"POT-Creation-Date: 2024-10-10 08:52+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,7 +60,7 @@ msgstr ""
 msgid "Present WWW-pages of the users."
 msgstr ""
 
-msgid "The page is not present"
+msgid "Page is not present"
 msgstr ""
 
 #, c-format
@@ -116,6 +116,9 @@ msgid "This object"
 msgstr ""
 
 msgid "Protocol's object"
+msgstr ""
+
+msgid "Transport's object"
 msgstr ""
 
 msgid "Scheduling the next service call"

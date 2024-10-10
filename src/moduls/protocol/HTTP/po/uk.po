@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-15 20:43+0300\n"
+"POT-Creation-Date: 2024-10-09 16:29+0300\n"
 "PO-Revision-Date: 2007-10-23 18:02+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -182,6 +182,10 @@ msgstr "Немає HTTP GET функції у модуля '%s'!"
 #, c-format
 msgid "No HTTP POST function in the module '%s'!"
 msgstr "Немає HTTP POST функції у модуля '%s'!"
+
+#, c-format
+msgid "Method '%s' is not implemented by this server!"
+msgstr "Метод '%s' не реалізовано цим сервером!"
 
 msgid "Login"
 msgstr "Вхід"

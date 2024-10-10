@@ -652,7 +652,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <li> <i>resource</i> — запитувати-формувати (примусово) ресурс сповіщення у сервера візуалізації, може бути звуковим файлом, текстом або іншими даними формування сповіщення; але наразі сповіщувачі переважно очікують аудіо.</li>
 <li> <i>queue</i> — ресурси сповіщення визначаються не лише за глобальною ознакою порушення та квітації, а й згідно до пріоритетної черги джерел сповіщення-ресурсів. Черга формується на боці серверу візуалізації, а для візуалізаторів вказується необхідність роботи з нею при запиті ресурсів.</li>
 <li> <i>qMergeMess</i> — поєднувати сповіщення у черзі за рівністю сповіщення.</li>
-<li> <i>quietanceRet</i> — можливість відкликання-повернення квітації візуалізатору, тобто, по факту — зворотного включення сповіщення.</li></ul>
+<li> <i>quietanceRet</i> — можливість відкликання-повернення стишення візуалізатору, тобто, по факту — зворотного включення сповіщення.</li></ul>
 <p>Наявність поля "resStatic" вмикає отримання ресурсу безпосередньо із таблиці ресурсів або файлу, вказується у спосіб подібний до <a href="#Media">примітиву "Медіа"</a>.
 </p><p>Змінні обміну:
 </p>
@@ -2978,7 +2978,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <p><b>Об'єкт "Сеанс" ( this.ownerSess() )</b>
 </p>
 <ul><li> <i>string user( )</i> — поточний користувач сеансу.</li>
-<li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — стишує порушення <i>wpath</i> з шаблоном <i>quit_tmpl</i>. Якщо <i>wpath</i> це порожній рядок то здійснюється глобальне стишення. У рядку <i>wpath</i>, через символ ';', може бути перелічено адреси декількох віджетів. При встановлені <i>ret</i> здійснюється повернення квітації.</li>
+<li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — стишує порушення <i>wpath</i> з шаблоном <i>quit_tmpl</i>. Якщо <i>wpath</i> це порожній рядок то здійснюється глобальне стишення. У рядку <i>wpath</i>, через символ ';', може бути перелічено адреси декількох віджетів. При встановлені <i>ret</i> здійснюється повернення стишення.</li>
 <li> <i>int reqTm( )</i> — час останнього запиту у секундах від епохи 1.1.1970.</li>
 <li> <i>string reqUser( )</i> — користувач останнього запиту.</li>
 <li> <i>string reqLang( )</i> — мова останнього запиту.</li>
@@ -3601,5 +3601,5 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/uk">Modules/VCAEngine/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2989</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/uk">Modules/VCAEngine/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2992</td></tr></table></body>
 </html>

@@ -56,7 +56,7 @@
 #define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.6.2"
+#define MOD_VER		"4.7.1"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and supported SSL-TLS depending on the library version.")
@@ -293,7 +293,7 @@ string TTransSock::addrResolve( const string &host, const string &port, vector<s
 	}
 
 	//Dynamic by reentrant gethostbyname()
-	char hBuf[STR_BUF_LEN];
+	char hBuf[prmStrBuf_SZ];
 	struct hostent hostbuf, *hp = NULL;
 	int herr;
 	gethostbyname_r(host.c_str(), &hostbuf, hBuf, sizeof(hBuf), &hp, &herr);
@@ -682,6 +682,40 @@ void TSocketIn::check( unsigned int cnt )
     } catch(...) { }
 }
 
+int TSocketIn::writeTo( const string &sender, const string &data )
+{
+    MtxAlloc res(sockRes, true);
+
+    map<int, SSockIn*>::iterator cI;
+    int sId = s2i(TSYS::strLine(sender,1)), rez;
+    if(sId <= 0 || (cI=clId.find(sId)) == clId.end()) return -1;	//=0 when sender has no socket ID
+
+    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(),_("Write: wrote %s."), TSYS::cpct2str(data.size()).c_str());
+
+    do { rez = BIO_write(cI->second->bio, data.data(), data.size()); }
+    while(rez < 0 && SSL_get_error(ssl,rez) == SSL_ERROR_WANT_WRITE);
+
+    if(rez <= 0) {
+	mess_err(nodePath().c_str(), (rez < 0) ? TSYS::strMess(_("Error writing '%s (%d)'"),strerror(errno),errno).c_str() :
+							_("No data wrote"));
+	return 0;
+    }
+
+    //Counters
+    cI->second->trOut += vmax(0, rez);
+    res.unlock();
+
+    dataRes().lock();
+    trOut += vmax(0, rez);
+    dataRes().unlock();
+
+    if(logLen())
+	pushLogMess(TSYS::strMess(_("%d:> Transmitted directly to '%s'\n"),sId,TSYS::strLine(sender,0).c_str()),
+	    string(data.data(),rez), sId);
+
+    return rez;
+}
+
 unsigned TSocketIn::forksPerHost( const string &sender )
 {
     sockRes.lock();
@@ -804,8 +838,8 @@ void *TSocketIn::Task( void *sock_in )
 
     //Finding up already registered to terminate
     MtxAlloc res(s.sockRes, true);
-    for(vector<SSockIn*>::iterator iId = s.clId.begin(); iId != s.clId.end(); ++iId)
-	if((*iId)->pid) pthread_kill((*iId)->pid, SIGALRM);
+    for(map<int, SSockIn*>::iterator iId = s.clId.begin(); iId != s.clId.end(); ++iId)
+	if(iId->second->pid) pthread_kill(iId->second->pid, SIGALRM);
     res.unlock();
     TSYS::eventWait(s.clFree, true, string(MOD_ID)+": "+s.id()+_(" stopping client tasks ..."));
 
@@ -823,7 +857,7 @@ void *TSocketIn::ClTask( void *s_inf )
 
     int		rez;
     char	err[255];
-    char	buf[STR_BUF_LEN];
+    char	buf[prmStrBuf_SZ];
     string	req, answ;
     vector< AutoHD<TProtocolIn> > prot_in;
     SSL		*ssl;
@@ -1029,31 +1063,30 @@ void TSocketIn::clientReg( SSockIn *so )
 {
     MtxAlloc res(sockRes, true);
 
-    for(unsigned iId = 0; iId < clId.size(); iId++)
-	if(clId[iId] == so) return;
+    for(map<int,SSockIn*>::iterator iId = clId.begin(); iId != clId.end(); ++iId)
+	if(iId->second == so) return;
 
-    clId.push_back(so);
+    clId[so->sock] = so;
     clS[so->sender]++;
     clFree = false;
 
-    if(logLen()) pushLogMess(TSYS::strMess(_("New client %d of '%s' connected"),so->sock,so->sender.c_str()));
+    if(logLen()) pushLogMess(TSYS::strMess(_("New client %d from '%s' connected"),so->sock,so->sender.c_str()));
 }
 
 void TSocketIn::clientUnreg( SSockIn *so )
 {
     MtxAlloc res(sockRes, true);
 
-    for(unsigned iId = 0; iId < clId.size(); iId++)
-	if(clId[iId] == so) {
-	    if(logLen()) pushLogMess(TSYS::strMess(_("The client %d of '%s' disconnected"),so->sock,so->sender.c_str()));
+    for(map<int,SSockIn*>::iterator iId = clId.begin(); iId != clId.end(); ++iId)
+	if(iId->second == so) {
+	    if(logLen()) pushLogMess(TSYS::strMess(_("Client %d from '%s' disconnected"),so->sock,so->sender.c_str()));
 
-	    clS[so->sender]--;
-	    clId.erase(clId.begin()+iId);
+	    clS[iId->second->sender]--;
+	    clId.erase(iId);
 	    delete so;
+	    clFree = clId.empty();
 	    break;
 	}
-
-    clFree = clId.empty();
 }
 
 void TSocketIn::cntrCmdProc( XMLNode *opt )
@@ -1110,14 +1143,14 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/prm/st/conns" && ctrChkNode(opt)) {
 	MtxAlloc res(sockRes, true);
-	for(vector<SSockIn*>::iterator iId = clId.begin(); iId != clId.end(); ++iId) {
+	for(map<int,SSockIn*>::iterator iId = clId.begin(); iId != clId.end(); ++iId) {
 	    string mess = TSYS::strMess(_("%s %d(%s): last %s; traffic in %s, out %s; "),
-		atm2s((*iId)->tmCreate,"%Y-%m-%dT%H:%M:%S").c_str(),(*iId)->sock,(*iId)->sender.c_str(),
-		atm2s((*iId)->tmReq,"%Y-%m-%dT%H:%M:%S").c_str(),
-		TSYS::cpct2str((*iId)->trIn).c_str(),TSYS::cpct2str((*iId)->trOut).c_str());
+		atm2s(iId->second->tmCreate,"%Y-%m-%dT%H:%M:%S").c_str(),iId->first,iId->second->sender.c_str(),
+		atm2s(iId->second->tmReq,"%Y-%m-%dT%H:%M:%S").c_str(),
+		TSYS::cpct2str(iId->second->trIn).c_str(),TSYS::cpct2str(iId->second->trOut).c_str());
 	    if(mess_lev() == TMess::Debug)
 		mess += TSYS::strMess(_("processing time %s[%s]; "),
-		tm2s(1e-6*(*iId)->prcTm).c_str(), tm2s(1e-6*(*iId)->prcTmMax).c_str());
+		tm2s(1e-6*iId->second->prcTm).c_str(), tm2s(1e-6*iId->second->prcTmMax).c_str());
 	    opt->childAdd("el")->setText(mess);
 	}
     }

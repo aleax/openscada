@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebUser file: web_user.h
 /***************************************************************************
- *   Copyright (C) 2010-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -131,7 +131,7 @@ class UserPg : public TCntrNode, public TConfig, public TPrmTempl::Impl
 	string	mDB;
 
 	int	ioRez, ioHTTPreq, ioUrl, ioPage, ioSender, ioUser,
-		ioHTTPvars, ioURLprms, ioCnts, ioThis, ioPrt, ioSchedCall;
+		ioHTTPvars, ioURLprms, ioCnts, ioThis, ioPrt, ioTrIn, ioSchedCall;
 
 	bool	chkLnkNeed;	//Check lnk need flag
 
@@ -180,8 +180,7 @@ class TWEB: public TUI
 		const string &htmlHeadEls = "", const string &forceTmplFile = "", const string &lang = "" );
 	bool pgAccess( TProtocolIn *iprt, const string &URL );
 
-	void HTTP_GET( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
-	void HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
+	void HTTP( const string &meth, const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 

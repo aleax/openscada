@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/HTTP</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FHTTP&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/HTTP" title="Modules/HTTP">Modules/HTTP</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/HTTP.html" title="Modules/HTTP (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/HTTP.html" title="Модули/HTTP (97% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FHTTP&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/HTTP" title="Modules/HTTP">Modules/HTTP</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/HTTP.html" title="Modules/HTTP (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--high" href="../../ru/Modules/HTTP.html" title="Модули/HTTP (77% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">HTTP</a> </td>
 <td> HTTP-реалізація
 </td>
-<td> 3.8 </td>
+<td> 3.9 </td>
 <td> GPL2 </td>
 <td> prot_HTTP.so </td>
 <td> en,uk,ru,de </td>
@@ -40,12 +40,12 @@
 <td> Протокол </td>
 <td> Роман Савоченко </td>
 <td> Надає підтримку HTTP для WWW базованих користувацьких інтерфейсів.
-<dl><dd>- реалізувати запит HEAD для правильної підтримки "<a class="external text" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Range_requests" rel="nofollow noreferrer noopener" target="_blank">HTTP запитів діапазону</a>".</dd></dl>
+<dl><dd>+ реалізація запиту HEAD для правильної підтримки "<a class="external text" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Range_requests" rel="nofollow noreferrer noopener" target="_blank">HTTP запитів діапазону</a>" (функції передавання).</dd></dl>
 </td></tr></table>
 <p>Модуль транспортного протоколу HTTP призначено для реалізації підтримки мережевого протоколу HTTP(Hypertext Transfer Protocol) у OpenSCADA.
-</p><p>Протокол HTTP використовується для передачі вмісту WWW. Так, через HTTP передаються наступні типи документів: html, xhtml, png, javascript та багато інших. Підтримка HTTP у OpenSCADA, у комплексі із транспортом <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>, дозволяє реалізовувати різні користувацькі функції на основі WWW інтерфейсу. Модуль реалізує два основних методи протоколу HTTP: GET та POST. Модуль забезпечує контроль цілісності HTTP-запитів та, спільно з транспортом Sockets, дозволяє "збирати" цілісні запити з їх фрагментів, а також забезпечувати утримання з'єднання "живим" (Keep-Alive).
-</p><p>Для гнучкого підключення користувацьких інтерфейсів до даного модуля, використовується модульний механізм у межах самого цього модуля. У ролі модулів використовуються модулі підсистеми "Користувацькі інтерфейси" з додатковим інформаційним полем "SubType", яке має значення "WWW".
-</p><p>У запитах до Web ресурсів прийнято використовувати URL(Universal Resource Locator). Відтак, URL передається як основний параметр через HTTP. Перший елемент URL запиту використовується для ідентифікації модуля UI. Наприклад, URL "http://localhost:10002/WebCfg" означає звернення до модуля "WebCfg" на хості "http://localhost:10002". У випадку помилкового визначення ідентифікатору модуля, або при звернені взагалі без ідентифікатору, модуль генерує інформаційний діалог про вхід та вибір одного з доступних користувацьких інтерфейсів. Приклад діалогу показано на рисунку 1. 
+</p><p>Протокол HTTP використовується для передачі вмісту WWW. До прикладу, через HTTP передаються наступні типи документів: html, xhtml, png, javascript і багато інших. Підтримка HTTP у OpenSCADA разом із транспортом <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a> і <a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a>, дозволяє реалізовувати різні користувацькі функції на WWW інтерфейсі. Модуль первинно реалізує два основних методи HTTP протоколу GET, POST, і наразі будь який метод HTTP. Модуль забезпечує контроль цілісності HTTP-запитів та, спільно з транспортом Сокети і SSL, дозволяє "збирати" цілісні запити з їх фрагментів, а також забезпечувати утримання з'єднання "живим" (Keep-Alive).
+</p><p>Для гнучкого підключення користувацьких інтерфейсів до даного модуля, використовується модульний механізм у межах самого цього модуля. У ролі модулів використовуються модулі підсистеми "Користувацькі інтерфейси" з додатковим інформаційним полем "SubType", зі значенням "WWW".
+</p><p>У запитах до Web ресурсів прийнято використовувати URL(Universal Resource Locator). Відтак, URL передається як основний параметр через HTTP. Перший елемент URL запиту використовується для ідентифікації модуля UI. Наприклад, URL "http://localhost:10002/WebCfg" означає звернення до модуля "WebCfg" на хості "http://localhost:10002". У випадку помилкового визначення ідентифікатору модуля, або при звернені взагалі без ідентифікатору, модуль генерує інформаційний діалог про вхід та вибір одного з доступних користувацьких інтерфейсів. Приклад діалогу наведено на рисунку 1.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:632px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_select_uk.png"><img class="thumbimage" height="475" src="../files/HTTP_select_uk.png" width="630" /></a>  <div class="thumbcaption">Рис.1. Діалог вибору модуля WWW-інтерфейсу.</div></div></div></div>
 <p>Модулем підтримується багатомовність, яка вмикається <a class="external" href="http://oscada.org/wiki/Documents/Program_manual/uk#ConfigTr" title="Documents/Program manual/uk">динамічним перекладом повідомлень OpenSCADA</a>.
@@ -55,12 +55,12 @@
 <li> Мова користувача, що увійшов.</li>
 <li> Мова Web-браузеру з HTTP властивості "Accept-Language".</li>
 <li> Загальна мова процесу OpenSCADA.</li></ul>
-<p>Отримана таким чином мова використовується для побудови інтерфейсів цього модуля та передається WWW під-модулям у HTTP властивості "oscd_lang", через аргумент "vars" <a href="#ModsHTTP">функцій "GET" та "POST"</a>.
-</p><p>Для конфігурації та керування цим модулем, надається конфігураційна сторінка інтерфейсу керування OpenSCADA (Рис.3) де Ви можете здійснювати:
+<p>Отримана таким чином мова використовується для побудови інтерфейсів цього модуля і передається WWW під-модулям у HTTP властивості "oscd_lang", через аргумент "vars" <a href="#ModsHTTP">функції узагальнення, "GET" і "POST"</a>.
+</p><p>Для конфігурації і керування цим модулем надається конфігураційна сторінка інтерфейсу керування OpenSCADA (Рис.3), де можете здійснювати:
 </p>
 <ul><li> Контроль за активними сеансами автентифікації.</li>
 <li> Конфігурацію:
-<ul><li> Правила доступу для заборони та дозволу. Кожний рядок є окремим правилом та Ви можете використовувати шаблони, на кшталт "*/WebVision/*", або регулярні вирази, на кшталт "/[^/]+/WebVision/.+/". Корисні записи для:
+<ul><li> Правила доступу для заборони і дозволу. Кожний рядок є окремим правилом і ви можете використовувати шаблони на кшталт "*/WebVision/*" або регулярні вирази на кшталт "/[^/]+/WebVision/.+/". Корисні записи для:
 <ul><li> Заборонено:
 <ul><li> "*/WebCfgD/*" — <a href="../Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">модуль WebCfgD</a> цілком;</li>
 <li> "*/WebVision/*tmplSO/*" — проєкт СВУ "tmplSO" <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">модуля WebVision</a>.</li></ul></li>
@@ -70,13 +70,13 @@
 <li> "*/login/*" — сторінка авторизації-входу;</li>
 <li> "/^[^/]+/WebVision/[^/]*($|\?)/" — основна сторінка <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">модуля WebVision</a> без доступу до проєктів СВУ;</li>
 <li> "/^[^/]+/WebVision/.+_aviariesOril\d*/.*/" — проєкт СВУ "aviariesOril" <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">модуля WebVision</a>.</li></ul></li></ul></li>
-<li> HTML-шаблон користувацького інтерфейсу та користувацької головної сторінки. У полях HTML-шаблону має вказуватися адреса до файлу HTML/XHTML, який буде використано у формуванні внутрішніх-сервісних інтерфейсів та головної сторінки. Внутрішні-сервісні інтерфейси, це наприклад: обрання модулів, сторінка авторизації та подібне у WEB-модулів. Від шаблону вимагається коректність XHTML, яка дозволяє розібрати файл XML-парсером, а також наявність мітки "#####CONTEXT#####" у місці розташування динамічного вмісту, що обов'язково для внутрішніх-сервісних інтерфейсів. Ресурсні файли шаблонів представлено зображеннями, CSS та JavaScript файлами, та які шукаються від теки у якій вказано розташування файлу шаблону та від поточної теки. Для іншого, до мови, файлу шаблону, Ви можете додати суфікс мови у кінець цього файлу "{Мій Шаблон}_{мова}.html", але обирати у конфігураційних полях основний-базовий файл шаблону "{Мій Шаблон}.html". У випадку виявлення помилок у шаблоні, буде використано стандартний вбудований інтерфейс. У якості прикладу шаблонів Ви можете подивитися такі найбільш вживані:
-<ul><li> <a class="external" href="http://oscada.org/wiki/File:HTTP_webopenscada.html.gz" title="File:HTTP webopenscada.html.gz">Шаблон внутрішнього-сервісного інтерфейсу та головної сторінки, включаючи індекс модулів</a>.</li>
-<li> <a class="external" href="http://oscada.org/wiki/File:HTTP_webopenscada_main.html.gz" title="File:HTTP webopenscada main.html.gz">Шаблон головної сторінки</a> із прямим посиланням на головний інтерфейс <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">АГЛКС</a> за допомогою модуля <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a> та без індексу WEB-модулів.</li>
+<li> HTML-шаблон користувацького інтерфейсу і користувацької головної сторінки. У полях HTML-шаблону має вказуватися адреса до файлу HTML/XHTML, який буде використано у формуванні внутрішніх-сервісних інтерфейсів та головної сторінки. Внутрішні-сервісні інтерфейси, це наприклад: обрання модулів, сторінка авторизації і подібне у WEB-модулів. Від шаблону вимагається коректність XHTML, яка дозволяє розібрати файл XML-парсером, а також наявність мітки "#####CONTEXT#####" у місці розташування динамічного вмісту, що обов'язково для внутрішніх-сервісних інтерфейсів. Ресурсні файли шаблонів представлено зображеннями, CSS і JavaScript файлами, та які шукаються від теки у якій вказано розташування файлу шаблону і від поточної теки. Для іншого файлу шаблону до мови, Ви можете додати суфікс мови у кінець цього файлу "{Мій Шаблон}_{мова}.html", але обирати у конфігураційних полях основний-базовий файл шаблону "{Мій Шаблон}.html". У випадку виявлення помилок у шаблоні буде використано стандартний вбудований інтерфейс. У якості прикладу шаблонів можете подивитися такі найбільш вживані:
+<ul><li> <a class="external" href="http://oscada.org/wiki/File:HTTP_webopenscada.html.gz" title="File:HTTP webopenscada.html.gz">Шаблон внутрішнього-сервісного інтерфейсу та головної сторінки включаючи індекс модулів</a>.</li>
+<li> <a class="external" href="http://oscada.org/wiki/File:HTTP_webopenscada_main.html.gz" title="File:HTTP webopenscada main.html.gz">Шаблон головної сторінки</a> із прямим посиланням на головний інтерфейс <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">АГЛКС</a> за допомогою модуля <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a> і без індексу WEB-модулів.</li>
 <li> <a class="external" href="http://oscada.org/wiki/File:HTTP_webopenscada_goto.html.gz" title="File:HTTP webopenscada goto.html.gz">Шаблон головної сторінки</a> із прямим переспрямуванням на головний інтерфейс <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">АГЛКС</a> за допомогою модуля <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a>.</li></ul></li>
-<li> БД активних сеансів аутентифікації передбачає зовнішню таблицю активних сеансів аутентифікації — "HTTP_AuthSessions", яка вмикається для непорожнього значення та надає можливість спільного використання аутентифікації між різними станціями OpenSCADA та її короткого збереження на час вимкнення станції.</li>
+<li> БД активних сеансів аутентифікації передбачає зовнішню таблицю активних сеансів аутентифікації — "HTTP_AuthSessions", яка вмикається для непорожнього значення і надає можливість спільного використання аутентифікації між різними станціями OpenSCADA і її короткого збереження на час вимкнення станції.</li>
 <li> Простір генерації UID автентифікації, доступне зі спільною таблицею сеансів автентифікації для гарантування відмінності "печеньок" (cookie) для різних процесів OpenSCADA.</li>
-<li> Час життя, перелік користувачів дозволених до аутентифікації та встановлення автоматичного входу. </li></ul></li></ul>
+<li> Час життя, перелік користувачів дозволених до аутентифікації і встановлення автоматичного входу. </li></ul></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:830px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_mod_uk.png"><img class="thumbimage" height="775" src="../files/HTTP_mod_uk.png" width="828" /></a>  <div class="thumbcaption">Рис.3. Сторінка налаштування модуля.</div></div></div></div>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
@@ -90,31 +90,41 @@
 <h2><span class="mw-headline" id=".D0.90.D1.83.D1.82.D0.B5.D0.BD.D1.82.D0.B8.D1.84.D1.96.D0.BA.D0.B0.D1.86.D1.96.D1.8F"><span class="mw-headline-number">1</span> Аутентифікація</span></h2>
 <p>Модулем підтримується аутентифікація у OpenSCADA при надані доступу до модулів WEB-інтерфейсів (рис.2).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:619px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_auth_uk.png"><img class="thumbimage" height="286" src="../files/HTTP_auth_uk.png" width="617" /></a>  <div class="thumbcaption">Рис.2. Діалог авторизації у OpenSCADA.</div></div></div></div>
-<p>Автентифікація цим модулем здійснюється "печеньками" (cookies) із динамічною назвою та простором ІД користувача, де назва "печеньки" (cookie) "oscd_UID" та використовується простір ІД користувача у роботі із спільною таблицею сеансів автентифікації, та назва "oscd_UID_{PrjNm}" у роботі без неї.
-</p><p>Для полегшення роботи з Web-інтерфейсами модуль передбачає можливість автоматичного входу від ім'я вказаного користувача. Конфігурація автоматичного входу здійснюється на сторінці налаштування модуля (рис.3). Автоматичний вхід здійснюється за збігом адреси, вказаної у стовпчику "Адреса", та від ім'я користувача, вказаного у стовпчику "Користувач".
-</p><p>Для більшої безпеки Ви можете визначити тільки Web-користувачів, у переліку користувачів дозволених до аутентифікації.
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:619px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_auth_uk.png"><img class="thumbimage" height="286" src="../files/HTTP_auth_uk.png" width="617" /></a>  <div class="thumbcaption">Рис.2. Діалог аутентифікації у OpenSCADA.</div></div></div></div>
+<p>Аутентифікація цим модулем здійснюється "печеньками" (cookies) із динамічною назвою і простором ІД користувача, де назва "печеньки" (cookie) "oscd_UID" і використовується простір ІД користувача у роботі із спільною таблицею сеансів автентифікації, та назва "oscd_UID_{PrjNm}" у роботі без неї.
+</p><p>Для полегшення роботи з Web-інтерфейсами, модуль передбачає можливість автоматичного входу від ім'я вказаного користувача. Конфігурація автоматичного входу здійснюється на сторінці налаштування модуля (рис.3). Автоматичний вхід здійснюється за збігом адреси, вказаної у стовпчику "Адреса", і від ім'я користувача, вказаного у стовпчику "Користувач".
+</p><p>Для більшої безпеки, можете визначити тільки Web-користувачів у переліку користувачів дозволених до аутентифікації.
 </p>
 <h2><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.96_WEB-.D1.96.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D1.83"><span class="mw-headline-number">2</span> <span id="ModsHTTP" title="#ModsHTTP">Модулі WEB-інтерфейсу</span></span></h2>
-<p>Модулі користувацького інтерфейсу (UI), які призначені для спільної роботи з модулем HTTP, мають встановлювати інформаційне поле "SubType" значенням "WWW" та поле "Auth" значенням "1", якщо модуль потребує автентифікації при вході. Для зв'язування модуля HTTP та модулів UI використовується розширений механізм комунікації. Цей механізм передбачає експорт інтерфейсних функцій. У даному, випадку UI модулі мають експортувати функції:
+<p>Модулі користувацького інтерфейсу (UI), які призначені для спільної роботи із модулем HTTP, мають встановлювати інформаційне поле "SubType" значенням "WWW" та поле "Auth" значенням "1", якщо модуль потребує автентифікації при вході. Для зв'язування модуля HTTP і модулів UI використовується розширений механізм комунікації. Цей механізм передбачає експорт інтерфейсних функцій. У даному випадку, UI модулі мають експортувати лише одну загальну функцію для усіх методів:
 </p>
-<ul><li> <b>void HTTP_GET(const string &amp;url, string &amp;page, vector&lt;string&gt; &amp;vars, const string &amp;user, TProtocolIn *iprt);</b> АБО</li></ul>
-<dl><dd><b>void HttpGet( const string &amp;url, string &amp;page, const string &amp;sender, vector&lt;string&gt; &amp;vars, const string &amp;user );</b> — Метод GET з параметрами:
-<dl><dd><i>url</i> — адреса запиту;</dd>
+<ul><li> <b>void HTTP(const string &amp;meth, const string &amp;uri, string &amp;page, vector&lt;string&gt; &amp;vars, const string &amp;user, TProtocolIn *iprt);</b>:</li></ul>
+<dl><dd><dl><dd><i>meth</i> — метод запиту;</dd>
+<dd><i>uri</i> — локальна адреса запиту;</dd>
 <dd><i>page</i> — сторінка з відповіддю;</dd>
 <dd><i>sender</i> — адреса відправника;</dd>
 <dd><i>vars</i> — змінні запиту;</dd>
 <dd><i>user</i> — користувач, може містити попереднього користувача у другому рядку;</dd>
 <dd><i>iprt</i> — посилання на об'єкт вхідної частини протоколу.</dd></dl></dd></dl>
-<ul><li> <b>void HTTP_POST(const string &amp;url, string &amp;page, vector&lt;string&gt; &amp;vars, const string &amp;user, TProtocolIn *iprt);</b> АБО</li></ul>
-<dl><dd><b>void HttpPost( const string &amp;url, string &amp;page, const string &amp;sender, vector&lt;string&gt; &amp;vars, const string &amp;user );</b> — метод POST з параметрами:
-<dl><dd><i>url</i> — адреса запиту;</dd>
+<p>Або наступні різні функції окремо для GET і POST методів:
+</p>
+<ul><li> <b>void HTTP_GET(const string &amp;uri, string &amp;page, vector&lt;string&gt; &amp;vars, const string &amp;user, TProtocolIn *iprt);</b> АБО</li></ul>
+<dl><dd><b>void HttpGet( const string &amp;uri, string &amp;page, const string &amp;sender, vector&lt;string&gt; &amp;vars, const string &amp;user );</b> — Метод GET з параметрами:
+<dl><dd><i>uri</i> — локальна адреса запиту;</dd>
+<dd><i>page</i> — сторінка з відповіддю;</dd>
+<dd><i>sender</i> — адреса відправника;</dd>
+<dd><i>vars</i> — змінні запиту;</dd>
+<dd><i>user</i> — користувач, може містити попереднього користувача у другому рядку;</dd>
+<dd><i>iprt</i> — посилання на об'єкт вхідної частини протоколу.</dd></dl></dd></dl>
+<ul><li> <b>void HTTP_POST(const string &amp;uri, string &amp;page, vector&lt;string&gt; &amp;vars, const string &amp;user, TProtocolIn *iprt);</b> АБО</li></ul>
+<dl><dd><b>void HttpPost( const string &amp;uri, string &amp;page, const string &amp;sender, vector&lt;string&gt; &amp;vars, const string &amp;user );</b> — метод POST з параметрами:
+<dl><dd><i>uri</i> — локальна адреса запиту;</dd>
 <dd><i>page</i> — сторінка з відповіддю та вмістом тіла запиту POST;</dd>
 <dd><i>sender</i> — адреса відправника;</dd>
 <dd><i>vars</i> — змінні запиту;</dd>
 <dd><i>user</i> — користувач, може містити попереднього користувача у другому рядку;</dd>
 <dd><i>iprt</i> — посилання на об'єкт вхідної частини протоколу.</dd></dl></dd></dl>
-<p>Надалі, у випадку надходження HTTP запиту "GET" буде викликатися функція "HTTP_GET" або "HttpGet", а у випадку запиту "POST" буде викликатися функція "HTTP_POST" або "HttpPost", у відповідному модулі UI.
+<p>Надалі, у випадку надходження HTTP запиту "GET" буде викликатися функція "HTTP_GET" або "HttpGet", а у випадку запиту "POST" буде викликатися функція "HTTP_POST" або "HttpPost", у відповідному модулі UI, або функція "HTTP" для будь якого методу.
 </p>
 <h2><span class="mw-headline" id=".D0.A4.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.8F_.D0.B2.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D0.B8.D1.85_.D0.B7.D0.B0.D0.BF.D0.B8.D1.82.D1.96.D0.B2_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_API"><span class="mw-headline-number">3</span> Функція вихідних запитів користувацького API</span></h2>
 <p>Функція вихідних запитів <a href="../User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">messIO()</a> оперує обміном вмістом HTTP-запитів, загорнутими у XML-пакети. Структура запиту має вигляд:
@@ -205,7 +215,7 @@
 <ul><li> <i>user</i> — користувач для зміни.</li></ul></li>
 <li> <i>bool pgAccess(string URL)</i> — перевіряє доступність сторінки, визначеної у <i>URL</i>.
 <ul><li> <i>URL</i> — URL сторінки, що перевіряється.</li></ul></li>
-<li> <i>string pgCreator(string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}", string htmlHeadEls = "", string forceTmplFile = "")</i> — формує сторінку або ресурс із вмістом <i>cnt</i>, загорнутим у HTTP з результатом <i>rcode</i>, із додатковими атрибутами HTTP <i>httpattrs</i>, додатковим елементом заголовку HTML <i>htmlHeadEls</i> та використанням файлу шаблону <i>forceTmplFile</i> та для мови <i>lang</i>.
+<li> <i>string pgCreator(string cnt, string rcode = "", string httpattrs = "Content-Type: text/html;charset={SYS}", string htmlHeadEls = "", string forceTmplFile = "")</i> — формує сторінку або ресурс із вмістом <i>cnt</i>, загорнутим у HTTP з результатом <i>rcode</i>, із додатковими атрибутами HTTP <i>httpattrs</i>, додатковим елементом заголовку HTML <i>htmlHeadEls</i> та використанням файлу шаблону <i>forceTmplFile</i> та для мови <i>lang</i>.
 <ul><li> <i>cnt</i> — вміст сторінки або ресурсу (зображення, XML, CSS, JavaScript, ...);</li>
 <li> <i>rcode</i> — результуючий код HTTP, на кшталт "200 OK"; порожнє значення вимикає додання HTTP заголовку;</li>
 <li> <i>httpattrs</i> — додаткові атрибути HTTP, переважно це "Content-Type" із значенням по замовченню "text/html;charset={SYS}"; тільки для "Content-Type: text/html" буде здійснюватися загортання у внутрішній/сервісний, або визначений <i>forceTmplFile</i>, HTML-шаблон;</li>
@@ -217,5 +227,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/HTTP/uk">Modules/HTTP/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2989</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/HTTP/uk">Modules/HTTP/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2992</td></tr></table></body>
 </html>

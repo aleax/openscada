@@ -73,7 +73,7 @@
 #define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.9.1"
+#define MOD_VER		"4.9.3"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov(2014)")
 #define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -179,7 +179,7 @@ string TTransSock::addrResolve( const string &host, const string &port, vector<s
 	}
 
 	//Dynamic by reentrant gethostbyname()
-	char hBuf[STR_BUF_LEN];
+	char hBuf[prmStrBuf_SZ];
 	struct hostent hostbuf, *hp = NULL;
 	int herr;
 	gethostbyname_r(host.c_str(), &hostbuf, hBuf, sizeof(hBuf), &hp, &herr);
@@ -288,7 +288,7 @@ string TTransSock::optDescr( )
 //* TSocketIn                                    *
 //************************************************
 TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) :
-    TTransportIn(name,idb,el), sockRes(true), wrToRes(true), type(S_TCP), mMode(M_ForceDiscon),
+    TTransportIn(name,idb,el), sockRes(true), /*wrToRes(true),*/ type(S_TCP), mMode(M_ForceDiscon),
     mInBufLen(DEF_InBufLen), mMSS(DEF_MSS), mMaxQueue(DEF_MaxQueue), mMaxFork(DEF_MaxClients), mMaxForkPerHost(DEF_MaxClientsPerHost),
     mKeepAliveReqs(DEF_KeepAliveReqs), mKeepAliveTm(DEF_KeepAliveTm), mTaskPrior(DEF_TaskPrior), clFree(true)
 {
@@ -595,12 +595,12 @@ int TSocketIn::writeTo( const string &sender, const string &data )
     fd_set		rw_fd;
     struct timeval	tv;
 
-    MtxAlloc resN(wrToRes, true);	//Prevent simultaneous writing
+    //MtxAlloc resN(wrToRes, true);	//Prevent simultaneous writing
 
     switch(type) {
 	case S_TCP: case S_UNIX: {
 	    int sId = s2i(TSYS::strLine(sender,1));
-	    if(sId < 0) return -1;
+	    if(sId <= 0) return -1;	//=0 when sender has no socket ID
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(),_("Write: wrote %s."), TSYS::cpct2str(data.size()).c_str());
 	    ssize_t wL = 1;
 	    unsigned wOff = 0;
@@ -689,7 +689,7 @@ void *TSocketIn::Task( void *sock_in )
     sock->endrunCl	= false;
     sock->endrun	= false;
 
-    if(sock->type == S_UDP) buf = new char[STR_BUF_LEN];
+    if(sock->type == S_UDP) buf = new char[prmStrBuf_SZ];
 
     while(!sock->endrun) {
 	tv.tv_sec  = 0; tv.tv_usec = prmWait_DL*1000000;
@@ -872,7 +872,7 @@ void *TSocketIn::ClTask( void *s_inf )
     struct timeval tv;
     fd_set rw_fd;
     string req, answ;
-    char   buf[STR_BUF_LEN];
+    char   buf[prmStrBuf_SZ];
     vector< AutoHD<TProtocolIn> > prot_in;
     bool   sessOk = false;
     int    actPrts = 0;
@@ -1058,7 +1058,6 @@ void TSocketIn::clientReg( SSockIn *so )
 {
     MtxAlloc res(sockRes, true);
 
-    //Find already registry
     for(map<int,SSockIn*>::iterator iId = clId.begin(); iId != clId.end(); ++iId)
 	if(iId->second == so) return;
 
@@ -1072,6 +1071,7 @@ void TSocketIn::clientReg( SSockIn *so )
 void TSocketIn::clientUnreg( SSockIn *so )
 {
     MtxAlloc res(sockRes, true);
+
     for(map<int,SSockIn*>::iterator iId = clId.begin(); iId != clId.end(); ++iId)
 	if(iId->second == so) {
 	    if(logLen()) pushLogMess(TSYS::strMess(_("Client %d from '%s' disconnected"),so->sock,so->sender.c_str()));

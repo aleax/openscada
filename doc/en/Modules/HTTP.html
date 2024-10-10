@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/HTTP</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/HTTP.html" title="Модули/HTTP (97% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/HTTP.html" title="Модулі/HTTP (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--high" href="../../ru/Modules/HTTP.html" title="Модули/HTTP (77% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/HTTP.html" title="Модулі/HTTP (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">HTTP</a> </td>
 <td> HTTP-realization
 </td>
-<td> 3.8 </td>
+<td> 3.9 </td>
 <td> GPL2 </td>
 <td> prot_HTTP.so </td>
 <td> en,uk,ru,de </td>
@@ -40,12 +40,12 @@
 <td> Protocol </td>
 <td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — the page initial translation</i></font> </td>
 <td> Provides support for the HTTP protocol for WWW-based user interfaces.
-<dl><dd>- implementation the HEAD request for true support the "<a class="external text" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Range_requests" rel="nofollow noreferrer noopener" target="_blank">HTTP range requests</a>".</dd></dl>
+<dl><dd>+ implementation the HEAD request for true support the "<a class="external text" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Range_requests" rel="nofollow noreferrer noopener" target="_blank">HTTP range requests</a>" (function of transition).</dd></dl>
 </td></tr></table>
 <p>Module of the transport protocol HTTP is designed to support the implementation of the network protocol HTTP (Hypertext Transfer Protocol) in OpenSCADA.
-</p><p>HTTP protocol is used to transfer the WWW content. For example, via HTTP the following types of documents are transmitted: html, xhtml, png, javascript, and many others. Support HTTP in OpenSCADA together with the transport <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a> allows to implement various user functions based on the WWW interface. The module implements two main methods of the HTTP protocol: "GET" and "POST". The module provides control of the integrity of HTTP-queries and, jointly with "Sockets" transport, allows to "collect" whole requests from their fragments, as well as hold of the connection "alive" (Keep-Alive).
+</p><p>HTTP protocol is used to transfer the WWW content. For example, via HTTP the following types of documents are transmitted: html, xhtml, png, javascript, and many others. Support HTTP in OpenSCADA together with the transport <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a> and <a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a> allows to implement various user functions based on the WWW interface. The module initially implements two main methods of the HTTP protocol "GET", "POST", and currently any HTTP method. The module provides control of the integrity of HTTP-queries and, jointly with Sockets and SSL transport, allows to "collect" whole requests from their fragments, as well as hold of the connection "alive" (Keep-Alive).
 </p><p>For flexible connection of the user interfaces to this module, the modular mechanism within the module itself is used. In the role of modules the modules of the subsystem "User interfaces" are used with the additional information field "SubType", with the value of "WWW".
-</p><p>In the requests for the Web resources the URL(Universal Resource Locator) are commonly used. Hence, the URL is passed as the main parameter via HTTP. The first element of the requested URL is used to identify the module UI. For example, the URL "http://localhost:10002/WebCfg" means requesting to the module "WebCfg" on the host "http://localhost:10002". In the case of an incorrect indication of the module ID, or when you address without identifier of the module at all, the module generates the information dialogue on the entry and the choice of one of the available user interfaces. Example of the dialogue is shown in Figure 1. 
+</p><p>In the requests for the Web resources the URL(Universal Resource Locator) are commonly used. Hence, the URL is passed as the main parameter via HTTP. The first element of the requested URL is used to identify the module UI. For example, the URL "http://localhost:10002/WebCfg" means requesting to the module "WebCfg" on the host "http://localhost:10002". In the case of an incorrect indication of the module ID, or when you address without identifier of the module at all, the module generates the information dialogue on the entry and the choice of one of the available user interfaces. Example of the dialogue is shown in Figure 1.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:629px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_select.png"><img class="thumbimage" height="456" src="../files/HTTP_select.png" width="627" /></a>  <div class="thumbcaption">Fig.1. Dialogue of the WWW-interface module choice.</div></div></div></div>
 <p>The module supports multi-language which one enabled by the <a class="external" href="http://oscada.org/wiki/Documents/Program_manual#ConfigTr" title="Documents/Program manual">dynamic messages translation of OpenSCADA</a>.
@@ -55,7 +55,7 @@
 <li> Authenticated user's language.</li>
 <li> Language of the Web-browser from the HTTP property "Accept-Language".</li>
 <li> Generic language of the OpenSCADA process.</li></ul>
-<p>Gotten in the way language used for building interfaces of the module and passes to the WWW sub-modules into the HTTP property "oscd_lang" of the argument "vars" of <a href="#ModsHTTP">the "GET" and "POST" functions</a>.
+<p>Gotten in the way language used for building interfaces of the module and passes to the WWW sub-modules into the HTTP property "oscd_lang" of the argument "vars" of <a href="#ModsHTTP">the generic, "GET" and "POST" functions</a>.
 </p><p>To configure and control this module, you have the configuration page of the OpenSCADA control interface (Fig.3) where you can perform:
 </p>
 <ul><li> Control for the active authentication sessions.</li>
@@ -96,25 +96,35 @@
 </p><p>For greater security, you can only identify Web users in the list of users allowed to authenticate.
 </p>
 <h2><span class="mw-headline" id="Modules_of_the_WEB-interface"><span class="mw-headline-number">2</span> <span id="ModsHTTP" title="#ModsHTTP">Modules of the WEB-interface</span></span></h2>
-<p>Modules of the user interface (UI) designed to work with HTTP module, should indicate the information field "SubType" with the value "WWW" and "Auth" field with the value "1", if the module requires an authentication at login. For communication of HTTP module and UI modules an advanced communication mechanism is used. This mechanism involves the export of interface functions. In this case, the UI modules must export the following function:
+<p>Modules of the user interface (UI) designed to work with the HTTP module, should indicate the information field "SubType" in the value "WWW" and "Auth" field in the value "1", if the module requires an authentication at login. For communication of the HTTP module and the UI modules an advanced communication mechanism is used. This mechanism involves export of interface functions. In this case, the UI modules must export only one generic function for all methods:
 </p>
-<ul><li> <b>void HTTP_GET(const string &amp;url, string &amp;page, vector&lt;string&gt; &amp;vars, const string &amp;user, TProtocolIn *iprt);</b> OR</li></ul>
-<dl><dd><b>void HttpGet( const string &amp;url, string &amp;page, const string &amp;sender, vector&lt;string&gt; &amp;vars, const string &amp;user );</b> — GET method with the parameters:
-<dl><dd><i>url</i> — address of the request;</dd>
+<ul><li> <b>void HTTP(const string &amp;meth, const string &amp;uri, string &amp;page, vector&lt;string&gt; &amp;vars, const string &amp;user, TProtocolIn *iprt);</b>:</li></ul>
+<dl><dd><dl><dd><i>meth</i> — method of the request;</dd>
+<dd><i>uri</i> — local address of the request;</dd>
 <dd><i>page</i> — page with the answer;</dd>
 <dd><i>sender</i> — address of the sender;</dd>
 <dd><i>vars</i> — variables of the request;</dd>
 <dd><i>user</i> — user, can contain previous user in the second line;</dd>
 <dd><i>iprt</i> — pointer to an input part object of the protocol.</dd></dl></dd></dl>
-<ul><li> <b>void HTTP_POST(const string &amp;url, string &amp;page, vector&lt;string&gt; &amp;vars, const string &amp;user, TProtocolIn *iprt);</b> OR</li></ul>
-<dl><dd><b>void HttpPost( const string &amp;url, string &amp;page, const string &amp;sender, vector&lt;string&gt; &amp;vars, const string &amp;user );</b> — POST method with the parameters:
-<dl><dd><i>url</i> — address of the request;</dd>
+<p>Or following different functions separately for GET and POST methods:
+</p>
+<ul><li> <b>void HTTP_GET(const string &amp;uri, string &amp;page, vector&lt;string&gt; &amp;vars, const string &amp;user, TProtocolIn *iprt);</b> OR</li></ul>
+<dl><dd><b>void HttpGet( const string &amp;uri, string &amp;page, const string &amp;sender, vector&lt;string&gt; &amp;vars, const string &amp;user );</b> — GET method with the parameters:
+<dl><dd><i>uri</i> — local address of the request;</dd>
+<dd><i>page</i> — page with the answer;</dd>
+<dd><i>sender</i> — address of the sender;</dd>
+<dd><i>vars</i> — variables of the request;</dd>
+<dd><i>user</i> — user, can contain previous user in the second line;</dd>
+<dd><i>iprt</i> — pointer to an input part object of the protocol.</dd></dl></dd></dl>
+<ul><li> <b>void HTTP_POST(const string &amp;uri, string &amp;page, vector&lt;string&gt; &amp;vars, const string &amp;user, TProtocolIn *iprt);</b> OR</li></ul>
+<dl><dd><b>void HttpPost( const string &amp;uri, string &amp;page, const string &amp;sender, vector&lt;string&gt; &amp;vars, const string &amp;user );</b> — POST method with the parameters:
+<dl><dd><i>uri</i> — local address of the request;</dd>
 <dd><i>page</i> — page with the answer and with the content of the body of the POST request;</dd>
 <dd><i>sender</i> — address of the sender;</dd>
 <dd><i>vars</i> — variables of the request;</dd>
 <dd><i>user</i> — user, can contain previous user in the second line;</dd>
 <dd><i>iprt</i> — pointer to an input part object of the protocol.</dd></dl></dd></dl>
-<p>Then, in the case of the HTTP "GET" request, the function "HTTP_GET" or "HttpGet" will be called, and in the case of the "POST" request, the function "HTTP_POST" or "HttpPost" will be called in the appropriate UI module.
+<p>Then, in the case of the HTTP "GET" request, the function "HTTP_GET" or "HttpGet" will be called, and in the case of the "POST" request, the function "HTTP_POST" or "HttpPost" will be called in the appropriate UI module, or the function "HTTP" for any method.
 </p>
 <h2><span class="mw-headline" id="Function_of_the_output_requests_of_the_user_API"><span class="mw-headline-number">3</span> Function of the output requests of the user API</span></h2>
 <p>The output request function <a href="../User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">messIO()</a> operates the exchange of contents of HTTP requests wrapped in XML packets. The query structure has the form:
@@ -205,7 +215,7 @@
 <ul><li> <i>user</i> — user to change.</li></ul></li>
 <li> <i>bool pgAccess(string URL)</i> — checks for accessing the page, pointed by the <i>URL</i>.
 <ul><li> <i>URL</i> — URL of the checking page.</li></ul></li>
-<li> <i>string pgCreator(string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}", string htmlHeadEls = "", string forceTmplFile = "" )</i> — forms for a page or a resource from the content <i>cnt</i>, wrapped to HTTP with the result <i>rcode</i>, with HTTP additional attributes <i>httpattrs</i>, HTML additional head's element <i>htmlHeadEls</i>, forced to template file <i>forceTmplFile</i>.
+<li> <i>string pgCreator(string cnt, string rcode = "", string httpattrs = "Content-Type: text/html;charset={SYS}", string htmlHeadEls = "", string forceTmplFile = "" )</i> — forms for a page or a resource from the content <i>cnt</i>, wrapped to HTTP with the result <i>rcode</i>, with HTTP additional attributes <i>httpattrs</i>, HTML additional head's element <i>htmlHeadEls</i>, forced to template file <i>forceTmplFile</i>.
 <ul><li> <i>cnt</i> — content of the page or the resource (images, XML, CSS, JavaScript, ...)&nbsp;;</li>
 <li> <i>rcode</i> — HTTP result code, like to "200 OK"; empty value there disables addition of the HTTP header;</li>
 <li> <i>httpattrs</i> — additional HTTP-attributes, mostly this is "Content-Type" which by default sets to "text/html;charset={SYS}"; only for "Content-Type: text/html" will be wrapped to internal/service or force <i>forceTmplFile</i> HTML-template;</li>
@@ -217,5 +227,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/HTTP/en">Modules/HTTP/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2989</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/HTTP/en">Modules/HTTP/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2992</td></tr></table></body>
 </html>
