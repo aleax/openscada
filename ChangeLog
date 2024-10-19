@@ -1,3 +1,10 @@
+2024-10-19 Roman (stable)
+- FIX:UI.VCAEngine: Appended of the resources checking from the included widgets (dynamically created)
+	on the owner page.
+    FIX: The session UserAPI function this.attr() fixed in checking the translation flag TFld::TransltText.
+- FIX:UI.WebVision: The Button view of the FormEl primitive allowed for images in the Load type.
+
+
 2024-10-19 Diego Eckhard
 - data/: Appending a service file template openscada.service directly to SystemD.
 

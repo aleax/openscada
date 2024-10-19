@@ -1695,7 +1695,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			formObj.onkeyup = function(e)	{ if(e.keyCode == 13 || e.keyCode == 32) this.parentNode.btUp(); }
 		    }
 
-		    if(custBut && !this.place.isLoad) {
+		    if(custBut) {
 			var stdBordWidth = 2;
 			var imgObj = formObj.childNodes.length ? formObj.childNodes[0] : this.place.ownerDocument.createElement('img');
 			var spanObj = formObj.childNodes.length ? formObj.childNodes[1] : this.place.ownerDocument.createElement('span');

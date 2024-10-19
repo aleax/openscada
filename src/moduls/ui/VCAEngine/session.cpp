@@ -1913,6 +1913,10 @@ string SessWdg::resourceGet( const string &iid, string *mime, int off, int *size
     mimeData = parent().at().resourceGet(id, &mimeType, off, size);
     if(mime) *mime = mimeType;
 
+    // Try through the owner page if MIME missing
+    if(mimeData.empty() && !dynamic_cast<const SessPage*>(this))
+	return ownerPage()->resourceGet(iid, mime, off, size);
+
     return mimeData;
 }
 
@@ -2456,10 +2460,10 @@ TVariant SessWdg::objFuncCall( const string &id, vector<TVariant> &prms, const s
     if(id == "attr" && prms.size()) {
 	if(prms.size() > 1 && prms[1].getB())	return sessAttr(prms[0].getS());
 	else if(attrPresent(prms[0].getS())){
-	    TVariant rez = attrAt(prms[0].getS()).at().get();
-	    if(rez.type() == TVariant::String)	return trD_LU(rez.getS(),ownerSess()->reqLang(),ownerSess()->reqUser());
-	    return rez;
-	    //return attrAt(prms[0].getS()).at().get();
+	    AutoHD<Attr> a = attrAt(prms[0].getS());
+	    if(a.at().type() == TFld::String && a.at().flgGlob()&TFld::TransltText)
+		return trD_LU(a.at().getS(), ownerSess()->reqLang(),ownerSess()->reqUser());
+	    else return a.at().get();
 	}
 	return string("");
     }
