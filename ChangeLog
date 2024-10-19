@@ -1,4 +1,9 @@
 2024-10-19 Roman (stable)
+- !!!!:LibsDB.vcaBase: wlb_Main.storeHouse: Expanded by support of including files
+    both to the MySQL LONGTEXT field and to FS.
+
+
+2024-10-19 Roman (stable)
 - FIX:UI.VCAEngine: Appended of the resources checking from the included widgets (dynamically created)
 	on the owner page.
     FIX: The session UserAPI function this.attr() fixed in checking the translation flag TFld::TransltText.
