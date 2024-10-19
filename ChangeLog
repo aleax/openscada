@@ -1,3 +1,7 @@
+2024-10-19 Diego Eckhard
+- data/: Appending a service file template openscada.service directly to SystemD.
+
+
 2024-10-10 Roman (stable)
 - !!!:FIX:LibsDB.OscadaLibs.tmplib_base.fileServerHTTP: Expanded of big data transferring in chunks
 	by the direct writing function writeTo(), that performed for non video files.
