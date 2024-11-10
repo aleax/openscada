@@ -603,7 +603,10 @@ int TTransportS::cntrIfCmd( XMLNode &node, const string &isenderPref, const stri
     bool rqDir = (rqUser.size() && rqUser != host.user) || (rqUser == host.user && rqPass.size());
     node./*setAttr("rqDir", i2s(rqDir))->*/setAttr("rqUser", (rqDir?rqUser:host.user))->setAttr("rqPass", rqDir?rqPass:host.pass);
     AutoHD<TTransportOut> tr = extHost(host, senderPref);
-    if(tr.at().startStat() && host.mdf > tr.at().startTm()) { tr.at().stop(); node.setAttr("rqAuthForce","1"); }
+    if(tr.at().startStat() && host.mdf > tr.at().startTm()) {
+	if(!tr.at().isFromInput()) tr.at().stop();
+	node.setAttr("rqAuthForce","1");
+    }
     if(!tr.at().startStat()) tr.at().start(s2i(node.attr("conTm")));
     if(mess_lev() == TMess::Debug) mess_debug((tr.at().nodePath()+senderPref).c_str(), "REQ: %s", node.save().c_str());
 
@@ -1665,7 +1668,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),R_R_R_,"root",STR_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Connect"),RWRWR_,"root",STR_ID,1,"tp","bool");
-		if(mAssociateSrcO.freeStat()) {
+		if(!isFromInput()) {
 		    ctrMkNode("fld",opt,-1,"/prm/st/db",_("Storage"),RWRWR_,"root",STR_ID,4,
 			"tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 		    if(DB(true).size())
@@ -1673,13 +1676,13 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 			    TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",STR_ID,1,"help",TMess::labStorRem(mDB).c_str());
 		}
 	    }
-	    if(mAssociateSrcO.freeStat() && ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
+	    if(!isFromInput() && ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/prm/cfg",-1,"root",STR_ID,RWRWR_);
 		ctrRemoveNode(opt, "/prm/cfg/MODULE");
 		ctrRemoveNode(opt, "/prm/cfg/A_PRMS");
 	    }
 	}
-	if(mAssociateSrcO.freeStat() && ctrMkNode("area",opt,-1,"/aprm",_("Additional"))) {
+	if(!isFromInput() && ctrMkNode("area",opt,-1,"/aprm",_("Additional"))) {
 	    TTransportS::cntrCmdPrm(opt, "/aprm/src_", cfg("A_PRMS").getS());
 	    if(cfg("A_PRMS").getS().size()) ctrMkNode("comm",opt,-1,"/aprm/acfgReset",_("Reset"),RWRW__,"root",STR_ID);
 	}

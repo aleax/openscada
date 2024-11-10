@@ -417,7 +417,7 @@
 <li><i>int message( string cat, int level, string mess );</i> — forms of the system message <i>mess</i> with the category <i>cat</i>, level <i>level</i> (-7...7). The negative value of the level forms the alarms.</li>
 <li><i>int messDebug( string cat, string mess ); int messInfo( string cat, string mess ); int messNote( string cat, string mess ); int messWarning( string cat, string mess ); int messErr( string cat, string mess ); int messCrit( string cat, string mess ); int messAlert( string cat, string mess ); int messEmerg( string cat, string mess );</i> — forms of the system message <i>mess</i> with the category <i>cat</i> and the appropriate level by the name.</li>
 <li><i>XMLNodeObj XMLNode( string name = "" );</i> — creates of the XML node object with the <i>name</i>.</li>
-<li><i>string cntrReq( XMLNodeObj req, string stat = "" );</i> — sends a request <i>req</i> in XML view to <a href="../en/API.html#CntrNode" title="Special:MyLanguage/Documents/API">the Control Interface</a> of the program. A request is generally written in the form <b>&lt;get path="/OPath/%2felem" /&gt;</b> and with additional attributes specific to the particular request. If the station <i>stat</i> is specified into the request then the request will be sent to this external station. The address for the attribute "path" you can obtain into the OpenSCADA configurator, that is into the status line where the address appear at the mouse cursor point to a field of configuration or information. Some examples of common requests, more examples in <a href="../en/API.html#CntrNode" title="Special:MyLanguage/Documents/API">description the Control Interface</a> and <a href="Libs_Service_procedures.html#releaseTests" title="Special:MyLanguage/Libs/Service procedures">releaseTests()</a>:
+<li><i>string cntrReq( XMLNodeObj req, string stat = "" );</i> — sends a request <i>req</i> in XML view to the <a href="../en/API.html#CntrNode" title="Special:MyLanguage/Documents/API">Control Interface</a> of the program. Returns a string with error in the format "<b>{errCod}:{errText}</b>", which is "0" for successful. A request is generally written in the form <b>&lt;get path="/OPath/%2felem" /&gt;</b> and with additional attributes specific to the particular request. If the station <i>stat</i> is specified into the request then the request will be sent to this external station. The address for the attribute "path" you can obtain into the OpenSCADA configurator, that is into the status line where the address appear at the mouse cursor point to a field of configuration or information. Some examples of common requests, more examples in <a href="../en/API.html#CntrNode" title="Special:MyLanguage/Documents/API">description the Control Interface</a> and <a href="Libs_Service_procedures.html#releaseTests" title="Special:MyLanguage/Libs/Service procedures">releaseTests()</a>:
 <ul>
  <li>Reading a value of the element (the user name "test"):
 <div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">req</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">XMLNode</span><span class="p">(</span><span class="s2">"get"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"path"</span><span class="p">,</span><span class="s2">"/sub_Security/usr_test/%2fprm%2fDESCR"</span><span class="p">);</span>
@@ -892,7 +892,7 @@
 <tr>
 <td> <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">Основная библиотека</a>
 </td>
-<td> 2.2 </td>
+<td> 2.3 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_base </td>
 <td> en, uk, ru
@@ -1018,5 +1018,5 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/ru">Documents/User_API/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2992</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/ru">Documents/User_API/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2996</td></tr></table></body>
 </html>

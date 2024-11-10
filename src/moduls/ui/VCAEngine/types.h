@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: types.h
 /***************************************************************************
- *   Copyright (C) 2013-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2013-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -115,6 +115,7 @@ namespace VCA
 	A_MediaSize	= 32,
 	A_MediaSeek	= 33,
 	A_MediaVolume	= 34,
+	A_MediaKeepAspect = 35,
 	A_MediaArs	= 40,
 	A_MediaArsSz	= 3,
 	A_MediaArShape	= 0,

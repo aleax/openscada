@@ -30,7 +30,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Движок Среды Визуализации и Управления
 </td>
-<td> 7.13 </td>
+<td> 7.14 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -1434,393 +1434,378 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 </td></tr></table>
 <h4><span class="mw-headline" id=".D0.AD.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82_.D1.84.D0.BE.D1.80.D0.BC.D1.8B_.28FormEl.29"><span class="mw-headline-number">3.9.2</span> <span id="FormEl" title="#FormEl">Элемент формы (FormEl)</span></span></h4>
 <p>Примитив, предназначенный для предоставления, в распоряжение пользователя, стандартных элементов формы. Общий перечень атрибутов зависит от типа элемента.
-</p><p><b>Таблица.</b> Набор дополнительных свойств/атрибутов примитива "Элемент формы (FormEl)"
+</p><p><b>Table.</b> List of additional properties/attributes of the primitive "Element of the form (FormEl)"
 </p>
 <table class="wikitable">
 
 <tr>
-<th> Идентификатор </th>
-<th> Имя </th>
-<th> Номер </th>
-<th> Значение
+<th> Identifier </th>
+<th> Name </th>
+<th> Number </th>
+<th> Value
 </th></tr>
 <tr>
 <td> elType </td>
-<td> Тип элемента </td>
+<td> Element type </td>
 <td> 20 </td>
-<td> Тип элемента, от значения которого зависит перечень дополнительных атрибутов:
-<ul><li> Строка редактирования (0)</li>
-<li> Редактор текста (1)</li>
-<li> Флажок (2)</li>
-<li> Кнопка (3)</li>
-<li> Выбор из списка (ComboBox) (4)</li>
-<li> Список (5)</li>
-<li> Дерево (8)</li>
-<li> Таблица (9)</li>
-<li> Слайдер (6)</li>
-<li> Полоса прокрутки (7)</li></ul>
+<td> Type of the element, from which depends the list of additional attributes:
+<ul><li> Line edit (0)</li>
+<li> Text edit (1)</li>
+<li> Check Box (2)</li>
+<li> Button (3)</li>
+<li> Combo box (4)</li>
+<li> List (5)</li>
+<li> Tree (8)</li>
+<li> Table (9)</li>
+<li> Slider (6)</li>
+<li> Scroll bar (7)</li></ul>
 </td></tr>
 <tr>
-<td colspan="4"> <i>Строка редактирования:</i>
+<td colspan="4"> <i>Line edit:</i>
 </td></tr>
 <tr>
 <td> value </td>
-<td> Значение </td>
+<td> Value </td>
 <td> 21 </td>
-<td> Содержимое строки.
+<td> Contents of the line.
 </td></tr>
 <tr>
 <td> view </td>
-<td> Вид </td>
+<td> View </td>
 <td> 22 </td>
-<td> Вид строки редактирования:
-<ul><li> Текст (0)</li>
-<li> Комбобокс (1)</li>
-<li> Целое (2)</li>
-<li> Вещественное (3)</li>
-<li> Время (4)</li>
-<li> Дата (5)</li>
-<li> Дата и время (6)</li>
-<li> Пароль (7)</li></ul>
+<td> View of the editing line:
+<ul><li> Text (0)</li>
+<li> Combo Box (1)</li>
+<li> Integer (2)</li>
+<li> Real (3)</li>
+<li> Time (4)</li>
+<li> Date (5)</li>
+<li> Date and Time (6)</li>
+<li> Password (7)</li></ul>
 </td></tr>
 <tr>
 <td> cfg </td>
-<td> Конфигурация </td>
+<td> Configuration </td>
 <td> 23 </td>
-<td>
-<p>Конфигурация строки. Формат значения данного поля для различных видов строки:
-</p>
-<dl><dd><i>Текст</i> — конфигурация форматированного ввода по шаблону с параметрами (поддерживается только Qt в <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">UI.Vision</a>):
-<dl><dd><dl><dd><b>A</b> — Необходим ASCII алфавитный символ, [A-Za-z].</dd>
-<dd><b>a</b> — Разрешён, но не обязателен, ASCII алфавитный символ.</dd>
-<dd><b>N</b> — Необходим ASCII алфавитно-цифровой символ, [A-Za-z0-9].</dd>
-<dd><b>n</b> — Разрешён, но не обязателен, ASCII алфавитно-цифровой символ.</dd>
-<dd><b>X</b> — Необходим любой символ.</dd>
-<dd><b>x</b> — Разрешён, но не обязателен, любой символ.</dd>
-<dd><b>9</b> — Необходима ASCII цифра, [0-9].</dd>
-<dd><b>0</b> — Разрешёна, но не обязательна, ASCII цифра.</dd>
-<dd><b>D</b> — Необходима ASCII цифра, [1-9].</dd>
-<dd><b>d</b> — Разрешёна, но не обязательна, ASCII цифра.</dd>
-<dd><b>#</b> — Разрешёны, но не обязательны, ASCII цифра или знаки плюс/минус.</dd>
-<dd><b>H</b> — Необходим символ шестнадцатеричного числа, [A-Fa-f0-9].</dd>
-<dd><b>h</b> — Разрешён, но не обязателен, символ шестнадцатеричного числа.</dd>
-<dd><b>B</b> — Необходим бинарный символ, [0-1].</dd>
-<dd><b>b</b> — Разрешён, но не обязателен, бинарный символ.</dd>
-<dd><b>&gt;</b> — Все следующие алфавитные символы в верхнем регистре.</dd>
-<dd><b>&lt;</b> — Все следующие алфавитные символы в нижнем регистре.</dd>
-<dd><b>!</b> — Выключение преобразования регистра.</dd>
-<dd><b>\\</b> — Используйте в разделителях, для экранирования специальных символов, которые перечислены.</dd></dl></dd></dl></dd>
-<dd><i>Комбобокс</i> — список значений редактируемого комбо-бокса, по строкам.</dd>
-<dd><i>Целое</i> — значение целого числа в форме: "<b>{Минимум}:{Максимум}:{ШагИзменения}:{Префикс}:{Суффикс}</b>".</dd>
-<dd><i>Вещественное</i> — значение вещественного числа в форме: "<b>{Минимум}:{Максимум}:{ШагИзменения}:{Префикс}:{Суффикс}:{ЗнаковПослеТочки}</b>".</dd>
-<dd><i>Время</i>, <i>Дата</i>, <i>Дата и время</i> — формировать дату по шаблону с параметрами:
-<dl><dd><dl><dd><b>d</b> — номер дня (1-31);</dd>
-<dd><b>dd</b> — номер дня (01-31);</dd>
-<dd><b>ddd</b> — сокращённое наименование дня ("Mon" ... "Sun");</dd>
-<dd><b>dddd</b> — полное наименование дня ("Monday" ... "Sunday");</dd>
-<dd><b>M</b> — номер месяца (1-12);</dd>
-<dd><b>MM</b> — номер месяца (01-12);</dd>
-<dd><b>MMM</b> — сокращённое имя месяца ("Jan" ... "Dec");</dd>
-<dd><b>MMMM</b> — полное имя месяца ("January" ... "December");</dd>
-<dd><b>yy</b> — последние две цифры года;</dd>
-<dd><b>yyyy</b> — год полностью;</dd>
-<dd><b>h</b> — час (0-23);</dd>
-<dd><b>hh</b> — час (00-23);</dd>
-<dd><b>m</b> — минуты (0-59);</dd>
-<dd><b>mm</b> — минуты (00-59);</dd>
-<dd><b>s</b> — секунды (0-59);</dd>
-<dd><b>ss</b> — секунды (00-59);</dd>
-<dd><b>AP,ap</b> — отображать AM/PM или am/pm. </dd></dl></dd></dl></dd></dl>
+<td> Configuration of the line. Format of the value of the field for different views of the lines:
+<dl><dd><i>Text</i> — configuration of the formatted input at the template with the parameters (supported only by Qt in <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">UI.Vision</a>):
+<dl><dd><dl><dd><b>A</b> — ASCII alphabetic character required, [A-Za-z].</dd>
+<dd><b>a</b> — ASCII alphabetic character permitted but not required.</dd>
+<dd><b>N</b> — ASCII alphanumeric character required, [A-Za-z0-9].</dd>
+<dd><b>n</b> — ASCII alphanumeric character permitted but not required.</dd>
+<dd><b>X</b> — Any character required.</dd>
+<dd><b>x</b> — Any character permitted but not required.</dd>
+<dd><b>9</b> — ASCII digit required, [0-9].</dd>
+<dd><b>0</b> — ASCII digit permitted but not required.</dd>
+<dd><b>D</b> — ASCII digit required, [1-9].</dd>
+<dd><b>d</b> — ASCII digit permitted but not required.</dd>
+<dd><b>#</b> — ASCII digit or plus/minus sign permitted but not required.</dd>
+<dd><b>H</b> — Hexadecimal character required, [A-Fa-f0-9].</dd>
+<dd><b>h</b> — Hexadecimal character permitted but not required.</dd>
+<dd><b>B</b> — Binary character required, [0-1].</dd>
+<dd><b>b</b> — Binary character permitted but not required.</dd>
+<dd><b>&gt;</b> — All following alphabetic characters are uppercased.</dd>
+<dd><b>&lt;</b> — All following alphabetic characters are lowercased.</dd>
+<dd><b>!</b> — Switch off case conversion.</dd>
+<dd><b>\\</b> — Use to shield the special characters listed above to use them as separators.</dd></dl></dd></dl></dd>
+<dd><i>Combobox</i> — list of values the editable combobox by lines.</dd>
+<dd><i>Integer</i> — integer value in the form: "<b>{Min}:{Max}:{ChangeStep}:{Prefix}:{Suffix}</b>".</dd>
+<dd><i>Real</i> — real value in the form: "<b>{Min}:{Max}:{ChangeStep}:{Prefix}:{Suffix}:{SignsAfterDot}</b>".</dd>
+<dd><i>Time</i>, <i>Date</i>, <i>Date and time</i> — to form the date following the template with the parameters:
+<dl><dd><dl><dd><b>d</b> — number of the day (1-31);</dd>
+<dd><b>dd</b> — number of the day (01-31);</dd>
+<dd><b>ddd</b> — acronym of the day ("Mon" ... "Sun");</dd>
+<dd><b>dddd</b> — full name of the day ("Monday" ... "Sunday");</dd>
+<dd><b>M</b> — number of the month (1-12);</dd>
+<dd><b>MM</b> — number of the month (01-12);</dd>
+<dd><b>MMM</b> — acronym of the month ("Jan" ... "Dec");</dd>
+<dd><b>MMMM</b> — full name of the month ("January" ... "December");</dd>
+<dd><b>yy</b> — last two digits of the year;</dd>
+<dd><b>yyyy</b> — full year;</dd>
+<dd><b>h</b> — hour (0-23);</dd>
+<dd><b>hh</b> — hour (00-23);</dd>
+<dd><b>m</b> — minutes (0-59);</dd>
+<dd><b>mm</b> — minutes (00-59);</dd>
+<dd><b>s</b> — seconds (0-59);</dd>
+<dd><b>ss</b> — seconds (00-59);</dd>
+<dd><b>AP,ap</b> — to display AM/PM or am/pm.</dd></dl></dd></dl></dd></dl>
 </td></tr>
 <tr>
 <td> confirm </td>
-<td> Подтверждать </td>
+<td> Confirm </td>
 <td> 24 </td>
-<td> Включение режима подтверждения.
+<td> Enable the confirming mode.
 </td></tr>
 <tr>
 <td> font </td>
-<td> Шрифт </td>
+<td> Font </td>
 <td> 25 </td>
-<td>
-<p>Имя шрифта в виде "<b>{family} {size} {bold} {italic} {underline} {strike}</b>", где:
+<td> Font name in the form "<b>{family} {size} {bold} {italic} {underline} {strike}</b>", where:
+<ul><li> "family" — font family, for spaces use symbol '_', like: "Arial", "Courier", "Times_New_Roman";</li>
+<li> "size" — font size in pixels;</li>
+<li> "bold" — font bold (0 or 1);</li>
+<li> "italic" — font italic (0 or 1);</li>
+<li> "underline" — font underlined (0 or 1);</li>
+<li> "strike" — font struck (0 or 1).<br /></li></ul>
+<p>Examples:
 </p>
-<ul><li> "family" — семейство шрифта, для пробелов используйте символ '_', вроде: "Arial", "Courier", "Times_New_Roman";</li>
-<li> "size" — размер шрифта в пикселях;</li>
-<li> "bold" — усиление шрифта (0 или 1);</li>
-<li> "italic" — наклонность шрифта (0 или 1);</li>
-<li> "underline" — подчёркивание шрифта (0 или 1);</li>
-<li> "strike" — перечёркивание шрифта (0 или 1).<br /></li></ul>
-<p>Примеры:
-</p>
-<ul><li> "Arial 10 1 0 0 0" — Arial шрифт размером 10 пикселей и усиленный. </li></ul>
+<ul><li> "Arial 10 1 0 0 0" — Arial font size 10 pixels and bold.</li></ul>
 </td></tr>
 <tr>
-<td colspan="4"> <i>Редактор текста:</i>
+<td colspan="4"> <i>Text edit:</i>
 </td></tr>
 <tr>
 <td> value </td>
-<td> Значение </td>
+<td> Value </td>
 <td> 21 </td>
-<td> Содержимое редактора.
+<td> Content of the editor.
 </td></tr>
 <tr>
 <td> wordWrap </td>
-<td> Перенос слов </td>
+<td> Word wrap </td>
 <td> 22 </td>
-<td> Автоматический перенос текста по словам.
+<td> Automatically wrap text by words.
 </td></tr>
 <tr>
 <td> confirm </td>
-<td> Подтверждать </td>
+<td> Confirm </td>
 <td> 24 </td>
-<td> Включение режима подтверждения.
+<td> Enable the confirming  mode.
 </td></tr>
 <tr>
 <td> font </td>
-<td> Шрифт </td>
+<td> Font </td>
 <td> 25 </td>
-<td> Имя шрифта в виде "<b>{family} {size} {bold} {italic} {underline} {strike}</b>" (детали выше).
+<td> Font name in the form "<b>{family} {size} {bold} {italic} {underline} {strike}</b>" (details above).
 </td></tr>
 <tr>
-<td colspan="4"> <i>Флажок:</i>
+<td colspan="4"> <i>Check box:</i>
 </td></tr>
 <tr>
 <td> name </td>
-<td> Имя </td>
+<td> Name </td>
 <td> 26 </td>
-<td> Имя/метка флажка.
+<td> Name/label of the checkbox.
 </td></tr>
 <tr>
 <td> value </td>
-<td> Значение </td>
+<td> Value </td>
 <td> 21 </td>
-<td> Значение флажка.
+<td> Value of the checkbox.
 </td></tr>
 <tr>
 <td> font </td>
-<td> Шрифт </td>
+<td> Font </td>
 <td> 25 </td>
-<td> Имя шрифта в виде "<b>{family} {size} {bold} {italic} {underline} {strike}</b>" (детали выше).
+<td> Font name in the form "<b>{family} {size} {bold} {italic} {underline} {strike}</b>" (details above).
 </td></tr>
 <tr>
-<td colspan="4"> <i>Кнопка:</i>
+<td colspan="4"> <i>Button:</i>
 </td></tr>
 <tr>
 <td> name </td>
-<td> Имя </td>
+<td> Name </td>
 <td> 26 </td>
-<td> Имя-надпись на кнопке. Допустимы символы '\n' для возможности ввода многострочных надписей.
+<td> Name-inscription on the button. Allowed symbols '\n' for multiple line names.
 </td></tr>
 <tr>
 <td> value </td>
-<td> Значение </td>
+<td> Value </td>
 <td> 21 </td>
-<td>
-<p>Значение, отличается для разных режимов:
-</p>
-<ul><li> "Стандарт" — параметры повтора событий при удержании <b>{задержка}-{интервал}</b>, время в миллисекундах;</li>
-<li> "Переключатель" — значение переключателя;</li>
-<li> "Меню" — список адресов элементов меню вида <b>/grp1/grp2/item1</b>;</li>
-<li> "Загрузка" — строка описания <b>{ШаблонФайлов}|{Заголовок}|{ФайлПоУмолчаниюИЗагр}|{ФайлMime}</b> и содержимое загруженного файла. Шаблон файлов в виде "Изображение (*.png *.xpm *.jpg);;CSV-файл (*.csv)".</li>
-<li> "Сохранение" — строка описания <b>{ШаблонФайлов}|{Заголовок}|{ФайлПоУмолчанию}|{ФайлMime}</b> и содержимое сохраняемого файла. Шаблон файлов как и выше.</li></ul>
+<td> The value, different for modes:
+<ul><li> "Standard" — repeating parameters of events on holding <b>{delay}-{interval}</b>, time in milliseconds;</li>
+<li> "Checkable" — toggle value;</li>
+<li> "Menu" — list of addresses of the menu elements like to <b>/grp1/grp2/item1</b>;</li>
+<li> "Load" — description line <b>{FilesTemplate}|{Header}|{FileByDefaultAndLoaded}|{FileMime}</b> and loaded file content from next line. The files template like to "Images (*.png *.xpm *.jpg);;CSV-file (*.csv)".</li>
+<li> "Save" — description line <b>{FilesTemplate}|{Header}|{FileByDefault}|{FileMime}</b> and saving file content from next line. The files template like to before one.</li></ul>
 </td></tr>
 <tr>
 <td> img </td>
-<td> Изображение </td>
+<td> Image </td>
 <td> 22 </td>
-<td>
-<p>Изображение на кнопке. Имя изображения в виде "<b>[{src}:]{name}</b>", где:
+<td> Image on the button. Image name in the view <b>[{src}:]{name}</b>, where:
+<ul><li> "src" — source of the image:
+<ul><li> <i>file</i> — directly from the local file by the path;</li>
+<li> <i>res</i> — from the resources table of DB.</li></ul></li>
+<li> "name" — file path or identifier of the resource.<br /></li></ul>
+<p>Examples:
 </p>
-<ul><li> "src" — источник изображения:
-<ul><li> <i>file</i> — прямо из локального файла по пути;</li>
-<li> <i>res</i> — из таблицы ресурсов БД.</li></ul></li>
-<li> "name" — путь файла или идентификатор ресурса.<br /></li></ul>
-<p>Примеры:
-</p>
-<ul><li> "res:backLogo" — из таблицы ресурсов БД для идентификатора "backLogo";</li>
-<li> "backLogo" — как и предыдущий;</li>
-<li> "file:/var/tmp/backLogo.png" — из локального файла по пути "/var/tmp/backLogo.png". </li></ul>
+<ul><li> "res:backLogo" — from the resources table of DB for the identifier "backLogo";</li>
+<li> "backLogo" — like toe the previous;</li>
+<li> "file:/var/tmp/backLogo.png" — from local file by the path "/var/tmp/backLogo.png".</li></ul>
 </td></tr>
 <tr>
 <td> color </td>
-<td> Цвет </td>
+<td> Color </td>
 <td> 23 </td>
-<td>
-<p>Цвет кнопки. Имя цвета в виде "<b>{color}[-{alpha}]</b>", где:
+<td> Color of the button. Color name form "<b>{color}[-{alpha}]</b>", where:
+<ul><li> "color" — standard color name or its numeric representation of three hexadecimal numbers of individual colors "#RRGGBB";</li>
+<li> "alpha" — level of the alpha [0...255], where 0 — completely transparent.<br /></li></ul>
+<p>Examples:
 </p>
-<ul><li> "color" — стандартное имя цвета или его числовое представление из трёх шестнадцатеричных чисел отдельных цветов "#RRGGBB";</li>
-<li> "alpha" — уровень альфа-канала [0...255], где 0 — полностью прозрачный.<br /></li></ul>
-<p>Примеры:
-</p>
-<ul><li> "red" — сплошной красный цвет;</li>
-<li> "#FF0000" — сплошной красный цвет в цифровом коде;</li>
-<li> "red-127" — полупрозрачный красный цвет.</li></ul>
+<ul><li> "red" — solid red color;</li>
+<li> "#FF0000" — solid red color by the digital code;</li>
+<li> "red-127" — half transparent red color.</li></ul>
 </td></tr>
 <tr>
 <td> colorText </td>
-<td> Цвет: текст </td>
+<td> Color:text </td>
 <td> 27 </td>
-<td> Цвет текста (детали выше).
+<td> Color of the text (details above).
 </td></tr>
 <tr>
 <td> mode </td>
-<td> Режим </td>
+<td> Mode </td>
 <td> 24 </td>
-<td>
-<p>Режим работы кнопки:
-</p>
-<ul><li> "Стандарт" — обычная кнопка с возможностью повтора событий при удержании, параметры в "value";</li>
-<li> "Переключатель" — кнопка с фиксацией, значение в "value";</li>
-<li> "Меню" — открытие меню по нажатию, перечень элементов в "value";</li>
-<li> "Загрузка" — организация пользовательской загрузки небольших файлов через интерфейс визуализации; при нажатии кнопки, в этом режиме, открывается диалог выбора файла загрузки, а содержимое выбранного файла загружается в атрибут "value";</li>
-<li> "Сохранение" — организация пользовательского сохранения небольших файлов через интерфейс визуализации; при записи содержимого файла в атрибут "value" пользователю будет открыт диалог выбора/указания файла для сохранения, после выбора, содержимое атрибута "value" сохранится в файл, а "value" очистится.</li></ul>
+<td> Operation mode of the button:
+<ul><li> "Standard" — normal button which allows repeating events on it hold, the parameters in "value";</li>
+<li> "Checkable" — check button, values in "value";</li>
+<li> "Menu" — opens menu on press, items list in "value";</li>
+<li> "Load" — provides for loading of the user-space small files through the visual interface; on the mode the button press will open the selection file dialog for loading and the file content next saving to the attribute "value";</li>
+<li> "Save" — provides for saving of the user-space small files through the visual interface; on the file content writing to the attribute "value" for user will: open the selecting/setting file dialog, save the attribute "value" content to the file, after the selecting, and set clean the attribute "value".</li></ul>
 </td></tr>
 <tr>
 <td> font </td>
-<td> Шрифт </td>
+<td> Font </td>
 <td> 25 </td>
-<td> Имя шрифта в виде "<b>{family} {size} {bold} {italic} {underline} {strike}</b>" (детали выше).
+<td> Font name in the form "<b>{family} {size} {bold} {italic} {underline} {strike}</b>" (details above).
 </td></tr>
 <tr>
-<td colspan="4"> <i>Список:</i>
+<td colspan="4"> <i>List:</i>
 </td></tr>
 <tr>
 <td> value </td>
-<td> Значение </td>
+<td> Value </td>
 <td> 21 </td>
-<td> Текущее значение списка.
+<td> Current value of the list.
 </td></tr>
 <tr>
 <td> items </td>
-<td> Элементы </td>
+<td> Items </td>
 <td> 22 </td>
-<td> Перечень элементов списка.
+<td> Entries of the list.
 </td></tr>
 <tr>
 <td> font </td>
-<td> Шрифт </td>
+<td> Font </td>
 <td> 25 </td>
-<td> Имя шрифта в виде "<b>{family} {size} {bold} {italic} {underline} {strike}</b>" (детали выше).
+<td> Font name in the form "<b>{family} {size} {bold} {italic} {underline} {strike}</b>" (details above).
 </td></tr>
 <tr>
 <td> mult </td>
-<td> Множественный выбор </td>
+<td> Multiple selection </td>
 <td> 23 </td>
-<td> Разрешать выбор множества элементов списка.
+<td> Allow for multiple entries selection of the list.
 </td></tr>
 <tr>
-<td colspan="4"> <i>Выбор из списка, Дерево:</i>
+<td colspan="4"> <i>Combo box, Tree:</i>
 </td></tr>
 <tr>
 <td> value </td>
-<td> Значение </td>
+<td> Value </td>
 <td> 21 </td>
-<td> Текущее значение списка.
+<td> Current value of the list.
 </td></tr>
 <tr>
 <td> items </td>
-<td> Элементы </td>
+<td> Items </td>
 <td> 22 </td>
-<td> Перечень элементов списка или иерархических элементов дерева в виде пути "<b>/{КАТ}/{КАТ}/{ЭЛЕМ}</b>".
+<td> Entries of the list or hierarchical items list of the tree in path "<b>/{DIR}/{DIR}/{ITEM}</b>".
 </td></tr>
 <tr>
 <td> font </td>
-<td> Шрифт </td>
+<td> Font </td>
 <td> 25 </td>
-<td> Имя шрифта в виде "<b>{family} {size} {bold} {italic} {underline} {strike}</b>" (детали выше).
+<td> Font name in the form "<b>{family} {size} {bold} {italic} {underline} {strike}</b>" (details above).
 </td></tr>
 <tr>
-<td colspan="4"> <i>Таблица:</i>
+<td colspan="4"> <i>Table:</i>
 </td></tr>
 <tr>
 <td> set </td>
-<td> Значение установки </td>
+<td> Setting value </td>
 <td> 23 </td>
-<td> Значение редактирования ячейки таблицы с адресом в событии "<b>ws_TableEdit_{colN}_{rowN}</b>".
+<td> Value of edition of a cell of the table which address in the event "<b>ws_TableEdit_{colN}_{rowN}</b>".
 </td></tr>
 <tr>
 <td> value </td>
-<td> Значение </td>
+<td> Value </td>
 <td> 21 </td>
-<td>
-<p>Адрес выбранного элемента. Изменение сопровождается событием "<b>ws_TableChangeSel</b>". Формат адреса зависит от режима выбора таблицы:
-</p>
-<ul><li> "Ячейка" — адрес ячейки в формате "<b>{row}:{col}</b>".</li>
-<li> "Строка", "Колонка" — номер строки-колонки или содержимое ячейки ключа строки-колонки, указанной атрибутом "keyID".</li></ul>
+<td> Address of the selected item. It changing follows by the event "<b>ws_TableChangeSel</b>". The address format depends from the table's selection mode:
+<ul><li> "Cell" — cell address in the format "<b>{row}:{col}</b>".</li>
+<li> "Row", "Column" — row-column number or cell content of the row-column key, which sets by the attribute "keyID".</li></ul>
 </td></tr>
 <tr>
 <td> items </td>
-<td> Элементы </td>
+<td> Elements </td>
 <td> 22 </td>
 <td>
-<p>Структура и содержимое таблицы в виде XML:
+<p>The table structure and content in the XML view:
 </p>
 <div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;tbl&gt;</span>
-<span class="nt">&lt;h&gt;&lt;s&gt;</span>{Заголовок1}<span class="nt">&lt;/s&gt;&lt;s&gt;</span>{Заголовок2}<span class="nt">&lt;/s&gt;&lt;/h&gt;</span>
-<span class="nt">&lt;r&gt;&lt;s&gt;</span>{Ряд1Колонка1Строка}<span class="nt">&lt;/s&gt;&lt;i&gt;</span>{Ряд1Колонка2Целое}<span class="nt">&lt;/i&gt;&lt;/r&gt;</span>
-<span class="nt">&lt;r&gt;&lt;b&gt;</span>{Ряд2Колонка1Логическое}<span class="nt">&lt;/b&gt;&lt;r&gt;</span>{Ряд2Колонка2Вещественное}<span class="nt">&lt;/r&gt;&lt;/r&gt;</span>
+<span class="nt">&lt;h&gt;&lt;s&gt;</span>{Header1}<span class="nt">&lt;/s&gt;&lt;s&gt;</span>{Header2}<span class="nt">&lt;/s&gt;&lt;/h&gt;</span>
+<span class="nt">&lt;r&gt;&lt;s&gt;</span>{Row1Column1String}<span class="nt">&lt;/s&gt;&lt;i&gt;</span>{Row1Column1Integer}<span class="nt">&lt;/i&gt;&lt;/r&gt;</span>
+<span class="nt">&lt;r&gt;&lt;b&gt;</span>{Row2Column1Logical}<span class="nt">&lt;/b&gt;&lt;r&gt;</span>{Row2Column2Real}<span class="nt">&lt;/r&gt;&lt;/r&gt;</span>
 <span class="nt">&lt;/tbl&gt;</span>
 </pre></div>
-<p>Теги:
+<p>The tags:
 </p>
-<dl><dd>"tbl" — Таблица, свойства таблицы в целом:
-<ul><li> "sel" — режим выбора-выделения элементов таблицы: "row" — по строкам, "col" — по колонкам, "cell" — ячейками (по умолчанию);</li>
-<li> "keyID" — номер ключевой строки-колонки, для получения значения выбора;</li>
-<li> "colsWdthFit" — подстраивать размер колонок, размер которых не фиксирован, под заполнение всей ширины таблицы;</li>
-<li> "hHdrVis", "vHdrVis" — установка видимости горизонтального, вертикального заголовков;</li>
-<li> "sortEn" — включение прямой сортировки по колонкам.</li></ul></dd>
-<dd>"h" — Строка заголовков, возможные атрибуты у тегов ячеек заголовка, для колонки в целом:
-<ul><li> "width" — ширина колонки, в пикселях или процентах (10%);</li>
-<li> "edit" — возможность редактирования (0 или 1) ячеек колонки, по умолчанию — нет (0);</li>
-<li> "color" — цвет колонки, в целом, в виде имени цвета или его кода;</li>
-<li> "colorText" — цвет текста колонки, в целом, в виде имени цвета или его кода;</li>
-<li> "font" — шрифт текста колонки, в целом, в виде типовой строки OpenSCADA;</li>
-<li> "prec" — точность значений ячеек вещественного типа в колонке;</li>
-<li> "sort" — сортировка по данной колонке [0 — по возрастанию-типично; 1 — по убыванию];</li>
-<li> "align" — выравнивание колонки на предмет: "left", "right" и "center".</li></ul></dd>
-<dd>"r" — Строка значений, возможные атрибуты у тегов ячеек заголовка, для колонки в целом:
-<ul><li> "color" — цвет строки, в целом, в виде имени цвета или его кода;</li>
-<li> "colorText" — цвет текста строки, в целом, в виде имени цвета или его кода;</li>
-<li> "font" — шрифт текста строки, в целом, в виде типовой строки OpenSCADA;</li>
-<li> "prec" — точность значений ячеек вещественного типа в строке.</li></ul></dd>
-<dd>"s", "t", "i", "r", "b" — ячейки типов данных: "Строка", "Текст", "Целое", "Вещественное" и "Логическое". Возможные атрибуты:
-<ul><li> "color" — цвет ячейки;</li>
-<li> "colorText" — цвет текста ячейки, в виде имени цвета или его кода;</li>
-<li> "font" — шрифт текста ячейки, в виде типовой строки OpenSCADA;</li>
-<li> "prec" — точность значений ячейки вещественного типа;</li>
-<li> "img" — изображение ячейки, в виде "<b>[{src}:]{name}</b>", детали выше;</li>
-<li> "edit" — возможность редактирования (0 или 1) ячейки, по умолчанию — нет (0);</li>
-<li> "align" — выравнивание ячейки на предмет: "left", "right" и "center".</li></ul></dd></dl>
+<dl><dd>"tbl" — Table, the properties at all:
+<ul><li> "sel" — selection mode of the table items: "row" — by rows, "col" — by columns, "cell" — by cells (by default);</li>
+<li> "keyID" — row-column number of the key, for the selection value get;</li>
+<li> "colsWdthFit" — fits the columns size, in the unfixed size, to fill the full width of the table;</li>
+<li> "hHdrVis", "vHdrVis" — visibility of the headers, for horizontal and vertical;</li>
+<li> "sortEn" — enables sorting directly by the columns.</li></ul></dd>
+<dd>"h" — Row of the headers. Possible attributes of the header cell tag for the column as a whole:
+<ul><li> "width" — column width, in pixels or percents (10%);</li>
+<li> "edit" — allowing to the cells of the row edition (0 or 1), by default — no (0);</li>
+<li> "color" — column color as a whole in the color name or code;</li>
+<li> "colorText" — color of the column text as a whole in the color name or code;</li>
+<li> "font" — font of the column text in the typical OpenSCADA string;</li>
+<li> "prec" — value precision of the real type cells in the column;</li>
+<li> "sort" — sorting by the column [0 - Ascending-default; 1 - Descending];</li>
+<li> "align" — alignment the column for: "left", "right" and "center".</li></ul></dd>
+<dd>"r" — Row of the values. Possible attributes of the row cell tag for the row as a whole:
+<ul><li> "color" — row color as a whole in the color name or code;</li>
+<li> "colorText" — color of the row text as a whole in the color name or code;</li>
+<li> "font" — font of the cell text in the typical OpenSCADA string;</li>
+<li> "prec" — value precision of the real type cells in the row.</li></ul></dd>
+<dd>"s", "t", "i", "r", "b" — cells of the data types "String", "Text", "Integer", "Real" and "Logical". Possible attributes:
+<ul><li> "color" — cell color;</li>
+<li> "colorText" — color of the cell text in the color name or code;</li>
+<li> "font" — font of the cell text in the typical OpenSCADA string;</li>
+<li> "prec" — value precision of the real type cell;</li>
+<li> "img" — image of the cell in the form "<b>[{src}:]{name}</b>", the details above;</li>
+<li> "edit" — allowing the cell edition (0 or 1), by default - no (0);</li>
+<li> "align" — alignment the cell for: "left", "right" and "center".</li></ul></dd></dl>
 </td></tr>
 <tr>
 <td> font </td>
-<td> Шрифт </td>
+<td> Font </td>
 <td> 25 </td>
-<td> Имя шрифта в виде "<b>{family} {size} {bold} {italic} {underline} {strike}</b>" (детали выше).
+<td> Font name in the form "<b>{family} {size} {bold} {italic} {underline} {strike}</b>" (the details above).
 </td></tr>
 <tr>
-<td colspan="4"> <i>Слайдер и полоса прокрутки:</i>
+<td colspan="4"> <i>Slider and Scroll Bar:</i>
 </td></tr>
 <tr>
 <td> value </td>
-<td> Значение </td>
+<td> Value </td>
 <td> 21 </td>
-<td> Положение слайдера.
+<td> Slider position.
 </td></tr>
 <tr>
 <td> cfg </td>
-<td> Конфигурация </td>
+<td> Configuration </td>
 <td> 22 </td>
-<td>
-<p>Конфигурация слайдера в формате: "<b>{ВертОриент}:{Минимум}:{Максимум}:{ОдинШаг}:{СтрШаг}</b>".<br />
-Где:
+<td> Configuration of the slider in the format: "<b>{VertOrient}:{Min}:{Max}:{SinglStep}:{PageStep}</b>".<br />
+<p>Where:
 </p>
-<ul><li> "ВертОриент" — признак вертикальной ориентации (0 или 1), по умолчанию ориентация горизонтальная;</li>
-<li> "Минимум" — минимальное значение;</li>
-<li> "Максимум" — максимальное значение;</li>
-<li> "ОдинШаг" — размер одного шага;</li>
-<li> "СтрШаг" — размер страничного шага. </li></ul>
+<ul><li> "VertOrient" — sign (0 or 1) of the vertical orientation, the default is the horizontal orientation;</li>
+<li> "Min" — minimum value;</li>
+<li> "Max" — maximum value;</li>
+<li> "SinglStep" — size of a single step;</li>
+<li> "PageStep" — size of a page step. </li></ul>
 </td></tr></table>
 <h4><span class="mw-headline" id=".D0.AD.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82_.D1.82.D0.B5.D0.BA.D1.81.D1.82.D0.B0_.28Text.29"><span class="mw-headline-number">3.9.3</span> <span id="Text" title="#Text">Элемент текста (Text)</span></span></h4>
 <p>Данный примитив предназначен для вывода простого и HTML текста, используемого в роли меток и различных подписей. С целью создания декоративных оформлений, примитив поддерживает обвод текста рамкой.
@@ -2072,7 +2057,13 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <td> fit </td>
 <td> Fit to the widget size </td>
 <td> 26 </td>
-<td> Sign "Coordinate the contents with the widget size".
+<td> Sign of coordination the contents with the widget size.
+</td></tr>
+<tr>
+<td> keepAspect </td>
+<td> Keep aspect ratio at fitting </td>
+<td> 35 </td>
+<td> Sign of keeping image aspect ratio at fitting to whole size of the widget.
 </td></tr>
 <tr>
 <td colspan="4"> <i>Attributes of the animation-video (Animation)</i>
@@ -2081,7 +2072,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <td> fit </td>
 <td> Fit to the widget size </td>
 <td> 26 </td>
-<td> Sign "Coordinate the contents with the widget size".
+<td> Sign of coordination the contents with the widget size.
 </td></tr>
 <tr>
 <td> speed </td>
@@ -3612,5 +3603,5 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/ru">Modules/VCAEngine/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2992</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/ru">Modules/VCAEngine/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2996</td></tr></table></body>
 </html>

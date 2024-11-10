@@ -261,6 +261,8 @@ class TTransSock: public TTypeTransport
 	static string addrResolve( const string &host, const string &port, vector<sockaddr_storage> &addrs,
 				    int type = S_TCP, bool isServer = false );
 	static string addrGet( const sockaddr_storage &addr );
+	static string addrHost( const string &addr );
+	static string addrPort( const string &addr );
 
 	string outAddrHelp( );
 	static string outTimingsHelp( bool noAdd = false );

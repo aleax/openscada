@@ -185,7 +185,7 @@ void InputDlg::showEvent( QShowEvent * event )
 DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent, const string &hint, const string &lang ) :
     QDialog(parent), VCAstat(iVCAstat), stSel(NULL)
 {
-    setWindowTitle(_("Selecting an user"));
+    setWindowTitle(_("User selection"));
 
     QVBoxLayout *dlg_lay = new QVBoxLayout(this);
     dlg_lay->setContentsMargins(10, 10, 10, 10);
@@ -269,7 +269,8 @@ void DlgUser::fillUsers( const string &hint )
 	    if(chckHintUser && h_user == req.childGet(iU)->text()) {
 		users->setEditText(h_user.c_str());
 		if(pasSep == string::npos)
-		    mAutoRes = (VCAstat == "." && dynamic_cast<VisRun*>(parentWidget()->window()) && SYS->security().at().usrAt(((VisRun*)parentWidget()->window())->user()).at().permitCmpr(user().toStdString()) <= 0)
+		    mAutoRes = (VCAstat == "." && dynamic_cast<VisRun*>(parentWidget()->window()) &&
+				    SYS->security().at().usrAt(((VisRun*)parentWidget()->window())->user()).at().permitCmpr(user().toStdString()) <= 0)
 				? SelOK : SelErr;
 		else {
 		    passwd->setText(h_pass.c_str());
@@ -311,7 +312,10 @@ void DlgUser::finish( int result )
 	    if(user().isEmpty()) users->setEditText(req.attr("user").c_str());
 	    setResult(SelOK);
 	}
-	else setResult(SelErr);
+	else {
+	    setResult(SelErr);
+	    setProperty("err", s2i(req.attr("rez")) ? req.text().c_str() : "");
+	}
     }
     else setResult(SelCancel);
 }
@@ -395,7 +399,11 @@ bool UserStBar::userSel( const string &ihint )
 	return true;
     }
     else if(rez == DlgUser::SelErr && d_usr.autoRes() == DlgUser::NoAuto)
-	mod->postMess(mod->nodePath().c_str(), QString(_("Error authenticating the user '%1'!!!")).arg(d_usr.user()), TVision::Warning, this);
+	mod->postMess(mod->nodePath().c_str(),
+	    QString(_("Error authenticating the user '%1'%2!!!"))
+		.arg(d_usr.user())
+		.arg(d_usr.property("err").toString().size()?", "+d_usr.property("err").toString():""),
+	    TVision::Warning, this);
 
     return false;
 }
@@ -1133,8 +1141,15 @@ void WdgView::resizeF( const QSizeF &isz )
     mWSize = isz;
     mWSize.setWidth(vmax(mWSize.width(),3));
     mWSize.setHeight(vmax(mWSize.height(),3));
-    resize(rRnd(posF().x()+sizeF().width()-xScale(true))-rRnd(posF().x())+1,
+
+    QSize toSz(rRnd(posF().x()+sizeF().width()-xScale(true))-rRnd(posF().x())+1,
 	rRnd(posF().y()+sizeF().height()-yScale(true))-rRnd(posF().y())+1);
+
+    //Unlocking maximum values due to increasing the page
+    if(toSz.width() > maximumSize().width() || toSz.height() > maximumSize().height())
+	setMaximumSize(toSz);
+
+    resize(toSz);
 }
 
 WdgView *WdgView::newWdgItem( const string &iwid )	{ return new WdgView(iwid,wLevel()+1,mainWin(),this); }

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_shapes.h
 /***************************************************************************
- *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -301,6 +301,7 @@ class ShapeMedia : public WdgShape
 		short	bordStyle	:5;
 		short	mediaType	:3;
 		short	mediaFit	:1;
+		short	mediaKeepAspect	:1;
 		short	mediaSpeed	:8;
 		short	videoPlay	:1;
 		short	videoRoll	:1;

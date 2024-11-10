@@ -4220,6 +4220,55 @@ MjU2YzcuMDc4IDAgMTIuODE4IDUuNzM5IDEyLjgxOCAxMi44MTggMCA3LjA3OC01Ljc0IDEyLjgx
 Ny0xMi44MTggMTIuODE3SDM5LjI1Yy05LjEwMyAwLTE2LjQ4LTcuMzc4LTE2LjQ4LTE2LjQ4IDAt
 OS4xMDMgNy4zNzctMTYuNDggMTYuNDgtMTYuNDgiIGZpbGw9IiNlZmVmZWQiPjwvcGF0aD48L3N2
 Zz4=');
+INSERT INTO wlb_Main_mime VALUES('weath13d','image/svg+xml;2.50098','PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEi
+IHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93
+d3cudzMub3JnLzE5OTkveGxpbmsiIGRhdGEtdi01ZWQzMTcxZT0iIiB3aWR0aD0iNTBweCIgaGVp
+Z2h0PSI1MHB4IiB2aWV3Qm94PSIwIDAgMTQ4IDE0OCIgY2xhc3M9Im93bS13ZWF0aGVyLWljb24i
+PjxnIGZpbGw9IiMzYjNjNDAiPjxwYXRoIGQ9Ik03OC4wMDkgNzYuMjg2bC00LjAxIDIuMzE1LTQu
+MDA3LTIuMzE1LS4wMDQtNC42MzMgNC4wMS0yLjMxNSA0LjAxIDIuMzE4em0yMC41NC0uNTA0bC0x
+MS4wODQgMi45Ny00LjI3My0yLjQ2NnYtNC42MjVsNC4yMjEtMi40MjYgMTEuMTM2IDIuOTgzYTIu
+NTkgMi41OSAwIDEwMS4zMzctNS4wMDVsLTYuMS0xLjYzNiA1LjYyMy0zLjIzYTIuNTg3IDIuNTg3
+IDAgMDAuOTU4LTMuNTM1IDIuNTg3IDIuNTg3IDAgMDAtMy41MzUtLjk1OGwtNS42MzggMy4yMzgg
+MS42MzQtNi4xMDVhMi41OTIgMi41OTIgMCAwMC0xLjgzLTMuMTc0Yy0xLjM3Ny0uMzYtMi44MDQu
+NDUxLTMuMTcxIDEuODMxTDg0Ljg1NiA2NC43M2wtNC4yNTIgMi40NDItNC4wMy0yLjMzMXYtNC44
+ODhsOC4xNDctOC4xNDdhMi41ODcgMi41ODcgMCAwMDAtMy42NjMgMi41ODUgMi41ODUgMCAwMC0z
+LjY2MSAwbC00LjQ4NSA0LjQ4NHYtNi41MWEyLjU5IDIuNTkgMCAwMC0yLjU5LTIuNTkgMi41OSAy
+LjU5IDAgMDAtMi41OTMgMi41OXY2LjQ3OGwtNC40NS00LjQ1MmEyLjU4NyAyLjU4NyAwIDAwLTMu
+NjYzIDAgMi41ODcgMi41ODcgMCAwMDAgMy42NjNsOC4xMTMgOC4xMTV2NC45NDFsLTMuOTk3IDIu
+MzA2LTQuMjUzLTIuNDM4LTIuOTY3LTExLjA4NmEyLjU5NiAyLjU5NiAwIDAwLTMuMTctMS44MzEg
+Mi41OTIgMi41OTIgMCAwMC0xLjgzMyAzLjE3NGwxLjYzNiA2LjEwMy01LjY0LTMuMjM2YTIuNTg3
+IDIuNTg3IDAgMDAtMy41MzUuOTU4IDIuNTg3IDIuNTg3IDAgMDAuOTU4IDMuNTM0bDUuNjI1IDMu
+MjMtNi4xMDYgMS42MzdhMi41OTEgMi41OTEgMCAwMDEuMzQzIDUuMDA1bDExLjEzNi0yLjk4NSA0
+LjIyIDIuNDIzLjAwMiA0LjYzLTQuMjc0IDIuNDctMTEuMDg0LTIuOTc0YTIuNjA1IDIuNjA1IDAg
+MDAtMy4xNzMgMS44MzMgMi41ODYgMi41ODYgMCAwMDEuODMgMy4xN2w2LjA4NSAxLjYzMi01LjYx
+IDMuMjM5YTIuNTg4IDIuNTg4IDAgMDAxLjI5NCA0LjgzMWMuNDQyIDAgLjg4NS0uMTA4IDEuMjk2
+LS4zNDdsNS42MzgtMy4yNTQtMS42NDEgNi4xMjdhMi41OTIgMi41OTIgMCAwMDIuNTA1IDMuMjY0
+IDIuNTkgMi41OSAwIDAwMi40OTgtMS45MjRsMi45ODMtMTEuMTMyIDQuMjQ1LTIuNDQ3IDMuOTg5
+IDIuMzAydjUuMDAzbC04LjExMyA4LjExN2EyLjU4OCAyLjU4OCAwIDAwMS44MyA0LjQyYy42NjIg
+MCAxLjMyNS0uMjUxIDEuODMzLS43NTdsNC40NS00LjQ1MnY2LjQ3NmEyLjU5IDIuNTkgMCAwMDIu
+NTkyIDIuNTkgMi41OSAyLjU5IDAgMDAyLjU5LTIuNTl2LTYuNTFsNC40ODYgNC40ODZjLjUwNi41
+MDYgMS4xNy43NTggMS44My43NTguNjY2IDAgMS4zMjgtLjI1MiAxLjgzMS0uNzU4YTIuNTg4IDIu
+NTg4IDAgMDAwLTMuNjYzbC04LjE0Ni04LjE1di00Ljk1bDQuMDI3LTIuMzIyIDQuMjQgMi40NDcg
+Mi45ODUgMTEuMTMyYTIuNTg2IDIuNTg2IDAgMDAzLjE3IDEuODM0IDIuNTkgMi41OSAwIDAwMS44
+MzEtMy4xNzRsLTEuNjQzLTYuMTI3IDUuNjQgMy4yNTRjLjQxMS4yNC44NTYuMzQ3IDEuMjk2LjM0
+N2EyLjU4OSAyLjU4OSAwIDAwMS4yOTQtNC44MzJsLTUuNjEtMy4yMzggNi4wODEtMS42MzJhMi41
+ODYgMi41ODYgMCAwMDEuODM0LTMuMTcgMi41OTcgMi41OTcgMCAwMC0zLjE3LTEuODMzIj48L3Bh
+dGg+PC9nPjwvc3ZnPg==');
+INSERT INTO wlb_Main_mime VALUES('weath02n','image/svg+xml;1.12695','PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEi
+IHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93
+d3cudzMub3JnLzE5OTkveGxpbmsiIGRhdGEtdi0zZTZlOWYxMj0iIiB3aWR0aD0iNTBweCIgaGVp
+Z2h0PSI1MHB4IiB2aWV3Qm94PSIwIDAgMTQ4IDE0OCIgY2xhc3M9Im93bS13ZWF0aGVyLWljb24i
+PjxwYXRoIGQ9Ik0xMjEuNjYgNjguMjdjMCAxNC4xODYtMTEuNSAyNS42ODgtMjUuNjg3IDI1LjY4
+OC0xNC4xODcgMC0yNS42ODctMTEuNTAyLTI1LjY4Ny0yNS42ODggMC0xNC4xODUgMTEuNS0yNS42
+ODcgMjUuNjg3LTI1LjY4NyAxNC4xODcgMCAyNS42ODggMTEuNTAyIDI1LjY4OCAyNS42ODciIGZp
+bGw9IiMzYjNjNDAiPjwvcGF0aD48cGF0aCBkPSJNNDIuODIgNzIuNDU4Yy43NiAwIDEuNTA1LjA2
+OCAyLjI0LjE2OGExOC4yNDkgMTguMjQ5IDAgMDEtLjQxLTMuODMyYzAtMTAuMTEyIDguMi0xOC4z
+MTIgMTguMzEzLTE4LjMxMiA5LjgzOCAwIDE3Ljg0MiA3Ljc2NyAxOC4yNjkgMTcuNTAyYTEwLjkz
+OSAxMC45MzkgMCAwMTcuMzY2LTIuODUzYzYuMDY3IDAgMTAuOTg3IDQuOTIgMTAuOTg3IDEwLjk5
+IDAgMS4zODItLjI2NyAyLjY5OC0uNzMxIDMuOTE4YTEzLjAwNyAxMy4wMDcgMCAwMTIuNTYxLS4y
+NTZjNy4wODEgMCAxMi44MiA1LjczNyAxMi44MiAxMi44MTUgMCA3LjA4My01LjczOSAxMi44Mi0x
+Mi44MiAxMi44Mkg0Mi44MmMtOS4xMDMgMC0xNi40OC03LjM4LTE2LjQ4LTE2LjQ3OCAwLTkuMTA0
+IDcuMzc3LTE2LjQ4MiAxNi40OC0xNi40ODIiIGZpbGw9IiNlZmVmZWQiPjwvcGF0aD48L3N2Zz4=');
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','El_text_alarm','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;alignment;text;',2);
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','box_alarm','/wlb_mnEls/wdg_El_Alarm','name;geomX;geomY;geomW;geomH;geomXsc;geomYsc;geomZ;fillColor;elLst;',2);
@@ -13518,11 +13567,11 @@ function updProc(iR, dataTbl, clsLsO ) {
 		SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET "+updReq+" WHERE `"+dataTbl[0][0]+"`=''"+dataTbl[iR][0]+"'';", true);
 }
 
-function getFileFIt(celId, celO) {
-	fItValFileNm = this["fItVal"+celId].attr("value");
+function getFileFIt(celId, celO, fNm) {
+	fItValFileNm = (fNm != null) ? fNm : this["fItVal"+celId].attr("value");
 	if(celO.tp.parse(2,":").length)	tVl = SYS.fileRead(celO.tp.parse(2,":")+"/"+fItValFileNm);
 	else {
-		dataTblOneReq = SYS.BD.nodeAt(db,".").SQLReq("SELECT `"+celId+"` FROM `sh_"+class+"` WHERE `ID`=''"+this.fItValID.attr("text")+"'';");
+		dataTblOneReq = SYS.BD.nodeAt(db,".").SQLReq("SELECT `"+celId+"` FROM `sh_"+class+"` WHERE `ID`=''"+dataTbl_value+"'';");
 		for(iF = 0, off = 0; (tVl=dataTblOneReq[1][0].parseLine(0,off)).length; iF++)
 			if((iF%2) == 0 && tVl == fItValFileNm) { tVl = SYS.strDecode(dataTblOneReq[1][0].parseLine(0,off),"Base64"); break; }
 		delete dataTblOneReq;
@@ -13919,11 +13968,11 @@ if(f_start || toUpdate) {
 							.attrSet("geomY",itEdFormOff).attrSet("geomH",itEdFormLineHigh).attrSet("geomZ",geomZoff++)
 							.attrSet("elType",3).attrSet("tipTool",tr("Clear")).attrSet("name","X");
 						itEdFormOff += itEdFormLineHigh;
-						if((tVl=celO.tp.parse(4,":")).toInt()) {
+						if((tVl=celO.tp.parse(4,":").toInt())) {
 							nwOe = this.wdgAdd("fItVal"+itVlId+"_VW", "", "/wlb_originals/wdg_Media");
-							nwOe.attrSet("geomX",itEdFormX+tVl2).attrSet("geomW",tVl.parse(1,"-").toInt()?tVl.parse(1,"-").toInt():tVl.toInt())
-								.attrSet("geomY",itEdFormOff).attrSet("geomH",tVl.toInt()).attrSet("geomZ",geomZoff++)
-								.attrSet("tipTool",tr("Overview")).attrSet("fit",1);
+							nwOe.attrSet("geomX",itEdFormX+tVl2).attrSet("geomW",tVl)
+								.attrSet("geomY",itEdFormOff).attrSet("geomH",tVl).attrSet("geomZ",geomZoff++)
+								.attrSet("tipTool",tr("Overview")).attrSet("fit",1).attrSet("keepAspect",1);
 							itEdFormOff += tVl.toInt();
 						}
 						delete nwOe;
@@ -13980,9 +14029,9 @@ if(f_start || toUpdate) {
 					this["fItVal"+itVlId+"_GT"].attrSet("active",itVl.length);
 					this["fItVal"+itVlId+"_CL"].attrSet("active",itVl.length);
 					this["fItVal"+itVlId+"_LD"].attrSet("value","|||"+celO.tp.parse(3,":")).attrSet("active", itVl.split("\n").length < max(1,celO.tp.parse(1,":").toInt()));
-					if((tVl=celO.tp.parse(4,":")).toInt())
-						this["fItVal"+itVlId+"_VW"].attrSet("src","data:"+SYS.UI.mimeGet(itVl.parseLine(0))+"\n"+
-										SYS.strEncode(getFileFIt(itVlId,celO),"Base64"));
+					if(celO.tp.parse(4,":").toInt())
+						this["fItVal"+itVlId+"_VW"].attrSet("src", itVl.parseLine(0).length ? "data:"+SYS.UI.mimeGet(itVl.parseLine(0))+"\n"+
+										SYS.strEncode(getFileFIt(itVlId,celO),"Base64") : "");
 				} else nwO.attrSet((celO.prc.length||itVlId == "ID")?"text":"value", itVl);
 				delete nwlO; delete nwO;
 
@@ -14081,6 +14130,11 @@ for(offEv = 0; (sval=event.parse(0,"\n",offEv)).length; ) {
 		fItValFile = fItVal.slice(off);
 		fItValFileSL = this["fItValSP_"+celId];
 		if(celO.tp.parse(2,":").length) {
+			if(SYS.fileSize(celO.tp.parse(2,":")+"/"+fItValFileNm) > 0) {
+				off = fItValFileNm.length; fItValFileExt = fItValFileNm.parseEnd(0, ".", off); fItValFileNm = fItValFileNm.slice(0, off+1);
+				for(iF = 2; SYS.fileSize(celO.tp.parse(2,":")+"/"+fItValFileNm+iF+"."+fItValFileExt) > 0; iF++) ;
+				fItValFileNm = fItValFileNm+iF+"."+fItValFileExt;
+			}
 			SYS.fileWrite(celO.tp.parse(2,":")+"/"+fItValFileNm, fItValFile);
 			SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET `SP_"+celId+"`="
 					"''"+SYS.strEncode(fItValFileNm+(dataTblOneReq[1][0].length?"\n"+dataTblOneReq[1][0]:""),"SQL")+"'' "
@@ -14104,7 +14158,7 @@ for(offEv = 0; (sval=event.parse(0,"\n",offEv)).length; ) {
 		this["fItValSP_"+celId+"_CL"].attrSet("active",1);
 		fItValFileLD.attrSet("value","|||"+celO.tp.parse(3,":")).attrSet("active",fItValFileSL.attr("items").split("\n").length < max(1,celO.tp.parse(1,":").toInt()));
 
-		if((tVl=celO.tp.parse(4,":")).toInt())
+		if(celO.tp.parse(4,":").toInt())
 			this["fItValSP_"+celId+"_VW"].attrSet("src","data:"+SYS.UI.mimeGet(fItValFileNm)+"\n"+
 										SYS.strEncode(getFileFIt("SP_"+celId,celO),"Base64"));
 	}
@@ -14116,7 +14170,7 @@ for(offEv = 0; (sval=event.parse(0,"\n",offEv)).length; ) {
 		isFStor = celO.tp.parse(2,":").length;
 		for(iF = 0, off = 0; (tVl=dataTblOneReq[1][0].parseLine(0,off)).length; iF++)
 			if((isFStor || (iF%2) == 0) && tVl == fItValFileNm) {
-				tVl = off - fItValFileNm.length - ((off<dataTblOneReq[1][0].length)?1:0);
+				tVl = off - fItValFileNm.length - ((dataTblOneReq[1][0][off-1]=="\n")?1:0);
 				if(!isFStor) dataTblOneReq[1][0].parseLine(0, off);
 				else SYS.fileRemove(celO.tp.parse(2,":")+"/"+fItValFileNm);
 				dataTblOneReq[1][0] = dataTblOneReq[1][0].replace(tVl, off-tVl, "");
@@ -14134,13 +14188,13 @@ for(offEv = 0; (sval=event.parse(0,"\n",offEv)).length; ) {
 		this["fItValSP_"+celId+"_GT"].attrSet("active",itVlRez.length);
 		this["fItValSP_"+celId+"_CL"].attrSet("active",itVlRez.length);
 
-		if((tVl=celO.tp.parse(4,":")).toInt() && itVlRez.length)
-			this["fItValSP_"+celId+"_VW"].attrSet("src","data:"+SYS.UI.mimeGet(itVlRez.parseLine(0))+"\n"+
+		if(celO.tp.parse(4,":").toInt())
+			this["fItValSP_"+celId+"_VW"].attrSet("src", !itVlRez.length ? "" : "data:"+SYS.UI.mimeGet(itVlRez.parseLine(0))+"\n"+
 										SYS.strEncode(getFileFIt("SP_"+celId,celO),"Base64"));
 	}
 	//File Get
 	else if((tVl=sval.match("^ws_BtRelease:/fItVal(.+)_GT$")).length && (celO=clsLsO[tVl[1].slice(3)]).tp.parse(0,":") == "file")
-		this["fItVal"+tVl[1]+"_GT"].attrSet("value","||"+this["fItVal"+tVl[1]].attr("value")+"\n"+getFileFIt(tVl[1],celO));
+		this["fItVal"+tVl[1]+"_GT"].attrSet("value","||"+(tVl2=this["fItVal"+tVl[1]].attr("value"))+"|"+SYS.UI.mimeGet(tVl2)+"\n"+getFileFIt(tVl[1],celO));
 	//File Select
 	else if((tVl=sval.match("^ws_CombChange:/fItVal(.+)$")).length && (celO=clsLsO[tVl[1].slice(3)]).tp.parse(0,":") == "file")
 		this["fItVal"+tVl[1]+"_VW"].attrSet("src","data:"+SYS.UI.mimeGet(this["fItVal"+tVl[1]].attr("value"))+"\n"+
@@ -14152,21 +14206,28 @@ for(offEv = 0; (sval=event.parse(0,"\n",offEv)).length; ) {
 		for(iR = 1; iR < dataTblOneReq.length; iR++) {
 			if(dataTblOneReq[iR][0] != dataTbl_value) continue;
 			for(iC = 0; iC < dataTblOneReq[iR].length; iC++) {
-				itVlNm = dataTblOneReq[0][iC];
+				itVlNm = itVlId = dataTblOneReq[0][iC];
+				celO = null;
 				if((itVlNm.indexOf("SP_") == 0 && !(celO=clsLsO[itVlNm.slice(3)]).isEVal()) || ((itVlNm == "NAME" || itVlNm == "DSCR") && !(celO=clsLsO["*"+itVlNm]).isEVal()))
 					itVlNm = celO.name;
 				if((itVl=dataTblOneReq[iR][iC]) == "<NULL>" || !itVl.length) continue;
-				if(celO.tp.parse(0,":") == "file" && !celO.tp.parse(2,":").length) {
+				if(celO != null && celO.tp.parse(0,":") == "file" && !celO.tp.parse(2,":").length) {
 						for(iF = 0, off = 0, itVlRez = ""; (itVlEl=itVl.parseLine(0,off)).length; iF++)
 							if((iF%2) == 0)	itVlRez += (itVlRez.length?"\n":"") + itVlEl;
 						itVl = itVlRez;
 					}
 				go_reportIt_report += "<span style=''font: bold 15px/25px Arial, sans-serif''>"+SYS.strEncode(itVlNm,"HTML")+":</span>";
 				if(colTps[iC] == "t")	go_reportIt_report += "<br/>";
-				//???? Inserting images
-				go_reportIt_report += "<span style=''white-space: pre-wrap;"+((colTps[iC] == "t")?"":" margin-left: 3pt;")+"''>"+
-						SYS.strEncode(itVl,"HTML").replace(new RegExp("(http|https|ftp)://(\\S+)","g"),"<a target=''_blank'' href=''$1://$2''>$2</a>")+
-						"</span><br/>";
+				// Inserting images
+				if(celO == null || celO.tp.parse(0,":") != "file")
+					go_reportIt_report += "<span style=''white-space: pre-wrap;"+((colTps[iC] == "t")?"":" margin-left: 3pt;")+"''>"+
+							SYS.strEncode(itVl,"HTML").replace(new RegExp("(http|https|ftp)://(\\S+)","g"),"<a target=''_blank'' href=''$1://$2''>$2</a>")+
+							"</span><br/>";
+				else for(off = 0; (itVlEl=itVl.parseLine(0,off)).length; ) {
+					go_reportIt_report += "<span>"+SYS.strEncode(itVlEl,"HTML")+"</span><br/>";
+					if((tVl=SYS.UI.mimeGet(itVlEl)).indexOf("image/") >= 0)
+						go_reportIt_report += "<img src=''data:"+tVl+";base64,"+SYS.strEncode(getFileFIt(itVlId,celO,itVlEl),"Base64")+"'' /><br/>";
+				}
 			}
 			break;
 		}
@@ -14194,7 +14255,7 @@ if(fClrTo >= 0) {
 if(toCalcCycles > 0.1) {
 	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
 	toCalcCycles = max(0, toCalcCycles-1);
-}','','',-2,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1729320274);
+}','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1731163305);
 INSERT INTO wlb_Main VALUES('weather','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAxCAIAAADldTjtAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAO
 KUlEQVRogdVa228bV3o/Z87cyRnebyJF8SJLsmRZchy7cSUncQyjDjbbNhssdrsLNFsUaNEWfSgK
 9F/xS9CgD3loUewiKFqk62w2XslO1rZs2bEki5JMihJ1o3jRkJwZzu30YWxqRMluI2eb7PdEHn7n
@@ -24331,7 +24392,7 @@ The frame provides currently and in future for next features:
   - detailed control panel-form of the selected item with the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.0.0
+Version: 2.0.5
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -24345,7 +24406,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - деталізована панель-форма керування обраним елементом зі специфічними полями.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.0.0
+Версія: 2.0.5
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');

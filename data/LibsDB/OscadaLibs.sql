@@ -15,7 +15,7 @@ The library was created to provide main templates of the DAQ-sources processing 
 Author: Roman Savochenko <roman@oscada.org>
 Used by: Most projects on OpenSCADA
 Founded: January 2006
-Version: 2.2.0
+Version: 2.3.0
 License: GPLv2
 DOC: Libs_Main|Libs/Main','Бібліотека основних шаблонів опрацювання DAQ-джерел та похідних сервісів.
 
@@ -24,7 +24,7 @@ DOC: Libs_Main|Libs/Main','Бібліотека основних шаблоні�
 Автор: Роман Савоченко <roman@oscada.org>
 Використано: Більшість проектів OpenSCADA
 Засновано: Січень 2006
-Версія: 2.2.0
+Версія: 2.3.0
 Ліцензія: GPLv2
 DOC: Libs_Main|Libs/Main','tmplib_base','Основная библиотека','Библиотека основных шаблонов обработки DAQ-источников и производных сервисов.
 
@@ -33,7 +33,7 @@ DOC: Libs_Main|Libs/Main','tmplib_base','Основная библиотека',
 Автор: Роман Савоченко <roman@oscada.org>
 Использовано: Большинство проектов OpenSCADA
 Основано: Январь 2006
-Версия: 2.2.0
+Версия: 2.3.0
 Лицензия: GPLv2
 DOC: Libs_Main|Libs/Main');
 INSERT INTO ParamTemplLibs VALUES('DevLib','Industrial devices','Промислові пристрої','The user protocol devices library created to provide access to industrial device''s data through network, like to common industrial automation devices and wide resources counters, with protocols simple enough to implement into the User Protocol module, using the presented complex protocols (ModBus, OPC_UA, HTTP) or directly on the internal like to Java language.
@@ -10887,6 +10887,179 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 else if(f_err.toInt() && !tErr.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 f_err = tErr;','','',1714665209);
+INSERT INTO tmplib_base VALUES('initRemCntr','Control the remote initiative connections','Контроль віддалених ініціативних підключень','','Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0
+License: GPLv2','Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.0
+Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
+function prmAdd(req, path, pId, pNm, pTp, pSrc, pLogLnk) {
+	req.childAdd("add").setAttr("path",path+"/%2fbr%2fprm_").setAttr("id",pId).setText(pNm);
+	req.childAdd("set").setAttr("path",path+"/prm_"+pId+"/%2fprm%2fst%2ftype").setText(pTp);
+	req.childAdd("set").setAttr("path",path+"/prm_"+pId+"/%2fprm%2fcfg%2fEN").setText(1);
+	if(pTp == "Prm" && pSrc != null)
+		req.childAdd("set").setAttr("path",path+"/prm_"+pId+"/%2fprm%2fcfg%2fPRM").setText(pSrc);
+	if(pTp == "PrmRefl" && pSrc != null)
+		req.childAdd("set").setAttr("path",path+"/prm_"+pId+"/%2fprm%2fcfg%2fPSRC").setText(pSrc);
+	req.childAdd("set").setAttr("path",path+"/prm_"+pId+"/%2fprm%2fst%2fen").setText(1);
+	if(pTp == "Prm" && pLogLnk != null)
+		req.childAdd("set").setAttr("path",path+"/prm_"+pId+"/%2fcfg%2fprm%2fel_0").setText(pLogLnk);
+}
+
+if(f_start) {
+	inTransport_ = "", inTr = null;
+	prcTr = "";
+	return;	//Do no work on the start time
+}
+
+//Checking the transport change and connect
+tErr = "";
+if(inTr == null || inTransport != inTransport_) {
+	inTransport_ = inTransport;
+	inTr = SYS.Transport[inTransport.parse(0)]["in_"+inTransport.parse(1)];
+}
+
+if(inTr == null)	tErr = "1:"+tr("Input transport ''%1'' error.").replace("%1",inTransport);
+else {
+	outTrs = inTr.associateTrsList();
+	for(iTr = 0; iTr < outTrs.length; iTr++) {
+		oTrNm = outTrs[iTr];
+		if((oTrO=SYS.Transport[inTransport.parse(0)]["out_"+oTrNm]) == null || !oTrO.start() || oTrO.conPrm("initConID").length)
+			continue;
+
+		//Getting the host address
+		hostAddr = (hostAddr=oTrO.status().match(" ''(.+)''\\.")).length ? hostAddr[1] : "";
+		
+		//Getting the station name and the DataSource key
+		req = SYS.XMLNode("CntrReqs").setAttr("rqDir","1").setAttr("rqUser",cntrUser).setAttr("rqPass",cntrPass).setAttr("conTm",conTm)
+				.setAttr("path","/");
+		req.childAdd("get").setAttr("path","/%2fgen%2fstat");
+		req.childAdd("get").setAttr("path","/DAQ/LogicLev/"+cntrObj+"/%2fcntr%2fcfg%2fDESCR");
+		if((rez=oTrO.messIO(req,"SelfSystem")).length) {
+			SYS.messNote("initRemCntr", (tVl=tr("Error requesting the remote host ''%1'': %2. ").replace("%1",hostAddr).replace("%2",rez)));
+			tErr += (tErr.length?"":"10:") + tVl;
+			oTrO.start(false);
+			continue;
+		}
+		stNm = req.childGet(0).text();
+		stSrcKey = rand(999999).toString();
+		isSrcInited = isHostReqPresent = false;
+		if(!req.childGet(1).attr("rez").toInt() && (tVl=req.childGet(1).text().match("^SrcKey: *([^\\n]+)$","m")).length)
+			isSrcInited = true, stSrcKey = tVl[1];
+		stSrcId = oTrO.conPrm("initConID", stNm+"_"+stSrcKey);
+
+		prcTr = prcTr.replace(new RegExp("^"+stSrcId+":.+$","g"), "");
+		prcTr += stSrcId+": "+oTrNm+", "+hostAddr+", "+SYS.strftime(SYS.time())+"\n";
+
+		//Record to the table of the OpenSCADA remote hosts
+		// Checking presence
+		req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost");
+		SYS.cntrReq(req);
+		for(iH = 0; iH < req.childGet(0).childSize(); iH++)
+			if(req.childGet(0).childGet(iH).text() == stSrcId)
+			{ isHostReqPresent = true; break; }
+
+		// Appending/updating
+		if(!isHostReqPresent) {
+			req = SYS.XMLNode("CntrReqs").setAttr("path","/Transport");
+			req.childAdd("add").setAttr("path","/%2fsub%2fehost");
+			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id","newHost").setAttr("col","id").setText(stSrcId);
+			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id",stSrcId).setAttr("col","name").setText(stNm+" ("+stSrcKey+")");
+			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id",stSrcId).setAttr("col","transp").setText(inTransport.parse(0)+".in_"+inTransport.parse(1));
+			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id",stSrcId).setAttr("col","addr").setText(stSrcId);
+			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id",stSrcId).setAttr("col","user").setText(cntrUser);
+			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id",stSrcId).setAttr("col","pass").setText(cntrPass);
+			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id",stSrcId).setAttr("col","mode").setText(2);
+			SYS.cntrReq(req);
+		}
+
+		//Initialisation
+		if(!isSrcInited) {
+			//Creating the main control object of the Data Sources
+			req = SYS.XMLNode("CntrReqs").setAttr("path","/DAQ/LogicLev");
+			req.childAdd("add").setAttr("path","/%2fbr%2fcntr_").setAttr("id",cntrObj).setText("Sources for remote aggregator");
+			req.childAdd("set").setAttr("path","/"+cntrObj+"/%2fcntr%2fst%2frunSt").setText(1);
+			req.childAdd("set").setAttr("path","/"+cntrObj+"/%2fcntr%2fcfg%2fSTART").setText(1);
+			req.childAdd("save").setAttr("path","/"+cntrObj+"/%2fobj");
+			SYS.cntrReq(req, stSrcId);
+
+			//Primary sources in DAQ.System
+			// Getting allowed ones
+			reqSys = SYS.XMLNode("get").setAttr("path","/DAQ/System/%2fbr%2fcntr_");
+			SYS.cntrReq(reqSys, stSrcId);
+
+			// Creation one at missing any one
+			if(!reqSys.childSize()) {
+				req = SYS.XMLNode("CntrReqs").setAttr("path","/DAQ/System");
+				req.childAdd("add").setAttr("path","/%2fbr%2fcntr_").setAttr("id",cntrObj).setText("Remote sources");
+				req.childAdd("set").setAttr("path","/"+cntrObj+"/%2fcntr%2fcfg%2fAUTO_FILL").setText(3);
+				req.childAdd("set").setAttr("path","/"+cntrObj+"/%2fcntr%2fst%2frunSt").setText(1);
+				req.childAdd("set").setAttr("path","/"+cntrObj+"/%2fcntr%2fcfg%2fSTART").setText(1);
+				req.childAdd("save").setAttr("path","/"+cntrObj+"/%2fobj");
+				SYS.cntrReq(req, stSrcId);
+				reqSys.childAdd("el").setAttr("id",cntrObj).setText("Remote sources");
+			}
+
+			// Reading lists of the parameters of the System sources with reading parameters of the sources
+			// and creation their representing on the Logical Level
+			reqLogic = SYS.XMLNode("CntrReqs").setAttr("path","/DAQ/LogicLev/"+cntrObj);
+			prmAdd(reqLogic, "/", "SYS", "System", "Prm");
+			prmAdd(reqLogic, "/", "DISK", "Disk", "Prm");
+			prmAdd(reqLogic, "/", "NET", "Network", "Prm");
+
+			for(iEl = 0; iEl < reqSys.childSize(); iEl++) {
+				cntrId = reqSys.childGet(iEl).attr("id");
+				reqSysPrms = SYS.XMLNode("get").setAttr("path","/DAQ/System/"+cntrId+"/%2fbr%2fprm_");
+				SYS.cntrReq(reqSysPrms, stSrcId);
+
+				for(iEl2 = 0; iEl2 < reqSysPrms.childSize(); iEl2++) {
+					pId = reqSysPrms.childGet(iEl2).attr("id");
+					req = SYS.XMLNode("get").setAttr("path","/DAQ/System/"+cntrId+"/prm_"+pId+"/%2fprm%2fcfg%2fTYPE");
+					SYS.cntrReq(req, stSrcId);
+
+					//  Completely reflected sources
+					if((tVl=req.text()) == "CPU" || tVl == "MEM" || tVl == "sensors" || tVl == "Power" || tVl == "uptime")
+						prmAdd(reqLogic, "/prm_SYS", pId, reqSysPrms.childGet(iEl2).text(), "PrmRefl", "System."+cntrId+"."+pId);
+					else if(tVl == "fs" || tVl == "hddstat" || tVl == "hddsmart") {
+						prmAdd(reqLogic, "/prm_DISK", pId, reqSysPrms.childGet(iEl2).text(), "PrmRefl", "System."+cntrId+"."+pId);
+						if(tVl == "hddsmart")
+							prmAdd(reqLogic, "/prm_DISK", "log_"+pId, reqSysPrms.childGet(iEl2).text()+" - processing", "Prm", "base.DiskSMART", "System."+cntrId+"."+pId);
+					}
+					else if(tVl == "netstat")
+						prmAdd(reqLogic, "/prm_NET", pId, reqSysPrms.childGet(iEl2).text(), "PrmRefl", "System."+cntrId+"."+pId);
+					else if(tVl == "ups") {
+						prmAdd(reqLogic, "/", pId, reqSysPrms.childGet(iEl2).text(), "PrmRefl", "System."+cntrId+"."+pId);
+						prmAdd(reqLogic, "/", "log_"+pId, reqSysPrms.childGet(iEl2).text()+" - processing", "Prm", "base.UPS", "System."+cntrId+"."+pId);
+					}
+					else SYS.messNote("initRemCntr", "Implement the type ''"+tVl+"''");
+				}
+			}
+
+			//Mark the Logical Level controller as finished in the initialisation and save
+			reqLogic.childAdd("set").setAttr("path","/%2fcntr%2fcfg%2fDESCR").setText("SrcKey: "+stSrcKey+"\n");
+			reqLogic.childAdd("save").setAttr("path","/%2fobj");
+			if(!SYS.cntrReq(reqLogic,stSrcId).toInt()) {
+				//Creation the DAQGate object in the end and no error
+				req = SYS.XMLNode("CntrReqs").setAttr("path","/DAQ/DAQGate");
+				req.childAdd("add").setAttr("path","/%2fbr%2fcntr_").setAttr("id",stSrcId).setText(stNm+" ("+stSrcKey+")");
+				req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fcfg%2fSTATIONS").setText(stSrcId);
+				req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fcfg%2fCNTRPRM").setText("LogicLev."+cntrObj);
+				req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fcfg%2fSTART").setText(1);
+				req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fst%2frunSt").setText(1);
+				req.childAdd("save").setAttr("path","/"+stSrcId+"/%2fobj");
+				SYS.cntrReq(req);
+			}
+			delete reqLogic;
+			delete reqSysPrms;
+			delete reqSys;
+		}
+		delete req;
+	}
+	delete oTrO;
+}
+
+//Error set
+if(tErr.length)	f_err = tErr;
+else f_err = "0";','','',1731073576);
 CREATE TABLE IF NOT EXISTS 'flb_Controller' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO flb_Controller VALUES('prescr','Prescriptions manager (moved)','','','!!!!: Moved and replaced by the template PrescrTempl.manager. Will be removed soon
 Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
@@ -16156,6 +16329,7 @@ INSERT INTO Trs VALUES('3:No response. ','','','');
 INSERT INTO Trs VALUES('3:Response isn''t completed. ','','','');
 INSERT INTO Trs VALUES('Address ''%1'' out of range [0...9999].','','','');
 INSERT INTO Trs VALUES('Reading in time=%1','','','');
+INSERT INTO Trs VALUES('Error requesting the remote host ''%1'': %2. ','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_base_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_base_io VALUES('digAlarm','in','Input',3,144,'Input|in',2,'Вхід','','Вход','','');
 INSERT INTO tmplib_base_io VALUES('simleBoard','in','Input',2,128,'Parameter|var',0,'Вхід','','Вход','','');
@@ -16497,6 +16671,12 @@ INSERT INTO tmplib_base_io VALUES('DiskSMART','DESCR','Description',0,0,'',6,'О
 INSERT INTO tmplib_base_io VALUES('fileServerHTTP','tr','Transport',4,1,'',8,'Транспорт','','','','');
 INSERT INTO tmplib_base_io VALUES('fileServerHTTP','prt','Protocol',4,1,'',9,'Протокол','','','','');
 INSERT INTO tmplib_base_io VALUES('fileServerHTTP','sender','Sender',0,0,'',3,'Відправник','','','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','inTransport','Input transport',0,64,'Sockets.InitRemCntr',0,'Вхідний транспорт','','Входной транспорт','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','prcTr','Processed connections',0,21,'',5,'Опрацьовані підключення','','','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','cntrUser','Access: user',0,64,'root',2,'Доступ: користувач','','','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','cntrPass','Access: password',0,64,'openscada',3,'Доступ: пароль','','','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','cntrObj','Control object in DAQ.LogicLev and DAQ.System',0,64,'RemCntr',4,'Об''єкт контролю у DAQ.LogicLev і DAQ.System','','','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','conTm','Connection time, ms',1,64,'5000',1,'Час підключення, мс','','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_DevLib_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_DevLib_io VALUES('SCU750','transport','Transport',0,64,'SCU750',0,'Транспорт','','Транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('SCU750','addr','Device address (-1...255)',1,64,'1',1,'Адрес устройства (-1...255)','','Адреса пристрою (-1...255)','','');

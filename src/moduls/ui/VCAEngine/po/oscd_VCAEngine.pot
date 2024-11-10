@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-17 23:15+0200\n"
+"POT-Creation-Date: 2024-11-09 18:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -548,6 +548,9 @@ msgid "Map areas"
 msgstr ""
 
 msgid "Fit to the widget size"
+msgstr ""
+
+msgid "Keep aspect ratio at fitting"
 msgstr ""
 
 msgid "Play speed"
@@ -1749,9 +1752,6 @@ msgid "Full link"
 msgstr ""
 
 msgid "From style"
-msgstr ""
-
-msgid "Element type is not selective!"
 msgstr ""
 
 #, c-format

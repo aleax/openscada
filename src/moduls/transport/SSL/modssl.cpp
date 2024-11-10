@@ -56,7 +56,7 @@
 #define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.7.1"
+#define MOD_VER		"4.7.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and supported SSL-TLS depending on the library version.")
@@ -355,6 +355,16 @@ string TTransSock::addrGet( const sockaddr_storage &addr )
     return string(inet_ntoa(((sockaddr_in*)&addr)->sin_addr)) + ":" + i2s(htons(((sockaddr_in*)&addr)->sin_port));
 }
 
+string TTransSock::addrHost( const string &addr )
+{
+    return TSYS::strParse(addr, 0, (addr[0] == '[') ? "]:" : ":");
+}
+
+string TTransSock::addrPort( const string &addr )
+{
+    return TSYS::strParse(addr, 1, (addr[0] == '[') ? "]:" : ":");
+}
+
 string TTransSock::outAddrHelp( )
 {
     return string(_("SSL output transport has the address format \"{addr}[,{addrN}]:{port}\", where:\n"
@@ -524,15 +534,11 @@ void TSocketIn::start( )
 
     //The generic mode
     else {
-	int aOff = 0;
-
 	//SSL context init
-	string ssl_host, cfile, tVl;
-	if(addr()[aOff] != '[') ssl_host = TSYS::strParse(addr(), 0, ":", &aOff);
-	else { aOff++; ssl_host = "["+TSYS::strParse(addr(),0,"]:",&aOff)+"]"; }	//Get IPv6
+	string	cfile, tVl, aErr,
+		ssl_host = TTransSock::addrHost(addr()),
+		ssl_port_ = TTransSock::addrPort(addr()), ssl_port;
 	if(ssl_host.empty()) ssl_host = "*";
-	string ssl_port_ = TSYS::strParse(addr(), 0, ":", &aOff), ssl_port;
-	string aErr;
 
 	vector<sockaddr_storage> addrs;
 	for(int pCnt = 0, tOff = 0; (ssl_port=TSYS::strParse(ssl_port_,0,",",&tOff)).size() || pCnt == 0; ++pCnt)
@@ -1292,16 +1298,13 @@ void TSocketOut::save_( )
 string TSocketOut::connectSSL( const string &addr, SSL **ssl, BIO **conn,
     int tmCon, const string &certKey, const string &pKeyPass, const string &certKeyFile )
 {
-    int sockFd = -1, aOff = 0;
-    string	cfile, aErr, connAddr, tVl;
-    char	err[255];
+    int     sockFd = -1;
+    char    err[255];
+    string  cfile, aErr, connAddr, tVl,
+	    ssl_host = TTransSock::addrHost(addr), ssl_host_,
+	    ssl_port = TTransSock::addrPort(addr);
 
     *ssl = NULL; *conn = NULL;
-
-    string addr_ = addr, ssl_host, ssl_host_;
-    if(addr_[aOff] != '[') ssl_host = TSYS::strParse(addr_, 0, ":", &aOff);
-    else { aOff++; ssl_host = TSYS::strParse(addr_, 0, "]:", &aOff); }	//Get IPv6
-    string ssl_port = TSYS::strParse(addr_, 0, ":", &aOff);
 
     for(int off = 0; (ssl_host_=TSYS::strParse(ssl_host,0,",",&off)).size(); ) {
 	// Resolving all addresses

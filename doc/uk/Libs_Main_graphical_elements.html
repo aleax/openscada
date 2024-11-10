@@ -2286,7 +2286,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <td> en, uk
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
-<td> -2 мс (вимкнено)
+<td> -1 мс (предок)
 </td></tr></table>
 <p>Елемент-кадр, представлений на рисунку 3.8, слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 </p><p>Протягом реалізації кадру, вигляд "Таблиця" <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">примітиву "FormEl"</a> значним чином розширено на обох візуалізаторах щодо:
@@ -2333,8 +2333,13 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <ul><li> <i>CLASS</i> [varchar(20)] — ІД класу;</li>
 <li> <i>ID</i> [varchar(20)] — ІД специфічного поля класу;</li>
 <li> <i>NAME</i> [text] — локалізована назва специфічного поля класу, де перший рядок для типового значення та наступні рядки формуються у вигляді <b>{2СимвольнаМова}:{ЛокалізованийТекст}</b>;</li>
-<li> <i>TP</i> [varchar(100)] — тип специфічного поля класу, який наразі прямо відповідає типам БД MySQL;</li>
-<li> <i>TBL</i> [varchar(100)] — властивості представлення даних специфічного поля у таблиці, має формат <b>{вирівнювання}:{ширина}:{позиція}</b>, де:</li></ul>
+<li> <i>TP</i> [varchar(100)] — тип специфічного поля класу, який прямо відповідає типам БД MySQL і деяким специфічним:</li></ul>
+<dl><dd><ul><li> "<b>file[:{max}[:{storage}[:{MIME}[:{OverViewSz}]]]]</b>" — прикріплення файлів із параметрами:</li></ul>
+<dl><dd><ul><li> <i>max</i> — максимум файлів дозволених до прикріплення;</li>
+<li> <i>storage</i> — сховок файлів на Файловій Системі за визначеним шляхом, і порожнє для збереження прямо у полі БД типу LONGTEXT;</li>
+<li> <i>MIME</i> — тип файлів, дозволених до прикріплення-завантаження, де порожньо для будь якого і на кшталт "image/*" лише для зображень;</li>
+<li> <i>OverViewSz</i> — увімкнути поле перегляду файлів зображень на формі елементу із визначеним розміром у пікселях.</li></ul></dd></dl></dd></dl>
+<ul><li> <i>TBL</i> [varchar(100)] — властивості представлення даних специфічного поля у таблиці, має формат <b>{вирівнювання}:{ширина}:{позиція}</b>, де:</li></ul>
 <dl><dd><ul><li> <i>вирівнювання</i> — вирівнювання стовпчика, підтримуються значення: "left", "center", "right"; де значення "left" по замовченню для рядків та "center" для інших;</li>
 <li> <i>ширина</i> — примусова ширина стовпчика, у відсотках за символу "%" у кінці або у пікселях;</li>
 <li> <i>позиція</i> — позиція стовпчика у вигляді рядка, тож ви можете записати це на кшталт "005" для правильного сортування.</li></ul></dd></dl>
@@ -2367,11 +2372,11 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </p><p>У режимі редагування класу, користувачі, допущені до редагування, можуть додавати нові та видаляти представлені (після видалення останнього елементу) класи; та додавати, видаляти специфічні поля класу і редагувати властивості цих полів.
 </p><p>Для обмеження доступу користувачів наразі надається лише механізм включення користувачів, дозволених для редагування класу та даних, до групи "ITW".
 </p><p>Для генерації окремого звіту користувач може клацнути характерну іконку у правому верхньому куту.
-</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Кадр наразі підтримує функціювання із дуже великим значенням "Період опрацювання" та це значення наразі встановлено для вимкнення (значення -2). Це можливе завдяки механізму раннього опрацювання подій та можливості контролю періодичності опрацювання із процедури.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Кадр наразі підтримує функціювання із дуже великим значенням "Період опрацювання" та це значення наразі встановлено для спадкування від батьківської сторінки/сеансу (значення -1). Це можливе завдяки механізму раннього опрацювання подій та можливості контролю періодичності опрацювання із процедури.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseClassR_uk.png"><img class="thumbimage" height="580" src="files/LibMainEls_storeHouseClassR_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.8b. Кадр "Склад" у режимі виконання на представлені класу.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseDataR_uk.png"><img class="thumbimage" height="580" src="files/LibMainEls_storeHouseDataR_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.8c. Кадр "Склад" у режимі виконання на представлені даних.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseDataRf_uk.png"><img class="thumbimage" height="580" src="files/LibMainEls_storeHouseDataRf_uk.png" width="900" /></a>  <div class="thumbcaption">Fig.3.8d. Кадр "Склад" у режимі виконання на формі редагування елементу.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseDataRf_uk.png"><img class="thumbimage" height="735" src="files/LibMainEls_storeHouseDataRf_uk.png" width="900" /></a>  <div class="thumbcaption">Fig.3.8d. Кадр "Склад" у режимі виконання на формі редагування елементу.</div></div></div></div>
 <p><b><u>Властивості зв'язування та конфігурації</u></b><br />
 </p>
 <table class="wikitable">
@@ -3224,5 +3229,5 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/uk">Libs/Main_graphical_elements/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2992</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/uk">Libs/Main_graphical_elements/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2996</td></tr></table></body>
 </html>

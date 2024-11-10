@@ -1,3 +1,31 @@
+2024-11-09 Roman (stable)
+- !!!!:LibsDB.OscadaLibs: The library tmplib_base appended by an initial template
+    "Control the remote initiative connections (initRemCntr)".
+- !!:FIX:LibsDB.vcaBase:
+    !!:wlb_Main.storeHouse: Appending the images preview from the item report.
+	Appending of indexing the loaded on FS files.
+	Appending the MIME information at the files load.
+	Setting "keepAspect" for the images preview in the item form.
+    FIX:wlb_Main.storeHouse: Setting empty content in the images preview of the item form at no image.
+	Fixing the file names cleaning at loading on FS.
+	Period of the page processing set to -1 (from parent page) to prevent of sticking at user change.
+    The library wlb_Main appended by an extra icon 'weath13d' and 'weath02n'
+	for the widget "Weather (weather)".
+- DAQ.JavaLikeCalc: Some improved in the Ukrainian translation.
+- !:FIX:Transports: TTransportOut appended by the function isFromInput() to detect automatically created
+	objects from the input transport.
+    FIX: The external initiative connections of the OpenSCADA hosts prevented from stop.
+    Sockets,SSL: Improved in parsing address by appending the functions TTransSock::{addrHost,addrPort}()
+	and switching to TTransSock::addrGet() everywhere.
+- UI: The mimeGet() appended by the "image/webp" MIME at the "webp" extension.
+    !!:VCAEngine,Vision,WebVision: The type Image of the primitive Media appended
+	by the attribute "Keep aspect ratio at fitting (keepAspect)".
+    FIX:Vision: Appending of resetting maximum geometry of included pages
+	    for allow their dynamic increasing with increasing content.
+	The error message "Error authenticating the user ..." appended by the error detalization.
+    QTCfg: Some improved in original texts.
+
+
 2024-10-19 Roman (stable)
 - !!!!:LibsDB.vcaBase: wlb_Main.storeHouse: Expanded by support of including files
     both to the MySQL LONGTEXT field and to FS.

@@ -30,7 +30,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Рушій Середовища Візуалізації та Управління
 </td>
-<td> 7.13 </td>
+<td> 7.14 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -1622,8 +1622,8 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <ul><li> "Стандарт" — параметри повтору подій при утримані <b>{затримка}-{інтервал}</b>, час у мілісекундах;</li>
 <li> "Перемикач" — значення перемикача;</li>
 <li> "Меню" — перелік адрес елементів меню виду <b>/grp1/grp2/item1</b>;</li>
-<li> "Завантаження" — рядок опису <b>{ШаблонФайлів}|{Заголовок}|{ФайлПоЗамовчТаЗав}|{ФайлMime}</b> та вміст завантаженого файлу. Шаблон файлів у вигляді "Зображення (*.png *.xpm *.jpg);;CSV-файл (*.csv)".</li>
-<li> "Збереження" — рядок опису <b>{ШаблонФайлів}|{Заголовок}|{ФайлПоЗамовч}|{ФайлMime}</b> та вміст файлу, що зберігається. Шаблон файлів як і вище.</li></ul>
+<li> "Завантаження" — рядок опису <b>{ШаблонФайлів}|{Заголовок}|{ФайлПоЗамовчТаЗав}|{ФайлMime}</b> та вміст завантаженого файлу із наступного рядка. Шаблон файлів у вигляді "Зображення (*.png *.xpm *.jpg);;CSV-файл (*.csv)".</li>
+<li> "Збереження" — рядок опису <b>{ШаблонФайлів}|{Заголовок}|{ФайлПоЗамовч}|{ФайлMime}</b> та вміст файлу до збереження із наступного рядка. Шаблон файлів як і вище.</li></ul>
 </td></tr>
 <tr>
 <td> img </td>
@@ -2076,7 +2076,13 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <td> fit </td>
 <td> Заповнювати віджет </td>
 <td> 26 </td>
-<td> Ознака "Погоджувати вміст з розміром віджету".
+<td> Ознака вписування вмісту у розмір віджету.
+</td></tr>
+<tr>
+<td> keepAspect </td>
+<td> Зберігати співвідношення за вписування </td>
+<td> 35 </td>
+<td> Ознака збереження співвідношення сторін зображення при вписувані у повні розміри віджету.
 </td></tr>
 <tr>
 <td colspan="4"> <i>Атрибути анімації-відеоролику (Animation)</i>
@@ -2085,7 +2091,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <td> fit </td>
 <td> Заповнювати віджет </td>
 <td> 26 </td>
-<td> Ознака "Погоджувати вміст з розміром віджету".
+<td> Ознака вписування вмісту у розмір віджету.
 </td></tr>
 <tr>
 <td> speed </td>
@@ -3601,5 +3607,5 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/uk">Modules/VCAEngine/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2992</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/uk">Modules/VCAEngine/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2996</td></tr></table></body>
 </html>

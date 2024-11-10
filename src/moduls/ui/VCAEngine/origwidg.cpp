@@ -850,6 +850,7 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 	    switch(prev.getI()) {
 		case FM_IMG:
 		    cfg.owner()->attrDel("fit");
+		    cfg.owner()->attrDel("keepAspect");
 		    break;
 		case FM_ANIM:
 		    cfg.owner()->attrDel("fit");
@@ -868,7 +869,8 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 	    //Create specific attributes
 	    switch(cfg.getI()) {
 		case FM_IMG:
-		    cfg.owner()->attrAdd(new TFld("fit",trS("Fit to the widget size"),TFld::Boolean,Attr::Mutable,"","","","",i2s(A_MediaFit).c_str()));
+		    cfg.owner()->attrAdd(new TFld("fit",trS("Fit to the widget size"),TFld::Boolean,Attr::Mutable,"","0","","",i2s(A_MediaFit).c_str()));
+		    cfg.owner()->attrAdd(new TFld("keepAspect",trS("Keep aspect ratio at fitting"),TFld::Boolean,Attr::Mutable,"","0","","",i2s(A_MediaKeepAspect).c_str()));
 		    break;
 		case FM_ANIM:
 		    cfg.owner()->attrAdd(new TFld("fit",trS("Fit to the widget size"),TFld::Boolean,Attr::Mutable,"","","","",i2s(A_MediaFit).c_str()));
@@ -896,7 +898,7 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 		    cfg.owner()->attrDel(fidp+"title");
 		}
 	    }
-	    //Create ullage attributes of map areas
+	    //Create missing attributes of the map areas
 	    for(int iP = 0; iP < cfg.getI(); iP++) {
 		fidp = fid+i2s(iP);
 		fnmp = fnm+i2s(iP);

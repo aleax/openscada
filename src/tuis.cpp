@@ -211,6 +211,7 @@ string TUIS::mimeGet( const string &inm, const string &fDt, const string &orig )
     else if(strcasecmp(tvl,"ico") == 0)					prc = "image/ico";
     else if(strcasecmp(tvl,"pcx") == 0)					prc = "image/pcx";
     else if(strcasecmp(tvl,"bmp") == 0)					prc = "image/bmp";
+    else if(strcasecmp(tvl,"webp") == 0)				prc = "image/webp";
     else if(strcasecmp(tvl,"svg") == 0 || strcasecmp(tvl,"svg+xml") == 0) prc = "image/svg+xml";
 		//string("image/") + ((fDt.find("<?xml ") == string::npos) ? "svg" : "svg+xml");
     // Audio

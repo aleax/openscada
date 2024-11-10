@@ -73,7 +73,7 @@
 #define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.9.3"
+#define MOD_VER		"4.9.4"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov(2014)")
 #define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -216,7 +216,7 @@ string TTransSock::addrResolve( const string &host, const string &port, vector<s
     struct addrinfo hints, *res;
     memset(&hints, 0, sizeof(hints));
     hints.ai_socktype = (type == S_TCP) ? SOCK_STREAM : SOCK_DGRAM;
-    if(isServer) hints.ai_flags = AI_PASSIVE;	//For server side all addresses allow 
+    if(isServer) hints.ai_flags = AI_PASSIVE;	//For server side all addresses allow
     int error;
 
     if((error=getaddrinfo(host.size()?host.c_str():NULL,(port.size()?port.c_str():DEF_PORT),&hints,&res)))
@@ -239,6 +239,16 @@ string TTransSock::addrGet( const sockaddr_storage &addr )
 	return string("[") + aBuf + "]:" + i2s(htons(((sockaddr_in6*)&addr)->sin6_port));
     }
     return string(inet_ntoa(((sockaddr_in*)&addr)->sin_addr)) + ":" + i2s(htons(((sockaddr_in*)&addr)->sin_port));
+}
+
+string TTransSock::addrHost( const string &addr )
+{
+    return TSYS::strParse(addr, 0, (addr[0] == '[') ? "]:" : ":");
+}
+
+string TTransSock::addrPort( const string &addr )
+{
+    return TSYS::strParse(addr, 1, (addr[0] == '[') ? "]:" : ":");
 }
 
 string TTransSock::outAddrHelp( )
@@ -384,11 +394,9 @@ void TSocketIn::start( )
 	//throw TError(nodePath().c_str(), _("Error the socket type '%s'!"), s_type.c_str());
 
     if(type == S_TCP || type == S_UDP) {
-	if(addr()[aOff] != '[') host = TSYS::strParse(addr(), 0, ":", &aOff);
-	else { aOff++; host = TSYS::strParse(addr(), 0, "]:", &aOff); } //Get IPv6
-	string port_ = TSYS::strParse(addr(), 0, ":", &aOff);
-
-	string aErr;
+	host = TTransSock::addrHost(addr().substr(aOff));
+	string	aErr,
+		port_ = TTransSock::addrPort(addr().substr(aOff));
 	sockFd = -1;
 
 	// Resolving all addresses
@@ -708,12 +716,7 @@ void *TSocketIn::Task( void *sock_in )
 	if(sock->type == S_TCP) {
 	    int sockFdCL = accept(sock->sockFd, sadr, &sadrLen);
 	    if(sockFdCL != -1) {
-		string sender;
-		if(sadr->sa_family == AF_INET6) {
-		    char aBuf[INET6_ADDRSTRLEN];
-		    getnameinfo(sadr, sadrLen, aBuf, sizeof(aBuf), 0, 0, NI_NUMERICHOST);
-		    sender = aBuf;
-		} else sender = inet_ntoa(((sockaddr_in*)sadr)->sin_addr);
+		string sender = TTransSock::addrHost(TTransSock::addrGet(sockStor));
 
 		if(sock->clId.size() >= sock->maxFork() ||
 			(sock->maxForkPerHost() && sock->forksPerHost(sender) >= sock->maxForkPerHost()) ||
@@ -734,6 +737,7 @@ void *TSocketIn::Task( void *sock_in )
 			tr.at().setTimings(TSYS::strParse(sock->initAssocPrms(),0,"||"));
 			tr.at().setAttempts(vmax(1,s2i(TSYS::strParse(sock->initAssocPrms(),1,"||"))));
 		    }
+
 		    tr.at().connAddr = sender;
 
 		    sock->connNumb++;
@@ -781,12 +785,7 @@ void *TSocketIn::Task( void *sock_in )
 	    sock->trIn += r_len;
 	    req.assign(buf, r_len);
 
-	    string sender;
-	    if(sadr->sa_family == AF_INET6) {
-		char aBuf[INET6_ADDRSTRLEN];
-		getnameinfo(sadr, sadrLen, aBuf, sizeof(aBuf), 0, 0, NI_NUMERICHOST);
-		sender = aBuf;
-	    } else sender = inet_ntoa(((sockaddr_in*)sadr)->sin_addr); //name_cl.sin_addr);
+	    string sender = TTransSock::addrHost(TTransSock::addrGet(sockStor));
 
 	    if(mess_lev() == TMess::Debug)
 		mess_debug(sock->nodePath().c_str(), _("Read datagram %s from '%s'!"), TSYS::cpct2str(r_len).c_str(), sender.c_str());
@@ -1338,12 +1337,10 @@ void TSocketOut::start( int itmCon )
 	}
     }
     else if(type == S_TCP || type == S_UDP) {
-	string host, host_, port;
-	if(addr_[aOff] != '[') host = TSYS::strParse(addr_, 0, ":", &aOff);
-	else { aOff++; host = TSYS::strParse(addr_, 0, "]:", &aOff); }	//Get IPv6
-	port	= TSYS::strParse(addr_, 0, ":", &aOff);
+	string	aErr,
+		host = TTransSock::addrHost(addr_.substr(aOff)), host_,
+		port = TTransSock::addrPort(addr_.substr(aOff));
 
-	string aErr;
 	sockFd = -1;
 	for(int off = 0; (host_=TSYS::strParse(host,0,",",&off)).size(); ) {
 	    if(logLen()) pushLogMess(TSYS::strMess(_("Resolving for '%s'"),host_.c_str()));

@@ -30,7 +30,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Visual control area engine
 </td>
-<td> 7.13 </td>
+<td> 7.14 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -1634,8 +1634,8 @@ Where:
 <ul><li> "Standard" — repeating parameters of events on holding <b>{delay}-{interval}</b>, time in milliseconds;</li>
 <li> "Checkable" — toggle value;</li>
 <li> "Menu" — list of addresses of the menu elements like to <b>/grp1/grp2/item1</b>;</li>
-<li> "Load" — description line <b>{FilesTemplate}|{Header}|{FileByDefaultAndLoaded}|{FileMime}</b> and loaded file content. The files template like to "Images (*.png *.xpm *.jpg);;CSV-file (*.csv)".</li>
-<li> "Save" — description line <b>{FilesTemplate}|{Header}|{FileByDefault}|{FileMime}</b> and saving file content. The files template like to before one.</li></ul>
+<li> "Load" — description line <b>{FilesTemplate}|{Header}|{FileByDefaultAndLoaded}|{FileMime}</b> and loaded file content from next line. The files template like to "Images (*.png *.xpm *.jpg);;CSV-file (*.csv)".</li>
+<li> "Save" — description line <b>{FilesTemplate}|{Header}|{FileByDefault}|{FileMime}</b> and saving file content from next line. The files template like to before one.</li></ul>
 </td></tr>
 <tr>
 <td> img </td>
@@ -2067,7 +2067,13 @@ Where:
 <td> fit </td>
 <td> Fit to the widget size </td>
 <td> 26 </td>
-<td> Sign "Coordinate the contents with the widget size".
+<td> Sign of coordination the contents with the widget size.
+</td></tr>
+<tr>
+<td> keepAspect </td>
+<td> Keep aspect ratio at fitting </td>
+<td> 35 </td>
+<td> Sign of keeping image aspect ratio at fitting to whole size of the widget.
 </td></tr>
 <tr>
 <td colspan="4"> <i>Attributes of the animation-video (Animation)</i>
@@ -2076,7 +2082,7 @@ Where:
 <td> fit </td>
 <td> Fit to the widget size </td>
 <td> 26 </td>
-<td> Sign "Coordinate the contents with the widget size".
+<td> Sign of coordination the contents with the widget size.
 </td></tr>
 <tr>
 <td> speed </td>
@@ -3580,5 +3586,5 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/en">Modules/VCAEngine/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2992</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/en">Modules/VCAEngine/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2996</td></tr></table></body>
 </html>
