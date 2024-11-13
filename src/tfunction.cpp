@@ -293,7 +293,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 			XMLNode *nd = ctrMkNode("fld",opt,-1,("/exec/io/"+io(iIO)->id()).c_str(),
 					nprm1,((io(iIO)->flg()&IO::Return)?R_R_R_:RWRW__),"root",grp);
 			if(nd) {
-			    if(nOff < nprm.size()) nd->setAttr("help",nprm.substr(nOff));
+			    if(nOff < (int)nprm.size()) nd->setAttr("help",nprm.substr(nOff));
 			    switch(io(iIO)->type()) {
 				case IO::String:
 				    nd->setAttr("tp","str");

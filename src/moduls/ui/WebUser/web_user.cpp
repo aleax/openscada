@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.6.14"
+#define MOD_VER		"1.6.15"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -202,7 +202,7 @@ void TWEB::perSYSCall( unsigned int cnt )
 
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr )
 {
-    return  "HTTP/1.0 " + rcode + "\x0D\x0A"
+    return  "HTTP/1.1 " + rcode + "\x0D\x0A"
 	    "Date: " + atm2s(time(NULL),"%a, %d %b %Y %T %Z") + "\x0D\x0A"
 	    "Server: " + PACKAGE_STRING + "\x0D\x0A"
 	    "Accept-Ranges: bytes\x0D\x0A"
@@ -506,7 +506,7 @@ void UserPg::perSYSCall( )
 
     int schedCall = 0;
     if(ioSchedCall < 0 || !(schedCall=getI(ioSchedCall))) return;
-    setI(ioSchedCall, (schedCall=vmax(0,schedCall-SERV_TASK_PER)));
+    setI(ioSchedCall, (schedCall=vmax(0,schedCall-prmServTask_PER)));
     if(schedCall)	return;
 
     try {

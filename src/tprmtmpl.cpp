@@ -745,7 +745,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 			    case IO::Object:	fullTxt = true;	break;
 			}
 		    XMLNode *wn = ctrMkNode("fld", opt, -1, (pref+"/prm/el_"+i2s(iIO)).c_str(), nprm1, RWRWR_, "root", SDAQ_ID, 1, "tp",tip);
-		    if(nOff < nprm.size()) wn->setAttr("help",nprm.substr(nOff));
+		    if(nOff < (int)nprm.size()) wn->setAttr("help",nprm.substr(nOff));
 		    if(wn && is_lnk) wn->setAttr("dest","sel_ed")->setAttr("select",pref+"/prm/ls_"+i2s(iIO))->
 					 setAttr("help",(wn->attr("help").size()?wn->attr("help")+"\n\n":"")+lnkHelp());
 		    if(wn && fullTxt)wn/*->setAttr("cols","100")*/->setAttr("rows","4");

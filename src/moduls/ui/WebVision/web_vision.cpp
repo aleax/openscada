@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"6.10.7"
+#define MOD_VER		"6.10.9"
 #define AUTHORS		trS("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	trS("Visual operation user interface, based on the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -326,7 +326,7 @@ string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcod
     const string &htmlHeadEls, const string &forceTmplFile, const string &lang )
 {
     /*if(httpattrs.size() && httpattrs.find("Content-Type: text/html") == string::npos)
-	return "HTTP/1.0 " + rcode + "\x0D\x0A"
+	return "HTTP/1.1 " + rcode + "\x0D\x0A"
 	    "Server: " + PACKAGE_STRING + "\x0D\x0A"
 	    "Accept-Ranges: bytes\x0D\x0A"
 	    "Content-Length: " + i2s(cnt.size()) + "\x0D\x0A" +

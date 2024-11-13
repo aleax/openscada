@@ -178,7 +178,7 @@ TVariant TTransportS::prm( string &cnt, const string &iid, const TVariant &val, 
 	    if(!toWr) {
 		itN->setAttr("tp", i2s(val.type()));
 		if((src=TSYS::strLine(iid,0,&off)).size()) itN->setAttr("nm", src);
-		if(off < iid.size()) itN->setAttr("help", iid.substr(off));
+		if(off < (int)iid.size()) itN->setAttr("help", iid.substr(off));
 	    }
 	    itN->setText(val.getS());
 	}
@@ -199,7 +199,7 @@ string TTransportS::cntrCmdPrm( XMLNode *opt, const string &path, const string &
 	XMLNode *srcN = NULL;
 	for(int iSrc = 0; (srcN=prmNd.childGet("SRC",iSrc,true)); ++iSrc)
 	    if(ctrMkNode("area",opt,-1,(path+srcN->attr("id")).c_str(),TSYS::strMess(_("For %s"),srcN->attr("id").c_str())))
-		for(int iP = 0; iP < srcN->childSize(); ++iP) {
+		for(int iP = 0; iP < (int)srcN->childSize(); ++iP) {
 		    XMLNode *pN = srcN->childGet(iP);
 		    string pTp = "str";
 		    switch(s2i(pN->attr("tp"))) {
@@ -603,7 +603,10 @@ int TTransportS::cntrIfCmd( XMLNode &node, const string &isenderPref, const stri
     bool rqDir = (rqUser.size() && rqUser != host.user) || (rqUser == host.user && rqPass.size());
     node./*setAttr("rqDir", i2s(rqDir))->*/setAttr("rqUser", (rqDir?rqUser:host.user))->setAttr("rqPass", rqDir?rqPass:host.pass);
     AutoHD<TTransportOut> tr = extHost(host, senderPref);
-    if(tr.at().startStat() && host.mdf > tr.at().startTm()) { tr.at().stop(); node.setAttr("rqAuthForce","1"); }
+    if(tr.at().startStat() && host.mdf > tr.at().startTm()) {
+	if(!tr.at().isFromInput()) tr.at().stop();
+	node.setAttr("rqAuthForce","1");
+    }
     if(!tr.at().startStat()) tr.at().start(s2i(node.attr("conTm")));
     if(mess_lev() == TMess::Debug) mess_debug((tr.at().nodePath()+senderPref).c_str(), "REQ: %s", node.save().c_str());
 
@@ -893,8 +896,8 @@ void TTypeTransport::perSYSCall( unsigned int cnt )
 //* TTransportIn				 *
 //************************************************
 TTransportIn::TTransportIn( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), runSt(false), mId(cfg("ID")), mStart(cfg("START").getBd()), mDB(idb), associateTrRes(true),
-    mLogLen(0), mLogItLim(1000), mLogTp(TTransportS::LTP_BinaryText), mLogAgrTm(prmWait_TM), mLogLstDt(0), mLogLstDtTm(0), mLogFHD(-1)
+    TConfig(el), runSt(false), associateTrRes(true), mId(cfg("ID")), mStart(cfg("START").getBd()), mDB(idb),
+    mLogLen(0), mLogItLim(1000), mLogTp(TTransportS::LTP_BinaryText), mLogAgrTm(1), mLogLstDt(0), mLogFHD(-1), mLogLstDtTm(0)
 {
     mId = iid;
 }
@@ -1354,7 +1357,8 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);
-		resLog += TSYS::strMess("[%s.%06d] ",atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S").c_str(),int(itTm%1000000)) + itDscr;
+		resLog += TSYS::strMess("[%s.%06d] ",atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S").c_str(),int(itTm%1000000)) +
+			    itDscr + ((off<(int)mLog[iL].size()) ? " ("+TSYS::cpct2str(mLog[iL].size()-off)+")" : "");
 		if(mLogTp == TTransportS::LTP_Binary || mLogTp == TTransportS::LTP_BinaryText)
 		    resLog += ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off,mLogItLim),TSYS::Bin,(mLogTp==TTransportS::LTP_Binary)?" ":"<text>"):"")
 			   + (((mLog[iL].size()-off)>mLogItLim)?(string("\n...<")+_("CUT")+" "+TSYS::cpct2str(mLog[iL].size()-off-mLogItLim)+">"):string("")) + "\n\n";
@@ -1379,7 +1383,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 //************************************************
 TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), runSt(false), mDefTimeouts(true), mLstReqTm(0), mId(cfg("ID")), mDB(idb), mStartTm(0), mReqRes(true),
-    mLogLen(0), mLogItLim(1000), mLogTp(TTransportS::LTP_BinaryText), mLogAgrTm(prmWait_TM), mLogLstDt(0), mLogLstDtTm(0), mLogFHD(-1)
+    mLogLen(0), mLogItLim(1000), mLogTp(TTransportS::LTP_BinaryText), mLogAgrTm(1), mLogLstDt(0), mLogFHD(-1), mLogLstDtTm(0)
 {
     mId = iid;
 }
@@ -1664,7 +1668,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),R_R_R_,"root",STR_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Connect"),RWRWR_,"root",STR_ID,1,"tp","bool");
-		if(mAssociateSrcO.freeStat()) {
+		if(!isFromInput()) {
 		    ctrMkNode("fld",opt,-1,"/prm/st/db",_("Storage"),RWRWR_,"root",STR_ID,4,
 			"tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 		    if(DB(true).size())
@@ -1672,13 +1676,13 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 			    TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",STR_ID,1,"help",TMess::labStorRem(mDB).c_str());
 		}
 	    }
-	    if(mAssociateSrcO.freeStat() && ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
+	    if(!isFromInput() && ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/prm/cfg",-1,"root",STR_ID,RWRWR_);
 		ctrRemoveNode(opt, "/prm/cfg/MODULE");
 		ctrRemoveNode(opt, "/prm/cfg/A_PRMS");
 	    }
 	}
-	if(mAssociateSrcO.freeStat() && ctrMkNode("area",opt,-1,"/aprm",_("Additional"))) {
+	if(!isFromInput() && ctrMkNode("area",opt,-1,"/aprm",_("Additional"))) {
 	    TTransportS::cntrCmdPrm(opt, "/aprm/src_", cfg("A_PRMS").getS());
 	    if(cfg("A_PRMS").getS().size()) ctrMkNode("comm",opt,-1,"/aprm/acfgReset",_("Reset"),RWRW__,"root",STR_ID);
 	}
@@ -1855,7 +1859,8 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);
-		resLog += TSYS::strMess("[%s.%06d] ",atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S").c_str(),int(itTm%1000000)) + itDscr;
+		resLog += TSYS::strMess("[%s.%06d] ",atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S").c_str(),int(itTm%1000000)) +
+		    itDscr + ((off<(int)mLog[iL].size()) ? " ("+TSYS::cpct2str(mLog[iL].size()-off)+")" : "");
 		if(mLogTp == TTransportS::LTP_Binary || mLogTp == TTransportS::LTP_BinaryText)
 		    resLog += ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off,mLogItLim),TSYS::Bin,(mLogTp==TTransportS::LTP_Binary)?" ":"<text>"):"")
 			   + (((mLog[iL].size()-off)>mLogItLim)?(string("\n...<")+_("CUT")+" "+TSYS::cpct2str(mLog[iL].size()-off-mLogItLim)+">"):string("")) + "\n\n";

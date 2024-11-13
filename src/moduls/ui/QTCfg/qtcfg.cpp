@@ -987,7 +987,7 @@ void ConfApp::itPaste( )
 		    throw TError(s2i(req.attr("rez")), req.attr("mcat"), req.text());
 	    }
 	} catch(TError &err) {
-	    if(elOff >= copyBuf.size()) mod->postMess(err.cat, err.mess, TUIMod::Error, this);
+	    if(elOff >= (int)copyBuf.size()) mod->postMess(err.cat, err.mess, TUIMod::Error, this);
 	    else if(InputDlg(this,actItPaste->icon(),
 			QString(_("Copy/Move node '%1' error '%2'.\nContinue other nodes?")).arg(dstNm.c_str()).arg(err.mess.c_str()),
 			_("Moving or copying the node"),0,0).exec() == QDialog::Accepted)
@@ -1047,7 +1047,7 @@ void ConfApp::favUpd( unsigned opts )
     if(opts&Fav_Reload) {
 	favs.clear();
 	string sfavs = TBDS::genPrmGet(mod->nodePath()+"favorites", "", user()), fav;
-	for(int off = 0; (fav=TSYS::strLine(sfavs,0,&off)).size() || off < sfavs.size(); )
+	for(int off = 0; (fav=TSYS::strLine(sfavs,0,&off)).size() || off < (int)sfavs.size(); )
 	    favs.push_back(fav);
     }
 
@@ -1058,7 +1058,7 @@ void ConfApp::favUpd( unsigned opts )
 	for(int iFv = (int)favs.size()-1; iFv >= 0; --iFv) {
 	    int off = 0;
 	    string spath = TSYS::strParse(favs[iFv], 0, ":", &off);
-	    actFavLnk = new QAction(((off<favs[iFv].size())?favs[iFv].substr(off):spath).c_str(), this);
+	    actFavLnk = new QAction(((off<(int)favs[iFv].size())?favs[iFv].substr(off):spath).c_str(), this);
 	    actFavLnk->setObjectName(spath.c_str());
 	    actFav->menu()->addAction(actFavLnk);
 	    connect(actFavLnk, SIGNAL(triggered()), this, SLOT(favGo()));
@@ -1317,7 +1317,7 @@ void ConfApp::selectPage( const string &path, int tm )
 {
     try {
 	//Prev and next
-	if(selPath.size()) {
+	if(selPath.size() && (prev.empty() || TSYS::strParse(prev[0],0,"#") != selPath)) {
 	    XMLNode *tabN = root->childGet("area", tabs->currentIndex(), true);
 	    prev.insert(prev.begin(), selPath+(tabN?"#"+tabN->attr("id"):""));
 	}
@@ -2277,7 +2277,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, val_r);
 		val_r->setText((string("<b>")+TSYS::strEncode(sval,TSYS::Html)+"</b>").c_str());
 
-		if(QString(sval.c_str()).toStdWString().size() < s2i(OBJ_ID_SZ))
+		if(QString(sval.c_str()).toStdWString().size() < limObjID_SZ)
 		    val_r->setFixedWidth(1.2*QFontMetrics(val_r->font()).size(Qt::TextSingleLine,sval.c_str()).width());
 		else { val_r->setMinimumWidth(10); val_r->setMaximumWidth(100000); }
 
@@ -2468,7 +2468,7 @@ loadGenReqDate:
     }
 
     //Changing the tab
-    XMLNode *tabN;
+    XMLNode *tabN = NULL;
     for(int tabId = 0; tab.size() && (tabN=root->childGet("area",tabId,true)); ++tabId) {
 	if(tabN->attr("id") != tab)	continue;
 	if(tabs->currentIndex() != tabId) tabs->setCurrentIndex(tabId);
@@ -2801,7 +2801,7 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 		reqPath = reqPath.substr(0, reqElPos);
 		vector<string> selNds;
 		QList<QTreeWidgetItem *> sel_ls = CtrTree->selectedItems();
-		for(unsigned iEl = 0; iEl < sel_ls.size(); iEl++)
+		for(unsigned iEl = 0; (int)iEl < sel_ls.size(); iEl++)
 		    if(sel_ls.at(iEl)->text(2).toStdString() != reqPath) {
 			selNds.push_back(sel_ls.at(iEl)->text(2).toStdString());
 			if(selNds.size() < GRP_SHOW_OP_LIM)
@@ -3266,7 +3266,7 @@ void ConfApp::tablePopup( const QPoint &pos )
     string el_path = selPath+"/"+tbl->objectName().toStdString();
 
     QAction *last_it, *actAdd, *actIns, *actDel, *actMoveUp, *actMoveDown, *actCopy, *actCopyForMWiki, *actFind, *actFindNext;
-    last_it = actAdd = actIns = actDel = actMoveUp = actMoveDown = actCopy = actFind = actFindNext = NULL;
+    last_it = actAdd = actIns = actDel = actMoveUp = actMoveDown = actCopy = actCopyForMWiki = actFind = actFindNext = NULL;
 
     int row = tbl->currentRow();
 

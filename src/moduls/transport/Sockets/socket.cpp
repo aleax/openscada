@@ -73,7 +73,7 @@
 #define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.8.1"
+#define MOD_VER		"4.8.2"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov(2014)")
 #define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -604,7 +604,7 @@ void *TSocketIn::Task( void *sock_in )
     sock->endrunCl	= false;
     sock->endrun	= false;
 
-    if(sock->type == S_UDP) buf = new char[STR_BUF_LEN];
+    if(sock->type == S_UDP) buf = new char[prmStrBuf_SZ];
 
     while(!sock->endrun) {
 	tv.tv_sec  = 0; tv.tv_usec = prmWait_DL*1000000;
@@ -787,7 +787,7 @@ void *TSocketIn::ClTask( void *s_inf )
     struct timeval tv;
     fd_set rw_fd;
     string req, answ;
-    char   buf[STR_BUF_LEN];
+    char   buf[prmStrBuf_SZ];
     vector< AutoHD<TProtocolIn> > prot_in;
     bool   sessOk = false;
     int    actPrts = 0;
@@ -973,7 +973,6 @@ void TSocketIn::clientReg( SSockIn *so )
 {
     MtxAlloc res(sockRes, true);
 
-    //Find already registry
     for(map<int,SSockIn*>::iterator iId = clId.begin(); iId != clId.end(); ++iId)
 	if(iId->second == so) return;
 
@@ -987,6 +986,7 @@ void TSocketIn::clientReg( SSockIn *so )
 void TSocketIn::clientUnreg( SSockIn *so )
 {
     MtxAlloc res(sockRes, true);
+
     for(map<int,SSockIn*>::iterator iId = clId.begin(); iId != clId.end(); ++iId)
 	if(iId->second == so) {
 	    if(logLen()) pushLogMess(TSYS::strMess(_("Client %d from '%s' disconnected"),so->sock,so->sender.c_str()));

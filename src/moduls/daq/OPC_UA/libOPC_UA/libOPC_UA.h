@@ -1,9 +1,9 @@
 
 //OpenSCADA OPC_UA implementation library file: libOPC_UA.h
 /********************************************************************************
- *   Copyright (C) 2009-2023 by Roman Savochenko, <roman@oscada.org>		*
+ *   Copyright (C) 2009-2024 by Roman Savochenko, <roman@oscada.org>		*
  *										*
- *   Version: 2.2.1								*
+ *   Version: 2.2.2								*
  *	* UA::symmetricEncrypt() and UA::symmetricDecrypt() merged		*
  *	  to UA::symmetricCrypt() and switched for using EVP_CipherInit()	*
  *	  and EVP_CipherUpdate() instead AES_cbc_encrypt();			*

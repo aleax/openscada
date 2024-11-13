@@ -723,11 +723,11 @@ void TVal::setI( int64_t value, int64_t tm, bool sys )
 	    //Check to write
 	    if(!sys && fld().flg()&TFld::NoWrite) return;
 	    //Set current value and time
-	    int64_t pvl, minV, maxV;
+	    int64_t minV = 0, maxV = 0;
 	    if(!(fld().flg()&TFld::Selectable) && value != EVAL_INT && fld().values().size() &&
 		    (minV=s2ll(TSYS::strParse(fld().values(),0,";"))) < (maxV=s2ll(TSYS::strParse(fld().values(),1,";"))))
 		value = vmin(maxV, vmax(minV,value));
-	    pvl = val.i; val.i = value;
+	    int64_t pvl = val.i; val.i = value;
 	    mTime = tm;
 	    if(!mTime) mTime = TSYS::curTime();
 	    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, value, pvl);
@@ -758,11 +758,11 @@ void TVal::setR( double value, int64_t tm, bool sys )
 	    //Check to write
 	    if(!sys && fld().flg()&TFld::NoWrite) return;
 	    //Set current value and time
-	    double pvl, minV, maxV;
+	    double minV = 0, maxV = 0;
 	    if(!(fld().flg()&TFld::Selectable) && value != EVAL_REAL && fld().values().size() &&
 		    (minV=s2r(TSYS::strParse(fld().values(),0,";"))) < (maxV=s2r(TSYS::strParse(fld().values(),1,";"))))
 		value = vmin(maxV, vmax(minV,value));
-	    pvl = val.r; val.r = value;
+	    double pvl = val.r; val.r = value;
 	    mTime = tm;
 	    if(!mTime) mTime = TSYS::curTime();
 	    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, value, pvl);

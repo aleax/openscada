@@ -211,7 +211,7 @@ void Project::load_( TConfig *icfg )
 	int IDS = cStls.cfg("IDS").getI();
 	string ID = cStls.cfg("ID").getS();
 	vector<string> &prop = mStProp[ID];
-	while(prop.size() <= IDS) prop.push_back("");
+	while((int)prop.size() <= IDS) prop.push_back("");
 	prop[IDS] = (ID==STL_PRM_NM) ? cStls.cfg("VAL").getS() : cStls.cfg("VAL").getS(TCfg::ExtValOne);
     }
     // Load old style table at missing the new one
@@ -278,7 +278,7 @@ void Project::save_( )
     // Checking for the removed properties
     cStl.cfgViewAll(false);
     for(int fldCnt = 0; TBDS::dataSeek(fullDB()+"_stls",nodePath()+tbl()+"_stls",fldCnt++,cStl); )
-	if(cStl.cfg("IDS").getI() >= stls.size() || stls[cStl.cfg("IDS").getI()].empty() ||
+	if(cStl.cfg("IDS").getI() >= (int)stls.size() || stls[cStl.cfg("IDS").getI()].empty() ||
 		mStProp.find(cStl.cfg("ID").getS()) == mStProp.end()) {
 	    if(!TBDS::dataDel(fullDB()+"_stls",nodePath()+tbl()+"_stls",cStl,TBDS::UseAllKeys|TBDS::NoException)) break;
 	    fldCnt--;
@@ -509,7 +509,7 @@ string Project::stlPropGet( const string &pid, const string &def, int sid )
 	modif();
 	return def;
     }
-    if(iStPrp != mStProp.end() && sid >= 0 && sid < iStPrp->second.size()) return iStPrp->second[sid];
+    if(iStPrp != mStProp.end() && sid >= 0 && sid < (int)iStPrp->second.size()) return iStPrp->second[sid];
 
     return def;
 }

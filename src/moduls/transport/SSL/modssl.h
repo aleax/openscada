@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.SSL file: modssl.h
 /***************************************************************************
- *   Copyright (C) 2008-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -55,7 +55,7 @@ class SSockIn
 {
     public:
 	SSockIn( TSocketIn *is, BIO *ibio, const string &isender, bool iisCon = false ) :
-	    pid(0), bio(ibio), sock(0), sender(isender), tmCreate(time(NULL)), tmReq(time(NULL)), trIn(0), trOut(0), s(is), isCon(iisCon) { }
+	    pid(0), bio(ibio), sock(0), sender(isender), tmCreate(time(NULL)), tmReq(time(NULL)), trIn(0), trOut(0), isCon(iisCon), s(is) { }
 
 	pthread_t pid;
 	BIO	*bio;

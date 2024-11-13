@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.6.6"
+#define MOD_VER		"1.6.7"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -463,7 +463,7 @@ void UserPrt::perSYSCall( )
 
     if(!enableStat() || !func() || ioSchedCall < 0 || !(schedCall=getI(ioSchedCall))) return;
 
-    setI(ioSchedCall, (schedCall=vmax(0,schedCall-SERV_TASK_PER)));
+    setI(ioSchedCall, (schedCall=vmax(0,schedCall-prmServTask_PER)));
     if(schedCall) return;
 
     try {

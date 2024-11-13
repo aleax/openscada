@@ -259,7 +259,7 @@ XMLNode *TFld::cntrCmdMake( XMLNode *opt, const string &path, int pos, const str
     XMLNode *nE = TCntrNode::ctrMkNode("fld", opt, pos, (path+"/"+name()).c_str(), dscr1,
 	    (flg()&TFld::NoWrite)?(perm&~_W_W_W):perm, user.c_str(), grp.c_str(),1,"len",i2s(len()).c_str());
     if(nE) {
-	if(dOff < dscr.size())
+	if(dOff < (int)dscr.size())
 	    nE->setAttr("help", dscr.substr(dOff));
 	if(flg()&TFld::Selectable) {
 	    nE->setAttr("tp","str")->setAttr("len","")->setAttr("dest",(flg()&TFld::SelEdit)?"sel_ed":"select");

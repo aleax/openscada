@@ -98,9 +98,9 @@ namespace OSCADA
 extern uint8_t	limObjID_SZ;	//[20..50] ID size of the OpenSCADA objects.
 extern uint8_t	limObjNm_SZ;	//[100...200] NAME size of the OpenSCADA objects.
 extern uint8_t	limArchID_SZ;	//[50...90] ID size of the value archive objects, limObjID_SZ + 1.5*limObjID_SZ.
-extern int	limUserFile_SZ;	//[1MB...*10MB...1000MB] The files size limit at loading and processing in the userspace
+extern unsigned	limUserFile_SZ;	//[1MB...*10MB...1000MB] The files size limit at loading and processing in the userspace
 				//	and the part size of the big files transferring.
-extern int	limUserIts_N;	//[1000...*1000000...1000000000] The limit on count of creating user items, like to array items.
+extern unsigned	limUserIts_N;	//[1000...*1000000...1000000000] The limit on count of creating user items, like to array items.
 extern unsigned	limCacheIts_N;	//[*100...100000] The limit on count of the caching items.
 extern unsigned	limCacheIts_TM;	//[10...*60...1000] The limit on the caching items time, seconds.
 
@@ -254,9 +254,10 @@ class TSYS : public TCntrNode
 	static void sighandler( int signal, siginfo_t *siginfo, void *context );
 
 	int	nCPU( )		{ return mN_CPU; }
-	float	sysClk( )	{ return mSysclc; }	//In MHz
+	float	sysClk( )	{ return mSysclc; }			//In MHz
 	void	setSysClk( float vl )	{ mSysclc = vl; }
-	time_t	sysTm( bool *hasJump = NULL, time_t last = 0 ) {	//System time fast access with detection the time jumps
+	time_t	sysTm( ) volatile	{ return mSysTm; }		//System time fast access
+	time_t	sysTmJmp( bool *hasJump = NULL, time_t last = 0 ) {	//System time fast access with detection the time jumps
 	    if(hasJump) *hasJump = (last < mSysTmJump);
 	    return mSysTm;
 	}

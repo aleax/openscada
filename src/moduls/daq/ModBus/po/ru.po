@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-24 16:22+0300\n"
+"POT-Creation-Date: 2024-09-26 09:25+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -373,15 +373,16 @@ msgstr "Реальное положение"
 msgid "Error of searching and a new node creation."
 msgstr "Ошибка поиска и создания нового узла."
 
-msgid "Error of the server response"
-msgstr "Ошибка ответа сервера"
+#, fuzzy
+msgid "No response"
+msgstr "Неполный ответ"
+
+msgid "Not full response"
+msgstr "Неполный ответ"
 
 #, c-format
 msgid "The response Transaction ID %d is not suitable to the request one %d."
 msgstr "ID транзакции ответа %d не соответствует запросу %d."
-
-msgid "Not full response"
-msgstr "Неполный ответ"
 
 msgid "Error of the response: Too large."
 msgstr "Ошибка ответа: Очень длинный."
@@ -649,6 +650,9 @@ msgid ""
 msgstr ""
 "Предоставляет реализацию протоколов ModBus. Поддерживаются Modbus/TCP, "
 "Modbus/RTU и Modbus/ASCII протоколы."
+
+#~ msgid "Error of the server response"
+#~ msgstr "Ошибка ответа сервера"
 
 #~ msgid "DB"
 #~ msgstr "БД"

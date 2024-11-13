@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-24 16:22+0300\n"
+"POT-Creation-Date: 2024-09-26 09:25+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -298,14 +298,14 @@ msgstr ""
 msgid "Error of searching and a new node creation."
 msgstr ""
 
-msgid "Error of the server response"
+msgid "No response"
+msgstr ""
+
+msgid "Not full response"
 msgstr ""
 
 #, c-format
 msgid "The response Transaction ID %d is not suitable to the request one %d."
-msgstr ""
-
-msgid "Not full response"
 msgstr ""
 
 msgid "Error of the response: Too large."

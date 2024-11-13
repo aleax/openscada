@@ -1,3 +1,48 @@
+2024-11-13 Roman 0.9.7.4
+- FIX:LibsDB.vcaBase: wlb_Main.RootPgSo: Improved by pause the demo-procedures execution at no requests on WEB,
+	so preventing of opening all pages before real close.
+    FIX:wlb_Main.storeHouse: RO value of the ID field in the data form mode shortened twicely.
+	Period of the page processing set to -1 (from parent page) to prevent of sticking at user change.
+    The library wlb_Main appended by an extra icon 'weath13d' and 'weath02n' for the widget "Weather (weather)".
+- !:SYS,DAQ.{DAQGate,JavaLikeCalc,OPC_UA.libOPC_UA,System},Protocol.ModBus,Transport.SSL,
+    UI.{QTCfg,QTStarter,Vision,WebCfgD,WebVision}: The source code some cleaned from building warnings.
+- Transport.{Sockets,SSL},Protocol.SelfSystem: Switched to the limit parameter prmStrBuf_SZ in the buffer size
+    instead direct value or such definition.
+- Protocol.UserProtocol,UI.WebUser: Switched to the limit parameter prmServTask_PER instead such definition.
+- Protocol.HTTP,UI.{WebUser,WebCfg}: Switched to "HTTP/1.1".
+- SYS,DAQ.JavaLikeCalc: The sysTm() function split to sysTmJmp() for the original sysTm() was maximum fast
+    without jumps detection.
+- FIX:SYS: XMLNode: The "a" tag appended to "script" and "div" for preventing the tags wrapping.
+    Type of the limit variables limUserFile_SZ, limUserIts_N changed to unsigned.
+- DAQ: The TValFunc::mCalc flag moved from a bit to a separate bool attribute, since access here must
+	be maximum fast.
+    JavaLikeCalc: Some improved in the Ukrainian translation.
+    DAQGate: The configuration field "Synchronization time with the remote station, seconds" expanded in
+	the range to [-1...9999].
+- Protocol.ModBus: The data requesting improved in the TCP variant for waiting tail to any first package size,
+    that is not only the MBAP header in 7 bytes size.
+- !!:FIX:Transports: The IO log items appended by whole package (or agregation) size and the agregation default
+	time set to 1.
+    !: TTransportOut appended by the function isFromInput() to detect automatically created objects
+	from the input transport.
+    FIX: The external initiative connections of the OpenSCADA hosts prevented from stop.
+- UI: The mimeGet() appended by the "image/webp" MIME at the "webp" extension.
+    FIX:QTCfg: The operation of selection wrong item prevented from setting the previous item.
+	Depth of the back and forward lists expanded to 30 items.
+	Some improved in original texts.
+	Switched to the limit parameter limObjID_SZ instead such definition.
+    FIX:Vision: Appending of resetting maximum geometry of included pages for allow their dynamic
+	    increasing with increasing content.
+	FIX: The table fitting of the view Table of the primitive FormEl fixed in shrink the last column
+	    at resetting setStretchLastSection() to false on Qt4.
+	The error message "Error authenticating the user ..." appended by the error detalization.
+	Switched to the global parameter prmWait_TM instead such definition.
+    FIX:VCAEngine: Appended of the resources checking from the included widgets (dynamically created)
+	    on the owner page.
+	FIX: The session UserAPI function this.attr() fixed in checking the translation flag TFld::TransltText.
+    FIX:WebVision: The Button view of the FormEl primitive allowed for images in the Load type.
+
+
 2024-08-12 Roman 0.9.7.3
 - !!!!:FIX:LibsDB.OscadaLibs.DevLib.VSE002: Fixed in non reconnection at leaving partial data in the buffer.
 - FIX:LibsDB.vcaBase: wlb_Main.storeHouse: Some improved in generic items placing at geomZ.

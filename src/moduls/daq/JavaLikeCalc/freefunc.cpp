@@ -1937,7 +1937,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
     while(!(dt.flg&0x01)) {
 	//Calc time control mechanism
 	bool hasTmJump = false;
-	if(SYS->sysTm(&hasTmJump,dt.startTm) > (dt.startTm+mMaxCalcTm) && !hasTmJump) {
+	if(SYS->sysTmJmp(&hasTmJump,dt.startTm) > (dt.startTm+mMaxCalcTm) && !hasTmJump) {
 	    mess_err(nodePath().c_str(), _("Calculation time has been exceeded %d > %d+%d"), SYS->sysTm(), dt.startTm, mMaxCalcTm);
 	    dt.flg |= 0x09;
 	    return;
@@ -3009,7 +3009,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 
 		    XMLNode *nd = ctrMkNode("fld", opt, -1, ("/exec/io/"+io(iIO)->id()).c_str(), nprm1,
 						((io(iIO)->flg()&IO::Return)?R_R_R_:RWRW__), "root", grp);
-		    if(nd && nOff < nprm.size()) nd->setAttr("help",nprm.substr(nOff));
+		    if(nd && nOff < (int)nprm.size()) nd->setAttr("help",nprm.substr(nOff));
 		}
 	return;
     }

@@ -125,7 +125,7 @@ msgid "Hidden"
 msgstr "Приховано"
 
 msgid "Default"
-msgstr "Замовчення"
+msgstr "Типово"
 
 #, c-format
 msgid ""

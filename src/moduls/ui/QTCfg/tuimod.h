@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: tuimod.h
 /***************************************************************************
- *   Copyright (C) 2004-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2004-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,7 @@
 #undef trS
 #define trS(mess) mod->I18N(mess,mess_PreSave)
 
-#define NAV_BACK_DEPTH	10
+#define NAV_BACK_DEPTH	30
 
 #define DEF_TmConChk	"10:600"
 #define DEF_ToolTipLim	150

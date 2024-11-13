@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttransports.h
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -161,6 +161,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	virtual ~TTransportOut( );
 
 	bool isNetwork( );
+	bool isFromInput( )		{ return !mAssociateSrcO.freeStat(); }
 
 	TCntrNode &operator=( const TCntrNode &node );
 

@@ -824,7 +824,7 @@ void ReqIdNameDlg::selectItTp( int it )
 //*************************************************
 DlgUser::DlgUser( QWidget *parent ) : QDialog(parent)
 {
-    setWindowTitle(_("Selecting an user"));
+    setWindowTitle(_("User selection"));
 
     QVBoxLayout *dlg_lay = new QVBoxLayout(this);
     dlg_lay->setContentsMargins(10, 10, 10, 10);

@@ -1944,13 +1944,13 @@ void Attr::setI( int64_t val, bool strongPrev, bool sys )
 	case TFld::Boolean:	setB((val!=EVAL_INT) ? (bool)val : EVAL_BOOL, strongPrev, sys);		break;
 	case TFld::Object:	if(val == EVAL_INT) setO(new TEValObj(), strongPrev, sys);	break;
 	case TFld::Integer: {
-	    int64_t t_val, minV, maxV;
+	    int64_t minV = 0, maxV = 0;
 	    if(!(fld().flg()&TFld::Selectable) && fld().values().size() &&
 		    (minV=s2ll(TSYS::strParse(fld().values(),0,";"))) < (maxV=s2ll(TSYS::strParse(fld().values(),1,";"))))
 		val = vmin(maxV, vmax(minV,val));
 	    if((!strongPrev && mVal.i == val) ||
 		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull()))	break;
-	    t_val = mVal.i;
+	    int64_t t_val = mVal.i;
 	    mVal.i = val;
 	    if(!sys && !owner()->attrChange(*this,TVariant(t_val)))	mVal.i = t_val;
 	    else setAModif();
@@ -1969,13 +1969,13 @@ void Attr::setR( double val, bool strongPrev, bool sys )
 	case TFld::Boolean:	setB((val!=EVAL_REAL) ? (bool)val : EVAL_BOOL, strongPrev, sys);break;
 	case TFld::Object:	if(val == EVAL_REAL) setO(new TEValObj(), strongPrev, sys);	break;
 	case TFld::Real: {
-	    double t_val, minV, maxV;
+	    double minV = 0, maxV = 0;
 	    if(!(fld().flg()&TFld::Selectable) && fld().values().size() &&
 		    (minV=s2r(TSYS::strParse(fld().values(),0,";"))) < (maxV=s2r(TSYS::strParse(fld().values(),1,";"))))
 		val = vmin(maxV, vmax(minV,val));
 	    if((!strongPrev && mVal.r == val) ||
 		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull()))		break;
-	    t_val = mVal.r;
+	    double t_val = mVal.r;
 	    mVal.r = val;
 	    if(!sys && !owner()->attrChange(*this,TVariant(t_val)))	mVal.r = t_val;
 	    else setAModif();

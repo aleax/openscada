@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.SSL file: modssl.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -56,7 +56,7 @@
 #define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.5.0"
+#define MOD_VER		"4.5.1"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and supported SSL-TLS depending on the library version.")
@@ -501,7 +501,7 @@ void TSocketIn::start( )
 		connAddr = ssl_host + ":" + ssl_port;
 	    } catch(TError &err) {
 		//Free context
-		if(abio)	{ BIO_reset(abio); abio = NULL; }
+		if(abio){ BIO_reset(abio); abio = NULL; }
 		if(bio)	{ BIO_free_all(bio); bio = NULL; }
 		ssl = NULL;
 
@@ -720,7 +720,7 @@ void *TSocketIn::ClTask( void *s_inf )
 
     int		rez;
     char	err[255];
-    char	buf[STR_BUF_LEN];
+    char	buf[prmStrBuf_SZ];
     string	req, answ;
     vector< AutoHD<TProtocolIn> > prot_in;
     SSL		*ssl;

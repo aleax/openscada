@@ -110,8 +110,8 @@ using namespace OSCADA;
 uint8_t	OSCADA::limObjID_SZ = DEF_limObjID_SZ;
 uint8_t	OSCADA::limObjNm_SZ = DEF_limObjNm_SZ;
 uint8_t	OSCADA::limArchID_SZ = DEF_limArchID_SZ;
-int	OSCADA::limUserFile_SZ = DEF_limUserFile_SZ;
-int	OSCADA::limUserIts_N = DEF_limUserIts_N;
+unsigned OSCADA::limUserFile_SZ = DEF_limUserFile_SZ;
+unsigned OSCADA::limUserIts_N = DEF_limUserIts_N;
 unsigned OSCADA::limCacheIts_N = DEF_limCacheIts_N;
 unsigned OSCADA::limCacheIts_TM = DEF_limCacheIts_TM;
 
@@ -1642,7 +1642,7 @@ string TSYS::strDecode( const string &in, TSYS::Code tp, const string &opt )
     switch(tp) {
 	case TSYS::ShieldSymb:
 	    sout.reserve(in.size());
-	    for(iSz = 0; iSz < (int)in.size(); iSz++)
+	    for(iSz = 0; iSz < in.size(); iSz++)
 		if(in[iSz] == '\\' && iSz < ((int)in.size()-1)) {
 		    switch(in[iSz+1]) {
 			case 'b':	sout += '\b';	break;

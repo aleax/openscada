@@ -1056,7 +1056,7 @@ void ShapeFormEl::tableFit( WdgView *w )
 		    wdg->setColumnWidth(iC, busyColsWdth);
 	}
     }
-    wdg->horizontalHeader()->setStretchLastSection(wdg->property("colsWdthFit").toBool());
+    if(wdg->property("colsWdthFit").toBool()) wdg->horizontalHeader()->setStretchLastSection(true);
 
     wdg->resizeRowsToContents();
     for(int iRW = 0; iRW < wdg->rowCount(); iRW++)
@@ -1558,7 +1558,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val, const stri
 		}
 		default: argT = shD->args[iA].val().toString().toStdString();	break;
 	    }
-	    text = TRegExp("%"+i2s(iA+1),"g").replace(text, ((argT.size()<wdth)?string(wdth-argT.size(),' '):"")+argT);
+	    text = TRegExp("%"+i2s(iA+1),"g").replace(text, (((int)argT.size()<wdth)?string(wdth-argT.size(),' '):"")+argT);
 	}
 	if(text != shD->text)	{ shD->text = text; up = true; }
     }
@@ -1942,7 +1942,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 			lab->movie()->start();
 		    }
 		    //Fit set
-		    lab->setScaledContents( shD->mediaFit );
+		    lab->setScaledContents(shD->mediaFit);
 		    if(!shD->mediaFit && lab->movie()->jumpToNextFrame()) {
 			QImage img = lab->movie()->currentImage();
 			lab->movie()->setScaledSize(QSize((int)((float)img.width()*w->xScale(true)),(int)((float)img.height()*w->yScale(true))));
@@ -1958,7 +1958,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		shD->chkTimer = new QTimer(w);
 		shD->chkTimer->setSingleShot(false);
 		connect(shD->chkTimer, SIGNAL(timeout()), this, SLOT(chkTimer()));
-		shD->chkTimer->start(STD_WAIT_TM*1000);
+		shD->chkTimer->start(prmWait_TM*1000);
 
 # if HAVE_MULTIMEDIA
 		if(!shD->addrWdg) {

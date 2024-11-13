@@ -540,9 +540,9 @@ void VCAFormEl::getReq( SSess &ses )
 	    XMLNode xproc("tbl");
 	    xproc.load(req.text(), XMLNode::LD_NO, Mess->charset());
 
-	    for(int iR = 0; iR < xproc.childSize(); ++iR) {
+	    for(int iR = 0; iR < (int)xproc.childSize(); ++iR) {
 		XMLNode *rO = xproc.childGet(iR);
-		for(int iC = 0; iC < rO->childSize(); ++iC) {
+		for(int iC = 0; iC < (int)rO->childSize(); ++iC) {
 		    XMLNode *cO = rO->childGet(iC);
 		    if(rO->name() == "h" || cO->name() == "s" || cO->name() == "t")
 			ses.page += "\""+TSYS::strEncode(cO->text(),TSYS::SQL,"\"")+"\";";
@@ -6533,7 +6533,7 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 	//Update trend's current values
 	for(unsigned iP = 0; iP < trnds.size(); iP++) {
 	    int vpos = trnds[iP].val(curTime);
-	    if(trnds[iP].val().size() && vpos == trnds[iP].val().size())	//!!!! Compensate the one point outward the size
+	    if(trnds[iP].val().size() && vpos == (int)trnds[iP].val().size())	//!!!! Compensate the one point outward the size
 		vpos = trnds[iP].val().size() - 1;
 
 	    double val = EVAL_REAL;

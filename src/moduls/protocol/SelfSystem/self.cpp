@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.SelfSystem file: self.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,7 +32,7 @@
 #define MOD_NAME	trS("Own protocol of OpenSCADA")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"2.0.3"
+#define MOD_VER		"2.0.4"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -188,7 +188,7 @@ TProtocolIn *TProt::in_open( const string &name )	{ return new TProtIn(name); }
 
 void TProt::outMess( XMLNode &io, TTransportOut &tro )
 {
-    char buf[1000];
+    char buf[prmStrBuf_SZ];
     string req, resp, header;
     int rez, resp_len, off;
     string reqNm = io.name();

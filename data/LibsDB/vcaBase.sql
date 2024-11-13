@@ -4220,6 +4220,55 @@ MjU2YzcuMDc4IDAgMTIuODE4IDUuNzM5IDEyLjgxOCAxMi44MTggMCA3LjA3OC01Ljc0IDEyLjgx
 Ny0xMi44MTggMTIuODE3SDM5LjI1Yy05LjEwMyAwLTE2LjQ4LTcuMzc4LTE2LjQ4LTE2LjQ4IDAt
 OS4xMDMgNy4zNzctMTYuNDggMTYuNDgtMTYuNDgiIGZpbGw9IiNlZmVmZWQiPjwvcGF0aD48L3N2
 Zz4=');
+INSERT INTO wlb_Main_mime VALUES('weath13d','image/svg+xml;2.50098','PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEi
+IHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93
+d3cudzMub3JnLzE5OTkveGxpbmsiIGRhdGEtdi01ZWQzMTcxZT0iIiB3aWR0aD0iNTBweCIgaGVp
+Z2h0PSI1MHB4IiB2aWV3Qm94PSIwIDAgMTQ4IDE0OCIgY2xhc3M9Im93bS13ZWF0aGVyLWljb24i
+PjxnIGZpbGw9IiMzYjNjNDAiPjxwYXRoIGQ9Ik03OC4wMDkgNzYuMjg2bC00LjAxIDIuMzE1LTQu
+MDA3LTIuMzE1LS4wMDQtNC42MzMgNC4wMS0yLjMxNSA0LjAxIDIuMzE4em0yMC41NC0uNTA0bC0x
+MS4wODQgMi45Ny00LjI3My0yLjQ2NnYtNC42MjVsNC4yMjEtMi40MjYgMTEuMTM2IDIuOTgzYTIu
+NTkgMi41OSAwIDEwMS4zMzctNS4wMDVsLTYuMS0xLjYzNiA1LjYyMy0zLjIzYTIuNTg3IDIuNTg3
+IDAgMDAuOTU4LTMuNTM1IDIuNTg3IDIuNTg3IDAgMDAtMy41MzUtLjk1OGwtNS42MzggMy4yMzgg
+MS42MzQtNi4xMDVhMi41OTIgMi41OTIgMCAwMC0xLjgzLTMuMTc0Yy0xLjM3Ny0uMzYtMi44MDQu
+NDUxLTMuMTcxIDEuODMxTDg0Ljg1NiA2NC43M2wtNC4yNTIgMi40NDItNC4wMy0yLjMzMXYtNC44
+ODhsOC4xNDctOC4xNDdhMi41ODcgMi41ODcgMCAwMDAtMy42NjMgMi41ODUgMi41ODUgMCAwMC0z
+LjY2MSAwbC00LjQ4NSA0LjQ4NHYtNi41MWEyLjU5IDIuNTkgMCAwMC0yLjU5LTIuNTkgMi41OSAy
+LjU5IDAgMDAtMi41OTMgMi41OXY2LjQ3OGwtNC40NS00LjQ1MmEyLjU4NyAyLjU4NyAwIDAwLTMu
+NjYzIDAgMi41ODcgMi41ODcgMCAwMDAgMy42NjNsOC4xMTMgOC4xMTV2NC45NDFsLTMuOTk3IDIu
+MzA2LTQuMjUzLTIuNDM4LTIuOTY3LTExLjA4NmEyLjU5NiAyLjU5NiAwIDAwLTMuMTctMS44MzEg
+Mi41OTIgMi41OTIgMCAwMC0xLjgzMyAzLjE3NGwxLjYzNiA2LjEwMy01LjY0LTMuMjM2YTIuNTg3
+IDIuNTg3IDAgMDAtMy41MzUuOTU4IDIuNTg3IDIuNTg3IDAgMDAuOTU4IDMuNTM0bDUuNjI1IDMu
+MjMtNi4xMDYgMS42MzdhMi41OTEgMi41OTEgMCAwMDEuMzQzIDUuMDA1bDExLjEzNi0yLjk4NSA0
+LjIyIDIuNDIzLjAwMiA0LjYzLTQuMjc0IDIuNDctMTEuMDg0LTIuOTc0YTIuNjA1IDIuNjA1IDAg
+MDAtMy4xNzMgMS44MzMgMi41ODYgMi41ODYgMCAwMDEuODMgMy4xN2w2LjA4NSAxLjYzMi01LjYx
+IDMuMjM5YTIuNTg4IDIuNTg4IDAgMDAxLjI5NCA0LjgzMWMuNDQyIDAgLjg4NS0uMTA4IDEuMjk2
+LS4zNDdsNS42MzgtMy4yNTQtMS42NDEgNi4xMjdhMi41OTIgMi41OTIgMCAwMDIuNTA1IDMuMjY0
+IDIuNTkgMi41OSAwIDAwMi40OTgtMS45MjRsMi45ODMtMTEuMTMyIDQuMjQ1LTIuNDQ3IDMuOTg5
+IDIuMzAydjUuMDAzbC04LjExMyA4LjExN2EyLjU4OCAyLjU4OCAwIDAwMS44MyA0LjQyYy42NjIg
+MCAxLjMyNS0uMjUxIDEuODMzLS43NTdsNC40NS00LjQ1MnY2LjQ3NmEyLjU5IDIuNTkgMCAwMDIu
+NTkyIDIuNTkgMi41OSAyLjU5IDAgMDAyLjU5LTIuNTl2LTYuNTFsNC40ODYgNC40ODZjLjUwNi41
+MDYgMS4xNy43NTggMS44My43NTguNjY2IDAgMS4zMjgtLjI1MiAxLjgzMS0uNzU4YTIuNTg4IDIu
+NTg4IDAgMDAwLTMuNjYzbC04LjE0Ni04LjE1di00Ljk1bDQuMDI3LTIuMzIyIDQuMjQgMi40NDcg
+Mi45ODUgMTEuMTMyYTIuNTg2IDIuNTg2IDAgMDAzLjE3IDEuODM0IDIuNTkgMi41OSAwIDAwMS44
+MzEtMy4xNzRsLTEuNjQzLTYuMTI3IDUuNjQgMy4yNTRjLjQxMS4yNC44NTYuMzQ3IDEuMjk2LjM0
+N2EyLjU4OSAyLjU4OSAwIDAwMS4yOTQtNC44MzJsLTUuNjEtMy4yMzggNi4wODEtMS42MzJhMi41
+ODYgMi41ODYgMCAwMDEuODM0LTMuMTcgMi41OTcgMi41OTcgMCAwMC0zLjE3LTEuODMzIj48L3Bh
+dGg+PC9nPjwvc3ZnPg==');
+INSERT INTO wlb_Main_mime VALUES('weath02n','image/svg+xml;1.12695','PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEi
+IHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93
+d3cudzMub3JnLzE5OTkveGxpbmsiIGRhdGEtdi0zZTZlOWYxMj0iIiB3aWR0aD0iNTBweCIgaGVp
+Z2h0PSI1MHB4IiB2aWV3Qm94PSIwIDAgMTQ4IDE0OCIgY2xhc3M9Im93bS13ZWF0aGVyLWljb24i
+PjxwYXRoIGQ9Ik0xMjEuNjYgNjguMjdjMCAxNC4xODYtMTEuNSAyNS42ODgtMjUuNjg3IDI1LjY4
+OC0xNC4xODcgMC0yNS42ODctMTEuNTAyLTI1LjY4Ny0yNS42ODggMC0xNC4xODUgMTEuNS0yNS42
+ODcgMjUuNjg3LTI1LjY4NyAxNC4xODcgMCAyNS42ODggMTEuNTAyIDI1LjY4OCAyNS42ODciIGZp
+bGw9IiMzYjNjNDAiPjwvcGF0aD48cGF0aCBkPSJNNDIuODIgNzIuNDU4Yy43NiAwIDEuNTA1LjA2
+OCAyLjI0LjE2OGExOC4yNDkgMTguMjQ5IDAgMDEtLjQxLTMuODMyYzAtMTAuMTEyIDguMi0xOC4z
+MTIgMTguMzEzLTE4LjMxMiA5LjgzOCAwIDE3Ljg0MiA3Ljc2NyAxOC4yNjkgMTcuNTAyYTEwLjkz
+OSAxMC45MzkgMCAwMTcuMzY2LTIuODUzYzYuMDY3IDAgMTAuOTg3IDQuOTIgMTAuOTg3IDEwLjk5
+IDAgMS4zODItLjI2NyAyLjY5OC0uNzMxIDMuOTE4YTEzLjAwNyAxMy4wMDcgMCAwMTIuNTYxLS4y
+NTZjNy4wODEgMCAxMi44MiA1LjczNyAxMi44MiAxMi44MTUgMCA3LjA4My01LjczOSAxMi44Mi0x
+Mi44MiAxMi44Mkg0Mi44MmMtOS4xMDMgMC0xNi40OC03LjM4LTE2LjQ4LTE2LjQ3OCAwLTkuMTA0
+IDcuMzc3LTE2LjQ4MiAxNi40OC0xNi40ODIiIGZpbGw9IiNlZmVmZWQiPjwvcGF0aD48L3N2Zz4=');
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','El_text_alarm','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;alignment;text;',2);
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','box_alarm','/wlb_mnEls/wdg_El_Alarm','name;geomX;geomY;geomW;geomH;geomXsc;geomYsc;geomZ;fillColor;elLst;',2);
@@ -10222,7 +10271,7 @@ if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCal
 
 //Demo play process
 if(f_start || !play_value) { stepCur = -1; stepTm = 0; play_img = "start"; }
-if(play_value) {
+if(play_value && (SYS.time()-this.ownerSess().reqTm()) < (1e-3*this.calcPer())) {	//With preventing call in background on WEB
 	play_img = "stop";
 	if(stepTm > 0) stepTm -= 1/f_frq;
 	else {
@@ -13865,7 +13914,7 @@ if(f_start || toUpdate) {
 					// Value
 					if(celO.prc.length || itVlId == "ID") {	//RO items
 						nwO = this.wdgAdd("fItVal"+itVlId, "", "/wlb_originals/wdg_Text");
-						nwO.attrSet("geomX", itEdFormX+tVl2).attrSet("geomW", itEdFormW - tVl2)
+						nwO.attrSet("geomX", itEdFormX+tVl2).attrSet("geomW", (itEdFormW - tVl2) / ((itVlId=="ID")?2:1))
 							.attrSet("geomY", itEdFormOff).attrSet("geomH", itEdFormLineHigh).attrSet("geomZ", geomZoff++)
 							.attrSet("alignment", 8);
 						itEdFormOff += itEdFormLineHigh;
@@ -14048,7 +14097,7 @@ if(fClrTo >= 0) {
 if(toCalcCycles > 0.1) {
 	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
 	toCalcCycles = max(0, toCalcCycles-1);
-}','','',-2,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1723382203);
+}','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1723382203);
 INSERT INTO wlb_Main VALUES('weather','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAxCAIAAADldTjtAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAO
 KUlEQVRogdVa228bV3o/Z87cyRnebyJF8SJLsmRZchy7cSUncQyjDjbbNhssdrsLNFsUaNEWfSgK
 9F/xS9CgD3loUewiKFqk62w2XslO1rZs2bEki5JMihJ1o3jRkJwZzu30YWxqRMluI2eb7PdEHn7n
@@ -17899,7 +17948,7 @@ Container of the control panels — container area to include control panels of 
 Under the control panels container placed a button to start the demo mode — mode in which performed periodic switching for representative frames, changing regimes and other operations by a scenario.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.7.1
+Version: 2.7.2
 License: GPLv2',32,'','','','Елемент-кадр слугує базою для створення користувацьких інтерфейсів, пачатково для управління технологічними процесами, заснованими на об''єктах сигналізації (СО).
 
 Коренева сторінка містить чотири області:
@@ -17927,7 +17976,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Під контейнером панелей управління розташовується кнопка запуску демонстраційного режиму — режиму за яким здійснюється періодичне перемикання показних кадрів, зміна режимів та інших операцій згідно сценарію.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.7.1
+Версія: 2.7.2
 Ліцензія: GPLv2','','Элемент-кадр служит базой для создания пользовательских интерфейсов, начально для управления технологическими процессами, основанными на объектах сигнализации (СО).
 
 Корневая страница содержит четыре области:
@@ -17957,7 +18006,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Корневая страница интерфейса визуализации ТП, построенного на основе объектов сигнализации.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.7.1
+Версия: 2.7.2
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','1024',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','670',40,'','','','','','','','','','');
@@ -24180,7 +24229,7 @@ The frame provides currently and in future for next features:
   - detailed control panel-form of the selected item with the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.4.18
+Version: 1.4.19
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -24194,7 +24243,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - деталізована панель-форма керування обраним елементом зі специфічними полями.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.4.18
+Версія: 1.4.19
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');
