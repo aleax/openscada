@@ -1,3 +1,12 @@
+2024-11-24 Roman (stable)
+- LibsDB.OscadaLibs: tmplib_base.initRemCntr: Appending hostname as a part of the remote station identifier.
+- LibsDB.vcaBase: wlb_Main.storeHouse: Appending file size in the file element of the item form.
+    Expanding width of the file element of the item form up to 300 pixels.
+- !!!:data/{debian,debian_mod}/control: Appending openscada-server.service and openscada-plc.service
+    on the openscada.service basis from Diego Eckhard, also as a commented entry dh_installsystemd in rules;
+    and that switched to use in Debian 12,11,10 and Ubuntu 24.04,22.04,20.04.
+
+
 2024-11-09 Roman (stable)
 - !!!!:LibsDB.OscadaLibs: The library tmplib_base appended by an initial template
     "Control the remote initiative connections (initRemCntr)".
@@ -107,7 +116,7 @@
 2024-08-19 Roman (stable)
 - !:SYS,DAQ.{DAQGate,JavaLikeCalc,OPC_UA.libOPC_UA,System},Protocol.ModBus,Transport.
 	SSL,UI.{QTCfg,QTStarter,Vision,WebCfgD,WebVision}: The source code some cleaned from building warnings.
-- SYS Type of the limit variables limUserFile_SZ, limUserIts_N changed to unsigned.
+- SYS: Type of the limit variables limUserFile_SZ, limUserIts_N changed to unsigned.
 
 
 2024-08-12 Roman (stable)

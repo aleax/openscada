@@ -10888,9 +10888,9 @@ else if(f_err.toInt() && !tErr.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 f_err = tErr;','','',1714665209);
 INSERT INTO tmplib_base VALUES('initRemCntr','Control the remote initiative connections','Контроль віддалених ініціативних підключень','','Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.0
+Version: 1.0.1
 License: GPLv2','Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.0
+Версія: 1.0.1
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 function prmAdd(req, path, pId, pNm, pTp, pSrc, pLogLnk) {
 	req.childAdd("add").setAttr("path",path+"/%2fbr%2fprm_").setAttr("id",pId).setText(pNm);
@@ -10934,13 +10934,14 @@ else {
 				.setAttr("path","/");
 		req.childAdd("get").setAttr("path","/%2fgen%2fstat");
 		req.childAdd("get").setAttr("path","/DAQ/LogicLev/"+cntrObj+"/%2fcntr%2fcfg%2fDESCR");
+		req.childAdd("get").setAttr("path","/%2fgen%2fenv%2fhost");
 		if((rez=oTrO.messIO(req,"SelfSystem")).length) {
 			SYS.messNote("initRemCntr", (tVl=tr("Error requesting the remote host ''%1'': %2. ").replace("%1",hostAddr).replace("%2",rez)));
 			tErr += (tErr.length?"":"10:") + tVl;
 			oTrO.start(false);
 			continue;
 		}
-		stNm = req.childGet(0).text();
+		stNm = req.childGet(2).text()+"_"+req.childGet(0).text();
 		stSrcKey = rand(999999).toString();
 		isSrcInited = isHostReqPresent = false;
 		if(!req.childGet(1).attr("rez").toInt() && (tVl=req.childGet(1).text().match("^SrcKey: *([^\\n]+)$","m")).length)
@@ -11059,7 +11060,7 @@ else {
 
 //Error set
 if(tErr.length)	f_err = tErr;
-else f_err = "0";','','',1731073576);
+else f_err = "0";','','',1732366136);
 CREATE TABLE IF NOT EXISTS 'flb_Controller' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO flb_Controller VALUES('prescr','Prescriptions manager (moved)','','','!!!!: Moved and replaced by the template PrescrTempl.manager. Will be removed soon
 Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
