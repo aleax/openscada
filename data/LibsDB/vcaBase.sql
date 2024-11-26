@@ -14145,7 +14145,7 @@ for(offEv = 0; (sval=event.parse(0,"\n",offEv)).length; ) {
 			}
 			SYS.fileWrite(celO.tp.parse(2,":")+"/"+fItValFileNm, fItValFile);
 			SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET `SP_"+celId+"`="
-					"''"+SYS.strEncode(fItValFileNm+(dataTblOneReq[1][0].length?"\n"+dataTblOneReq[1][0]:""),"SQL")+"'' "
+					"''"+SYS.strEncode(fItValFileNm+((dataTblOneReq[1][0].length && dataTblOneReq[1][0] != "<NULL>")?"\n"+dataTblOneReq[1][0]:""),"SQL")+"'' "
 					"WHERE `ID`=''"+this.fItValID.attr("text")+"'';");
 		}
 		else {
@@ -14155,7 +14155,7 @@ for(offEv = 0; (sval=event.parse(0,"\n",offEv)).length; ) {
 				fItValFileNm = fItValFileNm+iF+"."+fItValFileExt;
 			}
 			SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET `SP_"+celId+"`="
-					"''"+SYS.strEncode(fItValFileNm+"\n"+SYS.strEncode(fItValFile,"Base64")+(dataTblOneReq[1][0].length?"\n"+dataTblOneReq[1][0]:""),"SQL")+"'' "
+					"''"+SYS.strEncode(fItValFileNm+"\n"+SYS.strEncode(fItValFile,"Base64")+((dataTblOneReq[1][0].length && dataTblOneReq[1][0] != "<NULL>")?"\n"+dataTblOneReq[1][0]:""),"SQL")+"'' "
 					"WHERE `ID`=''"+this.fItValID.attr("text")+"'';");
 		}
 		fItValFileSL.attrSet("items",fItValFileNm+";;"+(fItValFile.length/1024).toPrecision(4)+"KiB\n"+fItValFileSL.attr("items"))
@@ -14270,7 +14270,7 @@ if(fClrTo >= 0) {
 if(toCalcCycles > 0.1) {
 	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
 	toCalcCycles = max(0, toCalcCycles-1);
-}','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1732197380);
+}','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1732612922);
 INSERT INTO wlb_Main VALUES('weather','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAxCAIAAADldTjtAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAO
 KUlEQVRogdVa228bV3o/Z87cyRnebyJF8SJLsmRZchy7cSUncQyjDjbbNhssdrsLNFsUaNEWfSgK
 9F/xS9CgD3loUewiKFqk62w2XslO1rZs2bEki5JMihJ1o3jRkJwZzu30YWxqRMluI2eb7PdEHn7n
@@ -24407,7 +24407,7 @@ The frame provides currently and in future for next features:
   - detailed control panel-form of the selected item with the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.0.7
+Version: 2.0.8
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -24421,7 +24421,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - деталізована панель-форма керування обраним елементом зі специфічними полями.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.0.7
+Версія: 2.0.8
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');

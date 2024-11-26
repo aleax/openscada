@@ -1216,7 +1216,7 @@ void TMdPrm::loadDATA( bool incl )
 			ai = (aflg.find("~") == string::npos) ?	TSYS::strMess("%d,%d,%d,%d", reg, reg2, reg3, reg4) :
 								TSYS::strMess("%d,%d,%d,%d", reg4, reg3, reg2, reg);
 		    }
-		    else if(atp_sub == "s") {
+		    else if(atp_sub[0] == 's') {
 			int rN = vmax(0,vmin(100,strtol(TSYS::strParse(ai,1,",").c_str(), NULL, 0)));
 			if(rN == 0) rN = 10;
 			if(flg&TVal::DirRead) for(int iR = reg+1; iR < (reg+rN); iR++) owner().regVal(iR, atp_m);
@@ -1655,7 +1655,7 @@ bool TMdPrm::TLogCtx::lnkInit( int num, bool toRecnt )
 	    ai = (mode.find("~") == string::npos) ? TSYS::strMess("%d,%d,%d,%d", reg, reg2, reg3, reg4) :
 						    TSYS::strMess("%d,%d,%d,%d", reg4, reg3, reg2, reg);
 	}
-	else if(atp_sub == "s") {
+	else if(atp_sub[0] == 's') {
 	    int rN = vmax(0,vmin(100,strtol(TSYS::strParse(ai,1,",").c_str(), NULL, 0)));
 	    if(rN == 0) rN = 10;
 	    if(!justWr) for(int iR = reg; iR < reg+rN; iR++) ((TMdPrm*)obj)->owner().regVal(iR, atp_m);
