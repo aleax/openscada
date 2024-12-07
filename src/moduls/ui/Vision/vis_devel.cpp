@@ -1420,8 +1420,18 @@ void VisDevelop::visualItDel( const string &itms, bool chNoWr )
 
     //Request to confirm
     if(itms.empty()) {
+	string st_ls;
+	// Requesting status of the item
+	XMLNode req("get");
+	for(int w_off = 0; (del_wdg=TSYS::strSepParse(work_wdg_loc,0,';',&w_off)).size(); ) {
+	    req.setAttr("path", del_wdg+"/%2fwdg%2fst%2fstatus");
+	    if(!cntrIfCmd(req))	st_ls += "\n" + del_wdg + ": " + req.text();
+	}
+
 	InputDlg dlg(this,actVisItDel->icon(),
-		QString(_("Are you sure of deleting the visual items: '%1'?")).arg(QString(work_wdg_loc.c_str()).replace(";","; ")),
+		QString(_("Are you sure of deleting the visual items: '%1'?")).arg(QString(work_wdg_loc.c_str()).replace(";","; "))+
+		"\n\n"+
+		QString(_("Check statuses the items before the deletion:%2")).arg(st_ls.c_str()),
 		_("Deleting the visual items"),false,false);
 	if(dlg.exec() != QDialog::Accepted) return;
     }
@@ -1434,8 +1444,7 @@ void VisDevelop::visualItDel( const string &itms, bool chNoWr )
 	do {
 	    it_own= it_own+(it_id.empty() ? "" : ("/"+it_id));
 	    it_id = it_tmp;
-	}
-	while((it_tmp=TSYS::pathLev(del_wdg,pElCnt++)).size());
+	} while((it_tmp=TSYS::pathLev(del_wdg,pElCnt++)).size());
 	pElCnt--;
 
 	XMLNode req("del");

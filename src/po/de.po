@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-26 09:08+0300\n"
+"POT-Creation-Date: 2024-12-07 08:34+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -324,13 +324,16 @@ msgstr "Alle mit Fehlerquelle entfernen – fehlende Quelle"
 msgid "Remove all lost archives - empty storage"
 msgstr "Entfernen Sie alle verlorenen Archive – Leerspeicher"
 
+msgid "Remove all doubly linked"
+msgstr "Entfernen Sie alle doppelt verknüpften"
+
 #, c-format
 msgid ""
 "all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost "
-"(empty storage) %d"
+"(empty storage) %d, doubly linked %d"
 msgstr ""
 "alle %d, aktiviert %d; Keine Quelle (passiv) %d, Fehler (fehlende Quelle) "
-"%d, verloren(Leerspeicher) %d"
+"%d, verloren(Leerspeicher) %d, doppelt verknüpft %d"
 
 msgid "<High level>"
 msgstr "<Hohes Niveau>"
@@ -2160,18 +2163,18 @@ msgstr "Fehler beim Stoppen des Subsystems '%s'."
 msgid "Termination signal is received. Stopping the program!"
 msgstr "Terminierungssignal wird empfangen. Programm anhalten!"
 
-msgid "Floating point exception is caught!"
-msgstr "Fehler bei Fliesskommaoperation abgefangen!"
-
 #, c-format
 msgid "Close the process %d of the child!"
 msgstr "Schließen Sie den Prozess %d des Kindes!"
 
-msgid "Segmentation fault signal!"
-msgstr "Fehler Speichersegmentierung!"
+msgid "Floating point exception!"
+msgstr "Gleitkomma-Ausnahme!"
 
 msgid "Program aborted!"
 msgstr "Programmabbruch!"
+
+msgid "Segmentation fault signal!"
+msgstr "Fehler Speichersegmentierung!"
 
 #, c-format
 msgid "Unknown signal %d!"

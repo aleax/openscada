@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-09 18:10+0200\n"
+"POT-Creation-Date: 2024-12-07 08:50+0200\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -966,6 +966,9 @@ msgstr "Widget/Seite erstellen"
 
 msgid "Are you sure of deleting the visual items: '%1'?"
 msgstr "Sind Sie sicher, dass die visuellen Elemente zu löschen: '%1'?"
+
+msgid "Check statuses the items before the deletion:%2"
+msgstr "Überprüfen Sie den Status der Elemente vor dem Löschen:%2"
 
 msgid "Deleting the visual items"
 msgstr "Löschen der visuellen Elemente"

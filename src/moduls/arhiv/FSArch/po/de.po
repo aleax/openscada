@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-29 15:43+0300\n"
+"POT-Creation-Date: 2024-12-07 08:41+0200\n"
 "PO-Revision-Date: 2009-08-17 10:44+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -19,6 +19,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Error call the packing program!"
+msgstr "Fehler beim Aufruf des Packprogramms!"
 
 #, c-format
 msgid "Error compressing for '%s': %d!"
@@ -397,6 +400,9 @@ msgstr ""
 "außerhalb der Sicherheit liegen.\n"
 "Um diese Eigenschaft zu deaktivieren, kannst du sie auf Null setzen."
 
+msgid "Remove original archive file at error unpacking"
+msgstr "Bei Fehler beim Entpacken die Originalarchivdatei entfernen"
+
 msgid "Files size"
 msgstr "Dateiumfang"
 
@@ -459,6 +465,14 @@ msgid "Error archive file!"
 msgstr "Fehler Archivdatei!"
 
 #, c-format
+msgid ""
+"Number of the setting to file items achieved the limit %d for time range "
+"[%lld:%lld]!"
+msgstr ""
+"Die Anzahl der Einstellungen für Dateielemente hat für den Zeitraum "
+"[%lld:%lld] das Limit von %d erreicht!"
+
+#, c-format
 msgid "Warning! Allocated buffer size %d for indexes lesser for used %d."
 msgstr "Achtung! Zugeteilt Puffergröße %d für Indizes geringerem verwendet %d."
 
@@ -475,18 +489,15 @@ msgid "Error writing to the file '%s'!"
 msgstr "Fehler beim Schreiben in die Datei '%s'!"
 
 #, c-format
-msgid ""
-"Error archive file structure: '%s'. Margin = %d byte. Will try fix that!"
-msgstr ""
-"Fehler in der Dateistruktur: '%s'. Differenz = %d byte. Reparaturversuch!"
+msgid "Error archive file structure: '%s'. Margin = %d byte. Will try fix that!"
+msgstr "Fehler in der Dateistruktur: '%s'. Differenz = %d byte. Reparaturversuch!"
 
 #, c-format
 msgid "Error openning/creating an archive file for the copy here: %s"
 msgstr "Fehler beim Öffnen/Erstellen einer Archivdatei für die Kopie hier: %s"
 
 #, c-format
-msgid ""
-"Last value for the actual archive file '%s' is not EVAL. Will try fix that!"
+msgid "Last value for the actual archive file '%s' is not EVAL. Will try fix that!"
 msgstr ""
 "Der letzte Wert für die aktuelle Archivdatei '%s' ist nicht EVAL. Werde "
 "versuchen, das zu beheben!"
@@ -503,3 +514,4 @@ msgid ""
 msgstr ""
 "Das Archivierungsmodul. Funktionen zum Archivieren von Nachrichten und "
 "Werten in dasDateisystem"
+

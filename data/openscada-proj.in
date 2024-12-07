@@ -2,38 +2,84 @@
 
 argHelp()
 {
-    echo "Projects management script of OpenSCADA mostly designed to call from OpenSCADA but also can be used independently.
-The script is mostly software platform specific and relates now for Linux.
+    echo "The project management script of OpenSCADA mostly designed to call from OpenSCADA itself, but it also can be used independently.
+The script is mostly software platform specific and this one is related for Linux.
+
 openscada-proj list
-openscada-proj proc|create|remove|update {ProjName}
+openscada-proj proc|create|remove|snapshot|crash|cores|update {ProjName}
  Commands:
-  list   - allowed projects list;
-  proc   - proceed for copy RO projects to WR, create desktop links, process core dumps;
-  create - create new projects or copy RO projects to WR, create desktop links;
-  remove - remove project;
-  update - update from 0.8.0 LTS;
+  list   - list of the accessible projects;
+  proc   - performing of the RO project copying to WR, creating desktop link, processing core dumps;
+  create - creating new project or copying the RO project to WR, creating desktop link;
+  remove - removing the project;
+  snapshot|crash|cores - creating the hot crash snapshot to the running project,
+           where the 'crash' variant to call from OpenSCADA,
+                 the 'cores' variant to call from 'proc' for processing the core-files;
+  update - updating from 0.8.0 LTS.
  Arguments:
   ProjName - project name;
  Environment variables:
   dPrj     - directory of projects OpenSCADA, can be RO;
   dPrjUser - directory of projects OpenSCADA of the user, WR;
   dSysCfg  - directory of system configuration;
-  dData    - directory of system data;
+  dData    - directory of system data.
 
 openscada-proj backup|backupRestore {ProjName} [{BackupName}]
 openscada-proj backupList {ProjName}
  Commands:
-  backup - backup the selected project <ProjName> to the name <BackupName>, or to the current date at missing;
-  backupRestore - restore the selected project <ProjName> from the pointed backup name <BackupName>, or from the last one at missing;
-  backupList	- list the project <ProjName> backups.
+  backup	- backup the project <ProjName> under the name <BackupName>, or with the current date at missing;
+  backupRestore - restore the project <ProjName> from the backup name <BackupName>, or from the last one at missing;
+  backupList	- list of backups of the project <ProjName>.
  Arguments:
   ProjName   - project name;
-  BackupName - the backup archive name.
+  BackupName - name of the backup archive.
  Environment variables:
   OSCD_TAR_ComprPrg - TAR compression program, by default gzip;
   OSCD_TAR_Args     - TAR extra arguments, by default \"--exclude=lock --exclude=ARCHIVES\";
   OSCD_BackLim      - Backups limit, by default 10.
 ";
+}
+
+crashHandler()
+{
+    prjNm=$1
+    dPrjRez=$dPrj/$prjNm
+
+    if test -z "$(which gdb 2> /dev/null)"; then echo "No GDB program present!"; return 0; fi
+
+    cd $dPrjRez
+
+    if test "$2" = cores; then
+	for fit in `ls core* 2> /dev/null`; do
+	    resultFile="${prjNm}_${fit}_$(date +%F_%H.%M).crash"
+	    echo "Processing the core dump files for backtrace obtaining in the file $resultFile"
+	    gdb @bindir_full@/openscada --core ${fit} --batch --quiet -ex "thread apply all bt full" -ex "quit" > $resultFile
+	    gzip $resultFile
+	    rm -f ${fit}
+	done
+	return 0
+    fi
+
+    if test "$2" != snapshot -a "$2" != crash; then echo "Unknown command $2 to the crash handler!"
+    elif test ! -f $dPrjRez/lock; then echo "The project is not running since missing the file $dPrjRez/lock!"
+    else
+	pid=`cat $dPrjRez/lock | sed -r 's/^0*([0-9]+).*/\1/'`
+	if ! ps -A -o "pid cmd" | grep "^ *$pid.*openscada" > /dev/null; then
+	    echo "No 'openscada' process at pid $pid!"
+	else
+	    cd $dPrjRez
+	    if test "$2" = crash; then
+		resultFile="${prjNm}_$(date +%F_%H.%M).crash"
+		echo "Processing the crashing project for backtrace obtaining in the file $resultFile"
+		rm $dPrjRez/lock
+	    else
+		resultFile="${prjNm}_$2_$(date +%F_%H.%M).crash"
+		echo "Processing the crash snapshot for backtrace obtaining in the file $resultFile"
+	    fi
+	    gdb -p $pid --batch --quiet -ex "thread apply all bt full" -ex "quit" > $resultFile
+	    gzip $resultFile
+	fi
+    fi
 }
 
 if test $# -lt 1; then argHelp; exit 0; fi
@@ -104,17 +150,8 @@ case "$1" in
 	if ! ps -A -o "pid cmd" | grep "^ *$pid.*openscada" > /dev/null; then rm $dPrjRez/lock; fi
     fi
 
-    # Core dump files "core[.*]" into work directory process
-    if test -n "$(which gdb 2> /dev/null)"; then
-	cd $dPrjRez
-	for fit in `ls core* 2> /dev/null`; do
-	    resultFile="${prjNm}_${fit}_$(date +%F_%H.%M).crash"
-	    echo "Core dump process for back trace purchase to the file $resultFile"
-	    gdb @bindir_full@/openscada --core ${fit} --batch --quiet -ex "thread apply all bt full" -ex "quit" > $resultFile
-	    gzip $resultFile
-	    rm -f ${fit}
-	done
-    fi
+    # Processing the core dump files "core[.*]" in the work directory
+    crashHandler $prjNm cores
     ;;
   remove)
     if test $# -lt 2; then echo "Not enough arguments!"; exit 1; fi
@@ -240,6 +277,11 @@ case "$1" in
     cp -R $dPrjUser/.openscada_old/ARCHIVES $dPrjUser/$prjNm
     ln -s ../LibsDB $dPrjUser/$prjNm/LibsDB
     ln -s ./ $dPrjUser/$prjNm/$prjNm
+    ;;
+  snapshot | crash | cores)
+    if test $# -lt 2; then echo "Not enough arguments!"
+    else crashHandler $2 $1
+    fi
     ;;
   *) argHelp ;;
 esac

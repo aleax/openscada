@@ -176,8 +176,8 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     //sigaction(SIGCHLD, &sHdr, &sigActOrig);
     sigaction(SIGALRM, &sHdr, &sigActOrig);
     sigaction(SIGPIPE, &sHdr, &sigActOrig);
-    //sigaction(SIGFPE, &sHdr, &sigActOrig);
-    //sigaction(SIGSEGV, &sHdr, &sigActOrig);
+    sigaction(SIGFPE, &sHdr, &sigActOrig);
+    sigaction(SIGSEGV, &sHdr, &sigActOrig);
     sigaction(SIGABRT, &sHdr, &sigActOrig);
     sigaction(SIGUSR1, &sHdr, &sigActOrig);
 
@@ -235,8 +235,8 @@ TSYS::~TSYS( )
     //sigaction(SIGCHLD, &sigActOrig, NULL);
     sigaction(SIGALRM, &sigActOrig, NULL);
     sigaction(SIGPIPE, &sigActOrig, NULL);
-    //sigaction(SIGFPE, &sigActOrig, NULL);
-    //sigaction(SIGSEGV, &sigActOrig, NULL);
+    sigaction(SIGFPE, &sigActOrig, NULL);
+    sigaction(SIGSEGV, &sigActOrig, NULL);
     sigaction(SIGABRT, &sigActOrig, NULL);
     sigaction(SIGUSR1, &sigActOrig, NULL);
 
@@ -1138,6 +1138,8 @@ void TSYS::setTaskInvPhs( int vl )
 
 void TSYS::sighandler( int signal, siginfo_t *siginfo, void *context )
 {
+    bool isPrc = false;
+
     switch(signal) {
 	case SIGINT:
 	    SYS->mStopSignal = signal;
@@ -1145,10 +1147,6 @@ void TSYS::sighandler( int signal, siginfo_t *siginfo, void *context )
 	case SIGTERM:
 	    SYS->mess_sys(TMess::Warning, _("Termination signal is received. Stopping the program!"));
 	    SYS->mStopSignal = signal;
-	    break;
-	case SIGFPE:
-	    SYS->mess_sys(TMess::Warning, _("Floating point exception is caught!"));
-	    exit(1);
 	    break;
 	case SIGCHLD: {
 	    int status;
@@ -1159,13 +1157,31 @@ void TSYS::sighandler( int signal, siginfo_t *siginfo, void *context )
 	case SIGPIPE:
 	    //mess_sys(TMess::Warning, _("Broken PIPE signal!"));
 	    break;
-	case SIGSEGV:
-	    SYS->mess_sys(TMess::Emerg, _("Segmentation fault signal!"));
-	    break;
-	case SIGABRT:
-	    SYS->mess_sys(TMess::Emerg, _("Program aborted!"));
-	    break;
 	case SIGALRM: case SIGUSR1: break;
+
+	//Signals with call the crash handler
+	//----------------------------------
+	case SIGFPE:
+	    if(!isPrc) SYS->mess_sys(TMess::Warning, _("Floating point exception!"));
+	    isPrc = true;
+	case SIGABRT:
+	    if(!isPrc) SYS->mess_sys(TMess::Emerg, _("Program aborted!"));
+	    isPrc = true;
+	case SIGSEGV:
+	    if(!isPrc) SYS->mess_sys(TMess::Emerg, _("Segmentation fault signal!"));
+	    isPrc = true;
+
+	    // Call the crash handler
+	    system((string("dPrj=") + oscd_datadir_full +
+		" dPrjUser=" + SYS->prjUserDir() +
+		" dSysCfg=" + sysconfdir_full +
+		" dData=" + datadir_full +
+		" " bindir_full "/openscada-proj" +
+		" crash" +
+		" " + SYS->prjNm()).c_str());
+
+	    exit(EXIT_FAILURE);
+	    break;
 	default:
 	    SYS->mess_sys(TMess::Warning, _("Unknown signal %d!"), signal);
     }
@@ -3956,6 +3972,6 @@ int main( int argc, char *argv[] )
     //Free OpenSCADA root object
     if(SYS) delete SYS;
 
-    return rez;
+    return EXIT_SUCCESS; //rez;
 }
 #endif

@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Документы/Руководство по программе</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FProgram+manual&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/Program_manual" title="Documents/Program manual">Documents/Program manual</a> and the translation is 91% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Program_manual.html" title="Documents/Program manual (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FProgram+manual&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/Program_manual" title="Documents/Program manual">Documents/Program manual</a> and the translation is 89% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Program_manual.html" title="Documents/Program manual (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Автор:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a></li>
 <li> <b>Изначально создано:</b> в <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual" rel="nofollow noreferrer noopener" target="_blank">старой Wiki</a> </li></ul>
@@ -894,10 +894,10 @@
 <li> <i>Level of priority of the data receiving task</i> — sets priority of the task of the active archiving. It is used when scheduling the operating system tasks. In the case of proper access availability this field enables the planning of the archiving task in real time and with the specified priority otherwise it modifies the parameter "nice" of the task.</li>
 <li> <i>Forced to set timestampes in the current time</i> — timestamp of received values, on the active archiving, forces to the current time, replaces the data source time.</li>
 <li> <i>Mode of forming ID of the automatic created archives</i> — the mode of forming identifier at selecting the archiving in the tab "Archiving" of the DAQ-parameters.</li>
-<li> <i>Number</i> — detailed number of the value archives with the common statistic about ones: enabled, no source (passive), error (missing source), lost (empty DB).</li>
+<li> <i>Number</i> — detailed number of the value archives with the common statistic about ones: enabled, no source (passive), error (missing source), lost (empty storage), doubly linked.</li>
 <li> <i>Value archives</i> — list of the value archives itself.</li>
-<li> <i>Remove all ...</i> — group operations of removing all no source - passive, with error source - missing source, lost archives - empty DB.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:912px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_val.png"><img class="thumbimage" height="676" src="../en/files/QTCfg_subsys_arch_val.png" width="910" /></a>  <div class="thumbcaption">Рис. 4.6c. Вкладка "Значения" подсистемы "Архивы-История".</div></div></div></div>
+<li> <i>Remove all ...</i> — group operations of removing all no source - passive, with error source - missing source, lost archives - empty storage, doubly linked.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:774px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_val.png"><img class="thumbimage" height="724" src="../en/files/QTCfg_subsys_arch_val.png" width="772" /></a>  <div class="thumbcaption">Рис. 4.6c. Вкладка "Значения" подсистемы "Архивы-История".</div></div></div></div>
 <p>Вкладка "Модули" (Рис.4.1b) содержит список модулей подсистемы "Архивы-История" и идентична для всех модульных подсистем.
 </p><p>Архив значений подсистемы "Архивы-История" предоставляет конфигурационную страницу с вкладками "Архив", "Архиваторы" и "Значения".
 </p><p>The tab "Archive" (Fig.4.6d) contains the basic settings of the archive:
@@ -1822,48 +1822,53 @@ ChkPer     &lt;секунд&gt;     Период поиска новых раз�
 <p>Создать новый проект можно из локального графического интерфейса <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">UI.QTStarter</a> (Рис.5c) и через сценарий командной строки менеджера проектов <b>openscada-proj</b>, который собственно и вызывается из локального графического интерфейса.
 </p>
 <div class="mw-collapsible mw-collapsed">
-<p>Результат исполнения команды <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">openscada-proj --help</span> ...
+<p>Result of the command <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">openscada-proj</span> execution ...
 </p>
 <pre class="mw-collapsible-content" style="white-space: pre-wrap;">
-Projects management script of OpenSCADA mostly designed to call from OpenSCADA but also can be used independently.
-The script is mostly software platform specific and relates now for Linux.
+The project management script of OpenSCADA mostly designed to call from OpenSCADA itself, but it also can be used independently.
+The script is mostly software platform specific and it is related now for Linux.
+
 openscada-proj list
-openscada-proj proc|create|remove|update {ProjName}
+openscada-proj proc|create|remove|snapshot|crash|cores|update {ProjName}
  Commands:
-  list   - allowed projects list;
-  proc   - proceed for copy RO projects to WR, create desktop links, process core dumps;
-  create - create new projects or copy RO projects to WR, create desktop links;
-  remove - remove project;
-  update - update from 0.8.0 LTS;
+  list   - list of the accessible projects;
+  proc   - performing of the RO project copying to WR, creating desktop link, processing core dumps;
+  create - creating new project or copying the RO project to WR, creating desktop link;
+  remove - removing the project;
+  snapshot|crash|cores - creating the hot crash snapshot to the running project,
+           where the 'crash' variant to call from OpenSCADA,
+                 the 'cores' variant to call from 'proc' for processing the core-files;
+  update - updating from 0.8.0 LTS.
  Arguments:
   ProjName - project name;
  Environment variables:
   dPrj     - directory of projects OpenSCADA, can be RO;
   dPrjUser - directory of projects OpenSCADA of the user, WR;
   dSysCfg  - directory of system configuration;
-  dData    - directory of system data;
+  dData    - directory of system data.
 
 openscada-proj backup|backupRestore {ProjName} [{BackupName}]
 openscada-proj backupList {ProjName}
  Commands:
-  backup - backup the selected project &lt;ProjName&gt; to the name &lt;BackupName&gt;, or to the current date at missing;
-  backupRestore - restore the selected project &lt;ProjName&gt; from the pointed backup name &lt;BackupName&gt;, or from the last one at missing;
-  backupList    - list the project &lt;ProjName&gt; backups.
+  backup        - backup the project &lt;ProjName&gt; under the name &lt;BackupName&gt;, or with the current date at missing;
+  backupRestore - restore the project &lt;ProjName&gt; from the backup name &lt;BackupName&gt;, or from the last one at missing;
+  backupList    - list of backups of the project &lt;ProjName&gt;.
  Arguments:
   ProjName   - project name;
-  BackupName - the backup archive name.
+  BackupName - name of the backup archive.
  Environment variables:
   OSCD_TAR_ComprPrg - TAR compression program, by default gzip;
-  OSCD_TAR_Args     - TAR extra arguments, by default \"--exclude=lock --exclude=ARCHIVES\";
+  OSCD_TAR_Args     - TAR extra arguments, by default "--exclude=lock --exclude=ARCHIVES";
   OSCD_BackLim      - Backups limit, by default 10.
 </pre>
 </div>
-<p>В целом сценарий командной строки менеджера проектов <b>openscada-proj</b> предусматривает функции и команды над проектами:
+<p>In general, the command line script for the project manager <b>openscada-proj</b> includes such project functions and commands:
 </p>
-<ul><li> <i>list</i> — перечень присутствующих проектов;</li>
-<li> <i>proc</i> — обработка на предмет: копирования RO проекта в RW, создания иконки-ярлыка на рабочем столе, генерации отчёта об аварийном завершении и т.д.;</li>
-<li> <i>create</i> — создание нового проекта, дополнительно ко всем функциям <i>proc</i>;</li>
-<li> <i>remove</i> — удаление существующего проекта.</li></ul>
+<ul><li> <i>list</i> — list of the accessible projects;</li>
+<li> <i>proc</i> — performing of the RO project copying to WR, creating desktop link, processing core dumps;</li>
+<li> <i>create</i> — creating new project or copying the RO project to WR, creating desktop link;</li>
+<li> <i>remove</i> — removing the project;</li>
+<li> <i>snapshot|crash|cores</i> — creating the hot crash snapshot to the running project, where the 'crash' variant to call from OpenSCADA, the 'cores' variant to call from 'proc' for processing the core-files.</li></ul>
 <p>Дополнительно сценарий командной строки содержит команды менеджера резервного копирования проектов:
 </p>
 <ul><li> <i>backup</i> — резервное копирование выбранного проекта <i>ProjName</i> в <i>BackupName</i>, или на текущую дату при отсутствии;</li>
@@ -1874,25 +1879,34 @@ openscada-proj backupList {ProjName}
 <h3><span class="mw-headline" id=".D0.98.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5_.D0.B3.D0.BE.D1.82.D0.BE.D0.B2.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B5.D0.BA.D1.82.D0.B0_OpenSCADA_.D0.B2_.D0.BF.D1.80.D0.BE.D1.81.D1.82.D1.80.D0.B0.D0.BD.D1.81.D1.82.D0.B2.D0.B5_.D1.81.D0.B5.D1.80.D0.B2.D0.B8.D1.81.D0.B0-.D1.84.D0.BE.D0.BD.D0.B5"><span class="mw-headline-number">5.2</span> <span id="Service" title="#Service">Исполнение готового проекта OpenSCADA в пространстве сервиса-фоне</span></span></h3>
 <p>Организация проекта OpenSCADA в отдельном каталоге делает простым запуск готовых проектов в пространстве сервиса — исполнение в фоне, а также дальнейшее обновление и сопровождение этого проекта без прямого удаленного контроля. Фактически, вы можете разрабатывать проект локально, держа его каталог в пользовательском рабочем каталоге (типично "{HOME}/.openscada"), а для запуска в пространстве сервиса только копировать или паковать, передавать на удалённое рабочее устройство и распаковывать в системный рабочий каталог (типично "/usr/share/openscada").
 </p><p>Сервисное-фоновое исполнение программ в Linux обслуживается соответствующим образом сформированным сценарием-скриптом, который размещается в каталоге "/etc/ini.d" и должен быть отдельным на каждый проект OpenSCADA, который запускается в сервисном пространстве. Для упрощения и исключения необходимости заниматься созданием собственных сценариев, OpenSCADA предоставляет соответствующие для стандартных случаев-профилей и которые обычно поставляются пакетами <b>openscada-server</b> и <b>openscada-plc</b> (<b>openscada-lts-server</b> и <b>openscada-lts-plc</b> для LTS).
-</p><p>Соответственно, для запуска в пространстве сервиса скажем библиотечного проекта "АГЛКС" мы:
+</p><p>Therefore, to launch <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">the AGLKS library project</a> in the service space, we:
 </p>
-<ul><li> устанавливаем пакет <b>openscada-model-aglks</b> (<b>openscada-lts-model-aglks</b> для LTS) и <b>openscada-server</b> (<b>openscada-lts-server</b> для LTS), если их ещё не установлено и это не окружение <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">Живого Диска</a> или <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Linux Автоматизации</a> от установки этого Диска;</li>
-<li> запускаем проект "АГЛКС", для получения его каталога в пользовательском рабочем каталоге;</li>
-<li> копируем каталог проекта "АГЛКС" в системный рабочий каталог с переименованием в "server", предварительно остановив фоновое исполнение проекта "server" и удалив его каталог проекта; например следующим образом из консоли:</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="c"># Подключиться от суперпользователя</span>
+<ul><li> install the packages <b>openscada-model-aglks</b> (<b>openscada-lts-model-aglks</b> for LTS) and <b>openscada-server</b> (<b>openscada-lts-server</b> for LTS), if they were not installed yet and that is not environments of the <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">Live Disk</a> or the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Linux Automation</a> from the Disk installation;</li>
+<li> start the project "AGLKS", for getting its folder in the user's work folder;</li>
+<li> copy the project "AGLKS" folder to the system work folder also renaming to "server", previously stop the background execution of the project "server" and remove its project folder; for example, in that way from the console:</li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="c"># Connect from the superuser</span>
 su -
-<span class="c"># ... для живого диска и некоторых других окружений Linux</span>
+<span class="c"># ... for the live disk and some other Linux environments</span>
 sudo bash
-<span class="c"># Остановить исполнение предыдущей конфигурации сервера и удалить его каталог</span>
-service openscada-server stop<span class="p">;</span> rm -R /usr/share/openscada/server
-<span class="c"># ... для LTS</span>
-service openscada-lts-server stop<span class="p">;</span> rm -R /usr/share/openscada/server
-<span class="c"># Скопировать проект "АГЛКС" из домашнего каталога пользователя "{HOME}" с переименованием в "server"</span>
+
+<span class="c"># Stop down of execution of the previous server configuration and remove its folder</span>
+systemctl stop openscada-server.service     <span class="c"># for SystemD</span>
+service openscada-server stop               <span class="c"># for SysVinit</span>
+rm -R /usr/share/openscada/server
+<span class="c"># ... for LTS</span>
+systemctl stop openscada-lts-server.service <span class="c"># for SystemD</span>
+service openscada-lts-server stop           <span class="c"># for SysVinit</span>
+rm -R /usr/share/openscada/server
+
+<span class="c"># Copy the project "AGLKS" from the user home folder "{HOME}" also renaming to "server"</span>
 cp -R <span class="o">{</span>HOME<span class="o">}</span>/.openscada/AGLKS /usr/share/openscada/server 
-<span class="c"># Запустить сервер уже с проектом "АГЛКС"</span>
-service openscada-server start
-<span class="c"># ... для LTS</span>
-service openscada-lts-server start
+
+<span class="c"># Start the server already in the project "AGLKS"</span>
+systemctl start openscada-server.service     <span class="c"># for SystemD</span>
+service openscada-server start               <span class="c"># for SysVinit</span>
+<span class="c"># ... for LTS</span>
+systemctl start openscada-lts-server.service <span class="c"># for SystemD</span>
+service openscada-lts-server start           <span class="c"># for SysVinit</span>
 </pre></div>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Отметьте, что локально вы можете не копировать каталог проекта целиком, а только установить на него символическую ссылку, но вы получите риск двойного исполнения проекта на общий каталог и данные, что приводит к аварийному завершению одного исполнения или их обоих!
 </p><p>Отличие исполнения проекта в среде сервиса-фона от пользовательской среды рабочего стола собственно одно, естественно кроме отсутствия локального графического интерфейса, это — отсутствие в фоне определения локали, т.е. язык интерфейса там будет Английский. И что можно просто исправить сменой или добавлением <a href="#CfgFilePrm">конфигурационного параметра</a> <b>&lt;prm id="Lang"&gt;ru_RU.UTF-8&lt;/prm&gt;</b> в секции-теге "station" файла <b>oscada.xml</b> фонового проекта.
@@ -1912,5 +1926,5 @@ service openscada-lts-server start
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/ru">Documents/Program_manual/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2996</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/ru">Documents/Program_manual/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3000</td></tr></table></body>
 </html>

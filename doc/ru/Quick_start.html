@@ -307,25 +307,34 @@ apt-get install openscada-Model.AGLKS
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Все консольные операции можете выполнить в консольном терминале, например, программа "konsole" в окружении Живого Диска из диалога запуска по Alt+F2. И каталог "{HOME}" тут это "<b>/home/user</b>".
 </p><p>Организация проекта OpenSCADA в отдельном каталоге делает простым запуск готовых проектов в пространстве сервиса — исполнение в фоне, а также дальнейшее обновление и сопровождение этого проекта без прямого удаленного контроля. Фактически, вы можете разрабатывать проект локально, держа его каталог в пользовательском рабочем каталоге (типично "{HOME}/.openscada"), а для запуска в пространстве сервиса только копировать или паковать, передавать на удалённое рабочее устройство и распаковывать в системный рабочий каталог (типично "/usr/share/openscada").
 </p><p>Сервисное-фоновое исполнение программ в Linux обслуживается соответствующим образом сформированным сценарием-скриптом, который размещается в каталоге "/etc/ini.d" и должен быть отдельным на каждый проект OpenSCADA, который запускается в сервисном пространстве. Для упрощения и исключения необходимости заниматься созданием собственных сценариев, OpenSCADA предоставляет соответствующие для стандартных случаев-профилей и которые обычно поставляются пакетами <b>openscada-server</b> и <b>openscada-plc</b> (<b>openscada-lts-server</b> и <b>openscada-lts-plc</b> для LTS).
-</p><p>Соответственно, для запуска в пространстве сервиса скажем библиотечного проекта "АГЛКС" мы:
+</p><p>Therefore, to launch <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">the AGLKS library project</a> in the service space, we:
 </p>
-<ul><li> устанавливаем пакет <b>openscada-model-aglks</b> (<b>openscada-lts-model-aglks</b> для LTS) и <b>openscada-server</b> (<b>openscada-lts-server</b> для LTS), если их ещё не установлено и это не окружение <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">Живого Диска</a> или <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Linux Автоматизации</a> от установки этого Диска;</li>
-<li> запускаем проект "АГЛКС", для получения его каталога в пользовательском рабочем каталоге;</li>
-<li> копируем каталог проекта "АГЛКС" в системный рабочий каталог с переименованием в "server", предварительно остановив фоновое исполнение проекта "server" и удалив его каталог проекта; например следующим образом из консоли:</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="c"># Подключиться от суперпользователя</span>
+<ul><li> install the packages <b>openscada-model-aglks</b> (<b>openscada-lts-model-aglks</b> for LTS) and <b>openscada-server</b> (<b>openscada-lts-server</b> for LTS), if they were not installed yet and that is not environments of the <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">Live Disk</a> or the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Linux Automation</a> from the Disk installation;</li>
+<li> start the project "AGLKS", for getting its folder in the user's work folder;</li>
+<li> copy the project "AGLKS" folder to the system work folder also renaming to "server", previously stop the background execution of the project "server" and remove its project folder; for example, in that way from the console:</li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="c"># Connect from the superuser</span>
 su -
-<span class="c"># ... для живого диска и некоторых других окружений Linux</span>
+<span class="c"># ... for the live disk and some other Linux environments</span>
 sudo bash
-<span class="c"># Остановить исполнение предыдущей конфигурации сервера и удалить его каталог</span>
-service openscada-server stop<span class="p">;</span> rm -R /usr/share/openscada/server
-<span class="c"># ... для LTS</span>
-service openscada-lts-server stop<span class="p">;</span> rm -R /usr/share/openscada/server
-<span class="c"># Скопировать проект "АГЛКС" из домашнего каталога пользователя "{HOME}" с переименованием в "server"</span>
+
+<span class="c"># Stop down of execution of the previous server configuration and remove its folder</span>
+systemctl stop openscada-server.service     <span class="c"># for SystemD</span>
+service openscada-server stop               <span class="c"># for SysVinit</span>
+rm -R /usr/share/openscada/server
+<span class="c"># ... for LTS</span>
+systemctl stop openscada-lts-server.service <span class="c"># for SystemD</span>
+service openscada-lts-server stop           <span class="c"># for SysVinit</span>
+rm -R /usr/share/openscada/server
+
+<span class="c"># Copy the project "AGLKS" from the user home folder "{HOME}" also renaming to "server"</span>
 cp -R <span class="o">{</span>HOME<span class="o">}</span>/.openscada/AGLKS /usr/share/openscada/server 
-<span class="c"># Запустить сервер уже с проектом "АГЛКС"</span>
-service openscada-server start
-<span class="c"># ... для LTS</span>
-service openscada-lts-server start
+
+<span class="c"># Start the server already in the project "AGLKS"</span>
+systemctl start openscada-server.service     <span class="c"># for SystemD</span>
+service openscada-server start               <span class="c"># for SysVinit</span>
+<span class="c"># ... for LTS</span>
+systemctl start openscada-lts-server.service <span class="c"># for SystemD</span>
+service openscada-lts-server start           <span class="c"># for SysVinit</span>
 </pre></div>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Отметьте, что локально вы можете не копировать каталог проекта целиком, а только установить на него символическую ссылку, но вы получите риск двойного исполнения проекта на общий каталог и данные, что приводит к аварийному завершению одного исполнения или их обоих!
 </p><p>Отличие исполнения проекта в среде сервиса-фона от пользовательской среды рабочего стола собственно одно, естественно кроме отсутствия локального графического интерфейса, это — отсутствие в фоне определения локали, т.е. язык интерфейса там будет Английский. И что можно просто исправить сменой или добавлением <a href="#CfgFilePrm">конфигурационного параметра</a> <b>&lt;prm id="Lang"&gt;ru_RU.UTF-8&lt;/prm&gt;</b> в секции-теге "station" файла <b>oscada.xml</b> фонового проекта.
@@ -916,5 +925,5 @@ fill:(50|165):(100|140):(150|165)
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Quick_start/ru">Documents/Quick_start/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2996</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Quick_start/ru">Documents/Quick_start/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3000</td></tr></table></body>
 </html>

@@ -199,6 +199,7 @@ class ModVArch: public TVArchivator
 	int	checkTm( )	{ return mChkTm; }
 	int	packTm( )	{ return mPackTm; }
 	bool	packInfoFiles( ){ return mPackInfoFiles; }
+	bool	removeOrigAtUnpackErr( ) { return mRemoveOrigAtUnpackErr; }
 
 	void setFileTimeSize( double vl )	{ time_size = vmax(100*valPeriod()/3600,vmin(366*24,vl)); modif(); }
 	void setNumbFiles( unsigned vl )	{ mNumbFiles = vl; modif(); }
@@ -207,6 +208,7 @@ class ModVArch: public TVArchivator
 	void setCheckTm( int vl )		{ mChkTm = vmax(0,vl); modif(); }
 	void setPackTm( int vl )		{ mPackTm = vmax(0,vl); modif(); }
 	void setPackInfoFiles( bool vl )	{ mPackInfoFiles = vl; modif(); }
+	void setRemoveOrigAtUnpackErr( bool vl ){ mRemoveOrigAtUnpackErr = vl; modif(); }
 
 	void start( );
 	void stop( bool full_del = false );
@@ -245,6 +247,7 @@ class ModVArch: public TVArchivator
 	int	mChkTm;				//Period of check the archive files directory;
 	int	mPackTm;			//Pack the archive files timeout
 	bool	mPackInfoFiles;			//Use info files for packed archives
+	bool	mRemoveOrigAtUnpackErr;		//Remove original archive at error
 
 	time_t	mLstCheck;			//Last check directory time
     };

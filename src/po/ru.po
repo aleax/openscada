@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-26 09:08+0300\n"
+"POT-Creation-Date: 2024-12-07 08:34+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -320,10 +320,13 @@ msgstr ""
 msgid "Remove all lost archives - empty storage"
 msgstr ""
 
+msgid "Remove all doubly linked"
+msgstr ""
+
 #, c-format
 msgid ""
 "all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost "
-"(empty storage) %d"
+"(empty storage) %d, doubly linked %d"
 msgstr ""
 
 msgid "<High level>"
@@ -2131,18 +2134,19 @@ msgstr "Ошибка останова подсистемы '%s'."
 msgid "Termination signal is received. Stopping the program!"
 msgstr "Получен сигнал прерывания. Остановка станции!"
 
-msgid "Floating point exception is caught!"
-msgstr "Исключение операции с плавающей точкой!"
-
 #, c-format
 msgid "Close the process %d of the child!"
 msgstr "Закрытие дочернего процесса %d!"
 
-msgid "Segmentation fault signal!"
-msgstr "Сигнал нарушения сегментации памяти!"
+#, fuzzy
+msgid "Floating point exception!"
+msgstr "Исключение операции с плавающей точкой!"
 
 msgid "Program aborted!"
 msgstr "Программа прервана!"
+
+msgid "Segmentation fault signal!"
+msgstr "Сигнал нарушения сегментации памяти!"
 
 #, c-format
 msgid "Unknown signal %d!"

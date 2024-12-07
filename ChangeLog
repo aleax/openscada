@@ -1,3 +1,16 @@
+2024-12-07 Roman (stable)
+- !!!!:data/openscada-proj.in: Expanding by the commands snapshot, crash, cores with unification
+    of preparing the crash reports also for the crashing processes from itself.
+- !!!!:SYS: Enabled in processing the signals SIGFPE and SIGSEGV with call "openscada-proj crash {ProjID}"
+	to prepare the crash report immediatly for SIGFPE, SIGABRT and SIGSEGV.
+    The process return-exit result for success is forced to EXIT_SUCCESS and for fail to EXIT_FAILURE.
+- !!:Archive: The value archives appended of detection the doubly links and their all removing.
+    !:FSArch: The archives unpacking function appended by the error message unification
+	and a possibility to remove error archives, currently only at checking the value archive files.
+- UI.Vision: The acknowledge dialogue of the items removing added by status information
+    about the removing items for fast checking.
+
+
 2024-11-26 Roman (stable)
 - !!:FIX:LibsDB.vcaBase.wlb_Main.storeHouse: Fixed in files loading by checking the cell to "<null>".
 - FIX:DAQ.ModBus: Fixed in complete processing strings with encoding, that is registering all registers.

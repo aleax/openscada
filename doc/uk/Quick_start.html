@@ -327,16 +327,25 @@ wget -O - http://ftp.oscada.org/Misc/pkgSignKey <span class="p">|</span> sudo ap
 su -
 <span class="c"># ... для живого диску та деяких інших оточень Linux</span>
 sudo bash
+
 <span class="c"># Зупинити виконання попередньої конфігурації серверу та видалити його теку</span>
-service openscada-server stop<span class="p">;</span> rm -R /usr/share/openscada/server
+systemctl stop openscada-server.service     <span class="c"># для SystemD</span>
+service openscada-server stop               <span class="c"># для SysVinit</span>
+rm -R /usr/share/openscada/server
 <span class="c"># ... для LTS</span>
-service openscada-lts-server stop<span class="p">;</span> rm -R /usr/share/openscada/server
+systemctl stop openscada-lts-server.service <span class="c"># для SystemD</span>
+service openscada-lts-server stop           <span class="c"># для SysVinit</span>
+rm -R /usr/share/openscada/server
+
 <span class="c"># Скопіювати проєкт "АГЛКС" із домашньої теки користувача "{HOME}" з перейменуванням у "server"</span>
 cp -R <span class="o">{</span>HOME<span class="o">}</span>/.openscada/AGLKS /usr/share/openscada/server 
+
 <span class="c"># Запустити сервер вже з проєктом "АГЛКС"</span>
-service openscada-server start
+systemctl start openscada-server.service     <span class="c"># для SystemD</span>
+service openscada-server start               <span class="c"># для SysVinit</span>
 <span class="c"># ... для LTS</span>
-service openscada-lts-server start
+systemctl start openscada-lts-server.service <span class="c"># для SystemD</span>
+service openscada-lts-server start           <span class="c"># для SysVinit</span>
 </pre></div>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Зауважте, що локально ви можете не копіювати теку проєкту цілком, а лише встановити на неї символічне посилання, але ви отримаєте ризик подвійного виконання проєкту на спільну теку та дані, що призводить до аварійного завершення одного виконання або й обох!
 </p><p>Відмінність виконання проєкту у середовищі сервісу-фону від користувацького середовища робочої стільниці власне одна, звісно крім відсутності локального графічного інтерфейсу, це — відсутність у фоні визначення локалі, тобто мова інтерфейсу там буде Англійська. Та що можна просто виправити зміною або доданням <a href="#CfgFilePrm">конфігураційного параметру</a> <b>&lt;prm id="Lang"&gt;uk_UA.UTF-8&lt;/prm&gt;</b> до секції-тегу "station" файлу <b>oscada.xml</b> фонового проєкту.
@@ -927,5 +936,5 @@ fill:(50|165):(100|140):(150|165)
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Quick_start/uk">Documents/Quick_start/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2996</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Quick_start/uk">Documents/Quick_start/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3000</td></tr></table></body>
 </html>

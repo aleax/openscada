@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-26 09:08+0300\n"
+"POT-Creation-Date: 2024-12-07 08:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -280,8 +280,11 @@ msgstr ""
 msgid "Remove all lost archives - empty storage"
 msgstr ""
 
+msgid "Remove all doubly linked"
+msgstr ""
+
 #, c-format
-msgid "all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost (empty storage) %d"
+msgid "all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost (empty storage) %d, doubly linked %d"
 msgstr ""
 
 msgid "<High level>"
@@ -1755,17 +1758,17 @@ msgstr ""
 msgid "Termination signal is received. Stopping the program!"
 msgstr ""
 
-msgid "Floating point exception is caught!"
-msgstr ""
-
 #, c-format
 msgid "Close the process %d of the child!"
 msgstr ""
 
-msgid "Segmentation fault signal!"
+msgid "Floating point exception!"
 msgstr ""
 
 msgid "Program aborted!"
+msgstr ""
+
+msgid "Segmentation fault signal!"
 msgstr ""
 
 #, c-format

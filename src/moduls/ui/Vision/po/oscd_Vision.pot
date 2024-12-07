@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-09 18:10+0200\n"
+"POT-Creation-Date: 2024-12-07 08:50+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -854,6 +854,9 @@ msgid "Creating a widget/page"
 msgstr ""
 
 msgid "Are you sure of deleting the visual items: '%1'?"
+msgstr ""
+
+msgid "Check statuses the items before the deletion:%2"
 msgstr ""
 
 msgid "Deleting the visual items"

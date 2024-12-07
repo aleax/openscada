@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-26 09:08+0300\n"
+"POT-Creation-Date: 2024-12-07 08:34+0200\n"
 "PO-Revision-Date: 2020-10-25 10:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team:  <uk@li.org>\n"
@@ -320,13 +320,16 @@ msgstr "Видалити усе із помилкою джерела - джер�
 msgid "Remove all lost archives - empty storage"
 msgstr "Видалити усі втрачені архіви - порожнє сховище"
 
+msgid "Remove all doubly linked"
+msgstr "Видалити усі подвійні посилання"
+
 #, c-format
 msgid ""
 "all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost "
-"(empty storage) %d"
+"(empty storage) %d, doubly linked %d"
 msgstr ""
 "загалом %d, увімкнено %d; без джерела (пасивне) %d, помилка (відсутнє "
-"джерело) %d, втрачене (порожнє сховище) %d"
+"джерело) %d, втрачене (порожнє сховище) %d, подвійних посилань %d"
 
 msgid "<High level>"
 msgstr "<Високий рівень>"
@@ -2137,18 +2140,18 @@ msgstr "Помилка зупинки підсистеми '%s'."
 msgid "Termination signal is received. Stopping the program!"
 msgstr "Отримано сигнал переривання роботи. Зупинка програми!"
 
-msgid "Floating point exception is caught!"
-msgstr "Виключення операції з плаваючою крапкою!"
-
 #, c-format
 msgid "Close the process %d of the child!"
 msgstr "Закриття процесу нащадка %d!"
 
-msgid "Segmentation fault signal!"
-msgstr "Сигнал помилки сегментації пам'яті!"
+msgid "Floating point exception!"
+msgstr "Виключення з плаваючою крапкою!"
 
 msgid "Program aborted!"
 msgstr "Програму перевано!"
+
+msgid "Segmentation fault signal!"
+msgstr "Сигнал помилки сегментації пам'яті!"
 
 #, c-format
 msgid "Unknown signal %d!"

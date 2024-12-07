@@ -1085,6 +1085,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("comm",opt,-1,"/v_arch/delSrcNo",_("Remove all with no source - passive"),RWRW__,"root",SARH_ID);
 	    ctrMkNode("comm",opt,-1,"/v_arch/delSrcErr",_("Remove all with error source - missing source"),RWRW__,"root",SARH_ID);
 	    ctrMkNode("comm",opt,-1,"/v_arch/delLost",_("Remove all lost archives - empty storage"),RWRW__,"root",SARH_ID);
+	    ctrMkNode("comm",opt,-1,"/v_arch/delDblLnks",_("Remove all doubly linked"),RWRW__,"root",SARH_ID);
 	}
 	return;
     }
@@ -1207,29 +1208,35 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/v_arch/nmb" && ctrChkNode(opt)) {
 	vector<string> list;
 	valList(list);
-	unsigned eCnt = 0, srcErrCnt = 0, srcNoCnt = 0, lostCnt = 0;
+	unsigned eCnt = 0, srcErrCnt = 0, srcNoCnt = 0, lostCnt = 0, dblLnkCnt = 0;
 	for(unsigned iA = 0; iA < list.size(); iA++) {
 	    AutoHD<TVArchive> vo = valAt(list[iA]);
 	    if(vo.at().startStat()) eCnt++;
-	    else if(vo.at().srcMode() != TVArchive::Passive && SYS->daq().at().attrAt(vo.at().srcData(),'.',true).freeStat())
-		srcErrCnt++;
+	    else if(vo.at().srcMode() != TVArchive::Passive) {
+		if(SYS->daq().at().attrAt(vo.at().srcData(),'.',true).freeStat()) srcErrCnt++;
+		else dblLnkCnt++;
+	    }
 	    if(vo.at().srcMode() == TVArchive::Passive)	srcNoCnt++;
 	    if(vo.at().DB().empty())	lostCnt++;
 	}
-	opt->setText(TSYS::strMess(_("all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost (empty storage) %d"),
-					list.size(),eCnt,srcNoCnt,srcErrCnt,lostCnt));
+	opt->setText(TSYS::strMess(_("all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost (empty storage) %d, doubly linked %d"),
+					list.size(),eCnt,srcNoCnt,srcErrCnt,lostCnt,dblLnkCnt));
     }
     else if(a_path.find("/v_arch/del") == 0 && ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR)) {
 	bool SrcNo = (a_path.find("delSrcNo") != string::npos);
 	bool SrcErr = (a_path.find("delSrcErr") != string::npos);
 	bool Lost = (a_path.find("delLost") != string::npos);
+	bool dblLnks = (a_path.find("delDblLnks") != string::npos);
+	bool tmpSign = false;
 
 	vector<string> list;
 	valList(list);
 	for(unsigned iA = 0; iA < list.size(); iA++) {
 	    AutoHD<TVArchive> vo = valAt(list[iA]);
 	    if(!((SrcNo && vo.at().srcMode() == TVArchive::Passive) ||
-		    (SrcErr && vo.at().srcMode() != TVArchive::Passive && SYS->daq().at().attrAt(vo.at().srcData(),'.',true).freeStat()) ||
+		    (vo.at().srcMode() != TVArchive::Passive && !vo.at().startStat() &&
+			(((tmpSign=SYS->daq().at().attrAt(vo.at().srcData(),'.',true).freeStat()) && SrcErr) ||
+			(dblLnks && !tmpSign))) ||
 		    (Lost && vo.at().DB().empty())))
 		continue;
 
