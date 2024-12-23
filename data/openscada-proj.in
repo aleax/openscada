@@ -40,6 +40,14 @@ openscada-proj backupList {ProjName}
 ";
 }
 
+gdbCall()
+{
+    gdb $@ --batch --quiet \
+	-ex "echo \n==== (gdb) info thread ====\n" -ex "info thread" \
+	-ex "echo \n==== (gdb) thread apply all bt full ====\n" -ex "thread apply all bt full" \
+	-ex "echo \n==== (gdb) info sharedlibrary ====\n" -ex "info sharedlibrary"
+}
+
 crashHandler()
 {
     prjNm=$1
@@ -53,7 +61,7 @@ crashHandler()
 	for fit in `ls core* 2> /dev/null`; do
 	    resultFile="${prjNm}_${fit}_$(date +%F_%H.%M).crash"
 	    echo "Processing the core dump files for backtrace obtaining in the file $resultFile"
-	    gdb @bindir_full@/openscada --core ${fit} --batch --quiet -ex "thread apply all bt full" -ex "quit" > $resultFile
+	    gdbCall @bindir_full@/openscada --core ${fit} > $resultFile
 	    gzip $resultFile
 	    rm -f ${fit}
 	done
@@ -76,7 +84,7 @@ crashHandler()
 		resultFile="${prjNm}_$2_$(date +%F_%H.%M).crash"
 		echo "Processing the crash snapshot for backtrace obtaining in the file $resultFile"
 	    fi
-	    gdb -p $pid --batch --quiet -ex "thread apply all bt full" -ex "quit" > $resultFile
+	    gdbCall -p $pid > $resultFile
 	    gzip $resultFile
 	fi
     fi
@@ -192,6 +200,11 @@ case "$1" in
     else exit 1;
     fi
     ;;
+  snapshot|crash|cores)
+    if test $# -lt 2; then echo "Not enough arguments!"
+    else crashHandler $2 $1
+    fi
+    ;;
   backup)
     if test $# -lt 2; then echo "Not enough arguments!"; exit 1; fi
     prjNm=$2
@@ -277,11 +290,6 @@ case "$1" in
     cp -R $dPrjUser/.openscada_old/ARCHIVES $dPrjUser/$prjNm
     ln -s ../LibsDB $dPrjUser/$prjNm/LibsDB
     ln -s ./ $dPrjUser/$prjNm/$prjNm
-    ;;
-  snapshot | crash | cores)
-    if test $# -lt 2; then echo "Not enough arguments!"
-    else crashHandler $2 $1
-    fi
     ;;
   *) argHelp ;;
 esac

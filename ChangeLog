@@ -1,4 +1,17 @@
 2024-12-23 Roman (stable)
+- !:data/openscada-proj.in: Appending the crash-reports by "info thread" and "info sharedlibrary".
+- !!!:FIX:LibsDB.OscadaLibs.tmplib_base.fileServerHTTP,UI.WebVision:
+    Unified in processing the data transferring in the sequence:
+	ranges of media in the head, big data by chunks, simple single package for small data.
+- LibsDB.vcaBase: wlb_Main.storeHouse: Added of checking images at writing to the preview.
+    wlb_Main.treeSelect: Updating icon of the frame with improving the name.
+- !!:UI.WebVision: Requesting data of the resources added by support chunks for big data
+	and conversion only for small images.
+    !: The save type of the buttons appended by support the media ranges
+	with storing the data in WebVision context for retries.
+
+
+2024-12-23 Roman (stable)
 - FIX:Archive: TVArchive::makeTrendImg() added by limiting begin and end arguments in the least zero value.
     The "Size, seconds" configuration field added by the range [0...2600000].
 - FIX:UI: TUIS::mimeGet() added by MIME "webm".

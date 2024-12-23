@@ -10580,13 +10580,13 @@ INSERT INTO tmplib_base VALUES('fileServerHTTP','WebUser: HTTP File Server','Web
 Currently there implemented only requesting files by the GET request of HTTP. There are supported also chunks and the Partial Content requests in single range and with forcing to this mode at some configured file size.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.1
+Version: 1.2.0
 License: GPLv2','Шаблон для реалізації Файлового Серверу HTTP безпосередньо в OpenSCADA, який корисний за відсутності повнофункціонального для функцій обслуговування файлових запитів із OpenSCADA Web-інтерфейсів.
 
 Наразі реалізовано лише запити файлів HTTP запитом GET. Також реалізуються шматки і запити Часток Контенту за одним діапазоном зі змушуванням до цього режиму за певного налаштованого розміру файлу.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.1.1
+Версія: 1.2.0
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(HTTPreq != "GET") { rez = ""; return; }
 
@@ -10599,40 +10599,33 @@ if(!(fSz=SYS.fileSize(baseD+reqF)))	{
 	return;
 }
 
+HTTPvars["Content-Type"] = SYS.UI.mimeGet(reqF);
+
 fSzLim = max(10e3, fSzSolidLim);	//File''s block size for reading
-fOff = 0;			//File offset
+
+//Range at request
 if(HTTPvars["Range"] != null) {
 	tVl = HTTPvars["Range"].parse(1, "bytes=");
 	fOff = tVl.parse(0,"-").toInt();
 	if((tVl=tVl.parse(1,"-")).toInt())	fSzLim = tVl.toInt() - fOff + 1;
-}
-//SYS.messInfo("FileHTTP", "fOff="+fOff);
 
-HTTPvars["Content-Type"] = tVl = SYS.UI.mimeGet(reqF);
-
-//Simple data in single package
-if(!fOff && fSz < fSzLim)	{
-	page = SYS.fileRead(baseD+reqF, fOff, fSzLim);
-	rez = "200 OK";
-	return;
-}
-
-//Range at request or force for audio and video
-if(fOff || tVl.indexOf("audio/") >= 0 || tVl.indexOf("video/") >= 0) {
 	page = SYS.fileRead(baseD+reqF, fOff, fSzLim);
 	HTTPvars["Content-Range"] = "bytes "+fOff+"-"+(fOff+page.length-1)+"/"+fSz;
 	rez = "206 Partial Content";
-	return;
 }
-
 //By chunks with direct writing
-tr.writeTo(sender, prt.pgCreator("","200 OK","Content-Type: "+tVl+"\x0D\x0ATransfer-Encoding: chunked"));
-for(fOff = 0; fOff < fSz; fOff += page.length) {
-	page = SYS.fileRead(baseD+reqF, fOff, fSzLim);
-	tr.writeTo(sender, page.length.toString(16)+"\x0D\x0A"+page+"\x0D\x0A");
+else if(fSz > fSzLim) {
+	tr.writeTo(sender, prt.pgCreator("","200 OK",
+			"Content-Type: "+HTTPvars["Content-Type"]+"\x0D\x0ATransfer-Encoding: chunked"));
+	for(fOff = 0; fOff < fSz; fOff += page.length) {
+		page = SYS.fileRead(baseD+reqF, fOff, fSzLim);
+		tr.writeTo(sender, page.length.toString(16)+"\x0D\x0A"+page+"\x0D\x0A");
+	}
+	tr.writeTo(sender, "0\x0D\x0A\x0D\x0A");
+	rez = "";
 }
-tr.writeTo(sender, "0\x0D\x0A\x0D\x0A");
-rez = "";','','',1728323456);
+//Simple data in single package
+else { page = SYS.fileRead(baseD+reqF); rez = "200 OK"; }','','',1734640136);
 INSERT INTO tmplib_base VALUES('weather','Weather','Погода','','The template of acquiring weather data from different weather services in Internet and initially it is only Open Weather (https://openweathermap.org/).
 
 The weather data divided on current and forecast with their placing in corresponded objects, where current attributes placed directly in the root and forecast days (the "day" object) and times (the "time" object) inwardly corresponded day according to the current timezone. These data acquired at specified schedule independently for current and forecast, and by default the current ones are performed per hour when forecast ones per day. The data can be accessible by user both as directly and through a specially created widget of the main library.

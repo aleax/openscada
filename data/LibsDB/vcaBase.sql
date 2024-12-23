@@ -11859,25 +11859,17 @@ for(off = 0, ev_rez = ""; (evCur=event.parse(0,"\n",off)).length; ) {
 	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1664089765);
-INSERT INTO wlb_Main VALUES('treeSelect','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAeCAIAAAATj48OAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
-AA7EAAAOxAGVKw4bAAADx0lEQVRYhe2X3W/bVBjGX9vHTh27+XCSJWlamvSLds0qsY1O2kDbQIML
-LiYViRX1DgkEUoS44KITEn8LAuUGcVcxCQbthgasWwordEALydZpLW3WNHbjJE7OsQ8XiQrctI0L
-sirld2HZR3re93l85HOOmVQq5fV64WiiaRqSZXlyctJpJzZJp9Os0x4OSzuA07QDOE07gNOgVgWV
-ncLMteuU4Sdee1VgDqah9M6tOSqFz5wcbbXdvrQcQOxUBsK+jr6TczOfbdUEXwcriq71RzklGr+3
-kHll4kpfUPjo05kLz5/9evbGC5demrv+xdip07Nf3jx38fy1z9cAAKglcrXVIgl7xIgi389turgS
-x/s3tv4cHBm/dP70/xuAYZqvPTM/bwihiJeJ9o+Wyub40HAxnz8xMrC6+G0glsivZiPd0YXvbsvB
-SHYl19Mbf/wwi6uWSSmHkP4kt1UT9ZC0UCjybpnS+tCwghCvqaVW/bQcAAAGxk6xbs9bqXe3K5bk
-4gAADydcnZ4LL15kAOJjZ1Tz3tPHR1d+Wx5JJn//5ef40PH1B8tKV/yP+z/VTev295k33k7li4ZX
-EkSBL2iaLHfqeiXSFS7rtVbNMNPT01NTUzZi2EbXdUmSmQN+P3uSTqftzMAhkWX5P6x25JfRdgCn
-aQdwmiMfACmKsrS05LQNmyiKgmKxWDKZdNqJTSilNjcyvVRiwbLd2KjXff6AVtx2CXxzyMTA8QAA
-BAPi99A2sChlEQ/2zkIAQKnlcvEAsInzmOJuIWZYxleluWfcJ2J8977yWr1OKeUR2wjAUBpb/Ljg
-HWU31/lHy+rU1f0NAFQMbD8AAGBCAECi0pvknXP47B02M829f4yJ3Prmpqqq0Xgfb2K9bnndqFgm
-PEPdbrF/cIhHLACYptm4NooAwFpwPJH5BG8UH1y+SnE9c/cucDxiGSSIpKyqhhn0yZhYsj84mOgB
-AKCUAoDtVYhSignBhLAWF9bDs8aND40P4iiOCYl093hEQatUtXKVAmsSgk0aCAa0wsbjzUJDZVom
-ABDTbDxijF0rPxhPdPprHs0vYNOUJMnjD/gVn1bYqJjQ4XYjgVfVnUql0pQQAkAPNwMYN25eN650
-uaMe5GmMhEKhgKIwHLd73OwFAIDQsdCu6u8ZaBShFFdqyy+/xz6ruX9cxJj09vVDUxXZ7fhUb+Kf
-fTmesx+A5VC1tNP0J8aBQtX491Eek73kLMcwDDEtTJqqtecmAAA8SimeAONAfwWK5AEAlMvlWNaB
-7aywXTxkhaK6k81m/wJAAK2A/KcOawAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+INSERT INTO wlb_Main VALUES('treeSelect','iVBORw0KGgoAAAANSUhEUgAAAEAAAAA8CAIAAABZ6yszAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
+GElEQVRoge3av4vaYBjA8fdNc76a43JQMzhUOfRw6w+X0uOm2yzt3qEu/SvuDyjcHyD+CV16iy51
+KAcp5RbhXNpVAkoj2garmB++efMmHSwieLRUWx4Kz2dKCI95viHZpI1Go1Qqkf+TZVlqsVisVqvQ
+m2zJNE0FeoddYQA0DICGAdAwABoGQMMAaBgADQOgYQA0DICGAdAwABoGQMMAaBgADQOgYQA0DICG
+AdAwABoGQMMAaBgADQOgYQA0VQhhWRb0GlvyPE+N49j3/d1/izHGGPvTKc65lFLTtJ/ngpM9RiJB
+lDtE+c3bMZlMoihSt9j1VowxXdeXx9ffrk+NUx7zq69XBe3eg8NH6xuvd85mMyHEcjBxp+rHOi8/
+ox/eytKTVPXF5l1W40mSjMdjQshfC1h36V+2v7S7ont+cH5ff9hut7PZbBzHrus6jlMulyuVirL5
+gPcPee7xfuu1Lw311fNOp5NOpwkhw+HQMIw4jsMw7Pf7tVptfeiffMQn8Unre+vi4OLMOJNS6rre
+6/XCMHQcJ5/P27Z9y/aEJDxQbt77XFfMbvTps67rlNL5fO55nqZpUkrG2OZ/dGmz2Tw+Pt596Uwm
+k0qllsfTYDoNpkd3j1ZXF4sFYywIAlVVoyhavfSu6yqKsjxNQi7evdl7+lKYppLLqZXKr+84Go1s
+26b1er1QKOwekCTJdoOU0u1mKaWDweAHPGvJg9VZGg0AAAAASUVORK5CYII=','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
 if(f_start) { select_items = elItems; select_value = selValue; }
 
 //Events for commands process
@@ -11890,7 +11882,7 @@ for(off = 0, ev_rez = ""; (evCur=event.parse(0,"\n",off)).length; ) {
 	else if(evCur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
 	else ev_rez += evCur + "\n";
 }
-event = ev_rez;','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1664089765);
+event = ev_rez;','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1734419592);
 INSERT INTO wlb_Main VALUES('TextLab','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAXCAIAAAA0gN7GAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAABHUlEQVRYhWNgGOKAkYGBIScnh5ube6BdQjL4+vXrlClTWBgYGDg4ODg5
 OQfaPSSDv3//MjAwMA20MygFox4YaDDqgYEGox4YaDDkPcBCke6/Hx9cv/fszcdfCCFWHgFhKRmu
@@ -14038,8 +14030,8 @@ if(f_start || toUpdate) {
 					this["fItVal"+itVlId+"_CL"].attrSet("active",itVl.length);
 					this["fItVal"+itVlId+"_LD"].attrSet("value","|||"+celO.tp.parse(3,":")).attrSet("active", itVl.split("\n").length < max(1,celO.tp.parse(1,":").toInt()));
 					if(celO.tp.parse(4,":").toInt())
-						this["fItVal"+itVlId+"_VW"].attrSet("src", itVl.parseLine(0).length ? "data:"+SYS.UI.mimeGet(itVl.parseLine(0).parse(0,";;"))+"\n"+
-										SYS.strEncode(getFileFIt(itVlId,celO),"Base64") : "");
+						this["fItVal"+itVlId+"_VW"].attrSet("src", (itVl.parseLine(0).length && (tVl=SYS.UI.mimeGet(itVl.parseLine(0).parse(0,";;"))).indexOf("image/") >= 0)
+										? "data:"+tVl+"\n"+ SYS.strEncode(getFileFIt(itVlId,celO),"Base64") : "");
 				} else nwO.attrSet((celO.prc.length||itVlId == "ID")?"text":"value", itVl);
 				delete nwlO; delete nwO;
 
@@ -14168,8 +14160,8 @@ for(offEv = 0; (sval=event.parse(0,"\n",offEv)).length; ) {
 		fItValFileLD.attrSet("value","|||"+celO.tp.parse(3,":")).attrSet("active",fItValFileSL.attr("items").split("\n").length < max(1,celO.tp.parse(1,":").toInt()));
 
 		if(celO.tp.parse(4,":").toInt())
-			this["fItValSP_"+celId+"_VW"].attrSet("src","data:"+SYS.UI.mimeGet(fItValFileNm)+"\n"+
-										SYS.strEncode(getFileFIt("SP_"+celId,celO),"Base64"));
+			this["fItValSP_"+celId+"_VW"].attrSet("src", ((tVl=SYS.UI.mimeGet(fItValFileNm)).indexOf("image/") >= 0)
+				? "data:"+tVl+"\n"+SYS.strEncode(getFileFIt("SP_"+celId,celO),"Base64") : "");
 	}
 	//File Clear
 	else if((tVl=sval.match("^ws_BtRelease:/fItVal(.+)_CL$")).length) {
@@ -14204,16 +14196,16 @@ for(offEv = 0; (sval=event.parse(0,"\n",offEv)).length; ) {
 		this["fItValSP_"+celId+"_CL"].attrSet("active",itVlRez.length);
 
 		if(celO.tp.parse(4,":").toInt())
-			this["fItValSP_"+celId+"_VW"].attrSet("src", !itVlRez.length ? "" : "data:"+SYS.UI.mimeGet(itVlRez.parseLine(0).parse(0,";;"))+"\n"+
-										SYS.strEncode(getFileFIt("SP_"+celId,celO),"Base64"));
+			this["fItValSP_"+celId+"_VW"].attrSet("src", (itVlRez.length && (tVl=SYS.UI.mimeGet(itVlRez.parseLine(0).parse(0,";;"))).indexOf("image/") >= 0)
+						? "data:"+tVl+"\n"+SYS.strEncode(getFileFIt("SP_"+celId,celO),"Base64") : "");
 	}
 	//File Get
 	else if((tVl=sval.match("^ws_BtRelease:/fItVal(.+)_GT$")).length && (celO=clsLsO[tVl[1].slice(3)]).tp.parse(0,":") == "file")
 		this["fItVal"+tVl[1]+"_GT"].attrSet("value","||"+(tVl2=this["fItVal"+tVl[1]].attr("value").parse(0,";;"))+"|"+SYS.UI.mimeGet(tVl2)+"\n"+getFileFIt(tVl[1],celO));
 	//File Select
 	else if((tVl=sval.match("^ws_CombChange:/fItVal(.+)$")).length && (celO=clsLsO[tVl[1].slice(3)]).tp.parse(0,":") == "file")
-		this["fItVal"+tVl[1]+"_VW"].attrSet("src","data:"+SYS.UI.mimeGet(this["fItVal"+tVl[1]].attr("value").parse(0,";;"))+"\n"+
-										SYS.strEncode(getFileFIt(tVl[1],celO),"Base64"));
+		this["fItVal"+tVl[1]+"_VW"].attrSet("src",((tVl=SYS.UI.mimeGet(this["fItVal"+tVl[1]].attr("value").parse(0,";;"))).indexOf("image/") >= 0)
+				? "data:"+tVl+"\n"+SYS.strEncode(getFileFIt(tVl[1],celO),"Base64") : "");
 	else if(sval == "ws_BtRelease:/go_reportIt") {
 		go_reportIt_report = "<body>\n"
 			"<h1>"+tr("%1 item:").replace("%1",classNm_text)+"</h1>\n";
@@ -14270,7 +14262,7 @@ if(fClrTo >= 0) {
 if(toCalcCycles > 0.1) {
 	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
 	toCalcCycles = max(0, toCalcCycles-1);
-}','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1732612922);
+}','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1734509846);
 INSERT INTO wlb_Main VALUES('weather','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAxCAIAAADldTjtAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAO
 KUlEQVRogdVa228bV3o/Z87cyRnebyJF8SJLsmRZchy7cSUncQyjDjbbNhssdrsLNFsUaNEWfSgK
 9F/xS9CgD3loUewiKFqk62w2XslO1rZs2bEki5JMihJ1o3jRkJwZzu30YWxqRMluI2eb7PdEHn7n
@@ -21476,7 +21468,7 @@ INSERT INTO wlb_Main_io VALUES('prescrEdit','tipTool','Rename selected program',
 INSERT INTO wlb_Main_io VALUES('prescrEdit','active','1',40,'','','progRename','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','elType','3',32,'','','progRename','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','font','Arial 15',0,'','','progRename','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('treeSelect','name','Select item into tree',32,'','','','Вибір елементу у дереві','','Выбор элемента в дереве','','','','');
+INSERT INTO wlb_Main_io VALUES('treeSelect','name','Select item in tree',32,'','','','Вибір елементу у дереві','','Выбор элемента в дереве','','','','');
 INSERT INTO wlb_Main_io VALUES('treeSelect','geomW','383',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('treeSelect','geomH','364',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('treeSelect','pgGrp','fl',32,'','','','','','','','','','');
@@ -24378,17 +24370,17 @@ INSERT INTO wlb_Main_io VALUES('treeSelect','dscr','The element implements a sim
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Vassily Grigoriev, the Laboratory of Vacuum Technologies
-Version: 1.0.1
+Version: 1.0.2
 License: GPLv2',32,'','','','Елемент реалізує простий діалог операції обрання пункту у дереві. Діалог містить саме дерево та дві кнопки "Прийняти" й "Скасувати". Цей діалог, наприклад, використано, та первинно для нього розроблявся, у кадрі "Рецепт:виконання (простий)" для ієрархічного обрання елементу у дереві.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Василь Григор''єв, Лабораторія Вакуумних Технологій
-Версія: 1.0.1
+Версія: 1.0.2
 Ліцензія: GPLv2','','Элемент реализует простой диалог операции выбора пункта в дереве. Диалог содержит само дерево и две кнопки "Принять" и "Отменить". Этот диалог, например, использован, и первично для него разрабатывался, в кадре "Рецепт: исполнение (простой)" для иерархического выбора элемента в дереве.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Василий Григорьев, Лаборатория Вакуумных Технологий
-Версия: 1.0.1
+Версия: 1.0.2
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('anShow','tipTool','',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('anShow1','tipTool','',40,'','','','','','','','','','');
@@ -24407,7 +24399,7 @@ The frame provides currently and in future for next features:
   - detailed control panel-form of the selected item with the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.0.8
+Version: 2.0.9
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -24421,7 +24413,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - деталізована панель-форма керування обраним елементом зі специфічними полями.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.0.8
+Версія: 2.0.9
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');

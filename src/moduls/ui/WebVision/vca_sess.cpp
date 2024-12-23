@@ -237,12 +237,26 @@ void VCASess::getReq( SSess &ses )
 
 	    string mime;
 	    ses.page = resGet(TSYS::strDecode(prmEl->second,TSYS::HttpURL), ses.url, ses, &mime, start, &size);
-	    if((range.size() && size) || size > limUserFile_SZ)
+	    // Processing ranges
+	    if(range.size() && size)
 		ses.page = mod->pgCreator(ses.prt, ses.page, "206 Partial Content",
 		    "Content-Type: "+TSYS::strParse(mime,0,";")+"\x0D\x0A"+"Content-Range: bytes "+
 			i2s(vmax(0,start))+"-"+i2s(vmax(0,start)+ses.page.size()-1)+"/"+i2s(size));
+	    // Using chunks for getting parts from VCAEngine
+	    else if(size > ses.page.size()) {
+		ses.prt->writeTo(mod->pgCreator(ses.prt, "", "200 OK",
+			"Content-Type: "+TSYS::strParse(mime,0,";")+"\x0D\x0A"+"Transfer-Encoding: chunked"));
+		for(start = 0; start < size; ) {
+		    ses.prt->writeTo(i2s(ses.page.size(),TSYS::Hex)+"\x0D\x0A"+ses.page+"\x0D\x0A");
+		    start += ses.page.size();
+		    if(start >= size)	break;
+		    ses.page = resGet(TSYS::strDecode(prmEl->second,TSYS::HttpURL), ses.url, ses, &mime, start, &size);
+		}
+		ses.page = "";
+	    }
+	    // Transferring small in whole
 	    else {
-		mod->imgConvert(ses, mime);
+		if(mime.find("image/") != string::npos)	mod->imgConvert(ses, mime);	//Images conversion
 		ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: "+TSYS::strParse(mime,0,";"));
 	    }
 	} else ses.page = mod->pgCreator(ses.prt, "<div class='error'>"+string(_("Resource not found"))+"</div>\n", "404 Not Found");
@@ -511,17 +525,37 @@ void VCAFormEl::getReq( SSess &ses )
     MtxAlloc res(mRes, true);
     if(type == F_BUTTON && btMode == FBT_SAVE && fCtx.size()) {
 	int off = 0;
-	string cntr = TSYS::strLine(fCtx, 0, &off);
+	string	cntr = TSYS::strLine(fCtx, 0, &off),
+		mime = TSYS::strParse(cntr, 3, "|");
 	ses.page = fCtx.substr(off);
-	ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: "+TSYS::strParse(cntr,3,"|"));
-	fCtx = "";
 
-	//!!!! Clearing the attribute "value", but it can be spare for multiple connections to one session
-	XMLNode req("set");
-	size_t nURLoff = ses.url.rfind("/");
-	req.setAttr("path", ((nURLoff==string::npos)?ses.url:ses.url.substr(0,nURLoff))+"/%2fserv%2fattr");
-	req.childAdd("el")->setAttr("id","value")->setText("");
-	mod->cntrIfCmd(req, ses);
+	// Getting the "Range" for media
+	int start = 0, size = 0;
+	string range;
+	for(size_t iVr = 0; iVr < ses.vars.size(); iVr++)
+	    if(TSYS::strParse(ses.vars[iVr],0,":") == "Range") {
+		range = sTrm(TSYS::strParse(ses.vars[iVr],1,"Range: bytes="));
+		start = vmax(0, s2i(TSYS::strParse(range,0,"-")));
+		if((size=s2i(TSYS::strParse(range,1,"-"))))	size = size - start + 1;
+		break;
+	    }
+
+	if(range.size()) {
+	    if(!size) size = vmin(limUserFile_SZ, ses.page.size()-start);
+	    ses.page = mod->pgCreator(ses.prt, ses.page.substr(start,size), "206 Partial Content",
+		"Content-Type: "+mime+"\x0D\x0A"+"Content-Range: bytes "+
+			i2s(vmax(0,start))+"-"+i2s(vmax(0,start)+size-1)+"/"+i2s(ses.page.size()));
+	}
+	else {
+	    ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: "+mime);
+
+	    //!!!! Clearing the attribute "value", but it can be spare for multiple connections to one session
+	    XMLNode req("set");
+	    size_t nURLoff = ses.url.rfind("/");
+	    req.setAttr("path", ((nURLoff==string::npos)?ses.url:ses.url.substr(0,nURLoff))+"/%2fserv%2fattr");
+	    req.childAdd("el")->setAttr("id","value")->setText("");
+	    mod->cntrIfCmd(req, ses);
+	}
     }
     else if(type == F_TABLE) {
 	int off = ses.url.size();
@@ -601,8 +635,11 @@ void VCAFormEl::setAttrs( XMLNode &node, const SSess &ses )
 	}
     }
     //Processing the value at the end
-    if(iAVal >= 0 && type == F_BUTTON && (btMode == FBT_LOAD || btMode == FBT_SAVE) && (fCtx=node.childGet(iAVal)->text()).size())
-	node.childGet(iAVal)->setText(TSYS::strLine(fCtx,0));
+    if(iAVal >= 0 && type == F_BUTTON &&
+		(btMode == FBT_LOAD ||
+		(btMode == FBT_SAVE && node.childGet(iAVal)->text().size())))	//To store the saving context for video and audio
+										//???? Clear the context at some timeout
+	node.childGet(iAVal)->setText(TSYS::strLine((fCtx=node.childGet(iAVal)->text()),0));
 }
 
 //*************************************************
