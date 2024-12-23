@@ -1,3 +1,13 @@
+2024-12-23 Roman (stable)
+- FIX:Archive: TVArchive::makeTrendImg() added by limiting begin and end arguments in the least zero value.
+    The "Size, seconds" configuration field added by the range [0...2600000].
+- FIX:UI: TUIS::mimeGet() added by MIME "webm".
+    FIX:VCAEngine: Selection by the extensions for the "file:" prefix of the media sources is
+	fixed for "mp4", renamed for "ogv" to "ogm" and added by "webp", "webm".
+    WebCfgD: Added for processing range of values for dec, oct, hex, real.
+    QTCfg: Added for processing range of values for real.
+
+
 2024-12-07 Roman (stable)
 - !!!!:data/openscada-proj.in: Expanding by the commands snapshot, crash, cores with unification
     of preparing the crash reports also for the crashing processes from itself.

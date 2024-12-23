@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebCfgD file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2008-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1202,8 +1202,8 @@ function selectChildRecArea( node, aPath, cBlk )
 					}
 					tblCell.appendChild(cmbImg);
 				    }
-				    else if(tp == 'dec') { this.className += ' number'; this.childNodes[0].size = 10; }
-				    else if(tp == 'hex' || tp == 'oct' || tp == 'real') { this.className += ' number'; this.childNodes[0].size = 10; }
+				    else if(tp == 'dec' || tp == 'hex' || tp == 'oct' || tp == 'real')
+				    { this.className += ' number'; this.childNodes[0].size = 10; }
 				    else this.innerHTML = "<textarea/>";
 				    this.prcCol = prcCol;
 				    this.apply = function( ) {
@@ -1700,8 +1700,18 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 			var btOk = document.createElement('img'); btOk.src = '/' + MOD_ID + '/img_button_ok';
 			btOk.onclick = function( ) {
 			    var curVal = this.parentNode.childNodes[0].value;
-			    if(this.parentNode.srcNode.getAttribute('tp') == 'hex') curVal = parseInt(curVal, 16);
-			    else if(this.parentNode.srcNode.getAttribute('tp') == 'oct') curVal = parseInt(curVal, 8);
+			    if((tVl=this.parentNode.srcNode.getAttribute('tp')) == 'dec') curVal = parseInt(curVal);
+			    else if(tVl == 'hex') curVal = parseInt(curVal, 16);
+			    else if(tVl == 'oct') curVal = parseInt(curVal, 8);
+			    else if(tVl == 'real') curVal = parseFloat(curVal);
+			    if(tVl == 'dec' || tVl == 'hex' || tVl == 'oct') {
+				if((tVl2=this.parentNode.srcNode.getAttribute('min')) != null)	curVal = Math.max(parseInt(tVl2), curVal);
+				if((tVl2=this.parentNode.srcNode.getAttribute('max')) != null)	curVal = Math.min(parseInt(tVl2), curVal);
+			    }
+			    else if(tVl == 'real') {
+				if((tVl2=this.parentNode.srcNode.getAttribute('min')) != null)	curVal = Math.max(parseFloat(tVl2), curVal);
+				if((tVl2=this.parentNode.srcNode.getAttribute('max')) != null)	curVal = Math.min(parseFloat(tVl2), curVal);
+			    }
 			    var rez = servSet(this.parentNode.itPath, 'com=com', '<set>'+curVal+'</set>', true);
 			    if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
 			    setTimeout('pageRefresh()', 500);

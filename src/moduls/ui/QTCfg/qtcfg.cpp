@@ -3697,6 +3697,12 @@ void ConfApp::applyButton( )
 	    if(el->attr("max").size()) vl = vmin(s2ll(el->attr("max")), vl);
 	    sval = ll2s(vl);
 	}
+	else if(el->attr("tp") == "real") {
+	    double vl = s2r(sval);
+	    if(el->attr("min").size()) vl = vmax(s2r(el->attr("min")), vl);
+	    if(el->attr("max").size()) vl = vmin(s2r(el->attr("max")), vl);
+	    sval = r2s(vl);
+	}
 
 	mess_info(mod->nodePath().c_str(), _("%s| '%s' changed to: '%s'!"),
 		user().c_str(), (selPath+"/"+path).c_str(), sval.c_str());

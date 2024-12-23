@@ -1401,6 +1401,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
     int mrkFontSize = 10, begMarkBrd = -1, endMarkBrd = 0;
 
     //Check and get data
+    ibeg = vmax(0, ibeg); iend = vmax(0, iend);
     if(ibeg >= iend || valType() == TFld::String) return rez;
     TValBuf buf(TFld::Real, 0, 0, false, true);
 
@@ -2088,7 +2089,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	if(runSt && ctrMkNode("area",opt,-1,"/val",_("Values"),R_R___,"root",SARH_ID)) {
 	    ctrMkNode("fld",opt,-1,"/val/tm",_("Time"),RWRW__,"root",SARH_ID,1,"tp","time");
 	    ctrMkNode("fld",opt,-1,"/val/utm","",RWRW__,"root",SARH_ID,5,"tp","dec","len","6","min","0","max","999999","help",_("Microseconds"));
-	    ctrMkNode("fld",opt,-1,"/val/size",_("Size, seconds"),RWRW__,"root",SARH_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/val/size",_("Size, seconds"),RWRW__,"root",SARH_ID,3,"tp","real","min","0","max","2600000");	//Month in seconds
 	    ctrMkNode("fld",opt,-1,"/val/arch",_("Archiver"),RWRW__,"root",SARH_ID,4,"tp","str","dest","select","select","/val/lstAVal",
 		"help",_("Values archiver.\n"
 			 "If the value is empty, the request will be processed for the buffer and for all archivers.\n"
