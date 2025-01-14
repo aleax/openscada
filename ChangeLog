@@ -1,4 +1,20 @@
 2025-01-13 Roman (stable)
+- LibsDB.vcaBase: wlb_Main.storeHouse:
+	Omitting the includes on FS at the item copying and their removing at the item removing.
+    wlb_doc.docRepYear: Switching the direct data drawing on the diagram to the non periodic mode.
+- data/{debian,debian_mod}/control: Appending MySQL default dependency as default-libmysqlclient-dev.
+- !!:acinclude.m4: The autoconf macro AX_LIB_MYSQL added of using PKG_CONFIG when presence
+	the configuration file, to build together MySQL in cross-compiling environments
+	with binary mysql_config or mariadb_config.
+    Removing the spare macroses: AX_LIB_SQLITE3, BNV_HAVE_QT.
+    Some improving the macro AX_LIB_POSTGRESQL.
+- SYS.TCntrNode,UI.{QTCfg,WebCfgD}: To "<set />" control requests for commands an attribute "tp"
+    in value "comm" is appended for detection the commands in log.
+- DAQ: The "Controllers" tab of the DAQ-modules appended of a field of quantity the controller objects
+    with quantity of all, started, enabled and errors per the error code.
+
+
+2025-01-13 Roman (stable)
 - !!!:FIX:LibsDB.OscadaLibs.flb_doc.diagram: Adding of drawing non periodic direct data like months.
     !!!: Implementing of rounding big interval points by the Besier Cubic Curves.
     FIX: Fixing of calculating bottom border for vertical scale.

@@ -2936,9 +2936,10 @@ RESP: <i>&lt;get path="{path}" rez="<b>0</b>"&gt;<b>{lnkVal}</b>&lt;/get&gt;</i>
 </pre></div>
 <p><b><u> <span id="CntrCommSet" title="#CntrCommSet">Invoking</span> the command</u></b><br />
 Allowed at the SEC_WR permition.<br />
-REQ: <i>&lt;set path="<b>{path}</b>"&gt;<b>{fields}</b>&lt;/set&gt;</i><br />
+REQ: <i>&lt;set path="<b>{path}</b>" tp="<b>comm</b>"&gt;<b>{fields}</b>&lt;/set&gt;</i><br />
 </p>
-<ul><li> <i>fields</i> — the command fields in the "fld" tags.</li></ul>
+<ul><li> <i>tp</i> — forced to the "comm" value for correct commands detection in logs;</li>
+<li> <i>fields</i> — the command fields in the "fld" tags.</li></ul>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/sub_Archive/mod_FSArch/val_1s/%2farch%2fexp"</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"arch"</span><span class="nt">&gt;</span>CPULoad_load<span class="nt">&lt;/fld&gt;</span>
   <span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"beg"</span><span class="nt">&gt;</span>1673942400<span class="nt">&lt;/fld&gt;</span>
@@ -5011,5 +5012,5 @@ Error codes (enum — TError::Codes):
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3000</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2025</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3004</td></tr></table></body>
 </html>

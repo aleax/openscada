@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/Vision</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVision&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Vision" title="Modules/Vision">Modules/Vision</a> and the translation is 88% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Vision.html" title="Modules/Vision (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Vision.html" title="Модулі/Vision (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVision&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Vision" title="Modules/Vision">Modules/Vision</a> and the translation is 87% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Vision.html" title="Modules/Vision (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Vision.html" title="Модулі/Vision (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> </td>
 <td> Рабочий пользовательский интерфейс (Qt)
 </td>
-<td> 9.3 </td>
+<td> 9.4 </td>
 <td> GPL2 </td>
 <td> ui_Vision.so </td>
 <td> en,uk,ru,de </td>
@@ -304,9 +304,9 @@
 </p><p>Пользователем может быть создано множество стилей, каждый из которых будет хранить цветовые, шрифтовые и другие свойства элементов кадра. Простая смена стиля позволит быстро преобразить интерфейс ВУ, а возможность назначения индивидуального стиля для пользователя позволит учесть его особенности.
 </p><p>Для реализации этой возможности, при создании кадров, необходимо для свойств цвета, шрифта и других установить параметр "Конфигурация" (таблицы во вкладке "Обработка") в значение "Из стиля". А в параметре "Конфигурационный шаблон" указать идентификатор поля стиля. Далее, это поле автоматически появится в менеджере стилей и его можно будет там менять. Менеджер стилей доступен на странице конфигурации проекта во вкладке "Стили". На этой вкладке можно стили создавать, удалять и изменять, удалять их поля.
 </p>
-<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:Vision_prj_stl_ru.png"><img alt="Vision prj stl ru.png" height="601" src="../files/Vision_prj_stl_ru.png" width="542" /></a></div></div>
-<p>В целом, стили доступны начиная с уровня проектов. На уровне библиотек виджетов можно только определять поля стилей у виджетов. На уровне проекта, при выборе стиля, включается работа со стилями, что предполагает доступ к полям стилей вместо непосредственных значений атрибутов. Фактически, это означает, что при чтении или записи атрибута виджета, указанные операции будут осуществляться над соответствующим полем выбранного стиля.
-</p><p>При запуске проекта на исполнения будет использован установленный в проекте стиль. В последствии, пользователь может выбрать стиль из перечня доступных. Выбранный пользователем стиль будет сохранён и использован при следующем запуске проекта.
+<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:Vision_prj_stl.png"><img alt="Vision prj stl.png" height="603" src="../../en/files/Vision_prj_stl.png" width="418" /></a></div></div>
+<p>In general, the styles are available from the project level. At the level of the widget libraries you can only define the style fields for the widgets. At the project level, at the choice of style, it is started the work with styles, which includes access to the fields of styles instead of direct attribute values. In fact, this means that when reading or writing a widget attribute these operations will be carried out with the corresponding field of the chosen style. The configuration field "Write to style in the execution context" allows of dynamic changing the style fields in the execution context by writing to the proper attributes, but that can be done in wrong, so that is why the field is disabled by default.
+</p><p>When starting a project, the project-style will be used. The user can choose a style from the list of available styles of the running project. The user-selected style will be saved and used in next time the project is launched.
 </p><p><br />
 </p>
 <h3><span class="mw-headline" id=".D0.A1.D0.B2.D1.8F.D0.B7.D1.8B.D0.B2.D0.B0.D0.BD.D0.B8.D0.B5_.D1.81_.D0.B4.D0.B8.D0.BD.D0.B0.D0.BC.D0.B8.D0.BA.D0.BE.D0.B9"><span class="mw-headline-number">2.2</span> Связывание с динамикой</span></h3>
@@ -992,5 +992,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/ru">Modules/Vision/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3000</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/ru">Modules/Vision/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2025</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3004</td></tr></table></body>
 </html>

@@ -30,7 +30,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Движок Среды Визуализации и Управления
 </td>
-<td> 7.14 </td>
+<td> 7.15 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -231,9 +231,9 @@
 </p><p>Пользователем может быть создано множество стилей, каждый из которых будет хранить цветовые, шрифтовые и другие свойства элементов кадра. Простая смена стиля позволит быстро преобразить интерфейс ВУ, а возможность назначения индивидуального стиля для пользователя позволит учесть его особенности.
 </p><p>Для реализации этой возможности, при создании кадров, необходимо для свойств цвета, шрифта и других установить параметр "Конфигурация" (таблицы во вкладке "Обработка") в значение "Из стиля". А в параметре "Конфигурационный шаблон" указать идентификатор поля стиля. Далее, это поле автоматически появится в менеджере стилей и его можно будет там менять. Менеджер стилей доступен на странице конфигурации проекта во вкладке "Стили". На этой вкладке можно стили создавать, удалять и изменять, удалять их поля.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:685px;"><a class="image" href="http://oscada.org/wiki/File:VCA_prj_stl_ru.png"><img class="thumbimage" height="651" src="../files/VCA_prj_stl_ru.png" width="683" /></a>  <div class="thumbcaption">Рисунок. Вкладка "Стили" страницы конфигурации проекта.</div></div></div></div>
-<p>В целом, стили доступны начиная с уровня проектов. На уровне библиотек виджетов можно только определять поля стилей у виджетов. На уровне проекта, при выборе стиля, включается работа со стилями, что предполагает доступ к полям стилей вместо непосредственных значений атрибутов. Фактически, это означает, что при чтении или записи атрибута виджета, указанные операции будут осуществляться над соответствующим полем выбранного стиля.
-</p><p>При запуске проекта на исполнения будет использован установленный в проекте стиль. В последствии, пользователь может выбрать стиль из перечня доступных. Выбранный пользователем стиль будет сохранён и использован при следующем запуске проекта.
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:768px;"><a class="image" href="http://oscada.org/wiki/File:VCA_prj_stl.png"><img class="thumbimage" height="719" src="../../en/files/VCA_prj_stl.png" width="766" /></a>  <div class="thumbcaption">Рисунок. Вкладка "Стили" страницы конфигурации проекта.</div></div></div></div>
+<p>In general, the styles are available from the project level. At the level of the widget libraries you can only define the style fields for the widgets. At the project level, at the choice of style, it is started the work with styles, which includes access to the fields of styles instead of direct attribute values. In fact, this means that when reading or writing a widget attribute these operations will be carried out with the corresponding field of the chosen style. The configuration field "Write to style in the execution context" allows of dynamic changing the style fields in the execution context by writing to the proper attributes, but that can be done in wrong, so that is why the field is disabled by default.
+</p><p>When starting a project, the project-style will be used. The user can choose a style from the list of available styles of the running project. The user-selected style will be saved and used in next time the project is launched.
 </p><p><br />
 </p>
 <h3><span class="mw-headline" id=".D0.A1.D0.BE.D0.B1.D1.8B.D1.82.D0.B8.D1.8F.2C_.D0.B8.D1.85_.D0.BE.D0.B1.D1.80.D0.B0.D0.B1.D0.BE.D1.82.D0.BA.D0.B0_.D0.B8_.D0.BA.D0.B0.D1.80.D1.82.D1.8B_.D1.81.D0.BE.D0.B1.D1.8B.D1.82.D0.B8.D0.B9"><span class="mw-headline-number">3.5</span> События, их обработка и карты событий</span></h3>
@@ -3603,5 +3603,5 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/ru">Modules/VCAEngine/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3000</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/ru">Modules/VCAEngine/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2025</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3004</td></tr></table></body>
 </html>

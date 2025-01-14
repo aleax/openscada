@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: qtcfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2024 by Roman Savochenko, <roman@oscada.org>      *
+ *   Copyright (C) 2004-2025 by Roman Savochenko, <roman@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -3063,7 +3063,10 @@ void ConfApp::buttonClicked( )
 	    return;
 	}
 	else {
-	    XMLNode req("set"); req.setAttr("path", selPath+"/"+button->objectName().toStdString())->setAttr("primaryCmd", "1");
+	    XMLNode req("set");
+	    req.setAttr("path", selPath+"/"+button->objectName().toStdString())->
+		setAttr("tp", n_el->name())->
+		setAttr("primaryCmd", "1");
 	    //Copy parameters
 	    for(unsigned iCh = 0; iCh < n_el->childSize(); iCh++)
 		//*(req.childAdd()) = *(n_el->childGet(iCh));

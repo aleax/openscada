@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2010-2024.
+# Roman Savochenko <roman@oscada.org>, 2010-2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-07 08:34+0200\n"
+"POT-Creation-Date: 2025-01-13 15:57+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -739,6 +739,9 @@ msgstr "setze die Zelle ['%s':%s] auf '%s'."
 
 msgid "command with arguments:"
 msgstr "Befehl mit Argumenten:"
+
+msgid "command."
+msgstr "Befehl."
 
 #, c-format
 msgid "set to '%s'."
@@ -2928,6 +2931,13 @@ msgstr "Fehler beim Anhängen des neuen Controllers '%s'."
 
 msgid "Module does not support compilation of the programming language."
 msgstr "Modul unterstützt Kompilierung der Programmiersprache nicht."
+
+#, c-format
+msgid "all %d, running %d, enabled %d%s"
+msgstr "alle %d, ausgeführt %d, aktiviert %d%s"
+
+msgid "Errors: "
+msgstr "Fehler: "
 
 msgid "Owner"
 msgstr "Eigentümer"

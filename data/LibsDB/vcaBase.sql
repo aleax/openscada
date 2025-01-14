@@ -14082,13 +14082,28 @@ for(offEv = 0; (sval=event.parse(0,"\n",offEv)).length; ) {
 		toUpdate = true; toCalcCycles = 1;
 	}
 	else if(sval == "dlg_Apply:/itDel") {
-	//else if(sval == "ws_BtRelease:/itDel") {
+		// Delete files on FS for "file" fields
+		dataTblOneReq = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`,"+clsLsReq+" FROM `sh_"+class+"` WHERE `ID`=''"+dataTbl_value+"'';");
+		for(iR = 1; iR < dataTblOneReq.length; iR++) {
+			if(dataTblOneReq[iR][0] != dataTbl_value) continue;
+			for(iC = 0; iC < dataTblOneReq[iR].length; iC++)
+				if((itVlNm=dataTblOneReq[0][iC]).indexOf("SP_") == 0 && (celO=clsLsO[itVlNm.slice(3)]) != null &&
+						(itVl=dataTblOneReq[iR][iC]) != "<NULL>" && itVl.length &&
+						celO.tp.parse(0,":") == "file" && celO.tp.parse(2,":").length)
+					for(off = 0; (itVlEl=itVl.parseLine(0,off)).length; )
+						SYS.fileRemove(celO.tp.parse(2,":")+"/"+itVlEl);
+		}
+		delete dataTblOneReq;
+
+		// Delete same the fiels
 		SYS.BD.nodeAt(db,".").SQLReq("DELETE FROM `sh_"+class+"` WHERE `ID`=''"+dataTbl_value+"'';");
 		toUpdate = true; toCalcCycles = 1;
 	}
 	else if(sval == "ws_BtRelease:/itCopy") {
 		for(colLs = "", iC = 1; iC < dataTbl[0].length; iC++)
-			colLs += (colLs.length?", ":"") + "`"+dataTbl[0][iC]+"`";
+			// Without copying types of the "file" type and the files storage on FS
+			if(!(dataTbl[0][iC].indexOf("SP_") == 0 && (celO=clsLsO[dataTbl[0][iC].slice(3)]) != null && celO.tp.parse(0,":") == "file" && celO.tp.parse(4,":").toInt()))
+				colLs += (colLs.length?", ":"") + "`"+dataTbl[0][iC]+"`";
 		SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `sh_"+class+"` ("+colLs+") (SELECT "+colLs+" FROM `sh_"+class+"` WHERE `ID` = "+dataTbl_value+");");
 		toUpdate = true; toCalcCycles = 1;
 	}
@@ -14262,7 +14277,7 @@ if(fClrTo >= 0) {
 if(toCalcCycles > 0.1) {
 	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
 	toCalcCycles = max(0, toCalcCycles-1);
-}','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1734509846);
+}','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1736698649);
 INSERT INTO wlb_Main VALUES('weather','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAxCAIAAADldTjtAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAO
 KUlEQVRogdVa228bV3o/Z87cyRnebyJF8SJLsmRZchy7cSUncQyjDjbbNhssdrsLNFsUaNEWfSgK
 9F/xS9CgD3loUewiKFqk62w2XslO1rZs2bEki5JMihJ1o3jRkJwZzu30YWxqRMluI2eb7PdEHn7n
@@ -16390,7 +16405,7 @@ if(toBuild) {
 				if(firstV.isEVal())	firstV = mVl;
 				if(mO.tm < eTime)	lastV = mVl;
 				if(!finVl.isEVal() && (curPos=floor((mO.tm-bTime)/86400)) >= 0)
-					pO.trData += (pO.trData.length?",":"") + curPos.toString() + "=" + finVl;
+					pO.trData += (pO.trData.length?",":"") + mO.tm.toString() + "=" + finVl;
 			}
 		}
 		else {
@@ -16414,11 +16429,11 @@ if(toBuild) {
 			pO.trData += (pO.trData.length?",":"") + (curPos+30).toString() + "=" + SYS.strEncode(EVAL,"HTML");
 		}
 		if(pO.trData.length) {
-			pO.trData = "<d s=''1'' aprox=''1'' per=''86400''>"+pO.trData+"</d>";
+			pO.trData = "<d per=''0''>"+pO.trData+"</d>";
 			//this.messInfo("pO.trData="+pO.trData);
 		}
 	}
-}','','',-2,'owner;name;dscr;evProc;',1664170367);
+}','','',-2,'owner;name;dscr;evProc;',1736605077);
 CREATE TABLE IF NOT EXISTS 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"USER" TEXT DEFAULT 'root' ,"GRP" TEXT DEFAULT 'UI' ,"PERMIT" INTEGER DEFAULT '436' ,"PER" INTEGER DEFAULT '100' ,"STYLE" INTEGER DEFAULT '-1' ,"EN_BY_NEED" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO VCAPrjs VALUES('tmplSO','Signal groups (template)','Групи сигналізації (шаблон)','Группы сигнализаций (шаблон)','The projects'' template of visualisation based on signal groups.
 Author: Roman Savochenko <roman@oscada.org>
@@ -24399,7 +24414,7 @@ The frame provides currently and in future for next features:
   - detailed control panel-form of the selected item with the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.0.9
+Version: 2.0.10
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -24413,7 +24428,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - деталізована панель-форма керування обраним елементом зі специфічними полями.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.0.9
+Версія: 2.0.10
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');
@@ -29970,7 +29985,7 @@ Manually entered data is stored or traditionally in an archive of values, with o
 The message archiver of the module FSArch must be set for the next attributes to correct work perform together this document: set "Prevent duplicates", "Consider duplicates and prevent, for equal time, category, level" and set "Time size of the archive files" to 3660 days. The module DBArch must work without such kind specific.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.1
+Version: 1.3.2
 License: GPLv2',32,'','','','Документ слугує для генерації добового звіту місячних значень у вигляді діаграми трендів та таблиці даних. Документ динамічного типу. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають переважно архіви значень DAQ-параметрів.
 
 Документом вперше запроваджено ручне введення архівних значень великого інтервалу часу вимірювання, яким у цьому випадку є місяць, як недетермінований інтервал. Найбільшу актуальність ця функція становить для лічильників, які з тієї або іншої причини неможливо підключити до системи прямо, із безперервним вимірюванням або періодичним вивантаженням ділянок архіву. Визначення параметру до ручного вводу здійснюється встановленням постійної isMan відповідного параметру, що вмикає елементи форми нагорі документу, за відповідних прав ("root" або у групі "ITW"), та доступ до даних для таблиці та тренду суворо за інтервалом документу — місяць, як і їх введення.
@@ -29984,7 +29999,7 @@ License: GPLv2',32,'','','','Документ слугує для генерац
 Архіватор повідомлень модуля FSArch має бути встановлено у наступних атрибутах для здійснення коректної роботи разом із цим документом: встановити "Запобігати дублікатам", "Вважати дублікатами та запобігати, для рівного часу, категорії, рівня" та встановити "Розмір файлів за часом" у 3660 діб. Модуль DBArch має працювати без такого роду специфіки.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.3.1
+Версія: 1.3.2
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepYear','evProc','',32,'','','','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepYear','owner','root:ITW',32,'','','lab_set','','','','','','','');

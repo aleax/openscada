@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttypedaq.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -155,9 +155,11 @@ void TTypeDAQ::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TModule::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/cntr_",_("Controller"),RWRWR_,"root",SDAQ_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
-	if(ctrMkNode("area",opt,0,"/tctr",_("Controllers")))
+	if(ctrMkNode("area",opt,0,"/tctr",_("Controllers"))) {
+	    ctrMkNode("fld",opt,-1,"/tctr/nmb",_("Number"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/tctr/ctr",_("Controllers"),RWRWR_,"root",SDAQ_ID,5,
 		"tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","cntr_","idSz",i2s(limObjID_SZ).c_str());
+	}
 	return;
     }
     //Process command to page
@@ -171,6 +173,26 @@ void TTypeDAQ::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ opt->setAttr("id", add(opt->attr("id"))); at(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mCntr, opt->attr("id"), -1, NodeRemove);
+    }
+    else if(a_path == "/tctr/nmb" && ctrChkNode(opt)) {
+	vector<string> c_list;
+	list(c_list);
+	unsigned enCnt = 0, stCnt = 0;
+	map<int, unsigned> errCnt;
+	for(unsigned iCntr = 0; iCntr < c_list.size(); iCntr++) {
+	    AutoHD<TController> cntrO = at(c_list[iCntr]);
+	    if(cntrO.at().enableStat()) enCnt++;
+	    if(cntrO.at().startStat()) {
+		stCnt++;
+		int errSt = s2i(cntrO.at().getStatus());
+		if(errSt) errCnt[errSt]++;
+	    }
+	}
+	string errs;
+	for(map<int, unsigned>::iterator iE = errCnt.begin(); iE != errCnt.end(); ++iE)
+	    errs += (errs.size()?", ":"") + i2s(iE->first)+"="+i2s(iE->second);
+	opt->setText(TSYS::strMess(_("all %d, running %d, enabled %d%s"),
+			c_list.size(),stCnt,enCnt,errs.size()?(string("; ")+_("Errors: ")+errs).c_str():""));
     }
     else TModule::cntrCmdProc(opt);
 }

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-07 08:34+0200\n"
+"POT-Creation-Date: 2025-01-13 15:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -635,6 +635,9 @@ msgid "set the cell ['%s':%s] to '%s'."
 msgstr ""
 
 msgid "command with arguments:"
+msgstr ""
+
+msgid "command."
 msgstr ""
 
 #, c-format
@@ -2413,6 +2416,13 @@ msgid "Error attaching the new controller '%s'."
 msgstr ""
 
 msgid "Module does not support compilation of the programming language."
+msgstr ""
+
+#, c-format
+msgid "all %d, running %d, enabled %d%s"
+msgstr ""
+
+msgid "Errors: "
 msgstr ""
 
 msgid "Owner"

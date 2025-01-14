@@ -254,11 +254,11 @@
 <li> <i><b>Логічний (_PrmL)</b></i>:
 <ul><li> <i>Шаблон параметру</i> — адреса шаблону параметру DAQ.</li></ul></li></ul>
 <h4><span class="mw-headline" id=".D0.A1.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D0.B8.D0.B9_.28_Prm.29"><span class="mw-headline-number">3.2.1</span> Стандартний (_Prm)</span></h4>
-<p>Додатковим конфігураційним полем параметру даного модуля (рис.6) є перелік вузлів OPC-UA та поле навігації за вузлами OPC-UA у один рядок для вставки обраних вузлів типу "Змінна" до визначеного переліку. Атрибут у цьому переліку записується як "<b>{ns}:{id}[|[{flg}][|{id}[|{name}]]]</b>".<br />
+<p>Додатковим конфігураційним полем параметру даного типу (рис.6) є перелік вузлів OPC-UA і поле навігації за вузлами OPC-UA у один рядок для вставки обраних вузлів типу "Змінна" до визначеного переліку. Атрибут у цьому переліку записується як "<b>{ns}:{nid}[|[{flg}][|{id}[|{name}]]]</b>".<br />
 Де:
 </p>
 <ul><li> <i>ns</i> — простір імен, числом; нульове значення може бути опущено;</li>
-<li> <i>id</i> — ідентифікатор вузла, числом, рядком, рядком байт або GUID;</li>
+<li> <i>nid</i> — ідентифікатор вузла, числом, рядком, рядком байт або GUID;</li>
 <li> <i>flg</i> — прапорці нездійснення запиту цільових даних на сервері: тип значення (b-Логічний,i-Ціле,f-Реальне,s-Рядок,o-Об'єкт), режим запису/читання (r-читати, w-писати);</li>
 <li> <i>id</i> — ідентифікатор атрибуту що створюється;</li>
 <li> <i>name</i> — ім'я атрибуту що створюється.</li></ul>
@@ -974,5 +974,5 @@ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./OPC-UA_openssl.c
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/uk">Modules/OPC_UA/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3000</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/uk">Modules/OPC_UA/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2025</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3004</td></tr></table></body>
 </html>

@@ -254,12 +254,12 @@
 <li> <i><b>Logical (_PrmL)</b></i>:
 <ul><li> <i>Parameter template</i> — address of the DAQ-parameter template.</li></ul></li></ul>
 <h4><span class="mw-headline" id="Standard_.28_Prm.29"><span class="mw-headline-number">3.2.1</span> Standard (_Prm)</span></h4>
-<p>Additional configuration field of the type parameter (Fig.6) is the list of OPC-UA nodes and the field of navigation by OPC-UA nodes in single line, for the selected nodes of the type "Variable" insertion to the defined list. Attribute in this list is written as "<b>{ns}:{id}[|[{flg}][|{id}[|{name}]]]</b>".<br />
+<p>Additional configuration field of the type parameter (Fig.6) is the list of OPC-UA nodes and the field of navigation by OPC-UA nodes in single line, for the selected nodes of the type "Variable" insertion to the defined list. Attribute in this list is written as "<b>{ns}:{nid}[|[{flg}][|{id}[|{name}]]]</b>".<br />
 Where:
 </p>
 <ul><li> <i>ns</i> — name space, number; zero value can be omitted;</li>
-<li> <i>id</i> — node identifier by number, string, bytes string and GUID;</li>
-<li> <i>flg</i> — flags of no requesting the metadata on the server: value type (b-Boolean,i-Integer,f-Float,s-String,o-Object), read/write mode (r-read, w-write);</li>
+<li> <i>nid</i> — node identifier by number, string, bytes string and GUID;</li>
+<li> <i>flg</i> — flags for do not request the metadata on the server: value type (b-Boolean,i-Integer,f-Float,s-String,o-Object), read/write mode (r-read, w-write);</li>
 <li> <i>id</i> — identifier of the created attribute;</li>
 <li> <i>name</i> — name of the created attribute.</li></ul>
 <p>Examples:
@@ -973,5 +973,5 @@ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./OPC-UA_openssl.c
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/en">Modules/OPC_UA/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3000</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/en">Modules/OPC_UA/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2025</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3004</td></tr></table></body>
 </html>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-07 08:34+0200\n"
+"POT-Creation-Date: 2025-01-13 15:57+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -728,6 +728,9 @@ msgid "set the cell ['%s':%s] to '%s'."
 msgstr ""
 
 msgid "command with arguments:"
+msgstr ""
+
+msgid "command."
 msgstr ""
 
 #, c-format
@@ -2899,6 +2902,14 @@ msgstr "Ошибка подключения нового контроллера 
 
 msgid "Module does not support compilation of the programming language."
 msgstr "Модуль не поддерживает функцию компиляции языков программирования."
+
+#, c-format
+msgid "all %d, running %d, enabled %d%s"
+msgstr ""
+
+#, fuzzy
+msgid "Errors: "
+msgstr "Ошибка"
 
 msgid "Owner"
 msgstr "Владелец"

@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/Documents</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../ru/Libs_Documents.html" title="Библиотеки/Документы (33% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Documents.html" title="Бібліотеки/Документи (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../ru/Libs_Documents.html" title="Библиотеки/Документы (31% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Documents.html" title="Бібліотеки/Документи (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -1192,7 +1192,7 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <tr>
 <td> <span id="diagram" title="#diagram"><h3><span class="mw-headline" id="Diagram_.28diagram.29"><span class="mw-headline-number">2.4</span> Diagram (<a href="Libs_Documents.html#diagram" title="Special:MyLanguage/Libs/Documents">diagram</a>)</span></h3></span>
 </td>
-<td> 1.4 </td>
+<td> 1.5 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru
@@ -1201,7 +1201,7 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 </td></tr></table>
 <p>Building trends diagram to SVG, which may be builtin next to the XHTML-document, for specified period of the time [(<i>end</i>-<i>size</i>)...<i>end</i>] and from the sources <i>srcs</i>.
 </p>
-<ul><li> <b>Total complexity:</b> 1.3 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<ul><li> <b>Total complexity:</b> 1.4 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
 <li> <b>Sponsored by, for initial implementation on 1.0 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> Magomed, <a class="external text" href="https://www.savtech.ru" rel="nofollow noreferrer noopener" target="_blank">SAVTECH</a></li></ul>
 <p>The diagram forming code is based on code of the primitive "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">Diagram</a>" of the visualisers, and which was quite simply migrated from C++ to <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">the JavaLikeCalc embedded language</a>. Currently, only trends have been moved-implemented!
 </p><p>The appearance of the diagram is determined by its dimensions <i>hsz</i>*<i>vsz</i> and the source SVG-template <i>tmpl</i>, a number attributes of the root tag of which has special meaning and corresponding to the primitive "<a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">Diagram</a>":
@@ -1215,7 +1215,8 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 </p>
 <ul><li> <b>addr</b> — address to:
 <ul><li> the value archive ("/Archive/va_CPULoad_load") or the DAQ-parameter attribute ("/DAQ/LogicLev/gen/F3/var");</li>
-<li> the direct data in the form "<b>&lt;d s='1' aprox='1' per='1'&gt;{p0}={pV0},{p1}={pV1},...,{pN}={pVN}&lt;/d&gt;</b>", by set the attribute "s" it will allows the period setting in seconds; "aprox" — approximate the transition from one point to another instead of the previous value to all the periodicity points from the packaging;</li></ul></li>
+<li> the direct data in the form "<b>&lt;d s='1' aprox='1' per='1'&gt;{p0}={pV0},{p1}={pV1},...,{pN}={pVN}&lt;/d&gt;</b>" for periodic, by set the attribute "s" it will allows the period setting in seconds; "aprox" — approximate the transition from one point to another instead of the previous value to all the periodicity points from the packaging;</li>
+<li> the direct data in the form "<b>&lt;d per='0'&gt;{tm0}={pV0},{tm1}={pV1},...,{tmN}={pVN}&lt;/d&gt;</b>" for aperiodic of long intervals from months, where <i>tm{N}</i> in seconds.</li></ul></li>
 <li> <b>min</b>, <b>max</b> — minimum and maximum of the scale, in the scale absence (<b>min</b> &gt;= <b>max</b>), it will be calculated from the real data;</li>
 <li> <b>color</b> — colour of the trend curve;</li>
 <li> <b>scale</b> — separate definition of the trend scale, by default "Global (0)" and generally provided: "Global (0)", "Markers (2)", "Grid and markers (3)", "Markers (log) (6)", "Grid and markers (log) (7)".</li>
@@ -1322,5 +1323,5 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Documents/en">Libs/Documents/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2024</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3000</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Documents/en">Libs/Documents/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2025</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3004</td></tr></table></body>
 </html>

@@ -1,12 +1,12 @@
 # OpenSCADA core translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA package.
 #
-# Roman Savochenko <roman@oscada.org>, 2003-2024.
+# Roman Savochenko <roman@oscada.org>, 2003-2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-07 08:34+0200\n"
+"POT-Creation-Date: 2025-01-13 15:57+0200\n"
 "PO-Revision-Date: 2020-10-25 10:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team:  <uk@li.org>\n"
@@ -731,6 +731,9 @@ msgstr "встановлення комірки ['%s':%s] у '%s'."
 
 msgid "command with arguments:"
 msgstr "команда із аргументами:"
+
+msgid "command."
+msgstr "команда."
 
 #, c-format
 msgid "set to '%s'."
@@ -2895,6 +2898,13 @@ msgstr "Помилка підключення нового контролера 
 
 msgid "Module does not support compilation of the programming language."
 msgstr "Модуль не підтримує функцію компіляції мови програмування."
+
+#, c-format
+msgid "all %d, running %d, enabled %d%s"
+msgstr "загалом %d, виконується %d, увімкнено %d%s"
+
+msgid "Errors: "
+msgstr "Помилки: "
 
 msgid "Owner"
 msgstr "Власник"
