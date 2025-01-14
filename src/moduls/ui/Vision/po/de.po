@@ -4,13 +4,13 @@
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2011.
 # Joan Zimmermann <j.zimmermann@fetron.de>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2010-2024.
+# Roman Savochenko <roman@oscada.org>, 2010-2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-07 08:50+0200\n"
+"POT-Creation-Date: 2025-01-13 16:07+0200\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1123,6 +1123,9 @@ msgstr "Erase Stil"
 msgid "Value"
 msgstr "Wert"
 
+msgid "Write to style in the execution context:"
+msgstr "Schreiben in den Stil im Ausführungskontext"
+
 msgid "Diagnostics"
 msgstr "Diagnostik"
 
@@ -1308,11 +1311,11 @@ msgstr "Klare Veränderungen"
 msgid "Press to clear changes of the attribute."
 msgstr "Betätigen zum Zurücksetzen Änderungen des Attributs."
 
-msgid "Lower the widget changes to its parent"
-msgstr "Senken Sie die Widget Änderungen an der übergeordneten"
+msgid "Lower changes to the parent"
+msgstr "Senkung Änderungen am übergeordneten"
 
-msgid "Press for lowering the widget changes to its parent."
-msgstr "Betätigen zum Senken Sie die Widget Änderungen an der übergeordneten."
+msgid "Press for lowering changes to the parent."
+msgstr "Betätigen zum Senkung Änderungen am übergeordneten."
 
 msgid "Upload file"
 msgstr "Datei hochladen"

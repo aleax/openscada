@@ -1,13 +1,13 @@
 # OpenSCADA.UI.VCAEngine translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.VCAEngine package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2006-2023.
+# Roman Savochenko <roman@oscada.org>, 2006-2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-09 18:07+0200\n"
+"POT-Creation-Date: 2025-01-13 16:05+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1363,6 +1363,9 @@ msgstr "Стиль"
 
 msgid "Properties"
 msgstr "Властивості"
+
+msgid "Write to style in the execution context"
+msgstr "Писати до стилю у контексті виконання"
 
 msgid "Delete"
 msgstr "Видалити"

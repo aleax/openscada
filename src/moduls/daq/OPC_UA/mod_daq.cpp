@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.OPC_UA file: mod_daq.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1307,12 +1307,12 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	TParamContr::cntrCmdProc(opt);
 	if(isStd()) {
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/ND_LS",EVAL_STR,(owner().startStat()&&enableStat())?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"rows","8","SnthHgl","1",
-		"help",_("Variables and it containers (Objects) list. All variables will put into the parameter attributes list.\n"
-		    "Variables write by separate lines in the form \"{ns}:{id}[|[{flg}][|{id}[|{name}]]]\".\n"
+		"help",_("Variables and their containers (Objects) list. All variables will put into list of the parameter attributes.\n"
+		    "Variables write by separate lines in the form \"{ns}:{nid}[|[{flg}][|{id}[|{name}]]]\".\n"
 		    "Where:\n"
 		    "  ns  - name space, number; zero value can be omitted;\n"
-		    "  id  - node identifier by number, string, bytes string and GUID;\n"
-		    "  flg - flags of no requesting the metadata on the server:\n"
+		    "  nid - node identifier by number, string, bytes string and GUID;\n"
+		    "  flg - flags for do not request the metadata on the server:\n"
 		    "        value type (b-Boolean,i-Integer,f-Float,s-String,o-Object), read/write mode (r-read, w-write);\n"
 		    "  id  - identifier of the created attribute;\n"
 		    "  name - name of the created attribute.\n"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-07 08:50+0200\n"
+"POT-Creation-Date: 2025-01-13 16:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1000,6 +1000,9 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
+msgid "Write to style in the execution context:"
+msgstr ""
+
 msgid "Diagnostics"
 msgstr ""
 
@@ -1178,10 +1181,10 @@ msgstr ""
 msgid "Press to clear changes of the attribute."
 msgstr ""
 
-msgid "Lower the widget changes to its parent"
+msgid "Lower changes to the parent"
 msgstr ""
 
-msgid "Press for lowering the widget changes to its parent."
+msgid "Press for lowering changes to the parent."
 msgstr ""
 
 msgid "Upload file"

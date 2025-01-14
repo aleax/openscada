@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchives.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1208,10 +1208,10 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/v_arch/nmb" && ctrChkNode(opt)) {
 	vector<string> list;
 	valList(list);
-	unsigned eCnt = 0, srcErrCnt = 0, srcNoCnt = 0, lostCnt = 0, dblLnkCnt = 0;
+	unsigned enCnt = 0, srcErrCnt = 0, srcNoCnt = 0, lostCnt = 0, dblLnkCnt = 0;
 	for(unsigned iA = 0; iA < list.size(); iA++) {
 	    AutoHD<TVArchive> vo = valAt(list[iA]);
-	    if(vo.at().startStat()) eCnt++;
+	    if(vo.at().startStat()) enCnt++;
 	    else if(vo.at().srcMode() != TVArchive::Passive) {
 		if(SYS->daq().at().attrAt(vo.at().srcData(),'.',true).freeStat()) srcErrCnt++;
 		else dblLnkCnt++;
@@ -1220,7 +1220,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    if(vo.at().DB().empty())	lostCnt++;
 	}
 	opt->setText(TSYS::strMess(_("all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost (empty storage) %d, doubly linked %d"),
-					list.size(),eCnt,srcNoCnt,srcErrCnt,lostCnt,dblLnkCnt));
+					list.size(),enCnt,srcNoCnt,srcErrCnt,lostCnt,dblLnkCnt));
     }
     else if(a_path.find("/v_arch/del") == 0 && ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR)) {
 	bool SrcNo = (a_path.find("delSrcNo") != string::npos);

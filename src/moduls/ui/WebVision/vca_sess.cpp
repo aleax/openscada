@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebVision file: vca_sess.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>	   *
+ *   Copyright (C) 2007-2025 by Roman Savochenko, <roman@oscada.org>	   *
  *		   2007-2012 by Lysenko Maxim, <mlisenko@oscada.org>	   *
  *		   2007-2008 by Yashina Kseniya, <ksu@oscada.org>	   *
  *									   *
@@ -505,6 +505,37 @@ VCASess &VCAObj::owner( ) const	{ return *(VCASess*)nodePrev(); }
 
 string VCAObj::objName( )	{ return TCntrNode::objName()+":VCAObj"; }
 
+double VCAObj::bezierDeltaT( const Point &p1, const Point &p2, const Point &p3, const Point &p4 )
+{
+    double t = 0, dx_dt, dy_dt;
+    double max = fabs(-3*pow((1-t),2)*p1.x - 6*t*(1-t)*p2.x + 6*t*p3.x + 3*t*t*p4.x);
+    do {
+	dx_dt  = fabs(-3*pow((1-t),2)*p1.x - 6*t*(1-t)*p2.x + 6*t*p3.x + 3*t*t*p4.x);
+	if(max < dx_dt) max = dx_dt;
+	dy_dt  = fabs(-3*pow((1-t),2)*p1.y - 6*t*(1-t)*p2.y + 6*t*p3.y + 3*t*t*p4.y);
+	if(max < dy_dt) max = dy_dt;
+	t += 0.1;
+    } while(t < 1);
+
+    return 1/max;
+}
+
+Point VCAObj::bezier( double t, const Point &p1, const Point &p2, const Point &p3, const Point &p4 )
+{
+    return Point(pow((1-t),3)*p1.x + 3*t*pow((1-t),2)*p2.x + 3*t*t*(1-t)*p3.x + t*t*t*p4.x,
+		 pow((1-t),3)*p1.y + 3*t*pow((1-t),2)*p2.y + 3*t*t*(1-t)*p3.y + t*t*t*p4.y);
+}
+
+void VCAObj::gdImageCubic( gdImagePtr im, const Point &p1, const Point &p2, const Point &p3, const Point &p4, int clr )
+{
+    double delta = bezierDeltaT(p1, p2, p3, p4);
+    Point tp1, tp2;
+    for(double t = 0; t < 1; t += delta) {
+	tp1 = bezier(t, p1, p2, p3, p4); tp2 = bezier(t+delta, p1, p2, p3, p4);
+	gdImageLine(im, rRnd(tp1.x,POS_PREC_DIG,true), rRnd(tp1.y,POS_PREC_DIG,true), rRnd(tp2.x,POS_PREC_DIG,true), rRnd(tp2.y,POS_PREC_DIG,true), clr);
+    };
+}
+
 //*************************************************
 //* VCAFormEl					  *
 //*************************************************
@@ -710,36 +741,6 @@ Point VCAElFigure::unrotate( const Point pnt, double alpha, double a, double b )
 Point VCAElFigure::arc( double t, double a, double b )
 {
     return Point( a*cos(t*M_PI*2), -b*sin(t*M_PI*2) );
-}
-
-double VCAElFigure::ABS( double var )
-{
-    if( var < 0 ) return -var;
-    else return var;
-}
-
-//- Computing the step in the bezier curve construction -
-double VCAElFigure::bezierDeltaT( Point p1, Point p2, Point p3, Point p4 )
-{
-    double t = 0, dx_dt, dy_dt;
-    double max = ABS( -3*pow((1-t),2)*p1.x-6*t*(1-t)*p2.x+6*t*p3.x+3*t*t*p4.x );
-    do
-    {
-	dx_dt = ABS( -3*pow((1-t),2)*p1.x-6*t*(1-t)*p2.x+6*t*p3.x+3*t*t*p4.x );
-	if( max < dx_dt ) max = dx_dt;
-	dy_dt = ABS( -3*pow((1-t),2)*p1.y-6*t*(1-t)*p2.y+6*t*p3.y+3*t*t*p4.y );
-	if(max < dy_dt) max = dy_dt;
-	t += 0.1;
-    }
-    while(t < 1);
-    return 1/max;
-}
-
-//- getting the point of the bezier curve, using t as parameter -
-Point VCAElFigure::bezier(double t,Point p1,Point p2, Point p3, Point p4)
-{
-    return Point( pow((1-t),3)*p1.x+3*t*pow((1-t),2)*p2.x+3*t*t*(1-t)*p3.x+t*t*t*p4.x,
-		  pow((1-t),3)*p1.y+3*t*pow((1-t),2)*p2.y+3*t*t*(1-t)*p3.y+t*t*t*p4.y );
 }
 
 //- Computing the angle between two lines -
@@ -3503,12 +3504,12 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    do {
 				arc_pnt = Point( (int)rRnd( el_p3.x + rotate( arc( t_arc, arc_a_small, arc_b_small ), ang ).x, POS_PREC_DIG, true ),
 						 (int)rRnd( el_p3.y - rotate( arc( t_arc, arc_a_small, arc_b_small ), ang ).y, POS_PREC_DIG, true ) );
-				if( ( ABS(arc_pnt.x - bezier_pnt_1.x) ) < 1 && ( ABS(arc_pnt.y - bezier_pnt_1.y) < 1 ) && !f_brk_1 ) {
+				if( ( fabs(arc_pnt.x - bezier_pnt_1.x) ) < 1 && ( fabs(arc_pnt.y - bezier_pnt_1.y) < 1 ) && !f_brk_1 ) {
 				    new_pnt_1 = Point( arc_pnt.x, arc_pnt.y );
 				    f_brk_1 = true;
 				    delta_temp_1 = delta_t_bez;
 				}
-				if( ( ABS(arc_pnt.x - bezier_pnt_2.x) ) < 1 && ( ABS(arc_pnt.y - bezier_pnt_2.y) < 1 ) && !f_brk_2 ) {
+				if( ( fabs(arc_pnt.x - bezier_pnt_2.x) ) < 1 && ( fabs(arc_pnt.y - bezier_pnt_2.y) < 1 ) && !f_brk_2 ) {
 				    new_pnt_2 = Point( arc_pnt.x, arc_pnt.y );
 				    f_brk_2 = true;
 				    delta_temp_2 = delta_t_bez;
@@ -3749,7 +3750,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 						Point( P3.x, P3.y-W2 ),
 						Point( P4.x, P4.y-W2 ) ), ang1 ).y, POS_PREC_DIG, true ) );
 				}
-				if( (ABS( bezier_pnt_2_1.x - bezier_pnt_1_1.x)) < 1 && (ABS( bezier_pnt_2_1.y - bezier_pnt_1_1.y) < 1) && !f_brk_1 )
+				if( (fabs( bezier_pnt_2_1.x - bezier_pnt_1_1.x)) < 1 && (fabs( bezier_pnt_2_1.y - bezier_pnt_1_1.y) < 1) && !f_brk_1 )
 				{
 				    new_pnt_vect.push_back( Point( bezier_pnt_2_1.x, bezier_pnt_2_1.y ) );
 				    f_brk_1 = true;
@@ -3758,7 +3759,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 				    num_bezier_1.push_back(1);
 				    num_bezier_2.push_back(1);
 				}
-				if( (ABS( bezier_pnt_2_1.x - bezier_pnt_1_2.x)) < 1 && (ABS( bezier_pnt_2_1.y - bezier_pnt_1_2.y) < 1) && !f_brk_2 )
+				if( (fabs( bezier_pnt_2_1.x - bezier_pnt_1_2.x)) < 1 && (fabs( bezier_pnt_2_1.y - bezier_pnt_1_2.y) < 1) && !f_brk_2 )
 				{
 				    new_pnt_vect.push_back(Point(bezier_pnt_2_1.x, bezier_pnt_2_1.y));
 				    f_brk_2 = true;
@@ -3767,7 +3768,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 				    num_bezier_1.push_back(0);
 				    num_bezier_2.push_back(1);
 				}
-				if( (ABS( bezier_pnt_2_2.x - bezier_pnt_1_1.x)) < 1 && (ABS( bezier_pnt_2_2.y - bezier_pnt_1_1.y) < 1) && !f_brk_3 )
+				if( (fabs( bezier_pnt_2_2.x - bezier_pnt_1_1.x)) < 1 && (fabs( bezier_pnt_2_2.y - bezier_pnt_1_1.y) < 1) && !f_brk_3 )
 				{
 				    new_pnt_vect.push_back( Point( bezier_pnt_2_2.x, bezier_pnt_2_2.y ) );
 				    f_brk_3 = true;
@@ -3776,7 +3777,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 				    num_bezier_1.push_back(1);
 				    num_bezier_2.push_back(0);
 				}
-				if( (ABS( bezier_pnt_2_2.x - bezier_pnt_1_2.x)) < 1 && (ABS( bezier_pnt_2_2.y - bezier_pnt_1_2.y) < 1) && !f_brk_4 )
+				if( (fabs( bezier_pnt_2_2.x - bezier_pnt_1_2.x)) < 1 && (fabs( bezier_pnt_2_2.y - bezier_pnt_1_2.y) < 1) && !f_brk_4 )
 				{
 				    new_pnt_vect.push_back( Point( bezier_pnt_2_2.x, bezier_pnt_2_2.y ) );
 				    f_brk_4 = true;
@@ -4502,7 +4503,7 @@ vector<int> VCAText::textRotate( double ang, double x1, double y1, double x2, do
     Point p1_rot = rot(Point(x1,y1), ang, center); Point p2_rot = rot(Point(x2,y2), ang, center);
     Point p3_rot = rot(Point(x3,y3), ang, center); Point p4_rot = rot(Point(x4,y4), ang, center);
     if(ang > 0 && ang < 90) {
-	if((int)rRnd(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) < (int)rRnd(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
+	if((int)rRnd(fabs(x1-x3),POS_PREC_DIG,true) < (int)rRnd(fabs(y2-y1),POS_PREC_DIG,true))
 	{
 	    double  k1Rot = (p4_rot.y - p1_rot.y)/(p4_rot.x - p1_rot.x),
 		    k2Rot = (p4_rot.y - p3_rot.y)/(p4_rot.x - p3_rot.x);
@@ -4514,7 +4515,7 @@ vector<int> VCAText::textRotate( double ang, double x1, double y1, double x2, do
 	    wh[0] = (int)rRnd(VCAElFigure::length(p1Rez,p4Rez), POS_PREC_DIG, true);
 	    wh[1] = (int)rRnd(VCAElFigure::length(p4Rez,p3Rez), POS_PREC_DIG, true);
 	}
-	else if((int)rRnd(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) > (int)rRnd(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
+	else if((int)rRnd(fabs(x1-x3),POS_PREC_DIG,true) > (int)rRnd(fabs(y2-y1),POS_PREC_DIG,true))
 	{
 	    double  k1Rot = (p2_rot.y - p1_rot.y)/(p2_rot.x - p1_rot.x),
 		    k2Rot = (p4_rot.y - p1_rot.y)/(p4_rot.x - p1_rot.x);
@@ -4532,7 +4533,7 @@ vector<int> VCAText::textRotate( double ang, double x1, double y1, double x2, do
 	}
     }
     else if(ang > 90 && ang < 180) {
-	if((int)rRnd(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) < (int)rRnd(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
+	if((int)rRnd(fabs(x1-x3),POS_PREC_DIG,true) < (int)rRnd(fabs(y2-y1),POS_PREC_DIG,true))
 	{
 	    double  k1Rot = (p4_rot.y - p1_rot.y)/(p4_rot.x - p1_rot.x),
 		    k2Rot = (p2_rot.y - p1_rot.y)/(p2_rot.x - p1_rot.x);
@@ -4544,7 +4545,7 @@ vector<int> VCAText::textRotate( double ang, double x1, double y1, double x2, do
 	    wh[0] = (int)rRnd(VCAElFigure::length(p1Rez,p4Rez), POS_PREC_DIG, true);
 	    wh[1] = (int)rRnd(VCAElFigure::length(p1Rez,p2Rez), POS_PREC_DIG, true);
 	}
-	else if((int)rRnd(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) > (int)rRnd(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
+	else if((int)rRnd(fabs(x1-x3),POS_PREC_DIG,true) > (int)rRnd(fabs(y2-y1),POS_PREC_DIG,true))
 	{
 	    double  k1Rot = (p2_rot.y - p1_rot.y)/(p2_rot.x - p1_rot.x),
 		    k2Rot = (p3_rot.y - p2_rot.y)/(p3_rot.x - p2_rot.x);
@@ -4562,7 +4563,7 @@ vector<int> VCAText::textRotate( double ang, double x1, double y1, double x2, do
 	}
     }
     else if(ang > 180 && ang < 270) {
-	if((int)rRnd(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) < (int)rRnd(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
+	if((int)rRnd(fabs(x1-x3),POS_PREC_DIG,true) < (int)rRnd(fabs(y2-y1),POS_PREC_DIG,true))
 	{
 	    double  k1Rot = (p2_rot.y - p1_rot.y)/(p2_rot.x - p1_rot.x),
 		    k2Rot = (p3_rot.y - p2_rot.y)/(p3_rot.x - p2_rot.x);
@@ -4574,7 +4575,7 @@ vector<int> VCAText::textRotate( double ang, double x1, double y1, double x2, do
 	    wh[0] = (int)rRnd(VCAElFigure::length(p2Rez,p3Rez), POS_PREC_DIG, true);
 	    wh[1] = (int)rRnd(VCAElFigure::length(p1Rez,p2Rez), POS_PREC_DIG, true);
 	}
-	else if((int)rRnd(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) > (int)rRnd(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
+	else if((int)rRnd(fabs(x1-x3),POS_PREC_DIG,true) > (int)rRnd(fabs(y2-y1),POS_PREC_DIG,true))
 	{
 	    double  k1Rot = (p3_rot.y - p2_rot.y)/(p3_rot.x - p2_rot.x),
 		    k2Rot = (p4_rot.y - p3_rot.y)/(p4_rot.x - p3_rot.x);
@@ -4592,7 +4593,7 @@ vector<int> VCAText::textRotate( double ang, double x1, double y1, double x2, do
 	}
     }
     else if(ang > 270 && ang < 360) {
-	if((int)rRnd(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) < (int)rRnd(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
+	if((int)rRnd(fabs(x1-x3),POS_PREC_DIG,true) < (int)rRnd(fabs(y2-y1),POS_PREC_DIG,true))
 	{
 	    double  k1Rot = (p4_rot.y - p3_rot.y)/(p4_rot.x - p3_rot.x),
 		    k2Rot = (p3_rot.y - p2_rot.y)/(p3_rot.x - p2_rot.x);
@@ -4604,7 +4605,7 @@ vector<int> VCAText::textRotate( double ang, double x1, double y1, double x2, do
 	    wh[0] = (int)rRnd(VCAElFigure::length(p2Rez,p3Rez), POS_PREC_DIG, true);
 	    wh[1] = (int)rRnd(VCAElFigure::length(p3Rez,p4Rez), POS_PREC_DIG, true);
 	}
-	else if((int)rRnd(VCAElFigure::ABS(x1-x3),POS_PREC_DIG,true) > (int)rRnd(VCAElFigure::ABS(y2-y1),POS_PREC_DIG,true))
+	else if((int)rRnd(fabs(x1-x3),POS_PREC_DIG,true) > (int)rRnd(fabs(y2-y1),POS_PREC_DIG,true))
 	{
 	    double  k1Rot = (p2_rot.y - p1_rot.y)/(p2_rot.x - p1_rot.x),
 		    k2Rot = (p3_rot.y - p2_rot.y)/(p3_rot.x - p2_rot.x);
@@ -4652,11 +4653,11 @@ void VCAText::getReq( SSess &ses )
 	strex.hdpi = 72;
 
 	int rotateWidth, rotateHeight, lnSpace = (int)txtFontSize/3;
-	if(VCAElFigure::ABS(orient-90) < 0.01 || VCAElFigure::ABS(orient-270) < 0.01) {
+	if(fabs(orient-90) < 0.01 || fabs(orient-270) < 0.01) {
 	    rotateWidth = scaleHeight;
 	    rotateHeight = scaleWidth;
 	}
-	else if(VCAElFigure::ABS(orient-180) < 0.01 || VCAElFigure::ABS(orient-360) < 0.01) {
+	else if(fabs(orient-180) < 0.01 || fabs(orient-360) < 0.01) {
 	    rotateWidth = scaleWidth;
 	    rotateHeight = scaleHeight;
 	}
@@ -4937,7 +4938,7 @@ void VCAText::setAttrs( XMLNode &node, const SSess &ses )
 	    int argSize = s2i(TSYS::strSepParse(args[iA].cfg(),0,';'));
 	    argSize = vmax(-1000,vmin(1000,argSize));
 	    string argPad = "";
-	    for(int j = argVal.length(); j < VCAElFigure::ABS(argSize); j++) argPad += ' ';
+	    for(int j = argVal.length(); j < fabs(argSize); j++) argPad += ' ';
 	    if(argSize > 0) argVal = argPad+argVal; else argVal += argPad;
 	    string rep = "%"+i2s(iA+1);
 	    size_t fnd = txt.find(rep);
@@ -5232,7 +5233,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	if(sclVerT&FD_GRD_MARKS) {
 	    string labVal;
 	    gdImageLine(im, tArX-1, tArY, tArX-1, tArH, clrGridT);
-	    for(double iV = floor((vsMinT/vDiv)+0.5)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv) {
+	    for(double iV = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv) {
 		//  Draw grid
 		int v_pos = tArY + tArH - (int)((double)tArH*(iV-vsMinT)/(vsMaxT-vsMinT));
 		if(sclVerT&FD_GRD) gdImageLine(im, tArX, v_pos, tArX+tArW, v_pos, clrGrid);
@@ -5467,7 +5468,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    }
 	    //Writing a point and a line
 	    if(averVl != EVAL_REAL) {
-		if(cP.valTp() == 0)
+		if(cP.valTp() == TFld::Boolean)
 		    z_vpos = tArY + tArH - (int)((double)tArH*vmax(0,vmin(1,((vsPercT?(100*(0-bordL)/(bordU-bordL)):0)-vsMinT)/(vsMaxT-vsMinT))));
 		int c_vpos = tArY + tArH - (int)((double)tArH*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,averVl)):averVl)-vsMinT)/(vsMaxT-vsMinT))));
 		if(prevVl == EVAL_REAL) {
@@ -5475,9 +5476,15 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		    else gdImageLine(im, averPos, z_vpos, averPos, vmin(z_vpos-lnWdth,c_vpos), clr_t);
 		}
 		else {
-		    if(cP.valTp() != 0) {
+		    if(cP.valTp() != TFld::Boolean) {
 			int c_vpos_prv = tArY + tArH - (int)((double)tArH*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,prevVl)):prevVl)-vsMinT)/(vsMaxT-vsMinT))));
-			gdImageLine(im, prevPos, c_vpos_prv, averPos, c_vpos, clr_t);
+			if(abs(averPos-prevPos) > TRND_RND_RANGE && abs(c_vpos-c_vpos_prv) > TRND_RND_RANGE) {
+			    // Curvature [0.1...0.5] depending the rising level
+			    double curvLev = -0.2*(vmax(-2*TRND_RND_RANGE,vmin(2*TRND_RND_RANGE,c_vpos_prv-c_vpos))-2*TRND_RND_RANGE)/(2*TRND_RND_RANGE)+0.1;
+			    int wPos = curvLev*(averPos-prevPos);
+			    // Same drawing
+			    gdImageCubic(im, Point(prevPos,c_vpos_prv), Point(prevPos+wPos,c_vpos_prv), Point(averPos-wPos,c_vpos), Point(averPos,c_vpos), clr_t);
+			} else gdImageLine(im, prevPos, c_vpos_prv, averPos, c_vpos, clr_t);
 		    } else
 			for(int sps = prevPos+1; sps <= averPos; sps++)
 			    gdImageLine(im, sps, z_vpos, sps, vmin(z_vpos-lnWdth,c_vpos), clr_t);

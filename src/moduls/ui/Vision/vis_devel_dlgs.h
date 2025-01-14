@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_dlgs.h
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -90,7 +90,8 @@ class LibProjProp: public QDialog
 	QTabWidget	*wdg_tabs;	//Tabs
 	QPushButton	*obj_ico,	//Icon
 			*obj_remFromDB;	//Remove from DB
-	QCheckBox	*obj_enable;	//Enabled stat
+	QCheckBox	*obj_enable,	//Enabled stat
+			*stl_wrToStl;	//Write to style in the execution context
 			//*prj_keepAspRt;	//Keep master page aspect ratio
 	LineEdit	*obj_db;	//DB
 	QComboBox	*obj_user,	//User

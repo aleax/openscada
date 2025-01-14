@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2013.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2011-2023.
+# Roman Savochenko <roman@oscada.org>, 2011-2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-09 18:07+0200\n"
+"POT-Creation-Date: 2025-01-13 16:05+0200\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1373,6 +1373,9 @@ msgstr "Stil"
 
 msgid "Properties"
 msgstr "Beschaffenheiten"
+
+msgid "Write to style in the execution context"
+msgstr "Schreiben in den Stil im Ausführungskontext"
 
 msgid "Delete"
 msgstr "Löschen"

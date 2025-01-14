@@ -1,14 +1,14 @@
 # OpenSCADA.DAQ.OPC_UA translate to German.
 # This file is distributed under the same license as the OpenSCADA.DAQ.OPC_UA package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2011-2022.
+# Roman Savochenko <roman@oscada.org>, 2011-2024.
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 08:32+0200\n"
+"POT-Creation-Date: 2025-01-13 22:36+0200\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -311,14 +311,14 @@ msgid "10:Error of connection or no response."
 msgstr "10:Verbindungsfehler oder keine Antwort."
 
 msgid ""
-"Variables and it containers (Objects) list. All variables will put into the "
-"parameter attributes list.\n"
-"Variables write by separate lines in the form \"{ns}:{id}[|[{flg}][|{id}[|"
+"Variables and their containers (Objects) list. All variables will put into "
+"list of the parameter attributes.\n"
+"Variables write by separate lines in the form \"{ns}:{nid}[|[{flg}][|{id}[|"
 "{name}]]]\".\n"
 "Where:\n"
 "  ns  - name space, number; zero value can be omitted;\n"
-"  id  - node identifier by number, string, bytes string and GUID;\n"
-"  flg - flags of no requesting the metadata on the server:\n"
+"  nid - node identifier by number, string, bytes string and GUID;\n"
+"  flg - flags for do not request the metadata on the server:\n"
 "        value type (b-Boolean,i-Integer,f-Float,s-String,o-Object), read/"
 "write mode (r-read, w-write);\n"
 "  id  - identifier of the created attribute;\n"
@@ -336,11 +336,11 @@ msgid ""
 msgstr ""
 "Liste von Variablen und Containern (Objekten). Alle Variablen werden in die "
 "Liste von Parameterattributen eingesetzt.\n"
-"Variablen schreiben durch separate Zeilen im Formular \"{ns}:{id}[|[{flg}][|"
+"Variablen schreiben durch separate Zeilen im Formular \"{ns}:{nid}[|[{flg}][|"
 "{id}[|{name}]]]\".\n"
 "Wo:\n"
 "  ns  - Namenbereich, mit der Zahl; Nullwert kann ausgelassen sein;\n"
-"  id  - Bezeichner des Knotens, mit der Zahl, der Zeile, der Bytezeile oder "
+"  nid - Bezeichner des Knotens, mit der Zahl, der Zeile, der Bytezeile oder "
 "dem GUID;\n"
 "  flg - Flags für keine Anforderung der Metadaten auf dem Server:\n"
 "        Werttyp (b-Boolean,i-Integer,f-Float,s-String,o-Object), Lese-/"
@@ -511,7 +511,8 @@ msgstr "0 für die automatische Setzen von cntrKeepAlive*publInterv"
 
 #, c-format
 msgid "%d(%s): at %s(live %s), secure channel %u; Publish requests %u"
-msgstr "%d(%s): bei %s(live %s), sicherer Kanal %u; Anfragen veröffentlichen %u"
+msgstr ""
+"%d(%s): bei %s(live %s), sicherer Kanal %u; Anfragen veröffentlichen %u"
 
 msgid "Closed"
 msgstr "Geschlossen"
@@ -557,4 +558,3 @@ msgstr "Server OPC-UA"
 
 msgid "Provides OPC-UA server service implementation."
 msgstr "Bietet OPC-UA Server-Service-Implementierung."
-

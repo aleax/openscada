@@ -1,3 +1,20 @@
+2025-01-13 Roman (stable)
+- !!!:FIX:LibsDB.OscadaLibs.flb_doc.diagram: Adding of drawing non periodic direct data like months.
+    !!!: Implementing of rounding big interval points by the Besier Cubic Curves.
+    FIX: Fixing of calculating bottom border for vertical scale.
+    Changing the path sequence to without comas, which used in Cubic Curves.
+- !!:FIX:DB.SQLite: The error code SQLITE_CORRUPT appended for reconnection the DB file,
+    since this error can be appeared with changing the DB-file structure from an external source.
+- FIX:DAQ.OPC_UA: Fixing and improving some original messages.
+- !!:FIX:UI.{VCAEngine,Vision}: Adding an option in the "Processing" tab of the projects with control
+    the writing to styles in the execution context. And the writing disabled on the project side.
+- !!!:FIX:UI.{Vision,WebVision}: Implementing of rounding big interval points by the Besier Cubic Curves.
+    FIX: Fixing of calculating bottom border for vertical scale.
+    UI.WebVision: Moving the ElFigure functions bezierDeltaT() and bezier()
+	to the generic object's VCAObj space.
+- FIX:UI.Vision: Fixing and improving some original messages.
+
+
 2024-12-23 Roman (stable)
 - !:data/openscada-proj.in: Appending the crash-reports by "info thread" and "info sharedlibrary".
 - !!!:FIX:LibsDB.OscadaLibs.tmplib_base.fileServerHTTP,UI.WebVision:

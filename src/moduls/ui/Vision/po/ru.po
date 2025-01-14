@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-07 08:50+0200\n"
+"POT-Creation-Date: 2025-01-13 16:07+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1129,6 +1129,9 @@ msgstr "Удалить стиль"
 msgid "Value"
 msgstr "Значение"
 
+msgid "Write to style in the execution context:"
+msgstr ""
+
 msgid "Diagnostics"
 msgstr "Диагностика"
 
@@ -1320,10 +1323,12 @@ msgstr "Очистить изменения"
 msgid "Press to clear changes of the attribute."
 msgstr "Нажать для очистки изменений атрибута."
 
-msgid "Lower the widget changes to its parent"
+#, fuzzy
+msgid "Lower changes to the parent"
 msgstr "Опустить изменения виджета предку"
 
-msgid "Press for lowering the widget changes to its parent."
+#, fuzzy
+msgid "Press for lowering changes to the parent."
 msgstr "Нажать для опускания изменений виджета предку."
 
 #, fuzzy

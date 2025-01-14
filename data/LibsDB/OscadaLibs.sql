@@ -13324,7 +13324,10 @@ The appearance of the diagram is determined by its dimensions hsz*vsz and the so
 - Scale: Markers: color (sclMarkColor), by default "gray".
 
 Currently, only value archives can be used as a data source, either directly to them or through the DAQ-parameter attribute with the archive. The number of data sources is not directly limited and is written in separate lines of the argument srcs in the format "{addr}:{min}:{max}:{color}[:{scale}[:{width}]]", where:
-- addr — address to the value archive or attributes of the DAQ-parameter, for example: "/Archive/va_CPULoad_load", "/DAQ/LogicLev/gen/F3/var";
+- addr — address to:
+  - the value archive ("/Archive/va_CPULoad_load") or the DAQ-parameter attribute ("/DAQ/LogicLev/gen/F3/var");
+  - the direct data in the form "<d s=''1'' aprox=''1'' per=''1''>{p0}={pV0},{p1}={pV1},...,{pN}={pVN}</d>" for periodic, by set the attribute "s" it will allows the period setting in seconds; "aprox" — approximate the transition from one point to another instead of the previous value to all the periodicity points from the packaging;
+  - the direct data in the form "<d per=''0''>{tm0}={pV0},{tm1}={pV1},...,{tmN}={pVN}</d>" for aperiodic of long intervals from months, where <tm{N}> in seconds.
 - min, max — minimum and maximum of the scale, in the scale absence (min >= max), it will be calculated from the real data;
 - color — colour of the trend curve;
 - scale — separate definition of the trend scale, by default "Global (0)" and generally provided: "Global (0)", "Markers (2)", "Grid and markers (3)", "Markers (log) (6)", "Grid and markers (log) (7)".
@@ -13332,7 +13335,7 @@ Currently, only value archives can be used as a data source, either directly to 
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Magomed, SAVTECH
-Version: 1.4.1
+Version: 1.5.1
 License: GPLv2','Побудова діаграми трендів у SVG, яка може надалі вбудовуватися у XHTML-документу, для даних за вказаний період часу [(end-size)...end] та із джерел srcs.
 
 Код формування діаграми засновано на коді примітиву "Діаграма" візуалізаторів, та який було доволі просто перенесено із мови C++ на вбудовану мову JavaLikeCalc. Наразі перенесено-реалізовано лише тренди!
@@ -13345,7 +13348,10 @@ License: GPLv2','Побудова діаграми трендів у SVG, яка
 - Шкала: Маркери: колір (sclMarkColor), по замовченню "gray".
 
 У якості джерела даних наразі можуть використовуватися лише архіви значень, прямою адресою до них або через атрибут DAQ-параметру з архівом. Кількість джерел даних прямо не обмежене та вони записуються окремими рядками аргументу srcs із форматом "{addr}:{min}:{max}:{color}[:{scale}[:{width}]]", де:
-- addr — адреса до архіву значень або атрибуту DAQ-параметру, наприклад: "/Archive/va_CPULoad_load", "/DAQ/LogicLev/gen/F3/var";
+- addr — адреса до:
+  - архіву значень ("/Archive/va_CPULoad_load") або атрибуту DAQ-параметру ("/DAQ/LogicLev/gen/F3/var");
+  - прямі дані у формі "<d s=''1'' aprox=''1'' per=''1''>{p0}={pV0},{p1}={pV1},...,{pN}={pVN}</d>" для періодичних, встановленням атрибуту "s" можна вказати на період у секундах; "aprox" — апроксимувати перехід від однієї точки до іншої замість підставки попереднього значення у всі точки періодичності від упаковки;
+  - прямі дані у формі "<d per=''0''>{tm0}={pV0},{tm1}={pV1},...,{tmN}={pVN}</d>" для аперіодичних довгих інтервалів від місяців, де tm{N} у секундах.
 - min, max — мінімум та максимум шкали, за відсутності шкали (min >= max) вона буде вираховуватися із реальних даних;
 - color — колір кривої тренду;
 - scale — окреме визначення шкали тренду, по замовченню "Глобально (0)" та загалом передбачено: "Глобально (0)", "Маркери (2)", "Ґратка та маркери (3)", "Маркери (лог) (6)", "Ґратка та маркери (лог) (7)".
@@ -13353,7 +13359,7 @@ License: GPLv2','Побудова діаграми трендів у SVG, яка
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: Магомед, SAVTECH
-Версія: 1.4.1
+Версія: 1.5.1
 Ліцензія: GPLv2','Построение диаграммы трендов в SVG, которая может далее встраиваться в XHTML-документ, для данных за указанный период времени [(end-size)...end] и из источников srcs.
 
 Код формирования диаграммы основан на коде примитива "Диаграмма" визуализаторов, и который был довольно просто перенесен с языка C++ на встроенный язык JavaLikeCalc. Сейчас перенесено-реализовано только тренды!
@@ -13374,7 +13380,7 @@ License: GPLv2','Побудова діаграми трендів у SVG, яка
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсировано: Магомед, SAVTECH
-Версия: 1.4.1
+Версия: 1.5.1
 Лицензия: GPLv2',1,10,0,'function strChars(inS) {
 	for(inSz = 0, off = 0; off < inS.length; inSz++)
 		inS.charAt(off, "UTF-8");
@@ -13387,7 +13393,9 @@ if(!(drawArea=im.getElementBy("drawArea")) || !(scVer=im.getElementBy("scVer")) 
 		(styles=im.getElementsBy("style")[0]).isEVal())
 	return "";
 
-//Constant
+//Constants
+RndRange = 5;
+
 FD_GRD = 0x1;
 FD_MARKS = 0x2;
 FD_LOG = 0x4;
@@ -13416,9 +13424,18 @@ for(off = 0; (tEl=srcs.parseLine(0,off)).length; ) {
 		isSec = dDt.attr("s").toInt();
 		isAprox = dDt.attr("aprox").toInt();
 		elO.per = dDt.attr("per").toInt() * (isSec?1e6:1);
-		for(prevPos = 0, prevVal = EVAL, maxPos = floor(1e6*(end-begin)/elO.per), off1 = 0; true; ) {
-			if((svl=dDt.text().parse(0,",",off1)).length)
+
+		for(prevPos = 0, prevVal = EVAL, maxPos = elO.per ? floor(1e6*(end-begin)/elO.per) : 0, off1 = 0; true; ) {
+			if((svl=dDt.text().parse(0,",",off1)).length) {
 				curPos = svl.parse(0,"=").toInt(), curVal = ((curVal=svl.parse(1,"="))==EVAL)?EVAL:curVal.toReal();
+				if(!maxPos) {
+					elO.val.push(tVl=new Object());
+					tVl.tm = curPos;
+					tVl.val = curVal;
+					continue;
+				}
+			}
+			else if(!maxPos)	break;
 			else curPos = maxPos+1;
 			for(stPos = prevPos; prevPos < curPos; prevPos++)
 				if(isAprox && !prevVal.isEVal() && !curVal.isEVal())
@@ -13472,8 +13489,10 @@ for(iP = 0, mainPerc = false; iP < trends.length; iP++) {
 	cP.adjU = -3e300, cP.adjL = 3e300;
 	if(cP.max > cP.min)	cP.adjL = cP.min, cP.adjU = cP.max;
 	else {
-		for(iDt = 0; iDt < cP.val.length; iDt++)
-			if(!cP.val[iDt].isEVal()) { cP.adjL = min(cP.adjL, cP.val[iDt]); cP.adjU = max(cP.adjU, cP.val[iDt]); }
+		for(iDt = 0; iDt < cP.val.length; iDt++) {
+			if(cP.per && cP.val[iDt] != null) { cP.adjL = min(cP.adjL, cP.val[iDt]); cP.adjU = max(cP.adjU, cP.val[iDt]); }
+			else if(!cP.per && cP.val[iDt].val != null) { cP.adjL = min(cP.adjL, cP.val[iDt].val); cP.adjU = max(cP.adjU, cP.val[iDt].val); }
+		}
 		// Value range expanding
 		//  No value
 		if(cP.adjU == -3e300)	cP.adjU = 1, cP.adjL = 0;
@@ -13582,7 +13601,7 @@ for(iP = 0; vmax_ln >= 2 && iP < prmsInd.length; iP++) {	//prmsInd[i]=-1 - for m
 	markWdth = 0;
 	if(sclVerT&(FD_MARKS|FD_GRD)) {
 		scVer.childAdd("rect").setAttr("fill",clrGridT).setAttr("x",tArX-1).setAttr("y",tArY).setAttr("width",1).setAttr("height",tArH);
-		for(iV = floor((vsMinT/vDiv)+0.5)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv) {
+		for(iV = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv) {
 			//  Draw grid
 			v_pos = tArY + tArH - tArH*(iV-vsMinT)/(vsMaxT-vsMinT);
 			if(sclVerT&FD_GRD)	scVer.childAdd("rect").setAttr("fill",sclColor).setAttr("x",tArX).setAttr("y",floor(v_pos+0.5)).setAttr("width",tArW).setAttr("height",1);
@@ -13770,28 +13789,35 @@ for(iTr = 0; iTr < trends.length; iTr++) {
 		bordU += vMarg;
 	}*/
 
-	trPath = 0; prev_vl = EVAL; prev_pos = 0;
+	trPath = 0; prev_vl = EVAL; prev_pos = prev_vpos = 0;
 	for(iDt = 0; iDt < cP.val.length; iDt++) {
-		c_val = cP.val[iDt];
+		if(cP.per)	c_val = cP.val[iDt], c_tm = 1e-6*(cP.beg + iDt*cP.per);
+		else c_val = cP.val[iDt].val, c_tm = cP.val[iDt].tm;
 		if(vsPercT && !c_val.isEVal()) c_val = 100*(c_val-bordL)/(bordU-bordL);
-		c_tm = 1e-6*(cP.beg + iDt*cP.per);
 		if(c_tm < begin)	continue;
+		if(c_tm > end)		break;
 		c_pos = floor(tArX + tArW*(c_tm-begin)/(end-begin));
 		if(!c_val.isEVal()) {
 			c_vpos = max(tArY,min(tArY+tArH,floor(tArY + tArH - tArH*((isLogT?lg(max(1e-100,c_val)):c_val)-vsMinT)/(vsMaxT-vsMinT))));
 			if(!trPath) trPath = drawArea.childAdd("path").setAttr("stroke", cP.color).setAttr("stroke-width",cP.width);
-			if(prev_vl.isEVal()) trPath.setAttr("d", trPath.attr("d")+"M"+c_pos+","+c_vpos);
-			else trPath.setAttr("d",trPath.attr("d")+"L"+c_pos+","+c_vpos);
+			if(prev_vl.isEVal()) trPath.setAttr("d", trPath.attr("d")+"M "+c_pos+" "+c_vpos+" ");
+			else if(abs(c_pos-prev_pos) > RndRange && abs(c_vpos-prev_vpos) > RndRange) {
+				// Curvature [0.1...0.5] depending the rising level
+				curvLev = -0.2*(max(-2*RndRange,min(2*RndRange,prev_vpos-c_vpos))-2*RndRange)/(2*RndRange)+0.1;
+				// Same drawing
+				trPath.setAttr("d",trPath.attr("d")+"C "+(prev_pos+(tVl=curvLev*(c_pos-prev_pos)))+" "+prev_vpos+", "+(c_pos-tVl)+" "+c_vpos+", "+c_pos+" "+c_vpos+" ");
+			}
+			else trPath.setAttr("d",trPath.attr("d")+"L "+c_pos+" "+c_vpos+" ");
 		}
 		else if(!prev_vl.isEVal()) {
 			c_vpos = max(tArY,min(tArY+tArH,floor(tArY + tArH - tArH*((isLogT?lg(max(1e-100,prev_vl)):prev_vl)-vsMinT)/(vsMaxT-vsMinT))));
-			trPath.setAttr("d", trPath.attr("d")+"L"+prev_pos+".1,"+c_vpos+".1");
+			trPath.setAttr("d", trPath.attr("d")+"L "+prev_pos+".1 "+c_vpos+".1 ");
 		}
-		prev_vl = c_val; prev_pos = c_pos;
+		prev_vl = c_val, prev_pos = c_pos, prev_vpos = c_vpos;
 	}
 }
 
-return im.save();','','',1581943347);
+return im.save();','','',1736608631);
 CREATE TABLE IF NOT EXISTS 'tmplib_tests' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_tests VALUES('ai_simple','Simple AI','Простий AI','Простой AI','Simple analog parameter.','Простий аналоговий параметр.','Простой аналоговый параметр.',10,0,'JavaLikeCalc.JavaScript
 val=val_cod;
