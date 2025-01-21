@@ -1,3 +1,8 @@
+2025-01-21 Roman (stable)
+- FIX:SYS: Fixing time2str() in processing seconds.
+    FIX: Fixing the User API functions time2str(), cpct2str(), str2time() in the dynamic translation.
+
+
 2025-01-20 Roman (stable)
 - LibsDB.OscadaLibs: Automatic updating some translation.
 - !!:LibsDB.vcaBase: wlb_Main.{grph_panel,doc_panel}: Moving in the size-depth field to the editable combobox with

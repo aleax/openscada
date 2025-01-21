@@ -437,7 +437,7 @@ string TSYS::time2str( double tm, bool inParts )
 	lev = vmax(lev, 4);
     }
 
-    double usec = 1e6*(tm-floor(tm));
+    double usec = 1e6*(tm-floor(mins)*60);
 
     if((1e-6*usec) > 0.5 && lev < 5) {
 	rez += (rez.size()?" ":"") + r2s(1e-6*usec,3) + (inParts?_("s"):string(" ")+((floor(1e-6*usec)==1)?_("second"):_("seconds")));
@@ -3158,17 +3158,29 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //    like "1hour 23minutes 10s" at setting <inParts> or "1.5 hour" else.
     //  tm - real number of the relative time in seconds;
     //  inParts - divide the text time per days, hours, minutes and seconds.
-    if(iid == "time2str" && prms.size()) return time2str(prms[0].getR(), (prms.size()>=2) ? prms[1].getB() : true);
+    if(iid == "time2str" && prms.size()) {
+	TrCtxAlloc trCtx;
+	if(Mess->translDyn()) trCtx.hold(user_lang);
+	return time2str(prms[0].getR(), (prms.size()>=2) ? prms[1].getB() : true);
+    }
 
     // string cpct2str( real cnt ) - converts the capacity <cnt> in bytes to the human representing string.
     //  cnt - real number of the capacity in bytes.
-    if(iid == "cpct2str" && prms.size()) return cpct2str(prms[0].getR());
+    if(iid == "cpct2str" && prms.size()) {
+	TrCtxAlloc trCtx;
+	if(Mess->translDyn()) trCtx.hold(user_lang);
+	return cpct2str(prms[0].getR());
+    }
 
     // string str2time( string val, bool inParts = true ) - converts the human representing relative time <val>
     //    of the function time2str() to the time in seconds, with parsing parts at setting <inParts>.
     //  val - human representing relative time in corresponding with time2str();
     //  inParts - parse as divided the text time per days, hours, minutes and seconds.
-    if(iid == "str2time" && prms.size()) return str2time(prms[0].getS(), (prms.size()>=2) ? prms[1].getB() : true);
+    if(iid == "str2time" && prms.size()) {
+	TrCtxAlloc trCtx;
+	if(Mess->translDyn()) trCtx.hold(user_lang);
+	return str2time(prms[0].getS(), (prms.size()>=2) ? prms[1].getB() : true);
+    }
 
     // string strFromCharCode(int char1, int char2, int char3, ...) - string creation from symbol's codes
     //  char1, char2. char3 - symbol's codes
