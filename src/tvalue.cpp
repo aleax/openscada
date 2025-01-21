@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvalue.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -386,7 +386,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TVal                                          *
 //*************************************************
-TVal::TVal( ) : mCfg(false), mReqFlg(false), mResB1(false), mResB2(false), mTime(0)
+TVal::TVal( ) : mCfg(false), mReqFlg(false), mTime(0)
 {
     src.fld = NULL;
     modifClr();

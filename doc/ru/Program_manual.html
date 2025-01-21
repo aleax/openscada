@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Документы/Руководство по программе</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FProgram+manual&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/Program_manual" title="Documents/Program manual">Documents/Program manual</a> and the translation is 89% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Program_manual.html" title="Documents/Program manual (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FProgram+manual&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/Program_manual" title="Documents/Program manual">Documents/Program manual</a> and the translation is 88% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Program_manual.html" title="Documents/Program manual (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Автор:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a></li>
 <li> <b>Изначально создано:</b> в <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual" rel="nofollow noreferrer noopener" target="_blank">старой Wiki</a> </li></ul>
@@ -874,11 +874,11 @@
 </p>
 <ul><li> <i>Buffer size, archiving period</i> — indicates the size of the memory area reserved for the interim buffer of messages. Messages from the buffer are requested for viewing and archived with the messages archivers by the specified periodicity in seconds.</li>
 <li> <i>Days of the alarms automatic clearing</i> — after that term the alarms are meant as forgotten and inactual, so removed from the table of the active alarms. Zero disables the automatic clearing.</li></ul>
-<p>Форма запроса сообщений содержит конфигурационные поля запроса и таблицу результата. Конфигурационные поля запроса:
+<p>The messages request form contains the configuration fields of the request and the table of results. Configuration fields of the request are:
 </p>
-<ul><li> <i>Время, размер (секунд) и уровень</i> — указывает время, размер или глубину (в секундах) и минимальный уровень сообщений (более или равный указанному) запроса.</li>
-<li> <i>Шаблон категории</i> — указывает категорию запрашиваемых сообщений. В категории можно указывать элементы выборки по шаблону, а именно символы "*" — для любой подстроки и "?" — для любого символа, а также регулярное выражение заключённое между символами '/' (/mod_(System|LogicLev)/).</li>
-<li> <i>Архиваторы</i> — указывает архиваторы сообщений, разделённые символом ';', для которых обрабатывать запрос. Если значение отсутствует то запрос будет обработан для буфера и всех архиваторов. Если указано "&lt;buffer&gt;" то запрос будет обработан для буфера сообщений.</li></ul>
+<ul><li> <i>Time, depth and level</i> — specifies the request time, depth and minimum level of messages (more or equal).</li>
+<li> <i>Category pattern</i> — specifies the category of the requested messages. In the category you can specify the elements of selection by template, that is the characters '*' — for any string and '?' — for any character, as well as a regular expression enclosed between the symbols '/' (/mod_(System|LogicLev)/).</li>
+<li> <i>Archivers</i> — indicates the messages archivers (separated by symbol ';'), for which the request is to be processed. If the value is missing, the request will be processed for the buffer and all archivers. If "&lt;buffer&gt;" is specified then the request will be processed for the messages buffer.</li></ul>
 <p>Таблица результата содержит строки сообщений с колонками:
 </p>
 <ul><li> <i>Время</i>, <i>мкс</i> — полная дата и время сообщения, а также микросекундная часть, отдельно.</li>
@@ -887,7 +887,7 @@
 <li> <i>Сообщение</i> — непосредственно текст сообщения.</li></ul>
 <p>Для сообщений о нарушениях, после таблицы появляется кнопка очистки этой таблицы на предмет видимых нарушений, что полезно для сервисных функций. Таблица также дополняется командой "Удалить" для удаления отдельных нарушений.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1025px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mess.png"><img class="thumbimage" height="834" src="../en/files/QTCfg_subsys_arch_mess.png" width="1023" /></a>  <div class="thumbcaption">Рис. 4.6b. Вкладка "Сообщения" подсистемы "Архивы-История".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:916px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mess.png"><img class="thumbimage" height="780" src="../en/files/QTCfg_subsys_arch_mess.png" width="914" /></a>  <div class="thumbcaption">Рис. 4.6b. Вкладка "Сообщения" подсистемы "Архивы-История".</div></div></div></div>
 <p>The tab "Values" (Fig.4.6c) contains the general configuration of the values archiving and list of the value archives. In the context menu of the list of values the user has the opportunity to add, delete and go to the desired archive. The general configuration of the archiving is represented by the fields:
 </p>
 <ul><li> <i>Period of the data receiving</i> — indicates the periodicity of the task of the active archiving, in milliseconds. Highest level of detail or minimum period of the active archives is in fact determined by this value.</li>
@@ -929,15 +929,15 @@
 <li> <i>Начало</i> — дата и время начала данных архива в архиваторе.</li>
 <li> <i>Конец</i> — дата и время конца данных архива в архиваторе.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:882px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_va_arcs_ru.png"><img class="thumbimage" height="530" src="files/QTCfg_subsys_arch_va_arcs_ru.png" width="880" /></a>  <div class="thumbcaption">Рис. 4.6e. Вкладка "Архиваторы" архива значений подсистемы "Архивы-История".</div></div></div></div>
-<p>Вкладка "Значения" (Рис.4.6f) содержит запрос значений в архиве и результат в виде таблицы значений или изображения тренда. Запрос значений содержит поля:
+<p>The tab "Values" (Fig.4.6f) contains the values request in the archive and the result as a table of values or image of the trend. Values request contains the fields:
 </p>
-<ul><li> <i>Время</i> — указывает дату и время запроса. Содержит два поля: поле дата+время и микросекунды.</li>
-<li> <i>Размер</i> — указывает размер или глубину запроса в секундах.</li>
-<li> <i>Архиватор</i> — указывает архиватор значений для которого обрабатывать запрос. Если значение отсутствует то запрос будет обработан для буфера и всех архиваторов. Если указано "&lt;buffer&gt;", то запрос будет обработан только для буфера архива.</li>
-<li> <i>Показать график</i> — указывает на необходимость представления данных архива в виде графика (тренда) иначе результат представляется в таблице, содержащей только время и значение. В случае установки этого поля формируется и отображается график, кроме того появляются дополнительные конфигурационные поля настройки изображения:
-<ul><li> <i>Размер изображения</i> — указывает ширину и высоту формируемого изображения, в пикселах.</li>
-<li> <i>Шкала значения</i> — указывает нижнюю и верхнюю границу шкалы значений. Если оба значения установлены в 0 или равны, то шкала будет определяться автоматически в зависимости от значений.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1003px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_va_vals_ru.png"><img class="thumbimage" height="631" src="files/QTCfg_subsys_arch_va_vals_ru.png" width="1001" /></a>  <div class="thumbcaption">Рис. 4.6f. Вкладка "Значения" архива значений подсистемы "Архивы-История".</div></div></div></div>
+<ul><li> <i>Time</i> — indicates the time of the request. It contains two fields: the field of date+time and microseconds.</li>
+<li> <i>Depth</i> — specifies depth of the request.</li>
+<li> <i>Archiver</i> — indicates values archiver for which the request is to be processed. If the value is empty, the request will be processed for the buffer and for all archivers. If "&lt;buffer&gt;" is specified then the request will be processed only for the archive buffer.</li>
+<li> <i>Show trend</i> — indicates the necessity for presentation of the archive data in the form of a graph (trend) otherwise the result is presented in a table that contains only time and value. In the case of toggle of  this field the graph image is formed and displayed, additional configuration fields of the image settings are appeared:
+<ul><li> <i>Image size</i> — indicates the width and height of the generated image in pixels.</li>
+<li> <i>Scale of the values</i> — indicates the lower and upper border of the scale of the values. If both values are set to 0 or equal, then the scale will be determined automatically depending on the values.</li></ul></li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:969px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_va_vals.png"><img class="thumbimage" height="683" src="../en/files/QTCfg_subsys_arch_va_vals.png" width="967" /></a>  <div class="thumbcaption">Рис. 4.6f. Вкладка "Значения" архива значений подсистемы "Архивы-История".</div></div></div></div>
 <p>Каждый модуль подсистемы "Архивы-История" предоставляет конфигурационную страницу с вкладками "Архиваторы" и "Модуль". Вкладка "Архиваторы" (Рис.4.6g) содержит списки архиваторов сообщений и значений, зарегистрированных в модуле. В контекстном меню списков пользователю предоставляется возможность добавления, удаления и перехода к нужному архиватору. На вкладке "Модуль" содержится информация о модуле подсистемы "Архивы-История" (Рис.4.1d), состав которой идентичен для всех модулей.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:697px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_arcs_ru.png"><img class="thumbimage" height="457" src="files/QTCfg_subsys_arch_mod_arcs_ru.png" width="695" /></a>  <div class="thumbcaption">Рис. 4.6g. Вкладка "Архиваторы" модуля подсистемы "Архивы-История".</div></div></div></div>
@@ -960,17 +960,17 @@
 <li> <i>Address</i> — address of the storage in the specific for the type of archiver (module) format. The format description usually available in the tooltip for this field. In the example it is the relative path to the storage directory.</li></ul></li>
 <li> Section "Additional options" — a specialized section for the module, the contents of which can be found in the documentation for the module.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:778px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main.png"><img class="thumbimage" height="668" src="../en/files/QTCfg_subsys_arch_mod_ma_main.png" width="776" /></a>  <div class="thumbcaption">Рис. 4.6h. Главная вкладка конфигурации архиватора сообщений подсистемы "Архивы-История".</div></div></div></div>
-<p>Вкладка "Сообщения" (Рис.4.6i) содержит форму запроса сообщений из архива данного архиватора:
+<p>The "Messages" tab (Fig.4.6i) contains the form of the messages request from the archive of the archiver:
 </p>
-<ul><li> <i>Время, размер (секунд) и уровень</i> — указывает дату и время, размер или глубину и минимальный уровень сообщений (более или равный указанному) запроса.</li>
-<li> <i>Шаблон категории</i> — указывает категорию запрошенных сообщений. В категории можно указывать элементы выборки по шаблону, а именно символы '*' — для любой подстроки и '?' — для любого символа, а также регулярное выражение, заключённое между символами '/' (/mod_(System|LogicLev)/).</li></ul>
+<ul><li> <i>Time, depth and level</i> — specifies the request date and time, depth and minimum level of messages (more or equal).</li>
+<li> <i>Category pattern</i> — indicates the category of the requested messages. In the category you can specify the elements of selection by template, that is the characters '*' — for any string and '?' — for any character, as well as a regular expression enclosed between the symbols '/' (/mod_(System|LogicLev)/).</li></ul>
 <p>Таблица результата содержит строки сообщений с колонками:
 </p>
 <ul><li> <i>Время</i>, <i>мкс</i> — полная дата и время сообщения, а также микросекундная часть, отдельно.</li>
 <li> <i>Категория</i> — категория сообщения.</li>
 <li> <i>Уровень</i> — уровень сообщения.</li>
 <li> <i>Сообщение</i> — непосредственно текст сообщения.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1036px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_mess_ru.png"><img class="thumbimage" height="694" src="files/QTCfg_subsys_arch_mod_ma_mess_ru.png" width="1034" /></a>  <div class="thumbcaption">Рис. 4.6i. Вкладка запроса сообщений "Сообщения" архиватора сообщений подсистемы "Архивы-История".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:969px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_mess.png"><img class="thumbimage" height="683" src="../en/files/QTCfg_subsys_arch_mod_ma_mess.png" width="967" /></a>  <div class="thumbcaption">Рис. 4.6i. Вкладка запроса сообщений "Сообщения" архиватора сообщений подсистемы "Архивы-История".</div></div></div></div>
 <p>Архиваторы значений содержат собственную страницу конфигурации с вкладками "Архиватор" и "Архивы".
 </p><p>The "Archivator" tab (Fig.4.6j) contains the basic settings. The structure of these settings may differ slightly from one module to another one of this subsystem as you can find in the own documentation of the modules. As an example we shall examine the settings of the value archiver from the module of the archiving on the file system <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">Arch.FSArch</a> Settings:
 </p>

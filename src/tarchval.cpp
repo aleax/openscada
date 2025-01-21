@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchval.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -2089,7 +2089,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	if(runSt && ctrMkNode("area",opt,-1,"/val",_("Values"),R_R___,"root",SARH_ID)) {
 	    ctrMkNode("fld",opt,-1,"/val/tm",_("Time"),RWRW__,"root",SARH_ID,1,"tp","time");
 	    ctrMkNode("fld",opt,-1,"/val/utm","",RWRW__,"root",SARH_ID,5,"tp","dec","len","6","min","0","max","999999","help",_("Microseconds"));
-	    ctrMkNode("fld",opt,-1,"/val/size",_("Size, seconds"),RWRW__,"root",SARH_ID,3,"tp","real","min","0","max","2600000");	//Month in seconds
+	    ctrMkNode("fld",opt,-1,"/val/size",_("Depth"),RWRW__,"root",SARH_ID,5,"tp","str","len","10",
+		"dest","sel_ed","sel_list",TMess::labTimeSel().c_str(),"help",TMess::labTime().c_str());
 	    ctrMkNode("fld",opt,-1,"/val/arch",_("Archiver"),RWRW__,"root",SARH_ID,4,"tp","str","dest","select","select","/val/lstAVal",
 		"help",_("Values archiver.\n"
 			 "If the value is empty, the request will be processed for the buffer and for all archivers.\n"
@@ -2193,8 +2194,10 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"vaTm_u",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/val/size") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"vaSize",DEF_vaSize,opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"vaSize",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))
+	    opt->setText(TSYS::time2str(s2r(TBDS::genPrmGet(owner().nodePath()+"vaSize",DEF_vaSize,opt->attr("user"))),false));
+	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))
+	    TBDS::genPrmSet(owner().nodePath()+"vaSize",r2s(TSYS::str2time(opt->text(),false)),opt->attr("user"));
     }
     else if(a_path == "/val/arch") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"vArch",DEF_vArch,opt->attr("user")));

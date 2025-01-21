@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-13 15:57+0200\n"
+"POT-Creation-Date: 2025-01-19 14:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -208,7 +208,7 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-msgid "Time, size (seconds) and level"
+msgid "Time, depth and level"
 msgstr ""
 
 msgid "Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X]);Information (1[X]), ALARMS;Notice (2[X]), ALARMS;Warning (3[X]), ALARMS;Error (4[X]), ALARMS;Critical (5[X]), ALARMS;Alert (6[X]), ALARMS;Emergency (7[X]), ALARMS"
@@ -417,7 +417,7 @@ msgstr ""
 msgid "Microseconds"
 msgstr ""
 
-msgid "Size, seconds"
+msgid "Depth"
 msgstr ""
 
 msgid ""
@@ -927,6 +927,9 @@ msgstr ""
 msgid "Diagnostics"
 msgstr ""
 
+msgid "Time, size (seconds) and level"
+msgstr ""
+
 msgid ""
 "Display messages for larger or even levels.\n"
 "Also affects to specific-diagnostic messages generation by the data sources."
@@ -1194,6 +1197,20 @@ msgid ""
 "  '*' - any substring;\n"
 "  '?' - any character.\n"
 "Regular expression enclosed between the symbols '/' (/mod_(System|LogicLev)/)."
+msgstr ""
+
+msgid ""
+"In the field you set time both with the real number and the natural text multiplier also translated and in base language:\n"
+"- day, days (*86400)    - one and multiple days;\n"
+"- hour, hours (*3600)   - one and multiple hours;\n"
+"- minute, minutes (*60) - one and multiple minutes;\n"
+"- millisecond, milliseconds, ms (*1e-3) - one and multiple milliseconds;\n"
+"- microsecond, microseconds, us (*1e-6) - one and multiple microseconds;\n"
+"- nanosecond, nanoseconds, ns (*1e-9)   - one and multiple nanoseconds;\n"
+"- and all other are meant as seconds with substitution by 'second', 'seconds' or 's'."
+msgstr ""
+
+msgid "1 second;10 seconds;30 seconds;1 minute;10 minutes;30 minutes;1 hour;12 hours;1 day;10 days"
 msgstr ""
 
 #, c-format
@@ -1570,22 +1587,55 @@ msgstr ""
 msgid "day"
 msgstr ""
 
+msgid "days"
+msgstr ""
+
 msgid "hour"
 msgstr ""
 
-msgid "min"
+msgid "hours"
+msgstr ""
+
+msgid "minute"
+msgstr ""
+
+msgid "minutes"
 msgstr ""
 
 msgid "s"
 msgstr ""
 
+msgid "second"
+msgstr ""
+
+msgid "seconds"
+msgstr ""
+
 msgid "ms"
+msgstr ""
+
+msgid "millisecond"
+msgstr ""
+
+msgid "milliseconds"
 msgstr ""
 
 msgid "us"
 msgstr ""
 
+msgid "microsecond"
+msgstr ""
+
+msgid "microseconds"
+msgstr ""
+
 msgid "ns"
+msgstr ""
+
+msgid "nanosecond"
+msgstr ""
+
+msgid "nanoseconds"
 msgstr ""
 
 msgid "YiB"

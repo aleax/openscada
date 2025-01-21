@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcntrnode.h
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -97,7 +97,7 @@ class TConfig;
 //#pragma pack(push,1)
 class TCntrNode
 {
-    //* Controll scenaries language section *
+    //* Section of the Control Interface *
     public:
 	//Methods
 	TCntrNode( TCntrNode *prev = NULL );
@@ -192,9 +192,13 @@ class TCntrNode
 	TError err_sys( const char *fmt,  ... ) const;
 	TError err_sys( int cod, const char *fmt,  ... ) const;
 
+	// Properties
+	TVariant property( const string &id, const TVariant &val, const string &grp = "sys" );
+	void propertyClrGrp( const string &idPref = "", const string &grp = "sys" );
+
 	// User object access
 	virtual TVariant objPropGet( const string &id );
-	virtual void objPropSet( const string &id, TVariant val );
+	virtual void objPropSet( const string &id, const TVariant &val );
 	virtual TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	// Childs
@@ -246,6 +250,8 @@ class TCntrNode
 	string storage( const string &cnt, bool forQueueOfData = false ) const;
 	void setStorage( string &cnt, const string &vl, bool forQueueOfData = false );	//Empty <vl> and <forQueueOfData> removes the first storage from the queue
 
+
+
     private:
 	//Data
 	struct {
@@ -264,6 +270,8 @@ class TCntrNode
 	unsigned short int	mOi;	//Order index
 
 	char	mFlg;
+
+	map<string, TVariant>	*mProps;
 };
 //#pragma pack(pop)
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmess.h
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -194,6 +194,8 @@ class TMess
 	static string labTaskPrior( );
 	static string labStdOutTrs( );
 	static string labMessCat( );
+	static string labTime( );
+	static string labTimeSel( );
 
 	int getUTF8( const string &str, int off = 0, int32_t *symb = NULL );
 	static string setUTF8( int32_t symb );

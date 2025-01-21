@@ -1,3 +1,38 @@
+2025-01-20 Roman (stable)
+- LibsDB.OscadaLibs: Automatic updating some translation.
+- !!:LibsDB.vcaBase: wlb_Main.{grph_panel,doc_panel}: Moving in the size-depth field to the editable combobox with
+	the digital number and human text multiplier, based on the new UserAPI function
+	time2str() and str2time(), that is removing the type field here.
+    !: wlb_Main.{docRepDay,docRepMonth,docUsersSet,docRepInstVals,docDin,docRep2WorkSh,docAlarmsRep,docMessRep}:
+	Adaptation to opening the document control panel after several seconds of starting-opening,
+	    that is for allowing the document control at displaying by QtWebengine.
+- LibsDB.vcaTest: wlb_test.docTestGasNodeDayRep: Adaptation to opening the document control panel
+    at setting the "pgOpen" attribute and not setting the "pgOpen" attribute in the document control panel,
+    due to the document is archiving, that is for allowing the document control at displaying by QtWebengine.
+- ModelsDB.AGLKS: wlb_doc.{docRepMonth,docRepDay}: Set to no process periodically.
+    wlb_test.docTestGasNodeDayRep: Set to process with period 10 seconds.
+- !!:Archive.{MessArchive,MessArchiver,ValArchive}: Moving in the size-depth field of the Control Interface
+    to the editable combobox with the digital number and human text multiplier, based on the new function
+    time2str() and str2time().
+- !!!!:SYS:
+    !!!!:TCntrNode: Appending of the object properties in groups by prefixes for different parts of OpenSCADA:
+	    system (sys), user (usr), connection (con), ... .
+	Changing prototype of the objPropSet() function in the <val> argument.
+    !!: Adding a new function str2time() with parsing the human time from time2str(),
+	which added also by the "inParts" argument.
+    !!: Adding new User API functions with representing the system ones in the user space:
+	time2str(), cpct2str(), str2time().
+    FIX:TFunction: Fixing return value of the User API function calc() by replacing TVariant(), what is NULL,
+	to EVAL_REAL, for preventing the spare checking for calculation need.
+    The User API functions strftime() and strftimegm() switched to the generic implementation of TSYS::atime2str().
+    Mess: Adding the global label functions labTime(), labTimeSel().
+- !!!!:FIX:Transport: Moving the connection parameters to the object properties in group "con".
+    FIX:Serial: Fixed in return EVAL as (char)EVAL_BOOL in the User API functions.
+- !!!!:DAQ,DAQGate: Moving the TValue flags resB1() and resB2() to the object properties in group "DAQ".
+    !:DAQGate: Improving algorithm of the archives detection with providing an information field with list of
+	the archieving attributes.
+
+
 2025-01-13 Roman (stable)
 - LibsDB.vcaBase: wlb_Main.storeHouse:
 	Omitting the includes on FS at the item copying and their removing at the item removing.

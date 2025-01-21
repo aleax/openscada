@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvariant.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1424,15 +1424,13 @@ TVariant TCntrNodeObj::propGet( const string &id )
 	return new TCntrNodeObj(nnd, mUserLang);
     } catch(...) { }
 
-    TVariant rez = cnd.at().objPropGet(id);
-    if(rez.isNull()) return TVariant();
-    return rez;
+    return cnd.at().objPropGet(id);
 }
 
 void TCntrNodeObj::propSet( const string &id, TVariant val )
 {
     if(cnd.freeStat()) return;
-    cnd.at().objPropSet(id,val);
+    cnd.at().objPropSet(id, val);
 }
 
 string TCntrNodeObj::getStrXML( const string &oid )	{ return "<TCntrNodeObj path=\""+cnd.at().nodePath()+"\"/>"; }

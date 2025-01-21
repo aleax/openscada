@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.h
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -325,12 +325,13 @@ class TSYS : public TCntrNode
 	    return toint ? floor(rez+0.5) : rez;
 	}
 	static string atime2str( time_t tm, const string &format = "", bool gmt = false, const string &user_lang = "" );
-	static string time2str( double tm );
+	static string time2str( double tm, bool inParts = true );
 	static string cpct2str( double cnt );
 
 	// Convert string to value
 	//static double str2real( const string &val );
 	static time_t str2atime( const string &val, const string &format = "", bool gmt = false );
+	static double str2time( const string &val, bool inParts = true );
 
 	// Adress convertors
 	static string addr2str( void *addr );

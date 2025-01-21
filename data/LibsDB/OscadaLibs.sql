@@ -16688,9 +16688,9 @@ INSERT INTO tmplib_base_io VALUES('DiskSMART','this','The object',4,0,'',3,'Об
 INSERT INTO tmplib_base_io VALUES('DiskSMART','SHIFR','Code',0,0,'',4,'Шифр','','Шифр','','');
 INSERT INTO tmplib_base_io VALUES('DiskSMART','NAME','Name',0,0,'',5,'Назва','','Имя','','');
 INSERT INTO tmplib_base_io VALUES('DiskSMART','DESCR','Description',0,0,'',6,'Опис','','Описание','','');
-INSERT INTO tmplib_base_io VALUES('fileServerHTTP','tr','Transport',4,1,'',8,'Транспорт','','','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','tr','Transport',4,1,'',8,'Транспорт','','Транспорт','','');
 INSERT INTO tmplib_base_io VALUES('fileServerHTTP','prt','Protocol',4,1,'',9,'Протокол','','','','');
-INSERT INTO tmplib_base_io VALUES('fileServerHTTP','sender','Sender',0,0,'',3,'Відправник','','','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','sender','Sender',0,0,'',3,'Відправник','','Отправитель','','');
 INSERT INTO tmplib_base_io VALUES('initRemCntr','inTransport','Input transport',0,64,'Sockets.InitRemCntr',0,'Вхідний транспорт','','Входной транспорт','','');
 INSERT INTO tmplib_base_io VALUES('initRemCntr','prcTr','Processed connections',0,21,'',5,'Опрацьовані підключення','','','','');
 INSERT INTO tmplib_base_io VALUES('initRemCntr','cntrUser','Access: user',0,64,'root',2,'Доступ: користувач','','','','');

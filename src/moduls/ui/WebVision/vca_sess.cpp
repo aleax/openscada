@@ -669,7 +669,7 @@ void VCAFormEl::setAttrs( XMLNode &node, const SSess &ses )
     if(iAVal >= 0 && type == F_BUTTON &&
 		(btMode == FBT_LOAD ||
 		(btMode == FBT_SAVE && node.childGet(iAVal)->text().size())))	//To store the saving context for video and audio
-										//???? Clear the context at some timeout
+	//!!!! The context cleared together closing the page or the project session at all
 	node.childGet(iAVal)->setText(TSYS::strLine((fCtx=node.childGet(iAVal)->text()),0));
 }
 

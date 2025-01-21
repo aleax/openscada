@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-13 15:57+0200\n"
+"POT-Creation-Date: 2025-01-19 14:34+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -230,8 +230,9 @@ msgstr ""
 msgid "View"
 msgstr "Просмотр"
 
-msgid "Time, size (seconds) and level"
-msgstr "Время, размер (секунд) и уровень"
+#, fuzzy
+msgid "Time, depth and level"
+msgstr "Время, размер и уровень"
 
 msgid ""
 "Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);"
@@ -476,8 +477,8 @@ msgstr "Период, секунд"
 msgid "Microseconds"
 msgstr "Микросекунды"
 
-msgid "Size, seconds"
-msgstr "Размер, секунд"
+msgid "Depth"
+msgstr ""
 
 msgid ""
 "Values archiver.\n"
@@ -1038,6 +1039,9 @@ msgstr "Добавление параметров типа"
 msgid "Diagnostics"
 msgstr "Диагностика"
 
+msgid "Time, size (seconds) and level"
+msgstr "Время, размер (секунд) и уровень"
+
 msgid ""
 "Display messages for larger or even levels.\n"
 "Also affects to specific-diagnostic messages generation by the data sources."
@@ -1366,6 +1370,24 @@ msgstr ""
 "  '?' - любой символ.\n"
 "Регулярное выражение заключается между символами '/' (/mod_(System|"
 "LogicLev)/)."
+
+msgid ""
+"In the field you set time both with the real number and the natural text "
+"multiplier also translated and in base language:\n"
+"- day, days (*86400)    - one and multiple days;\n"
+"- hour, hours (*3600)   - one and multiple hours;\n"
+"- minute, minutes (*60) - one and multiple minutes;\n"
+"- millisecond, milliseconds, ms (*1e-3) - one and multiple milliseconds;\n"
+"- microsecond, microseconds, us (*1e-6) - one and multiple microseconds;\n"
+"- nanosecond, nanoseconds, ns (*1e-9)   - one and multiple nanoseconds;\n"
+"- and all other are meant as seconds with substitution by 'second', "
+"'seconds' or 's'."
+msgstr ""
+
+msgid ""
+"1 second;10 seconds;30 seconds;1 minute;10 minutes;30 minutes;1 hour;12 "
+"hours;1 day;10 days"
+msgstr ""
 
 #, c-format
 msgid "Closing the thread %d error '%s (%d)'!"
@@ -1812,23 +1834,65 @@ msgstr "Доступ только на чтение к файлу '%s'."
 msgid "day"
 msgstr "день"
 
+msgid "days"
+msgstr ""
+
 msgid "hour"
 msgstr "час"
 
-msgid "min"
-msgstr "мин"
+#, fuzzy
+msgid "hours"
+msgstr "час"
+
+msgid "minute"
+msgstr ""
+
+msgid "minutes"
+msgstr ""
 
 msgid "s"
 msgstr "с"
 
+#, fuzzy
+msgid "second"
+msgstr "Размер, секунд"
+
+#, fuzzy
+msgid "seconds"
+msgstr "Размер, секунд"
+
 msgid "ms"
 msgstr "мс"
+
+#, fuzzy
+msgid "millisecond"
+msgstr "Микросекунды"
+
+#, fuzzy
+msgid "milliseconds"
+msgstr "Микросекунды"
 
 msgid "us"
 msgstr "мкс"
 
+#, fuzzy
+msgid "microsecond"
+msgstr "Микросекунды"
+
+#, fuzzy
+msgid "microseconds"
+msgstr "Микросекунды"
+
 msgid "ns"
 msgstr "нс"
+
+#, fuzzy
+msgid "nanosecond"
+msgstr "Размер, секунд"
+
+#, fuzzy
+msgid "nanoseconds"
+msgstr "Размер, секунд"
 
 msgid "YiB"
 msgstr "ЙиБ"
@@ -3146,6 +3210,12 @@ msgstr "Имя проекта установлено в:"
 
 msgid "already started."
 msgstr "уже запущен."
+
+#~ msgid "Size, seconds"
+#~ msgstr "Размер, секунд"
+
+#~ msgid "min"
+#~ msgstr "мин"
 
 #~ msgid "Number of calculations"
 #~ msgstr "Количество исполнения"

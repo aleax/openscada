@@ -1048,8 +1048,9 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/m_arch/clrAlrmDays",_("Days of the alarms automatic clearing"),RWRWR_,"root",SARH_ID,3,"tp","dec", "min","0",
 		"help",_("After that term the alarms are meant as forgotten and inactual,\nso removed from the table of the active alarms.\nZero disables the automatic clearing."));
 	    if(ctrMkNode("area",opt,-1,"/m_arch/view",_("View"),R_R___,"root",SARH_ID)) {
-		ctrMkNode("fld",opt,-1,"/m_arch/view/tm",_("Time, size (seconds) and level"),RWRW__,"root",SARH_ID,1,"tp","time");
-		ctrMkNode("fld",opt,-1,"/m_arch/view/size","",RWRW__,"root",SARH_ID,1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/m_arch/view/tm",_("Time, depth and level"),RWRW__,"root",SARH_ID,1,"tp","time");
+		ctrMkNode("fld",opt,-1,"/m_arch/view/size","",RWRW__,"root",SARH_ID,5,"tp","str","len","10",
+		    "dest","sel_ed","sel_list",TMess::labTimeSel().c_str(),"help",TMess::labTime().c_str());
 		ctrMkNode("fld",opt,-1,"/m_arch/view/lvl","",RWRW__,"root",SARH_ID,5,"tp","dec", "dest","select",
 		    "sel_id","0;1;2;3;4;5;6;7;-1;-2;-3;-4;-5;-6;-7",
 		    "sel_list",_("Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X]);"
@@ -1112,8 +1113,10 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    TBDS::genPrmSet(nodePath()+"messTm",(s2i(opt->text())>=TSYS::curTime()/1000000)?"0":opt->text(),opt->attr("user"));
     }
     else if(a_path == "/m_arch/view/size") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"messSize",DEF_messSize,opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(nodePath()+"messSize",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))
+	    opt->setText(TSYS::time2str(s2i(TBDS::genPrmGet(nodePath()+"messSize",DEF_messSize,opt->attr("user"))),false));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))
+	    TBDS::genPrmSet(nodePath()+"messSize",i2s(TSYS::str2time(opt->text(),false)),opt->attr("user"));
     }
     else if(a_path == "/m_arch/view/cat") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"messCat",DEF_messCat,opt->attr("user")));
@@ -1640,8 +1643,9 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(runSt && ctrMkNode("area",opt,-1,"/mess",_("Messages"),R_R___,"root",SARH_ID)) {
-	    ctrMkNode("fld",opt,-1,"/mess/tm",_("Time, size (seconds) and level"),RWRW__,"root",SARH_ID,1,"tp","time");
-	    ctrMkNode("fld",opt,-1,"/mess/size","",RWRW__,"root",SARH_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/mess/tm",_("Time, depth and level"),RWRW__,"root",SARH_ID,1,"tp","time");
+	    ctrMkNode("fld",opt,-1,"/mess/size","",RWRW__,"root",SARH_ID,5,"tp","str","len","10",
+		"dest","sel_ed","sel_list",TMess::labTimeSel().c_str(),"help",TMess::labTime().c_str());
 	    ctrMkNode("fld",opt,-1,"/mess/lvl","",RWRW__,"root",SARH_ID,5,"tp","dec", "dest","select",
 		"sel_id","0;1;2;3;4;5;6;7",
 		"sel_list",_("Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X])"),
@@ -1681,8 +1685,10 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	    TBDS::genPrmSet(nodePath()+"messTm",(s2i(opt->text())>=TSYS::curTime()/1000000)?"0":opt->text(),opt->attr("user"));
     }
     else if(a_path == "/mess/size") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"messSize",DEF_messSize,opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(nodePath()+"messSize",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))
+	    opt->setText(TSYS::time2str(s2i(TBDS::genPrmGet(nodePath()+"messSize",DEF_messSize,opt->attr("user"))),false));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))
+	    TBDS::genPrmSet(nodePath()+"messSize",i2s(TSYS::str2time(opt->text(),false)),opt->attr("user"));
     }
     else if(a_path == "/mess/cat") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"messCat",DEF_messCat,opt->attr("user")));

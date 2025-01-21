@@ -393,10 +393,11 @@ Information variables of the program:
 <li> <i>static string real2str( double val, int prec=15, char tp='g');</i> — Real transformation with an accuracy <i>prec</i> signs and type <i>tp</i> to the string.</li>
 <li> <i>static double realRound( double val, int dig=0, bool toint=false );</i> — Rounding the real number to the specified digit <i>dig</i> after the decimal point with the possibility of transformation to integer after rounding <i>toint</i>.</li>
 <li> <i>static string atime2str( time_t tm, const string &amp;format = "", bool gmt = false, const string &amp;user_lang = "" );</i> — Astronomic UNIX time <i>tm</i> conversion to string in the <i>format</i> of the POSIX-function "strftime()" or "gmtime()" for <i>gmt</i>, also can be localised for the user and language <i>user_lang</i> or from the messages translation context.</li>
-<li> <i>static string time2str( double tm );</i> — Convert time interval, in seconds, to string like "1hour 23min 10sec".</li>
+<li> <i>static string time2str( double tm, bool inParts = true );</i> — Converts the time interval <i>tm</i> in seconds to human string like "1hour 23minutes 10s" at setting <i>inParts</i> or "1.5 hour" else.</li>
 <li> <i>static string cpct2str( double cnt );</i> — Traffic counter <i>cnt</i> (bytes) convert to string like "12.5KiB".</li>
 <li> <i>static double str2real( const string &amp;val );</i> — String transformation to the real.</li>
 <li> <i>static time_t str2atime( const string &amp;val, const string &amp;format = "", bool gmt = false )</i> — String time <i>val</i> conversion to an astronomic UNIX time, in the <i>format</i> of the POSIX-function "strptime()", and by the function "mktime()" or "timegm()", for <i>gmt</i>.</li>
+<li> <i>static double str2time( const string &amp;val, bool inParts = true );</i> — Converts the human representing relative time <i>val</i> of the function <i>time2str()</i> to the time in seconds, with parsing parts at setting <i>inParts</i>.</li>
 <li> <i>static string addr2str( void *addr );</i> — Convert addresses into string.</li>
 <li> <i>static void *str2addr( const string &amp;str );</i> — Convert string into the address.</li>
 <li> <i>static string strTrim( const string &amp;val, const string &amp;cfg = " \n\t\r" );</i> — Deletes from the original string <i>val</i> pointed into <i>cfg</i> (mostly empty) characters at the beginning and end of it.</li>
@@ -557,7 +558,7 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>bool translItSplit( const string &amp;base, const string &amp;srcFltr = "" );</i> — Splitting the BASE message <i>base</i> per it sources and only for matched ones to <i>srcFltr</i>.</li>
 <li> <i>bool translItRemTrs( const string &amp;base, const string &amp;srcFltr = "" );</i> — Removing the BASE message <i>base</i> from the individual messages table "Trs" and only for matched sources to <i>srcFltr</i>.</li>
 <li> <i>string trCtx( const string &amp;user_lang = mess_TrModifMark, bool *hold = NULL );</i> — Getting (by default) and registering(no empty)/clearing(empty) the translation context <i>user_lang</i> bound to the call pthread. <i>hold</i> can be pointed to detect the context already registered and do not clear that.</li>
-<li> <i>static string labStorFromCode( const string &amp;code ); static string labStor( ); static string labStorRem( const string &amp;cnt ); static string labSecCRON( ); static string labSecCRONsel( ); static string labTaskPrior( ); static string labMessCat( ); static string labStdOutTrs( );</i> — Common help labels.</li>
+<li> <i>static string labStorFromCode( const string &amp;code ); static string labStor( ); static string labStorRem( const string &amp;cnt ); static string labSecCRON( ); static string labSecCRONsel( ); static string labTaskPrior( ); static string labStdOutTrs( ); static string labMessCat( ); static string labTime( ); static string labTimeSel( );</i> — Common help labels.</li>
 <li> <i>int getUTF8( const string &amp;str, int off = 0, int32_t *symb = NULL );</i> — Get and parse a UTF-8 symbol.</li>
 <li> <i>static string setUTF8( int32_t symb );</i> — Set, form and return a UTF-8 symbol from their code <i>symb</i>.</li></ul>
 <h3><span class="mw-headline" id="Object_subsystem_.28TSubSYS.29"><span class="mw-headline-number">2.3</span> <span id="TSubSYS" title="#TSubSYS">Object subsystem (TSubSYS)</span></span></h3>
@@ -1106,8 +1107,8 @@ Additional flags to the object <a href="#TFld">#TFld</a> (enum TVal::AttrFlag):
 <li> <i>AutoHD&lt;TVArchive&gt; arch( );</i> — Getting the associated with the value archive.</li>
 <li> <i>void setArch( const AutoHD&lt;TVArchive&gt; &amp;vl );</i> — Setting the associated with the value archive.</li>
 <li> <i>string setArch( const string &amp;nm = "" );</i> — Setting/creation new archive with proposed name <i>nm</i> or automatic, if name empty.</li>
-<li> <i>bool reqFlg( ); bool resB1( ); bool resB2( )</i> — Get some realisation-specific flags.</li>
-<li> <i>void setReqFlg( bool vl ); void setResB1( bool vl ); void setResB2( bool vl )</i> — Set some realization-specific flags.</li>
+<li> <i>bool reqFlg( );</i> — Get the request flag.</li>
+<li> <i>void setReqFlg( bool vl );</i> — Set the request flag.</li>
 <li> <i>TFld &amp;fld( );</i> — Descriptor of the attribute's structure.</li></ul>
 <h3><span class="mw-headline" id="Object_of_the_templates_library_of_parameters_of_the_.22DAQ.22_subsystem_.28TPrmTmplLib.29"><span class="mw-headline-number">4.8</span> <span id="TPrmTmplLib" title="#TPrmTmplLib">Object of the templates library of parameters of the "DAQ" subsystem (TPrmTmplLib)</span></span></h3>
 <table class="wikitable">
@@ -1688,7 +1689,7 @@ Stages of the new Associated Output Transports processing (enum — TTransportIn
 <li> <i>virtual unsigned keepAliveReqs( );</i> — Maximum Keep Alive requests.</li>
 <li> <i>virtual unsigned keepAliveTm( );</i> — Keep Alive time.</li>
 <li> <i>TVariant prm( const string &amp;id, const TVariant &amp;val = TVariant(), bool toWr = false );</i> — Getting for value the addition parameter <i>id</i> with default one <i>val</i>, or setting to the value <i>val</i> at <i>toWr</i>. The additional parameters can store the connection time parameters at pointing <i>id</i> in the form "{id}\n{SRC}[\n{NAME}[\n{HELP}]]". The additional parameters stored in XML of the configuration field "A_PRMS".</li>
-<li> <i>TVariant conPrm( const string &amp;id, const TVariant &amp;val = TVariant(), const string &amp;cfg = "" );</i> — Getting for value the connection time parameter <i>id</i> and setting the parameter at specifying the value <i>val</i>. If the connection time parameter also is a configuration from an external source, you specify the argument <i>cfg</i> in the form "{SRC}[\n{NAME}[\n{HELP}]]". Configuration of the external sources is read only by this function with setting the value <i>val</i> and configuration <i>cfg</i> once at initialisation, all changes for value the configuration performed by user from control interface of the transport.</li>
+<li> <i>TVariant conPrm( const string &amp;id, const TVariant &amp;val = TVariant(), const string &amp;cfg = "" );</i> — Getting for value the connection time parameter <i>id</i> and setting the parameter at specifying the value <i>val</i>. It uses now <a href="#TCntrNode">TCntrNode</a>::property() as the objects container in the "con" group. If the connection time parameter also is a configuration from an external source, you specify the argument <i>cfg</i> in the form "{SRC}[\n{NAME}[\n{HELP}]]". Configuration of the external sources is read only by this function with setting the value <i>val</i> and configuration <i>cfg</i> once at initialisation, all changes for value the configuration performed by user from control interface of the transport.</li>
 <li> <i>virtual string getStatus( );</i> — Getting the status of the input transport.</li>
 <li> <i>bool toStart( );</i> — The sign "To start".</li>
 <li> <i>bool startStat( );</i> — The status "Running".</li>
@@ -1699,7 +1700,7 @@ Stages of the new Associated Output Transports processing (enum — TTransportIn
 <li> <i>void setDscr( const string &amp;idscr );</i> — Setting the description of transport in <i>idscr</i>.</li>
 <li> <i>void setAddr( const string &amp;addr );</i> — Setting the address of transport in <i>addr</i>.</li>
 <li> <i>void setProtocols( const string &amp;prt );</i> — Setting of the linked transport protocols.</li>
-<li> <i>void clearConPrm( const string &amp;id = "" );</i> — Clearing the connection time parameter <i>id</i> at non empty, all ones at empty and the external source configuration at "CFG:".</li>
+<li> <i>void clearConPrm( const string &amp;id = "" );</i> — Clearing the connection time parameter <i>id</i> at non empty, all ones at empty and the external source configuration at "CFG:". It uses now <a href="#TCntrNode">TCntrNode</a>::property() as the objects container in the "con" group.</li>
 <li> <i>void setToStart( bool val );</i> — Setting of the sign "To start".</li>
 <li> <i>void setDB( const string &amp;vl, bool qTop = false );</i> — Setting of the transport's storage address, <i>qTop</i> for the storage queue top.</li>
 <li> <i>virtual void start( );</i> — Start of the transport.</li>
@@ -1742,7 +1743,7 @@ Stages of the new Associated Output Transports processing (enum — TTransportIn
 <li> <i>virtual string timings( );</i> — Transport timeouts.</li>
 <li> <i>virtual unsigned short attempts( );</i> — Connection attempts.</li>
 <li> <i>TVariant prm( const string &amp;id, const TVariant &amp;val = TVariant(), bool toWr = false );</i> — Getting for value the addition parameter <i>id</i> with default one <i>val</i>, or setting to the value <i>val</i> at <i>toWr</i>. The additional parameters can store the connection time parameters at pointing <i>id</i> in the form "{id}\n{SRC}[\n{NAME}[\n{HELP}]]". The additional parameters stored in XML of the configuration field "A_PRMS".</li>
-<li> <i>TVariant conPrm( const string &amp;id, const TVariant &amp;val = TVariant(), const string &amp;cfg = "" );</i> — Getting for value the connection time parameter <i>id</i> and setting the parameter at specifying the value <i>val</i>. If the connection time parameter also is a configuration from an external source, you specify the argument <i>cfg</i> in the form "{SRC}[\n{NAME}[\n{HELP}]]". Configuration of the external sources is read only by this function with setting the value <i>val</i> and configuration <i>cfg</i> once at initialisation, all changes for value the configuration performed by user from control interface of the transport.</li>
+<li> <i>TVariant conPrm( const string &amp;id, const TVariant &amp;val = TVariant(), const string &amp;cfg = "" );</i> — Getting for value the connection time parameter <i>id</i> and setting the parameter at specifying the value <i>val</i>. It uses now <a href="#TCntrNode">TCntrNode</a>::property() as the objects container in the "con" group. If the connection time parameter also is a configuration from an external source, you specify the argument <i>cfg</i> in the form "{SRC}[\n{NAME}[\n{HELP}]]". Configuration of the external sources is read only by this function with setting the value <i>val</i> and configuration <i>cfg</i> once at initialisation, all changes for value the configuration performed by user from control interface of the transport.</li>
 <li> <i>bool startStat( );</i> — Status "Running".</li>
 <li> <i>time_t startTm( );</i> — Status "Time of starting/connection".</li>
 <li> <i>int64_t lstReqTm( );</i> — Status "Last request time".</li>
@@ -1755,7 +1756,7 @@ Stages of the new Associated Output Transports processing (enum — TTransportIn
 <li> <i>void setAddr( const string &amp;addr );</i> — Setting the address of transport.</li>
 <li> <i>virtual void setTimings( const string &amp;vl, bool isDef = false );</i> — Setting the transport timeouts, as default one for <i>isDef</i>.</li>
 <li> <i>virtual void setAttempts( unsigned short vl );</i> — Setting the connection attempts.</li>
-<li> <i>void clearConPrm( const string &amp;id = "" );</i> — Clearing the connection time parameter <i>id</i> at non empty, all ones at empty and the external source configuration at "CFG:".</li>
+<li> <i>void clearConPrm( const string &amp;id = "" );</i> — Clearing the connection time parameter <i>id</i> at non empty, all ones at empty and the external source configuration at "CFG:". It uses now <a href="#TCntrNode">TCntrNode</a>::property() as the objects container in the "con" group.</li>
 <li> <i>void setDB( const string &amp;vl, bool qTop = false );</i> — Setting of the transport's storage address, <i>qTop</i> for the storage queue top.</li>
 <li> <i>virtual void start( int time = 0 );</i> — Starting the transport with the connection timeout <i>time</i>. When you start the output transport the actual connection to the remote station is established for the interfaces that works by the connection. At this time the errors can occur if the connection is impossible and the transport should return to the stopped state.</li>
 <li> <i>virtual void stop( );</i> — Stopping the transport.</li>
@@ -4073,8 +4074,10 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 <li> <i>virtual bool AHDDisConnect( );</i> — Disсonnection from the node (release of the resource). Resource will remove on zero result.</li>
 <li> <i>void mess_sys( int8_t level, const char *fmt,  ... );</i> — The system message forms for the node path as the category, the <i>level</i>, the formatted message <i>fmt</i> appended by the node location and followed arguments.</li>
 <li> <i>TError err_sys( const char *fmt,  ... ) const; TError err_sys( int cod, const char *fmt,  ... ) const;</i> — The error object forms for the node path as the category, the code <i>cod</i>, the formatted message <i>fmt</i> appended by the node location and followed arguments.</li>
-<li> <i>virtual TVariant objPropGet( const string &amp;id );</i> — Request of the node's property as the user's object.</li>
-<li> <i>virtual void objPropSet( const string &amp;id, TVariant val );</i> — Setting the node's property as the user's object.</li>
+<li> <i>TVariant property( const string &amp;id, const TVariant &amp;val, const string &amp;grp = "sys" );</i> — returns of the object's property <i>id</i> of the Control Interface for the group <i>grp</i> with setting its at <i>val</i> non NULL and EVAL. Where <i>val</i> in EVAL is clearing the property and NULL (TVariant without arguments) just doesn't set nothing.</li>
+<li> <i>void propertyClrGrp( const string &amp;idPref = "", const string &amp;grp = "sys" );</i> — clearing the group <i>grp</i> properties at the prefix <i>idPref</i>, that is at empty <i>idPref</i> there are cleared all properties in the <i>grp</i> group. The property container is deleting also with clearing all properties.</li>
+<li> <i>virtual TVariant objPropGet( const string &amp;id );</i> — Request of the node's property <i>id</i> as the user's object. It uses now <i>TCntrNode::property()</i> as the objects container in the "usr" group.</li>
+<li> <i>virtual void objPropSet( const string &amp;id, const TVariant &amp;val );</i> — Setting the node's property <i>id</i> as the user's object. It uses now <i>TCntrNode::property()</i> as the objects container in the "usr" group.</li>
 <li> <i>virtual TVariant objFuncCall( const string &amp;id, vector&lt;TVariant&gt; &amp;prms, const string &amp;user_lang );</i> — Node function <i>id</i> call with the parameters <i>prms</i> and for user/language <i>user_lang</i> ("{user}\n{lang}").</li>
 <li> <i>int8_t grpSize( );</i> — Number of the containers with the child nodes.</li>
 <li> <i>int8_t grpId( const string &amp;sid );</i> — Getting the index of the group by its ID.</li>

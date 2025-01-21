@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1065,6 +1065,23 @@ string TMess::labMessCat( )
     return _("Specifies the category of the requested messages.\n"
 	     "Use template's symbols for group selection:\n  '*' - any substring;\n  '?' - any character.\n"
 	     "Regular expression enclosed between the symbols '/' (/mod_(System|LogicLev)/).");
+}
+
+string TMess::labTime( )
+{
+    return _("In the field you set time both with the real number and the natural text multiplier also translated and in base language:\n"
+	     "- day, days (*86400)    - one and multiple days;\n"
+	     "- hour, hours (*3600)   - one and multiple hours;\n"
+	     "- minute, minutes (*60) - one and multiple minutes;\n"
+	     "- millisecond, milliseconds, ms (*1e-3) - one and multiple milliseconds;\n"
+	     "- microsecond, microseconds, us (*1e-6) - one and multiple microseconds;\n"
+	     "- nanosecond, nanoseconds, ns (*1e-9)   - one and multiple nanoseconds;\n"
+	     "- and all other are meant as seconds with substitution by 'second', 'seconds' or 's'.");
+}
+
+string TMess::labTimeSel( )
+{
+    return _("1 second;10 seconds;30 seconds;1 minute;10 minutes;30 minutes;1 hour;12 hours;1 day;10 days");
 }
 
 int TMess::getUTF8( const string &str, int off, int32_t *symb )

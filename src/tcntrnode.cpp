@@ -40,7 +40,7 @@ using namespace OSCADA;
 
 //*************************************************
 //* Controll scenaries language section           *
-TCntrNode::TCntrNode( TCntrNode *iprev ) : mChM(true), mDataM(true), chGrp(NULL), mUse(0), mOi(USHRT_MAX), mFlg(0)
+TCntrNode::TCntrNode( TCntrNode *iprev ) : mChM(true), mDataM(true), chGrp(NULL), mUse(0), mOi(USHRT_MAX), mFlg(0), mProps(NULL)
 {
     setNodeMode(Disabled);
     prev.node = iprev;
@@ -50,7 +50,7 @@ TCntrNode::TCntrNode( TCntrNode *iprev ) : mChM(true), mDataM(true), chGrp(NULL)
     if(SYS && this != SYS && mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
 
-TCntrNode::TCntrNode( const TCntrNode &src ) : mChM(true), mDataM(true), chGrp(NULL), mUse(0), mOi(USHRT_MAX), mFlg(0)
+TCntrNode::TCntrNode( const TCntrNode &src ) : mChM(true), mDataM(true), chGrp(NULL), mUse(0), mOi(USHRT_MAX), mFlg(0), mProps(NULL)
 {
     setNodeMode(Disabled);
     prev.node = NULL;
@@ -63,7 +63,8 @@ TCntrNode::TCntrNode( const TCntrNode &src ) : mChM(true), mDataM(true), chGrp(N
 TCntrNode::~TCntrNode( )
 {
     nodeDelAll();
-    if(chGrp) delete chGrp;
+    if(chGrp)	delete chGrp;
+    if(mProps)	delete mProps;
 
     if(this != SYS && mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
@@ -992,12 +993,53 @@ bool TCntrNode::AHDDisConnect( )
     return false;
 }
 
-TVariant TCntrNode::objPropGet( const string &id )			{ return TVariant(); }
+TVariant TCntrNode::property( const string &id, const TVariant &val, const string &grp )
+{
+    if(!mProps && (val.isNull() || val.isEVal())) return (char)EVAL_BOOL;
 
-void TCntrNode::objPropSet( const string &id, TVariant val )		{ }
+    MtxAlloc res(dataRes(), true);
+    if(!mProps) mProps = new map<string, TVariant>;
+
+    string fid = (grp.size()?grp+":":"") + id;
+    //Erasing the property at EVAL setting and deleting the properties container at no more properties
+    if(!val.isNull() && val.isEVal()) {
+	mProps->erase(fid);
+	if(!mProps->size()) { delete mProps; mProps = NULL; }
+	return (char)EVAL_BOOL;
+    }
+    //Setting the value
+    else if(!val.isNull()) (*mProps)[fid] = val;
+
+    map<string, TVariant>::iterator iprop = mProps->find(fid);
+    return (iprop != mProps->end()) ? iprop->second : TVariant((char)EVAL_BOOL);
+}
+
+void TCntrNode::propertyClrGrp( const string &idPref, const string &grp )
+{
+    MtxAlloc res(dataRes(), true);
+    if(!mProps)	return;
+    else if(grp.empty() && idPref.empty()) { delete mProps; mProps = NULL; }
+    else {
+	for(map<string, TVariant>::iterator ip = mProps->begin(); ip != mProps->end(); )
+	    if(ip->first.find((grp.size()?grp+":":"")+idPref) == 0) mProps->erase(ip++);
+	    else ++ip;
+	if(!mProps->size()) { delete mProps; mProps = NULL; }
+    }
+}
+
+TVariant TCntrNode::objPropGet( const string &id )			{ return property(id, TVariant(), "usr"); }
+
+void TCntrNode::objPropSet( const string &id, const TVariant &val )	{ property(id, val, "usr"); }
 
 TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
+    // PropTp property(string id, PropTp val = NULL) - returns of the object's property <id> for the group <grp>
+    //    with setting its at val non NULL and EVAL. Where val in EVAL is clearing the property and NULL (no the argument)
+    //    just doesn't set nothing.
+    //  id - property identifier;
+    //  val - setting to the value at presence.
+    if(iid == "property" && prms.size() >= 1)
+	return property(prms[0].getS(), (prms.size()>=2)?prms[1]:TVariant(), "usr");
     // TArrayObj nodeList(string grp = "", string path = "") - child nodes list
     //  grp - nodes group
     //  path - path to source node

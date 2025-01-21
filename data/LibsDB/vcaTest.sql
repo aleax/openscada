@@ -701,11 +701,11 @@ INSERT INTO wlb_test_io VALUES('docTestGasNodeDayRep','owner','root:UI',32,'',''
 INSERT INTO wlb_test_io VALUES('docTestGasNodeDayRep','name','Test "Day report of flowcontrol point"',32,'','','','Тест "Добовий звіт витратовимірювального вузла"','','Тест "Суточный отчёт расходомерного узла"','','','');
 INSERT INTO wlb_test_io VALUES('docTestGasNodeDayRep','dscr','Full day report of the flow-control point.
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0',32,'','','','Повний добовий звіт вузла контролю витрат.
+Version: 1.1.1',32,'','','','Повний добовий звіт вузла контролю витрат.
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.0','','Полный суточный отчёт узла контроля расхода.
+Версія: 1.1.1','','Полный суточный отчёт узла контроля расхода.
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.0','','','');
+Версия: 1.1.1','','','');
 INSERT INTO wlb_test_io VALUES('docTestGasNodeDayRep','owner','root:UI',32,'','','doc','','','','','','');
 INSERT INTO wlb_test_io VALUES('docTestGasNodeDayRep','perm','438',32,'','','doc','','','','','','');
 INSERT INTO wlb_test_io VALUES('docTestGasNodeDayRep','geomZ','1',32,'','','doc','','','','','','');
@@ -2314,6 +2314,8 @@ lHC73RQKRSgUTk9Pl5SU+OOX5SsUOwdWSKHYORDAH3744dKlS48fP05OTvYjBEFUKtXj8bjdbhAE
 n/wqgAUFBWQy+S8HouFAdBX6y4G/HFjlDgTPB6Ke3/8J84Ho5vd/znwgivn9Ss8H/gvqvl5+zIak
 ZQAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'','','',-1,'name;geomW;geomH;backImg;',1374518075);
 INSERT INTO wlb_test VALUES('docTestGasNodeDayRep','','/wlb_doc/wdg_doc',0,'JavaLikeCalc.JavaScript
+if(this.attr("pgOpen") && !this.ownerSess().pg_control.pg_doc_panel.attr("pgOpen")) event = "ws_FocusIn:/doc";
+
 //Document generation one in hour
 curMin = curHour = curDay = curMonth = curYear = 0;
 SYS.localtime(SYS.time(), 0, curMin, curHour, curDay, curMonth, curYear);
@@ -2344,7 +2346,7 @@ else if(curMin != lastMin && !(curMin%5)) {
 	SYS.localtime(doc_time, 0, 0, curHour, curDay, curMonth, curYear);
 	doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
 	if(curHour < repHour) doc_bTime -= 24*60*60;
-}','','',1000,'owner;name;dscr;',1580648793);
+}','','',1000,'owner;name;dscr;',1737360229);
 CREATE TABLE IF NOT EXISTS 'wlb_test_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '0' ,"IO_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '0' ,"CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_test_uio VALUES('FormElTests','extValue','','Ext. value','Зовнішне значення','Внешнее значение',131076,'0|','','',6,'','','','','','');
 INSERT INTO wlb_test_uio VALUES('docTestGasNodeDayRep','closeDoc','','Close document','Закриття документа','Закрывать документ',131072,NULL,'','',8,'','','','','','');
