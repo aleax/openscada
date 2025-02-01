@@ -226,6 +226,7 @@ string TUIS::mimeGet( const string &inm, const string &fDt, const string &orig )
     else if(strcasecmp(tvl,"mp4") == 0)	prc = "video/mp4";
     else if(strcasecmp(tvl,"mpeg") == 0)prc = "video/mpeg";
     else if(strcasecmp(tvl,"mkv") == 0)	prc = "video/matroska";
+    else if(strcasecmp(tvl,"webm") == 0)prc = "video/webm";
 
     return prc + ((stvl=TSYS::strParse(orig,1,";")).size()?";"+stvl:"");
 }

@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Serial file: mod_serial.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -79,7 +79,7 @@
 #define MOD_NAME	trS("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.7.2"
+#define MOD_VER		"2.7.3"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	trS("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -1366,7 +1366,7 @@ TVariant TTrOut::objFuncCall( const string &id, vector<TVariant> &prms, const st
     //  rts - Request value RTS
     if(id == "TS") {
 	MtxAlloc res(reqRes(), true);
-	if(!runSt) return EVAL_BOOL;
+	if(!runSt) return (char)EVAL_BOOL;
 	int tiocm;
 	//Get TIOCM current status
 	ioctl(fd, TIOCMGET, &tiocm);
@@ -1385,7 +1385,7 @@ TVariant TTrOut::objFuncCall( const string &id, vector<TVariant> &prms, const st
     //  dtr - Terminal ready value DTR
     if(id == "DR") {
 	MtxAlloc res(reqRes(), true);
-	if(!runSt) return EVAL_BOOL;
+	if(!runSt) return (char)EVAL_BOOL;
 	int tiocm;
 	//Get TIOCM current status
 	ioctl(fd, TIOCMGET, &tiocm);
@@ -1403,7 +1403,7 @@ TVariant TTrOut::objFuncCall( const string &id, vector<TVariant> &prms, const st
     // bool DCD() - Data Carrier Detect control
     if(id == "DCD") {
 	MtxAlloc res(reqRes(), true);
-	if(!runSt) return EVAL_BOOL;
+	if(!runSt) return (char)EVAL_BOOL;
 	int tiocm;
 	//Get TIOCM current status
 	ioctl(fd, TIOCMGET, &tiocm);
@@ -1412,7 +1412,7 @@ TVariant TTrOut::objFuncCall( const string &id, vector<TVariant> &prms, const st
     // bool RI() - Ring Indicator control
     if(id == "RI") {
 	MtxAlloc res(reqRes(), true);
-	if(!runSt) return EVAL_BOOL;
+	if(!runSt) return (char)EVAL_BOOL;
 	int tiocm;
 	//Get TIOCM current status
 	ioctl(fd, TIOCMGET, &tiocm);

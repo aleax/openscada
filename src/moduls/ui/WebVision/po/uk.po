@@ -368,7 +368,7 @@ msgstr ""
 "призводить до збільшення навантаження на сервер."
 
 msgid "Custom interface CSS rules"
-msgstr "Користувацькі CSS правила інтерфейсу."
+msgstr "Користувацькі CSS правила інтерфейсу"
 
 #, c-format
 msgid ""

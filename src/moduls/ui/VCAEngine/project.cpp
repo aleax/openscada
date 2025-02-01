@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: project.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,7 +36,7 @@ using namespace VCA;
 //************************************************
 Project::Project( const string &id, const string &name, const string &lib_db ) :
     TConfig(&mod->elProject()), enableByNeed(false), mId(cfg("ID")), mDB(lib_db), mPermit(cfg("PERMIT").getId()),
-    mPer(cfg("PER").getId())/*, mFlgs(cfg("FLGS").getId())*/, mStyleIdW(cfg("STYLE").getId()),
+    mPer(cfg("PER").getId())/*, mFlgs(cfg("FLGS").getId())*/, mStyleIdW(cfg("STYLE").getId()), mWrToStl(cfg("WR_TO_STYLE").getBd()),
     mEnable(false), mFuncM(true)
 {
     mId = id;
@@ -655,6 +655,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("list",opt,-1,"/style/props/id",_("Identifier"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		    ctrMkNode("list",opt,-1,"/style/props/vl",_("Value"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		}
+		ctrMkNode("fld",opt,-1,"/style/wrToStl",_("Write to style in the execution context"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("comm",opt,-1,"/style/erase",_("Delete"),RWRWR_,"root",SUI_ID);
 	    }
 	}
@@ -878,6 +879,10 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    map< string, vector<string> >::iterator iStPrp = mStProp.find(opt->attr("key_id"));
 	    if(iStPrp != mStProp.end()) { iStPrp->second[stlCurent()] = opt->text(); modif(); }
 	}
+    }
+    else if(a_path == "/style/wrToStl") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(mWrToStl));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	{ mWrToStl = s2i(opt->text()); modif(); }
     }
     else if(a_path == "/style/erase" && ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR) && stlCurent() >= 0 && stlCurent() < stlSize())
     {
@@ -1557,9 +1562,12 @@ TVariant Page::stlReq( Attr &a, const TVariant &vl, bool wr )
     if(stlLock()) return vl;
     string pid = sTrm(a.cfgTempl());
     if(pid.empty()) pid = a.id();
-    if(!wr) return ownerProj()->stlPropGet(pid, vl.getS());
+    return ownerProj()->stlPropGet(pid, vl.getS());	//Getting and registering new style fields
+
+    //!!!! Commented to prevent any style writing on the project side from attributes, only from the styles table
+    /*if(!wr) return ownerProj()->stlPropGet(pid, vl.getS());
     if(ownerProj()->stlPropSet(pid,vl.getS())) return TVariant();
-    return vl;
+    return vl;*/
 }
 
 bool Page::cntrCmdGeneric( XMLNode *opt )

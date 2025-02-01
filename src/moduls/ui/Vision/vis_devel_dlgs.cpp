@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_dlgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -275,7 +275,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     buttStlDel = new QPushButton(_("Erase style"),tab_w);
     buttStlDel->setObjectName("/style/erase");
     connect(buttStlDel, SIGNAL(clicked()), this, SLOT(isModify()));
-    dlg_lay->addWidget(buttStlDel,0,3);
+    dlg_lay->addWidget(buttStlDel, 0, 3);
 
     dlg_lay->addWidget(new QLabel(_("Name:"),tab_w), 1, 0);
     stl_name = new LineEdit(tab_w, LineEdit::Text, false, false);
@@ -291,9 +291,17 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     stl_table->setHorizontalHeaderLabels(QStringList() << _("Identifier") << _("Value"));
     dlg_lay->addWidget(stl_table, 4, 0, 1, 4);
 
-    buttStlTableDel = new QPushButton(_("Delete record"),tab_w);
+    buttStlTableDel = new QPushButton(_("Delete record"), tab_w);
     connect(buttStlTableDel, SIGNAL(clicked()), this, SLOT(delStlItem()));
-    dlg_lay->addWidget(buttStlTableDel,5,3);
+    dlg_lay->addWidget(buttStlTableDel, 5, 3);
+
+    lab = new QLabel(_("Write to style in the execution context:"), tab_w);
+    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
+    dlg_lay->addWidget(lab, 6, 0, 1, 2);
+    stl_wrToStl = new QCheckBox(tab_w);
+    stl_wrToStl->setObjectName("/style/wrToStl");
+    connect(stl_wrToStl, SIGNAL(stateChanged(int)), this, SLOT(isModify()));
+    dlg_lay->addWidget(stl_wrToStl, 6, 2);
 
     //Add tab 'Diagnostic'
     //------------------
@@ -640,6 +648,14 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	gnd = TCntrNode::ctrId(root,buttStlDel->objectName().toStdString(),true);
 	buttStlDel->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 
+	// Write to style in the execution context
+	gnd = TCntrNode::ctrId(root, stl_wrToStl->objectName().toStdString(), true);
+	stl_wrToStl->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
+	if(gnd) {
+	    req.setAttr("path",ed_it+"/"+TSYS::strEncode(stl_wrToStl->objectName().toStdString(),TSYS::PathEl));
+	    if(!owner()->cntrIfCmd(req)) stl_wrToStl->setChecked(s2i(req.text()));
+	}
+
 	// Name
 	gnd = TCntrNode::ctrId(root,stl_name->objectName().toStdString(),true);
 	stl_name->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
@@ -837,7 +853,7 @@ void LibProjProp::isModify( QObject *snd )
 
     XMLNode req("set");
 
-    if(oname == obj_enable->objectName() /*|| oname == prj_keepAspRt->objectName()*/) {
+    if(oname == obj_enable->objectName() || oname == stl_wrToStl->objectName() /*|| oname == prj_keepAspRt->objectName()*/) {
 	req.setText(i2s(((QCheckBox*)snd)->isChecked()));
 	update = true;
     }

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_shapes.h
 /***************************************************************************
- *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -51,6 +51,8 @@
 
 #include <tmess.h>
 #include <xml.h>
+
+#define TRND_RND_RANGE	5	// Range in pixels of enabling the rounding of big lines by the Bezier Cubic Curve on trends
 
 using std::deque;
 using namespace OSCADA;

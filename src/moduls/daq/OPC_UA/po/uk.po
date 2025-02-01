@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.OPC_UA translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.OPC_UA module.
 #
-# Roman Savochenko <roman@oscada.org>, 2010-2022.
+# Roman Savochenko <roman@oscada.org>, 2010-2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 08:32+0200\n"
+"POT-Creation-Date: 2025-01-13 22:36+0200\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -124,11 +124,13 @@ msgstr "До запису %d. "
 msgid ""
 "Secure channel %u, token %u, lifetime %s; Request ID %u, handle %u; Session "
 "%s. "
-msgstr "Канал безпеки %u, токен %u, час життя %s; Запиту ІД %u, тримач %u; Сеанс %s. "
+msgstr ""
+"Канал безпеки %u, токен %u, час життя %s; Запиту ІД %u, тримач %u; Сеанс %s. "
 
 #, c-format
 msgid "Subscription %u, publishes %u, keep alive %s; Monitored items %u. "
-msgstr "Підписка %u, публікацій %u, утримання живим %s; Елементів моніторингу %u. "
+msgstr ""
+"Підписка %u, публікацій %u, утримання живим %s; Елементів моніторингу %u. "
 
 #, c-format
 msgid "OPC UA automatic created transport for '%s' controller."
@@ -305,14 +307,14 @@ msgid "10:Error of connection or no response."
 msgstr "10:Помилка з'єднання або немає відповіді."
 
 msgid ""
-"Variables and it containers (Objects) list. All variables will put into the "
-"parameter attributes list.\n"
-"Variables write by separate lines in the form \"{ns}:{id}[|[{flg}][|{id}[|"
+"Variables and their containers (Objects) list. All variables will put into "
+"list of the parameter attributes.\n"
+"Variables write by separate lines in the form \"{ns}:{nid}[|[{flg}][|{id}[|"
 "{name}]]]\".\n"
 "Where:\n"
 "  ns  - name space, number; zero value can be omitted;\n"
-"  id  - node identifier by number, string, bytes string and GUID;\n"
-"  flg - flags of no requesting the metadata on the server:\n"
+"  nid - node identifier by number, string, bytes string and GUID;\n"
+"  flg - flags for do not request the metadata on the server:\n"
 "        value type (b-Boolean,i-Integer,f-Float,s-String,o-Object), read/"
 "write mode (r-read, w-write);\n"
 "  id  - identifier of the created attribute;\n"
@@ -330,11 +332,11 @@ msgid ""
 msgstr ""
 "Перелік змінних та контейнерів (Об'єктів). Всі змінні буде розташовано у "
 "переліку атрибутів параметру.\n"
-"Змінні записуються окремими рядками у формі \"{ns}:{id}[|[{flg}][|{id}[|"
+"Змінні записуються окремими рядками у формі \"{ns}:{nid}[|[{flg}][|{id}[|"
 "{name}]]]\".\n"
 "Де:\n"
 "  ns  - простір імен, числом; нульове значення може бути опущено;\n"
-"  id  - ідентифікатор вузла, числом, рядком, рядком байт або GUID;\n"
+"  nid - ідентифікатор вузла, числом, рядком, рядком байт або GUID;\n"
 "  flg - прапорці нездійснення запиту цільових даних на сервері:\n"
 "        тип значення (b-Логічний,i-Ціле,f-Реальне,s-Рядок,o-Об'єкт), режим "
 "запису/читання (r-читати, w-писати);\n"
@@ -549,4 +551,3 @@ msgstr "Сервер OPC-UA"
 
 msgid "Provides OPC-UA server service implementation."
 msgstr "Надає реалізацію OPC-UA сервісу серверу."
-

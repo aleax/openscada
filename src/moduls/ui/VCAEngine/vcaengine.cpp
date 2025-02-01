@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: vcaengine.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.13.6"
+#define MOD_VER		"7.13.8"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -167,6 +167,7 @@ void Engine::postEnable( int flag )
     prj_el.fldAdd(new TFld("PERMIT",trS("Permission"),TFld::Integer,TFld::OctDec,"3","436"));
     prj_el.fldAdd(new TFld("PER",trS("Period of calculating, milliseconds"),TFld::Integer,TFld::NoFlag,"4","100"));
     prj_el.fldAdd(new TFld("STYLE",trS("Work style"),TFld::Integer,TFld::NoFlag,"2","-1"));
+    prj_el.fldAdd(new TFld("WR_TO_STYLE",trS("Write to style in the execution context"),TFld::Boolean,TFld::NoFlag,"1","0"));
     prj_el.fldAdd(new TFld("EN_BY_NEED",trS("Enable as needed"),TFld::Boolean,TFld::NoFlag,"1","1"));
 
     //Make page's DB structure: ProjPages(__OWNER__, __ID__, ICO, PARENT, PROC, PROC_PER, FLGS, ATTRS, TIMESTAMP)

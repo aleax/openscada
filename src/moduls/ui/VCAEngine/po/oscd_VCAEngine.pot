@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-17 23:15+0200\n"
+"POT-Creation-Date: 2025-01-13 16:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1024,6 +1024,9 @@ msgid "Style"
 msgstr ""
 
 msgid "Properties"
+msgstr ""
+
+msgid "Write to style in the execution context"
 msgstr ""
 
 msgid "Delete"

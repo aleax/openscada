@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tfunction.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -221,7 +221,7 @@ TVariant TFunction::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     // ElTp call(ElTp prm1, ...) - the function call
     //  prm{N} - {N} parameter to the function.
     if(iid == "call") {
-	if(!startStat()) return TVariant();
+	if(!startStat()) return EVAL_REAL;
 	TValFunc vfnc("JavaLikeObjFuncCalc",this);
 
 	//  Get return position
@@ -248,7 +248,7 @@ TVariant TFunction::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	}
 	//  Set return
 	if(rPos < vfnc.func()->ioSize()) return vfnc.get(rPos);
-	return TVariant();
+	return EVAL_REAL;
     }
 
     return TCntrNode::objFuncCall(iid, prms, user_lang);

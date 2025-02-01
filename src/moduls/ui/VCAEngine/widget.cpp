@@ -1209,7 +1209,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		opt->childAdd("el")->setText("res:"+ls[iT]);
 	}
 	else if(a_val.find("file:") == 0) {
-	    TSYS::ctrListFS(opt, a_val.substr(5), "png;jpeg;jpg;gif;pcx;mng;svg;mp3;ogg;wav;avi;mov;mpg4;ogv;mp4");
+	    TSYS::ctrListFS(opt, a_val.substr(5), "png;webp;jpeg;jpg;gif;pcx;mng;svg;mp3;ogg;wav;avi;mov;mpg4;ogm;mp4;webm;");
 	    for(unsigned iT = 0; iT < opt->childSize(); iT++)
 		opt->childGet(iT)->setText("file:"+opt->childGet(iT)->text());
 	}

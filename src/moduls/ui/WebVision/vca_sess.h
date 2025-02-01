@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebVision file: vca_sess.h
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>	   *
+ *   Copyright (C) 2007-2025 by Roman Savochenko, <roman@oscada.org>	   *
  *		   2007-2012 by Lysenko Maxim, <mlisenko@oscada.org>	   *
  *		   2007-2008 by Yashina Kseniya, <ksu@oscada.org>	   *
  *									   *
@@ -36,6 +36,7 @@
 
 #include <tcntrnode.h>
 
+#define TRND_RND_RANGE	5	// Range in pixels of enabling the rounding of big lines by the Bezier Cubic Curve on trends
 
 class Point
 {
@@ -88,6 +89,14 @@ class VCAObj : public TCntrNode
 	virtual void setAttrs( XMLNode &node, const SSess &ses ) = 0;
 
 	VCASess &owner( ) const;
+
+	//Common of LibGD
+	// Computing the step in the bezier curve construction
+	static double bezierDeltaT( const Point &p1, const Point &p2, const Point &p3, const Point &p4 );
+	// Getting the point of the bezier curve, using t as parameter
+	static Point bezier( double t, const Point &p1, const Point &p2, const Point &p3, const Point &p4 );
+	// Drawing Cubic Bezier Curve
+	static void gdImageCubic( gdImagePtr im, const Point &p1, const Point &p2, const Point &p3, const Point &p4, int clr );
 
     private:
 	//Attributes
@@ -183,14 +192,12 @@ class VCAElFigure : public VCAObj
 	Point arc( double t, double a, double b );
 	Point unrotate( const Point pnt, double alpha, double a, double b );
 	Point rotate( const Point pnt, double alpha );
-	Point bezier( double t, Point p1, Point p2, Point p3, Point p4 );
-	double bezierDeltaT( Point p1, Point p2, Point p3, Point p4 );
-	static double ABS(double var);
+
 	//bool isPaintable( ShapeItem item, double xScale, double yScale );
 	void paintFigure( gdImagePtr im, ShapeItem item, double xScale, double yScale, bool flag_allocate, bool flag_style );
-	void paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, int clr_el_line, double el_width, double el_border_width, int type, double xScale, double yScale );
-	void dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, double el_width, int type, int style  );
-	void dashDotFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int  clr_el, int clr_el_line, double el_width, double el_border_width, int type, double wdt, double wdt_1, double xScale, double yScale  );
+	void paintFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int clr_el, int clr_el_line, double el_width, double el_border_width, int type, double xScale, double yScale );
+	void dashDot( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int clr_el, double el_width, int type, int style  );
+	void dashDotFigureBorders( gdImagePtr im, Point el_p1, Point el_p2, Point el_p3, Point el_p4, Point el_p5, Point el_p6, int clr_el, int clr_el_line, double el_width, double el_border_width, int type, double wdt, double wdt_1, double xScale, double yScale  );
 	void paintFill( gdImagePtr im, Point pnt, InundationItem &in_item );
 	Point unscaleUnrotate( Point point, double xScale, double yScale, bool flag_scale = true, bool flag_rotate = true, bool flag_mirror = true );
 	Point scaleRotate( Point point, double xScale, double yScale, bool flag_scale = true, bool flag_rotate = true, bool flag_mirror = true );

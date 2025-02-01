@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: project.h
 /***************************************************************************
- *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -109,6 +109,7 @@ class Project : public TCntrNode, public TConfig
 	void stlList( vector<string> &ls );
 	int stlSize( );
 	int64_t stlCurent( )			{ return mStyleIdW; }
+	bool wrToStl( )				{ return mWrToStl; }
 	void stlCurentSet( int sid );
 	string stlGet( int sid );
 	void stlSet( int sid, const string &stl );
@@ -155,6 +156,7 @@ class Project : public TCntrNode, public TConfig
 	int64_t	&mPermit,	//Access permission
 		&mPer,		//Calculate period
 		&mStyleIdW;	//Work style
+	char	&mWrToStl;	//Write to style in the execution context
 	bool	mEnable;	//Enable state
 
 	// Styles

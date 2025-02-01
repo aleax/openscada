@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -770,8 +770,8 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	    actClr->setStatusTip(_("Press to clear changes of the attribute."));
 	    popup.addAction(actClr);
 	    if(!ico_t.load(TUIS::icoGet("down",NULL,true).c_str())) ico_t.load(":/images/down.png");
-	    actChDown = new QAction(QPixmap::fromImage(ico_t),_("Lower the widget changes to its parent"),this);
-	    actChDown->setStatusTip(_("Press for lowering the widget changes to its parent."));
+	    actChDown = new QAction(QPixmap::fromImage(ico_t),_("Lower changes to the parent"),this);
+	    actChDown->setStatusTip(_("Press for lowering changes to the parent."));
 	    popup.addAction(actChDown);
 	}
 

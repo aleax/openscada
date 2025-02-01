@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: session.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1596,7 +1596,7 @@ TVariant SessPage::stlReq( Attr &a, const TVariant &vl, bool wr )
     if(stlLock()) return vl;
     string pid = sTrm(a.cfgTempl());
     if(pid.empty()) pid = a.id();
-    if(!wr) return ownerSess()->stlPropGet(pid, vl.getS());
+    if(!wr || !ownerSess()->parent().at().wrToStl()) return ownerSess()->stlPropGet(pid, vl.getS());
     if(ownerSess()->stlPropSet(pid,vl.getS())) return TVariant();
     return vl;
 }

@@ -1,13 +1,13 @@
 # OpenSCADA.UI.Vision translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.Vision package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2005-2024.
+# Roman Savochenko <roman@oscada.org>, 2005-2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-09 18:10+0200\n"
+"POT-Creation-Date: 2025-01-13 16:07+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1108,6 +1108,9 @@ msgstr "Видалити стиль"
 msgid "Value"
 msgstr "Значення"
 
+msgid "Write to style in the execution context:"
+msgstr "Писати до стилю у контексті виконання:"
+
 msgid "Diagnostics"
 msgstr "Діагностика"
 
@@ -1292,11 +1295,11 @@ msgstr "Очистити зміни"
 msgid "Press to clear changes of the attribute."
 msgstr "Натиснути для очищення змін атрибуту."
 
-msgid "Lower the widget changes to its parent"
-msgstr "Опустити зміни віджету до предку"
+msgid "Lower changes to the parent"
+msgstr "Опустити зміни до предку"
 
-msgid "Press for lowering the widget changes to its parent."
-msgstr "Натиснути для опущення змін віджету до предку."
+msgid "Press for lowering changes to the parent."
+msgstr "Натиснути для опущення змін до предку."
 
 msgid "Upload file"
 msgstr "Завантажити файл"

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_shapes.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,6 +29,7 @@
 #include <QApplication>
 #include <QEvent>
 #include <QPainter>
+#include <QPainterPath>
 #include <QVBoxLayout>
 #include <QStackedWidget>
 #include <QPushButton>
@@ -2627,7 +2628,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	    string labVal;
 	    pnt.setPen(grdPenT);
 	    pnt.drawLine(tAr.x()-1, tAr.y(), tAr.x()-1, tAr.height());
-	    for(double iV = floor((vsMinT/vDiv)+0.5)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv) {
+	    for(double iV = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-iV)/vDiv > -0.1; iV += vDiv) {
 		int v_pos = tAr.y() + tAr.height() - (int)((double)tAr.height()*(iV-vsMinT)/(vsMaxT-vsMinT));
 		if(sclVerT&FD_GRD) { pnt.setPen(grdPen); pnt.drawLine(tAr.x(), v_pos, tAr.x()+tAr.width(), v_pos); }
 		else { pnt.setPen(grdPenT); pnt.drawLine(tAr.x()-3, v_pos, tAr.x()+3, v_pos); }
@@ -3745,7 +3746,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 
 	    //Writing a point and a line
 	    if(averVl != EVAL_REAL) {
-		if(cP.valTp() == 0)
+		if(cP.valTp() == TFld::Boolean)
 		    z_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((vsPercT?(100.*(0-bordL)/(bordU-bordL)):0)-vsMinT)/(vsMaxT-vsMinT))));
 		c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,averVl)):averVl)-vsMinT)/(vsMaxT-vsMinT))));
 		if(prevVl == EVAL_REAL) {
@@ -3753,9 +3754,18 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    else pnt.drawLine(averPos, z_vpos, averPos, vmin(z_vpos-trpen.width(),c_vpos));
 		}
 		else {
-		    if(cP.valTp() != 0) {
+		    if(cP.valTp() != TFld::Boolean) {
 			int c_vpos_prv = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,prevVl)):prevVl)-vsMinT)/(vsMaxT-vsMinT))));
-			pnt.drawLine(prevPos, c_vpos_prv, averPos, c_vpos);
+			if(abs(averPos-prevPos) > TRND_RND_RANGE && abs(c_vpos-c_vpos_prv) > TRND_RND_RANGE) {
+			    // Curvature [0.1...0.5] depending the rising level
+			    double curvLev = -0.2*(vmax(-2*TRND_RND_RANGE,vmin(2*TRND_RND_RANGE,c_vpos_prv-c_vpos))-2*TRND_RND_RANGE)/(2*TRND_RND_RANGE)+0.1;
+			    int wPos = curvLev*(averPos-prevPos);
+			    // Same drawing
+			    QPainterPath path;
+			    path.moveTo(prevPos, c_vpos_prv);
+			    path.cubicTo(prevPos + wPos, c_vpos_prv, averPos - wPos, c_vpos, averPos, c_vpos);
+			    pnt.drawPath(path);
+			} else pnt.drawLine(prevPos, c_vpos_prv, averPos, c_vpos);
 		    } else
 			for(int sps = prevPos+1; sps <= averPos; sps++)
 			    pnt.drawLine(sps, z_vpos, sps, vmin(z_vpos-trpen.width(),c_vpos));

@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.SQLite file: bd_sqlite.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"4.0.12"
+#define MOD_VER		"4.0.13"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -203,7 +203,7 @@ rep:
 	string err = _("Unknown error");
 	if(zErrMsg) { err = zErrMsg; sqlite3_free(zErrMsg); }
 
-	if(rc == SQLITE_BUSY) {	//Treat locked DBs
+	if(rc == SQLITE_BUSY || rc == SQLITE_CORRUPT) {	//Treating locked and corrupted DBs
 	    //Try to reconnect
 	    if((repCnt++) < 3)
 		try { enable(); goto rep; } catch(TError&) { }
