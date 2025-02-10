@@ -1,3 +1,25 @@
+2025-02-10 Roman (stable)
+- FIX:LibsDB.OscadaLibs: tmplib_DevLib.Incubator: Fixing value of the 'Transport (transport)' field.
+- !!:FIX:data/openscada-proj.in: Expanding the crashHandler() to work for the User Projects,
+	that is not only for ones in the system directory.
+    !!: Refactoring the algorithm of processing the projects in the System and User directory, that is fixing
+	of creation the project directory in the System directory at presence the System configuration file.
+- SYS,DAQ.{MMS.libMMS,OPC_UA.libOPC_UA},Special.SystemTests: Functions with arguments of the printf() format
+    appended by the argument "__attribute__ ((format (printf, 3, 4)))".
+- !:FIX:DAQ,DAQ.DAQGate: Fixed in remote archives detection for temporarily empty ones, that is no source.
+    DAQ.DAQGate: Added of detection of changing the syncing periodicity in the CRON mode for fast applying
+	after long intervals.
+- Protocol.HTTP: Improving some original messages.
+- !!!!:FIX:Transport.{SSL,Sockets}: Fixing a hard-detected problem of substitition wrong addresses during
+	the addresses resolving by getservbyname_r() from other thread, that is from GLibC 2.24 there forced
+	using getaddrinfo() as more correct or inet_pton() + locked getservbyname_r() on old systems.
+    FIX: Fixing of using htons() and ntohs() and several improvement of treating the structures
+	sockaddr_storage and sockaddr, also as errors processing in TTransSock::addrResolve().
+    Moving gethostbyname_r() to dynamic memory allocation.
+    Switching TTransSock::addrGet() completely to getnameinfo() and appending of detection wrong family addresses.
+- UI.WebCfgD: The page refreshing action appended also by the tree updating.
+
+
 2025-01-21 Roman (stable)
 - FIX:SYS: Fixing time2str() in processing seconds.
     FIX: Fixing the User API functions time2str(), cpct2str(), str2time() in the dynamic translation.

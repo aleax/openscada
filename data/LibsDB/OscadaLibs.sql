@@ -5649,7 +5649,7 @@ The statistics of a separate machine include: the number of received and process
 Author: Roman Savochenko <roman@oscada.org>
 Total complexity: 4.3 HD
 Sponsored by: Vinnica Poultry Farm
-Version: 1.0.0
+Version: 1.0.1
 License: GPLv2','','',240,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(data, buf) {
@@ -17360,7 +17360,7 @@ Rows in the form "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".',0,36,'#<Sn
 Рядки у форматі "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".','','');
 INSERT INTO tmplib_DevLib_io VALUES('ergomera625','tr','Output transport',4,0,'',6,'Выходной транспорт','','Вихідний транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('ergomera625','this','Object',4,0,'',7,'Объект','','Об''єкт','','');
-INSERT INTO tmplib_DevLib_io VALUES('Incubator','transport','Transport',0,64,'Sockets.LE:10.39.170.2:9761',0,'Транспорт','','Транспорт','','');
+INSERT INTO tmplib_DevLib_io VALUES('Incubator','transport','Transport',0,64,'Sockets.Inkubator:10.39.170.20:4001',0,'Транспорт','','Транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('Incubator','addr','Device address [0...255], and -1 for the passive mode',1,64,'1',1,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('Incubator','tmCon','Reconnection time, data missing for passive, in seconds',1,64,'10',2,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('Incubator','tmToEVAL','Time of missing the machine data to set EVAL',1,64,'120',3,'','','','','');

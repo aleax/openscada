@@ -349,7 +349,7 @@ class TSYS : public TCntrNode
 	static string sepstr2path( const string &str, char sep = '.' );
 	static string strEncode( const string &in, Code tp, const string &opt = "" );
 	static string strDecode( const string &in, Code tp = Custom, const string &opt = "" );
-	static string strMess( const char *fmt, ... );
+	static string strMess( const char *fmt, ... ) __attribute__ ((format (printf, 1, 2)));
 	static string strLabEnum( const string &base, bool onlyDec = true );
 
 	static string strCompr( const string &in, int lev = -1 );

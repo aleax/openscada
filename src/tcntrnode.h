@@ -188,9 +188,9 @@ class TCntrNode
 	virtual void AHDConnect( );
 	virtual bool AHDDisConnect( );
 
-	void mess_sys( int8_t level, const char *fmt,  ... );
-	TError err_sys( const char *fmt,  ... ) const;
-	TError err_sys( int cod, const char *fmt,  ... ) const;
+	void mess_sys( int8_t level, const char *fmt,  ... ) __attribute__ ((format (printf, 3, 4)));
+	TError err_sys( const char *fmt,  ... ) const __attribute__ ((format (printf, 2, 3)));
+	TError err_sys( int cod, const char *fmt,  ... ) const __attribute__ ((format (printf, 3, 4)));
 
 	// Properties
 	TVariant property( const string &id, const TVariant &val, const string &grp = "sys" );

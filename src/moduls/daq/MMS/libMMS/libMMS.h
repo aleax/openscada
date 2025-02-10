@@ -1,7 +1,7 @@
 
 //OpenSCADA MMS(IEC-9506) implementation library file: libMMS.h
 /******************************************************************************
- *   Copyright (C) 2014-2021 by Roman Savochenko, <roman@oscada.org>	      *
+ *   Copyright (C) 2014-2025 by Roman Savochenko, <roman@oscada.org>	      *
  *									      *
  *   This library is free software; you can redistribute it and/or modify     *
  *   it under the terms of the GNU Lesser General Public License as	      *
@@ -76,7 +76,7 @@ extern string ll2s( int64_t val );
 extern string r2s( double val, int prec = 15, char tp = 'g' );
 extern double s2r( const string &val );
 extern string strParse( const string &path, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
-extern string strMess( const char *fmt, ... );
+extern string strMess( const char *fmt, ... ) __attribute__ ((format (printf, 1, 2)));
 extern void setBS( string &vl, uint32_t n );
 extern bool tryBS( const string &vl, uint32_t n );
 
@@ -87,8 +87,8 @@ class Error
 {
     public:
 	//Methods
-	Error( const char *fmt, ... );
-	Error( int cod, const char *fmt, ... );
+	Error( const char *fmt, ... ) __attribute__ ((format (printf, 2, 3)));
+	Error( int cod, const char *fmt, ... ) __attribute__ ((format (printf, 3, 4)));
 
 	//Attributes
 	int	cod;

@@ -246,7 +246,8 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		    aNd->childAdd("v")->setText(vl);
 		}
 
-		if(!aNd->childSize()) { opt->childDel(aNd); iA--; }
+		//if(!aNd->childSize()) { opt->childDel(aNd); iA--; }	//!!!! Do not remove empty <ael> tag since it is a sign
+									//     of the archive presence and data missing is temporary
 	    }
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))		//Multi attributes set

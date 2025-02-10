@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 09:00+0300\n"
+"POT-Creation-Date: 2025-02-09 23:31+0200\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -32,10 +32,7 @@ msgstr ""
 #, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
-"    --getaddrinfo[=<lev>] Use getaddrinfo() for resolving all addresses.\n"
-"                        <lev> - level of using:\n"
-"                                1(default) - with global resource locking;\n"
-"                                2 - without the locking.\n"
+"    --getaddrinfo[=<on>] Use getaddrinfo() for resolving all addresses.\n"
 "\n"
 msgstr ""
 
@@ -50,6 +47,9 @@ msgstr ""
 
 #, c-format
 msgid "Port '%s' is wrong."
+msgstr ""
+
+msgid "No memory for the name resolver."
 msgstr ""
 
 #, c-format
@@ -76,11 +76,19 @@ msgstr ""
 msgid "Unknown error %d from gethostbyname() for '%s'."
 msgstr ""
 
+msgid "Nothing resolved."
+msgstr ""
+
+#, c-format
+msgid "Unknown network family %d."
+msgstr ""
+
 #, c-format
 msgid "Error the address '%s': '%s (%d)'"
 msgstr "Ошибка адреса '%s': '%s (%d)'"
 
-msgid "sockaddr to large."
+#, fuzzy
+msgid "Sockaddr too large."
 msgstr "sockaddr очень большой."
 
 #, fuzzy
@@ -194,6 +202,21 @@ msgstr "Файл сертификатов '%s' обновлен, перепод�
 msgid "Reconnect due to lack of input activity to '%s'."
 msgstr ""
 
+#, fuzzy, c-format
+msgid "Write: wrote %s."
+msgstr "Записано %s."
+
+#, fuzzy, c-format
+msgid "Error writing '%s (%d)'"
+msgstr "Ошибка записи: %s"
+
+msgid "No data wrote"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "%d:> Transmitted directly to '%s'\n"
+msgstr "%d:> Передано на '%s'\n"
+
 #, c-format
 msgid "The input transport closed by the error: %s"
 msgstr "Входной транспорт закрыт по ошибке: %s"
@@ -254,12 +277,12 @@ msgstr "Объект входного протокола '%s' закрылся �
 msgid "Error requesting the protocol."
 msgstr "Ошибка запроса протокола."
 
-#, c-format
-msgid "New client %d of '%s' connected"
+#, fuzzy, c-format
+msgid "New client %d from '%s' connected"
 msgstr "Подключен новый клиент %d из '%s'"
 
-#, c-format
-msgid "The client %d of '%s' disconnected"
+#, fuzzy, c-format
+msgid "Client %d from '%s' disconnected"
 msgstr "Отключен клиент %d из '%s'"
 
 msgid "Active connections"

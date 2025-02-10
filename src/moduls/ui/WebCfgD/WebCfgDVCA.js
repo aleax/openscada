@@ -2283,7 +2283,7 @@ if(actTreeUpdt) {
 }
 //  Update actions
 var actUpdate = document.getElementById('actUpdate');
-if(actUpdate) actUpdate.onclick = function()	{ if(this.className=='active') pageRefresh(); return false; }
+if(actUpdate) actUpdate.onclick = function()	{ if(this.className=='active') pageRefresh(); treeUpdate(); return false; }
 var actStart = document.getElementById('actStart');
 if(actStart) actStart.onclick = function()	{ if(this.className=='active') pageCyclRefrStart(); return false; }
 var actStop = document.getElementById('actStop');

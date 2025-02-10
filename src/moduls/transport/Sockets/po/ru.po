@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 4.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 09:00+0300\n"
+"POT-Creation-Date: 2025-02-09 23:38+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -30,6 +30,9 @@ msgstr ""
 
 #, c-format
 msgid "Port '%s' is wrong."
+msgstr ""
+
+msgid "No memory for the name resolver."
 msgstr ""
 
 #, c-format
@@ -56,11 +59,19 @@ msgstr ""
 msgid "Unknown error %d from gethostbyname() for '%s'."
 msgstr ""
 
+msgid "Nothing resolved."
+msgstr ""
+
+#, c-format
+msgid "Unknown network family %d."
+msgstr ""
+
 #, c-format
 msgid "Error the address '%s': '%s (%d)'"
 msgstr "Ошибка адреса '%s': '%s (%d)'"
 
-msgid "sockaddr to large."
+#, fuzzy
+msgid "Sockaddr too large."
 msgstr "sockaddr очень большой."
 
 msgid ""
@@ -135,10 +146,7 @@ msgstr ""
 #, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
-"    --getaddrinfo[=<lev>] Use getaddrinfo() for resolving all addresses.\n"
-"                        <lev> - level of using:\n"
-"                                1(default) - with global resource locking;\n"
-"                                2 - without the locking.\n"
+"    --getaddrinfo[=<on>] Use getaddrinfo() for resolving all addresses.\n"
 "\n"
 msgstr ""
 
@@ -538,6 +546,10 @@ msgstr "Временные интервалы"
 
 msgid "Attempts"
 msgstr "Попыток"
+
+#, fuzzy
+#~ msgid "Sockaddr to large."
+#~ msgstr "sockaddr очень большой."
 
 #, fuzzy
 #~ msgid "sockaddr very big."

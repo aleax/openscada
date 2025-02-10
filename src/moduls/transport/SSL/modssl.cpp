@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.SSL file: modssl.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -56,7 +56,7 @@
 #define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.7.2"
+#define MOD_VER		"5.0.1"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and supported SSL-TLS depending on the library version.")
@@ -93,11 +93,19 @@ using namespace MSSL;
 //************************************************
 //* TTransSock					 *
 //************************************************
-TTransSock::TTransSock( string name ) : TTypeTransport(MOD_ID), ctxIn(NULL), ctxOut(NULL), use_getaddrinfo(0)
+TTransSock::TTransSock( string name ) : TTypeTransport(MOD_ID), ctxIn(NULL), ctxOut(NULL), use_getaddrinfo(true)
 {
     mod = this;
 
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
+
+    //getaddrinfo() is adapted to MT on modern systems, but on old ones it has the same problems
+    //with substitution result of one thread to other, that is it call must be globbaly locked,
+    //so there better to use inet_pton() and gethostbyname() with different locks and preventing
+    //of long locking in resolving the direct IP together resolving names.
+#if !__GLIBC_PREREQ(2,24)
+    use_getaddrinfo = false;
+#endif
 
     //CRYPTO reentrant init
     bufRes = (pthread_mutex_t*)malloc(CRYPTO_num_locks() * sizeof(pthread_mutex_t));
@@ -160,10 +168,7 @@ string TTransSock::optDescr( )
 {
     return TSYS::strMess(_(
 	"======================= Module <%s:%s> options =======================\n"
-	"    --getaddrinfo[=<lev>] Use getaddrinfo() for resolving all addresses.\n"
-	"                        <lev> - level of using:\n"
-	"                                1(default) - with global resource locking;\n"
-	"                                2 - without the locking.\n"
+	"    --getaddrinfo[=<on>] Use getaddrinfo() for resolving all addresses.\n"
 	"\n"), MOD_TYPE,MOD_ID);
 }
 
@@ -237,7 +242,7 @@ void TTransSock::load_( )
 
     //Load parameters from command line
     if(SYS->cmdOptPresent("getaddrinfo")) {
-	use_getaddrinfo = 1;
+	use_getaddrinfo = true;
 	string tvl = SYS->cmdOpt("getaddrinfo");
 	if(tvl.size()) use_getaddrinfo = s2i(tvl);
     }
@@ -261,9 +266,8 @@ TTransportOut *TTransSock::Out( const string &name, const string &idb )	{ return
 
 string TTransSock::addrResolve( const string &host, const string &port, vector<sockaddr_storage> &addrs, bool isServer )
 {
+    string aErr;
     static struct sockaddr_storage ss;
-
-    memset(&ss, 0, sizeof(ss));
 
     if(!mod->use_getaddrinfo) {
 	// Checking for port
@@ -271,76 +275,101 @@ string TTransSock::addrResolve( const string &host, const string &port, vector<s
 	struct servent servbuf, *sp;
 	int stPort = s2i(port);
 	if(stPort == 0 && getservbyname_r(port.c_str(),"tcp",&servbuf,sBuf,sizeof(sBuf),&sp) == 0 && sp)
-	    stPort = htons(sp->s_port);
+	    stPort = ntohs(sp->s_port);
 	if(stPort == 0) return TSYS::strMess(_("Port '%s' is wrong."), port.c_str());
 
 	// Checking directly for static addresses
-	char stAddr[sizeof(in6_addr)];
-	if(!host.size() || inet_pton(AF_INET,host.c_str(),stAddr) == 1) {
-	    ((sockaddr_in*)&ss)->sin_family = AF_INET;
-	    if(host.size()) ((sockaddr_in*)&ss)->sin_addr = *(in_addr*)stAddr;
-	    else ((sockaddr_in*)&ss)->sin_addr.s_addr = INADDR_ANY;
-	    ((sockaddr_in*)&ss)->sin_port = ntohs(stPort);
+	memset(&ss, 0, sizeof(ss));
+
+	if(host.empty() || inet_pton(AF_INET,host.c_str(),&((sockaddr_in*)&ss)->sin_addr) == 1) {
+	    if(host.empty()) ((sockaddr_in*)&ss)->sin_addr.s_addr = INADDR_ANY;
+	    ((sockaddr_in*)&ss)->sin_family = ((sockaddr*)&ss)->sa_family = AF_INET;
+	    ((sockaddr_in*)&ss)->sin_port = htons(stPort);
 	    addrs.push_back(ss);
 	    return "";
 	}
-	if(inet_pton(AF_INET6,host.c_str(),stAddr) == 1) {
-	    ((sockaddr_in6*)&ss)->sin6_family = AF_INET6;
-	    ((sockaddr_in6*)&ss)->sin6_addr = *(in6_addr*)stAddr;
-	    ((sockaddr_in6*)&ss)->sin6_port = ntohs(stPort);
+	if(inet_pton(AF_INET6,host.c_str(),&((sockaddr_in6*)&ss)->sin6_addr) == 1) {
+	    ((sockaddr_in6*)&ss)->sin6_family = ((sockaddr*)&ss)->sa_family = AF_INET6;
+	    ((sockaddr_in6*)&ss)->sin6_port = htons(stPort);
 	    addrs.push_back(ss);
 	    return "";
 	}
+
+	MtxAlloc addrRes(*SYS->commonLock("gethostbyname()"), true);
 
 	//Dynamic by reentrant gethostbyname()
-	char hBuf[prmStrBuf_SZ];
+	int hBufLen = 100, herr;
+	char *hBuf = (char *)malloc(hBufLen);
 	struct hostent hostbuf, *hp = NULL;
-	int herr;
-	gethostbyname_r(host.c_str(), &hostbuf, hBuf, sizeof(hBuf), &hp, &herr);
-
-	if(!hp) switch(herr) {
+	while(hBuf && gethostbyname_r(host.c_str(),&hostbuf,hBuf,hBufLen,&hp,&herr) == ERANGE) {
+	    hBufLen *= 2;
+	    char *tBuf = (char*)realloc(hBuf, hBufLen);
+	    if(tBuf) hBuf = tBuf; else { free(hBuf); hBuf = NULL; }
+	}
+	if(!hBuf) aErr = _("No memory for the name resolver.");
+	else if(!hp) switch(herr) {
 	    case HOST_NOT_FOUND:
-		return TSYS::strMess(_("Host '%s' is not found."), host.c_str());
+		aErr = TSYS::strMess(_("Host '%s' is not found."), host.c_str());
+		break;
 	    case NO_ADDRESS:
-		return TSYS::strMess(_("The requested name '%s' has no IP address."), host.c_str());
+		aErr = TSYS::strMess(_("The requested name '%s' has no IP address."), host.c_str());
+		break;
 	    case NO_RECOVERY:
-		return TSYS::strMess(_("A non-recoverable name server error occurred while '%s'."), host.c_str());
+		aErr = TSYS::strMess(_("A non-recoverable name server error occurred while '%s'."), host.c_str());
+		break;
 	    case TRY_AGAIN:
-		return TSYS::strMess(_("A temporary error occurred on an authoritative name server for '%s'."), host.c_str());
+		aErr = TSYS::strMess(_("A temporary error occurred on an authoritative name server for '%s'."), host.c_str());
+		break;
 	    case ERANGE:
-		return TSYS::strMess(_("The requested name '%s' is resolved to very many addresses."), host.c_str());
-	    default: return TSYS::strMess(_("Unknown error %d from gethostbyname() for '%s'."), herr, host.c_str());
+		aErr = TSYS::strMess(_("The requested name '%s' is resolved to very many addresses."), host.c_str());
+		break;
+	    default:
+		aErr = TSYS::strMess(_("Unknown error %d from gethostbyname() for '%s'."), herr, host.c_str()); break;
 	}
-	if(hp->h_addrtype == AF_INET6) { ((sockaddr_in6*)&ss)->sin6_family = AF_INET6; ((sockaddr_in6*)&ss)->sin6_port = ntohs(stPort); }
-	else { ((sockaddr_in*)&ss)->sin_family = AF_INET; ((sockaddr_in*)&ss)->sin_port = ntohs(stPort); }
+	else if(!(hp->h_addr_list) || !*(hp->h_addr_list)) aErr = _("Nothing resolved.");
+	else for(char **pAddr = hp->h_addr_list; *pAddr; ++pAddr) {
+	    memset(&ss, 0, sizeof(ss));
+	    if(hp->h_addrtype == AF_INET6) {
+		((sockaddr_in6*)&ss)->sin6_family = ((sockaddr*)&ss)->sa_family = AF_INET6;
+		((sockaddr_in6*)&ss)->sin6_addr = *(in6_addr*)(*pAddr);
+		((sockaddr_in6*)&ss)->sin6_port = htons(stPort);
+		addrs.push_back(ss);
+	    }
+	    else if(hp->h_addrtype == AF_INET) {
+		((sockaddr_in*)&ss)->sin_family = ((sockaddr*)&ss)->sa_family = AF_INET;
+		((sockaddr_in*)&ss)->sin_addr = *(in_addr*)(*pAddr);
+		((sockaddr_in*)&ss)->sin_port = htons(stPort);
+		addrs.push_back(ss);
 
-	for(char **pAddr = hp->h_addr_list; *pAddr; ++pAddr) {
-	    if(hp->h_addrtype == AF_INET6) ((sockaddr_in6*)&ss)->sin6_addr = *(in6_addr*)(*pAddr);
-	    else ((sockaddr_in*)&ss)->sin_addr = *(in_addr*)(*pAddr);
-	    addrs.push_back(ss);
+		aErr += TSYS::strMess("gethostbyname_r(): %d: '%s' > '%s' > '%s'. ",
+		    addrs.size()-1, (host+":"+port).c_str(), addrGet(ss).c_str(), addrGet(addrs.back()).c_str());
+	    }
+	    else aErr = TSYS::strMess(_("Unknown network family %d."), ((sockaddr*)&ss)->sa_family);
 	}
-	return "";
+	if(hBuf) { free(hBuf); hBuf = NULL; }
+
+	return aErr;
     }
 
     //Dynamic by getaddrinfo()
-    MtxAlloc aRes(*SYS->commonLock("getaddrinfo"));
-    if(mod->use_getaddrinfo == 1) aRes.lock();
-
-    string aErr;
-    struct addrinfo hints, *res;
+    struct addrinfo hints, *res = NULL;
     memset(&hints, 0, sizeof(hints));
     hints.ai_socktype = SOCK_STREAM;
-    if(isServer) hints.ai_flags = AI_PASSIVE;	//For server side all addresses allow 
+    if(isServer) hints.ai_flags = AI_PASSIVE;	//For server side all addresses allow
     int error;
 
     if((error=getaddrinfo(host.size()?host.c_str():NULL,(port.size()?port.c_str():DEF_PORT),&hints,&res)))
-	throw TError(mod->nodePath().c_str(), _("Error the address '%s': '%s (%d)'"), (host+":"+port).c_str(), gai_strerror(error), error);
-    for(struct addrinfo *iAddr = res; iAddr != NULL; iAddr = iAddr->ai_next) {
-	if(iAddr->ai_addrlen > sizeof(ss)) { aErr = _("sockaddr to large."); continue; }
-	memcpy(&ss, iAddr->ai_addr, iAddr->ai_addrlen);
-	addrs.push_back(ss);
+	aErr = TSYS::strMess(_("Error the address '%s': '%s (%d)'"), (host+":"+port).c_str(), gai_strerror(error), error);
+    else if(!res) aErr = _("Nothing resolved.");
+    else for(struct addrinfo *iAddr = res; iAddr; iAddr = iAddr->ai_next) {
+	if(iAddr->ai_addrlen > sizeof(ss)) aErr = _("Sockaddr too large.");
+	else {
+	    memset(&ss, 0, sizeof(ss));
+	    memcpy(&ss, iAddr->ai_addr, iAddr->ai_addrlen);
+	    addrs.push_back(ss);
+	}
     }
-    freeaddrinfo(res);
+    if(res) freeaddrinfo(res);
 
     return aErr;
 }
@@ -350,9 +379,14 @@ string TTransSock::addrGet( const sockaddr_storage &addr )
     if(((sockaddr*)&addr)->sa_family == AF_INET6) {
 	char aBuf[INET6_ADDRSTRLEN];
 	getnameinfo((sockaddr*)&addr, sizeof(addr), aBuf, sizeof(aBuf), 0, 0, NI_NUMERICHOST);
-	return string("[") + aBuf + "]:" + i2s(htons(((sockaddr_in6*)&addr)->sin6_port));
+	return string("[") + aBuf + "]:" + i2s(ntohs(((sockaddr_in6*)&addr)->sin6_port));
     }
-    return string(inet_ntoa(((sockaddr_in*)&addr)->sin_addr)) + ":" + i2s(htons(((sockaddr_in*)&addr)->sin_port));
+    else if(((sockaddr*)&addr)->sa_family == AF_INET) {
+	char aBuf[INET_ADDRSTRLEN];
+	getnameinfo((sockaddr*)&addr, sizeof(addr), aBuf, sizeof(aBuf), 0, 0, NI_NUMERICHOST);
+	return string(aBuf) + ":" + i2s(ntohs(((sockaddr_in*)&addr)->sin_port));
+    }
+    else return "<UNKNOWN-FAMILY"+i2s(((sockaddr*)&addr)->sa_family)+">";
 }
 
 string TTransSock::addrHost( const string &addr )
@@ -546,7 +580,8 @@ void TSocketIn::start( )
 		aErr = tVl;
 
 	for(unsigned iA = 0; iA < addrs.size(); iA++) {
-	    connAddr = TTransSock::addrGet(addrs[iA]);
+	    sockaddr_storage &ss = addrs[iA];
+	    connAddr = TTransSock::addrGet(ss);
 	    try {
 		char err[255];
 
@@ -1314,8 +1349,9 @@ string TSocketOut::connectSSL( const string &addr, SSL **ssl, BIO **conn,
 
 	// Try for all addresses
 	for(unsigned iA = 0; iA < addrs.size(); iA++) {
+	    sockaddr_storage &ss = addrs[iA];
 	    try {
-		if((sockFd=socket((((sockaddr*)&addrs[iA])->sa_family==AF_INET6)?PF_INET6:PF_INET,SOCK_STREAM,0)) == -1)
+		if((sockFd=socket((((sockaddr*)&ss)->sa_family==AF_INET6)?PF_INET6:PF_INET,SOCK_STREAM,0)) == -1)
 		    throw TError(mod->nodePath().c_str(), _("Error creating TCP socket: %s!"), strerror(errno));
 		int vl = 1;
 		setsockopt(sockFd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
@@ -1323,7 +1359,7 @@ string TSocketOut::connectSSL( const string &addr, SSL **ssl, BIO **conn,
 		//Connect to the socket
 		int flags = fcntl(sockFd, F_GETFL, 0);
 		fcntl(sockFd, F_SETFL, flags|O_NONBLOCK);
-		int res = connect(sockFd, (sockaddr*)&addrs[iA], sizeof(addrs[iA]));
+		int res = connect(sockFd, (sockaddr*)&ss, sizeof(ss));
 		if(res == -1 && errno == EINPROGRESS) {
 		    struct timeval tv;
 		    socklen_t slen = sizeof(res);
@@ -1401,7 +1437,7 @@ string TSocketOut::connectSSL( const string &addr, SSL **ssl, BIO **conn,
 
 		fcntl(sockFd, F_SETFL, flags|O_NONBLOCK);
 
-		connAddr = TTransSock::addrGet(addrs[iA]);
+		connAddr = TTransSock::addrGet(ss);
 
 	    } catch(TError &err) {
 		aErr = err.mess;

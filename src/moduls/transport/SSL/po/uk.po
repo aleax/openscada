@@ -1,13 +1,13 @@
 # OpenSCADA.Transport.SSL translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.Transport.SSL package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2008-2023.
+# Roman Savochenko <roman@oscada.org>, 2008-2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 09:00+0300\n"
+"POT-Creation-Date: 2025-02-09 23:31+0200\n"
 "PO-Revision-Date: 2008-10-13 19:06+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -28,20 +28,13 @@ msgstr ""
 "Надає транспорт, заснований на безпечному шарі сокетів. Використано OpenSSL "
 "та підтримуються SSL-TLS залежно від версії бібліотеки."
 
-#, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
-"    --getaddrinfo[=<lev>] Use getaddrinfo() for resolving all addresses.\n"
-"                        <lev> - level of using:\n"
-"                                1(default) - with global resource locking;\n"
-"                                2 - without the locking.\n"
+"    --getaddrinfo[=<on>] Use getaddrinfo() for resolving all addresses.\n"
 "\n"
 msgstr ""
 "======================= Опції модуля <%s:%s> =============================\n"
-"    --getaddrinfo[=<lev>] Використати getaddrinfo() для вирішення усіх адрес.\n"
-"                        <lev> - рівень використання:\n"
-"                                1(типово) - із глобальним блокуванням ресурсу;\n"
-"                                2 - без блокування.\n"
+"    --getaddrinfo[=<on>] Використати getaddrinfo() для вирішення усіх адрес.\n"
 "\n"
 
 msgid "State"
@@ -56,6 +49,9 @@ msgstr "Клієнтські шифри"
 #, c-format
 msgid "Port '%s' is wrong."
 msgstr "Порт '%s' помилковий."
+
+msgid "No memory for the name resolver."
+msgstr "Немає пам'яті для вирішувача імен."
 
 #, c-format
 msgid "Host '%s' is not found."
@@ -81,12 +77,19 @@ msgstr "Запитана назва '%s' вирішується у надто б
 msgid "Unknown error %d from gethostbyname() for '%s'."
 msgstr "Невідома помилка %d від gethostbyname() для '%s'."
 
+msgid "Nothing resolved."
+msgstr "Нічого не вирішено."
+
+#, c-format
+msgid "Unknown network family %d."
+msgstr "Невідоме сімейство мережі %d."
+
 #, c-format
 msgid "Error the address '%s': '%s (%d)'"
 msgstr "Помилка адреси '%s': '%s (%d)'"
 
-msgid "sockaddr to large."
-msgstr "sockaddr дуже великий."
+msgid "Sockaddr too large."
+msgstr "Sockaddr дуже великий."
 
 msgid ""
 "SSL output transport has the address format \"{addr}[,{addrN}]:{port}\", "
@@ -193,6 +196,21 @@ msgid "Reconnect due to lack of input activity to '%s'."
 msgstr "Перепід'єднання через відсутність вхідної активності на '%s'."
 
 #, c-format
+msgid "Write: wrote %s."
+msgstr "Запис: записано %s."
+
+#, c-format
+msgid "Error writing '%s (%d)'"
+msgstr "Помилка запису '%s (%d)'"
+
+msgid "No data wrote"
+msgstr "Не записано даних"
+
+#, c-format
+msgid "%d:> Transmitted directly to '%s'\n"
+msgstr "%d:> Прямо передано до '%s'\n"
+
+#, c-format
 msgid "The input transport closed by the error: %s"
 msgstr "Вхідний транспорт закрито за помилкою: %s"
 
@@ -253,12 +271,12 @@ msgid "Error requesting the protocol."
 msgstr "Помилка запиту протоколу."
 
 #, c-format
-msgid "New client %d of '%s' connected"
-msgstr "Підключено новий клієнт %d з %s"
+msgid "New client %d from '%s' connected"
+msgstr "Підключено новий клієнт %d із %s"
 
 #, c-format
-msgid "The client %d of '%s' disconnected"
-msgstr "Відключено клієнт %d з %s"
+msgid "Client %d from '%s' disconnected"
+msgstr "Відключено клієнт %d із %s"
 
 msgid "Active connections"
 msgstr "Активні підключення"

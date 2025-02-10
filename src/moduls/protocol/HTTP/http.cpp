@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.HTTP file: http.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.9.1"
+#define MOD_VER		"3.9.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -978,7 +978,7 @@ string TProtIn::getIndex( const string &user, const string &sender )
 	    "<p>"+TSYS::strMess(_("Select the necessary Web-module from the list below, <a href='%s'>logout</a> or <a href='%s'>login as an another user</a>."),("/logout"+prms).c_str(),("/login"+prms).c_str())+"</p>";
     else {
 	answer = answer +
-	    "<p style='color: #CF8122;'>"+_("You are not logged in the system!")+"</p>"
+	    "<p style='color: #CF8122;'>"+_("You are not logged in!")+"</p>"
 	    "<p>"+TSYS::strMess(_("To use some modules you must be logged in. <a href='%s'>Login now</a>."),("/login"+prms).c_str())+"</p>";
 	string a_log = mod->autoLogGet(sender);
 	if(!a_log.empty())

@@ -50,11 +50,11 @@ gdbCall()
 
 crashHandler()
 {
-    prjNm=$1
-    dPrjRez=$dPrj/$prjNm
-
     if test -z "$(which gdb 2> /dev/null)"; then echo "No GDB program present!"; return 0; fi
 
+    prjNm=$1
+    dPrjRez=$dPrj/$prjNm
+    if test -n "$dPrjUser" -a -d $dPrjUser/$prjNm; then dPrjRez=$dPrjUser/$prjNm; fi
     cd $dPrjRez
 
     if test "$2" = cores; then
@@ -115,31 +115,33 @@ case "$1" in
     prjNm=$2
     dPrjRez=$dPrj/$prjNm
 
-    #User projects directory processing
-    if test -n "$dPrjUser" -a ! -d $dPrjUser; then mkdir $dPrjUser; fi
-    if test ! -d $dPrjRez -o ! -w $dPrjRez && test -n "$dPrjUser" -a -w $dPrjUser; then
-	dPrjRez=$dPrjUser/$prjNm
-	#if test -d $dPrj/LibsDB -a ! -d $dPrjUser/LibsDB; then cp -R $dPrj/LibsDB $dPrjUser; fi
-	# Creating the user LibsDB folder and setting links to the system DB files of the libraries
-	mkdir -p $dPrjUser/LibsDB/
-	ln -s $dPrj/LibsDB/* $dPrjUser/LibsDB/ || cp $dPrj/LibsDB/* $dPrjUser/LibsDB/
+    # Processing the system projects' directory
+    if test ! -d $dPrjRez -a -w $dPrj -a -f $dSysCfg/oscada_$prjNm.xml; then mkdir -p $dPrjRez; fi
 
-	if test ! -d $dPrjRez -a -d $dPrj/$prjNm; then
+    # Processing the user projects' directory
+    if test ! -d $dPrjRez -o ! -w $dPrjRez && test -n "$dPrjUser"; then
+	if test ! -d $dPrjUser; then mkdir -p $dPrjUser; fi
+	if test ! -d $dPrjUser/LibsDB/; then
+	    mkdir -p $dPrjUser/LibsDB/
+	    ln -s $dPrj/LibsDB/* $dPrjUser/LibsDB/ || cp $dPrj/LibsDB/* $dPrjUser/LibsDB/
+	fi
+	dPrjRez=$dPrjUser/$prjNm
+	if test ! -d $dPrjRez; then
 	    mkdir -p $dPrjRez
-	    cp -R $dPrj/$prjNm/* $dPrjRez;
-	    if test ! -e $dPrjRez/oscada.xml; then cp $dSysCfg/oscada_$prjNm.xml $dPrjRez/oscada.xml; fi
+	    if test -d $dPrj/$prjNm; then
+		cp -R $dPrj/$prjNm/* $dPrjRez
+		if test ! -f $dPrjRez/oscada.xml; then cp $dSysCfg/oscada_$prjNm.xml $dPrjRez/oscada.xml; fi
+	    fi
 	fi
     fi
 
-    #Generic projects directory processing
-    if test ! -d $dPrjRez && test $1 = create -o -w $dSysCfg/oscada_$prjNm.xml; then mkdir -p $dPrjRez; fi
-    if test -d $dPrjRez; then
-	if test ! -e $dPrjRez/oscada.xml -a ! -w $dSysCfg/oscada_$prjNm.xml; then cp $dSysCfg/oscada_start.xml $dPrjRez/oscada.xml; fi
+    # Initiating common files and checking
+    if test -d $dPrjRez -a -w $dPrjRez; then
+	if test ! -f $dPrjRez/oscada.xml -a ! -w $dSysCfg/oscada_$prjNm.xml; then cp $dSysCfg/oscada_start.xml $dPrjRez/oscada.xml; fi
 	if test ! -d $dPrjRez/LibsDB -a ! -L $dPrjRez/LibsDB; then ln -s ../LibsDB $dPrjRez/LibsDB; fi
 	if test ! -d $dPrjRez/LibsDB -a ! -L $dPrjRez/LibsDB; then cp -R $dPrjRez/../LibsDB $dPrjRez/LibsDB; fi
-	if test ! -d $dPrjRez/ARCHIVES/MESS; then mkdir -p $dPrjRez/ARCHIVES/MESS; fi
-	if test ! -d $dPrjRez/ARCHIVES/VAL; then mkdir -p $dPrjRez/ARCHIVES/VAL; fi
-	if test -n "$(which xdg-user-dir)" && test -n "$(xdg-user-dir DESKTOP)" -a $1 = create; then
+	if test ! -d $dPrjRez/ARCHIVES/; then mkdir -p $dPrjRez/ARCHIVES/MESS $dPrjRez/ARCHIVES/VAL; fi
+	if test $1 = create -a -n "$(which xdg-user-dir)" && test -n "$(xdg-user-dir DESKTOP)"; then
 	    DESKTOP_DIR="$(xdg-user-dir DESKTOP)"
 	    if test -n "$DESKTOP_DIR"  -a ! -f "$DESKTOP_DIR/openscada_$prjNm.desktop"; then
 		cp $dData/applications/openscada.desktop "$DESKTOP_DIR/openscada_$prjNm.desktop"
@@ -147,19 +149,16 @@ case "$1" in
 		sed -i "s/\(^\(Generic\|\)Name\(=\|\\[.*\\]=\).*\)/\1: $prjNm/" "$DESKTOP_DIR/openscada_$prjNm.desktop"
 	    fi
 	fi
+
+	# Checking for lost lock at it PID and openscada process in whole, and starting from the user directory
+	if test -f $dPrjRez/lock; then
+	    pid=`cat $dPrjRez/lock | sed -r 's/^0*([0-9]+).*/\1/'`
+	    if ! ps -A -o "pid cmd" | grep "^ *$pid.*openscada" > /dev/null; then rm $dPrjRez/lock; fi
+	fi
+
+	# Processing the core dump files "core[.*]" in the work directory
+	crashHandler $prjNm cores
     fi
-
-    #Checking for lost lock at it PID and openscada process in whole, and starting from the user directory
-    dPrjRez=$dPrjUser/$prjNm
-    if test ! -d $dPrjRez; then dPrjRez=$dPrj/$prjNm; fi
-
-    if test -f $dPrjRez/lock; then
-	pid=`cat $dPrjRez/lock | sed -r 's/^0*([0-9]+).*/\1/'`
-	if ! ps -A -o "pid cmd" | grep "^ *$pid.*openscada" > /dev/null; then rm $dPrjRez/lock; fi
-    fi
-
-    # Processing the core dump files "core[.*]" in the work directory
-    crashHandler $prjNm cores
     ;;
   remove)
     if test $# -lt 2; then echo "Not enough arguments!"; exit 1; fi

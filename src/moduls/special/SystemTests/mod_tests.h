@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.SystemTests file: test_kernel.h
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,7 +47,7 @@ class TTest: public TSpecial
 	void modStop( );
 
 	static string cat( );
-	void mess( const string &test, const char *fmt,  ... );
+	void mess( const string &test, const char *fmt,  ... ) __attribute__ ((format (printf, 3, 4)));
 	void prXMLNode( const string &cat, XMLNode *node, int level = 0 );
 
 	//> Test's functions

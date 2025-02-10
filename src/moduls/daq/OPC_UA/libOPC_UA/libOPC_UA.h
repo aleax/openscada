@@ -1,9 +1,9 @@
 
 //OpenSCADA OPC_UA implementation library file: libOPC_UA.h
 /********************************************************************************
- *   Copyright (C) 2009-2024 by Roman Savochenko, <roman@oscada.org>		*
+ *   Copyright (C) 2009-2025 by Roman Savochenko, <roman@oscada.org>		*
  *										*
- *   Version: 2.2.2								*
+ *   Version: 2.2.3								*
  *	* UA::symmetricEncrypt() and UA::symmetricDecrypt() merged		*
  *	  to UA::symmetricCrypt() and switched for using EVP_CipherInit()	*
  *	  and EVP_CipherUpdate() instead AES_cbc_encrypt();			*
@@ -380,7 +380,7 @@ extern string real2str( double val, int prec = 15, char tp = 'g' );
 extern double str2real( const string &val );
 extern string strParse( const string &path, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
 extern string strLine( const string &str, int level, int *off = NULL );
-extern string strMess( const char *fmt, ... );
+extern string strMess( const char *fmt, ... ) __attribute__ ((format (printf, 1, 2)));
 
 //***********************************************************
 //* Automatic POSIX mutex unlock object for OPC		    *
@@ -425,8 +425,8 @@ class OPCError
 {
     public:
     //Methods
-    OPCError( const char *fmt, ... );
-    OPCError( int cod, const char *fmt, ... );
+    OPCError( const char *fmt, ... ) __attribute__ ((format (printf, 2, 3)));
+    OPCError( int cod, const char *fmt, ... ) __attribute__ ((format (printf, 3, 4)));
 
     //Attributes
     int		cod;

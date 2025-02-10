@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the OpenSCADA.Transport.SSL package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
-# Roman Savochenko <roman@oscada.org>, 2011-2023.
+# Roman Savochenko <roman@oscada.org>, 2011-2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 09:00+0300\n"
+"POT-Creation-Date: 2025-02-09 23:31+0200\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -29,20 +29,13 @@ msgstr ""
 "Stellt Transport basierend auf der Secure-Sockets-Schicht bereit. Abhängig "
 "von der Bibliotheksversion wird OpenSSL verwendet und SSL-TLS unterstützt."
 
-#, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
-"    --getaddrinfo[=<lev>] Use getaddrinfo() for resolving all addresses.\n"
-"                        <lev> - level of using:\n"
-"                                1(default) - with global resource locking;\n"
-"                                2 - without the locking.\n"
+"    --getaddrinfo[=<on>] Use getaddrinfo() for resolving all addresses.\n"
 "\n"
 msgstr ""
 "======================= Module <%s:%s> options =======================\n"
-"    --getaddrinfo[=<lev>] Verwenden Sie getaddrinfo() zum Auflösen aller Adressen.\n"
-"                        <lev> - Nutzungsniveau:\n"
-"                                1 (Standard) - mit globaler Ressourcensperre;\n"
-"                                2 - ohne die Verriegelung.\n"
+"    --getaddrinfo[=<on>] Verwenden Sie getaddrinfo() zum Auflösen aller Adressen.\n"
 "\n"
 
 msgid "State"
@@ -58,6 +51,9 @@ msgstr "Client-Chiffren"
 msgid "Port '%s' is wrong."
 msgstr "Port „%s“ ist falsch."
 
+msgid "No memory for the name resolver."
+msgstr "Kein Speicher für den Namensauflöser."
+
 #, c-format
 msgid "Host '%s' is not found."
 msgstr "Host „%s“ wurde nicht gefunden."
@@ -72,7 +68,9 @@ msgstr "Während „%s“ ist ein nicht behebbarer Nameserverfehler aufgetreten.
 
 #, c-format
 msgid "A temporary error occurred on an authoritative name server for '%s'."
-msgstr "Auf einem autoritativen Nameserver für „%s“ ist ein temporärer Fehler aufgetreten."
+msgstr ""
+"Auf einem autoritativen Nameserver für „%s“ ist ein temporärer Fehler "
+"aufgetreten."
 
 #, c-format
 msgid "The requested name '%s' is resolved to very many addresses."
@@ -82,12 +80,19 @@ msgstr "Der angeforderte Name „%s“ wird in sehr viele Adressen aufgelöst."
 msgid "Unknown error %d from gethostbyname() for '%s'."
 msgstr "Unbekannter Fehler %d von gethostbyname() für „%s“."
 
+msgid "Nothing resolved."
+msgstr "Nichts gelöst."
+
+#, c-format
+msgid "Unknown network family %d."
+msgstr "Unbekannte Netzwerkfamilie %d."
+
 #, c-format
 msgid "Error the address '%s': '%s (%d)'"
 msgstr "Fehler bei der Adresse '%s': '%s (%d)'"
 
-msgid "sockaddr to large."
-msgstr "sockaddr zu groß."
+msgid "Sockaddr too large."
+msgstr "Sockaddr zu groß."
 
 msgid ""
 "SSL output transport has the address format \"{addr}[,{addrN}]:{port}\", "
@@ -202,6 +207,21 @@ msgid "Reconnect due to lack of input activity to '%s'."
 msgstr "Reconnect wegen fehlender Eingabeaktivität für '%s'."
 
 #, c-format
+msgid "Write: wrote %s."
+msgstr "Schreiben: geschrieben %s."
+
+#, c-format
+msgid "Error writing '%s (%d)'"
+msgstr "Fehler beim Schreiben '%s (%d)'"
+
+msgid "No data wrote"
+msgstr "Keine Daten geschrieben"
+
+#, c-format
+msgid "%d:> Transmitted directly to '%s'\n"
+msgstr "%d:> Direkt an '%s' übermittelt\n"
+
+#, c-format
 msgid "The input transport closed by the error: %s"
 msgstr "Der Eingabetransport wurde geschlossen durch den Fehler: %s"
 
@@ -262,11 +282,11 @@ msgid "Error requesting the protocol."
 msgstr "Fehler der Anfrage ans Protokoll."
 
 #, c-format
-msgid "New client %d of '%s' connected"
+msgid "New client %d from '%s' connected"
 msgstr "Ein neuer Kunde %d aus '%s' verbunden"
 
 #, c-format
-msgid "The client %d of '%s' disconnected"
+msgid "Client %d from '%s' disconnected"
 msgstr "Client %d aus '%s' getrennt"
 
 msgid "Active connections"

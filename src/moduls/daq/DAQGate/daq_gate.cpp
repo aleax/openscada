@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.14.0"
+#define MOD_VER		"2.14.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -546,6 +546,7 @@ void *TMdContr::Task( void *icntr )
     TMdContr &cntr = *(TMdContr *)icntr;
     int64_t tCnt, tPrev = TSYS::curTime();
     double syncCnt = 0;
+    int syncPerPrev = cntr.syncPer();
     unsigned int div = 0;
 
     cntr.endrunReq = false;
@@ -594,9 +595,12 @@ void *TMdContr::Task( void *icntr )
 	    if(!isAccess) { tPrev = tCnt; TSYS::taskSleep(cntr.period()?cntr.period():1e9); continue; }
 	    else {
 		if(cntr.syncPer() > 0) {	//Enable sync
+		    // Periodically
 		    div = cntr.period() ? vmax(2,(unsigned int)(cntr.syncPer()/(1e-9*cntr.period()))) : 0;
-		    if(syncCnt <= 0) syncCnt = cntr.syncPer();
+		    // At CRON
+		    if(syncCnt <= 0 || syncPerPrev != cntr.syncPer()) syncCnt = cntr.syncPer();
 		    syncCnt = vmax(0, syncCnt-1e-6*(tCnt-tPrev));
+		    syncPerPrev = cntr.syncPer();
 		} else { div = 0; syncCnt = 1; }//Disable sync
 
 		//Parameters list update
@@ -830,7 +834,8 @@ void *TMdContr::Task( void *icntr )
 				    cntr.mStatTm = vmax(cntr.mStatTm, atoll(aNd->attr("tm").c_str()));
 				    if(vl.at().hasArch() == EVAL_BOOL) vl.at().setHasArch(false);
 				}
-				else if(aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize()) {
+				//!!!! Remote archive with no data will have empty <ael> tag
+				else if(aNd->name() == "ael" && !vl.at().arch().freeStat() /*&& aNd->childSize()*/) {
 				    vl.at().setHasArch(true);
 
 				    //  Setting the archive

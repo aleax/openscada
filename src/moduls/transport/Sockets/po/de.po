@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 4.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 09:00+0300\n"
+"POT-Creation-Date: 2025-02-09 23:38+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -33,6 +33,9 @@ msgstr ""
 msgid "Port '%s' is wrong."
 msgstr "Port „%s“ ist falsch."
 
+msgid "No memory for the name resolver."
+msgstr "Kein Speicher für den Namensauflöser."
+
 #, c-format
 msgid "Host '%s' is not found."
 msgstr "Host „%s“ wurde nicht gefunden."
@@ -47,7 +50,9 @@ msgstr "Während „%s“ ist ein nicht behebbarer Nameserverfehler aufgetreten.
 
 #, c-format
 msgid "A temporary error occurred on an authoritative name server for '%s'."
-msgstr "Auf einem autoritativen Nameserver für „%s“ ist ein temporärer Fehler aufgetreten."
+msgstr ""
+"Auf einem autoritativen Nameserver für „%s“ ist ein temporärer Fehler "
+"aufgetreten."
 
 #, c-format
 msgid "The requested name '%s' is resolved to very many addresses."
@@ -57,12 +62,19 @@ msgstr "Der angeforderte Name „%s“ wird in sehr viele Adressen aufgelöst."
 msgid "Unknown error %d from gethostbyname() for '%s'."
 msgstr "Unbekannter Fehler %d von gethostbyname() für „%s“."
 
+msgid "Nothing resolved."
+msgstr "Nichts gelöst."
+
+#, c-format
+msgid "Unknown network family %d."
+msgstr "Unbekannte Netzwerkfamilie %d."
+
 #, c-format
 msgid "Error the address '%s': '%s (%d)'"
 msgstr "Fehler bei der Adresse '%s': '%s (%d)'"
 
-msgid "sockaddr to large."
-msgstr "sockaddr zu groß."
+msgid "Sockaddr too large."
+msgstr "Sockaddr zu groß."
 
 msgid ""
 "Socket's output transport has the address format:\n"
@@ -140,17 +152,12 @@ msgstr ""
 #, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
-"    --getaddrinfo[=<lev>] Use getaddrinfo() for resolving all addresses.\n"
-"                        <lev> - level of using:\n"
-"                                1(default) - with global resource locking;\n"
-"                                2 - without the locking.\n"
+"    --getaddrinfo[=<on>] Use getaddrinfo() for resolving all addresses.\n"
 "\n"
 msgstr ""
 "======================= Module <%s:%s> options =======================\n"
-"    --getaddrinfo[=<lev>] Verwenden Sie getaddrinfo() zum Auflösen aller Adressen.\n"
-"                        <lev> - Nutzungsniveau:\n"
-"                                1 (Standard) - mit globaler Ressourcensperre;\n"
-"                                2 - ohne die Verriegelung.\n"
+"    --getaddrinfo[=<on>] Verwenden Sie getaddrinfo() zum Auflösen aller "
+"Adressen.\n"
 "\n"
 
 #, c-format
@@ -159,7 +166,8 @@ msgstr "Die Hostadresse '%s'. "
 
 #, c-format
 msgid "Connections %d, opened %d, last %s, closed by the limit %d. "
-msgstr "Verbindungen %d, geöffnet %d, zuletzt %s, geschlossen durch das Limit %d. "
+msgstr ""
+"Verbindungen %d, geöffnet %d, zuletzt %s, geschlossen durch das Limit %d. "
 
 #, c-format
 msgid "%s traffic in %s, out %s. "
@@ -246,7 +254,8 @@ msgid "%d:> Transmitted to '%s'\n"
 msgstr "%d:> Übertragen in '%s'\n"
 
 #, c-format
-msgid "Received CAN frame id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X%02X!"
+msgid ""
+"Received CAN frame id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X%02X!"
 msgstr ""
 "Empfangenen CAN-Rahmen id:%08X; dlc:%d; data:"
 "%02X%02X%02X%02X%02X%02X%02X%02X!"
@@ -548,4 +557,3 @@ msgstr "Zeitabstände"
 
 msgid "Attempts"
 msgstr "Versuche"
-

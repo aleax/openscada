@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.SSL file: modssl.h
 /***************************************************************************
- *   Copyright (C) 2008-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -264,7 +264,7 @@ class TTransSock: public TTypeTransport
 	//Attributes
 	SSL_CTX		*ctxIn, *ctxOut;
 
-	uint8_t		use_getaddrinfo;
+	bool		use_getaddrinfo;
 
     protected:
 	void load_( );

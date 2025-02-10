@@ -917,14 +917,14 @@ void TSYS::load_( )
     // Get name for the command of project switch
     if(!prjNm().size()) {
 	setPrjNm(cmdOpt("projName"));
-	if(!prjNm().size()) {
+	if(prjNm().empty()) {
 	    TArrayObj *rez = TRegExp("openscada_(.+)$").match(cmdOpt(""));
 	    if(rez) {
 		if(rez->size() >= 2) setPrjNm(rez->arGet(1).getS());
 		delete rez;
 	    }
 	}
-	if(!prjNm().size() && getenv("OSCADA_ProjName")) setPrjNm(getenv("OSCADA_ProjName"));
+	if(prjNm().empty() && getenv("OSCADA_ProjName")) setPrjNm(getenv("OSCADA_ProjName"));
 	if(prjNm().size() && !prjSwitch(prjNm())) setPrjNm("");
     }
 
