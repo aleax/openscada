@@ -374,7 +374,7 @@ class TTransportS : public TSubSYS
 	AutoHD<TTypeTransport> at( const string &iid ) const	{ return modAt(iid); }
 
 	static TVariant prm( string &cnt, const string &id, const TVariant &val = TVariant(), bool toWr = false );
-	static string cntrCmdPrm( XMLNode *opt, const string &path, const string &cnt );
+	static string cntrCmdPrm( TCntrNode *cntrO, XMLNode *opt, const string &path, const string &cnt );
 
     protected:
 	void load_( );

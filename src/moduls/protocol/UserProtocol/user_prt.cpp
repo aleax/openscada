@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.6.8"
+#define MOD_VER		"1.6.9"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -692,7 +692,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/up/st/timestamp",_("Date of modification"),R_R_R_,"root",SPRT_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/up/cfg",_("Configuration"))) {
-		TConfig::cntrCmdMake(opt,"/up/cfg",0,"root",SPRT_ID,RWRWR_);
+		TConfig::cntrCmdMake(this,opt,"/up/cfg",0,"root",SPRT_ID,RWRWR_);
 		if(!progTr()) ctrRemoveNode(opt, "/up/cfg/PR_TR");
 		ctrRemoveNode(opt, "/up/cfg/InPROG");
 		ctrRemoveNode(opt, "/up/cfg/OutPROG");
@@ -776,7 +776,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	}
 	opt->childAdd("el")->setText("");
     }
-    else if(a_path.find("/up/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SPRT_ID, RWRWR_);
+    else if(a_path.find("/up/cfg") == 0) TConfig::cntrCmdProc(this, opt, TSYS::pathLev(a_path,2), "root", SPRT_ID, RWRWR_);
     else if(a_path == "/in/WaitReqTm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(waitReqTm()));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))	setWaitReqTm(s2i(opt->text()));

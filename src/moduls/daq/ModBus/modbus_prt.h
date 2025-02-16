@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.ModBus file: modbus_prt.h
 /***************************************************************************
- *   Copyright (C) 2008-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define PRT_NAME	trS("Server ModBus")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"2.10.13"
+#define PRT_MVER	"2.10.14"
 #define PRT_AUTHORS	trS("Roman Savochenko")
 #define PRT_DESCR	trS("Provides implementation of ModBus protocols. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define PRT_LICENSE	"GPL2"

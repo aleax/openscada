@@ -2703,7 +2703,7 @@ bool SessWdg::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	    vector<string> list_a;
 	    attrList(list_a);
 	    for(unsigned iEl = 0; iEl < list_a.size(); iEl++) {
-		XMLNode *el = attrAt(list_a[iEl]).at().fld().cntrCmdMake(opt,"/attr",-1,owner().c_str(),grp().c_str(),permit()|R_R_R_);
+		XMLNode *el = attrAt(list_a[iEl]).at().fld().cntrCmdMake(this,opt,"/attr",-1,owner().c_str(),grp().c_str(),permit()|R_R_R_);
 		if(el) el->setAttr("len", "")->setAttr("wdgFlg", i2s(attrAt(list_a[iEl]).at().flgGlob()));
 	    }
 	}

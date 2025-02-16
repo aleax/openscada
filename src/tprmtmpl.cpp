@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tprmtmpl.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -694,10 +694,10 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 
     MtxAlloc res(lnkRes, true);
     //Get page info
-    if(opt->name() == "info" && ctrMkNode("area",opt,-1,pref.c_str(),_("Template configuration"))) {
+    if(opt->name() == "info" && obj->ctrMkNode("area",opt,-1,pref.c_str(),_("Template configuration"))) {
 	vector<string> list;
-	ctrMkNode("fld",opt,-1,(pref+"/attr_only").c_str(),_("Show attributes"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-	if(ctrMkNode("area",opt,-1,(pref+"/prm").c_str(),_("Parameters")))
+	obj->ctrMkNode("fld",opt,-1,(pref+"/attr_only").c_str(),_("Show attributes"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+	if(obj->ctrMkNode("area",opt,-1,(pref+"/prm").c_str(),_("Parameters")))
 	    for(int iIO = 0; iIO < ioSize(); iIO++) {
 		//Updating the selection items in the dynamic translation mode
 		if(func()->io(iIO)->flg()&IO::Selectable && Mess->translDyn() &&
@@ -723,7 +723,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 		    for(unsigned iL = 0; iL < list.size() && !f_ok; iL++)
 			if(list[iL] == nprm) f_ok = true;
 		    if(!f_ok) {
-			ctrMkNode("fld",opt,-1,(pref+"/prm/pr_"+i2s(iIO)).c_str(),nprm,RWRWR_,"root",SDAQ_ID,
+			obj->ctrMkNode("fld",opt,-1,(pref+"/prm/pr_"+i2s(iIO)).c_str(),nprm,RWRWR_,"root",SDAQ_ID,
 			    4, "tp","str", "dest","sel_ed", "select",(pref+"/prm/pl_"+i2s(iIO)).c_str(), "help",lnkHelp().c_str());
 			list.push_back(nprm);
 		    }
@@ -744,7 +744,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 				break;
 			    case IO::Object:	fullTxt = true;	break;
 			}
-		    XMLNode *wn = ctrMkNode("fld", opt, -1, (pref+"/prm/el_"+i2s(iIO)).c_str(), nprm1, RWRWR_, "root", SDAQ_ID, 1, "tp",tip);
+		    XMLNode *wn = obj->ctrMkNode("fld", opt, -1, (pref+"/prm/el_"+i2s(iIO)).c_str(), nprm1, RWRWR_, "root", SDAQ_ID, 1, "tp",tip);
 		    if(nOff < (int)nprm.size()) wn->setAttr("help",nprm.substr(nOff));
 		    if(wn && is_lnk) wn->setAttr("dest","sel_ed")->setAttr("select",pref+"/prm/ls_"+i2s(iIO))->
 					 setAttr("help",(wn->attr("help").size()?wn->attr("help")+"\n\n":"")+lnkHelp());
@@ -759,13 +759,13 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
     if(a_path.find(pref) != 0)	return false;
     a_path = a_path.substr(pref.size());
     if(a_path == "/attr_only") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
+	if(obj->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	    opt->setText(TBDS::genPrmGet(obj->nodePath()+"onlAttr",DEF_onlAttr,opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+	if(obj->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	    TBDS::genPrmSet(obj->nodePath()+"onlAttr",opt->text(),opt->attr("user"));
     }
     else if(a_path.find("/prm/pr_") == 0) {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
+	if(obj->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    string lnk_val = lnks[s2i(a_path.substr(8))].addr;
 	    bool isPath = (lnk_val.find("prm:") == 0);
 	    if(!SYS->daq().at().attrAt(TSYS::strParse(isPath?lnk_val.substr(4):lnk_val,0,"#"),isPath?0:'.',true,obj).freeStat()) {
@@ -774,7 +774,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 	    }
 	    else opt->setText(lnk_val);
 	}
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
+	if(obj->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    TParamContr *pC = dynamic_cast<TParamContr*>(obj);
 	    string p_nm = TSYS::strSepParse(TSYS::strLine(func()->io(s2i(a_path.substr(8)))->def(),0),0,'|');
 	    string p_vl = TSYS::strParse(opt->text(), 0, " ");
@@ -794,7 +794,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 	    obj->modif();
 	}
     }
-    else if((a_path.find("/prm/pl_") == 0 || a_path.find("/prm/ls_") == 0) && ctrChkNode(opt)) {
+    else if((a_path.find("/prm/pl_") == 0 || a_path.find("/prm/ls_") == 0) && obj->ctrChkNode(opt)) {
 	bool is_pl = (a_path.find("/prm/pl_") == 0);
 	string m_prm = lnks[s2i(a_path.substr(8))].addr;
 	bool isVal = (m_prm.find("val:") == 0);
@@ -810,7 +810,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 	}
     }
     else if(a_path.find("/prm/el_") == 0) {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
+	if(obj->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    int iIO = s2i(a_path.substr(8));
 	    if(func()->io(iIO)->flg()&TPrmTempl::CfgLink) {
 		opt->setText(lnks[iIO].addr);
@@ -821,7 +821,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 	    else if(func()->io(iIO)->flg()&TPrmTempl::CfgConst)
 		opt->setText((func()->io(iIO)->type()==IO::Real) ? r2s(getR(iIO), 6) : getS(iIO));
 	}
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
+	if(obj->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    int iIO = s2i(a_path.substr(8));
 	    if(func()->io(iIO)->flg()&TPrmTempl::CfgLink) {
 		string a_vl = opt->text().find("val:") == 0 ? opt->text() : TSYS::strParse(opt->text(), 0, " ");

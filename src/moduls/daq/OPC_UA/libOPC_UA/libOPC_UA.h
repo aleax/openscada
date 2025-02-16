@@ -3,7 +3,9 @@
 /********************************************************************************
  *   Copyright (C) 2009-2025 by Roman Savochenko, <roman@oscada.org>		*
  *										*
- *   Version: 2.2.3								*
+ *   Version: 2.3.0								*
+ *	* implementing UserName authentication on the Server side.		*
+ *   Version: 2.2.2								*
  *	* UA::symmetricEncrypt() and UA::symmetricDecrypt() merged		*
  *	  to UA::symmetricCrypt() and switched for using EVP_CipherInit()	*
  *	  and EVP_CipherUpdate() instead AES_cbc_encrypt();			*
@@ -380,7 +382,7 @@ extern string real2str( double val, int prec = 15, char tp = 'g' );
 extern double str2real( const string &val );
 extern string strParse( const string &path, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
 extern string strLine( const string &str, int level, int *off = NULL );
-extern string strMess( const char *fmt, ... ) __attribute__ ((format (printf, 1, 2)));
+extern string strMess( const char *fmt, ... );
 
 //***********************************************************
 //* Automatic POSIX mutex unlock object for OPC		    *
@@ -425,8 +427,8 @@ class OPCError
 {
     public:
     //Methods
-    OPCError( const char *fmt, ... ) __attribute__ ((format (printf, 2, 3)));
-    OPCError( int cod, const char *fmt, ... ) __attribute__ ((format (printf, 3, 4)));
+    OPCError( const char *fmt, ... );
+    OPCError( int cod, const char *fmt, ... );
 
     //Attributes
     int		cod;
@@ -816,8 +818,8 @@ class Server: public UA
 	    bool isSecCnlActive( EP *ep );
 
 	    //Attributes
-	    string	name, inPrtId;
-			//idPolicyId, user;
+	    string	name, inPrtId,
+			idPolicyId, user;
 	    uint32_t	secCnl;
 	    double	tInact;
 	    int64_t	tAccess;

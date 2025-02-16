@@ -76,7 +76,7 @@ extern string ll2s( int64_t val );
 extern string r2s( double val, int prec = 15, char tp = 'g' );
 extern double s2r( const string &val );
 extern string strParse( const string &path, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
-extern string strMess( const char *fmt, ... ) __attribute__ ((format (printf, 1, 2)));
+extern string strMess( const char *fmt, ... );
 extern void setBS( string &vl, uint32_t n );
 extern bool tryBS( const string &vl, uint32_t n );
 
@@ -87,8 +87,8 @@ class Error
 {
     public:
 	//Methods
-	Error( const char *fmt, ... ) __attribute__ ((format (printf, 2, 3)));
-	Error( int cod, const char *fmt, ... ) __attribute__ ((format (printf, 3, 4)));
+	Error( const char *fmt, ... );
+	Error( int cod, const char *fmt, ... );
 
 	//Attributes
 	int	cod;

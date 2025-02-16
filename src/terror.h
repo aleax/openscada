@@ -57,8 +57,8 @@ class TError
 
 	//Methods
 	TError( ) : cod(NoCode)	{ }
-	TError( const char *cat, const char *mess, ... ) __attribute__ ((format (printf, 3, 4)));
-	TError( int cod, const char *cat, const char *mess, ... ) __attribute__ ((format (printf, 4, 5)));
+	TError( const char *cat, const char *mess, ... );
+	TError( int cod, const char *cat, const char *mess, ... );
 	TError( const string &icat, const string &imess ) : cod(NoCode), cat(icat), mess(imess)	{ }
 	TError( int icod, const string &icat, const string &imess ) : cod(icod), cat(icat), mess(imess)	{ }
 

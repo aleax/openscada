@@ -266,7 +266,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    vlList(vLs);
 	    for(unsigned iEl = 0; iEl < vLs.size(); iEl++) {
 		AutoHD<TVal> vl = vlAt(vLs[iEl]);
-		XMLNode *nE = vl.at().fld().cntrCmdMake(opt, "/val", -1, "root", SDAQ_ID, RWRWR_);
+		XMLNode *nE = vl.at().fld().cntrCmdMake(this, opt, "/val", -1, "root", SDAQ_ID, RWRWR_);
 		if(nE) {
 		    string sType = _("Unknown");
 		    switch(vl.at().fld().type()) {

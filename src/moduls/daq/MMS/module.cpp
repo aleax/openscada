@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.MMS file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2013-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,7 +37,7 @@
 #define MOD_NAME	trS("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.4.15"
+#define MOD_VER		"1.4.14"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsecurity.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -99,25 +99,25 @@ void TSecurity::grpDel( const string &name, bool complete )
     chldDel(mGrp, name, -1, complete?NodeRemove:NodeNoFlg);
 }
 
-char TSecurity::access( const string &user, char mode, const string &owner, const string &groups, int access )
+char TSecurity::access( const string &user, char mode, const string &owner, const string &group, int perm )
 {
     char rez = 0;
 
     //Check owner permision
-    if(user == "root" || user == owner) rez = ((access&0700)>>6)&mode;
+    if(user == "root" || user == owner) rez = ((perm&0700)>>6)&mode;
     //Check other permision
     if(rez == mode)	return rez;
-    rez |= (access&07)&mode;
+    rez |= (perm&07)&mode;
     if(rez == mode)	return rez;
-    //Check groups permision
+    //Check group permision
     bool grpAccs = false;
     grpAccs = grpAt("root").at().user(user);
     string grp;
-    for(int off = 0; !grpAccs && (grp=TSYS::strParse(groups,0,",",&off)).size(); )
+    for(int off = 0; !grpAccs && (grp=TSYS::strParse(group,0,",",&off)).size(); )
 	grpAccs = (grpPresent(grp) && grpAt(grp).at().user(user));
-    if(grpAccs) rez |= ((access&070)>>3)&mode;
+    if(grpAccs) rez |= ((perm&070)>>3)&mode;
 
-    //if(grpAt("root").at().user(user) || (grpPresent(group) && grpAt(group).at().user(user))) rez |= ((access&070)>>3)&mode;
+    //if(grpAt("root").at().user(user) || (grpPresent(group) && grpAt(group).at().user(user))) rez |= ((perm&070)>>3)&mode;
 
     return rez;
 }
@@ -237,13 +237,13 @@ string TSecurity::optDescr( )
 
 TVariant TSecurity::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
-    // int access(string user, int mode, string owner, string group, int access)
-    //      - Check for <user> access to resource what owned by <owner> and <group> and <access> for <mode>.
+    // int access(string user, int mode, string owner, string group, int perm)
+    //      - Checking for <user> access to resource what owned by <owner> and <group> and <perm> for <mode>.
     //  user - user for access check;
     //  mode - access mode (4-R, 2-W, 1-X);
     //  owner - resource owner;
     //  group - resource group;
-    //  access - resource access mode (RWXRWXRWX - 0777).
+    //  perm - resource permition (RWXRWXRWX - 0777).
     if(iid == "access" && prms.size() >= 5)
 	return (int)access(prms[0].getS(), prms[1].getI(), prms[2].getS(), prms[3].getS(), prms[4].getI());
 
@@ -487,7 +487,7 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("User ")+name(),RWRWR_,name().c_str(),SSEC_ID);
 	if(picture().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
 	if(ctrMkNode("area",opt,-1,"/prm",_("User"))) {
-	    TConfig::cntrCmdMake(opt,"/prm",0,name().c_str(),SSEC_ID,RWRWR_);
+	    TConfig::cntrCmdMake(this,opt,"/prm",0,name().c_str(),SSEC_ID,RWRWR_);
 	    //if(!Mess->translDyn()) ctrRemoveNode(opt,"/prm/LANG");
 	    ctrMkNode("fld",opt,-1,"/prm/LANG",EVAL_STR,RWRWR_,name().c_str(),SSEC_ID,2,
 		"dest","sel_ed", "sel_list",Mess->langBase().c_str());
@@ -543,7 +543,7 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path.find("/prm") == 0)
-	TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,1), name().c_str(), SSEC_ID, RWRWR_);
+	TConfig::cntrCmdProc(this, opt, TSYS::pathLev(a_path,1), name().c_str(), SSEC_ID, RWRWR_);
     else TCntrNode::cntrCmdProc(opt);
 }
 
@@ -639,7 +639,7 @@ void TGroup::cntrCmdProc( XMLNode *opt )
 	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Group ")+name(),RWRWR_,"root",SSEC_ID);
 	if(ctrMkNode("area",opt,-1,"/prm",_("Group"))) {
-	    TConfig::cntrCmdMake(opt,"/prm",0,"root",SSEC_ID,RWRWR_);
+	    TConfig::cntrCmdMake(this,opt,"/prm",0,"root",SSEC_ID,RWRWR_);
 	    ctrMkNode("list",opt,-1,"/prm/USERS",EVAL_STR,RWRWR_,"root",SSEC_ID,1,"s_com","add,del");
 	    ctrMkNode("fld",opt,-1,"/prm/db",_("Storage"),RWRWR_,"root",SSEC_ID,4,
 		"tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
@@ -667,6 +667,6 @@ void TGroup::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SSEC_ID,SEC_WR))	userAdd(opt->text());
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SSEC_ID,SEC_WR))	userDel(opt->text());
     }
-    else if(a_path.find("/prm") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,1), "root", SSEC_ID, RWRWR_);
+    else if(a_path.find("/prm") == 0) TConfig::cntrCmdProc(this, opt, TSYS::pathLev(a_path,1), "root", SSEC_ID, RWRWR_);
     else TCntrNode::cntrCmdProc(opt);
 }

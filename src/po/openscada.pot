@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-19 14:34+0200\n"
+"POT-Creation-Date: 2025-02-15 22:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -804,10 +804,6 @@ msgid "Error the function '%s' or missing its parameters."
 msgstr ""
 
 #, c-format
-msgid "Item %d of the path '%s' is missing!"
-msgstr ""
-
-#, c-format
 msgid "Error accessing item '%s'!"
 msgstr ""
 
@@ -925,9 +921,6 @@ msgid "Add parameters to the type"
 msgstr ""
 
 msgid "Diagnostics"
-msgstr ""
-
-msgid "Time, size (seconds) and level"
 msgstr ""
 
 msgid ""

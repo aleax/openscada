@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tconfig.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -182,24 +182,24 @@ void TConfig::setElem( TElem *Elements, bool first )
 	value.insert(std::pair<string,TCfg*>(mElem->fldAt(i).name(),new TCfg(mElem->fldAt(i),*this)));
 }
 
-void TConfig::cntrCmdMake( XMLNode *opt, const string &path, int pos, const string &user, const string &grp, int perm )
+void TConfig::cntrCmdMake( TCntrNode *cntrO, XMLNode *opt, const string &path, int pos, const string &owner, const string &group, int perm )
 {
     vector<string> list_c;
     cfgList(list_c);
     for(unsigned iEl = 0; iEl < list_c.size(); iEl++)
 	if(cfg(list_c[iEl]).view())
-	    cfg(list_c[iEl]).fld().cntrCmdMake(opt, path, (pos<0)?pos:pos++, user, grp, perm);
+	    cfg(list_c[iEl]).fld().cntrCmdMake(cntrO, opt, path, (pos<0)?pos:pos++, owner, group, perm);
 }
 
-void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user, const string &grp, int perm )
+void TConfig::cntrCmdProc( TCntrNode *cntrO, XMLNode *opt, const string &elem, const string &owner, const string &group, int perm )
 {
     TCfg &cel = cfg(elem);
-    if(TCntrNode::ctrChkNode(opt,"get",(cel.fld().flg()&TFld::NoWrite)?(perm&~_W_W_W):perm,user.c_str(),grp.c_str(),SEC_RD)) {
+    if(cntrO->ctrChkNode(opt,"get",(cel.fld().flg()&TFld::NoWrite)?(perm&~_W_W_W):perm,owner.c_str(),group.c_str(),SEC_RD)) {
 	if(cel.fld().type() == TFld::String && (cel.fld().flg()&TFld::TransltText))
 	    opt->setText(trD(cel.getS()));
 	else opt->setText(cel.getS());
     }
-    if(TCntrNode::ctrChkNode(opt,"set",(cel.fld().flg()&TFld::NoWrite)?(perm&~_W_W_W):perm,user.c_str(),grp.c_str(),SEC_WR)) {
+    if(cntrO->ctrChkNode(opt,"set",(cel.fld().flg()&TFld::NoWrite)?(perm&~_W_W_W):perm,owner.c_str(),group.c_str(),SEC_WR)) {
 	if(cel.fld().type() == TFld::String && (cel.fld().flg()&TFld::TransltText))
 	    cel.setS(trDSet(cel.getS(),opt->text()));
 	else cel.setS(opt->text());

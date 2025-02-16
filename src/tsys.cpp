@@ -3108,30 +3108,6 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //  form - result string format
     if((iid == "strftime" || (alt1=(iid=="strftimegm"))) && prms.size())
 	return atime2str(prms[0].getI(), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", alt1, user_lang);
-    //???? Remove after testing in real tasks
-    /*{
-	time_t tm_t = prms[0].getI();
-	struct tm tm_tm;
-	if(alt1) gmtime_r(&tm_t, &tm_tm);
-	else localtime_r(&tm_t, &tm_tm);
-	char buf[1000];
-	int rez = 0;
-#if HAVE_DECL_NEWLOCALE
-	string lang = TSYS::strLine(user_lang, 1);
-	if(lang.size()) {
-	    lang = Mess->langToLocale(lang);
-	    //!?!? Prepare the locales cache to speed up. Use in new locale string functions of conversion real numbers
-	    locale_t dLoc = newlocale(LC_TIME_MASK, lang.c_str(), 0);
-	    if(dLoc != 0) {
-		rez = strftime_l(buf, sizeof(buf), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &tm_tm, dLoc);
-		freelocale(dLoc);
-		return (rez > 0) ? string(buf,rez) : "";
-	    }
-	}
-#endif
-	rez = strftime(buf, sizeof(buf), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &tm_tm);
-	return (rez > 0) ? string(buf,rez) : "";
-    }*/
 
     // int {strptime|strptimegm}(string str, string form = "%Y-%m-%d %H:%M:%S") - returns the time in seconds from the epoch of 1/1/1970,
     //      based on the string record of time <str>, in accordance with the specified template <form>

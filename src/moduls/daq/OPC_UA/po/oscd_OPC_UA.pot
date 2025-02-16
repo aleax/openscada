@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-13 22:36+0200\n"
+"POT-Creation-Date: 2025-02-15 20:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -343,10 +343,13 @@ msgstr ""
 msgid "Binary"
 msgstr ""
 
+msgid "Security policies"
+msgstr ""
+
 msgid "URL"
 msgstr ""
 
-msgid "Security policies"
+msgid "Anonymous user"
 msgstr ""
 
 msgid "Server certificate (PEM)"
@@ -421,6 +424,9 @@ msgstr ""
 msgid "Configuration"
 msgstr ""
 
+msgid "Select a user of anonymous access, set empty only for authentication."
+msgstr ""
+
 msgid "Policy"
 msgstr ""
 
@@ -446,7 +452,10 @@ msgid "Set to 0 for automatic by cntrKeepAlive*publInterv"
 msgstr ""
 
 #, c-format
-msgid "%d(%s): at %s(live %s), secure channel %u; Publish requests %u"
+msgid "%d(%s): from '%s' at %s(live %s), secure channel %u; Publish requests %u"
+msgstr ""
+
+msgid "<PASSIVE>"
 msgstr ""
 
 msgid "Closed"

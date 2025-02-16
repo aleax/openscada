@@ -1,3 +1,41 @@
+2025-02-15 Roman (stable)
+- FIX:SYS,DAQ.{MMS.libMMS,OPC_UA.libOPC_UA},Special.SystemTests: Restoring functions with arguments of
+    the printf() format by removing the argument "__attribute__ ((format (printf, 3, 4)))",
+    due to it wrongly processed on old systems.
+- !!!!:FIX:SYS,DAQ: Implementing the custom ACLs to the control nodes by:
+	- TCntrNode: new functions nodeAccess(), nodeLoadACL(), nodeLoadACLSnthHgl();
+	- TCntrNode: moving from static with some improving and adaption to ACL with compatibility
+	    of the direct rules for the functions of the control interface:
+	    ctrMkNode(), ctrMkNode2(), _ctrMkNode(), ctrChkNode();
+	- TCntrNode: new functions of the control interface for ACL: ctrMkNode3(), ctrChkNode2();
+	- TCntrNode: _ctrMkNode() switched to no exception at missing container nodes,
+	    just don't create and return NULL;
+	- TFld: cntrCmdMake() added by an argument cntrO for linking with
+	    the Control Node, and all code adapted to that;
+	- TConfig: cntrCmdMake() and cntrCmdProc() added by an argument cntrO for linking with
+	    the Control Node, and all code adapted to that;
+	- TTransportS: cntrCmdPrm() added by an argument cntrO for linking with
+	    the Control Node, and all code adapted to that;
+	- DAQ: initial adaptation to ACLs in the description fields of the Controller and Parameter Objects,
+	    default owner-permition for the DAQ subsytem set to "root:DAQ"-0775;
+    !!:SYS:Building: configure.ac: Core library version risen to 4:11:0.
+- FIX:TSecurity: Renaming the function access() argument "access" to "perm" and "groups" to "group",
+    also for User API.
+- !!:DAQ: Moving in the size-depth field of the Control Interface of the Diagnostic tab of the Controller object
+    to the editable combobox with the digital number and human text multiplier, based on the new function
+    time2str() and str2time().
+- !!!!:FIX:Protocol.OPC_UA: Implementing the true authentication with checking permissions of
+	the DAQ-Nodes corresponding to the user:
+	- libOPC_UA: implementing the authentication through UA::Server::EP::sessActivate()
+	    and the property <identTkn>, from which there is taken the user in the attribute "userAuthenticated"
+	    and that is written to UA::Server::Sess::{user,idPolicyId};
+	- libOPC_UA: all data requests by reqData() appended in <req> by an attribute "sesTokId" with session
+	    identifier here and for accessing the user;
+	- appending a configuration field "Anonymous user" for representing the anonymous authentication;
+    FIX: Adaption to the dynamic translation in data requests.
+    FIX: Fixing description of the "Security policies" field.
+
+
 2025-02-10 Roman (stable)
 - FIX:LibsDB.OscadaLibs: tmplib_DevLib.Incubator: Fixing value of the 'Transport (transport)' field.
 - !!:FIX:data/openscada-proj.in: Expanding the crashHandler() to work for the User Projects,

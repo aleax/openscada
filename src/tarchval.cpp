@@ -2060,7 +2060,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 			TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",SARH_ID,1,"help",TMess::labStorRem(mDB).c_str());
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
-		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",SARH_ID,RWRWR_);
+		TConfig::cntrCmdMake(this,opt,"/prm/cfg",0,"root",SARH_ID,RWRWR_);
 		if(srcMode() == DAQAttr || srcMode() == ActiveAttr)
 		    ctrMkNode("fld",opt,-1,"/prm/cfg/Source","",RWRWR_,"root",SARH_ID,2,"dest","sel_ed","select","/cfg/prm_atr_ls");
 		else ctrRemoveNode(opt,"/prm/cfg/Source");
@@ -2133,7 +2133,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	mSource = TSYS::strParse(opt->text(), 0, " ");
     }
     else if(a_path == "/cfg/prm_atr_ls" && ctrChkNode(opt)) SYS->daq().at().ctrListPrmAttr(opt, srcData(), false, '.');
-    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SARH_ID, RWRWR_);
+    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(this, opt, TSYS::pathLev(a_path,2), "root", SARH_ID, RWRWR_);
     else if(a_path == "/arch/arch") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD)) {
 	    //Fill archivers table
@@ -2491,7 +2491,7 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 			TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",SARH_ID,1,"help",TMess::labStorRem(mDB).c_str());
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
-		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",SARH_ID,RWRWR_);
+		TConfig::cntrCmdMake(this,opt,"/prm/cfg",0,"root",SARH_ID,RWRWR_);
 		ctrMkNode("fld",opt,-1,"/prm/cfg/A_PER",EVAL_STR,RWRWR_,"root",SARH_ID,1,
 		    "help",_("Set a zero period to disable the use of the archiver in processing the buffer - just a direct recording."));
 		ctrMkNode("fld",opt,-1,"/prm/cfg/SEL_PR",EVAL_STR,RWRWR_,"root",SARH_ID,1,
@@ -2523,7 +2523,7 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))
 	postDisable(NodeRemoveOnlyStor);
-    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SARH_ID, RWRWR_);
+    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(this, opt, TSYS::pathLev(a_path,2), "root", SARH_ID, RWRWR_);
     else if(a_path == "/arch/arch" && ctrChkNode(opt)) {
 	// Fill Archives table
 	XMLNode *n_arch = ctrMkNode("list",opt,-1,"/arch/arch/0","");

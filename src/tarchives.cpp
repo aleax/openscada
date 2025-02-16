@@ -1633,7 +1633,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/st/beg",_("Begin"),R_R_R_,"root","root",1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
-		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",SARH_ID,RWRWR_);
+		TConfig::cntrCmdMake(this,opt,"/prm/cfg",0,"root",SARH_ID,RWRWR_);
 		ctrRemoveNode(opt,"/prm/cfg/MODUL");
 		ctrRemoveNode(opt,"/prm/cfg/REDNT");
 		ctrRemoveNode(opt,"/prm/cfg/REDNT_RUN");
@@ -1675,7 +1675,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/prm/st/end" && ctrChkNode(opt))		opt->setText(i2s(end()));
     else if(a_path == "/prm/st/beg" && ctrChkNode(opt))		opt->setText(i2s(begin()));
-    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SARH_ID,RWRWR_);
+    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(this,opt,TSYS::pathLev(a_path,2),"root",SARH_ID,RWRWR_);
     else if(a_path == "/mess/tm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD)) {
 	    opt->setText(TBDS::genPrmGet(nodePath()+"messTm",DEF_messTm,opt->attr("user")));

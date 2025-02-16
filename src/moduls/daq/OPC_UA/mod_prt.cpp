@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.OPC_UA file: mod_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -51,8 +51,9 @@ TProt::TProt( string name ) : TProtocol(PRT_ID)
     mEndPntEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     mEndPntEl.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,0,"1","0"));
     mEndPntEl.fldAdd(new TFld("SerialzType",trS("Serializer type"),TFld::Integer,TFld::Selectable,"1","0","0",trS("Binary")));
-    mEndPntEl.fldAdd(new TFld("URL",trS("URL"),TFld::String,0,"50","opc.tcp://localhost:4841"));
     mEndPntEl.fldAdd(new TFld("SecPolicies",trS("Security policies"),TFld::String,TFld::FullText,"100","None:0\nBasic128Rsa15:1"));
+    mEndPntEl.fldAdd(new TFld("URL",trS("URL"),TFld::String,0,"50","opc.tcp://localhost:4841"));
+    mEndPntEl.fldAdd(new TFld("UserAnon",trS("Anonymous user"),TFld::String,TFld::NoFlag,i2s(limObjID_SZ).c_str()));
     mEndPntEl.fldAdd(new TFld("ServCert",trS("Server certificate (PEM)"),TFld::String,TFld::FullText,"10000"));
     mEndPntEl.fldAdd(new TFld("ServPvKey",trS("Server private key (PEM)"),TFld::String,TFld::FullText,"10000"));
     mEndPntEl.fldAdd(new TFld("A_PRMS",trS("Addition parameters"),TFld::String,TFld::FullText,"10000"));
@@ -87,25 +88,22 @@ string TProt::epAdd( const string &iid, const string &db )
     return chldAdd(mEndPnt, new OPCEndPoint(TSYS::strEncode(sTrm(iid),TSYS::oscdID),db,&endPntEl()));
 }
 
-bool TProt::debug( )			{ return (mess_lev()==TMess::Debug); }
+bool TProt::debug( )				{ return (mess_lev()==TMess::Debug); }
 
-void TProt::debugMess( const string &mess )
-{
-    mess_debug(nodePath().c_str(), "%s", mess.c_str());
-}
+void TProt::debugMess( const string &mess )	{ mess_debug(nodePath().c_str(), "%s", mess.c_str()); }
 
 void TProt::epEnList( vector<string> &ls )
 {
     ls.clear();
-    for(unsigned i_ep = 0; i_ep < ep_hd.size(); i_ep++)
-	ls.push_back(ep_hd[i_ep].at().id());
+    for(unsigned iEp = 0; iEp < ep_hd.size(); iEp++)
+	ls.push_back(ep_hd[iEp].at().id());
 }
 
 Server::EP *TProt::epEnAt( const string &ep )
 {
-    for(unsigned i_ep = 0; i_ep < ep_hd.size(); i_ep++)
-	if(ep_hd[i_ep].at().id() == ep)
-	    return &ep_hd[i_ep].at();
+    for(unsigned iEp = 0; iEp < ep_hd.size(); iEp++)
+	if(ep_hd[iEp].at().id() == ep)
+	    return &ep_hd[iEp].at();
 
     return NULL;
 }
@@ -133,8 +131,8 @@ void TProt::discoveryUrls( vector<string> &ls )
     //Get allowed enpoints list
     vector<string> epLs;
     epList(epLs);
-    for(unsigned i_ep = 0; i_ep < epLs.size(); i_ep++) {
-	AutoHD<OPCEndPoint> ep = epAt(epLs[i_ep]);
+    for(unsigned iEp = 0; iEp < epLs.size(); iEp++) {
+	AutoHD<OPCEndPoint> ep = epAt(epLs[iEp]);
 	if(!ep.at().enableStat()) continue;
 	ls.push_back(ep.at().url());
 	break;
@@ -145,12 +143,12 @@ void TProt::epEn( const string &id, bool val )
 {
     ResAlloc res(enRes, true);
 
-    unsigned i_ep;
-    for(i_ep = 0; i_ep < ep_hd.size(); i_ep++)
-	if(ep_hd[i_ep].at().id() == id) break;
+    unsigned iEp;
+    for(iEp = 0; iEp < ep_hd.size(); iEp++)
+	if(ep_hd[iEp].at().id() == id) break;
 
-    if(val && i_ep >= ep_hd.size()) ep_hd.push_back(epAt(id));
-    if(!val && i_ep < ep_hd.size()) ep_hd.erase(ep_hd.begin()+i_ep);
+    if(val && iEp >= ep_hd.size()) ep_hd.push_back(epAt(id));
+    if(!val && iEp < ep_hd.size()) ep_hd.erase(ep_hd.begin()+iEp);
 }
 
 void TProt::load_( )
@@ -318,11 +316,13 @@ string OPCEndPoint::name( )
     return tNm.size() ? tNm : id();
 }
 
-string OPCEndPoint::tbl( ) const	{ return owner().modId()+"_ep"; }
+string OPCEndPoint::tbl( ) const { return owner().modId()+"_ep"; }
 
 string OPCEndPoint::cert( )	{ return cfg("ServCert").getS(); }
 
 string OPCEndPoint::pvKey( )	{ return cfg("ServPvKey").getS(); }
+
+string OPCEndPoint::userAnon( )	{ return cfg("UserAnon").getS(); }
 
 bool OPCEndPoint::cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
@@ -426,6 +426,28 @@ string OPCEndPoint::getStatus( )
     return rez;
 }
 
+uint32_t OPCEndPoint::sessActivate( int sid, uint32_t secCnl, bool check, const string &inPrtId, const XML_N &identTkn )
+{
+    uint32_t stCode = 0;
+    string policyId = identTkn.attr("policyId"), tVl;
+    XML_N identTknW;
+    identTknW.setAttr("policyId", policyId);
+
+    if(policyId == "Anonymous") {
+	if(userAnon().empty() || !SYS->security().at().usrPresent(userAnon()))	stCode = OpcUa_BadUserAccessDenied;
+	else identTknW.setAttr("userAuthenticated", userAnon());
+    }
+    else if(policyId == "UserName") {
+	if((tVl=identTkn.attr("userName")).empty() || !SYS->security().at().usrPresent(tVl) ||
+		!SYS->security().at().usrAt(tVl).at().auth(identTkn.attr("password")))
+	    stCode = OpcUa_BadUserAccessDenied;
+	else identTknW.setAttr("userAuthenticated", tVl);
+    }
+    else if(policyId.size()) stCode = OpcUa_BadUserAccessDenied;
+
+    return stCode || Server::EP::sessActivate(sid, secCnl, check, inPrtId, identTknW);
+}
+
 uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 {
     cntReq++;
@@ -446,6 +468,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 	    //Check for DAQ subsystem data
 	    if(nid.ns() != NS_OpenSCADA_DAQ || TSYS::strParse(nid.strVal(),0,".") != SYS->daq().at().subId() ||
 		(rPn && (int)req.childSize() >= rPn)) return rez;
+	    string sUser = sessGet(s2u(req.attr("sesTokId"))).user;
 	    NodeId rtId = NodeId::fromAddr(req.attr("RefTpId"));
 	    uint32_t bd = s2i(req.attr("BrDir"));
 	    uint32_t nClass = s2i(req.attr("ClassMask"));
@@ -510,40 +533,48 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 		if(!nClass || nClass&NC_Object) {
 		    if((nDAQ=dynamic_cast<TDAQS*>(&cNd.at()))) {
 			nDAQ->modList(chLs);
-			for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++)
-			    prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nDAQ->at(chLs[i_ch]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->
-				setAttr("referenceTypeId", refTpId.toAddr())->setAttr("dir", "1")->setAttr("name", nDAQ->at(chLs[i_ch]).at().modName())->
+			for(unsigned iCh = 0; iCh < chLs.size(); iCh++) {
+			    if(!(nDAQ->at(chLs[iCh]).at().nodeAccess(sUser)&SEC_RD)) continue;
+			    prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nDAQ->at(chLs[iCh]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->
+				setAttr("referenceTypeId", refTpId.toAddr())->setAttr("dir", "1")->setAttr("name", nDAQ->at(chLs[iCh]).at().modName())->
 				setAttr("NodeClass", i2s(NC_Object))->setAttr("typeDefinition", NodeId(OpcUa_FolderType).toAddr());
+			}
 		    }
 		    else if((nTpDAQ=dynamic_cast<TTypeDAQ*>(&cNd.at()))) {
 			nTpDAQ->list(chLs);
-			for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++)
-			    prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nTpDAQ->at(chLs[i_ch]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->
-				setAttr("referenceTypeId", refTpId.toAddr())->setAttr("dir", "1")->setAttr("name", nTpDAQ->at(chLs[i_ch]).at().name())->
+			for(unsigned iCh = 0; iCh < chLs.size(); iCh++) {
+			    if(!(nTpDAQ->at(chLs[iCh]).at().nodeAccess(sUser)&SEC_RD)) continue;
+			    prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nTpDAQ->at(chLs[iCh]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->
+				setAttr("referenceTypeId", refTpId.toAddr())->setAttr("dir", "1")->setAttr("name", nTpDAQ->at(chLs[iCh]).at().name())->
 				setAttr("NodeClass", i2s(NC_Object))->setAttr("typeDefinition", NodeId("DAQControllerObjectType",NS_OpenSCADA_DAQ).toAddr());
+			}
 		    }
 		    else if((nCntr=dynamic_cast<TController*>(&cNd.at()))) {
 			nCntr->list(chLs);
-			for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++)
-			    prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nCntr->at(chLs[i_ch]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->
-				setAttr("referenceTypeId", refTpId.toAddr())->setAttr("dir", "1")->setAttr("name", nCntr->at(chLs[i_ch]).at().name())->
+			for(unsigned iCh = 0; iCh < chLs.size(); iCh++) {
+			    if(!(nCntr->at(chLs[iCh]).at().nodeAccess(sUser)&SEC_RD)) continue;
+			    prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nCntr->at(chLs[iCh]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->
+				setAttr("referenceTypeId", refTpId.toAddr())->setAttr("dir", "1")->setAttr("name", nCntr->at(chLs[iCh]).at().name())->
 				setAttr("NodeClass", i2s(NC_Object))->setAttr("typeDefinition", NodeId("DAQParameterObjectType",NS_OpenSCADA_DAQ).toAddr());
+			}
 		    }
 		    else if((nPrm=dynamic_cast<TParamContr*>(&cNd.at()))) {
 			nPrm->list(chLs);
-			for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++)
-			    prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nPrm->at(chLs[i_ch]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->
-				setAttr("referenceTypeId", refTpId.toAddr())->setAttr("dir", "1")->setAttr("name", nPrm->at(chLs[i_ch]).at().name())->
+			for(unsigned iCh = 0; iCh < chLs.size(); iCh++) {
+			    if(!(nPrm->at(chLs[iCh]).at().nodeAccess(sUser)&SEC_RD)) continue;
+			    prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nPrm->at(chLs[iCh]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->
+				setAttr("referenceTypeId", refTpId.toAddr())->setAttr("dir", "1")->setAttr("name", nPrm->at(chLs[iCh]).at().name())->
 				setAttr("NodeClass", i2s(NC_Object))->setAttr("typeDefinition", NodeId("DAQParameterObjectType",NS_OpenSCADA_DAQ).toAddr());
+			}
 		    }
 		}
 		//  Variables processing
-		if((!nClass || nClass&NC_Variable) && (nPrm=dynamic_cast<TParamContr*>(&cNd.at()))) {
+		if((!nClass || (nClass&NC_Variable)) && (nPrm=dynamic_cast<TParamContr*>(&cNd.at())) && (nPrm->nodeAccess(sUser)&SEC_RD)) {
 		    nPrm->vlList(chLs);
-		    for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++)
-			prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nPrm->vlAt(chLs[i_ch]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->
+		    for(unsigned iCh = 0; iCh < chLs.size(); iCh++)
+			prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nPrm->vlAt(chLs[iCh]).at().DAQPath(),NS_OpenSCADA_DAQ).toAddr())->
 			    setAttr("referenceTypeId", NodeId(OpcUa_Organizes/*OpcUa_HasComponent*/).toAddr())->setAttr("dir", "1")->
-			    setAttr("name", nPrm->vlAt(chLs[i_ch]).at().name())->
+			    setAttr("name", nPrm->vlAt(chLs[iCh]).at().name())->
 			    setAttr("NodeClass", i2s(NC_Variable))->setAttr("typeDefinition", NodeId(OpcUa_BaseDataVariableType).toAddr());
 		}
 
@@ -585,6 +616,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 
 	    // OpenSCADA DAQ parameter's attribute
 	    if(nid.ns() != NS_OpenSCADA_DAQ)	return OpcUa_BadNodeIdUnknown;
+
 	    uint32_t aid = s2i(req.attr("aid"));
 
 	    // Connect to DAQ node
@@ -592,6 +624,13 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 	    string firstEl = TSYS::strParse(nid.strVal(),0,".",&addrOff);
 	    AutoHD<TCntrNode> cNd = SYS->daq().at().daqAt(nid.strVal().substr(addrOff), '.', true);
 	    if(cNd.freeStat()) return OpcUa_BadNodeIdUnknown;
+
+	    string sUser = sessGet(s2u(req.attr("sesTokId"))).user;
+	    char nAcs = cNd.at().nodeAccess(sUser);
+	    if(!(nAcs&SEC_RD)) return OpcUa_BadUserAccessDenied;
+
+	    TrCtxAlloc trCtx;
+	    if(Mess->translDyn()) trCtx.hold(sUser);
 
 	    switch(aid) {
 		case AId_NodeId: req.setAttr("type", i2s(OpcUa_NodeId))->setText(nid.toAddr());	return 0;
@@ -615,7 +654,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 			switch(aid) {
 			    case AId_NodeClass: req.setAttr("type", i2s(OpcUa_Int32))->setText(i2s(NC_Variable));	return 0;
 			    case AId_DisplayName: req.setAttr("type", i2s(OpcUa_LocalizedText))->setText(nVal->name());	return 0;
-			    case AId_Descr: req.setAttr("type", i2s(OpcUa_LocalizedText))->setText(nVal->fld().descr());	return 0;
+			    case AId_Descr: req.setAttr("type", i2s(OpcUa_LocalizedText))->setText(trD(nVal->fld().descr()));	return 0;
 			    case AId_Value: {
 				int64_t tm = 0;
 				bool dtOK = true;
@@ -623,7 +662,10 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 				    case TFld::Boolean:	req.setAttr("type", i2s(OpcUa_Boolean))->setText(nVal->getS(&tm));	break;
 				    case TFld::Integer:	req.setAttr("type", i2s(OpcUa_IntAuto/*OpcUa_Int64*/))->setText(nVal->getS(&tm));	break;
 				    case TFld::Real:	req.setAttr("type", i2s(OpcUa_Double))->setText(nVal->getS(&tm));	break;
-				    case TFld::String:	req.setAttr("type", i2s(OpcUa_String))->setText(nVal->getS(&tm));	break;
+				    case TFld::String:
+					req.setAttr("type", i2s(OpcUa_String))->
+					    setText((nVal->fld().flg()&TFld::TransltText)?trD(nVal->getS(&tm)):nVal->getS(&tm));
+					break;
 				    case TFld::Object: {	//?!?! With structures support append the detection ones
 					AutoHD<TArrayObj> arr = nVal->getO(&tm);
 					string rVl;
@@ -685,8 +727,13 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 				break;
 			    case AId_ValueRank: req.setAttr("type", i2s(OpcUa_Int32))->setText("-1");				return 0;
 			    case AId_ArrayDimensions: req.setAttr("type", i2s(OpcUa_Array|OpcUa_UInt32))->setText("");		return 0;
-			    case AId_AccessLevel: case AId_UserAccessLevel:
-				req.setAttr("type", i2s(OpcUa_Byte))->setText(i2s(ACS_Read | (nVal->fld().flg()&TFld::NoWrite ? 0 : ACS_Write)));
+			    case AId_AccessLevel:
+				req.setAttr("type", i2s(OpcUa_Byte))->
+				    setText(i2s(ACS_Read | (!(nVal->fld().flg()&TFld::NoWrite) ? ACS_Write : 0)));
+				return 0;
+			    case AId_UserAccessLevel:
+				req.setAttr("type", i2s(OpcUa_Byte))->
+				    setText(i2s(ACS_Read | ((!(nVal->fld().flg()&TFld::NoWrite) && (nAcs&SEC_XT)) ? ACS_Write : 0)));
 				return 0;
 			    case AId_MinimumSamplingInterval: req.setAttr("type", i2s(OpcUa_Double))->setText("0");		return 0;
 			    case AId_Historizing: req.setAttr("type", i2s(OpcUa_Boolean))->setText("0");			return 0;
@@ -736,6 +783,13 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 	    AutoHD<TCntrNode> cNd = SYS->daq().at().daqAt(nid.strVal().substr(addrOff), '.', true);
 	    if(cNd.freeStat()) return OpcUa_BadNodeIdUnknown;
 
+	    string sUser = sessGet(s2u(req.attr("sesTokId"))).user;
+	    char nAcs = cNd.at().nodeAccess(sUser);
+	    if(!(nAcs&SEC_XT)) return OpcUa_BadUserAccessDenied;
+
+	    TrCtxAlloc trCtx;
+	    if(Mess->translDyn()) trCtx.hold(sUser);
+
 	    if(aid != AId_Value || !dynamic_cast<TVal*>(&cNd.at())) return OpcUa_BadNothingToDo;
 	    AutoHD<TVal> vNd = cNd;
 	    if(vNd.at().fld().type() == TFld::Object && (vTp&OpcUa_Array)) {
@@ -762,6 +816,8 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 		}
 		vNd.at().setO(arr);
 	    }
+	    else if(vNd.at().fld().type() == TFld::String && (vNd.at().fld().flg()&TFld::TransltText))
+		vNd.at().setS(trDSet(vNd.at().getS(),req.text()));
 	    else vNd.at().setS(req.text());
 
 	    return 0;
@@ -790,18 +846,29 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 			TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",SPRT_ID,1,"help",TMess::labStorRem(mDB).c_str());
 	    }
 	    if(ctrMkNode("area",opt,-1,"/ep/cfg",_("Configuration"))) {
-		TConfig::cntrCmdMake(opt,"/ep/cfg",0,"root",SPRT_ID,RWRWR_);
+		TConfig::cntrCmdMake(this,opt,"/ep/cfg",0,"root",SPRT_ID,RWRWR_);
 		ctrRemoveNode(opt, "/ep/cfg/A_PRMS");
 		if(enableStat()) { ctrRemoveNode(opt,"/ep/cfg/ServCert"); ctrRemoveNode(opt,"/ep/cfg/ServPvKey"); }
 		else {
 		    ctrMkNode("fld",opt,-1,"/ep/cfg/ServCert",EVAL_STR,RWRW__,"root",SPRT_ID,3,"tp","str","cols","90","rows","7");
 		    ctrMkNode("fld",opt,-1,"/ep/cfg/ServPvKey",EVAL_STR,RWRW__,"root",SPRT_ID,3,"tp","str","cols","90","rows","7");
 		}
+		XMLNode *userAnon = ctrMkNode("fld",opt,-1,"/ep/cfg/UserAnon",EVAL_STR,RWRWR_,"root",SPRT_ID,2, "tp","str",
+		    "help",_("Select a user of anonymous access, set empty only for authentication."));
+		if(userAnon) {
+		    vector<string> list;
+		    SYS->security().at().usrList(list);
+		    string tVl;
+		    for(int iEl = 0; iEl < list.size(); ++iEl) tVl += list[iEl] + ";";
+		    userAnon->setAttr("dest", "sel_ed")->setAttr("sel_list", tVl);
+		}
 		ctrRemoveNode(opt,"/ep/cfg/SecPolicies");
-		if(ctrMkNode("table",opt,-1,"/ep/cfg/secPlc",EVAL_STR,RWRWR_,"root",SPRT_ID,2,"s_com","add,del","rows","3"))
+		if(ctrMkNode("table",opt,-1,"/ep/cfg/secPlc",_("Security policies"),RWRWR_,"root",SPRT_ID,2,"s_com","add,del","rows","3"))
 		{
-		    ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/0",_("Policy"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","select","sel_list","None;Basic128Rsa15;Basic256");
-		    ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/1",_("Message mode"),RWRWR_,"root",SPRT_ID,4,"tp","dec","dest","select","sel_id","1;2;3","sel_list",_("None;Sign;Sign&Encrypt"));
+		    ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/0",_("Policy"),RWRWR_,"root",SPRT_ID,3, "tp","str",
+			    "dest","select", "sel_list","None;Basic128Rsa15;Basic256");
+		    ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/1",_("Message mode"),RWRWR_,"root",SPRT_ID,4, "tp","dec",
+			    "dest","select", "sel_id","1;2;3", "sel_list",_("None;Sign;Sign&Encrypt"));
 		}
 	    }
 	    if(ctrMkNode("area",opt,-1,"/data",_("Data")))
@@ -832,9 +899,9 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	OPCAlloc mtx(mtxData, true);
 	for(unsigned iSess = 0; iSess < sessN(); ++iSess) {
 	    Server::Sess &sesO = mSess[iSess];
-	    opt->childAdd("el")->setText(TSYS::strMess(_("%d(%s): at %s(live %s), secure channel %u; Publish requests %u"),
+	    opt->childAdd("el")->setText(TSYS::strMess(_("%d(%s): from '%s' at %s(live %s), secure channel %u; Publish requests %u"),
 		iSess+1, sesO.inPrtId.c_str(),
-		atm2s(sesO.tAccess*1e-6,"%Y-%m-%dT%H:%M:%S").c_str(),
+		(sesO.user.size()?sesO.user.c_str():_("<PASSIVE>")), atm2s(sesO.tAccess*1e-6,"%Y-%m-%dT%H:%M:%S").c_str(),
 		tm2s(1e-3*sesO.tInact-1e-6*(curTime()-sesO.tAccess)).c_str(),
 		sesO.secCnl, sesO.publishReqs.size()));
 	}
@@ -890,7 +957,11 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	    modif();
 	}
     }
-    else if(a_path.compare(0,7,"/ep/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SPRT_ID, RWRWR_);
+    else if(a_path == "/ep/cfg/userAnon") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(userAnon());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	cfg("UserAnon").setS(opt->text());
+    }
+    else if(a_path.compare(0,7,"/ep/cfg") == 0) TConfig::cntrCmdProc(this, opt, TSYS::pathLev(a_path,2), "root", SPRT_ID, RWRWR_);
     else if(a_path == "/data/lim/subScr") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(limSubScr()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setLimSubScr(s2i(opt->text()));

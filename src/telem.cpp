@@ -1,7 +1,7 @@
 
 //OpenSCADA file: telem.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -251,13 +251,13 @@ TFld &TFld::operator=( const TFld &fld )
 
 string TFld::lenS( ) const	{ return i2s(len())+"."+i2s(dec()); }
 
-XMLNode *TFld::cntrCmdMake( XMLNode *opt, const string &path, int pos, const string &user, const string &grp, int perm )
+XMLNode *TFld::cntrCmdMake( TCntrNode *cntrO, XMLNode *opt, const string &path, int pos, const string &owner, const string &group, int perm )
 {
     string dscr = trD(descr());
     int dOff = 0; string dscr1 = TSYS::strLine(dscr, 0, &dOff);
 
-    XMLNode *nE = TCntrNode::ctrMkNode("fld", opt, pos, (path+"/"+name()).c_str(), dscr1,
-	    (flg()&TFld::NoWrite)?(perm&~_W_W_W):perm, user.c_str(), grp.c_str(),1,"len",i2s(len()).c_str());
+    XMLNode *nE = cntrO->ctrMkNode("fld",opt,pos,(path+"/"+name()).c_str(),dscr1,
+	    (flg()&TFld::NoWrite)?(perm&~_W_W_W):perm,owner.c_str(),group.c_str(),1, "len",i2s(len()).c_str());
     if(nE) {
 	if(dOff < (int)dscr.size())
 	    nE->setAttr("help", dscr.substr(dOff));

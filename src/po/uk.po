@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-19 14:34+0200\n"
+"POT-Creation-Date: 2025-02-15 22:39+0200\n"
 "PO-Revision-Date: 2020-10-25 10:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team:  <uk@li.org>\n"
@@ -910,10 +910,6 @@ msgid "Error the function '%s' or missing its parameters."
 msgstr "Помилка функції '%s' або недостатньо параметрів для неї."
 
 #, c-format
-msgid "Item %d of the path '%s' is missing!"
-msgstr "Елемент %d шляху '%s' відсутній!"
-
-#, c-format
 msgid "Error accessing item '%s'!"
 msgstr "Помилка доступу до елементу '%s'!"
 
@@ -1042,9 +1038,6 @@ msgstr "Додання параметрів типу"
 
 msgid "Diagnostics"
 msgstr "Діагностика"
-
-msgid "Time, size (seconds) and level"
-msgstr "Час, розмір (секунд) та рівень"
 
 msgid ""
 "Display messages for larger or even levels.\n"
@@ -1395,12 +1388,12 @@ msgstr ""
 "- день[day], днів[days] (*86400)         - один або декілька днів;\n"
 "- година[hour], годин[hours] (*3600)     - одна або декілька годин;\n"
 "- хвилина[minute], хвилин[minutes] (*60) - одна або декілька хвилин;\n"
-"- мілісекунда[millisecond], мілісекунд[milliseconds], мс[ms] (*1e-3)    - одна "
-"або декілька мілісекунд;\n"
+"- мілісекунда[millisecond], мілісекунд[milliseconds], мс[ms] (*1e-3)    - "
+"одна або декілька мілісекунд;\n"
 "- мікросекунда[microsecond], мікросекунд[microseconds], мкс[us] (*1e-6) - "
 "одна або декілька мікросекунд;\n"
-"- наносекунда[nanosecond], наносекунд[nanoseconds], нс[ns] (*1e-9)      - одна "
-"або декілька наносекунд;\n"
+"- наносекунда[nanosecond], наносекунд[nanoseconds], нс[ns] (*1e-9)      - "
+"одна або декілька наносекунд;\n"
 "- і усе інше передбачає секунди із підстановкою 'секунда', 'секунд' або 'с'."
 
 msgid ""
@@ -3217,3 +3210,10 @@ msgstr "Встановлено назву проєкту у:"
 
 msgid "already started."
 msgstr "вже запущено."
+
+#, c-format
+#~ msgid "Item %d of the path '%s' is missing!"
+#~ msgstr "Елемент %d шляху '%s' відсутній!"
+
+#~ msgid "Time, size (seconds) and level"
+#~ msgstr "Час, розмір (секунд) та рівень"

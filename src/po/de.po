@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-19 14:34+0200\n"
+"POT-Creation-Date: 2025-02-15 22:39+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -921,10 +921,6 @@ msgid "Error the function '%s' or missing its parameters."
 msgstr "Fehler in der Funktion '%s' oder nicht genug Parameter."
 
 #, c-format
-msgid "Item %d of the path '%s' is missing!"
-msgstr "Eintrag %d des Pfads '%s' wird verpasst!"
-
-#, c-format
 msgid "Error accessing item '%s'!"
 msgstr "Fehler beim Zugriff auf das Element '%s'!"
 
@@ -1053,9 +1049,6 @@ msgstr "Fügen Sie dem Typ Parameter hinzu"
 
 msgid "Diagnostics"
 msgstr "Diagnostik"
-
-msgid "Time, size (seconds) and level"
-msgstr "Zeit, Größe (Sekunden) und Niveau"
 
 msgid ""
 "Display messages for larger or even levels.\n"
@@ -3251,6 +3244,13 @@ msgstr "Stellen Sie den Namen des Projekts an:"
 
 msgid "already started."
 msgstr "begonnen."
+
+#, c-format
+#~ msgid "Item %d of the path '%s' is missing!"
+#~ msgstr "Eintrag %d des Pfads '%s' wird verpasst!"
+
+#~ msgid "Time, size (seconds) and level"
+#~ msgstr "Zeit, Größe (Sekunden) und Niveau"
 
 #~ msgid "Size, seconds"
 #~ msgstr "Größe, Sekunden"

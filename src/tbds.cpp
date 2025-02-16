@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tbds.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1134,7 +1134,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("comm",opt,-1,"/prm/st/load",_("Load the program from this DB"),RWRW__,"root","root");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
-		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",SDB_ID,RWRWR_);
+		TConfig::cntrCmdMake(this,opt,"/prm/cfg",0,"root",SDB_ID,RWRWR_);
 		ctrRemoveNode(opt,"/prm/cfg/TYPE");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID);
 		ctrMkNode2("fld",opt,-1,"/prm/cfg/CODEPAGE",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDB_ID,
@@ -1191,7 +1191,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	SYS->setSelDB("");
 	if(isMdf) modif();
     }
-    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SDB_ID, RWRWR_);
+    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(this, opt, TSYS::pathLev(a_path,2), "root", SDB_ID, RWRWR_);
     else if(a_path == "/br/tbl_" || a_path == "/tbls/otbl") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID,SEC_RD)) {
 	    vector<string> lst;

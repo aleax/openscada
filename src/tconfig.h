@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tconfig.h
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,7 +40,6 @@ namespace OSCADA
 //*************************************************
 class TConfig;
 
-//#pragma pack(push,1)
 class TCfg : public TVariant
 {
     public:
@@ -128,7 +127,8 @@ class TCfg : public TVariant
 	TFld	*mFld;
 	TConfig	&mOwner;
 };
-//#pragma pack(pop)
+
+class TCntrNode;
 
 //*************************************************
 //* TConfig                                       *
@@ -159,10 +159,10 @@ class TConfig: public TValElem
 	TElem &elem( )			{ return *mElem; }
 	void setElem( TElem *Elements, bool first = false );
 
-	void cntrCmdMake( XMLNode *fld, const string &path, int pos,
-		const string &user = "root", const string &grp = "root", int perm = 0664 );
-        void cntrCmdProc( XMLNode *fld, const string &elem,
-		const string &user = "root", const string &grp = "root", int perm = 0664 );
+	void cntrCmdMake( TCntrNode *cntrO, XMLNode *fld, const string &path, int pos,
+		const string &owner = "root", const string &group = "root", int perm = 0664 );
+        void cntrCmdProc( TCntrNode *cntrO, XMLNode *fld, const string &elem,
+		const string &owner = "root", const string &group = "root", int perm = 0664 );
 
 	bool incomplTblStruct( )	{ return mIncmplTblStrct; }
 	void setIncmplTblStrct( bool vl ) { mIncmplTblStrct = vl; }

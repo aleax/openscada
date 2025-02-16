@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.OPC_UA file: mod_prt.h
 /***************************************************************************
- *   Copyright (C) 2009-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,7 +46,7 @@ using namespace OPC;
 #define PRT_NAME	trS("Server OPC-UA")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"2.2.17"
+#define PRT_MVER	"2.3.2"
 #define PRT_AUTOR	trS("Roman Savochenko")
 #define PRT_DESCR	trS("Provides OPC-UA server service implementation.")
 #define PRT_LICENSE	"GPL2"
@@ -99,11 +99,12 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 	string name( );
 	string descr( )		{ return mDescr; }
 	bool toEnable( )	{ return mAEn; }
-	SerializerType serType( )	{ return (SerializerType)mSerType; }
+	SerializerType serType( ) { return (SerializerType)mSerType; }
 	string url( )		{ return mURL; }
 	string cert( );
 	string pvKey( );
 	double subscrProcPer( )	{ return 100; }
+	string userAnon( );
 
 	string getStatus( );
 
@@ -119,6 +120,8 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 
 	void setDB( const string &vl, bool qTop = false )	{ setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 
+	uint32_t sessActivate( int sid, uint32_t secCnl, bool check = false,
+			       const string &inPrtId = "", const XML_N &identTkn = XML_N() );
 	uint32_t reqData( int reqTp, XML_N &req );
 
 	// Limits

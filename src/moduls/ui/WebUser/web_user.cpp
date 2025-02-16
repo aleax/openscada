@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebUser file: web_user.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.0.3"
+#define MOD_VER		"2.0.4"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -685,7 +685,7 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/up/st/timestamp",_("Date of modification"),R_R_R_,"root",SUI_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/up/cfg",_("Configuration"))) {
-		TConfig::cntrCmdMake(opt,"/up/cfg",0,"root",SUI_ID,RWRWR_);
+		TConfig::cntrCmdMake(this,opt,"/up/cfg",0,"root",SUI_ID,RWRWR_);
 		ctrRemoveNode(opt, "/up/cfg/PROG");
 		ctrRemoveNode(opt, "/up/cfg/TIMESTAMP");
 		ctrMkNode("fld",opt,-1,"/up/cfg/PROGLang",_("Procedure language or DAQ-template"),RWRWR_,"root",SUI_ID,3,
@@ -752,7 +752,7 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 		opt->childAdd("el")->setText(lls[iL]+"."+ls[iT]);
 	}
     }
-    else if(a_path.find("/up/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SUI_ID, RWRWR_);
+    else if(a_path.find("/up/cfg") == 0) TConfig::cntrCmdProc(this, opt, TSYS::pathLev(a_path,2), "root", SUI_ID, RWRWR_);
     else if(a_path.find("/prgm") == 0) {
 	ResAlloc res(cfgRes, false);
 	if(func() && a_path == "/prgm/io") {

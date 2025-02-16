@@ -138,8 +138,8 @@ class TMess
 	void setMessLevel( int level );
 	void setSelDebCats( const string &vl );
 
-	void put( const char *categ, int8_t level, const char *fmt,  ... ) __attribute__ ((format (printf, 4, 5)));
-	void put_( const char *categ, int8_t level, const char *fmt,  ... ) __attribute__ ((format (printf, 4, 5)));
+	void put( const char *categ, int8_t level, const char *fmt,  ... );
+	void put_( const char *categ, int8_t level, const char *fmt,  ... );
 	void putArg( const char *categ, int8_t level, const char *fmt, va_list ap );
 	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const string &category = "", int8_t level = Debug );
 

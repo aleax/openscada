@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/User API</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/User_API.html" title="Документация/API пользователя (84% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/User_API.html" title="Документація/API користувача (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--high" href="../ru/User_API.html" title="Документация/API пользователя (79% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/User_API.html" title="Документація/API користувача (100% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
@@ -342,7 +342,7 @@ Where:
 <p>Object of work with the regular expressions, based on the library PCRE. In the global search sets object attribute "lastIndex", which allows you to continue the searching at the next function call. In the case of an unsuccessful search the attribute "lastIndex" resets to zero.
 </p><p>As arguments for creating the object, a string with regular expression text and a flags box in the form of a character string is passed:
 </p>
-<ul><li> 'g' — global match mode;</li>
+<ul><li> 'g' — global match mode, that is meant the request repeating for processing all expressions up to empty result array;</li>
 <li> 'i' — case insensitive match mode;</li>
 <li> 'm' — multi-line match mode;</li>
 <li> 'u' — compulsion for UTF-8 characters resolution, for other locales;</li>
@@ -515,12 +515,12 @@ Where:
 <h2><span class="mw-headline" id="Subsystem_.22Security.22_.28SYS.Security.29"><span class="mw-headline-number">5</span> Subsystem "Security" (SYS.Security)</span></h2>
 <p>Functions of the subsystem object (SYS.Security):
 </p>
-<ul><li> <i>int access( string user, int mode, string owner, string group, int access )</i> — checks for access of the <i>user</i> to resource which owned by the <i>owner</i> and <i>group</i> and for the <i>access</i> and <i>mode</i>:</li></ul>
+<ul><li> <i>int access( string user, int mode, string owner, string group, int perm )</i> — checking for access of the <i>user</i> to resource which owned by the <i>owner</i> and <i>group</i> and for the <i>perm</i> and <i>mode</i>:</li></ul>
 <dl><dd><dl><dd><i>user</i> — user of the access checking;</dd>
 <dd><i>mode</i> — access mode (4-R, 2-W, 1-X);</dd>
 <dd><i>owner</i> — owner of the resource;</dd>
 <dd><i>group</i> — group of the resource;</dd>
-<dd><i>access</i> — access mode of the resource (RWXRWXRWX — 0777).</dd></dl></dd></dl>
+<dd><i>perm</i> — permition of the resource (RWXRWXRWX — 0777).</dd></dl></dd></dl>
 <p>Functions of the object "User" (SYS.Security["usr_{User}"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
@@ -1022,5 +1022,5 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/en">Documents/User_API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2025</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3004</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/en">Documents/User_API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3009</td></tr></table></body>
 </html>

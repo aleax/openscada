@@ -47,7 +47,7 @@ class TTest: public TSpecial
 	void modStop( );
 
 	static string cat( );
-	void mess( const string &test, const char *fmt,  ... ) __attribute__ ((format (printf, 3, 4)));
+	void mess( const string &test, const char *fmt,  ... );
 	void prXMLNode( const string &cat, XMLNode *node, int level = 0 );
 
 	//> Test's functions

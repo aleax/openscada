@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.BlockCalc file: block.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -418,7 +418,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("fld",opt,-1,"/blck/st/prc",_("Process"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/blck/cfg",_("Configuration"))) {
-		TConfig::cntrCmdMake(opt,"/blck/cfg",0,"root",SDAQ_ID,RWRWR_);
+		TConfig::cntrCmdMake(this,opt,"/blck/cfg",0,"root",SDAQ_ID,RWRWR_);
 		ctrMkNode("fld",opt,-1,"/blck/cfg/PRIOR",EVAL_STR,RWRWR_,"root",SDAQ_ID,3,"dest","sel_ed","select","/blck/cfg/blks",
 		    "help",_("Priority block(s) calculate before this block. Blocks list is separated by symbol ';'."));
 		ctrMkNode("fld",opt,-1,"/blck/cfg/FUNC",EVAL_STR,func()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"dest","sel_ed","select","/blck/cfg/fncs");
@@ -512,7 +512,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 	for(unsigned iA = 0; iA < list.size(); iA++)
 	    opt->childAdd("el")->setText(c_path+list[iA]);
     }
-    else if(a_path.compare(0,9,"/blck/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SDAQ_ID, RWRWR_);
+    else if(a_path.compare(0,9,"/blck/cfg") == 0) TConfig::cntrCmdProc(this, opt, TSYS::pathLev(a_path,2), "root", SDAQ_ID, RWRWR_);
     else if((a_path == "/lio/show/hide" || a_path == "/lnk/show/hide") && enable()) {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"showHide",DEF_showHide,opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"showHide",opt->text(),opt->attr("user"));

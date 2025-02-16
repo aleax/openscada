@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/Program manual</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Program_manual.html" title="Документы/Руководство по программе (88% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Program_manual.html" title="Документы/Руководство по программе (87% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
@@ -298,11 +298,23 @@
 <p>The subsystem "User interfaces" is a modular one and its modular object is concrete that user interface itself. Modularity of the subsystem allows you to create different user interfaces in different GUI/TUI libraries and use the most optimal solution in a particular case, for example, you can use Web-based configurators and visualizers (<a href="Modules/WebCfg.html" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a>, <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a>, <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a>, <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">WebUser</a>), and in the case of stationary workstations, use the same configurators and visualizers, but on the basics libraries like Qt (<a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a>, <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a>).
 </p>
 <h3><span class="mw-headline" id="Security_of_the_program.2C_the_subsystem_.22Security.22"><span class="mw-headline-number">1.8</span> Security of the program, the subsystem "Security"</span></h3>
-<p>OpenSCADA is a ramified program that consists of a dozen subsystems and can include many modules. Therefore, providing all unrestricted access to these resources is least rash. In order to differentiate access, OpenSCADA provides the subsystem "Security" whose main functions are:
+<p>OpenSCADA is a ramified program that consists of a dozen subsystems and can include many modules. Therefore, giving everyone unlimited access to these resources is reckless, to say the least. In order to differentiate access, OpenSCADA provides the subsystem "Security" whose main functions are:
 </p>
 <ul><li> storing user accounts and user groups;</li>
 <li> authentication of users;</li>
 <li> verifying access rights to a particular resource.</li></ul>
+<p>Besides this subsystem, the <a href="API.html#CntrNode" title="Special:MyLanguage/Documents/API">Control Interface</a> also provides of the access checking per the control items and with logical dividing the permissions per subsystems for which there are automatically created the system groups, including this one — "Security". Currently any Control Node (TCntrNode) can have own access permition (ACL) which the Control Interface can use or save the compatibility before switching to it, and with saving the initial permissions on the subsystem root like to "root:DAQ"-0775. 
+</p><p>Due to ACL is not obligatory or significant in many tasks, its specifying is integrated to point in the description fields of work nodes as a line of the ACL rule — "<b>ACL: {owner}[:{group}[:{perm}]]</b>", where:
+</p>
+<ul><li> <i>owner</i> — owner of the resource;</li>
+<li> <i>group</i> — group of the resource;</li>
+<li> <i>perm</i> — permition of the resource whether in the symbol representing (RWXRWXRWX) or by the octal number (0777).</li></ul>
+<p>Currently ACL is supported by:
+</p>
+<ul><li> the <a href="#CfgDAQ">DAQ subsystem</a> for Controller and Parameter Objects and by the <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC-UA module</a> in the protocol part for checking permition of the authenticated user, where:
+<ul><li> <i>Rd (04)</i> — reading both the Control Nodes and the Parameter Attributes;</li>
+<li> <i>Wr (02)</i> — writing (also creating and removing) the Control Nodes;</li>
+<li> <i>Xt (01)</i> — execution-writing to the Parameter Attribute.</li></ul></li></ul>
 <h3><span class="mw-headline" id="Management_of_modules.2C_the_subsystem_.22Modules_scheduler.22"><span class="mw-headline-number">1.9</span> Management of modules, the subsystem "Modules scheduler"</span></h3>
 <p>OpenSCADA is built on the modular principle, which involves the presence of many modules that need to be controled and scheduled for availability, which is provided for the subsystem "Modules Scheduler". All modules are currently provided to the program through shared libraries (containers) or embedded directly into the OpenSCADA core library according to their logical connection. Each container can contain many different types of modules.
 </p><p>The subsystem "Modules scheduler" controls the state of the containers and allows "hot" plugging, deletion, and updating of the containers and modules it contains.
@@ -809,9 +821,9 @@
 <p>The tab "Parameters" (Fig.4.5i) contains a list of parameters in the controller object, provides selection of the type of parameters that are created by default, as well as information on the total number and the number of enabled parameters. In the context menu user can add, delete and go to the desired parameter.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:688px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm.png"><img class="thumbimage" height="583" src="files/QTCfg_subsys_daq_mod_cntr_prm.png" width="686" /></a>  <div class="thumbcaption">Fig. 4.5i. The tab "Parameters" of the configuration page of a controller object of the subsystem "Data acquisition".</div></div></div></div>
-<p><span id="DAQDiagnostic" title="#DAQDiagnostic">The tab "Diagnostic"</span> (Fig.4.5j) contains diagnostic messages form by the data source. More data sources are external devices with accessing to the data by a network connection or a system bus then there possible different emergency situations on access to the data. Display all their to the field "State" of the controller object impossible due it displays only current access data state. Due the diagnostic you can trace all the emergency situations at view of messages, which forming by the controller object for the specified range of time and by the selected messages level. Besides to certain diagnostic information some modules of the data sources can provide here debug exchange dumps, on the messages level "Debug (0)".
+<p><span id="DAQDiagnostic" title="#DAQDiagnostic">The tab "Diagnostic"</span> (Fig.4.5j) contains form of the diagnostic messages of the data source. Many data sources are external devices with accessing to the data by a network connection or a system bus then there possible different emergency situations on access to the data. Display all their to the field "State" of the controller object impossible due it displays only current access data state. Due the diagnostic you can trace all the emergency situations at view of messages, which forming by the controller object for the specified range of time and by the selected messages level. Besides to certain diagnostic information some modules of the data sources can provide here debug exchange dumps on the messages level "Debug (0)".
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1196px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_diagn.png"><img class="thumbimage" height="681" src="files/QTCfg_subsys_daq_mod_cntr_diagn.png" width="1194" /></a>  <div class="thumbcaption">Fig. 4.5j. The tab "Diagnostic" of the configuration page of a controller object of the subsystem "Data acquisition".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1048px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_diagn.png"><img class="thumbimage" height="723" src="files/QTCfg_subsys_daq_mod_cntr_diagn.png" width="1046" /></a>  <div class="thumbcaption">Fig. 4.5j. The tab "Diagnostic" of the configuration page of a controller object of the subsystem "Data acquisition".</div></div></div></div>
 <p>Parameters of the controller objects of the subsystem "Data acquisition" provide a configuration page with the tabs "Parameters", "Attributes", "Archiving", "Inclusion" and "Template configuration".
 </p><p>The tab "Parameter" (Fig.4.5k) contains the main settings:
 </p>
@@ -1599,20 +1611,14 @@ TblLifeTime  &lt;seconds&gt;  Opened tables lifetime (by default 600 seconds).
 ======================= Subsystem "Transports" options ==================
 
 ======================= Module &lt;Transport:Sockets&gt; options =======================
-    --getaddrinfo[=&lt;lev&gt;] Use getaddrinfo() for resolving all addresses.
-                        &lt;lev&gt; - level of using:
-                                1(default) - with global resource locking;
-                                2 - without the locking.
+    --getaddrinfo[=&lt;on&gt;] Use getaddrinfo() for resolving all addresses.
 
 ======================= Module &lt;Transport:Serial&gt; options =======================
 ---- Parameters of the module section '/sub_Transport/mod_Serial/' of the configuration file ----
 OutLifeTime  &lt;seconds&gt;  Output transports lifetime (by default 0 seconds), 0 to disable the function.
 
 ======================= Module &lt;Transport:SSL&gt; options =======================
-    --getaddrinfo[=&lt;lev&gt;] Use getaddrinfo() for resolving all addresses.
-                        &lt;lev&gt; - level of using:
-                                1(default) - with global resource locking;
-                                2 - without the locking.
+    --getaddrinfo[=&lt;on&gt;] Use getaddrinfo() for resolving all addresses.
 
 =============== Subsystem "Transport Protocols" options =================
 
@@ -1924,5 +1930,5 @@ service openscada-lts-server start           <span class="c"># for SysVinit</spa
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2025</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3004</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3009</td></tr></table></body>
 </html>
