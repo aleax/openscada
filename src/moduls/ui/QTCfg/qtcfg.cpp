@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: qtcfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2024 by Roman Savochenko, <roman@oscada.org>      *
+ *   Copyright (C) 2004-2025 by Roman Savochenko, <roman@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -719,10 +719,18 @@ void ConfApp::pageUp( )
 void ConfApp::pagePrev( )
 {
     if(!prev.size()) return;
-    XMLNode *tabN = root->childGet("area", tabs->currentIndex(), true);
-    next.insert(next.begin(), selPath+(tabN?"#"+tabN->attr("id"):""));
+
     string path = prev[0];
-    prev.erase(prev.begin());
+    XMLNode *tabN = root->childGet("area", tabs->currentIndex(), true);
+    if(sender() && !sender()->objectName().isEmpty() && sender()->objectName().toStdString() != path) {
+	path = sender()->objectName().toStdString();
+	if(prev.empty() || TSYS::strParse(prev[0],0,"#") != selPath)
+	    prev.insert(prev.begin(), selPath+(tabN?"#"+tabN->attr("id"):""));
+    }
+    else {
+	next.insert(next.begin(), selPath+(tabN?"#"+tabN->attr("id"):""));
+	prev.erase(prev.begin());
+    }
 
     try{ pageDisplay(path); } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 }
@@ -730,10 +738,18 @@ void ConfApp::pagePrev( )
 void ConfApp::pageNext( )
 {
     if(!next.size()) return;
-    XMLNode *tabN = root->childGet("area", tabs->currentIndex(), true);
-    prev.insert(prev.begin(), selPath+(tabN?"#"+tabN->attr("id"):""));
+
     string path = next[0];
-    next.erase(next.begin());
+    XMLNode *tabN = root->childGet("area", tabs->currentIndex(), true);
+    if(sender() && !sender()->objectName().isEmpty() && sender()->objectName().toStdString() != path) {
+	path = sender()->objectName().toStdString();
+	if(prev.empty() || TSYS::strParse(prev[0],0,"#") != selPath)
+	    prev.insert(prev.begin(), selPath+(tabN?"#"+tabN->attr("id"):""));
+    }
+    else {
+	prev.insert(prev.begin(), selPath+(tabN?"#"+tabN->attr("id"):""));
+	next.erase(next.begin());
+    }
 
     try{ pageDisplay(path); } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 }
@@ -2327,6 +2343,7 @@ void ConfApp::pageDisplay( const string &ipath )
     if(pgDisplay) return;
     pgDisplay = true;
 
+    string tVl;
     int off = 0;
     string  path = TSYS::strParse(ipath, 0, "#", &off),
 	    tab = TSYS::strParse(ipath, 0, "#", &off);
@@ -2338,17 +2355,30 @@ void ConfApp::pageDisplay( const string &ipath )
     //Checking for Prev and Next
     actPrev->setEnabled(prev.size());
     while(prev.size() > NAV_BACK_DEPTH) prev.pop_back();
-    string tVl;
-    for(vector<string>::iterator iv = prev.begin(); iv != prev.end(); ++iv)
+    actPrev->setMenu(new QMenu(this));
+    for(vector<string>::iterator iv = prev.begin(); iv != prev.end(); ++iv) {
+	QAction *actPrevLnk = new QAction(iv->c_str(), this);
+	actPrevLnk->setObjectName(iv->c_str());
+	actPrev->menu()->addAction(actPrevLnk);
+	connect(actPrevLnk, SIGNAL(triggered()), this, SLOT(pagePrev()));
+
 	tVl += (tVl.size()?"\n":"") + *iv;
-    actPrev->setToolTip(tVl.c_str());
+    }
+    actPrev->setToolTip((string(_("Go back"))+":\n"+tVl).c_str());
 
     actNext->setEnabled(next.size());
     while(next.size() > NAV_BACK_DEPTH) next.pop_back();
     tVl = "";
-    for(vector<string>::iterator iv = next.begin(); iv != next.end(); ++iv)
+    actNext->setMenu(new QMenu(this));
+    for(vector<string>::iterator iv = next.begin(); iv != next.end(); ++iv) {
+	QAction *actNextLnk = new QAction(iv->c_str(), this);
+	actNextLnk->setObjectName(iv->c_str());
+	actNext->menu()->addAction(actNextLnk);
+	connect(actNextLnk, SIGNAL(triggered()), this, SLOT(pageNext()));
+
 	tVl += (tVl.size()?"\n":"") + *iv;
-    actNext->setToolTip(tVl.c_str());
+    }
+    actNext->setToolTip((string(_("Go forward"))+":\n"+tVl).c_str());
 
     //Updating the current page
     if(path != pgInfo.attr("path")) {
@@ -3033,7 +3063,10 @@ void ConfApp::buttonClicked( )
 	    return;
 	}
 	else {
-	    XMLNode req("set"); req.setAttr("path", selPath+"/"+button->objectName().toStdString())->setAttr("primaryCmd", "1");
+	    XMLNode req("set");
+	    req.setAttr("path", selPath+"/"+button->objectName().toStdString())->
+		setAttr("tp", n_el->name())->
+		setAttr("primaryCmd", "1");
 	    //Copy parameters
 	    for(unsigned iCh = 0; iCh < n_el->childSize(); iCh++)
 		//*(req.childAdd()) = *(n_el->childGet(iCh));

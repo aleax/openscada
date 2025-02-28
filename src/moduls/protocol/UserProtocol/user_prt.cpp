@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.UserProtocol file: user_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.6.7"
+#define MOD_VER		"1.6.9"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -80,7 +80,7 @@ TProt::TProt( string name ) : TProtocol(MOD_ID)
     // User protocol DB structure
     mUPrtEl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     mUPrtEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mUPrtEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
+    mUPrtEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     mUPrtEl.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,0,"1","0"));
     mUPrtEl.fldAdd(new TFld("DAQTmpl",trS("Representative DAQ template"),TFld::String,TFld::NoFlag,"50"));
     mUPrtEl.fldAdd(new TFld("WaitReqTm",trS("Timeout of a request waiting, milliseconds"),TFld::Integer,TFld::NoFlag,"6","0"));
@@ -692,7 +692,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/up/st/timestamp",_("Date of modification"),R_R_R_,"root",SPRT_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/up/cfg",_("Configuration"))) {
-		TConfig::cntrCmdMake(opt,"/up/cfg",0,"root",SPRT_ID,RWRWR_);
+		TConfig::cntrCmdMake(this,opt,"/up/cfg",0,"root",SPRT_ID,RWRWR_);
 		if(!progTr()) ctrRemoveNode(opt, "/up/cfg/PR_TR");
 		ctrRemoveNode(opt, "/up/cfg/InPROG");
 		ctrRemoveNode(opt, "/up/cfg/OutPROG");
@@ -776,7 +776,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	}
 	opt->childAdd("el")->setText("");
     }
-    else if(a_path.find("/up/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SPRT_ID, RWRWR_);
+    else if(a_path.find("/up/cfg") == 0) TConfig::cntrCmdProc(this, opt, TSYS::pathLev(a_path,2), "root", SPRT_ID, RWRWR_);
     else if(a_path == "/in/WaitReqTm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(waitReqTm()));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))	setWaitReqTm(s2i(opt->text()));

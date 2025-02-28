@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.DAQGate file: daq_gate.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.13.13"
+#define MOD_VER		"2.14.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -64,10 +64,8 @@ extern "C"
 
 using namespace DAQGate;
 
-#define hasArch()		resB1()
-#define setHasArch(val)		setResB1(val)
-#define hasArchReq()		resB2()
-#define setHasArchReq(val)	setResB2(val)
+#define hasArch()		property("hasArch", TVariant(), "DAQ").getB()
+#define setHasArch(val)		property("hasArch", val, "DAQ")
 
 //******************************************************
 //* TTpContr                                           *
@@ -548,6 +546,7 @@ void *TMdContr::Task( void *icntr )
     TMdContr &cntr = *(TMdContr *)icntr;
     int64_t tCnt, tPrev = TSYS::curTime();
     double syncCnt = 0;
+    int syncPerPrev = cntr.syncPer();
     unsigned int div = 0;
 
     cntr.endrunReq = false;
@@ -588,7 +587,7 @@ void *TMdContr::Task( void *icntr )
 	    //Allow stations presenting
 	    bool isAccess = false, needToResync = false;
 	    for(map<string,StHd>::iterator st = cntr.mStatWork.begin(); st != cntr.mStatWork.end(); ++st) {
-		if(firstCall)	st->second.cntr = 0;	//Reset counter for connection alarm state update
+		if(firstCall)	st->second.cntr = 0;		//Reset counter for connection alarm state update
 		if(st->second.cntr > 0) st->second.cntr = vmax(0, st->second.cntr-1e-6*(tCnt-tPrev));
 		if(st->second.cntr <= 0) isAccess = true;
 		if(st->second.cntr == 0) needToResync = true;	//?!?! Maybe only for all == 0 stations
@@ -596,10 +595,13 @@ void *TMdContr::Task( void *icntr )
 	    if(!isAccess) { tPrev = tCnt; TSYS::taskSleep(cntr.period()?cntr.period():1e9); continue; }
 	    else {
 		if(cntr.syncPer() > 0) {	//Enable sync
+		    // Periodically
 		    div = cntr.period() ? vmax(2,(unsigned int)(cntr.syncPer()/(1e-9*cntr.period()))) : 0;
-		    if(syncCnt <= 0) syncCnt = cntr.syncPer();
+		    // At CRON
+		    if(syncCnt <= 0 || syncPerPrev != cntr.syncPer()) syncCnt = cntr.syncPer();
 		    syncCnt = vmax(0, syncCnt-1e-6*(tCnt-tPrev));
-		} else { div = 0; syncCnt = 1; }	//Disable sync
+		    syncPerPrev = cntr.syncPer();
+		} else { div = 0; syncCnt = 1; }//Disable sync
 
 		//Parameters list update
 		if(cntr.syncForce || (!firstCall && needToResync) || (!div && syncCnt <= 0) || (div && itCnt > div && (itCnt%div) == 0))
@@ -711,14 +713,13 @@ void *TMdContr::Task( void *icntr )
 			    for(unsigned iV = 0; iV < listV.size(); iV++) {
 				if(listV[iV] == "SHIFR") continue;
 				AutoHD<TVal> vl = prm.vlAt(listV[iV]);
-				if(firstCall && !vl.at().arch().freeStat() && !vl.at().hasArch())
-				    vl.at().setHasArchReq(false);	//!!!! Reset the remote archive detection flag to redetect forcibly at restart
-				if(sepReq && ((!vl.at().arch().freeStat() && !vl.at().hasArch()) ||	//!!!! Hiding the tag <el> at the remote archive presence
-										vl.at().reqFlg())) {
+				if(firstCall && !vl.at().arch().freeStat() && vl.at().hasArch() == false)
+				    vl.at().setHasArch((char)EVAL_BOOL);	//Resetting the remote archive detection flag to redetect forcibly at restart
+				if(sepReq && ((!vl.at().arch().freeStat() && vl.at().hasArch() == false) || vl.at().reqFlg())) {
 				    prmNd->childAdd("el")->setAttr("id",listV[iV]);
 				    rC++;
 				}
-				if(!vl.at().arch().freeStat() && (!vl.at().hasArchReq() || vl.at().hasArch()))	//!!!! Hidding the tag <ael> at the remote archive missing
+				if(!vl.at().arch().freeStat() && (vl.at().hasArch() == EVAL_BOOL || vl.at().hasArch() == true))
 				    prmNd->childAdd("ael")->setAttr("id", listV[iV])->
 					setAttr("tm", ll2s(vmax(vl.at().arch().at().end("")+1,	//!!!! +1 to prevent of spare values requesting
 												//     and their direct writing to the archives
@@ -831,9 +832,10 @@ void *TMdContr::Task( void *icntr )
 				    vl.at().setReqFlg(false);
 				    stO.numR++;
 				    cntr.mStatTm = vmax(cntr.mStatTm, atoll(aNd->attr("tm").c_str()));
-				    vl.at().setHasArchReq(true);
+				    if(vl.at().hasArch() == EVAL_BOOL) vl.at().setHasArch(false);
 				}
-				else if(aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize()) {
+				//!!!! Remote archive with no data will have empty <ael> tag
+				else if(aNd->name() == "ael" && !vl.at().arch().freeStat() /*&& aNd->childSize()*/) {
 				    vl.at().setHasArch(true);
 
 				    //  Setting the archive
@@ -1167,8 +1169,7 @@ void TMdPrm::load_( )
 	    if(vlPresent(aId)) continue;
 	    pEl.fldAdd(new TFld(aId.c_str(),aEl->attr("nm").c_str(),(TFld::Type)s2i(aEl->attr("tp")),
 		s2i(aEl->attr("flg")),"","",aEl->attr("vals"),aEl->attr("names")));
-	    vlAt(aId).at().setHasArch(false);
-	    vlAt(aId).at().setHasArchReq(false);
+	    vlAt(aId).at().setHasArch((char)EVAL_BOOL);
 	    //vlAt(aEl->attr("id")).at().setS(aEl->text());
 	}
 	vlAt("err").at().setS(_("10:Data not available."), 0, true);
@@ -1239,8 +1240,7 @@ void TMdPrm::sync( )
 			"","",ael->attr("vals"),ael->attr("names")));
 		    modif(true);
 		}
-		vlAt(aId).at().setHasArch(false);
-		vlAt(aId).at().setHasArchReq(false);
+		vlAt(aId).at().setHasArch((char)EVAL_BOOL);
 	    }
 
 	    // Check for remove attributes
@@ -1339,8 +1339,7 @@ void TMdPrm::vlArchMake( TVal &val )
 {
     TParamContr::vlArchMake(val);
 
-    val.setHasArch(false);
-    val.setHasArchReq(false);
+    val.setHasArch((char)EVAL_BOOL);
 
     if(val.arch().freeStat())	return;
     val.arch().at().setSrcMode(TVArchive::DAQAttr);
@@ -1375,6 +1374,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/st/nm",_("Name"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/stats",_("Stations"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/addr",_("Address in remote source"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/st/arhAttrs",_("Archiving attributes"),R_R_R_,"root",SDAQ_ID,2,"tp","str",
+		    "help",_("The attributes are archiving both locally and remotely, so for them only archives requesting is used."));
 	    }
 	    XMLNode *cfgN = ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"));
 	    if(cfgN && !isEmpty) {
@@ -1409,6 +1410,15 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/st/nm" && ctrChkNode(opt))	opt->setText(name());
     else if(a_path == "/prm/st/stats" && ctrChkNode(opt)) opt->setText(mStats.getS());
     else if(a_path == "/prm/st/addr" && ctrChkNode(opt))  opt->setText(mPrmAddr.getS());
+    else if(a_path == "/prm/st/arhAttrs" && ctrChkNode(opt)) {
+	string attrs;
+	vector<string> listV;
+	vlList(listV);
+	for(unsigned iV = 0; iV < listV.size(); iV++)
+	    if(vlAt(listV[iV]).at().hasArch() == true)
+		attrs += (attrs.size()?", ":"") + listV[iV];
+	opt->setText(attrs);
+    }
     else if(a_path == "/prm/cfg/SHIFR" || a_path == "/prm/cfg/NAME" || a_path == "/prm/cfg/DESCR")
 	TParamContr::cntrCmdProc(opt);
     else if(a_path.compare(0,4,"/prm") == 0) {

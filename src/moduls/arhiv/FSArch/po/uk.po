@@ -7,13 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-29 15:43+0300\n"
+"POT-Creation-Date: 2024-12-07 08:41+0200\n"
 "PO-Revision-Date: 2007-10-21 22:21+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Error call the packing program!"
+msgstr "Помилка виклику пакувальної програми!"
 
 #, c-format
 msgid "Error compressing for '%s': %d!"
@@ -374,6 +377,9 @@ msgstr ""
 "Дозволяє добре упаковувати слабозмінні значення, за межами дійсності.\n"
 "Виключити цю властивість можна встановивши параметр у нуль."
 
+msgid "Remove original archive file at error unpacking"
+msgstr "Видалити оригінальний файл архіву при помилці розпакування"
+
 msgid "Files size"
 msgstr "Розмір файлів"
 
@@ -436,9 +442,16 @@ msgid "Error archive file!"
 msgstr "Помилка у файлі архіву!"
 
 #, c-format
-msgid "Warning! Allocated buffer size %d for indexes lesser for used %d."
+msgid ""
+"Number of the setting to file items achieved the limit %d for time range "
+"[%lld:%lld]!"
 msgstr ""
-"Попередження! Виділений розмір %d буферу індексу менше використаного %d."
+"Кількість встановлень до елементів файлу сягнуло обмеження %d "
+"для діапазону часу [%lld:%lld]!"
+
+#, c-format
+msgid "Warning! Allocated buffer size %d for indexes lesser for used %d."
+msgstr "Попередження! Виділений розмір %d буферу індексу менше використаного %d."
 
 #, c-format
 msgid "Error writing to the archive '%s' file '%s': %s(%d)"
@@ -453,20 +466,16 @@ msgid "Error writing to the file '%s'!"
 msgstr "Помилка запису до файлу '%s'!"
 
 #, c-format
-msgid ""
-"Error archive file structure: '%s'. Margin = %d byte. Will try fix that!"
-msgstr ""
-"Помилка структури файлу: '%s'. Різниця = %d байт. Спробую виправити це!"
+msgid "Error archive file structure: '%s'. Margin = %d byte. Will try fix that!"
+msgstr "Помилка структури файлу: '%s'. Різниця = %d байт. Спробую виправити це!"
 
 #, c-format
 msgid "Error openning/creating an archive file for the copy here: %s"
 msgstr "Помилка відкриття/створення нового файлу архіву для копіювання: %s"
 
 #, c-format
-msgid ""
-"Last value for the actual archive file '%s' is not EVAL. Will try fix that!"
-msgstr ""
-"Останнє значення актуального файлу архіву '%s' не EVAL. Спробую виправити це!"
+msgid "Last value for the actual archive file '%s' is not EVAL. Will try fix that!"
+msgstr "Останнє значення актуального файлу архіву '%s' не EVAL. Спробую виправити це!"
 
 msgid "Archiver on the file system"
 msgstr "Архіватор на файлову систему"
@@ -480,3 +489,4 @@ msgid ""
 msgstr ""
 "Модуль архіватору. Надає функції архівації повідомлень та значень на файлову "
 "систему."
+

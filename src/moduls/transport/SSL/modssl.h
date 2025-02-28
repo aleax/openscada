@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.SSL file: modssl.h
 /***************************************************************************
- *   Copyright (C) 2008-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -113,8 +113,8 @@ class TSocketIn: public TTransportIn
 
 	void start( );
 	void stop( );
-	void check( unsigned int cnt );	//Some periodic tests and checkings like to the certificate file update
-					//?!?! and the initiative connection
+	void check( unsigned int cnt );	//Some periodic tests and checkings like to the certificate file update and the initiative connection
+	int writeTo( const string &sender, const string &data );
 
 	unsigned forksPerHost( const string &sender );
 
@@ -162,7 +162,7 @@ class TSocketIn: public TTransportIn
 
 	bool		clFree;			//Clients stopped
 	//vector<pthread_t>	clId;		//Client's pids
-	vector<SSockIn*> clId;			//Client's control object, by sockets FD
+	map<int, SSockIn*> clId;		//Client's control object, by sockets FD
 	map<string, int> clS;			//Clients (senders) counters
 
 	// Status atributes
@@ -250,7 +250,10 @@ class TTransSock: public TTypeTransport
 	TTransportIn  *In( const string &name, const string &idb );
 	TTransportOut *Out( const string &name, const string &idb );
 
-	static string getAddr( const sockaddr_storage &addr );
+	static string addrResolve( const string &host, const string &port, vector<sockaddr_storage> &addrs, bool isServer = false );
+	static string addrGet( const sockaddr_storage &addr );
+	static string addrHost( const string &addr );
+	static string addrPort( const string &addr );
 
 	string outAddrHelp( );
 	string outTimingsHelp( bool noAdd = false );
@@ -261,12 +264,15 @@ class TTransSock: public TTypeTransport
 	//Attributes
 	SSL_CTX		*ctxIn, *ctxOut;
 
+	bool		use_getaddrinfo;
+
     protected:
 	void load_( );
 
     private:
 	//Methods
 	void preDisable( int flag );
+	string optDescr( );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 

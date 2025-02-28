@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/WebUser</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/WebUser.html" title="Модули/Web пользователя (94% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/WebUser.html" title="Модулі/Web користувача (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--high" href="../../ru/Modules/WebUser.html" title="Модули/Web пользователя (65% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/WebUser.html" title="Модулі/Web користувача (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">WebUser</a> </td>
 <td> User WWW-page
 </td>
-<td> 1.6 </td>
+<td> 2.0 </td>
 <td> GPL2 </td>
 <td> ui_WebUser.so </td>
 <td> en,uk,ru,de </td>
@@ -41,8 +41,8 @@
 <td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2010) — the page initial translation</i></font> </td>
 <td> Provides for creating your own web-pages on internal OpenSCADA language.
 </td></tr></table>
-<p>The module provides the user with a mechanism to create WWW-pages, and can process other WWW-requests in internal OpenSCADA language, usually <a href="../Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, without involving low level programming. As a page processor, the module allows you to use <a href="../Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">standard DAQ templates</a>. Using DAQ templates allows you to create WWW-page libraries and call them in this module multiple times as their implementations, as well as provide the data context of the template with their connection to the data of the subsystem "Data Acquisition".
-</p><p>Except of the module's belonging to OpenSCADA it also belongs and is the module of the <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> transport protocol module. Actually, the module WebUser call is made from Protocol.HTTP and through the enhanced communication mechanism, by exported functions of the module: HTTP_GET(), HTTP_POST().
+<p>The module provides the user with a mechanism to create WWW-pages, and can process other WWW-requests in internal OpenSCADA language, usually <a href="../Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, without involving low level programming. As a page processor, the module allows you to use <a href="../Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">standard DAQ-Templates</a>. Using DAQ-Templates allows you to create WWW-page libraries and call them in this module multiple times as their implementations, as well as provide the data context of the template with their connection to the data of the subsystem "Data Acquisition".
+</p><p>Except of the module's belonging to OpenSCADA it also belongs and is the module of the <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> transport protocol module. Actually, the module WebUser call is made from Protocol.HTTP and through the enhanced communication mechanism — by the exported function HTTP() of the module.
 </p><p>Addressing of the pages begins with the second element of the URI. It is connected with the fact that the first element of the URI is used to identify the user WWW-interface module. For example, URL <i>http://localhost.localdomain:10002/WebUser/UserPage</i> can be deciphered as a call of the user page "UserPage" of this module on the host "localhost.localdomain" on port 10002. In the case of absence of the second element of URI and instruction to display an index of the user pages in the configuration, the index of the pages is generated (Fig.1).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:650px;"><a class="image" href="http://oscada.org/wiki/File:WebUser_idx.png"><img class="thumbimage" height="297" src="../files/WebUser_idx.png" width="648" /></a>  <div class="thumbcaption">Fig.1. Index of the user pages.</div></div></div></div>
@@ -58,8 +58,8 @@
 <ul><li> Section "State" — contains properties that characterize the state of the page: Status, "Enabled", the name of the database containing the configuration (with tracking the availability of the data in different storages and providing the sequentially removing duplicates) and date of the last modification.</li>
 <li> Identifier, name and description of the page.</li>
 <li> The state "Enabled", in which the page must be translated at boot.</li>
-<li> Language of the direct procedure or <a href="../Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">DAQ-template</a> associated with the page.</li></ul>
-<p>All requests to the user pages are sent to the direct procedure of the processing of the requests of the user page, or to the DAQ-template procedure, which is represented on the "Program" tab of the user page object (Fig.4). In the case of the DAQ-template, the template configuration tab is also provided (Fig.5).
+<li> Language of the direct procedure or <a href="../Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">DAQ-Template</a> associated with the page.</li></ul>
+<p>All requests to the user pages are sent to the direct procedure of the processing of the requests of the user page, or to the DAQ-Template procedure, which is represented on the "Program" tab of the user page object (Fig.4). In the case of the DAQ-Template, the template configuration tab is also provided (Fig.5).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:783px;"><a class="image" href="http://oscada.org/wiki/File:WebUser_up_prog.png"><img class="thumbimage" height="692" src="../files/WebUser_up_prog.png" width="781" /></a>  <div class="thumbcaption">Fig.4. The tab "Procedure" of an user WWW-page object.</div></div></div></div>
 <p>Tab of the procedure for processing the requests to the user's page contains:
@@ -69,8 +69,8 @@
 <li> Links to the data of the "Data Acquisition" subsystem, which are visible and available for determination in the mode of work on the template and in the state "Enabled" of the page object.</li></ul>
 <p>For the direct processing procedure, and the required or optional ones to create in the template, the following exchange attributes with the HTTP-protocol are predetermined:
 </p>
-<ul><li> <i><b>Result (rez)</b></i> &lt;String&gt; — processing result, by defaults — "200 OK"; in the DAQ-template mode you must write thither directly, not by the operator "return";</li>
-<li> <i><b>HTTP request (HTTPreq)</b></i> &lt;String&gt; — the HTTP request method: GET, POST;</li>
+<ul><li> <i><b>Result (rez)</b></i> &lt;String&gt; — processing result, by defaults — "200 OK"; in the DAQ-Template mode you must write thither directly, not by the operator "return"; to prevent sending a HTTP-wrapped response, put an empty string here, that is, send the response directly via <a href="../User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">SYS.Transport["Modul"]["in_Transp"].writeTo()</a>;</li>
+<li> <i><b>HTTP request (HTTPreq)</b></i> &lt;String&gt; — the HTTP request method like to GET, POST, ...;</li>
 <li> <i><b>URL (url)</b></i> &lt;String&gt; — URI of the request;</li>
 <li> <i><b>WWW-page (page)</b></i> &lt;String&gt; — content of the Get/Post page for the request and respond as well;</li>
 <li> <i>Sender (sender)</i> &lt;String&gt; — request sender;</li>
@@ -80,6 +80,7 @@
 <li> <i>Content items (cnts)</i> &lt;Object::Array&lt;XMLNodeObj&gt;&gt; — content items for POST;</li>
 <li> <i>This object (this)</i> &lt;Object&gt; — pointer to this page's object;</li>
 <li> <i>Protocol's object (prt)</i> &lt;Object&gt; — pointer to the input part object of the HTTP protocol;</li>
+<li> <i>Transport's object (tr)</i> &lt;Object&gt; — pointer to the input transport to the input part object of the HTTP protocol;</li>
 <li> <i>Scheduling the next service call (schedCall)</i> &lt;Integer&gt; — write here the time value in seconds for scheduling the procedure context execution in a service call; <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> the service calls are performed in the periodicity 10 seconds usually, so you can schedule the calls not often than at 10 seconds.</li></ul>
 <p>The overall scenario of the user's page request:
 </p>
@@ -88,7 +89,7 @@
 <li> The transport protocol module, in accordance with the first element of the URI, sends the request to this module.</li>
 <li> This module selects the object of the user's page which is specified in the second element of the URI.</li>
 <li> Initialization of the HTTP-protocol variables for the page procedure is made:
-<ul><li> <i><b>HTTPreq</b></i> — value of the string "GET" or "POST", depending on the type of the request, is set;</li>
+<ul><li> <i><b>HTTPreq</b></i> — is set to value of the HTTP-Method (like to "GET", "POST"), depending on the request type;</li>
 <li> <i><b>url</b></i> — address of the requested resource (URI);</li>
 <li> <i><b>page</b></i> — the input single content and the sending page for the method "POST";</li>
 <li> <i>sender</i> — address of sender of the request;</li>
@@ -97,12 +98,12 @@
 <li> <i>URLprms</i> — parsed list of the URL parameters in the form of object's properties;</li>
 <li> <i>cnts</i> — parsed content's items for POST, in the Array &lt;XMLNodeObj&gt;, with the elements content in the text and properties, in the XMLNodeObj attributes.</li></ul></li>
 <li> Calling the procedure for execution, which, having processed the request, forms the page content in the "page" and the request result in the "rez".</li>
-<li> At the end, the answer is formed with the return code of the HTTP from "rez" and with the content from the "page", and also with changed and appended variables of the HTTP-protocol from "HTTPvars".</li></ul>
+<li> At the end, the answer is formed with the return code of the HTTP from "rez" and with the content from the "page", and also with changed and appended variables of the HTTP-protocol from "HTTPvars". For empty "rez" the answer is not generated!</li></ul>
 
 
 
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebUser/en">Modules/WebUser/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebUser/en">Modules/WebUser/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.8</td></tr></table></body>
 </html>

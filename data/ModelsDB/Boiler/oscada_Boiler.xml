@@ -28,16 +28,6 @@
 		<fld NAME="user" DESCR="Simple user" DESCR_uk="Звичайний користувач" DESCR_ru="Простой пользователь" PASS="$1$user$k8sntSoh7jhsc6lwspjsU." />
 	    </tbl>
 	    <tbl id="Security_grp">
-		<fld NAME="Archive" DESCR="Archives-History" DESCR_uk="Архіви-Історія" DESCR_ru="Архивы-История" />
-		<fld NAME="BD" DESCR="Databases" DESCR_uk="Бази даних" DESCR_ru="Базы данных" />
-		<fld NAME="DAQ" DESCR="Data acquisition" DESCR_uk="Збір даних" DESCR_ru="Сбор данных" />
-		<fld NAME="ModSched" DESCR="Modules scheduler" DESCR_uk="Диспетчер модулів" DESCR_ru="Диспетчер модулей" />
-		<fld NAME="Protocol" DESCR="Transport protocols" DESCR_uk="Транспортні протоколи" DESCR_ru="Транспортные протоколы" />
-		<fld NAME="Security" DESCR="Security" DESCR_uk="Безпека" DESCR_ru="Безопасность" />
-		<fld NAME="Special" DESCR="Specials" DESCR_uk="Спеціальні" DESCR_ru="Специальные" />
-		<fld NAME="Transport" DESCR="Transports" DESCR_uk="Транспорти" DESCR_ru="Транспорты" />
-		<fld NAME="UI" DESCR="User Interfaces" DESCR_uk="Інтерфейси користувача" DESCR_ru="Интерфейсы пользователя" />
-		<fld NAME="root" DESCR="Administartors group" DESCR_uk="Група адміністраторів" DESCR_ru="Группа администраторов" />
 		<fld NAME="users" DESCR="Users group" DESCR_uk="Група користувачів" DESCR_ru="Группа пользователей" USERS="test;user;roman;" />
 		<fld NAME="ITW" DESCR="IT worker" DESCR_uk="Робітник IT" DESCR_ru="Работник IT"
 		    LONGDESCR="Information Technology or service worker."

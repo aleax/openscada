@@ -118,6 +118,9 @@ msgstr ""
 msgid "Protocol's object"
 msgstr ""
 
+msgid "Transport's object"
+msgstr ""
+
 msgid "Scheduling the next service call"
 msgstr ""
 

@@ -125,6 +125,9 @@ msgstr "Dieses Objekt"
 msgid "Protocol's object"
 msgstr "Protokollobjekt"
 
+msgid "Transport's object"
+msgstr "Transportobjekt"
+
 msgid "Scheduling the next service call"
 msgstr "Terminierung des nächsten Serviceeinsatzes"
 

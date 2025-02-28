@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/SSL</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../../ru/Modules/SSL.html" title="Модули/SSL (24% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/SSL.html" title="Модулі/SSL (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../../ru/Modules/SSL.html" title="Модули/SSL (29% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/SSL.html" title="Модулі/SSL (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a> </td>
 <td> SSL
 </td>
-<td> 4.5 </td>
+<td> 5.0 </td>
 <td> GPL2 </td>
 <td> tr_SSL.so </td>
 <td> en,uk,ru,de </td>
@@ -51,7 +51,7 @@
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
-<li class="toclevel-1 tocsection-1"><a href="#Input_transports"><span class="tocnumber">1</span> <span class="toctext">Input transports</span></a></li>
+<li class="toclevel-1 tocsection-1"><a href="#Input_transports"><span class="tocnumber">1</span> <span class="toctext"><span>Input transports</span></span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#Output_transports"><span class="tocnumber">2</span> <span class="toctext">Output transports</span></a></li>
 <li class="toclevel-1 tocsection-3"><a href="#Certificates_and_keys"><span class="tocnumber">3</span> <span class="toctext">Certificates and keys</span></a></li>
 </ul>
@@ -60,7 +60,7 @@
 <p>On new SSL-versions the "Transports" tab of the module is appended by information of the common-context ciphers for input-server and output-client parts differently, see Figure 1.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:891px;"><a class="image" href="http://oscada.org/wiki/File:SSL_tr.png"><img class="thumbimage" height="705" src="../files/SSL_tr.png" width="889" /></a>  <div class="thumbcaption">Fig.1. The "Transports" tab with SSL ciphers.</div></div></div></div>
-<h2><span class="mw-headline" id="Input_transports"><span class="mw-headline-number">1</span> Input transports</span></h2>
+<h2><span class="mw-headline" id="Input_transports"><span class="mw-headline-number">1</span> <span id="InTr" title="#InTr">Input transports</span></span></h2>
 <p>Configured and running input transport opens server SSL-socket for the expectation of connection of the clients, besides the initiative connections. SSL-socket is multi-stream, i.e. when the client connects, the client socket and the new thread are created in which the client is served. Server socket in this moment switches to the waiting for the request from the new client. Thus the parallel service of the clients is achieved.
 </p><p>Each input transport is associated with one or several available transport protocols, to which input messages are transmitted. Together with the transport protocols, the mechanism of combining fragmented pieces when sending requests is supported.
 </p><p>Read about the passive acquisition mechanism and initiative connections you can in the corresponding part of the "<a href="../DAQ.html#PassiveAndInitiative" title="Special:MyLanguage/Documents/DAQ">Data acquisition in OpenSCADA</a>" document.
@@ -135,5 +135,5 @@ openssl req -x509 -new -key ./key.pem -out ./selfcert.pem -days 365
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SSL/en">Modules/SSL/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SSL/en">Modules/SSL/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.8</td></tr></table></body>
 </html>

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcontroller.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -550,53 +550,55 @@ void TController::cntrCmdProc( XMLNode *opt )
 	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Controller: ")+trD(name()),RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("branches",opt,-1,"/br","",R_R_R_);
-	if(ctrMkNode("area",opt,-1,"/cntr",_("Controller"))) {
-	    if(ctrMkNode("area",opt,-1,"/cntr/st",_("State"))) {
-		ctrMkNode("fld",opt,-1,"/cntr/st/status",_("Status"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/cntr/st/enSt",_("Enabled"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/cntr/st/runSt",_("Running"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Storage"),RWRWR_,"root",SDAQ_ID,4,
-		    "tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
+	if(ctrMkNode("area",opt,-1,"/cntr",_("Controller"),R_R_R_)) {
+	    if(ctrMkNode("area",opt,-1,"/cntr/st",_("State"),R_R_R_)) {
+		ctrMkNode("fld",opt,-1,"/cntr/st/status",_("Status"),R_R_R_,"","",1, "tp","str");
+		ctrMkNode3("fld",opt,-1,"/cntr/st/enSt",_("Enabled"),SEC_RD|SEC_WR, "tp","bool", NULL);
+		ctrMkNode3("fld",opt,-1,"/cntr/st/runSt",_("Running"),SEC_RD|SEC_WR, "tp","bool", NULL);
+		ctrMkNode3("fld",opt,-1,"/cntr/st/db",_("Storage"),SEC_RD|SEC_WR,
+		    "tp","str", "dest","select", "select","/db/list", "help",TMess::labStor().c_str(), NULL);
 		if(DB(true).size())
-		    ctrMkNode("comm",opt,-1,"/cntr/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),
-			TMess::labStorFromCode(DB(true)).c_str()).c_str(),RWRW__,"root",SDAQ_ID,1,"help",TMess::labStorRem(mDB).c_str());
-		ctrMkNode("fld",opt,-1,"/cntr/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
+		    ctrMkNode3("comm",opt,-1,"/cntr/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),
+			TMess::labStorFromCode(DB(true)).c_str()).c_str(),SEC_RD|SEC_WR, "help",TMess::labStorRem(mDB).c_str(), NULL);
+		ctrMkNode("fld",opt,-1,"/cntr/st/timestamp",_("Date of modification"),R_R_R_,"","",1, "tp","time");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/cntr/cfg",_("Configuration"))) {
-		TConfig::cntrCmdMake(opt,"/cntr/cfg",0,"root",SDAQ_ID,RWRWR_);
+	    if(ctrMkNode3("area",opt,-1,"/cntr/cfg",_("Configuration"),SEC_RD,NULL)) {
+		TConfig::cntrCmdMake(this,opt,"/cntr/cfg",0,"","",SEC_RD|SEC_WR);
 		for(unsigned iTpP = 0; iTpP < owner().tpPrmSize(); ++iTpP)	//????[v1.0] Remove
 		    if(owner().tpPrmAt(iTpP).mDB.size() && tbl(owner().tpPrmAt(iTpP)) == tblStd(owner().tpPrmAt(iTpP)))
 			ctrRemoveNode(opt, ("/cntr/cfg/"+owner().tpPrmAt(iTpP).mDB).c_str());
+		ctrMkNode3("fld",opt,-1,"/cntr/cfg/DESCR",EVAL_STR,SEC_RD|SEC_WR, "SnthHgl","1", NULL);
 		ctrRemoveNode(opt, "/cntr/cfg/MESS_LEV");
 		ctrRemoveNode(opt, "/cntr/cfg/REDNT");
 		ctrRemoveNode(opt, "/cntr/cfg/REDNT_RUN");
 	    }
 	}
 	if(owner().tpPrmSize()) {
-	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),RWRWR_,"root",SDAQ_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
-	    if(ctrMkNode("area",opt,-1,"/prm",_("Parameters"))) {
+	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),RWRWR_,"","",2, "idm",i2s(limObjNm_SZ).c_str(), "idSz",i2s(limObjID_SZ).c_str());
+	    if(ctrMkNode("area",opt,-1,"/prm",_("Parameters"),R_R_R_)) {
 		if(owner().tpPrmSize() > 1)
-		    ctrMkNode("fld",opt,-1,"/prm/t_prm",_("Add parameters to the type"),RWRW__,"root",SDAQ_ID,3,
-			"tp","str","dest","select","select","/prm/t_lst");
-		ctrMkNode("fld",opt,-1,"/prm/nmb",_("Number"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/prm/prm",_("Parameters"),RWRWR_,"root",SDAQ_ID,5,
-		    "tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","prm_","idSz",i2s(limObjID_SZ).c_str());
+		    ctrMkNode("fld",opt,-1,"/prm/t_prm",_("Add parameters to the type"),RWRW__,"","",3,
+			"tp","str", "dest","select", "select","/prm/t_lst");
+		ctrMkNode("fld",opt,-1,"/prm/nmb",_("Number"),R_R_R_,"","",1, "tp","str");
+		ctrMkNode("list",opt,-1,"/prm/prm",_("Parameters"),RWRWR_,"","",5,
+		    "tp","br", "idm",i2s(limObjNm_SZ).c_str(), "s_com","add,del", "br_pref","prm_", "idSz",i2s(limObjID_SZ).c_str());
 	    }
 	}
-	if(ctrMkNode("area",opt,-1,"/mess",_("Diagnostics"))) {
-	    ctrMkNode("fld",opt,-1,"/mess/tm",_("Time, size (seconds) and level"),RWRW__,"root",SDAQ_ID,1,"tp","time");
-	    ctrMkNode("fld",opt,-1,"/mess/size","",RWRW__,"root",SDAQ_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/mess/lvl","",RWRW__,"root",SDAQ_ID,5,"tp","dec","dest","select",
+	if(ctrMkNode("area",opt,-1,"/mess",_("Diagnostics"),R_R___)) {
+	    ctrMkNode("fld",opt,-1,"/mess/tm",_("Time, depth and level"),RWRW__,"","",1, "tp","time");
+	    ctrMkNode("fld",opt,-1,"/mess/size","",RWRW__,"","",5, "tp","str", "len","10",
+		"dest","sel_ed", "sel_list",TMess::labTimeSel().c_str(), "help",TMess::labTime().c_str());
+	    ctrMkNode("fld",opt,-1,"/mess/lvl","",RWRW__,"","",5, "tp","dec", "dest","select",
 		"sel_id","0;1;2;3;4;5;6;7",
 		"sel_list",_("Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X])"),
 		"help",_("Display messages for larger or even levels.\n"
 			 "Also affects to specific-diagnostic messages generation by the data sources."));
-	    if(ctrMkNode("table",opt,-1,"/mess/mess",_("Messages"),R_R___,"root",SDAQ_ID)) {
-		ctrMkNode("list",opt,-1,"/mess/mess/0",_("Time"),R_R___,"root",SDAQ_ID,1,"tp","time");
-		ctrMkNode("list",opt,-1,"/mess/mess/0a",_("mcsec"),R_R___,"root",SDAQ_ID,1,"tp","dec");
-		ctrMkNode("list",opt,-1,"/mess/mess/1",_("Category"),R_R___,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/mess/mess/2",_("Level"),R_R___,"root",SDAQ_ID,1,"tp","dec");
-		ctrMkNode("list",opt,-1,"/mess/mess/3",_("Message"),R_R___,"root",SDAQ_ID,1,"tp","str");
+	    if(ctrMkNode("table",opt,-1,"/mess/mess",_("Messages"),R_R___,"","")) {
+		ctrMkNode("list",opt,-1,"/mess/mess/0",_("Time"),R_R___,"","",1, "tp","time");
+		ctrMkNode("list",opt,-1,"/mess/mess/0a",_("mcsec"),R_R___,"","",1, "tp","dec");
+		ctrMkNode("list",opt,-1,"/mess/mess/1",_("Category"),R_R___,"","",1, "tp","str");
+		ctrMkNode("list",opt,-1,"/mess/mess/2",_("Level"),R_R___,"","",1, "tp","dec");
+		ctrMkNode("list",opt,-1,"/mess/mess/3",_("Message"),R_R___,"","",1, "tp","str");
 	    }
 	}
 	return;
@@ -605,8 +607,31 @@ void TController::cntrCmdProc( XMLNode *opt )
     //Process command to page
     vector<string> c_list;
 
-    if(a_path == "/cntr/st/status" && ctrChkNode(opt))	opt->setText(getStatus());
-    else if(a_path == "/prm/nmb" && ctrChkNode(opt)) {
+    if(a_path == "/cntr/st/status" && ctrChkNode(opt,"get")) opt->setText(getStatus());
+    else if(a_path == "/cntr/st/db") {
+	if(ctrChkNode2(opt,"get",SEC_RD)) opt->setText(DB());
+	if(ctrChkNode2(opt,"set",SEC_WR)) setDB(opt->text());
+    }
+    else if(a_path == "/cntr/st/enSt") {
+	if(ctrChkNode2(opt,"get",SEC_RD)) opt->setText(enSt?"1":"0");
+	if(ctrChkNode2(opt,"set",SEC_WR)) s2i(opt->text()) ? enable() : disable();
+    }
+    else if(a_path == "/cntr/st/runSt") {
+	if(ctrChkNode2(opt,"get",SEC_RD)) opt->setText(runSt?"1":"0");
+	if(ctrChkNode2(opt,"set",SEC_WR)) s2i(opt->text()) ? start() : stop();
+    }
+    else if(a_path == "/cntr/st/removeFromDB" && ctrChkNode2(opt,"set",SEC_WR))
+	postDisable(NodeRemoveOnlyStor);
+    else if(a_path == "/cntr/st/timestamp" && ctrChkNode(opt,"get")) opt->setText(i2s(timeStamp()));
+    else if(a_path == "/cntr/cfg/DESCR" && ctrChkNode2(opt,"SnthHgl",SEC_RD)) nodeLoadACLSnthHgl(*opt);
+    else if(a_path.find("/cntr/cfg") == 0) {
+	TConfig::cntrCmdProc(this, opt, TSYS::pathLev(a_path,2), "", "", -1);
+	if(ctrChkNode2(opt,"set",SEC_WR))	//????[v1.0] Remove
+	    for(unsigned iT = 0; iT < owner().tpPrmSize(); iT++)
+		if(owner().tpPrmAt(iT).mDB == TSYS::pathLev(a_path,2))
+		{ modifG(); break; }
+    }
+    else if(a_path == "/prm/nmb" && ctrChkNode(opt,"get")) {
 	list(c_list);
 	unsigned eC = 0;
 	for(unsigned iA = 0; iA < c_list.size(); iA++)
@@ -614,13 +639,13 @@ void TController::cntrCmdProc( XMLNode *opt )
 	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),eC));
     }
     else if(a_path == "/prm/t_prm" && owner().tpPrmSize()) {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))
+	if(ctrChkNode(opt,"get",RWRW__,"","",SEC_RD))
 	    opt->setText(TBDS::genPrmGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
+	if(ctrChkNode(opt,"set",RWRW__,"","",SEC_WR))
 	    TBDS::genPrmSet(owner().nodePath()+"addType",opt->text(),opt->attr("user"));
     }
     else if((a_path == "/br/prm_" || a_path == "/prm/prm") && owner().tpPrmSize()) {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
+	if(ctrChkNode(opt,"get",RWRWR_,"","",SEC_RD)) {
 	    list(c_list);
 	    for(unsigned iA = 0; iA < c_list.size(); iA++) {
 		XMLNode *cN = opt->childAdd("el")->setAttr("id",c_list[iA])->setText(trD(at(c_list[iA]).at().name()));
@@ -630,68 +655,46 @@ void TController::cntrCmdProc( XMLNode *opt )
 		cN->setName("el")->setAttr("path","")->setAttr("rez","")->setAttr("recurs","")->setText("");
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
+	if(ctrChkNode(opt,"add",RWRWR_,"","",SEC_WR)) {
 	    opt->setAttr("id", add(opt->attr("id"),owner().tpPrmToId(TBDS::genPrmGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user")))));
 	    at(opt->attr("id")).at().setName(opt->text());
 	}
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	del(opt->attr("id"), NodeRemove);
+	if(ctrChkNode(opt,"del",RWRWR_,"","",SEC_WR))	del(opt->attr("id"), NodeRemove);
     }
     else if(a_path == "/prm/t_lst" && owner().tpPrmSize() && ctrChkNode(opt,"get",R_R_R_)) {
 	for(unsigned iA = 0; iA < owner().tpPrmSize(); iA++)
 	    opt->childAdd("el")->setAttr("id",owner().tpPrmAt(iA).name)->setText(owner().tpPrmAt(iA).descr);
     }
-    else if(a_path == "/cntr/st/db") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(DB());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDB(opt->text());
-    }
-    else if(a_path == "/cntr/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
-	postDisable(NodeRemoveOnlyStor);
-    else if(a_path == "/cntr/st/timestamp" && ctrChkNode(opt))	opt->setText(i2s(timeStamp()));
-    else if(a_path == "/cntr/st/enSt") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(enSt?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	s2i(opt->text()) ? enable() : disable();
-    }
-    else if(a_path == "/cntr/st/runSt") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(runSt?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	s2i(opt->text()) ? start() : stop();
-    }
-    else if(a_path.find("/cntr/cfg") == 0) {
-	TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SDAQ_ID, RWRWR_);
-	if(ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR))	//????[v1.0] Remove
-	    for(unsigned iT = 0; iT < owner().tpPrmSize(); iT++)
-		if(owner().tpPrmAt(iT).mDB == TSYS::pathLev(a_path,2))
-		{ modifG(); break; }
-    }
     else if(a_path == "/mess/tm") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD)) {
+	if(ctrChkNode(opt,"get",RWRW__,"","",SEC_RD)) {
 	    opt->setText(TBDS::genPrmGet(SYS->daq().at().nodePath()+"messTm",DEF_messTm,opt->attr("user")));
 	    if(!s2i(opt->text())) opt->setText(i2s(TSYS::curTime()/1000000));
 	}
-	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
+	if(ctrChkNode(opt,"set",RWRW__,"","",SEC_WR))
 	    TBDS::genPrmSet(SYS->daq().at().nodePath()+"messTm",(s2i(opt->text())>=TSYS::curTime()/1000000)?"0":opt->text(),opt->attr("user"));
     }
     else if(a_path == "/mess/size") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
-	    opt->setText(TBDS::genPrmGet(SYS->daq().at().nodePath()+"messSize",DEF_messSize,opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-	    TBDS::genPrmSet(SYS->daq().at().nodePath()+"messSize",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRWR_,"","",SEC_RD))
+	    opt->setText(TSYS::time2str(s2i(TBDS::genPrmGet(SYS->daq().at().nodePath()+"messSize",DEF_messSize,opt->attr("user"))),false));
+	if(ctrChkNode(opt,"set",RWRWR_,"","",SEC_WR))
+	    TBDS::genPrmSet(SYS->daq().at().nodePath()+"messSize",i2s(TSYS::str2time(opt->text(),false)),opt->attr("user"));
     }
     else if(a_path == "/mess/lvl") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(mMessLev.getS());
-	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	mMessLev = opt->text();
+	if(ctrChkNode(opt,"get",RWRW__,"","",SEC_RD))	opt->setText(mMessLev.getS());
+	if(ctrChkNode(opt,"set",RWRW__,"","",SEC_WR))	mMessLev = opt->text();
     }
-    else if(a_path == "/mess/mess" && ctrChkNode(opt,"get",R_R___,"root",SDAQ_ID)) {
+    else if(a_path == "/mess/mess" && ctrChkNode(opt,"get",R_R___,"","")) {
 	vector<TMess::SRec> rec;
 	time_t gtm = s2i(TBDS::genPrmGet(SYS->daq().at().nodePath()+"messTm",DEF_messTm,opt->attr("user")));
 	if(!gtm) gtm = (time_t)(TSYS::curTime()/1000000);
 	int gsz = s2i(TBDS::genPrmGet(SYS->daq().at().nodePath()+"messSize",DEF_messSize,opt->attr("user")));
 	SYS->archive().at().messGet(gtm-gsz, gtm, rec, "/("+catsPat()+")/", messLev(), "");
 
-	XMLNode *n_tm   = ctrMkNode("list",opt,-1,"/mess/mess/0","",R_R___,"root",SDAQ_ID);
-	XMLNode *n_tmu  = ctrMkNode("list",opt,-1,"/mess/mess/0a","",R_R___,"root",SDAQ_ID);
-	XMLNode *n_cat  = ctrMkNode("list",opt,-1,"/mess/mess/1","",R_R___,"root",SDAQ_ID);
-	XMLNode *n_lvl  = ctrMkNode("list",opt,-1,"/mess/mess/2","",R_R___,"root",SDAQ_ID);
-	XMLNode *n_mess = ctrMkNode("list",opt,-1,"/mess/mess/3","",R_R___,"root",SDAQ_ID);
+	XMLNode *n_tm   = ctrMkNode("list",opt,-1,"/mess/mess/0","",R_R___,"","");
+	XMLNode *n_tmu  = ctrMkNode("list",opt,-1,"/mess/mess/0a","",R_R___,"","");
+	XMLNode *n_cat  = ctrMkNode("list",opt,-1,"/mess/mess/1","",R_R___,"","");
+	XMLNode *n_lvl  = ctrMkNode("list",opt,-1,"/mess/mess/2","",R_R___,"","");
+	XMLNode *n_mess = ctrMkNode("list",opt,-1,"/mess/mess/3","",R_R___,"","");
 	for(int iRec = rec.size()-1; iRec >= 0; iRec--) {
 	    if(n_tm)	n_tm->childAdd("el")->setText(i2s(rec[iRec].time));
 	    if(n_tmu)	n_tmu->childAdd("el")->setText(i2s(rec[iRec].utime));
@@ -708,6 +711,7 @@ bool TController::cfgChange( TCfg &co, const TVariant &pc )
     if(co.getS() != pc.getS()) {
 	if(co.name() == "ENABLE" && !co.getB())    cfg("START").setB(false);
 	else if(co.name() == "START" && co.getB()) cfg("ENABLE").setB(true);
+	else if(co.name() == "DESCR") nodeLoadACL(co.getS());
 
 	modif();
     }

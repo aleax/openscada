@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/OPC UA</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/OPC_UA.html" title="Модули/OPC UA (98% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/OPC_UA.html" title="Модулі/OPC UA (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/OPC_UA.html" title="Модули/OPC UA (97% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/OPC_UA.html" title="Модулі/OPC UA (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -50,7 +50,7 @@
 <td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
 <td> Server OPC-UA
 </td>
-<td> 2.2 </td>
+<td> 2.3 </td>
 <td> GPL2 </td>
 <td> daq_OPC_UA.so </td>
 <td> en,uk,ru,de </td>
@@ -70,7 +70,7 @@
 <td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
 <td> Library of implementing OPC-UA into OpenSCADA
 </td>
-<td> 2.2 </td>
+<td> 2.3 </td>
 <td> LGPL3 </td>
 <td> libOPC_UA.{h,cpp} </td>
 <td> en </td>
@@ -92,9 +92,7 @@
 <li> <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/module_opc_ua_functions_extending/" rel="nofollow noreferrer noopener" target="_blank">A task of the module extending</a></li>
 <li> <b><a href="../To_do.html" title="Special:MyLanguage/Works/To do">To Do</a>:</b></li></ul>
 <dl><dd> - resolve the controversy in <i>Client::messIO()</i> about mixing the pure requesting mode with the free read/write mode and the time of waiting responses here without passing the connection timeout directly;</dd>
-<dd> - append the authentication support for the input-server protocol part;</dd>
 <dd> - append the automatic creation for input transports and their pre-configuration from the EndPoint object properties;</dd>
-<dd> + implement the request-service "Publish" and chunks in the client part;</dd>
 <dd> - observe deeply the Publish service for the packages loss and the Republish request sending;</dd>
 <dd> - append for support of the history services of the server part, seeing and testing against UAExpert negotiation;</dd>
 <dd> - append for support of the history services of the client part.</dd></dl>
@@ -215,10 +213,11 @@
 <li> State, in which to transfer the node at the start: "Enabled".</li>
 <li> Type of the protocol encoding, at the moment it is only "Binary".</li>
 <li> URL of the endpoint node.</li>
+<li> Anonymous user of enabling the anonymous access, or only authentication at empty.</li>
 <li> Server certificate and private key in the PEM format.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Hidden in the enabled state.</dd></dl>
 <ul><li> Security Server Policy.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1003px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_ep_main.png"><img class="thumbimage" height="846" src="../files/OPC-UA_prt_ep_main.png" width="1001" /></a>  <div class="thumbcaption">Fig.3. Main tab of the endpoint node's page.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:875px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_ep_main.png"><img class="thumbimage" height="928" src="../files/OPC-UA_prt_ep_main.png" width="873" /></a>  <div class="thumbcaption">Fig.3. Main tab of the endpoint node's page.</div></div></div></div>
 <h2><span class="mw-headline" id="Module_of_the_data_acquisition"><span class="mw-headline-number">3</span> Module of the data acquisition</span></h2>
 <p>The data acquisition module provides ability of acquisition and writing the value's attributes (13) of points with the "Variable" type in the direct acquisition mode by the request "Read" and the asynchronous service request "Publish".
 </p>
@@ -254,12 +253,12 @@
 <li> <i><b>Logical (_PrmL)</b></i>:
 <ul><li> <i>Parameter template</i> — address of the DAQ-parameter template.</li></ul></li></ul>
 <h4><span class="mw-headline" id="Standard_.28_Prm.29"><span class="mw-headline-number">3.2.1</span> Standard (_Prm)</span></h4>
-<p>Additional configuration field of the type parameter (Fig.6) is the list of OPC-UA nodes and the field of navigation by OPC-UA nodes in single line, for the selected nodes of the type "Variable" insertion to the defined list. Attribute in this list is written as "<b>{ns}:{id}[|[{flg}][|{id}[|{name}]]]</b>".<br />
+<p>Additional configuration field of the type parameter (Fig.6) is the list of OPC-UA nodes and the field of navigation by OPC-UA nodes in single line, for the selected nodes of the type "Variable" insertion to the defined list. Attribute in this list is written as "<b>{ns}:{nid}[|[{flg}][|{id}[|{name}]]]</b>".<br />
 Where:
 </p>
 <ul><li> <i>ns</i> — name space, number; zero value can be omitted;</li>
-<li> <i>id</i> — node identifier by number, string, bytes string and GUID;</li>
-<li> <i>flg</i> — flags of no requesting the metadata on the server: value type (b-Boolean,i-Integer,f-Float,s-String,o-Object), read/write mode (r-read, w-write);</li>
+<li> <i>nid</i> — node identifier by number, string, bytes string and GUID;</li>
+<li> <i>flg</i> — flags for do not request the metadata on the server: value type (b-Boolean,i-Integer,f-Float,s-String,o-Object), read/write mode (r-read, w-write);</li>
 <li> <i>id</i> — identifier of the created attribute;</li>
 <li> <i>name</i> — name of the created attribute.</li></ul>
 <p>Examples:
@@ -973,5 +972,5 @@ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./OPC-UA_openssl.c
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/en">Modules/OPC_UA/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/en">Modules/OPC_UA/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.8</td></tr></table></body>
 </html>

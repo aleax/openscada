@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvalue.h
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -92,12 +92,7 @@ class TVal: public TCntrNode
 	string setArch( const string &nm = "" );
 
 	bool reqFlg( )			{ return mReqFlg; }
-	bool resB1( )			{ return mResB1; }
-	bool resB2( )			{ return mResB2; }
-
 	void setReqFlg( bool vl )	{ mReqFlg = vl; }
-	void setResB1( bool vl )	{ mResB1 = vl; }
-	void setResB2( bool vl )	{ mResB2 = vl; }
 
 	TValue &owner( ) const;
 	TFld &fld( );
@@ -124,8 +119,6 @@ class TVal: public TCntrNode
 
 	unsigned char	mCfg	: 1;	//Configuration id
 	unsigned char	mReqFlg	: 1;	//Request to attribute flag
-	unsigned char	mResB1	: 1;	//Reserve Boolean
-	unsigned char	mResB2	: 1;	//Reserve Boolean
 	union {
 	    TFld *fld;
 	    TCfg *cfg;

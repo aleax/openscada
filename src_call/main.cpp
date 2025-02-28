@@ -1,7 +1,7 @@
 
 //OpenSCADA file: main.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2017 by Roman Savochenko, <roman@oscada.org>       *                                                     *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -100,5 +100,5 @@ int main( int argc, char *argv[], char *envp[] )
 
     if(pidFile.size()) remove(pidFile.c_str());
 
-    return rez;
+    return EXIT_SUCCESS; //rez;
 }

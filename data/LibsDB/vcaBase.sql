@@ -441,7 +441,6 @@ INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_doc_pane
 INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_doc_panel','prev','/wlb_Main/wdg_doc_panel/wdg_prev','owner;value;');
 INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_doc_panel','prev1','/wlb_Main/wdg_doc_panel/wdg_prev1','owner;value;');
 INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_doc_panel','size','/wlb_Main/wdg_doc_panel/wdg_size','owner;value;');
-INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_doc_panel','tmTp','/wlb_Main/wdg_doc_panel/wdg_tmTp','owner;');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_Main_mime VALUES('pg_next','image/png;6.00684','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAAZiS0dEACwA
 RADxQFue7AAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9gDBQghJ2VBTzAAAAAddEVYdENv
@@ -9760,14 +9759,14 @@ selSingle = 0;
 selAll = false;
 
 //Events process
-for(evRez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	if(ev_cur == "key_presComma:/trnd1")			trnd1_tSek -= trnd1_tSize/2;
-	else if(ev_cur == "key_presPeriod:/trnd1")	trnd1_tSek += trnd1_tSize/2;
-	else if(ev_cur == "ws_SliderChange:/arh")		trnd1_tSek = arh_value*trnd1_tSize;
-	else if(ev_cur.search("usr_single:/el") == 0) selSingle = ev_cur.slice(14).toInt();
-	else if(ev_cur.search("usr_all:/el") == 0)	selAll = true;
-	else evRez += (ev_cur+"\n");
-	//SYS.messDebug("Trend","Event: "+ev_cur);
+for(evRez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	if(evCur == "key_presComma:/trnd1")			trnd1_tSek -= trnd1_tSize/2;
+	else if(evCur == "key_presPeriod:/trnd1")	trnd1_tSek += trnd1_tSize/2;
+	else if(evCur == "ws_SliderChange:/arh")		trnd1_tSek = arh_value*trnd1_tSize;
+	else if(evCur.search("usr_single:/el") == 0) selSingle = evCur.slice(14).toInt();
+	else if(evCur.search("usr_all:/el") == 0)	selAll = true;
+	else evRez += (evCur+"\n");
+	//SYS.messDebug("Trend","Event: "+evCur);
 }
 event = evRez;
 
@@ -10205,6 +10204,8 @@ if(pgCont_pgOpenSrc != lastView || toCompleteUpd) {
 		pgSel_items = "";
 		for(iEl = 0, iM = -1; iEl < elLst.length; iEl++) {
 			oEl = this["pg_"+curSO]["pg_"+curMode][elLst[iEl]];
+			if(!SYS.Security.access(reqUser_,4,oEl.attr("owner").parse(0,":"),oEl.attr("owner").parse(1,":"),oEl.attr("perm")))
+				continue;
 			if(!(elNm=oEl.attr("name")).length)
 				elNm = oEl.ownerPage().attr("name") + " " + iEl;
 			elNm += " ("+elLst[iEl].slice(3)+")";
@@ -10367,11 +10368,11 @@ curTm = SYS.time();
 if(!trnd1_tSek) trnd1_tSek = curTm;
 
 //Events process
-for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//Special.FLibSYS.messPut("Trend",0,"Event: "+ev_cur);
-	if(ev_cur == "key_presSC#3b:/trnd1")			trnd1_tSek -= trnd1_tSize/2;
-	else if(ev_cur == "key_presSC#3c:/trnd1")	trnd1_tSek += trnd1_tSize/2;
-	else ev_rez += (ev_cur+"\n");
+for(off = 0, ev_rez = ""; (evCur=event.parse(0,"\n",off)).length; ) {
+	//Special.FLibSYS.messPut("Trend",0,"Event: "+evCur);
+	if(evCur == "key_presSC#3b:/trnd1")			trnd1_tSek -= trnd1_tSize/2;
+	else if(evCur == "key_presSC#3c:/trnd1")	trnd1_tSek += trnd1_tSize/2;
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;
 
@@ -10851,7 +10852,7 @@ AFAsFul2/PdLJpNHR0d0SqiIouj7PnU0TRPV6/XXr1+DfyD7+/v/TsY8RTlFOUU5Rfk3oiB6Bfsn
 EN1u9zcd131HdACyZgAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
 curTm = SYS.time();
 if(n == 0 && !time) { time = curTm; bTime = time - 30; }
-size_en = tmTp_en = Text1_en = Text2_en = prev1_en = next1_en = date_en = dateBeg_en = !n;
+size_en = Text1_en = Text2_en = prev1_en = next1_en = date_en = dateBeg_en = !n;
 szVal = time - bTime;
 
 //Archive size
@@ -10864,47 +10865,37 @@ else Text3_text = Text3_text.parse(0,"\n");
 
 //Events process
 prevTime = time;
-for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo("Trend control","Event: "+ev_cur);
-	if(ev_cur == "ws_LnAccept:/size" || ev_cur == "ws_CombChange:/tmTp") {
-		szVal = size_value;
-		if(tmTp_value == tr("m"))			szVal = szVal*60;
-		else if(tmTp_value == tr("h"))	szVal = szVal*60*60;
-		else if(tmTp_value == tr("d"))	szVal = szVal*24*60*60;
-		else if(tmTp_value.search("\\d+"+tr("s")) >= 0)	szVal = tmTp_value.toInt();
-		else if(tmTp_value.search("\\d+"+tr("m")) >= 0)	szVal = tmTp_value.toInt()*60;
-		else if(tmTp_value.search("\\d+"+tr("h")) >= 0)	szVal = tmTp_value.toInt()*60*60;
-		else if(tmTp_value.search("\\d+"+tr("d")) >= 0)	szVal = tmTp_value.toInt()*24*60*60;
+for(off = 0, ev_rez = ""; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo("Trend control","Event: "+evCur);
+	if(evCur == "ws_LnAccept:/size") {
+		size_value = SYS.time2str(szVal=SYS.str2time(size_value,false), false);
 		time += 1;
 	}
-	else if(ev_cur == "ws_LnAccept:/dateBeg") { szVal = max(1, date_value-dateBeg_value); time += 1; }
-	else if(ev_cur == "ws_LnAccept:/date") time = min(curTm, max(szVal,date_value));
-	else if(ev_cur == "ws_BtPress:/curtime") {	
+	else if(evCur == "ws_LnAccept:/dateBeg") { szVal = max(1, date_value-dateBeg_value); time += 1; }
+	else if(evCur == "ws_LnAccept:/date") time = min(curTm, max(szVal,date_value));
+	else if(evCur == "ws_BtPress:/curtime") {	
 		if(n == 0) time = curTm;
 		else vCur = aCur;
 	}
-	else if(ev_cur == "ws_BtPress:/prev") {
+	else if(evCur == "ws_BtPress:/prev") {
 		if(n == 0) time = min(curTm, max(szVal,time-szVal));
 		else vCur = -2;
 	}
-	else if(ev_cur == "ws_BtPress:/next") {
+	else if(evCur == "ws_BtPress:/next") {
 		if(n == 0) time = min(curTm, max(szVal,time+szVal)); 
 		else vCur = -1;
 	}
-	else if(ev_cur == "ws_BtPress:/prev1") time = min(curTm, max(5*szVal,time-5*szVal));
-	else if(ev_cur == "ws_BtPress:/next1") time = min(curTm, max(5*szVal,time+5*szVal));
-	else ev_rez += (ev_cur+"\n");
+	else if(evCur == "ws_BtPress:/prev1") time = min(curTm, max(5*szVal,time-5*szVal));
+	else if(evCur == "ws_BtPress:/next1") time = min(curTm, max(5*szVal,time+5*szVal));
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;
 
 //Time control
 date_value = time;
 if(n == 0 && prevTime != time) { bTime = time - szVal; doc=""; }
-if(szVal < 60)						{ tmTp_value = tr("s"); size_value = szVal; }
-else if(szVal < 60*60)			{ tmTp_value = tr("m"); size_value = szVal/60; }
-else if(szVal < 24*60*60)	{ tmTp_value = tr("h"); size_value = szVal/(60*60); }
-else									{ tmTp_value = tr("d"); size_value = szVal/(24*60*60); }
-dateBeg_value = date_value - szVal;','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;',1664089765);
+size_value = SYS.time2str(szVal, false);
+dateBeg_value = date_value - szVal;','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;',1737295464);
 INSERT INTO wlb_Main VALUES('terminator','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAAx1AAAMdQEteJR1AAAA
 2UlEQVRYhe3QsWrFMAwFUDlVsGWDDa/ZAvn5138K+QEPITVkiSEJ8hvcoUPpUG9Fd5NAh4vU8/mR
 UoKGOOcwpZTSZ4sCAF3jvSiiiCLKb0rOOcbIzH9WEAC2bTPGzPPMzESUc3bOXdfVdd00TcuyWGvv
@@ -10967,52 +10958,40 @@ if(f_start) {
 }
 
 //Events process
-for(/*ev_rez = "", */off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo("Trend control", "Event: "+ev_cur);
-	if(ev_cur == "ws_LnAccept:/size" || ev_cur == "ws_CombChange:/tmTp") {
-		tSzPrev = tSize;
-		tSize = size_value;
-		if(tmTp_value == tr("m"))			tSize = tSize*60;
-		else if(tmTp_value == tr("h"))	tSize = tSize*60*60;
-		else if(tmTp_value == tr("d"))	tSize = tSize*24*60*60;
-		else if(tmTp_value.search("\\d+"+tr("s")) >= 0)	tSize = tmTp_value.toInt();
-		else if(tmTp_value.search("\\d+"+tr("m")) >= 0)	tSize = tmTp_value.toInt()*60;
-		else if(tmTp_value.search("\\d+"+tr("h")) >= 0)	tSize = tmTp_value.toInt()*60*60;
-		else if(tmTp_value.search("\\d+"+tr("d")) >= 0)	tSize = tmTp_value.toInt()*24*60*60;
-		//if(tSize < tSzPrev && curSek < tSek && curSek > (tSek-tSzPrev)) tSek = curSek;
-	}
-	else if(ev_cur == "ws_LnAccept:/dateBeg")	{
-		tSzPrev = tSize; tSize = max(1, date_value-dateBeg_value);
-		//if(tSize < tSzPrev && curSek < tSek && curSek > (tSek-tSzPrev)) tSek = curSek;
-	}
-	else if(ev_cur == "ws_BtPress:/curstimeBeg")	{ tSize = max(1, tSek-curSek); }
-	else if(ev_cur == "ws_LnAccept:/date")		{ tSek = date_value; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/curtime")	{ tSek = curSek = curTm; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/curstime")	{ tSek = curSek; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/prev")		{ tSek -= tSize/2; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/prev1")		{ tSek -= 5*tSize; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/next")		{ tSek += tSize/2; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/next1")		{ tSek += 5*tSize; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_CombChange:/arch")	valArch=(arch_value==tr("All")) ? "" : arch_value;
-	else if(ev_cur == "ws_CombChange:/type")	{ type = (type_value==tr("Spectrum"))?1:((type_value==tr("XY"))?2:0); if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/zoomIn")		{ sclVer *= 0.9; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/zoomOut")	{ sclVer *= 1.1; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/zoomOffUp")	{ sclVerOff += sclVer/10; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/zoomOffDown")	{ sclVerOff -= sclVer/10; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/zoomDef")	{ sclVer = 100, sclVerOff = 0; if(sclWin == true) sclWin = false; }
-	else if(ev_cur == "ws_BtPress:/xZoomIn")	sclHor *= 0.9;
-	else if(ev_cur == "ws_BtPress:/xZoomOut")	sclHor *= 1.1;
-	else if(ev_cur == "ws_BtPress:/xZoomOffRight")sclHorOff += sclHor/10;
-	else if(ev_cur == "ws_BtPress:/xZoomOffLeft") sclHorOff -= sclHor/10;
-	else if(ev_cur == "ws_BtPress:/xZoomDef")	sclHor = 100, sclHorOff = 0;
-	else if(ev_cur == "ws_BtToggleChange:/selWin") {
+for(/*ev_rez = "", */off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo("Trend control", "Event: "+evCur);
+	if(evCur == "ws_LnAccept:/size")
+		size_value = SYS.time2str(tSize=SYS.str2time(size_value,false), false);
+	else if(evCur == "ws_LnAccept:/dateBeg")
+		tSize = max(1, date_value-dateBeg_value);
+	else if(evCur == "ws_BtPress:/curstimeBeg")	{ tSize = max(1, tSek-curSek); }
+	else if(evCur == "ws_LnAccept:/date")		{ tSek = date_value; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/curtime")	{ tSek = curSek = curTm; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/curstime")	{ tSek = curSek; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/prev")		{ tSek -= tSize/2; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/prev1")		{ tSek -= 5*tSize; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/next")		{ tSek += tSize/2; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/next1")		{ tSek += 5*tSize; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_CombChange:/arch")	valArch=(arch_value==tr("All")) ? "" : arch_value;
+	else if(evCur == "ws_CombChange:/type")	{ type = (type_value==tr("Spectrum"))?1:((type_value==tr("XY"))?2:0); if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/zoomIn")		{ sclVer *= 0.9; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/zoomOut")	{ sclVer *= 1.1; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/zoomOffUp")	{ sclVerOff += sclVer/10; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/zoomOffDown")	{ sclVerOff -= sclVer/10; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/zoomDef")	{ sclVer = 100, sclVerOff = 0; if(sclWin == true) sclWin = false; }
+	else if(evCur == "ws_BtPress:/xZoomIn")	sclHor *= 0.9;
+	else if(evCur == "ws_BtPress:/xZoomOut")	sclHor *= 1.1;
+	else if(evCur == "ws_BtPress:/xZoomOffRight")sclHorOff += sclHor/10;
+	else if(evCur == "ws_BtPress:/xZoomOffLeft") sclHorOff -= sclHor/10;
+	else if(evCur == "ws_BtPress:/xZoomDef")	sclHor = 100, sclHorOff = 0;
+	else if(evCur == "ws_BtToggleChange:/selWin") {
 		if(selWin_value && !sclWinCtx.isEVal()) {
 			sclWinCtx.tSek = tSek; sclWinCtx.tSize = tSize; sclWinCtx.sclVer = sclVer; sclWinCtx.sclVerOff = sclVerOff; }
 		else if(!selWin_value && !sclWinCtx.isEVal() && !sclWinCtx.tSek.isEVal()) {
 			tSek = sclWinCtx.tSek; tSize = sclWinCtx.tSize; sclVer = sclWinCtx.sclVer; sclVerOff = sclWinCtx.sclVerOff; }
 		sclWin = selWin_value;
 	}
-	//else ev_rez += (ev_cur+"\n");
+	//else ev_rez += (evCur+"\n");
 }
 event = "";//ev_rez;
 
@@ -11023,10 +11002,7 @@ xScaleInfo_arg0val = 1e4/sclHor; xScaleInfo_arg1val = sclHorOff;
 //Trend time control
 date_value = tSek;
 if(tSek < curTm) trcPer = 0; else trcPer = trcPer_, tSek = 0;
-if(tSize < 60)					tmTp_value = tr("s"), size_value = tSize;
-else if(tSize < 60*60)			tmTp_value = tr("m"), size_value = tSize/60;
-else if(tSize < 24*60*60)	tmTp_value = tr("h"), size_value = tSize/(60*60);
-else									tmTp_value = tr("d"), size_value = tSize/(24*60*60);
+size_value = SYS.time2str(tSize, false);
 dateBeg_value = date_value - tSize;
 
 arch_value = valArch.length ? valArch : tr("All");
@@ -11036,7 +11012,7 @@ if(cursor_en && type == 1) cursor_arg0val = tr("Frequency")+":\n"+(1e6/(1e6*curS
 type_value = (type==1)?tr("Spectrum"):((type==2)?tr("XY"):tr("Graph"));
 xScaleInfo_en = xZoomIn_en = xZoomOut_en = xZoomOffRight_en = xZoomOffLeft_en = xZoomDef_en = (type==2);
 selWin_en = (type == 0 && !sclWin.isEVal());
-if(selWin_en)	selWin_value = sclWin;','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1664210236);
+if(selWin_en)	selWin_value = sclWin;','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1737295461);
 INSERT INTO wlb_Main VALUES('cntrPasp','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAAYElEQVRoge3PQQ0AIBDAMMC/50MEj4ZkVbDtmVk/OzrgVQNaA1oDWgNa
 A1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgPaBXKq
@@ -11234,15 +11210,15 @@ progLbUpdt = progSelPrg = progSelCom = progSelTp = false;
 var comOp = "";
 
 //Events for commands process
-for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo(this.nodePath(),"Event: "+ev_cur);
-	if(ev_cur == "ws_BtPress:/progAdd") {
+for(ev_rez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo(this.nodePath(),"Event: "+evCur);
+	if(evCur == "ws_BtPress:/progAdd") {
 		if(!progNm_value.length) progNm_value = tr("New program");
 		SYS.BD.nodeAt(dbDB,".").SQLReq("INSERT INTO "+dbProgs+" (name) VALUES (''"+progNm_value+"'');");
 		lib_value = progNm_value;
 		progLbUpdt = progSelPrg = progSelCom = true; prog_value = "";
 	}
-	else if(ev_cur == "ws_BtPress:/progCopy") {
+	else if(evCur == "ws_BtPress:/progCopy") {
 		if(!progNm_value.length) progNm_value = tr("New program");
 		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
 		if(rez.length > 1) {
@@ -11251,27 +11227,27 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 			progLbUpdt = progSelPrg = progSelCom = true; prog_value = "";
 		}
 	}
-	else if(ev_cur == "ws_BtPress:/progRename") {
+	else if(evCur == "ws_BtPress:/progRename") {
 		SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET name=''"+progNm_value+"'' WHERE name=''"+lib_value+"'';");
 		lib_value = progNm_value;
 		progLbUpdt = progSelPrg = progSelCom = true; prog_value = "";
 	}
-	else if(ev_cur == "dlg_Apply:/progDel" && lib_value.length) {
-	//else if(ev_cur == "ws_BtPress:/progDel" && lib_value.length) {
+	else if(evCur == "dlg_Apply:/progDel" && lib_value.length) {
+	//else if(evCur == "ws_BtPress:/progDel" && lib_value.length) {
 		SYS.BD.nodeAt(dbDB,".").SQLReq("DELETE FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
 		lib_value = "";
 		progLbUpdt = progSelPrg = true;
 	}
-	else if(ev_cur == "ws_TreeChange:/lib")	{ progSelPrg = progSelCom = true; prog_value = ""; }
-	else if(ev_cur == "ws_BtPress:/comAdd")	comOp = "add";
-	else if(ev_cur == "ws_BtPress:/comIns")	comOp = "ins";
-	else if(ev_cur == "ws_BtPress:/comInAdd")	comOp = "inAdd";
-	else if(ev_cur == "ws_BtPress:/comDel") comOp = "del";
-	else if(ev_cur == "ws_BtPress:/comUp")	comOp = "up";
-	else if(ev_cur == "ws_BtPress:/comDwn") comOp = "dwn";
-	else if(ev_cur == "ws_TreeChange:/prog"){ progSelCom = true; save_active = false; }
-	else if(ev_cur == "ws_CombChange:/type"){ progSelTp = true; save_active = true; }
-	else if(ev_cur == "ws_BtPress:/save" && prog_value.length) {
+	else if(evCur == "ws_TreeChange:/lib")	{ progSelPrg = progSelCom = true; prog_value = ""; }
+	else if(evCur == "ws_BtPress:/comAdd")	comOp = "add";
+	else if(evCur == "ws_BtPress:/comIns")	comOp = "ins";
+	else if(evCur == "ws_BtPress:/comInAdd")	comOp = "inAdd";
+	else if(evCur == "ws_BtPress:/comDel") comOp = "del";
+	else if(evCur == "ws_BtPress:/comUp")	comOp = "up";
+	else if(evCur == "ws_BtPress:/comDwn") comOp = "dwn";
+	else if(evCur == "ws_TreeChange:/prog"){ progSelCom = true; save_active = false; }
+	else if(evCur == "ws_CombChange:/type"){ progSelTp = true; save_active = true; }
+	else if(evCur == "ws_BtPress:/save" && prog_value.length) {
 		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
 		if(rez.length > 1) {
 			comTree = selNd = SYS.XMLNode("prg"); comTree.load(rez[1][0]);
@@ -11300,7 +11276,7 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 		}
 		save_active = false;
 	}
-	else if(ev_cur == "ws_BtPress:/progExport" && lib_value.length) {
+	else if(evCur == "ws_BtPress:/progExport" && lib_value.length) {
 		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
 		if(rez.length > 1) {
 			expTree = SYS.XMLNode("OpenSCADA_Prescr");
@@ -11309,8 +11285,8 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 			progExport_value = tr("Prescription-Program")+" (*.prscr)|"+tr("Prescription file")+"|"+lib_value.replace("/","_")+".prscr\n"+expTree.save(0x05);
 		}
 	} 
-	//else if(ev_cur == "ws_BtPress:/progImport")
-	else if(ev_cur == "ws_BtLoad:/progImport" && progImport_value.length && (pCtx=progImport_value.indexOf("\n")) > 0)
+	//else if(evCur == "ws_BtPress:/progImport")
+	else if(evCur == "ws_BtLoad:/progImport" && progImport_value.length && (pCtx=progImport_value.indexOf("\n")) > 0)
 	{
 		expTree = SYS.XMLNode("OpenSCADA_Prescr");
 		expTree.load(progImport_value.slice(pCtx+1));
@@ -11326,15 +11302,15 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 		}
 		progLbUpdt = progSelPrg = progSelCom = true;
 	}
-	else if(ev_cur == "ws_LnAccept:/name" || ev_cur == "ws_TxtAccept:/descr" || ev_cur == "ws_ChkChange:/backgrnd" || (rez=ev_cur.match("ws_LnAccept:\\/arg(\\d)")).length)	save_active = true;
-	else if((rez=ev_cur.match("ws_FocusOut:\\/arg(\\d)")).length) {
+	else if(evCur == "ws_LnAccept:/name" || evCur == "ws_TxtAccept:/descr" || evCur == "ws_ChkChange:/backgrnd" || (rez=evCur.match("ws_LnAccept:\\/arg(\\d)")).length)	save_active = true;
+	else if((rez=evCur.match("ws_FocusOut:\\/arg(\\d)")).length) {
 		argObj = this["arg"+rez[1]];
 		argVal = argObj.attr("value");
 		if(!argObj.attr("min").isEVal()) argVal = max(argVal,argObj.attr("min"));
 		if(!argObj.attr("max").isEVal()) argVal = min(argVal,argObj.attr("max"));
 		argObj.attrSet("value",argVal);
 	}
-	else ev_rez += (ev_cur+"\n");
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;
 
@@ -11620,24 +11596,24 @@ if(pTxt.length) {
 prCnt++;
 
 //Events for commands process
-for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
-	if(ev_cur == "ws_TreeChange:/lib") {
+for(ev_rez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messDebug("Prescription edit control","Event: "+evCur);
+	if(evCur == "ws_TreeChange:/lib") {
 		prog_vCur = prog_aCur;
 		prExtProg = lib_value;
 	}
-	else if(ev_cur == "ws_BtPress:/btStart") {
+	else if(evCur == "ws_BtPress:/btStart") {
 		if(prExtMode <= 0)	prExtMode = 1;
 		else if(prExtMode == 1)	prExtMode = 2;
 		prog_vCur = prog_aCur;
 	}
-	else if(ev_cur == "ws_BtRelease:/btStart")	prExtMode = 1;
-	else if(ev_cur == "ws_BtPress:/btStop" && prExtMode >= 0) {
+	else if(evCur == "ws_BtRelease:/btStart")	prExtMode = 1;
+	else if(evCur == "ws_BtPress:/btStop" && prExtMode >= 0) {
 		prExtMode = prExtCurCom = 0;
 		prog_vCur = prog_aCur;
 	}
-	else if(ev_cur == "ws_BtPress:/btPass" && (prExtMode == 1 || prExtMode == 2))	prExtMode = 3;
-	else ev_rez += (ev_cur+"\n");
+	else if(evCur == "ws_BtPress:/btPass" && (prExtMode == 1 || prExtMode == 2))	prExtMode = 3;
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;
 
@@ -11805,19 +11781,19 @@ if(pTxt.length)	prog_doc = pTxt;
 prCnt++;
 
 //Events for commands process
-for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo("Prescription edit control","Event: "+ev_cur);
-	//if(ev_cur == "ws_CombChange:/lib") prExtProg = lib_name;
-	//if(ev_cur.slice(0,11) == "ws_BtMenu=/")	prExtProg = ev_cur.slice(11).parse(0,":");
-	if(ev_cur == "dlg_Apply:/lib")	prExtProg = lib_selValue;
-	else if(ev_cur == "ws_BtPress:/btStart") {
+for(ev_rez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo("Prescription edit control","Event: "+evCur);
+	//if(evCur == "ws_CombChange:/lib") prExtProg = lib_name;
+	//if(evCur.slice(0,11) == "ws_BtMenu=/")	prExtProg = evCur.slice(11).parse(0,":");
+	if(evCur == "dlg_Apply:/lib")	prExtProg = lib_selValue;
+	else if(evCur == "ws_BtPress:/btStart") {
 		if(prExtMode <= 0)			prExtMode = 1;
 		else if(prExtMode == 1)	prExtMode = 2;
 	}
-	else if(ev_cur == "ws_BtRelease:/btStart")	prExtMode = 1;
-	else if(ev_cur == "ws_BtPress:/btStop" && prExtMode >= 0)	prExtMode = prExtCurCom = 0;
-	else if(ev_cur == "ws_BtPress:/btPass" && (prExtMode == 1 || prExtMode == 2))	prExtMode = 3;
-	else ev_rez += (ev_cur+"\n");
+	else if(evCur == "ws_BtRelease:/btStart")	prExtMode = 1;
+	else if(evCur == "ws_BtPress:/btStop" && prExtMode >= 0)	prExtMode = prExtCurCom = 0;
+	else if(evCur == "ws_BtPress:/btPass" && (prExtMode == 1 || prExtMode == 2))	prExtMode = 3;
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;
 
@@ -11847,48 +11823,40 @@ fTmesx+A5VC1tNP0J8aBQtX491Eek73kLMcwDDEtTJqqtecmAAA8SimeAONAfwWK5AEAlMvlWNaB
 if(f_start) mess_text = elMess;
 
 //Events for commands process
-for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
-	if(ev_cur == "ws_BtPress:/apply") {
+for(off = 0, ev_rez = ""; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messDebug("Prescription edit control","Event: "+evCur);
+	if(evCur == "ws_BtPress:/apply") {
 		elEvent += "dlg_Apply\n";
 		this.attrSet("pgOpen",false);
 	}
-	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
-	else ev_rez += (ev_cur+"\n");
+	else if(evCur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1664089765);
-INSERT INTO wlb_Main VALUES('treeSelect','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAeCAIAAAATj48OAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
-AA7EAAAOxAGVKw4bAAADx0lEQVRYhe2X3W/bVBjGX9vHTh27+XCSJWlamvSLds0qsY1O2kDbQIML
-LiYViRX1DgkEUoS44KITEn8LAuUGcVcxCQbthgasWwordEALydZpLW3WNHbjJE7OsQ8XiQrctI0L
-sirld2HZR3re93l85HOOmVQq5fV64WiiaRqSZXlyctJpJzZJp9Os0x4OSzuA07QDOE07gNOgVgWV
-ncLMteuU4Sdee1VgDqah9M6tOSqFz5wcbbXdvrQcQOxUBsK+jr6TczOfbdUEXwcriq71RzklGr+3
-kHll4kpfUPjo05kLz5/9evbGC5demrv+xdip07Nf3jx38fy1z9cAAKglcrXVIgl7xIgi389turgS
-x/s3tv4cHBm/dP70/xuAYZqvPTM/bwihiJeJ9o+Wyub40HAxnz8xMrC6+G0glsivZiPd0YXvbsvB
-SHYl19Mbf/wwi6uWSSmHkP4kt1UT9ZC0UCjybpnS+tCwghCvqaVW/bQcAAAGxk6xbs9bqXe3K5bk
-4gAADydcnZ4LL15kAOJjZ1Tz3tPHR1d+Wx5JJn//5ef40PH1B8tKV/yP+z/VTev295k33k7li4ZX
-EkSBL2iaLHfqeiXSFS7rtVbNMNPT01NTUzZi2EbXdUmSmQN+P3uSTqftzMAhkWX5P6x25JfRdgCn
-aQdwmiMfACmKsrS05LQNmyiKgmKxWDKZdNqJTSilNjcyvVRiwbLd2KjXff6AVtx2CXxzyMTA8QAA
-BAPi99A2sChlEQ/2zkIAQKnlcvEAsInzmOJuIWZYxleluWfcJ2J8977yWr1OKeUR2wjAUBpb/Ljg
-HWU31/lHy+rU1f0NAFQMbD8AAGBCAECi0pvknXP47B02M829f4yJ3Prmpqqq0Xgfb2K9bnndqFgm
-PEPdbrF/cIhHLACYptm4NooAwFpwPJH5BG8UH1y+SnE9c/cucDxiGSSIpKyqhhn0yZhYsj84mOgB
-AKCUAoDtVYhSignBhLAWF9bDs8aND40P4iiOCYl093hEQatUtXKVAmsSgk0aCAa0wsbjzUJDZVom
-ABDTbDxijF0rPxhPdPprHs0vYNOUJMnjD/gVn1bYqJjQ4XYjgVfVnUql0pQQAkAPNwMYN25eN650
-uaMe5GmMhEKhgKIwHLd73OwFAIDQsdCu6u8ZaBShFFdqyy+/xz6ruX9cxJj09vVDUxXZ7fhUb+Kf
-fTmesx+A5VC1tNP0J8aBQtX491Eek73kLMcwDDEtTJqqtecmAAA8SimeAONAfwWK5AEAlMvlWNaB
-7aywXTxkhaK6k81m/wJAAK2A/KcOawAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+INSERT INTO wlb_Main VALUES('treeSelect','iVBORw0KGgoAAAANSUhEUgAAAEAAAAA8CAIAAABZ6yszAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
+GElEQVRoge3av4vaYBjA8fdNc76a43JQMzhUOfRw6w+X0uOm2yzt3qEu/SvuDyjcHyD+CV16iy51
+KAcp5RbhXNpVAkoj2garmB++efMmHSwieLRUWx4Kz2dKCI95viHZpI1Go1Qqkf+TZVlqsVisVqvQ
+m2zJNE0FeoddYQA0DICGAdAwABoGQMMAaBgADQOgYQA0DICGAdAwABoGQMMAaBgADQOgYQA0DICG
+AdAwABoGQMMAaBgADQOgYQA0VQhhWRb0GlvyPE+N49j3/d1/izHGGPvTKc65lFLTtJ/ngpM9RiJB
+lDtE+c3bMZlMoihSt9j1VowxXdeXx9ffrk+NUx7zq69XBe3eg8NH6xuvd85mMyHEcjBxp+rHOi8/
+ox/eytKTVPXF5l1W40mSjMdjQshfC1h36V+2v7S7ont+cH5ff9hut7PZbBzHrus6jlMulyuVirL5
+gPcPee7xfuu1Lw311fNOp5NOpwkhw+HQMIw4jsMw7Pf7tVptfeiffMQn8Unre+vi4OLMOJNS6rre
+6/XCMHQcJ5/P27Z9y/aEJDxQbt77XFfMbvTps67rlNL5fO55nqZpUkrG2OZ/dGmz2Tw+Pt596Uwm
+k0qllsfTYDoNpkd3j1ZXF4sFYywIAlVVoyhavfSu6yqKsjxNQi7evdl7+lKYppLLqZXKr+84Go1s
+26b1er1QKOwekCTJdoOU0u1mKaWDweAHPGvJg9VZGg0AAAAASUVORK5CYII=','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
 if(f_start) { select_items = elItems; select_value = selValue; }
 
 //Events for commands process
-for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo("Prescription edit control","Event: "+ev_cur);
-	if(ev_cur == "ws_BtPress:/apply") {
+for(off = 0, ev_rez = ""; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo("Prescription edit control","Event: "+evCur);
+	if(evCur == "ws_BtPress:/apply") {
 		if(select_value.length)	{ selValue = select_value; elEvent += "dlg_Apply\n"; }
 		this.attrSet("pgOpen", false);
 	}
-	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
-	else ev_rez += ev_cur + "\n";
+	else if(evCur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
+	else ev_rez += evCur + "\n";
 }
-event = ev_rez;','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1664089765);
+event = ev_rez;','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1734419592);
 INSERT INTO wlb_Main VALUES('TextLab','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAXCAIAAAA0gN7GAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAABHUlEQVRYhWNgGOKAkYGBIScnh5ube6BdQjL4+vXrlClTWBgYGDg4ODg5
 OQfaPSSDv3//MjAwMA20MygFox4YaDDqgYEGox4YaDDkPcBCke6/Hx9cv/fszcdfCCFWHgFhKRmu
@@ -12381,19 +12349,19 @@ if(f_start || (cntr%(f_frq*3600*24)) == 0)	{	//By day
 }
 
 //Events process
-for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo("MnCntr","Event: "+ev_cur);
-	if(ev_cur == "ws_BtPress:/curDay")	selTime = SYS.time();
-	else if(ev_cur == "ws_CombChange:/year")
+for(ev_rez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo("MnCntr","Event: "+evCur);
+	if(evCur == "ws_BtPress:/curDay")	selTime = SYS.time();
+	else if(evCur == "ws_CombChange:/year")
 		selTime = SYS.mktime(0, 0, 0, selDay, selMonth, year_value, 0, 0, isDst);
-	else if(ev_cur == "ws_CombChange:/month")
+	else if(evCur == "ws_CombChange:/month")
 		selTime = SYS.mktime(0, 0, 0, selDay, (month_value.match("\\((\\d+)\\)","")[1].toInt()-1), selYear, 0, 0, isDst);
-	else if(ev_cur.indexOf("key_mousePresLeft:/w") == 0) {
-		weekWdg = this.wdgAt(ev_cur.slice(19));
+	else if(evCur.indexOf("key_mousePresLeft:/w") == 0) {
+		weekWdg = this.wdgAt(evCur.slice(19));
 		if(weekWdg.attr("text").length)
 			selTime = SYS.mktime(0, 0, 0, weekWdg.attr("text"), selMonth, selYear, 0, 0, isDst);
 	}
-	else ev_rez += (ev_cur+"\n");
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;
 
@@ -13282,13 +13250,13 @@ if(sesUer != this.ownerSess().reqUser()) {
 }
 
 //Events for commands process
-for(ev_rez = "", offEv = 0; (ev_cur=event.parse(0,"\n",offEv)).length; ) {
-	//this.messInfo("Event: "+ev_cur);
-	if(ev_cur == "ws_ListChange:/lib") {
+for(ev_rez = "", offEv = 0; (evCur=event.parse(0,"\n",offEv)).length; ) {
+	//this.messInfo("Event: "+evCur);
+	if(evCur == "ws_ListChange:/lib") {
 		userSel = SYS.mtime();
 		userSelVl = ((userSelVl=lib_value.match("\\((.+)\\)$")).length > 1) ? userSelVl[1] : "";
 	}
-	if(ev_cur == "ws_BtPress:/userAdd") {
+	if(evCur == "ws_BtPress:/userAdd") {
 		if(!userNm_value.length) userNm_value = tr("NewUser");
 		req = SYS.XMLNode("add").setAttr("path","/sub_Security/%2fbr%2fusr_").setText(userNm_value);
 		if(!SYS.cntrReq(req).toInt()) {
@@ -13306,7 +13274,7 @@ for(ev_rez = "", offEv = 0; (ev_cur=event.parse(0,"\n",offEv)).length; ) {
 
 		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/%2fobj"));	//To save all users and groups
 	}
-	else if(ev_cur == "dlg_Apply:/userDel" && userSelVl.length) {
+	else if(evCur == "dlg_Apply:/userDel" && userSelVl.length) {
 		req = SYS.XMLNode("del").setAttr("path","/sub_Security/%2fbr%2fusr_").setText(userSelVl);
 		rez = SYS.cntrReq(req);
 		SYS.messNote("OP:"+this.ownerSess().user()+":{Page}."+this.attr("id"), title_text+" : "+tr("Deleted user \"%1\"").replace("%1",userNm_value));
@@ -13316,26 +13284,26 @@ for(ev_rez = "", offEv = 0; (ev_cur=event.parse(0,"\n",offEv)).length; ) {
 
 		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/%2fobj"));	//To save all groups
 	}
-	else if(ev_cur == "ws_LnAccept:/fullName" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl))) {
+	else if(evCur == "ws_LnAccept:/fullName" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl))) {
 		oIt.cfgSet("DESCR", fullName_value);
 		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/usr_"+userSelVl+"/%2fobj"));
 		SYS.messNote("OP:"+this.ownerSess().user()+":{Page}."+this.attr("id"), title_text+" : "+tr("Set the user \"%1\" for").replace("%1",userSelVl)+" "+tr("Full name")+" : : "+fullName_value);
 		lib_value_ = fullName_value + " ("+userSelVl+")";
 		userLbUpdt = userSel = SYS.mtime()+500;
 	}
-	else if(ev_cur == "ws_TxtAccept:/descr" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl))) {
+	else if(evCur == "ws_TxtAccept:/descr" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl))) {
 		oIt.cfgSet("LONGDESCR", descr_value);
 		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/usr_"+userSelVl+"/%2fobj"));
 		SYS.messNote("OP:"+this.ownerSess().user()+":{Page}."+this.attr("id"), title_text+" : "+tr("Set the user \"%1\" for").replace("%1",userSelVl)+" "+tr("Description")+" : : "+descr_value);
 		userSel = SYS.mtime()+500;
 	}
-	else if(ev_cur == "ws_LnAccept:/pass" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl))) {
+	else if(evCur == "ws_LnAccept:/pass" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl))) {
 		oIt.cfgSet("PASS", pass_value);
 		SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/usr_"+userSelVl+"/%2fobj")); 
 		SYS.messNote("OP:"+this.ownerSess().user()+":{Page}."+this.attr("id"), title_text+" : "+tr("Set the user \"%1\" for").replace("%1",userSelVl)+" "+tr("Password")+" : : "+tr("CHANGED"));
 		userSel = SYS.mtime()+500;
 	}
-	else if(ev_cur == "ws_TableChangeSel:/grp" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl)) &&
+	else if(evCur == "ws_TableChangeSel:/grp" && (oIt=SYS.Security.nodeAt("usr_"+userSelVl)) &&
 			grp_value.length && (oIt1=SYS.Security.nodeAt(grp_value))) {
 		grp_value = grp_value.slice(4);
 		SYS.messNote("OP:"+this.ownerSess().user()+":{Page}."+this.attr("id"), title_text+" : "+tr("Set the user \"%1\" for").replace("%1",userSelVl)+" "+(oIt1.user(userSelVl)?tr("Group uncheck"):tr("Group check"))+" : : "+grp_value);
@@ -13346,7 +13314,7 @@ for(ev_rez = "", offEv = 0; (ev_cur=event.parse(0,"\n",offEv)).length; ) {
 		//SYS.cntrReq(SYS.XMLNode("save").setAttr("path","/sub_Security/usr_"+userSelVl+"/%2fobj")); 
 		userSel = SYS.mtime()+500;
 	}
-	else ev_rez += (ev_cur+"\n");
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;
 
@@ -13505,9 +13473,9 @@ vLOCe7sYo6q6azKzXlVDCOiS8zw64F8cQOMAGgfQOIDGATQOoHEAjQNoHEDjABoH0DiAxgE0DqBx
 AI0DaBxA4wAaB9A4gMYBtMsP9OM4ppTQGQfinFsnS3sW9x6K7mUbNIiXdUm9mdVa0YUHpulRnZ/b
 3XeSy/bdyu31EZF9zT9OVjILd/qtqAAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
 //Events for commands process
-for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	if(ev_cur == "ws_BtPress:/apply")	this.attrSet("pgOpen",false);
-	else ev_rez += ev_cur + "\n";
+for(off = 0, ev_rez = ""; (evCur=event.parse(0,"\n",off)).length; ) {
+	if(evCur == "ws_BtPress:/apply")	this.attrSet("pgOpen",false);
+	else ev_rez += evCur + "\n";
 }
 event = ev_rez;','','',500,'owner;name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1677086092);
 INSERT INTO wlb_Main VALUES('storeHouse','iVBORw0KGgoAAAANSUhEUgAAAEAAAAApCAIAAAAK8LgbAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAB
@@ -13563,6 +13531,24 @@ function updProc(iR, dataTbl, clsLsO ) {
 		}
 	if(updReq.length)
 		SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET "+updReq+" WHERE `"+dataTbl[0][0]+"`=''"+dataTbl[iR][0]+"'';", true);
+}
+
+function getFileFIt(celId, celO, fNm, sz) {
+	fItValFileNm = ((fNm != null) ? fNm : this["fItVal"+celId].attr("value")).parse(0,";;");
+	if(celO.tp.parse(2,":").length)
+		tVl = (sz==true) ? SYS.fileSize(celO.tp.parse(2,":")+"/"+fItValFileNm) : SYS.fileRead(celO.tp.parse(2,":")+"/"+fItValFileNm);
+	else {
+		dataTblOneReq = SYS.BD.nodeAt(db,".").SQLReq("SELECT `"+celId+"` FROM `sh_"+class+"` WHERE `ID`=''"+dataTbl_value+"'';");
+		for(iF = 0, off = 0; (tVl=dataTblOneReq[1][0].parseLine(0,off)).length; iF++)
+			if((iF%2) == 0 && tVl == fItValFileNm) {
+				tVl = dataTblOneReq[1][0].parseLine(0,off);
+				tVl = (sz == true) ? tVl.length : SYS.strDecode(tVl,"Base64");
+				break;
+			}
+		delete dataTblOneReq;
+	}
+
+	return tVl;
 }
 
 var wUser;
@@ -13716,8 +13702,10 @@ if(btClassEdit_value) {
 					SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` CHANGE `SP_"+fldID+"` `SP_"+dataTbl_set+"` "+dataTbl[row+1][2].parse(0,":")+";", true);
 					toCalcCycles = 1; //2000/this.ownerSess().period();
 				}
-				else if(colID == "TP" && (fldID[0] != "*" || fldID == "*NAME"))
-					SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` MODIFY `"+(fldID[0]=="*"?fldID.slice(1):"SP_"+fldID)+"` "+dataTbl_set.parse(0,":")+";", true);
+				else if(colID == "TP" && (fldID[0] != "*" || fldID == "*NAME")) {
+					if((tVl=dataTbl_set.parse(0,":")) == "file") tVl = dataTbl_set.parse(2,":").length ? "TEXT" : "LONGTEXT";
+					SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` MODIFY `"+(fldID[0]=="*"?fldID.slice(1):"SP_"+fldID)+"` "+tVl+";", true);
+				}
 				else if(colID == "PROC" && dataTbl_set.length)
 					SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET `SP_"+fldID+"`=NULL;", true);
 			}
@@ -13755,8 +13743,8 @@ if(f_start || toUpdate) {
 			tO.name = ((tO.name=clsLs[iR][1]) == "<NULL>" || !tO.name.length) ? clsLs[iR][0] : messByLang(tO.name);
 			tO.tp = clsLs[iR][2];
 			tO.tbl = clsLs[iR][3];
-			if((tO.fltr=clsLs[iR][4]) == "<NULL>")	tO.fltr = "";
-			if((tO.prc=clsLs[iR][5]) == "<NULL>")	tO.prc = "";
+			if((tO.fltr=clsLs[iR][4]) == "<NULL>") tO.fltr = "";
+			if((tO.prc=clsLs[iR][5]) == "<NULL>")  tO.prc = "";
 			if(tO.prc.length) hasProc = true;
 			if(clsLs[iR][0] == "*ID") {
 				tO.name = (tO.name==clsLs[iR][0]) ? tr("Identifier") : tO.name;
@@ -13823,12 +13811,13 @@ if(f_start || toUpdate) {
 							colVars[itVl].ls = new Object();
 							colVars[itVl].fltr = tVl.fltr;
 						}
-						opt += (btEdit_value && !tVl.prc.length && itVl != "ID") ? " edit=''1''" : "";
+						opt += (btEdit_value && !tVl.prc.length && itVl != "ID" && tVl.tp.parse(0,":") != "file") ? " edit=''1''" : "";
 						itVl = tVl.name;
-						if(tVl.tp.search("bool","i") >= 0)		colTps[iC] = "b";
+						if(tVl.tp.search("bool","i") >= 0)			colTps[iC] = "b";
 						else if(tVl.tp.search("int","i") >= 0)	colTps[iC] = "i";
 						else if(tVl.tp.search("(float|double)","i") >= 0) colTps[iC] = "r";
-						else if(tVl.tp.search("text","i") >= 0)	colTps[iC] = "t";
+						else if(tVl.tp.search("text","i") >= 0 || tVl.tp.parse(0,":") == "file")
+																				colTps[iC] = "t";
 						if((tVl2=tVl.tbl.parse(0,":")).length)	opt += " align=''"+tVl2+"''";
 						if((tVl2=tVl.tbl.parse(1,":")).length)	opt += " width=''"+tVl2+"''";
 						//this.messInfo("iC="+iC+"; tp="+tVl.tp+" = "+colTps[iC]+"; tVl.fltr="+tVl.fltr);
@@ -13847,6 +13836,11 @@ if(f_start || toUpdate) {
 					itVl = dataTbl[iR][iC];
 					opt = "";
 					if(itVl == "<NULL>")	itVl = "";
+					if((celO=clsLsO[itVlCol.slice(3)]) != null && celO.tp.parse(0,":") == "file" && !celO.tp.parse(2,":").length) {
+						for(iF = 0, off = 0, itVlRez = ""; (itVlEl=itVl.parseLine(0,off)).length; iF++)
+							if((iF%2) == 0)	itVlRez += (itVlRez.length?"\n":"") + itVlEl;
+						itVl = itVlRez;
+					}
 					if((tVl1=itHighl(colVars[itVlCol],itVl)).length) {
 						tVl = ((tVl=tVl1.parse(2,":")).length?" color=''"+tVl+"''":"") + ((tVl=tVl1.parse(3,":")).length?" font=''"+tVl+"''":"");
 						if(tVl1.parse(1,":")[0] == "1") optR += tVl; else opt += tVl;
@@ -13901,9 +13895,15 @@ if(f_start || toUpdate) {
 
 			for(iC = 0; iC < dataTblOneReq[iR].length; iC++) {
 				itVlNm = itVlId = dataTblOneReq[0][iC];
+				celO = null;
 				if((itVlId.indexOf("SP_") == 0 && !(celO=clsLsO[itVlId.slice(3)]).isEVal()) || ((itVlId == "NAME" || itVlId == "DSCR") && !(celO=clsLsO["*"+itVlId]).isEVal()))
 					itVlNm = celO.name;
 				if((itVl=dataTblOneReq[iR][iC]) == "<NULL>") itVl = "";
+				if(celO != null && celO.tp.parse(0,":") == "file" && !celO.tp.parse(2,":").length) {
+					for(iF = 0, off = 0, itVlRez = ""; (itVlEl=itVl.parseLine(0,off)).length; iF++)
+						if((iF%2) == 0)	itVlRez += (itVlRez.length?"\n":"") + itVlEl;
+					itVl = itVlRez;
+				}
 				if(toCreatFormIt) {
 					if(itEdFormOff == null)	itEdFormOff = itEdFormY, geomZoff = 100;
 					// Label
@@ -13918,6 +13918,33 @@ if(f_start || toUpdate) {
 							.attrSet("geomY", itEdFormOff).attrSet("geomH", itEdFormLineHigh).attrSet("geomZ", geomZoff++)
 							.attrSet("alignment", 8);
 						itEdFormOff += itEdFormLineHigh;
+					}
+					else if(celO.tp.parse(0,":") == "file") {
+						nwO = this.wdgAdd("fItVal"+itVlId, "", "/wlb_originals/wdg_FormEl");
+						nwO.attrSet("geomX",itEdFormX+tVl2).attrSet("geomW",300)
+							.attrSet("geomY",itEdFormOff).attrSet("geomH",itEdFormLineHigh).attrSet("geomZ",geomZoff++)
+							.attrSet("active",1).attrSet("elType",4).attrSet("tipTool",tr("Select file"));
+						nwOe = this.wdgAdd("fItVal"+itVlId+"_GT", "", "/wlb_originals/wdg_FormEl");
+						nwOe.attrSet("geomX",itEdFormX+tVl2+nwO.attr("geomW")).attrSet("geomW",itEdFormLineHigh)
+							.attrSet("geomY",itEdFormOff).attrSet("geomH",itEdFormLineHigh).attrSet("geomZ",geomZoff++)
+							.attrSet("elType",3).attrSet("mode",4).attrSet("tipTool",tr("Get")).attrSet("img","upm");
+						nwOe = this.wdgAdd("fItVal"+itVlId+"_LD", "", "/wlb_originals/wdg_FormEl");
+						nwOe.attrSet("geomX",itEdFormX+tVl2+nwO.attr("geomW")+itEdFormLineHigh).attrSet("geomW",itEdFormLineHigh)
+							.attrSet("geomY",itEdFormOff).attrSet("geomH",itEdFormLineHigh).attrSet("geomZ",geomZoff++)
+							.attrSet("active",1).attrSet("elType",3).attrSet("mode",3).attrSet("tipTool",tr("Load")).attrSet("img","downm");
+						nwOe = this.wdgAdd("fItVal"+itVlId+"_CL", "", "/wlb_originals/wdg_FormEl");
+						nwOe.attrSet("geomX",itEdFormX+tVl2+nwO.attr("geomW")+2*itEdFormLineHigh).attrSet("geomW",itEdFormLineHigh)
+							.attrSet("geomY",itEdFormOff).attrSet("geomH",itEdFormLineHigh).attrSet("geomZ",geomZoff++)
+							.attrSet("elType",3).attrSet("tipTool",tr("Clear")).attrSet("name","X");
+						itEdFormOff += itEdFormLineHigh;
+						if((tVl=celO.tp.parse(4,":").toInt())) {
+							nwOe = this.wdgAdd("fItVal"+itVlId+"_VW", "", "/wlb_originals/wdg_Media");
+							nwOe.attrSet("geomX",itEdFormX+tVl2).attrSet("geomW",tVl)
+								.attrSet("geomY",itEdFormOff).attrSet("geomH",tVl).attrSet("geomZ",geomZoff++)
+								.attrSet("tipTool",tr("Overview")).attrSet("fit",1).attrSet("keepAspect",1);
+							itEdFormOff += tVl.toInt();
+						}
+						delete nwOe;
 					}
 					else {
 						nwO = this.wdgAdd("fItVal"+itVlId, "", "/wlb_originals/wdg_FormEl");
@@ -13966,7 +13993,20 @@ if(f_start || toUpdate) {
 					if((tVl=tVl1.parse(3,":")).length)	nwlO.attrSet("font", tVl);
 				}
 				// Value
-				nwO.attrSet((celO.prc.length||itVlId == "ID")?"text":"value", itVl);
+				if(celO != null && celO.tp.parse(0,":") == "file") {
+					//  Size appending
+					for(tVl2 = "", off = 0; (tVl=itVl.parseLine(0,off)).length; )
+						tVl2 += (tVl2.length?"\n":"") + tVl + ";;" + (getFileFIt(itVlId,celO,tVl,true)/1024).toPrecision(4) + "KiB";
+					itVl = tVl2;
+
+					nwO.attrSet("items", itVl).attrSet("value",itVl.parseLine(0));
+					this["fItVal"+itVlId+"_GT"].attrSet("active",itVl.length);
+					this["fItVal"+itVlId+"_CL"].attrSet("active",itVl.length);
+					this["fItVal"+itVlId+"_LD"].attrSet("value","|||"+celO.tp.parse(3,":")).attrSet("active", itVl.split("\n").length < max(1,celO.tp.parse(1,":").toInt()));
+					if(celO.tp.parse(4,":").toInt())
+						this["fItVal"+itVlId+"_VW"].attrSet("src", (itVl.parseLine(0).length && (tVl=SYS.UI.mimeGet(itVl.parseLine(0).parse(0,";;"))).indexOf("image/") >= 0)
+										? "data:"+tVl+"\n"+ SYS.strEncode(getFileFIt(itVlId,celO),"Base64") : "");
+				} else nwO.attrSet((celO.prc.length||itVlId == "ID")?"text":"value", itVl);
 				delete nwlO; delete nwO;
 
 				if(itEdFormOff && (itEdFormOff+itEdFormMarg) > geomH)	geomH = itEdFormOff + itEdFormMarg;
@@ -13986,7 +14026,7 @@ if(event.length) {
 }
 
 //Representing events process
-for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
+for(offEv = 0; (sval=event.parse(0,"\n",offEv)).length; ) {
 	if(sval == "ws_BtToggleChange:/btItEdit")	{
 		toUpdate = true, toCalcCycles = 1;
 		// Dynamic filter fields hide/show
@@ -14016,13 +14056,28 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		toUpdate = true; toCalcCycles = 1;
 	}
 	else if(sval == "dlg_Apply:/itDel") {
-	//else if(sval == "ws_BtRelease:/itDel") {
+		// Delete files on FS for "file" fields
+		dataTblOneReq = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`,"+clsLsReq+" FROM `sh_"+class+"` WHERE `ID`=''"+dataTbl_value+"'';");
+		for(iR = 1; iR < dataTblOneReq.length; iR++) {
+			if(dataTblOneReq[iR][0] != dataTbl_value) continue;
+			for(iC = 0; iC < dataTblOneReq[iR].length; iC++)
+				if((itVlNm=dataTblOneReq[0][iC]).indexOf("SP_") == 0 && (celO=clsLsO[itVlNm.slice(3)]) != null &&
+						(itVl=dataTblOneReq[iR][iC]) != "<NULL>" && itVl.length &&
+						celO.tp.parse(0,":") == "file" && celO.tp.parse(2,":").length)
+					for(off = 0; (itVlEl=itVl.parseLine(0,off)).length; )
+						SYS.fileRemove(celO.tp.parse(2,":")+"/"+itVlEl);
+		}
+		delete dataTblOneReq;
+
+		// Delete same the fiels
 		SYS.BD.nodeAt(db,".").SQLReq("DELETE FROM `sh_"+class+"` WHERE `ID`=''"+dataTbl_value+"'';");
 		toUpdate = true; toCalcCycles = 1;
 	}
 	else if(sval == "ws_BtRelease:/itCopy") {
 		for(colLs = "", iC = 1; iC < dataTbl[0].length; iC++)
-			colLs += (colLs.length?", ":"") + "`"+dataTbl[0][iC]+"`";
+			// Without copying types of the "file" type and the files storage on FS
+			if(!(dataTbl[0][iC].indexOf("SP_") == 0 && (celO=clsLsO[dataTbl[0][iC].slice(3)]) != null && celO.tp.parse(0,":") == "file" && celO.tp.parse(4,":").toInt()))
+				colLs += (colLs.length?", ":"") + "`"+dataTbl[0][iC]+"`";
 		SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `sh_"+class+"` ("+colLs+") (SELECT "+colLs+" FROM `sh_"+class+"` WHERE `ID` = "+dataTbl_value+");");
 		toUpdate = true; toCalcCycles = 1;
 	}
@@ -14054,6 +14109,92 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		toUpdate = true; toCalcCycles = 1;
 	}
 	else if(sval.slice(0,17) == "ws_LnAccept:/fltr")	toUpdate = true, toCalcCycles = 1;
+	//File Load
+	else if((tVl=sval.match("^ws_BtLoad:/fItVal(.+)_LD$")).length) {
+		celO = clsLsO[celId=tVl[1].slice(3)];
+		fItVal = (fItValFileLD=this["fItValSP_"+celId+"_LD"]).attr("value");
+		dataTblOneReq = SYS.BD.nodeAt(db,".").SQLReq("SELECT `SP_"+celId+"` FROM `sh_"+class+"` WHERE `ID`=''"+this.fItValID.attr("text")+"'';");
+		off = 0; tVl = fItVal.parseLine(0, off);
+		fItValFileNm = tVl.parse(2,"|");
+		fItValFile = fItVal.slice(off);
+		fItValFileSL = this["fItValSP_"+celId];
+		if(celO.tp.parse(2,":").length) {
+			if(SYS.fileSize(celO.tp.parse(2,":")+"/"+fItValFileNm) > 0) {
+				off = fItValFileNm.length; fItValFileExt = fItValFileNm.parseEnd(0, ".", off); fItValFileNm = fItValFileNm.slice(0, off+1);
+				for(iF = 2; SYS.fileSize(celO.tp.parse(2,":")+"/"+fItValFileNm+iF+"."+fItValFileExt) > 0; iF++) ;
+				fItValFileNm = fItValFileNm+iF+"."+fItValFileExt;
+			}
+			SYS.fileWrite(celO.tp.parse(2,":")+"/"+fItValFileNm, fItValFile);
+			SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET `SP_"+celId+"`="
+					"''"+SYS.strEncode(fItValFileNm+((dataTblOneReq[1][0].length && dataTblOneReq[1][0] != "<NULL>")?"\n"+dataTblOneReq[1][0]:""),"SQL")+"'' "
+					"WHERE `ID`=''"+this.fItValID.attr("text")+"'';");
+		}
+		else {
+			if(fItValFileSL.attr("items").indexOf(fItValFileNm) >= 0) {	//Enumeration equal files
+				off = fItValFileNm.length; fItValFileExt = fItValFileNm.parseEnd(0, ".", off); fItValFileNm = fItValFileNm.slice(0, off+1);
+				for(iF = 2; fItValFileSL.attr("items").indexOf(fItValFileNm+iF+"."+fItValFileExt) >= 0; iF++) ;
+				fItValFileNm = fItValFileNm+iF+"."+fItValFileExt;
+			}
+			SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET `SP_"+celId+"`="
+					"''"+SYS.strEncode(fItValFileNm+"\n"+SYS.strEncode(fItValFile,"Base64")+((dataTblOneReq[1][0].length && dataTblOneReq[1][0] != "<NULL>")?"\n"+dataTblOneReq[1][0]:""),"SQL")+"'' "
+					"WHERE `ID`=''"+this.fItValID.attr("text")+"'';");
+		}
+		fItValFileSL.attrSet("items",fItValFileNm+";;"+(fItValFile.length/1024).toPrecision(4)+"KiB\n"+fItValFileSL.attr("items"))
+						.attrSet("value",fItValFileNm+";;"+(fItValFile.length/1024).toPrecision(4)+"KiB");
+		delete dataTblOneReq;
+		delete fItValFile;
+		delete fItVal;
+		this["fItValSP_"+celId+"_GT"].attrSet("active",1);
+		this["fItValSP_"+celId+"_CL"].attrSet("active",1);
+		fItValFileLD.attrSet("value","|||"+celO.tp.parse(3,":")).attrSet("active",fItValFileSL.attr("items").split("\n").length < max(1,celO.tp.parse(1,":").toInt()));
+
+		if(celO.tp.parse(4,":").toInt())
+			this["fItValSP_"+celId+"_VW"].attrSet("src", ((tVl=SYS.UI.mimeGet(fItValFileNm)).indexOf("image/") >= 0)
+				? "data:"+tVl+"\n"+SYS.strEncode(getFileFIt("SP_"+celId,celO),"Base64") : "");
+	}
+	//File Clear
+	else if((tVl=sval.match("^ws_BtRelease:/fItVal(.+)_CL$")).length) {
+		celO = clsLsO[celId=tVl[1].slice(3)];
+		fItValFileNm = this["fItValSP_"+celId].attr("value").parse(0,";;");
+		dataTblOneReq = SYS.BD.nodeAt(db,".").SQLReq("SELECT `SP_"+celId+"` FROM `sh_"+class+"` WHERE `ID`=''"+this.fItValID.attr("text")+"'';");
+		isFStor = celO.tp.parse(2,":").length;
+		for(iF = 0, off = 0; (tVl=dataTblOneReq[1][0].parseLine(0,off)).length; iF++)
+			if((isFStor || (iF%2) == 0) && tVl == fItValFileNm) {
+				tVl = off - fItValFileNm.length - ((dataTblOneReq[1][0][off-1]=="\n")?1:0);
+				if(!isFStor) dataTblOneReq[1][0].parseLine(0, off);
+				else SYS.fileRemove(celO.tp.parse(2,":")+"/"+fItValFileNm);
+				dataTblOneReq[1][0] = dataTblOneReq[1][0].replace(tVl, off-tVl, "");
+				break;
+			}
+		SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET `SP_"+celId+"`=''"+SYS.strEncode(dataTblOneReq[1][0],"SQL")+"'' "
+					"WHERE `ID`=''"+this.fItValID.attr("text")+"'';");
+
+		if(!isFStor) {
+			for(iF = 0, off = 0, itVlRez = ""; (itVlEl=dataTblOneReq[1][0].parseLine(0,off)).length; iF++)
+				if((iF%2) == 0)	itVlRez += (itVlRez.length?"\n":"") + itVlEl;
+		} else itVlRez = dataTblOneReq[1][0];
+		delete dataTblOneReq;
+
+		// Size appending
+		for(tVl2 = "", off = 0; (tVl=itVlRez.parseLine(0,off)).length; )
+			tVl2 += (tVl2.length?"\n":"") + tVl + ";;" + (getFileFIt("SP_"+celId,celO,tVl,true)/1024).toPrecision(4) + "KiB";
+		itVlRez = tVl2;
+
+		this["fItValSP_"+celId].attrSet("items",itVlRez).attrSet("value",itVlRez.parseLine(0));
+		this["fItValSP_"+celId+"_GT"].attrSet("active",itVlRez.length);
+		this["fItValSP_"+celId+"_CL"].attrSet("active",itVlRez.length);
+
+		if(celO.tp.parse(4,":").toInt())
+			this["fItValSP_"+celId+"_VW"].attrSet("src", (itVlRez.length && (tVl=SYS.UI.mimeGet(itVlRez.parseLine(0).parse(0,";;"))).indexOf("image/") >= 0)
+						? "data:"+tVl+"\n"+SYS.strEncode(getFileFIt("SP_"+celId,celO),"Base64") : "");
+	}
+	//File Get
+	else if((tVl=sval.match("^ws_BtRelease:/fItVal(.+)_GT$")).length && (celO=clsLsO[tVl[1].slice(3)]).tp.parse(0,":") == "file")
+		this["fItVal"+tVl[1]+"_GT"].attrSet("value","||"+(tVl2=this["fItVal"+tVl[1]].attr("value").parse(0,";;"))+"|"+SYS.UI.mimeGet(tVl2)+"\n"+getFileFIt(tVl[1],celO));
+	//File Select
+	else if((tVl=sval.match("^ws_CombChange:/fItVal(.+)$")).length && (celO=clsLsO[tVl[1].slice(3)]).tp.parse(0,":") == "file")
+		this["fItVal"+tVl[1]+"_VW"].attrSet("src",((tVl=SYS.UI.mimeGet(this["fItVal"+tVl[1]].attr("value").parse(0,";;"))).indexOf("image/") >= 0)
+				? "data:"+tVl+"\n"+SYS.strEncode(getFileFIt(tVl[1],celO),"Base64") : "");
 	else if(sval == "ws_BtRelease:/go_reportIt") {
 		go_reportIt_report = "<body>\n"
 			"<h1>"+tr("%1 item:").replace("%1",classNm_text)+"</h1>\n";
@@ -14061,15 +14202,28 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		for(iR = 1; iR < dataTblOneReq.length; iR++) {
 			if(dataTblOneReq[iR][0] != dataTbl_value) continue;
 			for(iC = 0; iC < dataTblOneReq[iR].length; iC++) {
-				itVlNm = dataTblOneReq[0][iC];
-				if((itVlNm.indexOf("SP_") == 0 && !(tVl=clsLsO[itVlNm.slice(3)]).isEVal()) || ((itVlNm == "NAME" || itVlNm == "DSCR") && !(tVl=clsLsO["*"+itVlNm]).isEVal()))
-					itVlNm = tVl.name;
+				itVlNm = itVlId = dataTblOneReq[0][iC];
+				celO = null;
+				if((itVlNm.indexOf("SP_") == 0 && !(celO=clsLsO[itVlNm.slice(3)]).isEVal()) || ((itVlNm == "NAME" || itVlNm == "DSCR") && !(celO=clsLsO["*"+itVlNm]).isEVal()))
+					itVlNm = celO.name;
 				if((itVl=dataTblOneReq[iR][iC]) == "<NULL>" || !itVl.length) continue;
+				if(celO != null && celO.tp.parse(0,":") == "file" && !celO.tp.parse(2,":").length) {
+						for(iF = 0, off = 0, itVlRez = ""; (itVlEl=itVl.parseLine(0,off)).length; iF++)
+							if((iF%2) == 0)	itVlRez += (itVlRez.length?"\n":"") + itVlEl;
+						itVl = itVlRez;
+					}
 				go_reportIt_report += "<span style=''font: bold 15px/25px Arial, sans-serif''>"+SYS.strEncode(itVlNm,"HTML")+":</span>";
 				if(colTps[iC] == "t")	go_reportIt_report += "<br/>";
-				go_reportIt_report += "<span style=''white-space: pre-wrap;"+((colTps[iC] == "t")?"":" margin-left: 3pt;")+"''>"+
-						SYS.strEncode(itVl,"HTML").replace(new RegExp("(http|https|ftp)://(\\S+)","g"),"<a target=''_blank'' href=''$1://$2''>$2</a>")+
-						"</span><br/>";
+				// Inserting images
+				if(celO == null || celO.tp.parse(0,":") != "file")
+					go_reportIt_report += "<span style=''white-space: pre-wrap;"+((colTps[iC] == "t")?"":" margin-left: 3pt;")+"''>"+
+							SYS.strEncode(itVl,"HTML").replace(new RegExp("(http|https|ftp)://(\\S+)","g"),"<a target=''_blank'' href=''$1://$2''>$2</a>")+
+							"</span><br/>";
+				else for(off = 0; (itVlEl=itVl.parseLine(0,off)).length; ) {
+					go_reportIt_report += "<span>"+SYS.strEncode(itVlEl,"HTML")+"</span><br/>";
+					if((tVl=SYS.UI.mimeGet(itVlEl)).indexOf("image/") >= 0)
+						go_reportIt_report += "<img src=''data:"+tVl+";base64,"+SYS.strEncode(getFileFIt(itVlId,celO,itVlEl),"Base64")+"'' /><br/>";
+				}
 			}
 			break;
 		}
@@ -14097,7 +14251,7 @@ if(fClrTo >= 0) {
 if(toCalcCycles > 0.1) {
 	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
 	toCalcCycles = max(0, toCalcCycles-1);
-}','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1723382203);
+}','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1736698649);
 INSERT INTO wlb_Main VALUES('weather','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAxCAIAAADldTjtAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAO
 KUlEQVRogdVa228bV3o/Z87cyRnebyJF8SJLsmRZchy7cSUncQyjDjbbNhssdrsLNFsUaNEWfSgK
 9F/xS9CgD3loUewiKFqk62w2XslO1rZs2bEki5JMihJ1o3jRkJwZzu30YWxqRMluI2eb7PdEHn7n
@@ -15770,20 +15924,24 @@ if(f_start) {
 	this.doc.attrSet("params", params);
 
 	if(!n) time = SYS.time(), lastTime = 0;
-	return;
+
+	cnt = 0;
+	toCalcCycles = cnt_ = max(3, 2000/this.ownerSess().period());
 }
+cnt++;
+if(cnt == cnt_ && !this.attr("pgNoOpenProc"))	event = "ws_FocusIn";
+
+if(f_stop)	return;
 
 curMin = curHour = curDay = curMonth = curYear = 0;
 
-for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; )
-	if(ev_cur == "ws_FocusIn:/doc")	ev_rez += "ws_FocusIn";
-	else ev_rez += ev_cur;
+for(off = 0, ev_rez = ""; (evCur=event.parse(0,"\n",off)).length; )
+	if(evCur == "ws_FocusIn:/doc")	ev_rez += "ws_FocusIn";
+	else ev_rez += evCur;
 event = ev_rez;
 
 //Build the document dynamically
-if(!n) {
-	if(time == lastTime)	return;
-
+if(!n && time != lastTime) {
 	time = min(time, SYS.time());
 	SYS.localtime(time, 0, curMin, curHour, curDay, curMonth, curYear);
 	doc_bTime_ = SYS.mktime(0, 0, repHour, curDay, curMonth, curYear);
@@ -15794,41 +15952,45 @@ if(!n) {
 	doc_doc = "";
 	if(doc_time == doc_time_) doc_time = 0;
 	else doc_time = doc_time_, doc_bTime = doc_bTime_;
+}
+//Build the document in the archive generation one per hour 
+else if(n) {
+	SYS.localtime(SYS.time(), 0, curMin, curHour, curDay, curMonth, curYear);
+	if(!doc_bTime) {
+		doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
+		if(curHour < repHour)	doc_bTime -= 24*60*60;
+	}
+	if(lastHour < 0 || lastDay < 0 || lastMin < 0) SYS.localtime(doc_bTime, 0, lastMin, lastHour, lastDay);
 
-	return;
+	//Archive last not closed document
+	if(closeDoc == true) { if(!doc_process) { this.doc.attrSet("aCur", -1);/*(doc_aCur = -1;*/ closeDoc = false; } }
+	else if(doc_time && doc_time < doc_bTime) {
+		closeDoc = true;  
+		SYS.localtime(doc_time, 0, 0, curHour, curDay, curMonth, curYear);
+		doc_time = doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
+		if(curHour >= repHour) doc_time += 24*60*60; else doc_bTime -= 24*60*60;
+	}
+	//Archive the document
+	else if(curDay != lastDay && curHour == repHour && curMin >= 3) {
+		closeDoc = true;
+		doc_time = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
+		lastDay = curDay;
+	}
+	//Periodic notfull update
+	else if(curMin != lastMin && !(curMin%5)) {
+		lastMin = curMin;
+		doc_time = SYS.time() - 5*60;
+		SYS.localtime(doc_time, 0, 0, curHour, curDay, curMonth, curYear);
+		doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
+		if(curHour < repHour) doc_bTime -= 24*60*60;
+	}
 }
 
-//Build the document in the archive
-//generation one per hour 
-SYS.localtime(SYS.time(), 0, curMin, curHour, curDay, curMonth, curYear);
-if(!doc_bTime) {
-	doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
-	if(curHour < repHour)	doc_bTime -= 24*60*60;
-}
-if(lastHour < 0 || lastDay < 0 || lastMin < 0) SYS.localtime(doc_bTime, 0, lastMin, lastHour, lastDay);
-
-//Archive last not closed document
-if(closeDoc == true) { if(!doc_process) { this.doc.attrSet("aCur", -1);/*(doc_aCur = -1;*/ closeDoc = false; } }
-else if(doc_time && doc_time < doc_bTime) {
-	closeDoc = true;  
-	SYS.localtime(doc_time, 0, 0, curHour, curDay, curMonth, curYear);
-	doc_time = doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
-	if(curHour >= repHour) doc_time += 24*60*60; else doc_bTime -= 24*60*60;
-}
-//Archive the document
-else if(curDay != lastDay && curHour == repHour && curMin >= 3) {
-	closeDoc = true;
-	doc_time = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
-	lastDay = curDay;
-}
-//Periodic notfull update
-else if(curMin != lastMin && !(curMin%5)) {
-	lastMin = curMin;
-	doc_time = SYS.time() - 5*60;
-	SYS.localtime(doc_time, 0, 0, curHour, curDay, curMonth, curYear);
-	doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
-	if(curHour < repHour) doc_bTime -= 24*60*60;
-}','','',-1,'name;dscr;evProc;backColor;',1666954984);
+//Updating cycles processing for big processing periods of that page 
+if(toCalcCycles > 0.1) {
+	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
+	toCalcCycles = max(0, toCalcCycles-1);
+}','','',-1,'name;dscr;evProc;backColor;',1737360203);
 INSERT INTO wlb_doc VALUES('docRepMonth','','/wlb_doc/wdg_doc',0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	//Init the avialable parameters
@@ -15853,22 +16015,24 @@ if(f_start) {
 	this.doc.attrSet("params", params);
 
 	if(!n) { time = SYS.time(); lastTime = 0; }
-	return;
+
+	cnt = 0;
+	toCalcCycles = cnt_ = max(3, 2000/this.ownerSess().period());
 }
+cnt++;
+if(cnt == cnt_ && !this.attr("pgNoOpenProc"))	event = "ws_FocusIn";
 
 if(f_stop)	return;
 
 curMin = curHour = curDay = curMonth = curYear = 0;
 
-for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; )
-	if(ev_cur == "ws_FocusIn:/doc")	ev_rez += "ws_FocusIn";
-	else ev_rez += ev_cur;
+for(off = 0, ev_rez = ""; (evCur=event.parse(0,"\n",off)).length; )
+	if(evCur == "ws_FocusIn:/doc")	ev_rez += "ws_FocusIn";
+	else ev_rez += evCur;
 event = ev_rez;
 
 //Build the document dynamically
-if(!n) {
-	if(time == lastTime)	return;
-
+if(!n && time != lastTime) {
 	if(abs(time-lastTime) == 30*24*60*60)	time -= 10*24*60*60;
 
 	time = min(time, SYS.time());
@@ -15886,50 +16050,55 @@ if(!n) {
 	doc_doc = "";
 	if(doc_time == doc_time_) doc_time = 0;
 	else doc_time = doc_time_, doc_bTime = doc_bTime_;
-
-	return;
 }
+//Document generation one per hour
+else if(n) {
+	curMin = curHour = curDay = curMonth = curYear = 0;
+	SYS.localtime(SYS.time(), 0, curMin, curHour, curDay, curMonth, curYear);
+	if(!doc_bTime) {
+		if(curDay == 1 && curHour < repHour)
+			doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
+		else doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
+	}
+	if(lastHour < 0 || lastDay < 0 || lastMin < 0 || lastMonth < 0)
+		SYS.localtime(doc_bTime, 0, lastMin, lastHour, lastDay, lastMonth);
 
-//Document generation one per hour 
-curMin = curHour = curDay = curMonth = curYear = 0;
-SYS.localtime(SYS.time(), 0, curMin, curHour, curDay, curMonth, curYear);
-if(!doc_bTime) {
-	if(curDay == 1 && curHour < repHour)
-		doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
-	else doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
-}
-if(lastHour < 0 || lastDay < 0 || lastMin < 0 || lastMonth < 0)
-	SYS.localtime(doc_bTime, 0, lastMin, lastHour, lastDay, lastMonth);
-
-//Archive last not closed document
-if(closeDoc == true) { if(!doc_process)	{ this.doc.attrSet("aCur", -1);/*doc_aCur = -1;*/ closeDoc = false; } }
-else if(doc_time && doc_time < doc_bTime)	{
-	closeDoc = true;
-	SYS.localtime(doc_time, 0, 0, 0, curDay, curMonth, curYear);
-	if(curDay == 1 && curHour < repHour) {
+	//Archive last not closed document
+	if(closeDoc == true) { if(!doc_process)	{ this.doc.attrSet("aCur", -1);/*doc_aCur = -1;*/ closeDoc = false; } }
+	else if(doc_time && doc_time < doc_bTime)	{
+		closeDoc = true;
+		SYS.localtime(doc_time, 0, 0, 0, curDay, curMonth, curYear);
+		if(curDay == 1 && curHour < repHour) {
+			doc_time = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
+			doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
+		}
+		else {
+			doc_time = SYS.strptime(""+((curMonth==11)?(curYear+1):curYear)+"-"+((curMonth==11)?1:curMonth+2)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
+			doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
+		}
+	}
+	// Archive the document
+	else if(curMonth != lastMonth && curDay >= 1 && curHour >= repHour && curMin >= 3)	{
+		closeDoc = true;
 		doc_time = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
-		doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
+		lastMonth = curMonth;
 	}
-	else {
-		doc_time = SYS.strptime(""+((curMonth==11)?(curYear+1):curYear)+"-"+((curMonth==11)?1:curMonth+2)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
-		doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
+	// Periodic not full update
+	else if(curMin != lastMin && !(curMin%5))	{
+		lastMin = curMin;
+		doc_time = SYS.time() - 5*60;
+		SYS.localtime(doc_time, 0, 0, curHour, curDay, curMonth, curYear);
+		if(curDay == 1 && curHour < repHour)
+			doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
+		else doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
 	}
 }
-// Archive the document
-else if(curMonth != lastMonth && curDay >= 1 && curHour >= repHour && curMin >= 3)	{
-	closeDoc = true;
-	doc_time = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
-	lastMonth = curMonth;
-}
-// Periodic not full update
-else if(curMin != lastMin && !(curMin%5))	{
-	lastMin = curMin;
-	doc_time = SYS.time() - 5*60;
-	SYS.localtime(doc_time, 0, 0, curHour, curDay, curMonth, curYear);
-	if(curDay == 1 && curHour < repHour)
-		doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
-	else doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
-}','','',-1,'name;dscr;evProc;',1668281007);
+
+//Updating cycles processing for big processing periods of that page 
+if(toCalcCycles > 0.1) {
+	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
+	toCalcCycles = max(0, toCalcCycles-1);
+}','','',-1,'name;dscr;evProc;',1737360203);
 INSERT INTO wlb_doc VALUES('docUsersSet','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
 fklEQVRYhe2V0UrrQBBAt93ZuEnTNLVUSa0BW5Aq6A/4K/6A/+dX+CaaQsUHfSgiYquGJtlNsnMf
 FooPIpcLda+w5ynsTCZzNplN4/LycjQakd9JkiRwcHBwdHT0ZVgppZQCAESsqopS2mw2vylX1zWl
@@ -15947,7 +16116,18 @@ if(f_start) {
 	doc_time = SYS.time();
 	doc_bTime = doc_time-24*3600;
 	doc_tmpl = doc_tmpl.replace("@@messCat@@", messCat);
-}','','',-1,'name;dscr;',1670951600);
+
+	cnt = 0;
+	toCalcCycles = cnt_ = max(3, 2000/this.ownerSess().period());
+}
+cnt++;
+if(cnt == cnt_ && !this.attr("pgNoOpenProc"))	event = "ws_FocusIn:/doc";
+
+//Updating cycles processing for big processing periods of that page 
+if(toCalcCycles > 0.1) {
+	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
+	toCalcCycles = max(0, toCalcCycles-1);
+}','','',-1,'name;dscr;',1737360203);
 INSERT INTO wlb_doc VALUES('doc','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAG
 d0lEQVRYhe1Y227TSheeGY9jJ3bsOHUTWkJpSlpOUspJQgJxwQUSb8AL8DI8D9wScYVEhHpBaRCI
 klBRUsd2nTSODxN75r8YKX9ouyvYu9rRlvJdRWtmrVnfrNM48NWrV2tra+C/iZ2dHVytVq9fvw4A
@@ -16022,7 +16202,20 @@ if(f_start) {
 	this.doc.attrSet("params", params);
 
 	doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120;
-}','','',-1,'name;dscr;',1694269838);
+
+	cnt = 0;
+	toCalcCycles = cnt_ = max(3, 2000/this.ownerSess().period());
+}
+cnt++;
+if(cnt == cnt_ && !this.attr("pgNoOpenProc"))	event = "ws_FocusIn:/doc";
+
+if(f_stop)	return;
+
+//Updating cycles processing for big processing periods of that page 
+if(toCalcCycles > 0.1) {
+	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
+	toCalcCycles = max(0, toCalcCycles-1);
+}','','',-1,'name;dscr;',1737360203);
 INSERT INTO wlb_doc VALUES('docDin','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAG
 f0lEQVRYhe1XS28TPRe2PddkZjKZJG1J2tKGQAlpERSWrCq27Fmx4d/wb5BAQgLBigVCLFg0CSml
 jXpLmtsMnfvF9rewFCJKCx+b8Ep5FlF8fC7z+Bz72PDly5fXrl0D/03U63W+XC7funULAJAkCYQQ
@@ -16054,7 +16247,22 @@ UqlisXh0dJTP5weDga7ra2trY2Kj0Qhj7Pv+nTt3Jrv9JBRFGQwGoigahmEYRqlUYvLhcDgYDAgh
 mqYZhlEsFidNOp2O53ksqCzL46AAgEajAT9//ry8vPzLeOdv/xe9B/7wnfAX5pd7/vLlCy8IQi6X
 +23sfxM8z//N8+qfwozAtDEjMG3MCEwbMwLTxozAtDEjMG3MCEwbMwLTxozAtDEjMG385wnwjUbD
 dd1pf8ZfotVq/Q94Va1bBeCz3wAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
-if(f_start){ doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120; }','','',-2,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1663488391);
+if(f_start) {
+	doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120;
+
+	cnt = 0;
+	toCalcCycles = cnt_ = max(3, 2000/this.ownerSess().period());
+}
+cnt++;
+if(cnt == cnt_)	event = "ws_FocusIn:/doc";
+
+if(f_stop)	return;
+
+//Updating cycles processing for big processing periods of that page 
+if(toCalcCycles > 0.1) {
+	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
+	toCalcCycles = max(0, toCalcCycles-1);
+}','','',-2,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1737360203);
 INSERT INTO wlb_doc VALUES('docRep2WorkSh','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
 uUlEQVRYhe2UzUvkMBiHkyaZmta2UmIV5iIzo85J0H/c/8CT4kEED1I8dEaLTntoLU7b6Vf64aGw
 yC7LggOGhT6XhB8keZ/kJfDy8nI6nYL/E9u28f7+fhAE0+m0bVsIoe/7Z2dnjuOoqso5p5QahrFe
@@ -16069,7 +16277,22 @@ hH2oqmpZloqixHFMCOlDXdeLokAIIYTu7+/h7e3tZDLhnCOEuq77ZSJJUi/KOW+apn8yhJAkSb0M
 57yffJ1vGXZd1zRNf4//XAUAeHh4wKqqWpa1TSMKhFKK4zh+enqq63o0GvUff285Ho/7XvqTvqF/
 uNa/gXVdn8/nosv4PpLoArZlEBDNICCaQUA0g4BoBgHRDAKiGQREMwiIZhAQzSAgmkFANIOAaAYB
 0eDVaqUoiugyvonv+5860YM6/4UAQgAAAABJRU5ErkJggg==','/wlb_doc/wdg_docDin',0,'JavaLikeCalc.JavaScript
-if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-12*3600; }','','',-1,'name;dscr;geomH;geomXsc;geomYsc;',1580750144);
+if(f_start) {
+	doc_time = SYS.time(); doc_bTime = doc_time-12*3600;
+
+	cnt = 0;
+	toCalcCycles = cnt_ = max(3, 2000/this.ownerSess().period());
+}
+cnt++;
+if(cnt == cnt_)	event = "ws_FocusIn:/doc";
+
+if(f_stop)	return;
+
+//Updating cycles processing for big processing periods of that page 
+if(toCalcCycles > 0.1) {
+	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
+	toCalcCycles = max(0, toCalcCycles-1);
+}','','',-1,'name;dscr;geomH;geomXsc;geomYsc;',1737360203);
 INSERT INTO wlb_doc VALUES('docAlarmsRep','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
 JklEQVRYhe2V0YqyQBTHRz1uWlYGWSQRVBDVTdfRq/QCvV9P0UUXRVERREG3Flk06jhnLwSJ/RYW
 PpaGhfldqec/zvmBZ1Sm02mr1SJ/k9VqBc1ms9frfVvmnHPOAQARGWO6rsdxrGkaY0xVVVVVERER
@@ -16086,7 +16309,20 @@ if(f_start) {
 	doc_time = SYS.time();
 	doc_bTime = doc_time-24*3600;
 	doc_tmpl = doc_tmpl.replace("@@messCat@@", messCat);
-}','','',-2,'name;dscr;backColor;bordWidth;',1663488391);
+
+	cnt = 0;
+	toCalcCycles = cnt_ = max(3, 2000/this.ownerSess().period());
+}
+cnt++;
+if(cnt == cnt_)	event = "ws_FocusIn:/doc";
+
+if(f_stop)	return;
+
+//Updating cycles processing for big processing periods of that page 
+if(toCalcCycles > 0.1) {
+	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
+	toCalcCycles = max(0, toCalcCycles-1);
+}','','',-2,'name;dscr;backColor;bordWidth;',1737360203);
 INSERT INTO wlb_doc VALUES('docMessRep','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
 IUlEQVRYhe2VzcriMBhGkzRpYxOpWF0UBPEHBFG8C+/C+/KaXIggggpuxIWKINZGRZtkFh2k8y1m
 BmcgM5Cza/K85TmUNHA0GpVKJUopYyyKok6nwzmP45gxxjn3fR/8iBBiu932ej3wDzCfzzEhBEKI
@@ -16102,7 +16338,14 @@ if(f_start) {
 	doc_time = SYS.time();
 	doc_bTime = doc_time-24*3600;
 	doc_tmpl = doc_tmpl.replace("@@archLs@@",archLs).replace("@@messCat@@",messCat);
+
+	cnt = 0;
+	toCalcCycles = cnt_ = max(3, 2000/this.ownerSess().period());
 }
+cnt++;
+if(cnt == cnt_)	event = "ws_FocusIn:/doc";
+
+if(f_stop)	return;
 
 //Events process
 for(off = 0, ev_rez = ""; (sval=event.parse(0,"\n",off)).length; ) {
@@ -16115,7 +16358,14 @@ for(off = 0, ev_rez = ""; (sval=event.parse(0,"\n",off)).length; ) {
 	else if(sval == "ws_LnAccept:/fltr")		{ doc_doc = ""; doc_time = 0; }
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',-1,'owner;name;dscr;geomH;backColor;',1635772940);
+event = ev_rez;
+
+
+//Updating cycles processing for big processing periods of that page 
+if(toCalcCycles > 0.1) {
+	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
+	toCalcCycles = max(0, toCalcCycles-1);
+}','','',-1,'owner;name;dscr;geomH;backColor;',1737360203);
 INSERT INTO wlb_doc VALUES('docRepYear','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD
 f0lEQVRYhe2WzUvrShiHZ95M2qZprGkTbYsUUatiwYULu3QhFMStKxfn/HEuxYXuBN2Ii1IUddGC
 VRGs2tbW2ERT8jm5i0ApnHvPveqFcCDPbvL+3mGezDAJ/vnjRzweNy0LAKjr8jyvahoAMACe571/
@@ -16175,11 +16425,11 @@ if(f_start) {
 	return;
 }
 
-for(off = 0; (ev_cur=event.parse(0,"\n",off)).length; )
-	//this.messInfo("ev_cur="+ev_cur);
-	if(ev_cur == "ws_CombChange:/year")	toBuild = true;
-	else if(ev_cur == "ws_CombChange:/set_item")	set_val_active = set_item_value.length;
-	else if(ev_cur == "ws_LnAccept:/set_val") {
+for(off = 0; (evCur=event.parse(0,"\n",off)).length; )
+	//this.messInfo("evCur="+evCur);
+	if(evCur == "ws_CombChange:/year")	toBuild = true;
+	else if(evCur == "ws_CombChange:/set_item")	set_val_active = set_item_value.length;
+	else if(evCur == "ws_LnAccept:/set_val") {
 		// Writing the manual input values to the value or message archive
 		for(pO = false, iP = 0; iP < params.length; iP++) {
 			if((pO=params[iP]).name != set_item_value)	continue;
@@ -16225,7 +16475,7 @@ if(toBuild) {
 				if(firstV.isEVal())	firstV = mVl;
 				if(mO.tm < eTime)	lastV = mVl;
 				if(!finVl.isEVal() && (curPos=floor((mO.tm-bTime)/86400)) >= 0)
-					pO.trData += (pO.trData.length?",":"") + curPos.toString() + "=" + finVl;
+					pO.trData += (pO.trData.length?",":"") + mO.tm.toString() + "=" + finVl;
 			}
 		}
 		else {
@@ -16249,11 +16499,11 @@ if(toBuild) {
 			pO.trData += (pO.trData.length?",":"") + (curPos+30).toString() + "=" + SYS.strEncode(EVAL,"HTML");
 		}
 		if(pO.trData.length) {
-			pO.trData = "<d s=''1'' aprox=''1'' per=''86400''>"+pO.trData+"</d>";
+			pO.trData = "<d per=''0''>"+pO.trData+"</d>";
 			//this.messInfo("pO.trData="+pO.trData);
 		}
 	}
-}','','',-2,'owner;name;dscr;evProc;',1664170367);
+}','','',-2,'owner;name;dscr;evProc;',1736605077);
 CREATE TABLE IF NOT EXISTS 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"USER" TEXT DEFAULT 'root' ,"GRP" TEXT DEFAULT 'UI' ,"PERMIT" INTEGER DEFAULT '436' ,"PER" INTEGER DEFAULT '100' ,"STYLE" INTEGER DEFAULT '-1' ,"EN_BY_NEED" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO VCAPrjs VALUES('tmplSO','Signal groups (template)','Групи сигналізації (шаблон)','Группы сигнализаций (шаблон)','The projects'' template of visualisation based on signal groups.
 Author: Roman Savochenko <roman@oscada.org>
@@ -16536,15 +16786,15 @@ progLbUpdt = progSelPrg = progSelCom = progSelTp = false;
 var comOp = "";
 
 //Events for commands process
-for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo(this.nodePath(),"Event: "+ev_cur);
-	if(ev_cur == "ws_BtPress:/progAdd") {
+for(ev_rez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo(this.nodePath(),"Event: "+evCur);
+	if(evCur == "ws_BtPress:/progAdd") {
 		if(!progNm_value.length) progNm_value = tr("New program");
 		SYS.BD.nodeAt(dbDB,".").SQLReq("INSERT INTO "+dbProgs+" (name) VALUES (''"+progNm_value+"'');");
 		lib_value = progNm_value;
 		progLbUpdt = progSelPrg = progSelCom = true; prog_value = "";
 	}
-	else if(ev_cur == "ws_BtPress:/progCopy") {
+	else if(evCur == "ws_BtPress:/progCopy") {
 		if(!progNm_value.length) progNm_value = tr("New program");
 		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
 		if(rez.length > 1) {
@@ -16553,27 +16803,27 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 			progLbUpdt = progSelPrg = progSelCom = true; prog_value = "";
 		}
 	}
-	else if(ev_cur == "ws_BtPress:/progRename") {
+	else if(evCur == "ws_BtPress:/progRename") {
 		SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET name=''"+progNm_value+"'' WHERE name=''"+lib_value+"'';");
 		lib_value = progNm_value;
 		progLbUpdt = progSelPrg = progSelCom = true; prog_value = "";
 	}
-	else if(ev_cur == "dlg_Apply:/progDel" && lib_value.length) {
-	//else if(ev_cur == "ws_BtPress:/progDel" && lib_value.length) {
+	else if(evCur == "dlg_Apply:/progDel" && lib_value.length) {
+	//else if(evCur == "ws_BtPress:/progDel" && lib_value.length) {
 		SYS.BD.nodeAt(dbDB,".").SQLReq("DELETE FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
 		lib_value = "";
 		progLbUpdt = progSelPrg = true;
 	}
-	else if(ev_cur == "ws_TreeChange:/lib")	{ progSelPrg = progSelCom = true; prog_value = ""; }
-	else if(ev_cur == "ws_BtPress:/comAdd")	comOp = "add";
-	else if(ev_cur == "ws_BtPress:/comIns")	comOp = "ins";
-	else if(ev_cur == "ws_BtPress:/comInAdd")	comOp = "inAdd";
-	else if(ev_cur == "ws_BtPress:/comDel") comOp = "del";
-	else if(ev_cur == "ws_BtPress:/comUp")	comOp = "up";
-	else if(ev_cur == "ws_BtPress:/comDwn") comOp = "dwn";
-	else if(ev_cur == "ws_TreeChange:/prog"){ progSelCom = true; save_active = false; }
-	else if(ev_cur == "ws_CombChange:/type"){ progSelTp = true; save_active = true; }
-	else if(ev_cur == "ws_BtPress:/save" && prog_value.length) {
+	else if(evCur == "ws_TreeChange:/lib")	{ progSelPrg = progSelCom = true; prog_value = ""; }
+	else if(evCur == "ws_BtPress:/comAdd")	comOp = "add";
+	else if(evCur == "ws_BtPress:/comIns")	comOp = "ins";
+	else if(evCur == "ws_BtPress:/comInAdd")	comOp = "inAdd";
+	else if(evCur == "ws_BtPress:/comDel") comOp = "del";
+	else if(evCur == "ws_BtPress:/comUp")	comOp = "up";
+	else if(evCur == "ws_BtPress:/comDwn") comOp = "dwn";
+	else if(evCur == "ws_TreeChange:/prog"){ progSelCom = true; save_active = false; }
+	else if(evCur == "ws_CombChange:/type"){ progSelTp = true; save_active = true; }
+	else if(evCur == "ws_BtPress:/save" && prog_value.length) {
 		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
 		if(rez.length > 1) {
 			comTree = selNd = SYS.XMLNode("prg"); comTree.load(rez[1][0]);
@@ -16602,7 +16852,7 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 		}
 		save_active = false;
 	}
-	else if(ev_cur == "ws_BtPress:/progExport" && lib_value.length) {
+	else if(evCur == "ws_BtPress:/progExport" && lib_value.length) {
 		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
 		if(rez.length > 1) {
 			expTree = SYS.XMLNode("OpenSCADA_Prescr");
@@ -16611,8 +16861,8 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 			progExport_value = tr("Prescription-Program")+" (*.prscr)|"+tr("Prescription file")+"|"+lib_value.replace("/","_")+".prscr\n"+expTree.save(0x05);
 		}
 	} 
-	//else if(ev_cur == "ws_BtPress:/progImport")
-	else if(ev_cur == "ws_BtLoad:/progImport" && progImport_value.length && (pCtx=progImport_value.indexOf("\n")) > 0)
+	//else if(evCur == "ws_BtPress:/progImport")
+	else if(evCur == "ws_BtLoad:/progImport" && progImport_value.length && (pCtx=progImport_value.indexOf("\n")) > 0)
 	{
 		expTree = SYS.XMLNode("OpenSCADA_Prescr");
 		expTree.load(progImport_value.slice(pCtx+1));
@@ -16628,15 +16878,15 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 		}
 		progLbUpdt = progSelPrg = progSelCom = true;
 	}
-	else if(ev_cur == "ws_LnAccept:/name" || ev_cur == "ws_TxtAccept:/descr" || ev_cur == "ws_ChkChange:/backgrnd" || (rez=ev_cur.match("ws_LnAccept:\\/arg(\\d)")).length)	save_active = true;
-	else if((rez=ev_cur.match("ws_FocusOut:\\/arg(\\d)")).length) {
+	else if(evCur == "ws_LnAccept:/name" || evCur == "ws_TxtAccept:/descr" || evCur == "ws_ChkChange:/backgrnd" || (rez=evCur.match("ws_LnAccept:\\/arg(\\d)")).length)	save_active = true;
+	else if((rez=evCur.match("ws_FocusOut:\\/arg(\\d)")).length) {
 		argObj = this["arg"+rez[1]];
 		argVal = argObj.attr("value");
 		if(!argObj.attr("min").isEVal()) argVal = max(argVal,argObj.attr("min"));
 		if(!argObj.attr("max").isEVal()) argVal = min(argVal,argObj.attr("max"));
 		argObj.attrSet("value",argVal);
 	}
-	else ev_rez += (ev_cur+"\n");
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;
 
@@ -16922,24 +17172,24 @@ if(pTxt.length) {
 prCnt++;
 
 //Events for commands process
-for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
-	if(ev_cur == "ws_TreeChange:/lib") {
+for(ev_rez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messDebug("Prescription edit control","Event: "+evCur);
+	if(evCur == "ws_TreeChange:/lib") {
 		prog_vCur = prog_aCur;
 		prExtProg = lib_value;
 	}
-	else if(ev_cur == "ws_BtPress:/btStart") {
+	else if(evCur == "ws_BtPress:/btStart") {
 		if(prExtMode <= 0)	prExtMode = 1;
 		else if(prExtMode == 1)	prExtMode = 2;
 		prog_vCur = prog_aCur;
 	}
-	else if(ev_cur == "ws_BtRelease:/btStart")	prExtMode = 1;
-	else if(ev_cur == "ws_BtPress:/btStop" && prExtMode >= 0) {
+	else if(evCur == "ws_BtRelease:/btStart")	prExtMode = 1;
+	else if(evCur == "ws_BtPress:/btStop" && prExtMode >= 0) {
 		prExtMode = prExtCurCom = 0;
 		prog_vCur = prog_aCur;
 	}
-	else if(ev_cur == "ws_BtPress:/btPass" && (prExtMode == 1 || prExtMode == 2))	prExtMode = 3;
-	else ev_rez += (ev_cur+"\n");
+	else if(evCur == "ws_BtPress:/btPass" && (prExtMode == 1 || prExtMode == 2))	prExtMode = 3;
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;
 
@@ -17107,19 +17357,19 @@ if(pTxt.length)	prog_doc = pTxt;
 prCnt++;
 
 //Events for commands process
-for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo("Prescription edit control","Event: "+ev_cur);
-	//if(ev_cur == "ws_CombChange:/lib") prExtProg = lib_name;
-	//if(ev_cur.slice(0,11) == "ws_BtMenu=/")	prExtProg = ev_cur.slice(11).parse(0,":");
-	if(ev_cur == "dlg_Apply:/lib")	prExtProg = lib_selValue;
-	else if(ev_cur == "ws_BtPress:/btStart") {
+for(ev_rez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo("Prescription edit control","Event: "+evCur);
+	//if(evCur == "ws_CombChange:/lib") prExtProg = lib_name;
+	//if(evCur.slice(0,11) == "ws_BtMenu=/")	prExtProg = evCur.slice(11).parse(0,":");
+	if(evCur == "dlg_Apply:/lib")	prExtProg = lib_selValue;
+	else if(evCur == "ws_BtPress:/btStart") {
 		if(prExtMode <= 0)			prExtMode = 1;
 		else if(prExtMode == 1)	prExtMode = 2;
 	}
-	else if(ev_cur == "ws_BtRelease:/btStart")	prExtMode = 1;
-	else if(ev_cur == "ws_BtPress:/btStop" && prExtMode >= 0)	prExtMode = prExtCurCom = 0;
-	else if(ev_cur == "ws_BtPress:/btPass" && (prExtMode == 1 || prExtMode == 2))	prExtMode = 3;
-	else ev_rez += (ev_cur+"\n");
+	else if(evCur == "ws_BtRelease:/btStart")	prExtMode = 1;
+	else if(evCur == "ws_BtPress:/btStop" && prExtMode >= 0)	prExtMode = prExtCurCom = 0;
+	else if(evCur == "ws_BtPress:/btPass" && (prExtMode == 1 || prExtMode == 2))	prExtMode = 3;
+	else ev_rez += (evCur+"\n");
 }
 event = ev_rez;
 
@@ -17726,6 +17976,11 @@ INSERT INTO Trs VALUES('OL CHRG TRIM','ВМ ЗРД УСІЧ','','');
 INSERT INTO Trs VALUES('UPS beeper status','Статус пищання ДБЖ','','');
 INSERT INTO Trs VALUES('OL TRIM','ВМ УСІЧ','','');
 INSERT INTO Trs VALUES('OB DISCHRG BOOST','ВБ РЗРД ПІДСИЛ','','');
+INSERT INTO Trs VALUES('Get','Отримати','','');
+INSERT INTO Trs VALUES('Load','Завантажити','','');
+INSERT INTO Trs VALUES('Clear','Очистити','','');
+INSERT INTO Trs VALUES('Select file','Обрати файл','','');
+INSERT INTO Trs VALUES('Overview','Перегляд','','');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#IO_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_Main_io VALUES('ElCadr','name','Element cadre',32,'','','','Елемент кадр','','Элемент кадр','','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','geomW','110',32,'','','','','','','','','','');
@@ -17948,7 +18203,7 @@ Container of the control panels — container area to include control panels of 
 Under the control panels container placed a button to start the demo mode — mode in which performed periodic switching for representative frames, changing regimes and other operations by a scenario.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.7.2
+Version: 2.7.3
 License: GPLv2',32,'','','','Елемент-кадр слугує базою для створення користувацьких інтерфейсів, пачатково для управління технологічними процесами, заснованими на об''єктах сигналізації (СО).
 
 Коренева сторінка містить чотири області:
@@ -17976,7 +18231,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Під контейнером панелей управління розташовується кнопка запуску демонстраційного режиму — режиму за яким здійснюється періодичне перемикання показних кадрів, зміна режимів та інших операцій згідно сценарію.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.7.2
+Версія: 2.7.3
 Ліцензія: GPLv2','','Элемент-кадр служит базой для создания пользовательских интерфейсов, начально для управления технологическими процессами, основанными на объектах сигнализации (СО).
 
 Корневая страница содержит четыре области:
@@ -18006,7 +18261,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Корневая страница интерфейса визуализации ТП, построенного на основе объектов сигнализации.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.7.2
+Версия: 2.7.3
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','1024',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','670',40,'','','','','','','','','','');
@@ -18914,13 +19169,13 @@ INSERT INTO wlb_Main_io VALUES('doc_panel','geomH','23',32,'','','curtime','',''
 INSERT INTO wlb_Main_io VALUES('doc_panel','geomZ','7',32,'','','curtime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','tipTool','Go to the current time',32,'','','curtime','Перейти до поточного часу','','Перейти к текущему времени','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','tipStatus','Press to go to the current time',32,'','','curtime','Натиснути для переходу до поточного часу','','Нажать для перехода к текущему времени','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','view','3',32,'','','size','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('doc_panel','view','1',0,'','','size','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','active','1',32,'','','size','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','value','0',8,'','','size','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('doc_panel','value','1 second',0,'','','size','секунда','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','geomZ','10',32,'','','size','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','tipStatus','Change for setting need document''s depth',32,'','','size','Змінити для встановлення потрібної глибини документа','','Изменить для установки нужной глубины документа','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','tipTool','Document depth',32,'','','size','Глибина документа','','Глубина документа','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','geomW','70',32,'','','size','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('doc_panel','geomW','110',32,'','','size','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','geomH','20',32,'','','size','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','active','1',32,'','','curtime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','geomX','0',32,'','','size','','','','','','','');
@@ -18979,14 +19234,31 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','geomMargin','2',32,'','','Text3',''
 INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 18 0 1 0 0',32,'','','Text3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','16',32,'','','Text3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','alignment','10',32,'','','Text3','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','tipStatus','Change for select other dimension',32,'','','tmTp','Змініть для вибору іншої розмірності','','Изменить для выбора иной размерности','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipTool','Used archivators',32,'','','arch','Використані архіватори','','Используемые архиваторы','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','0',32,'','','date','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','45',32,'','','date','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','Date',32,'','','date','Дата','','Дата','','','','Датум');
-INSERT INTO wlb_Main_io VALUES('grph_panel','cfg','0.1:366:0.1:::1',32,'','','size','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','value','0.01',8,'','','size','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','view','3',32,'','','size','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','cfg','1 second
+10 seconds
+30 seconds
+1 minute
+10 minutes
+30 minutes
+1 hour
+12 hours
+1 day
+10 days',32,'','','size','секунда
+10 секунд
+30 секунд
+хвилина
+10 хвилин
+30 хвилин
+година
+12 годин
+день
+10 днів','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','value','1 second',8,'','','size','секунда','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','view','1',32,'','','size','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','active','1',32,'','','size','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipTool','Graphic''s window size',32,'','','size','Розмір вікна графіка','','Размер окна графика','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipStatus','Change for setting graphic''s window size.',32,'','','size','Змініть для встановлення розміру вікна графіку','','Изменить для установки размера окна графика','','','','');
@@ -19022,17 +19294,28 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','23',32,'','','next1','','',
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','6',32,'','','next1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipTool','More forward',32,'','','next1','Далеко вперед','','Далеко вперёд','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipStatus','Press for going to forward to five graphic''s sizes',32,'','','next1','Натиснути для переходу вперед на п''ять розмірів вікна графіку','','Нажать для перехода вперёд на пять размеров окна графика','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','73',32,'','','tmTp','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','11',32,'','','tmTp','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','tipTool','Dimension',32,'','','tmTp','Одиниця виміру','','Единица измерения','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','164',32,'','','tmTp','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','37',32,'','','tmTp','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','tmTp','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','name','Dimension type',32,'','','tmTp','Тип вимірювання','','Тип измерения','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','name','Date',32,'','','date','Дата','','Дата','','','','Датум');
-INSERT INTO wlb_Main_io VALUES('doc_panel','cfg','0.1:366:0.1:::1',32,'','','size','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('doc_panel','cfg','1 second
+10 seconds
+30 seconds
+1 minute
+10 minutes
+30 minutes
+1 hour
+12 hours
+1 day
+10 days',0,'','','size','секунда
+10 секунд
+30 секунд
+хвилина
+10 хвилин
+30 хвилин
+година
+12 годин
+день
+10 днів','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','size','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','60',32,'','','size','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','97',32,'','','size','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','Size',32,'','','size','Розмір','','Размер','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','13',32,'','','size','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','164',32,'','','size','','','','','','','');
@@ -19051,7 +19334,6 @@ INSERT INTO wlb_Main_io VALUES('doc_panel','en','1',40,'','','Text3','','','',''
 INSERT INTO wlb_Main_io VALUES('doc_panel','geomY','100',32,'','','Text3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','geomW','108',32,'','','Text3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','geomX','1',32,'','','Text3','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','name','',32,'','','tmTp','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipStatus','Select for point need data archivator',32,'','','arch','Вибрати для встановлення потрібного архіватора даних','','Выбрать для указания нужного архиватора данных','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','elType','4',32,'','','arch','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','active','1',32,'','','arch','','','','','','','');
@@ -19070,51 +19352,6 @@ INSERT INTO wlb_Main_io VALUES('RootPgSo','geomY','81',32,'','','next','','','',
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','45',32,'','','next','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','34',32,'','','next','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomZ','4',32,'','','next','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','en','1',40,'','','tmTp','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','geomX','70',32,'','','tmTp','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','geomY','75',32,'','','tmTp','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','geomW','40',32,'','','tmTp','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','geomH','20',32,'','','tmTp','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','geomZ','5',32,'','','tmTp','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','tipTool','Depth dimensions',32,'','','tmTp','Розмірність глибини','','Размерность глубины','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','tipStatus','Change for selection different depth dimension',32,'','','tmTp','Змінити для вибору іншої розмірності глибини','','Изменить для выбора иной размерности глубины','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','active','1',32,'','','tmTp','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','elType','4',32,'','','tmTp','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','value','s',8,'','','tmTp','с','','с','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','items','s
-m
-h
-d
---
-1m
-20m
-1h
-12h
-1d
-7d
-30d',0,'','','tmTp','с
-х
-г
-д
---
-1х
-20х
-1г
-12г
-1д
-7д
-30д','','с
-м
-ч
-д
---
-1м
-20м
-1ч
-12ч
-1д
-7д
-30д','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','name','>',32,'','','next','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','geomX','56',32,'','','next','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','geomY','150',32,'','','next','','','','','','','');
@@ -19198,43 +19435,6 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','tipTool','Backward',32,'','','prev'
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipStatus','Press for going to backward to half graphic''s sizes',32,'','','prev','Натиснути для перехода назад на половину розміру вікна графіку','','Нажать для перехода назад на половину размера окна графика','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','active','1',32,'','','prev','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','elType','3',32,'','','prev','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','active','1',32,'','','tmTp','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','elType','4',32,'','','tmTp','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','value','s',8,'','','tmTp','с','','с','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','items','s
-m
-h
-d
---
-1m
-20m
-1h
-12h
-1d
-7d
-30d',0,'','','tmTp','с
-х
-г
-д
---
-1х
-20х
-1г
-12г
-1д
-7д
-30д','','с
-м
-ч
-д
---
-1м
-20м
-1ч
-12ч
-1д
-7д
-30д','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','>',32,'','','next','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','54',32,'','','next','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','67',32,'','','next','','','','','','','');
@@ -20327,7 +20527,6 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','perm','438',32,'','','next1','','',
 INSERT INTO wlb_Main_io VALUES('grph_panel','perm','438',32,'','','prev','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','perm','438',32,'','','prev1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','perm','438',32,'','','size','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','perm','438',32,'','','tmTp','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','perm','438',32,'','','zoomDef','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','perm','438',32,'','','zoomIn','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','perm','438',32,'','','zoomOffDown','','','','','','','');
@@ -20342,7 +20541,6 @@ INSERT INTO wlb_Main_io VALUES('doc_panel','perm','438',32,'','','next1','','','
 INSERT INTO wlb_Main_io VALUES('doc_panel','perm','438',32,'','','prev','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','perm','438',32,'','','prev1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','perm','438',32,'','','size','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','perm','438',32,'','','tmTp','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','alignment','10',32,'','','pgCntr','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','alignment','10',32,'','','greed_text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','alignment','10',32,'','','greed_text1','','','','','','','');
@@ -20365,11 +20563,8 @@ INSERT INTO wlb_Main_io VALUES('doc_panel','font','Arial 18 1 0 0 0',0,'','','ne
 INSERT INTO wlb_Main_io VALUES('doc_panel','font','Arial 18 1 0 0 0',0,'','','next1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','font','Arial 18 1 0 0 0',0,'','','prev','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','font','Arial 18 1 0 0 0',0,'','','prev1','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','font','Arial 16',32,'','','size','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','font','Arial 14',0,'','','tmTp','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('doc_panel','geomXsc','1',32,'','','tmTp','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('doc_panel','font','Arial 15',0,'','','size','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 15',32,'','','size','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 14',0,'','','tmTp','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 13',32,'','','cursor','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','1',32,'','','line3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','name','Prescription — edit (moved)',32,'','','','Рецепт — редагування (перенесено)','','Рецепт — редактирование (перенесен)','','','','');
@@ -21298,7 +21493,7 @@ INSERT INTO wlb_Main_io VALUES('prescrEdit','tipTool','Rename selected program',
 INSERT INTO wlb_Main_io VALUES('prescrEdit','active','1',40,'','','progRename','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','elType','3',32,'','','progRename','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','font','Arial 15',0,'','','progRename','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('treeSelect','name','Select item into tree',32,'','','','Вибір елементу у дереві','','Выбор элемента в дереве','','','','');
+INSERT INTO wlb_Main_io VALUES('treeSelect','name','Select item in tree',32,'','','','Вибір елементу у дереві','','Выбор элемента в дереве','','','','');
 INSERT INTO wlb_Main_io VALUES('treeSelect','geomW','383',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('treeSelect','geomH','364',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('treeSelect','pgGrp','fl',32,'','','','','','','','','','');
@@ -22608,15 +22803,15 @@ License: GPLv2',32,'','','','Елемент реалізує діалог кор
 INSERT INTO wlb_Main_io VALUES('grph_panel','dscr','The element is a specialized panel for dynamic control of basic user properties of the primitive "Diagram". So, the panel allows you to view graphs of the history for the required period of time and the desired resolution, supports: the scale, the selection of archiver for display and the graphs presentation in a spectrum of present frequencies or XY.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.5.6
+Version: 1.6.0
 License: GPLv2',32,'','','','Елемент є спеціалізованою панеллю динамічного керування основними користувацькими властивостями примітиву "Діаграма". Так, панель дозволяє переглянути графіки історії за потрібний проміжок часу та на потрібну роздільну здатність, підтримується: масштабування шкали, вибір архіваторів для відображення, а також надання графіків у вигляді спектру присутніх частот або XY.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.5.6
+Версія: 1.6.0
 Ліцензія: GPLv2','','Элемент является специализированной панелью динамического управления основными пользовательскими свойствами примитива "Диаграмма". Так, панель позволяет просмотреть графики истории за необходимый период времени и в нужном разрешении, поддерживается: масштабирование шкалы, выбор архиваторов для отображения, а также представление графиков в виде спектра присутствующих частот или XY.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.5.6
+Версия: 1.6.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('objProps','dscr','The element serves to display the properties of the data source in tabular form and to highlight them in color, as an object, and to allow the values of the recordable properties to be changed. This element also generates violation notifications according to the features of the object. The element generally uses and represents a representative structure "Complex objects" of the DAQ-templates.
 
@@ -23846,15 +24041,15 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для нал�
 INSERT INTO wlb_Main_io VALUES('doc_panel','dscr','The element is a specialized panel for dynamic control of basic user properties of the primitive "Document". So, the panel allows you to manage documents and navigate through their histories; supported dynamic and archival documents.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.3
+Version: 1.3.0
 License: GPLv2',32,'','','','Елемент є спеціалізованою панеллю динамічного керування основними користувацькими властивостями примітиву "Документ". Так, панель дозволяє керувати документами та здійснювати навігації за їх історією; підтримуються динамічні та архівні документи.
 
 Автор: Роман Савоченко <roman@oscada,org>
-Версія: 1.2.3
+Версія: 1.3.0
 Ліцензія: GPLv2','','Элемент является специализированной панелью динамического управления основными пользовательскими свойствами примитива "Документ". Так, панель позволяет управлять документами и осуществлять навигацию по их истории; поддерживаются динамические и архивные документы.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.2.3
+Версия: 1.3.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('terminator','dscr','The panel element serves to fill the panel container space when no active visual control element is selected in the main frame, since closing or clearing frames in the container area is not provided, only the replacement.
 
@@ -24200,17 +24395,17 @@ INSERT INTO wlb_Main_io VALUES('treeSelect','dscr','The element implements a sim
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Vassily Grigoriev, the Laboratory of Vacuum Technologies
-Version: 1.0.1
+Version: 1.0.2
 License: GPLv2',32,'','','','Елемент реалізує простий діалог операції обрання пункту у дереві. Діалог містить саме дерево та дві кнопки "Прийняти" й "Скасувати". Цей діалог, наприклад, використано, та первинно для нього розроблявся, у кадрі "Рецепт:виконання (простий)" для ієрархічного обрання елементу у дереві.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Василь Григор''єв, Лабораторія Вакуумних Технологій
-Версія: 1.0.1
+Версія: 1.0.2
 Ліцензія: GPLv2','','Элемент реализует простой диалог операции выбора пункта в дереве. Диалог содержит само дерево и две кнопки "Принять" и "Отменить". Этот диалог, например, использован, и первично для него разрабатывался, в кадре "Рецепт: исполнение (простой)" для иерархического выбора элемента в дереве.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Василий Григорьев, Лаборатория Вакуумных Технологий
-Версия: 1.0.1
+Версия: 1.0.2
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('anShow','tipTool','',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('anShow1','tipTool','',40,'','','','','','','','','','');
@@ -24229,7 +24424,7 @@ The frame provides currently and in future for next features:
   - detailed control panel-form of the selected item with the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.4.19
+Version: 2.0.10
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -24243,7 +24438,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - деталізована панель-форма керування обраним елементом зі специфічними полями.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.4.19
+Версія: 2.0.10
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');
@@ -24873,6 +25068,7 @@ License: GPLv2',32,'','','','Елемент використовується д�
 Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.0.0
 Ліцензія: GPLv2','','','','','','');
+INSERT INTO wlb_Main_io VALUES('doc_panel','elType','0',32,'','','size','','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_doc_uio VALUES('docRepDay','lastDay','Last day',131073,'-1|',8,'','','','Останній день','','','Последний день','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepDay','lastHour','Last hour',131073,'-1|',8,'','','','Остання година','','','Последний час','','','','','');
@@ -26208,7 +26404,6 @@ INSERT INTO prj_archBrowser_io VALUES('/prj_archBrowser/pg_control/pg_doc_panel'
 INSERT INTO prj_archBrowser_io VALUES('/prj_archBrowser/pg_control/pg_doc_panel','value','prev1','',0,'','','','','','','','','');
 INSERT INTO prj_archBrowser_io VALUES('/prj_archBrowser/pg_control/pg_doc_panel','owner','size','root:UI',32,'','','','','','','','','');
 INSERT INTO prj_archBrowser_io VALUES('/prj_archBrowser/pg_control/pg_doc_panel','value','size','0',8,'','','','','','','','','');
-INSERT INTO prj_archBrowser_io VALUES('/prj_archBrowser/pg_control/pg_doc_panel','owner','tmTp','root:UI',32,'','','','','','','','','');
 INSERT INTO prj_archBrowser_io VALUES('/prj_archBrowser/pg_so/pg_1/pg_doc','owner','','root:op',0,'','','','','','','','','');
 INSERT INTO prj_archBrowser_io VALUES('/prj_archBrowser/pg_so/pg_1/pg_doc','perm','','944',0,'','','','','','','','','');
 INSERT INTO prj_archBrowser_io VALUES('/prj_archBrowser/pg_so/pg_1/pg_doc','name','','Documents',0,'','','Документы','','','Документи','','','');
@@ -28692,9 +28887,9 @@ INSERT INTO wlb_Main_uio VALUES('doc_panel','vCur','View cursor',131073,'<EVAL>|
 INSERT INTO wlb_Main_uio VALUES('grph_panel','trcPer','Trace period',131073,'0|',14,'<page>|trcPer','','','Період слідкування','','','Период слежения','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('grph_panel','tSek','Trend time',139265,'0|',14,'<page>|tSek','','','Час тренду','','','Время тренда','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('grph_panel','tSize','Trend size',131076,'0|',14,'<page>|tSize','','','Розмір тренду','','','Размер тренда','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('grph_panel','valArch','Archiver',131077,NULL,14,'<page>|valArch','','','Архіватор','<EVAL>||','','Архиватор','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('grph_panel','valArch','Archiver',131077,NULL,14,'<page>|valArch','','','Архіватор','','','Архиватор','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('grph_panel','curSek','Cursor',139265,'<EVAL>|',14,'<page>|curSek','','','Курсор','','','Курсор','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('grph_panel','type','Type',131073,'<EVAL>|',14,'<page>|type','','','Тип','<EVAL>||','','Тип','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('grph_panel','type','Type',131073,'<EVAL>|',14,'<page>|type','','','Тип','','','Тип','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('grph_panel','curUSek','Cursor, microseconds',131073,'<EVAL>|',14,'<page>|curUSek','','','Курсор, мікросекунди','','','Курсор, микросекунды','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('RootPgSo','lastView','Last view',131077,NULL,8,'','','','Останній вигляд','','','Последний вид','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElCadr','prmManIn','Parameter: manual input',131076,'<EVAL>|',14,'<page>|manIn','','','Параметр: ручний ввід','','','Параметр: ручной ввод','','','','','','');
@@ -29491,7 +29686,7 @@ The main advantage of this document type is the maximal actuality of the data an
 Therefore, documents of this type are allowed to use on every types of the interfaces, include the WEB-interfaces, but some documents based on big archival data require for not slow processing systems!
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.0
+Version: 1.3.1
 License: GPLv2',32,'','','','Кадр є шаблоном документу динамічного типу, він надається як приклад та для побудови власних динамічних документів на його основі. Основною специфікою документу цього типу є синхронна генерація за запитом-відкриттям.
 
 Основною перевагою цього типу документу є максимальна актуальність даних та мови документу, для багатомовних інтерфейсів, тобто можливість генерації на визначену дату та час. Але цей тип документу має суттєвий недолік, який полягає у високому навантажені процесору та тривалому часі синхронної генерації для великих архівних даних.
@@ -29499,10 +29694,10 @@ License: GPLv2',32,'','','','Кадр є шаблоном документу д�
 Відтак, документи такого типу дозволено до використання на всіх типах інтерфейсів, включно з WEB-інтерфейсами, але деякі документи, засновані на великих архівних даних, потребують не повільних обчислювальних систем!
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.3.0
+Версія: 1.3.1
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('doc','evProc','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel',32,'','','','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel','','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel','','','','');
-INSERT INTO wlb_doc_io VALUES('docDin','evProc','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel',32,'','','','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel','','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel','','','','');
+INSERT INTO wlb_doc_io VALUES('docDin','evProc','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel',32,'','','','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','name','Report of two working shifts',32,'','','','Звіт двох робочих змін','','Рапорт двух рабочих смен','','','','');
 INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','geomXsc','1',32,'','','','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','geomYsc','1',32,'','','','','','','','','','');
@@ -29696,11 +29891,11 @@ INSERT INTO wlb_doc_io VALUES('docMessRep','text','Filter:',32,'','','lab_fltr',
 INSERT INTO wlb_doc_io VALUES('docAlarmsRep','dscr','The document is provided for generating a report of the violations. The document is the dynamic type, so you can specify the data time and depth. The document commonly uses and represents the messages structure "Violations". As a data source of this document is the message archive.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.7.0
+Version: 1.7.1
 License: GPLv2',32,'','','','Документ слугує для генерації звіту з порушень. Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє структуру повідомлень "Порушення". У якості джерела даних документу виступає архів повідомлень.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.7.0
+Версія: 1.7.1
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepDay','dscr','The document is provided for generating a day report of the hour-averaged values in view of the trends diagram and the data table. The document is initially the archival type but in time it is made dynamic also, so, depending from the execution mode, you can whether select a ready document from the archive or specify the data time and depth. The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
 
@@ -29708,23 +29903,23 @@ Working in the primary archival mode performed with the 5 minutes period, when d
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored for the dynamization by: Elyor Turaboev, BLUE STAR GROUP Ltd
-Version: 3.2.0
+Version: 3.2.1
 License: GPLv2',32,'','','','Документ слугує для генерації добового звіту середніх за годину значень у вигляді діаграми трендів та таблиці даних. Документ початково архівного типу, та з часом він зроблений і динамічним, відтак, залежно від режиму виконання, ви можете або обирати готові документи із архіву або визначити час та глибину даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають архіви значень DAQ-параметрів.
 
 Робота у первинному архівному режимі відбувається із періодом 5 хвилин, коли протягом години формується один запис-рядок. Останній запис-рядок закривається на п''ятій хвилині нової години (наприклад, 14:05) та розпочинається новий запис-рядок. Весь та завершений документ архівується на третій хвилині "Звітного часу (repHour)" наступного дня (наприклад, 09:03).
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано щодо динамізації: Еліор Турабоєв, ТОВ BLUE STAR GROUP
-Версія: 3.2.0
+Версія: 3.2.1
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepInstVals','dscr','The document is provided for generating a report of the instantaneous values in view of the trends diagram and the data table. The document is the dynamic type, so you can specify the data time and depth. The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.1.3
+Version: 2.1.4
 License: GPLv2',32,'','','','Документ слугує для генерації звіту миттєвих значень у вигляді діаграми трендів та таблиці даних. Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають архіви значень DAQ-параметрів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.1.3
+Версія: 2.1.4
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepMonth','dscr','The document is provided for generating a month report of the day-averaged values in view of the trends diagram and the data table. The document is initially the archival type but in time it is made dynamic also, so, depending from the execution mode, you can whether select a ready document from the archive or specify the data time and depth. The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
 
@@ -29732,14 +29927,14 @@ Working in the primary archival mode performed with the 5 minutes period, when d
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored for the dynamization by: Elyor Turaboev, BLUE STAR GROUP Ltd
-Version: 3.2.2
+Version: 3.2.3
 License: GPLv2',32,'','','','Документ слугує для генерації місячного звіту середніх за добу значень у вигляді діаграми трендів та таблиці даних. Документ початково архівного типу, та з часом він зроблений і динамічним, відтак, залежно від режиму виконання, ви можете або обирати готові документи із архіву або визначити час та глибину даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають архіви значень DAQ-параметрів.
 
 Робота у первинному архівному режимі відбувається із періодом 5 хвилин, коли протягом доби формується один запис-рядок. Останній запис-рядок закривається на п''ятій хвилині нової доби (наприклад, 05 09:05) та розпочинається новий запис-рядок. Весь та завершений документ архівується на третій хвилині "Звітного часу (repHour)" наступного місяця (наприклад, 05 09:03).
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано щодо динамізації: Еліор Турабоєв, ТОВ BLUE STAR GROUP
-Версія: 3.2.2
+Версія: 3.2.3
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docMessRep','dscr','The document is provided for generating a report of different sort messages together, including: "Violations", "User-operator actions" and "System". The document is the dynamic type, so you can specify the data time and depth. The document so commonly uses and represents the messages structures: "Violations", "User-operator actions" and "System". As a data source of this document is the message archive.
 
@@ -29747,34 +29942,34 @@ The document also provides a simple filtering for selected criteria: "Disabled",
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Ustijancev Michael
-Version: 1.5.3
+Version: 1.5.4
 License: GPLv2',32,'','','','Документ слугує для генерації звіту різного сорту повідомлень разом, включаючи: "Порушення", "Дії користувача-оператора" та "Системні". Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє структури повідомлень: "Порушення", "Дії користувача-оператора" та "Системні". У якості джерела даних документу виступає архів повідомлень.
 
 Документ також надає просту фільтрацію за обраним критерієм: "Вимкнено", "Дата та час (dttm)", "Рівень (lev)", "Параметр (prm)", "Опис (dscr)", "Значення (alrm)".
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Устьянцев Михайло
-Версія: 1.5.3
+Версія: 1.5.4
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','dscr','The document is provided for generating a report of the hour values of up to 10 parameters for two working shift of day with the result sum for flows and related parameters. The document is the dynamic type, so you can specify the data time and depth (fixed). The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: DIYA LTD (http://diyaorg.dp.ua/)
-Version: 2.0.0
+Version: 2.0.1
 License: GPLv2',32,'','','','Документ слугує для генерації звіту годинних значень до 10 параметрів двох робочих змін доби із результатною сумою для потоків та схожих параметрів. Документ динамічного типу, відтак ви можете визначити час та глибину (фіксована) даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають архіви значень DAQ-параметрів.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: ТОВ "ДІЯ" (http://diyaorg.dp.ua/)
-Версія: 2.0.0
+Версія: 2.0.1
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docUsersSet','dscr','The document is provided for generating a report of the user interruptions. The document is the dynamic type, so you can specify the data time and depth. The document commonly uses and represents the messages structure "User-operator actions". As a data source of this document is the message archive.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.8.1
+Version: 1.8.2
 License: GPLv2',32,'','','','Документ слугує для генерації звіту з втручань користувача. Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє структуру повідомлень "Дії користувача-оператора". У якості джерела даних документу виступає архів повідомлень.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.8.1
+Версія: 1.8.2
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepDay','doc','',40,'','','doc','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepMonth','doc','',40,'','','doc','','','','','','','');
@@ -29800,7 +29995,7 @@ Manually entered data is stored or traditionally in an archive of values, with o
 The message archiver of the module FSArch must be set for the next attributes to correct work perform together this document: set "Prevent duplicates", "Consider duplicates and prevent, for equal time, category, level" and set "Time size of the archive files" to 3660 days. The module DBArch must work without such kind specific.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.1
+Version: 1.3.2
 License: GPLv2',32,'','','','Документ слугує для генерації добового звіту місячних значень у вигляді діаграми трендів та таблиці даних. Документ динамічного типу. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають переважно архіви значень DAQ-параметрів.
 
 Документом вперше запроваджено ручне введення архівних значень великого інтервалу часу вимірювання, яким у цьому випадку є місяць, як недетермінований інтервал. Найбільшу актуальність ця функція становить для лічильників, які з тієї або іншої причини неможливо підключити до системи прямо, із безперервним вимірюванням або періодичним вивантаженням ділянок архіву. Визначення параметру до ручного вводу здійснюється встановленням постійної isMan відповідного параметру, що вмикає елементи форми нагорі документу, за відповідних прав ("root" або у групі "ITW"), та доступ до даних для таблиці та тренду суворо за інтервалом документу — місяць, як і їх введення.
@@ -29814,7 +30009,7 @@ License: GPLv2',32,'','','','Документ слугує для генерац
 Архіватор повідомлень модуля FSArch має бути встановлено у наступних атрибутах для здійснення коректної роботи разом із цим документом: встановити "Запобігати дублікатам", "Вважати дублікатами та запобігати, для рівного часу, категорії, рівня" та встановити "Розмір файлів за часом" у 3660 діб. Модуль DBArch має працювати без такого роду специфіки.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.3.1
+Версія: 1.3.2
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepYear','evProc','',32,'','','','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepYear','owner','root:ITW',32,'','','lab_set','','','','','','','');
@@ -30244,11 +30439,10 @@ INSERT INTO wlb_Main_incl VALUES('doc_panel','Text3','/wlb_originals/wdg_Text',-
 INSERT INTO wlb_Main_incl VALUES('doc_panel','next1','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
 INSERT INTO wlb_Main_incl VALUES('doc_panel','prev','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
 INSERT INTO wlb_Main_incl VALUES('doc_panel','curtime','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
-INSERT INTO wlb_Main_incl VALUES('doc_panel','size','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;value;view;cfg;font;');
+INSERT INTO wlb_Main_incl VALUES('doc_panel','size','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;view;cfg;font;');
 INSERT INTO wlb_Main_incl VALUES('doc_panel','date','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;tipTool;tipStatus;value;view;cfg;font;');
 INSERT INTO wlb_Main_incl VALUES('doc_panel','prev1','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
 INSERT INTO wlb_Main_incl VALUES('terminator','Text1','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;font;alignment;text;');
-INSERT INTO wlb_Main_incl VALUES('grph_panel','tmTp','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;items;font;');
 INSERT INTO wlb_Main_incl VALUES('grph_panel','next','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
 INSERT INTO wlb_Main_incl VALUES('grph_panel','Text1','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;alignment;text;');
 INSERT INTO wlb_Main_incl VALUES('grph_panel','Text3','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;alignment;text;');
@@ -30260,7 +30454,6 @@ INSERT INTO wlb_Main_incl VALUES('grph_panel','size','/wlb_originals/wdg_FormEl'
 INSERT INTO wlb_Main_incl VALUES('grph_panel','date','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;value;view;cfg;');
 INSERT INTO wlb_Main_incl VALUES('grph_panel','prev1','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomXsc;geomZ;tipTool;tipStatus;elType;font;');
 INSERT INTO wlb_Main_incl VALUES('grph_panel','cursor','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;geomMargin;tipTool;bordWidth;font;alignment;text;numbArg;arg0tp;arg0val;');
-INSERT INTO wlb_Main_incl VALUES('doc_panel','tmTp','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomXsc;geomZ;tipTool;tipStatus;elType;value;items;font;');
 INSERT INTO wlb_Main_incl VALUES('ElCadr','modAuto','/wlb_originals/wdg_FormEl',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;font;');
 INSERT INTO wlb_Main_incl VALUES('ElCadr','moveUp','/wlb_originals/wdg_ElFigure',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;');
 INSERT INTO wlb_Main_incl VALUES('ElCadr','downm','/wlb_originals/wdg_FormEl',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;img;');

@@ -550,6 +550,9 @@ msgstr ""
 msgid "Fit to the widget size"
 msgstr ""
 
+msgid "Keep aspect ratio at fitting"
+msgstr ""
+
 msgid "Play speed"
 msgstr ""
 
@@ -1752,9 +1755,6 @@ msgid "Full link"
 msgstr ""
 
 msgid "From style"
-msgstr ""
-
-msgid "Element type is not selective!"
 msgstr ""
 
 #, c-format

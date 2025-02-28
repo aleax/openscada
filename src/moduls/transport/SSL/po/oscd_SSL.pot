@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-17 23:26+0200\n"
+"POT-Creation-Date: 2025-02-09 23:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,6 +26,13 @@ msgstr ""
 msgid "Provides transport based on the secure sockets' layer. OpenSSL is used and supported SSL-TLS depending on the library version."
 msgstr ""
 
+#, c-format
+msgid ""
+"======================= Module <%s:%s> options =======================\n"
+"    --getaddrinfo[=<on>] Use getaddrinfo() for resolving all addresses.\n"
+"\n"
+msgstr ""
+
 msgid "State"
 msgstr ""
 
@@ -33,6 +40,51 @@ msgid "Server ciphers"
 msgstr ""
 
 msgid "Client ciphers"
+msgstr ""
+
+#, c-format
+msgid "Port '%s' is wrong."
+msgstr ""
+
+msgid "No memory for the name resolver."
+msgstr ""
+
+#, c-format
+msgid "Host '%s' is not found."
+msgstr ""
+
+#, c-format
+msgid "The requested name '%s' has no IP address."
+msgstr ""
+
+#, c-format
+msgid "A non-recoverable name server error occurred while '%s'."
+msgstr ""
+
+#, c-format
+msgid "A temporary error occurred on an authoritative name server for '%s'."
+msgstr ""
+
+#, c-format
+msgid "The requested name '%s' is resolved to very many addresses."
+msgstr ""
+
+#, c-format
+msgid "Unknown error %d from gethostbyname() for '%s'."
+msgstr ""
+
+msgid "Nothing resolved."
+msgstr ""
+
+#, c-format
+msgid "Unknown network family %d."
+msgstr ""
+
+#, c-format
+msgid "Error the address '%s': '%s (%d)'"
+msgstr ""
+
+msgid "Sockaddr too large."
 msgstr ""
 
 msgid ""
@@ -117,6 +169,21 @@ msgid "Reconnect due to lack of input activity to '%s'."
 msgstr ""
 
 #, c-format
+msgid "Write: wrote %s."
+msgstr ""
+
+#, c-format
+msgid "Error writing '%s (%d)'"
+msgstr ""
+
+msgid "No data wrote"
+msgstr ""
+
+#, c-format
+msgid "%d:> Transmitted directly to '%s'\n"
+msgstr ""
+
+#, c-format
 msgid "The input transport closed by the error: %s"
 msgstr ""
 
@@ -177,11 +244,11 @@ msgid "Error requesting the protocol."
 msgstr ""
 
 #, c-format
-msgid "New client %d of '%s' connected"
+msgid "New client %d from '%s' connected"
 msgstr ""
 
 #, c-format
-msgid "The client %d of '%s' disconnected"
+msgid "Client %d from '%s' disconnected"
 msgstr ""
 
 msgid "Active connections"
@@ -267,13 +334,6 @@ msgstr ""
 
 #, c-format
 msgid "Response time %s[%s]. "
-msgstr ""
-
-#, c-format
-msgid "Error the address '%s': '%s (%d)'"
-msgstr ""
-
-msgid "sockaddr to large."
 msgstr ""
 
 #, c-format

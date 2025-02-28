@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.BlockCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,7 +42,7 @@
 #define MOD_NAME	trS("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.12.17"
+#define MOD_VER		"1.12.19"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides a block based calculator.")
 #define LICENSE		"GPL2"
@@ -115,7 +115,7 @@ void TpContr::postEnable( int flag )
     //Blok's db structure
     blkEl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     blkEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    blkEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
+    blkEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     blkEl.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,TFld::NoFlag,"1","0"));
     blkEl.fldAdd(new TFld("PROC",trS("To process"),TFld::Boolean,TFld::NoFlag,"1","0"));
     blkEl.fldAdd(new TFld("PRIOR",trS("Prior block"),TFld::String,TFld::NoFlag,"200"));

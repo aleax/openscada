@@ -79,7 +79,7 @@
 #define MOD_NAME	trS("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.7.3"
+#define MOD_VER		"2.7.4"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	trS("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -146,7 +146,7 @@ TTransportOut *TTr::Out( const string &name, const string &idb ){ return new TTr
 
 string TTr::outAddrHelp( )
 {
-    return string(_("The serial transport has the address format \"{dev}:{speed}:{format}[:{opts}[:{modTel}]]\", where:\n"
+    return string(_("The serial transport has the address format \"{dev}[:{speed}[:{format}[:{opts}[:{modTel}]]]]\", where:\n"
 	"    dev - serial device address (/dev/ttyS0);\n"
 	"    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
 	"                          230400, 460800, 500000, 576000 or 921600);\n"
@@ -719,7 +719,7 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	TTransportIn::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID,3,
 	    "dest","sel_ed","select","/prm/cfg/devLS","help",
-	    _("The serial transport has the address format \"{dev}:{speed}:{format}[:{opts}[:{mdm}]]\", where:\n"
+	    _("The serial transport has the address format \"{dev}[:{speed}[:{format}[:{opts}[:{mdm}]]]]\", where:\n"
 	    "    dev - serial device address (/dev/ttyS0);\n"
 	    "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
 	    "                          230400, 460800, 500000, 576000 or 921600);\n"

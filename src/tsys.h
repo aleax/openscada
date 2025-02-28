@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.h
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -95,8 +95,9 @@ namespace OSCADA
 {
 
 //Global configurable Limits
-extern uint8_t	limObjID_SZ;	//[20..50] ID size of the OpenSCADA objects.
-extern uint8_t	limObjNm_SZ;	//[100...200] NAME size of the OpenSCADA objects.
+extern uint8_t	limObjID_SZ;	//[*20..50] ID size of the OpenSCADA objects.
+extern uint8_t	limObjNm_SZ;	//[*100...200] NAME size of the OpenSCADA objects.
+extern unsigned	limObjDscr_SZ;	//[300...*1000...1000000] DESCR size of the OpenSCADA objects.
 extern uint8_t	limArchID_SZ;	//[50...90] ID size of the value archive objects, limObjID_SZ + 1.5*limObjID_SZ.
 extern unsigned	limUserFile_SZ;	//[1MB...*10MB...1000MB] The files size limit at loading and processing in the userspace
 				//	and the part size of the big files transferring.
@@ -324,12 +325,13 @@ class TSYS : public TCntrNode
 	    return toint ? floor(rez+0.5) : rez;
 	}
 	static string atime2str( time_t tm, const string &format = "", bool gmt = false, const string &user_lang = "" );
-	static string time2str( double tm );
+	static string time2str( double tm, bool inParts = true );
 	static string cpct2str( double cnt );
 
 	// Convert string to value
 	//static double str2real( const string &val );
 	static time_t str2atime( const string &val, const string &format = "", bool gmt = false );
+	static double str2time( const string &val, bool inParts = true );
 
 	// Adress convertors
 	static string addr2str( void *addr );
@@ -422,6 +424,9 @@ class TSYS : public TCntrNode
 	//Public attributes
 	AutoHD<TModule>	mainThr;	//A module to call into the main thread
 
+	// Generic system flags
+	unsigned f_useEnv	:1;	//Use environment variable OSCADA_{cmd} for default commadline options and generic parameters,
+					//  sets itself by OSCADA_CMD_EN.
 
     protected:
 	//Protected methods

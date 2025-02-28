@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tbds.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,7 +42,7 @@ TBDS::TBDS( ) : TSubSYS(SDB_ID, true), mTblLifeTime(DEF_TblLifeTime)
     elDB.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     elDB.fldAdd(new TFld("TYPE",trS("DB type (module)"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     elDB.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    elDB.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"2000"));
+    elDB.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     elDB.fldAdd(new TFld("ADDR",trS("Address"),TFld::String,TFld::NoFlag,"1000"));
     elDB.fldAdd(new TFld("CODEPAGE",trS("Code page"),TFld::String,TFld::NoFlag,"20"));
     elDB.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,TFld::NoFlag,"1","1"));
@@ -698,6 +698,7 @@ string TBDS::genPrmGet( const string &path, const string &oval, const string &us
 	elSYS.fldAdd(new TFld("val","Value"  ,TFld::String,TFld::TransltText,"1000"));
     }
 
+    bool isOK = false;
     string rez = oval;
 
     TConfig db_el(&elSYS);
@@ -705,9 +706,17 @@ string TBDS::genPrmGet( const string &path, const string &oval, const string &us
     db_el.cfg("id").setS(path);
     db_el.cfg("val").setNoTransl(!(flags&UseTranslation));
     try {
-	if(dataGet(fullDBSYS(),"prm:"+path,db_el,flags))
+	if(dataGet(fullDBSYS(),"prm:"+path,db_el,flags)) {
 	    rez = db_el.cfg("val").getS();
+	    isOK = true;
+	}
     } catch(TError &err) { }
+
+    //Get from environment variable
+    if(!isOK && SYS->f_useEnv) {
+	char *rezV = getenv(("OSCADA_"+TSYS::path2sepstr(path,'_')).c_str());
+	if(rezV) rez = rezV;
+    }
 
     return rez;
 }
@@ -1125,7 +1134,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("comm",opt,-1,"/prm/st/load",_("Load the program from this DB"),RWRW__,"root","root");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
-		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",SDB_ID,RWRWR_);
+		TConfig::cntrCmdMake(this,opt,"/prm/cfg",0,"root",SDB_ID,RWRWR_);
 		ctrRemoveNode(opt,"/prm/cfg/TYPE");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID);
 		ctrMkNode2("fld",opt,-1,"/prm/cfg/CODEPAGE",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDB_ID,
@@ -1182,7 +1191,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	SYS->setSelDB("");
 	if(isMdf) modif();
     }
-    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SDB_ID, RWRWR_);
+    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(this, opt, TSYS::pathLev(a_path,2), "root", SDB_ID, RWRWR_);
     else if(a_path == "/br/tbl_" || a_path == "/tbls/otbl") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID,SEC_RD)) {
 	    vector<string> lst;

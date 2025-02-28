@@ -74,6 +74,7 @@ binary-common:
 #	dh_installlogrotate
 #	dh_installmime
 	dh_installinit
+#	dh_installsystemd
 #	dh_installcron
 #	dh_installinfo
 	dh_installman

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvalue.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -246,7 +246,8 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		    aNd->childAdd("v")->setText(vl);
 		}
 
-		if(!aNd->childSize()) { opt->childDel(aNd); iA--; }
+		//if(!aNd->childSize()) { opt->childDel(aNd); iA--; }	//!!!! Do not remove empty <ael> tag since it is a sign
+									//     of the archive presence and data missing is temporary
 	    }
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))		//Multi attributes set
@@ -265,7 +266,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    vlList(vLs);
 	    for(unsigned iEl = 0; iEl < vLs.size(); iEl++) {
 		AutoHD<TVal> vl = vlAt(vLs[iEl]);
-		XMLNode *nE = vl.at().fld().cntrCmdMake(opt, "/val", -1, "root", SDAQ_ID, RWRWR_);
+		XMLNode *nE = vl.at().fld().cntrCmdMake(this, opt, "/val", -1, "root", SDAQ_ID, RWRWR_);
 		if(nE) {
 		    string sType = _("Unknown");
 		    switch(vl.at().fld().type()) {
@@ -386,7 +387,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TVal                                          *
 //*************************************************
-TVal::TVal( ) : mCfg(false), mReqFlg(false), mResB1(false), mResB2(false), mTime(0)
+TVal::TVal( ) : mCfg(false), mReqFlg(false), mTime(0)
 {
     src.fld = NULL;
     modifClr();

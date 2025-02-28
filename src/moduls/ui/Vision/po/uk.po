@@ -956,6 +956,9 @@ msgstr "Створення віджету/сторінки"
 msgid "Are you sure of deleting the visual items: '%1'?"
 msgstr "Ви дійсно бажаєте видалити візуальні елементи '%1'?"
 
+msgid "Check statuses the items before the deletion:%2"
+msgstr "Перевірте статуси елементів перед видаленням:%2"
+
 msgid "Deleting the visual items"
 msgstr "Видалення візуальних елементів"
 

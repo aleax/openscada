@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: widget.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1129,7 +1129,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	    src->attrList(list_a);
 	    for(unsigned iEl = 0; iEl < list_a.size(); iEl++) {
 		AutoHD<Attr> attr = src->attrAt(list_a[iEl]);
-		XMLNode *el = attr.at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
+		XMLNode *el = attr.at().fld().cntrCmdMake(this, opt,"/attr",-1,"root",SUI_ID,RWRWR_);
 		if(el) {
 		    el->setAttr("len","")->setAttr("wdgFlg",i2s(attr.at().flgGlob()))->
 			setAttr("modif",u2s(attr.at().aModif()))->setAttr("p",attr.at().fld().reserve());

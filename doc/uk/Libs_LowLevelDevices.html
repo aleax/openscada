@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Бібліотеки/НизькоРівневіПристрої</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FLowLevelDevices&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/LowLevelDevices" title="Libs/LowLevelDevices">Libs/LowLevelDevices</a> and the translation is 38% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_LowLevelDevices.html" title="Libs/LowLevelDevices (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/Libs_LowLevelDevices.html" title="Библиотеки/НизкоУровневыеУстройства (14% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--low">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FLowLevelDevices&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/LowLevelDevices" title="Libs/LowLevelDevices">Libs/LowLevelDevices</a> and the translation is 49% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_LowLevelDevices.html" title="Libs/LowLevelDevices (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/Libs_LowLevelDevices.html" title="Библиотеки/НизкоУровневыеУстройства (11% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--med">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -39,7 +39,7 @@
 <li> <b>Початково створено:</b> у <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/APIFunctionLibs/LibUserPrtDevs" rel="nofollow noreferrer noopener" target="_blank">старій Wiki</a></li>
 <li> <b>Використано:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Server" title="Special:MyLanguage/Sub-projects/Server">проектами розумних будинків</a></li>
 <li> <b><a href="../en/To_do.html" title="Special:MyLanguage/Works/To do">Завдання (To Do)</a>:</b></li></ul>
-<dl><dd>- комбінувати <a href="Libs_LowLevelDevices.html#1W_DS9097" title="Special:MyLanguage/Libs/LowLevelDevices">1W шаблони</a> у один складний та доповнити 1W роботою безпосередньо через GPIO.</dd></dl>
+<dl><dd>- Реалізувати шаблони для доступу до різних BLE і WiFi низькорівневих пристроїв на кшталт Розумних Ламп, Розеток, Перемикачів, ... .</dd></dl>
 </td></tr></table>
 <p>Бібліотеку пристроїв користувацьких протоколів створено для надання доступу до даних пристроїв низькорівневих шин, із протоколом достатньо простим до реалізації у <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">модулі користувацького протоколу</a> або безпосередньо на <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">внутрішній мові подібній до Java</a>.
 </p><p>Назви елементів та їх параметрів доступні на мовах: Англійська, Українська та mRussian. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу <i>tr()</i> та переклад цих повідомлень також доступний Англійською, Українською та mRussian.
@@ -56,9 +56,9 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1"><a href="#BT:_RDTech_UM24C.2C_UM25C_.D1.82.D0.B0_UM34C_.28RDTech.29"><span class="tocnumber">1</span> <span class="toctext">BT: RDTech UM24C, UM25C та UM34C (RDTech)</span></a></li>
-<li class="toclevel-1"><a href="#BT:_ATORCH_UC96_.28UC96.29"><span class="tocnumber">2</span> <span class="toctext">BT: ATORCH UC96 (UC96)</span></a></li>
-<li class="toclevel-1"><a href="#One_Wire_by_DS9097_.281W_DS9097.29"><span class="tocnumber">3</span> <span class="toctext">One Wire by DS9097 (1W_DS9097)</span></a></li>
-<li class="toclevel-1"><a href="#One_Wire_by_DS9097U_.281W_DS9097U.29"><span class="tocnumber">4</span> <span class="toctext">One Wire by DS9097U (1W_DS9097U)</span></a></li>
+<li class="toclevel-1"><a href="#BT:_ATORCH_UC96.2C_UD24_.28UC96.29"><span class="tocnumber">2</span> <span class="toctext">BT: ATORCH UC96, UD24 (UC96)</span></a></li>
+<li class="toclevel-1"><a href="#BT:_ATORCH_S1BP_.28S1BP.29"><span class="tocnumber">3</span> <span class="toctext">BT: ATORCH S1BP (S1BP)</span></a></li>
+<li class="toclevel-1"><a href="#1-.D0.94.D1.80.D1.96.D1.82_.281W.29"><span class="tocnumber">4</span> <span class="toctext">1-Дріт (1W)</span></a></li>
 <li class="toclevel-1"><a href="#I2C:_PCF8591_.28PCF8591.29"><span class="tocnumber">5</span> <span class="toctext">I2C: PCF8591 (PCF8591)</span></a></li>
 <li class="toclevel-1"><a href="#I2C:_PCF8574_.28PCF8574.29"><span class="tocnumber">6</span> <span class="toctext">I2C: PCF8574 (PCF8574)</span></a></li>
 <li class="toclevel-1"><a href="#I2C:_ADS101x.2C_ADS111x_.28ADS111x.29"><span class="tocnumber">7</span> <span class="toctext">I2C: ADS101x, ADS111x (ADS111x)</span></a></li>
@@ -115,8 +115,9 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <li> <b>Подяки:</b> Райан Фінніє за початкове опрацювання протоколу у <a class="external text" href="https://github.com/smandon/rdumtool" rel="nofollow noreferrer noopener" target="_blank">RDUMTOOL</a></li></ul>
 <p><b><u>ВВ шаблону</u></b><br />
 </p>
-<table class="wikitable">
-
+<table class="mw-collapsible mw-collapsed wikitable sortable">
+<caption style="white-space:nowrap">
+</caption>
 <tr>
 <th> Ідентифікатор </th>
 <th> Параметр </th>
@@ -391,33 +392,34 @@ rfcomm <span class="nb">bind </span><span class="m">0</span> 98:D3:31:F8:52:29  
 <dd>4. У вкладці "Конфігурація шаблону" об'єкту логічного параметру ви маєте встановити:
 <ul><li> <i>Транспорт</i> — адресу автоматично створюваного транспорту із його параметрами після ":", відповідно до <a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">формату адреси функції SYS.Transport.outAt()</a>, де адреса пристрою відповідає команді <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">rfcomm bind 0</span> у пункті 1.</li>
 <li> <i>Пристрій для зв'язування</i> — тут можна встановити адресу Bluetooth пристрою у вигляді "98:D3:31:F8:52:29" для виклику команди <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">rfcomm bind {N} </span> при запуску шаблону, де <i>N</i> відповідно береться із адреси попереднього пункту.</li></ul>
-<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Команда <b>rfcomm</b> зазвичай не доступна для виклику непривілейованим користувачем та якщо ви все-ж бажаєте викликати її таким користувачем, то маєте встановити їй ознаку <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">chmod u+s /usr/bin/rfcomm</span> від привілейованого користувача.</dd></dl></dd>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Команда <b>rfcomm</b> зазвичай недоступна для виклику непривілейованим користувачем та якщо ви все-ж бажаєте викликати її таким користувачем, то маєте встановити їй ознаку <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">chmod u+s /usr/bin/rfcomm</span> від привілейованого користувача.</dd></dl></dd>
 <dd>5. РЕЗУЛЬТАТ: Об'єкт логічного параметру здійснюватиме збір даних та відстежуватиме модифікацію записуваних властивостей.</dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
 
 <tr>
-<td> <span id="UC96" title="#UC96"><h3><span class="mw-headline" id="BT:_ATORCH_UC96_.28UC96.29"><span class="mw-headline-number">2</span> BT: ATORCH UC96 (<a href="Libs_LowLevelDevices.html#UC96" title="Special:MyLanguage/Libs/LowLevelDevices">UC96</a>)</span></h3></span>
+<td> <span id="UC96" title="#UC96"><h3><span class="mw-headline" id="BT:_ATORCH_UC96.2C_UD24_.28UC96.29"><span class="mw-headline-number">2</span> BT: ATORCH UC96, UD24 (<a href="Libs_LowLevelDevices.html#UC96" title="Special:MyLanguage/Libs/LowLevelDevices">UC96</a>)</span></h3></span>
 </td>
-<td> 1.0 </td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en,uk
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
-<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsLowLevDevsUC96_uk.png" title="Результат оперативного встановлення."><img alt="Результат оперативного встановлення." height="475" src="files/LibsLowLevDevsUC96_uk.png" width="252" /></a></div>
-<p>Шаблон BlueTooth інтерфейсу ATORCH UC96.
-</p><p>ATORCH UC96 є недорогим пристроєм вимірювання прохідної потужності на USB із багатьма інтерфейсами і підтримкою достатньої колекції властивостей, як і контролем через Bluetooth. Цей шаблон реалізує лише команду очищення даних і збір даних через Bluetooth інтерфейс пристрою.<br />
-<a class="image" href="http://oscada.org/wiki/File:ATORCH_UC96.jpg"><img alt="ATORCH UC96.jpg" height="382" src="../en/files/ATORCH_UC96.jpg" width="500" /></a>
-</p><p>Пристрій надсилає пакети даних не за запитом, тобто розсилає із періодом у одну секунду. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Пристрій може не надсилати пакети даних при увімкнені не на першому екрані, тож вам необхідно перемкнутися на перший екран для появи даних. Дані також можуть бути відсутні після присипляння ПК, тож цей шаблон першим реалізує виявлення відсутності даних і перепідключення.
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsLowLevDevsUC96_uk.png" title="Результат оперативного встановлення."><img alt="Результат оперативного встановлення." height="565" src="files/LibsLowLevDevsUC96_uk.png" width="252" /></a></div>
+<p>Шаблон BlueTooth інтерфейсу ATORCH UC96, UD24.
+</p><p>ATORCH UC96, UD24 є недорогим пристроєм вимірювання прохідної потужності на USB із багатьма інтерфейсами і підтримкою достатньої колекції властивостей, як і контролем через Bluetooth. Цей шаблон реалізує лише команду очищення даних і збір даних через Bluetooth інтерфейс пристрою.<br />
+<a class="image" href="http://oscada.org/wiki/File:ATORCH_UC96.jpg"><img alt="ATORCH UC96.jpg" height="382" src="../en/files/ATORCH_UC96.jpg" width="758" /></a>
+</p><p>Пристрій надсилає пакети даних не за запитом, а просто розсилає із періодом у одну секунду після встановлення підключення. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Пристрій може не надсилати пакети даних при увімкнені не на першому екрані, тож вам необхідно перемкнутися на перший екран для появи даних. Дані також можуть бути відсутні після присипляння ПК, тож цей шаблон першим реалізує виявлення відсутності даних і перепідключення.
 </p>
 <ul><li> <b>Загальна працемісткість:</b> 0.3 <span title="людиноднів, 1 ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span></li></ul>
 <p><b><u>ВВ шаблону</u></b><br />
 </p>
-<table class="wikitable">
-
+<table class="mw-collapsible mw-collapsed wikitable sortable">
+<caption style="white-space:nowrap">
+</caption>
 <tr>
 <th> Ідентифікатор </th>
 <th> Параметр </th>
@@ -460,6 +462,24 @@ rfcomm <span class="nb">bind </span><span class="m">0</span> 98:D3:31:F8:52:29  
 <tr>
 <td> V </td>
 <td> Вольти </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> Vup </td>
+<td> Вольти максимум </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> Vdwn </td>
+<td> Вольти мінімум </td>
 <td> Реальний </td>
 <td> Вхід </td>
 <td> Тільки читання </td>
@@ -530,6 +550,24 @@ rfcomm <span class="nb">bind </span><span class="m">0</span> 98:D3:31:F8:52:29  
 <td>
 </td></tr>
 <tr>
+<td> Dplus </td>
+<td> Дата+, В </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> Dminus </td>
+<td> Дата-, В </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
 <td> clear </td>
 <td> Очистити </td>
 <td> Логічний </td>
@@ -592,7 +630,7 @@ rfcomm <span class="nb">bind </span><span class="m">0</span> 98:D3:31:F8:52:29  
 <dd>4. У вкладці "Конфігурація шаблону" об'єкту логічного параметру ви маєте встановити:
 <ul><li> <i>Транспорт</i> — адресу автоматично створюваного транспорту із його параметрами після ":", відповідно до <a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">формату адреси функції SYS.Transport.outAt()</a>, де адреса пристрою відповідає команді <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">rfcomm bind 0</span>.</li>
 <li> <i>Пристрій для зв'язування</i> — тут можна встановити адресу Bluetooth пристрою у вигляді "58:F4:04:33:D5:FD" для виклику команди <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">rfcomm bind {N} </span> при запуску шаблону, де <i>N</i> відповідно береться із адреси попереднього пункту.</li></ul>
-<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Команда <b>rfcomm</b> зазвичай не доступна для виклику непривілейованим користувачем та якщо ви все-ж бажаєте викликати її таким користувачем, то маєте встановити їй ознаку <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">chmod u+s /usr/bin/rfcomm</span> від привілейованого користувача.</dd></dl>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Команда <b>rfcomm</b> зазвичай недоступна для виклику непривілейованим користувачем та якщо ви все-ж бажаєте викликати її таким користувачем, то маєте встановити їй ознаку <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">chmod u+s /usr/bin/rfcomm</span> від привілейованого користувача.</dd></dl>
 <ul><li> <i>Час виявлення відсутності даних</i> — тут ви можете встановити час виявлення відсутності даних.</li></ul></dd>
 <dd>5. РЕЗУЛЬТАТ: Об'єкт логічного параметру здійснюватиме збір даних та відстежуватиме модифікацію записуваних властивостей.</dd></dl>
 <p><br />
@@ -600,121 +638,367 @@ rfcomm <span class="nb">bind </span><span class="m">0</span> 98:D3:31:F8:52:29  
 <table class="wikitable">
 
 <tr>
-<td> <span id="1W_DS9097" title="#1W_DS9097"><h3><span class="mw-headline" id="One_Wire_by_DS9097_.281W_DS9097.29"><span class="mw-headline-number">3</span> One Wire by DS9097 (<a href="Libs_LowLevelDevices.html#1W_DS9097" title="Special:MyLanguage/Libs/LowLevelDevices">1W_DS9097</a>)</span></h3></span> </td>
-<td> 1.2 </td>
-<td> GPLv2 </td>
-<td> * </td>
-<td> en
-</td></tr>
-<tr>
-<td> <span id="1W_DS9097U" title="#1W_DS9097U"><h3><span class="mw-headline" id="One_Wire_by_DS9097U_.281W_DS9097U.29"><span class="mw-headline-number">4</span> One Wire by DS9097U (<a href="Libs_LowLevelDevices.html#1W_DS9097U" title="Special:MyLanguage/Libs/LowLevelDevices">1W_DS9097U</a>)</span></h3></span> </td>
-<td> 1.2 </td>
-<td> GPLv2 </td>
-<td> * </td>
-<td> en 
+<td> <span id="S1BP" title="#S1BP"><h3><span class="mw-headline" id="BT:_ATORCH_S1BP_.28S1BP.29"><span class="mw-headline-number">3</span> BT: ATORCH S1BP (<a href="Libs_LowLevelDevices.html#S1BP" title="Special:MyLanguage/Libs/LowLevelDevices">S1BP</a>)</span></h3></span>
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en,uk
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
-<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsLowLevDevs1WOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="655" src="../en/files/LibsLowLevDevs1WOp.png" width="386" /></a></div>
-<p><span id="1W" title="#1W">One Wire</span> sensors bus implementing by 1Wire-adapter {DS9097,DS9097U}. Supported direct and parasite powering for the temperature sensors.<br />
-Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.<br />
-<a class="image" href="http://oscada.org/wiki/File:Ds9097.png"><img alt="Ds9097.png" height="265" src="../en/files/Ds9097.png" width="800" /></a>
-</p><p><b><u>Template IOs</u></b><br />
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsLowLevDevsS1BP_uk.png" title="Результат оперативного встановлення."><img alt="Результат оперативного встановлення." height="503" src="files/LibsLowLevDevsS1BP_uk.png" width="372" /></a></div>
+<p>Шаблон BlueTooth інтерфейсу ATORCH S1BP
+</p><p>ATORCH S1BP є недорогим пристроєм вимірювання енергії змінного струму (AC) із підтримкою достатньої колекції властивостей, як і контролем через Bluetooth. Цей шаблон реалізує команду очищення даних і перемикання режиму живлення, як і збір даних через Bluetooth інтерфейс пристрою.<br />
+<a class="image" href="http://oscada.org/wiki/File:ATORCH_S1BP.jpg"><img alt="ATORCH S1BP.jpg" height="400" src="../en/files/ATORCH_S1BP.jpg" width="301" /></a>
+</p><p>Пристрій надсилає пакети даних не за запитом, а просто розсилає із періодом у одну секунду після встановлення підключення.
 </p>
-<table class="wikitable">
-
+<ul><li> <b>Загальна працемісткість:</b> 0.1 <span title="людиноднів, 1 ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span></li></ul>
+<p><b><u>ВВ шаблону</u></b><br />
+</p>
+<table class="mw-collapsible mw-collapsed wikitable sortable">
+<caption style="white-space:nowrap">
+</caption>
 <tr>
-<th> Identifier </th>
-<th> Parameter </th>
-<th> Type </th>
-<th> Mode </th>
-<th> Attribute </th>
-<th> Configuration </th>
-<th> Value
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Атрибут </th>
+<th> Конфігурація </th>
+<th> Значення
 </th></tr>
 <tr>
 <td> transport </td>
-<td> Transport of the One Wire bus, Serial </td>
-<td> String </td>
-<td> Input </td>
-<td> Not attribute </td>
-<td> Constant </td>
-<td> oneWire
+<td> Транспорт </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> Serial.S1BP:/dev/rfcomm2:9600||1000:40-20
 </td></tr>
 <tr>
-<td> tmResc </td>
-<td> Rescan period, s </td>
-<td> Real </td>
-<td> Input </td>
-<td> Not attribute </td>
-<td> Constant </td>
+<td> dev </td>
+<td> Пристрій для зв'язування
+<p>На кшталт "40:2B:6D:EF:48:A7" для зв'язування за допомогою "rfcomm bind {N} 40:2B:6D:EF:48:A7".
+</p>
+</td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td>
+</td></tr>
+<tr>
+<td> noDataTm </td>
+<td> Час виявлення відсутності даних, секунд </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
 <td> 60
 </td></tr>
 <tr>
+<td> V </td>
+<td> Вольти </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> A </td>
+<td> Ампери </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> W </td>
+<td> Вати </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> KWh </td>
+<td> Енергія, кВт*годин </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> Hz </td>
+<td> Частота, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> Pf </td>
+<td> Фактор потужності, Pf </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> T </td>
+<td> Температура, °С </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> Tm </td>
+<td> Час, секунди </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> clear </td>
+<td> Очистити </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
 <td> power </td>
-<td> Power, for temperature </td>
-<td> Boolean </td>
-<td> Input </td>
-<td> Read only </td>
-<td> Variable </td>
+<td> Перемкнути режим живлення Вимкн/Авто/Увімкн </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Повний доступ </td>
+<td> Змінна </td>
 <td>
 </td></tr>
 <tr>
 <td> this </td>
-<td> Object </td>
-<td> Object </td>
-<td> Input </td>
-<td> Not attribute </td>
-<td> Variable </td>
+<td> Об'єкт </td>
+<td> Об'єкт </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Прапорець зупинки функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Прапорець запуску функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Частота обчислення функції, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Помилка функції </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsLowLevDevsCfgS1BP_uk.png" title="Конфігурація."><img alt="Конфігурація." height="253" src="files/LibsLowLevDevsCfgS1BP_uk.png" width="371" /></a></div>
+<p><b><u>Конфігурація та використання</u></b><br />
+</p>
+<dl><dd>1. Підключення BlueTooth пристрою: здійснюється стандартним чином через парування і довіри без PIN та до S1BP_SPP</dd>
+<dd>2. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь який наявний із необхідними властивостями планування.</dd>
+<dd>3. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього, один для кожного пристрою. Увімкнути параметр.</dd>
+<dd>4. У вкладці "Конфігурація шаблону" об'єкту логічного параметру ви маєте встановити:
+<ul><li> <i>Транспорт</i> — адресу автоматично створюваного транспорту із його параметрами після ":", відповідно до <a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">формату адреси функції SYS.Transport.outAt()</a>, де адреса пристрою відповідає команді <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">rfcomm bind 0</span>.</li>
+<li> <i>Пристрій для зв'язування</i> — тут можна встановити адресу Bluetooth пристрою у вигляді "58:F4:04:33:D5:FD" для виклику команди <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">rfcomm bind {N} </span> при запуску шаблону, де <i>N</i> відповідно береться із адреси попереднього пункту.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Команда <b>rfcomm</b> зазвичай недоступна для виклику непривілейованим користувачем та якщо ви все-ж бажаєте викликати її таким користувачем, то маєте встановити їй ознаку <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">chmod u+s /usr/bin/rfcomm</span> від привілейованого користувача.</dd></dl>
+<ul><li> <i>Час виявлення відсутності даних</i> — тут ви можете встановити час виявлення відсутності даних.</li></ul></dd>
+<dd>5. РЕЗУЛЬТАТ: Об'єкт логічного параметру здійснюватиме збір даних та відстежуватиме модифікацію записуваних властивостей.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="1W" title="#1W"><h3><span class="mw-headline" id="1-.D0.94.D1.80.D1.96.D1.82_.281W.29"><span class="mw-headline-number">4</span> 1-Дріт (<a href="Libs_LowLevelDevices.html#1W" title="Special:MyLanguage/Libs/LowLevelDevices">1W</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en,uk 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsLowLevDevs1WOp_uk.png" title="Результат оперативного встановлення."><img alt="Результат оперативного встановлення." height="740" src="files/LibsLowLevDevs1WOp_uk.png" width="283" /></a></div>
+<p>Сенсори <span id="1W" title="#1W">Одно Дротової</span> шини реалізуються 1Дротовими адаптерами DS9097 і DS9097U. Підтримується пряме і паразитне живлення для температурних сенсорів.<br />
+Підтримуються 1Дротові пристрої: DS1820, DS1820/DS18S20/DS1920 (не перевірено), DS1822 (не перевірено), DS2413, DS2408, DS2450, DS2438.<br />
+<a class="image" href="http://oscada.org/wiki/File:Ds9097.png"><img alt="Ds9097.png" height="500" src="../en/files/Ds9097.png" width="404" /></a>
+</p><p><b><u>ВВ шаблону</u></b><br />
+</p>
+<table class="mw-collapsible mw-collapsed wikitable sortable">
+<caption style="white-space:nowrap">
+</caption>
+<tr>
+<th> Ідентифікатор </th>
+<th> Параметр </th>
+<th> Тип </th>
+<th> Режим </th>
+<th> Атрибут </th>
+<th> Конфігурація </th>
+<th> Значення
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Транспорт </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 1Wire:/dev/ttyS0
+</td></tr>
+<tr>
+<td> tmResc </td>
+<td> Період сканування, секунд </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 60
+</td></tr>
+<tr>
+<td> onlyAddAtScan </td>
+<td> Додавати лише при скануванні </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 0
+</td></tr>
+<tr>
+<td> tryEVAL </td>
+<td> Спроб, після яких встановлювати значення у EVAL </td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 3
+</td></tr>
+<tr>
+<td> adapter </td>
+<td> Тип виявленого адаптеру
+<p>0 - DS9097<br />
+1 - DS9097U
+</p>
+</td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td> -1
+</td></tr>
+<tr>
+<td> power </td>
+<td> Живлення, для температур </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Тільки читання </td>
+<td> Змінна </td>
+<td>
+</td></tr>
+<tr>
+<td> isData </td>
+<td> У режимі даних </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> this </td>
+<td> Об'єкт </td>
+<td> Об'єкт </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
 <td>
 </td></tr>
 <tr>
 <td> f_frq </td>
-<td> Function calculate frequency (Hz) </td>
-<td> Real </td>
-<td> Input </td>
-<td> Not attribute </td>
-<td> Variable </td>
+<td> Частота обчислення функції, Гц </td>
+<td> Реальний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
 <td> 1000
 </td></tr>
 <tr>
 <td> f_start </td>
-<td> Function start flag </td>
-<td> Boolean </td>
-<td> Input </td>
-<td> Not attribute </td>
-<td> Variable </td>
-<td> 0
-</td></tr>
-<tr>
-<td> f_stop </td>
-<td> Function stop flag </td>
-<td> Boolean </td>
-<td> Input </td>
-<td> Not attribute </td>
-<td> Variable </td>
+<td> Прапорець запуску функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
 <td> 0
 </td></tr>
 <tr>
 <td> f_err </td>
-<td> Function error </td>
-<td> String </td>
-<td> Input </td>
-<td> Not attribute </td>
-<td> Variable </td>
+<td> Помилка функції </td>
+<td> Рядок </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Прапорець зупинки функції </td>
+<td> Логічний </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
 <td> 0
 </td></tr></table>
-<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsLowLevDevs1WCfg.png" title="Configuration."><img alt="Configuration." height="240" src="../en/files/LibsLowLevDevs1WCfg.png" width="384" /></a></div>
-<p><b><u>Configuring and using</u></b><br />
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsLowLevDevs1WCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="266" src="files/LibsLowLevDevs1WCfg_uk.png" width="456" /></a></div>
+<p><b><u>Конфігурація та використання</u></b><br />
 </p>
-<dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "oneWire", one for each the One Wire bus.</dd>
-<dd>2. Set proper address of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device, only for the adapter's serial device like "/dev/ttyS{N}". The serial port speed, asynchronous data format and timeouts will adjust by the template.</dd>
-<dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
-<dd>4. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each the devices. Enable the parameter.</dd>
-<dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
-<ul><li> <i>Transport of the One Wire bus, Serial</i> — to the address of the transport into step 1. Tracing for the address changing is supported.</li>
-<li> <i>Rescan period, s</i> — periodicity of rescaning for new and removed devices search.</li></ul></dd>
-<dd>6. RESULT: The logical parameter object will perform at first searching to 1Wire devices on the bus and create included parameters to the each found one. Next the logical parameter object will perform gather data of the found devices and trace to modify of the writable device's properties.</dd></dl>
+<dl><dd>1. Створити та запустити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного контролеру</a> або використати будь який наявний із необхідними властивостями планування.</dd>
+<dd>3. Створити <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">об'єкт логічного параметру</a> та обрати цей шаблон для нього, один для кожного пристрою. Увімкнути параметр.</dd>
+<dd>4. У вкладці "Конфігурація шаблону" об'єкту логічного параметру ви маєте встановити:
+<ul><li> <i>Транспорт</i> — адресу автоматично створюваного транспорту із його параметрами після ":", відповідно до <a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">формату адреси функції SYS.Transport.outAt()</a>, де адреса пристрою відповідає послідовному пристрою із адаптером DS9097.</li>
+<li> <i>Період сканування</i> — періодичність повторного сканування на предмет пошуку нових і видалених пристроїв.</li>
+<li> <i>Додавати лише при скануванні</i> — ознака додавання пристроїв лише при скануванні, тобто також запобігання їх видаленню (позначення видаленим) за помилкових запитах на поганих шинах.</li>
+<li> <i>Спроб, після яких встановлювати значення у EVAL</i> — кількість помилкових спроб перед встановленням атрибутів у EVAL.</li></ul></dd>
+<dd>5. РЕЗУЛЬТАТ: Об'єкт логічного параметру на початку здійснить пошук 1Дротових пристроїв на шині і створення включених параметрів для кожного знайденого. Надалі об'єкт логічного параметру  здійснюватиме збір даних за знайденими пристроями і відстежуватиме модифікацію записуваних властивостей.</dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -731,8 +1015,9 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <p>I2C 8-bit 4xA/D and D/A converter. Connects through a Serial output transport into the I2C mode.
 </p><p><b><u>Template IOs</u></b><br />
 </p>
-<table class="wikitable">
-
+<table class="mw-collapsible mw-collapsed wikitable sortable">
+<caption style="white-space:nowrap">
+</caption>
 <tr>
 <th> Identifier </th>
 <th> Parameter </th>
@@ -877,8 +1162,9 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <p>I2C 8-bit 8DIO. Connects through a Serial output transport into the I2C mode.
 </p><p><b><u>Template IOs</u></b><br />
 </p>
-<table class="wikitable">
-
+<table class="mw-collapsible mw-collapsed wikitable sortable">
+<caption style="white-space:nowrap">
+</caption>
 <tr>
 <th> Identifier </th>
 <th> Parameter </th>
@@ -1112,8 +1398,9 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <p>I2C 12/16-bit 4xA/D converter. Connect through a Serial output transport into the I2C mode.
 </p><p><b><u>Template IOs</u></b><br />
 </p>
-<table class="wikitable">
-
+<table class="mw-collapsible mw-collapsed wikitable sortable">
+<caption style="white-space:nowrap">
+</caption>
 <tr>
 <th> Identifier </th>
 <th> Parameter </th>
@@ -1252,8 +1539,9 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <p>I2C 12-bit D/A converter. Connect through a Serial output transport into the I2C mode.
 </p><p><b><u>Template IOs</u></b><br />
 </p>
-<table class="wikitable">
-
+<table class="mw-collapsible mw-collapsed wikitable sortable">
+<caption style="white-space:nowrap">
+</caption>
 <tr>
 <th> Identifier </th>
 <th> Parameter </th>
@@ -1362,8 +1650,9 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <p>I2C Pressure and Temperature sensor. Connecting through a Serial output transport into the I2C mode.
 </p><p><b><u>Template IOs</u></b><br />
 </p>
-<table class="wikitable">
-
+<table class="mw-collapsible mw-collapsed wikitable sortable">
+<caption style="white-space:nowrap">
+</caption>
 <tr>
 <th> Identifier </th>
 <th> Parameter </th>
@@ -1481,8 +1770,9 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <p>I2C Barometric Pressure, Temperature and Humidity sensor. Connect through a Serial output transport into the I2C mode.
 </p><p><b><u>Template IOs</u></b><br />
 </p>
-<table class="wikitable">
-
+<table class="mw-collapsible mw-collapsed wikitable sortable">
+<caption style="white-space:nowrap">
+</caption>
 <tr>
 <th> Identifier </th>
 <th> Parameter </th>
@@ -1609,8 +1899,9 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <p>Digital Temperature and Humidity Sensor for the models: SHT30
 </p><p><b><u>Template IOs</u></b><br />
 </p>
-<table class="wikitable">
-
+<table class="mw-collapsible mw-collapsed wikitable sortable">
+<caption style="white-space:nowrap">
+</caption>
 <tr>
 <th> Identifier </th>
 <th> Parameter </th>
@@ -1718,8 +2009,9 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <p>I2C RTC chips DS1307,DS3231 with Temperature sensor and calibration for DS3231. Connects through a Serial output transport into the I2C mode.
 </p><p><b><u>Template IOs</u></b><br />
 </p>
-<table class="wikitable">
-
+<table class="mw-collapsible mw-collapsed wikitable sortable">
+<caption style="white-space:nowrap">
+</caption>
 <tr>
 <th> Identifier </th>
 <th> Parameter </th>
@@ -1908,8 +2200,9 @@ DS3231;DS1307
 <i>Conditions:</i> Exclusively realtime planing in the priority 199 (FIFO-99).
 </p><p><b><u>Template IOs</u></b><br />
 </p>
-<table class="wikitable">
-
+<table class="mw-collapsible mw-collapsed wikitable sortable">
+<caption style="white-space:nowrap">
+</caption>
 <tr>
 <th> Identifier </th>
 <th> Parameter </th>
@@ -2037,8 +2330,9 @@ DS3231;DS1307
 <i>Conditions:</i> Exclusively realtime planing in the priority 199 (FIFO-99).
 </p><p><b><u>Template IOs</u></b><br />
 </p>
-<table class="wikitable">
-
+<table class="mw-collapsible mw-collapsed wikitable sortable">
+<caption style="white-space:nowrap">
+</caption>
 <tr>
 <th> Identifier </th>
 <th> Parameter </th>
@@ -2157,8 +2451,9 @@ DS3231;DS1307
 <i>Conditions:</i> Default planing policy but realtime one preferred.
 </p><p><b><u>Template IOs</u></b><br />
 </p>
-<table class="wikitable">
-
+<table class="mw-collapsible mw-collapsed wikitable sortable">
+<caption style="white-space:nowrap">
+</caption>
 <tr>
 <th> Identifier </th>
 <th> Parameter </th>
@@ -2313,5 +2608,5 @@ DS3231;DS1307
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/LowLevelDevices/uk">Libs/LowLevelDevices/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/LowLevelDevices/uk">Libs/LowLevelDevices/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.8</td></tr></table></body>
 </html>

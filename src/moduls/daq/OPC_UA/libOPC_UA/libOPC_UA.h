@@ -1,8 +1,10 @@
 
 //OpenSCADA OPC_UA implementation library file: libOPC_UA.h
 /********************************************************************************
- *   Copyright (C) 2009-2024 by Roman Savochenko, <roman@oscada.org>		*
+ *   Copyright (C) 2009-2025 by Roman Savochenko, <roman@oscada.org>		*
  *										*
+ *   Version: 2.3.0								*
+ *	* implementing UserName authentication on the Server side.		*
  *   Version: 2.2.2								*
  *	* UA::symmetricEncrypt() and UA::symmetricDecrypt() merged		*
  *	  to UA::symmetricCrypt() and switched for using EVP_CipherInit()	*
@@ -816,8 +818,8 @@ class Server: public UA
 	    bool isSecCnlActive( EP *ep );
 
 	    //Attributes
-	    string	name, inPrtId;
-			//idPolicyId, user;
+	    string	name, inPrtId,
+			idPolicyId, user;
 	    uint32_t	secCnl;
 	    double	tInact;
 	    int64_t	tAccess;

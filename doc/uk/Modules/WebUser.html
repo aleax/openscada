@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/Web користувача</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FWebUser&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/WebUser" title="Modules/WebUser">Modules/WebUser</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/WebUser.html" title="Modules/WebUser (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/WebUser.html" title="Модули/Web пользователя (94% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FWebUser&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/WebUser" title="Modules/WebUser">Modules/WebUser</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/WebUser.html" title="Modules/WebUser (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--high" href="../../ru/Modules/WebUser.html" title="Модули/Web пользователя (65% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">WebUser</a> </td>
 <td> WWW-сторінка користувача
 </td>
-<td> 1.6 </td>
+<td> 2.0 </td>
 <td> GPL2 </td>
 <td> ui_WebUser.so </td>
 <td> en,uk,ru,de </td>
@@ -41,8 +41,8 @@
 <td> Роман Савоченко </td>
 <td> Забезпечує створення власних WWW-сторінок на внутрішній мові OpenSCADA.
 </td></tr></table>
-<p>Модуль надає користувачу механізм створення WWW-сторінок, а також дозволяє обробляти інші WWW-запити на внутрішній мові OpenSCADA, зазвичай це <a href="../Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, не залучаючи при цьому низькорівневого програмування. У ролі обробнику сторінок модуль дозволяє використовувати <a href="../Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">стандартні шаблони DAQ</a>. Використання шаблонів DAQ дозволяє створювати бібліотеки WWW-сторінок та виклик їх у цьому модулі багаторазово, як їх реалізації, а також надає контекст даних виконання шаблону із їх зв'язуванням з даними підсистеми "Збір Даних".
-</p><p>Окрім приналежності модуля до OpenSCADA він також належить та є модулем модуля транспортного протоколу <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a>. Власне виклик модулю WebUser здійснюється з Protocol.HTTP та за посередництвом розширеного механізму комунікації, експортованими функціями цього модуля: HTTP_GET(), HTTP_POST().
+<p>Модуль надає користувачу механізм створення WWW-сторінок, а також дозволяє обробляти інші WWW-запити на внутрішній мові OpenSCADA, зазвичай це <a href="../Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, не залучаючи при цьому низькорівневого програмування. У ролі обробнику сторінок, модуль дозволяє використовувати <a href="../Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">стандартні DAQ-Шаблони</a>. Використання DAQ-Шаблонів дозволяє створювати бібліотеки WWW-сторінок і здійснювати виклик їх у цьому модулі багаторазово, як їх реалізації, а також надає контекст даних виконання шаблону із їх зв'язуванням з даними підсистеми "Збір Даних".
+</p><p>Окрім приналежності модуля до OpenSCADA, він також належить і є модулем модуля транспортного протоколу <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a>. Власне, виклик модулю WebUser здійснюється із Protocol.HTTP і за посередництвом розширеного механізму комунікації — експортованою функцією HTTP() цього модуля.
 </p><p>Адресація сторінок починається із другого елементу URI. Що пов'язано із тим, що перший елемент URI використовується для ідентифікації самого модуля користувацького WWW-інтерфейсу. Наприклад, URL <i>http://localhost.localdomain:10002/WebUser/UserPage</i> можна розшифрувати як виклик користувацької сторінки "UserPage" цього модуля на хості "localhost.localdomain" через порт 10002. У випадку відсутності другого елементу URI та вказання на відображення індексу користувацьких сторінок у конфігурації — формується індекс сторінок (рис.1).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:624px;"><a class="image" href="http://oscada.org/wiki/File:WebUser_idx_uk.png"><img class="thumbimage" height="288" src="../files/WebUser_idx_uk.png" width="622" /></a>  <div class="thumbcaption">Рис.1. Індекс користувацьких сторінок.</div></div></div></div>
@@ -55,54 +55,55 @@
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:782px;"><a class="image" href="http://oscada.org/wiki/File:WebUser_up_main_uk.png"><img class="thumbimage" height="583" src="../files/WebUser_up_main_uk.png" width="780" /></a>  <div class="thumbcaption">Рис.3. Головна вкладка конфігурації користувацької сторінки.</div></div></div></div>
 <p>Головна вкладка містить основні налаштування користувацької WWW-сторінки:
 </p>
-<ul><li> Розділ "Стан" — містить властивості, які характеризують стан сторінки: статус, "Ввімкнено", ім'я БД (яка містить конфігурацію та з відстеженням наявності даних у різних сховищах та наданням послідовного видалення дублікатів) та дату останньої модифікації.</li>
-<li> Ідентифікатор, ім'я та опис сторінки.</li>
+<ul><li> Розділ "Стан" — містить властивості, які характеризують стан сторінки: статус, "Ввімкнено", ім'я БД (яка містить конфігурацію і з відстеженням наявності даних у різних сховищах та наданням послідовного видалення дублікатів) і дату останньої модифікації.</li>
+<li> Ідентифікатор, ім'я і опис сторінки.</li>
 <li> Стан "Ввімкнено", у який переводити сторінку при завантажені.</li>
-<li> Мова прямої процедури або <a href="../Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">DAQ-шаблон</a>, пов'язаний зі сторінкою.</li></ul>
-<p>Всі запити до користувацьких сторінок спрямовуються до процедури обробки запитів користувацької сторінки, або до процедури DAQ-шаблону, яка представлена на вкладці "Програма" об'єкту сторінки користувача (рис.4). У випадку з DAQ-шаблоном також надається вкладка конфігурації шаблону (рис.5).
+<li> Мова прямої процедури або <a href="../Program_manual.html#DAQTmpl" title="Special:MyLanguage/Documents/Program manual">DAQ-Шаблон</a>, пов'язаний зі сторінкою.</li></ul>
+<p>Всі запити до користувацьких сторінок спрямовуються до процедури обробки запитів користувацької сторінки, або до процедури DAQ-Шаблону, яка представлена на вкладці "Програма" об'єкту сторінки користувача (рис.4). У випадку з DAQ-Шаблоном також надається вкладка конфігурації шаблону (рис.5).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:893px;"><a class="image" href="http://oscada.org/wiki/File:WebUser_up_prog_uk.png"><img class="thumbimage" height="740" src="../files/WebUser_up_prog_uk.png" width="891" /></a>  <div class="thumbcaption">Рис.4. Вкладка "Процедура" об'єкту користувацької WWW-сторінки.</div></div></div></div>
 <p>Вкладка процедури обробки запитів до користувацької сторінки містить:
 </p>
-<ul><li> Таблицю контексту даних процедури. Переважно має сенс лише при роботі за шаблоном та де можна контролювати цей процес обробки, включно з можливістю втручання через зміну значень даних.</li>
+<ul><li> Таблицю контексту даних процедури. Переважно має сенс лише при роботі за шаблоном і де можна контролювати цей процес обробки, включно з можливістю втручання через зміну значень даних.</li>
 <li> Текст прямої процедури сторінки, відсутній у режимі роботи за шаблоном.</li>
-<li> Зв'язки на дані підсистеми "Збір Даних", які видимі та доступні для визначення у режимі роботи за шаблоном та у ввімкненому стані об'єкту сторінки.</li></ul>
-<p>Для прямої процедури обробки предвизначено, та обов'язкові або опціональні до створення у шаблоні, наступні атрибути обміну з протоколом HTTP:
+<li> Зв'язки на дані підсистеми "Збір Даних", які видимі і доступні для визначення у режимі роботи за шаблоном та у ввімкненому стані об'єкту сторінки.</li></ul>
+<p>Для прямої процедури обробки передвизначено і обов'язкові або опціональні до створення у шаблоні наступні атрибути обміну з протоколом HTTP:
 </p>
-<ul><li> <i><b>Результат (rez)</b></i> &lt;Рядок&gt; — результат оброки, за замовченням — "200 OK"; у режимі DAQ-шаблону Ви маєте писати сюди прямо, не оператором "return";</li>
-<li> <i><b>Запит HTTP (HTTPreq)</b></i> &lt;Рядок&gt; — метод HTTP запиту: GET, POST;</li>
+<ul><li> <i><b>Результат (rez)</b></i> &lt;Рядок&gt; — результат оброки, за замовченням — "200 OK"; у режимі DAQ-Шаблону маєте писати сюди прямо, не оператором "return"; для запобігання надсилання загорнутої у HTTP відповіді ставте тут порожній рядок, тобто відповідь надсилайте прямо через <a href="../User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">SYS.Transport["Modul"]["in_Transp"].writeTo()</a>;</li>
+<li> <i><b>Запит HTTP (HTTPreq)</b></i> &lt;Рядок&gt; — метод HTTP запиту на кшталт GET, POST, ...;</li>
 <li> <i><b>URL (url)</b></i> &lt;Рядок&gt; — URI запиту;</li>
 <li> <i><b>WWW-сторінка (page)</b></i> &lt;Рядок&gt; — вміст сторінки Get/Post, як для запиту так і відповіді;</li>
 <li> <i>Відправник (sender)</i> &lt;Рядок&gt; — відправник запиту;</li>
 <li> <i>Користувач (user)</i> &lt;Рядок&gt; — аутентифікований користувач;</li>
-<li> <i><b>HTTP змінні (HTTPvars)</b></i> &lt;Об'єкт&gt; — HTTP змінні; змінені та додані змінні (окрім "Date", "Server", "Accept-Ranges" та "Content-Length") будуть розташовані у пакеті відповіді;</li>
+<li> <i><b>HTTP змінні (HTTPvars)</b></i> &lt;Об'єкт&gt; — HTTP змінні; змінені і додані змінні (окрім "Date", "Server", "Accept-Ranges" та "Content-Length") будуть розташовані у пакеті відповіді;</li>
 <li> <i>Параметри URL (URLprms)</i> &lt;Об'єкт&gt; — параметри URL;</li>
 <li> <i>Елементи вмісту (cnts)</i> &lt;Об'єкт::Array&lt;XMLNodeObj&gt;&gt; — елементи вмісту для POST;</li>
 <li> <i>Цей об'єкт (this)</i> &lt;Об'єкт&gt; — вказівник на об'єкт цієї сторінки;</li>
 <li> <i>Об'єкт протоколу (prt)</i> &lt;Об'єкт&gt; — вказівник на об'єкт вхідної частини HTTP-протоколу;</li>
+<li> <i>Об'єкт транспорту (tr)</i> &lt;Об'єкт&gt; — вказівник на об'єкт вхідного транспорту до вхідної частини HTTP-протоколу;</li>
 <li> <i>Планування наступного сервісного виклику (schedCall)</i> &lt;Ціле&gt; — запишіть тут значення часу у секундах для планування виконання контексту процедури у сервісному виклику; <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> сервісні виклики зазвичай здійснюються із періодичністю 10 секунд, тож ви можете планувати такі виклики не частіше за 10 секунд.</li></ul>
 <p>Загальний сценарій запиту користувацької сторінки:
 </p>
 <ul><li> Зовнішня мережева станція формує HTTP запит з URI виду "/WebUser/{UserPage}", який попадає на транспорт OpenSCADA із значенням поля конфігурації "Протокол", рівного "HTTP".</li>
 <li> Транспорт спрямовує запит на модуль транспортного протоколу "Protocol.HTTP".</li>
-<li> Модуль транспортного протоколу, відповідно до першого елементу URI, спрямовує запит цьому модулю.</li>
+<li> Модуль транспортного протоколу спрямовує запит цьому модулю відповідно до першого елементу URI.</li>
 <li> Цей модуль обирає об'єкт сторінки користувача, яка вказана у другому елементі URI.</li>
 <li> Здійснюється ініціалізація змінних HTTP-протоколу для процедури сторінки:
-<ul><li> <i><b>HTTPreq</b></i> — встановлюється у значення рядка "GET" або "POST", залежно від типу запиту;</li>
+<ul><li> <i><b>HTTPreq</b></i> — встановлюється у значення рядка HTTP-Методу (на кшталт "GET", "POST"), залежно від типу запиту;</li>
 <li> <i><b>url</b></i> — адреса запитаного ресурсу (URI);</li>
-<li> <i><b>page</b></i> — вхідний одиничний вміст та сторінка, що передається, для методу "POST";</li>
+<li> <i><b>page</b></i> — вхідний одиничний вміст і сторінка, що передається, для методу "POST";</li>
 <li> <i>sender</i> — адреса відправника запиту;</li>
 <li> <i>user</i> — ідентифікатор аутентифікованого користувача, якщо аутентифікація мала місце;</li>
 <li> <i><b>HTTPvars</b></i> — розібраний перелік змінних протоколу HTTP у вигляді властивостей об'єкту;</li>
 <li> <i>URLprms</i> — розібраний перелік параметрів URL у вигляді властивостей об'єкту;</li>
-<li> <i>cnts</i> — розібрані елементи вмісту для POST, у Array&lt;XMLNodeObj&gt;, з вмістом елементів у тексті з властивостями, у атрибутах XMLNodeObj.</li></ul></li>
-<li> Виклик процедури на виконання, яка, обробивши запит, формує вміст сторінки у "page" та результат запиту у "rez".</li>
-<li> На завершення формується відповідь з кодом повернення HTTP із "rez" та вмістом із "page", а також зміненими та доповненими змінними протоколу HTTP із "HTTPvars".</li></ul>
+<li> <i>cnts</i> — розібрані елементи вмісту для POST, у Array&lt;XMLNodeObj&gt;, з вмістом елементів у тексті з властивостями у атрибутах XMLNodeObj.</li></ul></li>
+<li> Виклик процедури на виконання, яка, обробивши запит, формує вміст сторінки у "page" і результат запиту у "rez".</li>
+<li> На завершення формується відповідь з кодом повернення HTTP із "rez" і вмістом із "page", а також зміненими та доповненими змінними протоколу HTTP із "HTTPvars". Для порожнього "rez" відповідь не формується!</li></ul>
 
 
 
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebUser/uk">Modules/WebUser/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebUser/uk">Modules/WebUser/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.8</td></tr></table></body>
 </html>

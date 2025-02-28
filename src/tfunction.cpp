@@ -307,9 +307,10 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 			}
 		    }
 		// Adding the calc button and the calc time field
-		ctrMkNode("fld",opt,-1,"/exec/n_clc",_("Number of calculations"),RWRW__,"root",grp,1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/exec/tm",_("Spent time"),R_R___,"root",grp,1,"tp","str");
 		ctrMkNode("comm",opt,-1,"/exec/calc",_("Execute"),RWRW__,"root",grp);
+		ctrMkNode("fld",opt,-1,"/exec/n_clc",_("Executions, spent time"),RWRW__,"root",grp,1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/exec/tm","",R_R___,"root",grp,1,"tp","str");
+
 	    }
 	}
         return;
@@ -367,16 +368,21 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	    if(to_en_exec && !mTVal) {
 		if(!startStat()) setStart(true);
 		mTVal = new TValFunc(id()+"_exec",this);
+		SYS->cntrSet(nodePath('.'), 0); SYS->cntrSet(nodePath('.')+".min", 0); SYS->cntrSet(nodePath('.')+".max", 0);
 	    }
 	    if(!to_en_exec && mTVal)	{ delete mTVal; mTVal = NULL; }
 	}
     }
     else if(a_path == "/exec/n_clc" && mTVal) {
-	if(ctrChkNode(opt,"get",RWRW__,"root",grp,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"ntCalc",DEF_ntCalc,opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR))	TBDS::genPrmSet(nodePath()+"ntCalc",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root",grp,SEC_RD)) opt->setText(TBDS::genPrmGet(nodePath()+"ntCalc",DEF_ntCalc,opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR)) {
+	    TBDS::genPrmSet(nodePath()+"ntCalc",opt->text(),opt->attr("user"));
+	    SYS->cntrSet(nodePath('.'), 0); SYS->cntrSet(nodePath('.')+".min", 0); SYS->cntrSet(nodePath('.')+".max", 0);
+	}
     }
     else if(a_path == "/exec/tm" && mTVal && ctrChkNode(opt,"get",R_R___,"root",grp,SEC_RD))
-	opt->setText(tm2s(1e-6*SYS->cntrGet(nodePath('.'))));
+	opt->setText(tm2s(1e-6*SYS->cntrGet(nodePath('.')))+
+		" ["+tm2s(1e-6*SYS->cntrGet(nodePath('.')+".min"))+"-"+tm2s(1e-6*SYS->cntrGet(nodePath('.')+".max"))+"]");
     else if(a_path.find("/exec/io") == 0 && mTVal) {
 	string io_id = TSYS::pathLev(a_path, 2);
 	for(unsigned iIO = 0; iIO < mIO.size(); iIO++)
@@ -392,10 +398,12 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	int n_tcalc = s2i(TBDS::genPrmGet(nodePath()+"ntCalc",DEF_ntCalc,opt->attr("user")));
 	string wuser = opt->attr("user");
 	time_t tm_lim = SYS->sysTm()+prmWait_TM+1;
-	int64_t t_cnt = TSYS::curTime();
+	int64_t t_cnt = TSYS::curTime(), t_tmp = 0;
 	for(int iC = 0; iC < n_tcalc && SYS->sysTm() < tm_lim; iC++)
 	    mTVal->calc(wuser);
-	SYS->cntrSet(nodePath('.'), TSYS::curTime()-t_cnt);
+	SYS->cntrSet(nodePath('.'), t_cnt=(TSYS::curTime()-t_cnt));
+	SYS->cntrSet(nodePath('.')+".min", (t_tmp=SYS->cntrGet(nodePath('.')+".min")) ? vmin(t_tmp,t_cnt) : t_cnt);
+	SYS->cntrSet(nodePath('.')+".max", (t_tmp=SYS->cntrGet(nodePath('.')+".max")) ? vmax(t_tmp,t_cnt) : t_cnt);
     }
     else TCntrNode::cntrCmdProc(opt);
 }

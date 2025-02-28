@@ -856,6 +856,9 @@ msgstr ""
 msgid "Are you sure of deleting the visual items: '%1'?"
 msgstr ""
 
+msgid "Check statuses the items before the deletion:%2"
+msgstr ""
+
 msgid "Deleting the visual items"
 msgstr ""
 

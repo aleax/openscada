@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -72,6 +72,9 @@
 #define DEF_limObjNm_SZ		100
 #define MIN_limObjNm_SZ		100
 #define MAX_limObjNm_SZ		200
+#define DEF_limObjDscr_SZ	1000
+#define MIN_limObjDscr_SZ	300
+#define MAX_limObjDscr_SZ	1000000
 #define DEF_limArchID_SZ	50
 #define MIN_limArchID_SZ	50
 #define MAX_limArchID_SZ	90
@@ -109,6 +112,7 @@ using namespace OSCADA;
 //Default values of the global limits
 uint8_t	OSCADA::limObjID_SZ = DEF_limObjID_SZ;
 uint8_t	OSCADA::limObjNm_SZ = DEF_limObjNm_SZ;
+unsigned OSCADA::limObjDscr_SZ = DEF_limObjDscr_SZ;
 uint8_t	OSCADA::limArchID_SZ = DEF_limArchID_SZ;
 unsigned OSCADA::limUserFile_SZ = DEF_limUserFile_SZ;
 unsigned OSCADA::limUserIts_N = DEF_limUserIts_N;
@@ -127,7 +131,7 @@ TSYS	*OSCADA::SYS = NULL;
 pthread_key_t TSYS::sTaskKey;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
-    isLoaded(false), mRunning(false), isServPrc(false), mFinalKill(false),
+    f_useEnv(false), isLoaded(false), mRunning(false), isServPrc(false), mFinalKill(false),
     mUser(DEF_User), mConfFile(DEF_ConfFile), mId(DEF_Id), mModDir(DEF_ModPath), mIcoDir(DEF_IcoDir), mDocDir(DEF_DocDir),
     mName(dataRes()), mNameB(dataRes()), mWorkDB(dataRes()), mSelDB(dataRes()), mMainCPUs(dataRes()),
     mTaskInvPhs(DEF_TaskInvPhs), mSaveAtExit(DEF_SaveAtExit), mSavePeriod(DEF_SavePeriod), mModifCalc(DEF_ModifCalc),
@@ -172,8 +176,8 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     //sigaction(SIGCHLD, &sHdr, &sigActOrig);
     sigaction(SIGALRM, &sHdr, &sigActOrig);
     sigaction(SIGPIPE, &sHdr, &sigActOrig);
-    //sigaction(SIGFPE, &sHdr, &sigActOrig);
-    //sigaction(SIGSEGV, &sHdr, &sigActOrig);
+    sigaction(SIGFPE, &sHdr, &sigActOrig);
+    sigaction(SIGSEGV, &sHdr, &sigActOrig);
     sigaction(SIGABRT, &sHdr, &sigActOrig);
     sigaction(SIGUSR1, &sHdr, &sigActOrig);
 
@@ -182,6 +186,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     for(int argPos = 0; (argCom=getCmdOpt(argPos,&argVl)).size(); )
 	mCmdOpts[strEncode(argCom,ToLower)] = argVl;
     mCmdOpts[""] = argv[0];
+    f_useEnv = (getenv("OSCADA_CMD_EN") != NULL && s2i(getenv("OSCADA_CMD_EN")));	//Get default commandline options from the environment variables
 
     //Early starting the service task
     taskCreate("SYS_Service", 0, TSYS::ServTask, NULL, 10);
@@ -230,8 +235,8 @@ TSYS::~TSYS( )
     //sigaction(SIGCHLD, &sigActOrig, NULL);
     sigaction(SIGALRM, &sigActOrig, NULL);
     sigaction(SIGPIPE, &sigActOrig, NULL);
-    //sigaction(SIGFPE, &sigActOrig, NULL);
-    //sigaction(SIGSEGV, &sigActOrig, NULL);
+    sigaction(SIGFPE, &sigActOrig, NULL);
+    sigaction(SIGSEGV, &sigActOrig, NULL);
     sigaction(SIGABRT, &sigActOrig, NULL);
     sigaction(SIGUSR1, &sigActOrig, NULL);
 
@@ -407,23 +412,46 @@ string TSYS::atime2str( time_t itm, const string &format, bool gmt, const string
     return (rez > 0) ? string(buf,rez) : string("");
 }
 
-string TSYS::time2str( double tm )
+string TSYS::time2str( double tm, bool inParts )
 {
     if(tm < 1e-12) return "0";
-    int lev = 0;
-    int days = (int)floor(tm/(24*60*60));
-    int hours = (int)floor(tm/(60*60))%24;
-    int mins = (int)floor(tm/(60))%60;
-    double usec = 1e6 * (tm - days*24*60*60 - hours*60*60 - mins*60);
+    int lev = 0, tNum = 0;
+    float days  = tm/(24*60*60);
+    float hours = tm/(60*60);
+    float mins  = tm/(60);
 
     string rez;
-    if(days)		{ rez += i2s(days)+_("day"); lev = vmax(lev,6); }
-    if(hours)		{ rez += (rez.size()?" ":"")+i2s(hours)+_("hour"); lev = vmax(lev,5); }
-    if(mins && lev < 6)	{ rez += (rez.size()?" ":"")+i2s(mins)+_("min"); lev = vmax(lev,4); }
-    if((1e-6*usec) > 0.5 && lev < 5)	{ rez += (rez.size()?" ":"")+r2s(1e-6*usec,3)+_("s"); lev = vmax(lev,3); }
-    else if((1e-3*usec) > 0.5 && !lev)	{ rez += (rez.size()?" ":"")+r2s(1e-3*usec,4)+_("ms"); lev = vmax(lev,2); }
-    else if(usec > 0.5 && !lev)		{ rez += (rez.size()?" ":"")+r2s(usec,4)+_("us"); lev = vmax(lev,1); }
-    else if(!lev)	rez += (rez.size()?" ":"")+r2s(1e3*usec,4)+_("ns");
+    if((int)floor(days)) {
+	rez += (inParts?i2s(days):r2s(days,5)+" ") + ((floor(days)==1)?_("day"):_("days"));
+	if(!inParts) return rez;
+	lev = vmax(lev, 6);
+    }
+    if((tNum=(int)floor(hours)%24)) {
+	rez += (rez.size()?" ":"") + (inParts?i2s(tNum):r2s(hours,3)+" ") + ((tNum==1)?_("hour"):_("hours"));
+	if(!inParts) return rez;
+	lev = vmax(lev, 5);
+    }
+    if((tNum=(int)floor(mins)%60) && lev < 6) {
+	rez += (rez.size()?" ":"") + (inParts?i2s(tNum):r2s(mins,3)+" ") + ((tNum==1)?_("minute"):_("minutes"));
+	if(!inParts) return rez;
+	lev = vmax(lev, 4);
+    }
+
+    double usec = 1e6*(tm-floor(mins)*60);
+
+    if((1e-6*usec) > 0.5 && lev < 5) {
+	rez += (rez.size()?" ":"") + r2s(1e-6*usec,3) + (inParts?_("s"):string(" ")+((floor(1e-6*usec)==1)?_("second"):_("seconds")));
+	lev = vmax(lev,3);
+    }
+    else if((1e-3*usec) > 0.5 && !lev) {
+	rez += (rez.size()?" ":"") + r2s(1e-3*usec,4) + (inParts?_("ms"):string(" ")+((floor(1e-6*usec)==1)?_("millisecond"):_("milliseconds")));
+	lev = vmax(lev,2);
+    }
+    else if(usec > 0.5 && !lev) {
+	rez += (rez.size()?" ":"") + r2s(usec,4) + (inParts?_("us"):string(" ")+((floor(1e-6*usec)==1)?_("microsecond"):_("microseconds")));
+	lev = vmax(lev,1);
+    }
+    else if(!lev) rez += (rez.size()?" ":"") + r2s(1e3*usec,4) + (inParts?_("ns"):string(" ")+((floor(1e-6*usec)==1)?_("nanosecond"):_("nanoseconds")));
 
     return rez;
 }
@@ -506,6 +534,35 @@ string TSYS::addr2str( void *addr )
 }
 
 void *TSYS::str2addr( const string &str )	{ return (void *)strtoull(str.c_str(),NULL,16); }
+
+double TSYS::str2time( const string &ival, bool inParts )
+{
+    double rez = 0, cf = 1;
+    string val;
+    for(int off = 0; (val=inParts?TSYS::strParse(ival,0," ",&off,true):ival).size(); ) {
+	cf = 1;	//In seconds
+	if(val.find("ms") != string::npos || val.find(_("ms")) != string::npos ||
+		val.find("millisecond") != string::npos || val.find(_("millisecond")) != string::npos || val.find(_("milliseconds")) != string::npos)
+	    cf = 1e-3;
+	else if(val.find("us") != string::npos || val.find(_("us")) != string::npos ||
+		val.find("microsecond") != string::npos || val.find(_("microsecond")) != string::npos || val.find(_("microseconds")) != string::npos)
+	    cf = 1e-6;
+	else if(val.find("ns") != string::npos || val.find(_("ns")) != string::npos ||
+		val.find("nanosecond") != string::npos || val.find(_("nanosecond")) != string::npos || val.find(_("nanoseconds")) != string::npos)
+	    cf = 1e-9;
+	else if(val.find("minute") != string::npos || val.find(_("minute")) != string::npos || val.find(_("minutes")) != string::npos)
+	    cf = 60;
+	else if(val.find("hour") != string::npos || val.find(_("hour")) != string::npos || val.find(_("hours")) != string::npos)
+	    cf = 60*60;
+	else if(val.find("day") != string::npos || val.find(_("day")) != string::npos || val.find(_("days")) != string::npos)
+	    cf = 24*60*60;
+	rez += cf*(isdigit(val[0])?s2r(val):1.0);
+
+	if(!inParts) break;
+    }
+
+    return rez;
+}
 
 string TSYS::strTrim( const string &val, const string &cfg )
 {
@@ -623,6 +680,7 @@ string TSYS::optDescr( )
 	"			 Change that once before use on DBs with the fixed type \"char({N})\"!\n"
 	"limObjNm_SZ	[*100...200] NAME size of the OpenSCADA objects.\n"
 	"		WARNING! Change that once before use on DBs with the fixed type \"char({N})\"!\n"
+	"limObjDscr_SZ	[300...*1000...1000000] DESCR size of the OpenSCADA objects.\n"
 	"limArchID_SZ	[*50...90] ID size of the value archive objects.\n"
 	"		WARNING! Increase it only, else you can get problems on Archive.FSArch!\n"
 	"			 Change that once before use on DBs with the fixed type \"char({N})\"!\n"
@@ -684,7 +742,11 @@ string TSYS::getCmdOpt_( int &curPos, string *argVal, int argc, char **argv )
 bool TSYS::cmdOptPresent( const string &opt )
 {
     MtxAlloc res(dataRes(), true);
-    return mCmdOpts.find(strEncode(opt,ToLower)) != mCmdOpts.end();
+
+    bool rez = (mCmdOpts.find(strEncode(opt,ToLower)) != mCmdOpts.end());
+    if(!rez && f_useEnv) rez = (getenv(("OSCADA_"+opt).c_str()) != NULL);
+
+    return rez;
 }
 
 string TSYS::cmdOpt( const string &opt, const string &setVl )
@@ -696,8 +758,13 @@ string TSYS::cmdOpt( const string &opt, const string &setVl )
 
     //Get value
     map<string, string>::iterator iOpt = mCmdOpts.find(strEncode(opt,ToLower));
-    if(iOpt == mCmdOpts.end()) return "";
-    return iOpt->second.size() ? iOpt->second : "";	// "1";
+    if(iOpt != mCmdOpts.end())	return iOpt->second;
+    else if(f_useEnv) {
+	char *rez = getenv(("OSCADA_"+opt).c_str());
+	if(rez) return rez;
+    }
+
+    return "";
 }
 
 int TSYS::permCrtFiles( bool exec )
@@ -797,6 +864,7 @@ void TSYS::cfgPrmLoad( )
     //Global limits
     limObjID_SZ = vmax(MIN_limObjID_SZ, vmin(MAX_limObjID_SZ,s2i(TBDS::genPrmGet(nodePath()+"limObjID_SZ",i2s(DEF_limObjID_SZ)))));
     limObjNm_SZ = vmax(MIN_limObjNm_SZ, vmin(MAX_limObjNm_SZ,s2i(TBDS::genPrmGet(nodePath()+"limObjNm_SZ",i2s(DEF_limObjNm_SZ)))));
+    limObjDscr_SZ = vmax(MIN_limObjDscr_SZ, vmin(MAX_limObjDscr_SZ,s2i(TBDS::genPrmGet(nodePath()+"limObjDscr_SZ",i2s(DEF_limObjDscr_SZ)))));
     limArchID_SZ = vmax(MIN_limArchID_SZ, vmin(MAX_limArchID_SZ,s2i(TBDS::genPrmGet(nodePath()+"limArchID_SZ",i2s(DEF_limArchID_SZ)))));
     limUserFile_SZ = vmax(MIN_limUserFile_SZ, vmin(MAX_limUserFile_SZ,s2i(TBDS::genPrmGet(nodePath()+"limUserFile_SZ",i2s(DEF_limUserFile_SZ)))));
     limUserIts_N = vmax(MIN_limUserIts_N, vmin(MAX_limUserIts_N,s2i(TBDS::genPrmGet(nodePath()+"limUserIts_N",i2s(DEF_limUserIts_N)))));
@@ -849,14 +917,14 @@ void TSYS::load_( )
     // Get name for the command of project switch
     if(!prjNm().size()) {
 	setPrjNm(cmdOpt("projName"));
-	if(!prjNm().size()) {
+	if(prjNm().empty()) {
 	    TArrayObj *rez = TRegExp("openscada_(.+)$").match(cmdOpt(""));
 	    if(rez) {
 		if(rez->size() >= 2) setPrjNm(rez->arGet(1).getS());
 		delete rez;
 	    }
 	}
-	if(!prjNm().size() && getenv("OSCADA_ProjName")) setPrjNm(getenv("OSCADA_ProjName"));
+	if(prjNm().empty() && getenv("OSCADA_ProjName")) setPrjNm(getenv("OSCADA_ProjName"));
 	if(prjNm().size() && !prjSwitch(prjNm())) setPrjNm("");
     }
 
@@ -1122,6 +1190,8 @@ void TSYS::setTaskInvPhs( int vl )
 
 void TSYS::sighandler( int signal, siginfo_t *siginfo, void *context )
 {
+    bool isPrc = false;
+
     switch(signal) {
 	case SIGINT:
 	    SYS->mStopSignal = signal;
@@ -1129,10 +1199,6 @@ void TSYS::sighandler( int signal, siginfo_t *siginfo, void *context )
 	case SIGTERM:
 	    SYS->mess_sys(TMess::Warning, _("Termination signal is received. Stopping the program!"));
 	    SYS->mStopSignal = signal;
-	    break;
-	case SIGFPE:
-	    SYS->mess_sys(TMess::Warning, _("Floating point exception is caught!"));
-	    exit(1);
 	    break;
 	case SIGCHLD: {
 	    int status;
@@ -1143,13 +1209,31 @@ void TSYS::sighandler( int signal, siginfo_t *siginfo, void *context )
 	case SIGPIPE:
 	    //mess_sys(TMess::Warning, _("Broken PIPE signal!"));
 	    break;
-	case SIGSEGV:
-	    SYS->mess_sys(TMess::Emerg, _("Segmentation fault signal!"));
-	    break;
-	case SIGABRT:
-	    SYS->mess_sys(TMess::Emerg, _("Program aborted!"));
-	    break;
 	case SIGALRM: case SIGUSR1: break;
+
+	//Signals with call the crash handler
+	//----------------------------------
+	case SIGFPE:
+	    if(!isPrc) SYS->mess_sys(TMess::Warning, _("Floating point exception!"));
+	    isPrc = true;
+	case SIGABRT:
+	    if(!isPrc) SYS->mess_sys(TMess::Emerg, _("Program aborted!"));
+	    isPrc = true;
+	case SIGSEGV:
+	    if(!isPrc) SYS->mess_sys(TMess::Emerg, _("Segmentation fault signal!"));
+	    isPrc = true;
+
+	    // Call the crash handler
+	    system((string("dPrj=") + oscd_datadir_full +
+		" dPrjUser=" + SYS->prjUserDir() +
+		" dSysCfg=" + sysconfdir_full +
+		" dData=" + datadir_full +
+		" " bindir_full "/openscada-proj" +
+		" crash" +
+		" " + SYS->prjNm()).c_str());
+
+	    exit(EXIT_FAILURE);
+	    break;
 	default:
 	    SYS->mess_sys(TMess::Warning, _("Unknown signal %d!"), signal);
     }
@@ -2810,11 +2894,13 @@ reload:
 TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     bool alt1 = false;
+
     // int message(string cat, int level, string mess) - formation of the program message <mess> with the category <cat>, level <level>
     //  cat - message category
     //  level - message level
     //  mess - message text
     if(iid == "message" && prms.size() >= 3)	{ message(prms[0].getS().c_str(), (TMess::Type)prms[1].getI(), "%s", prms[2].getS().c_str()); return 0; }
+
     // int mess{Debug,Info,Note,Warning,Err,Crit,Alert,Emerg}(string cat, string mess) -
     //		formation of the program message <mess> with the category <cat> and the appropriate level
     //  cat - message category
@@ -2827,6 +2913,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if(iid == "messCrit" && prms.size() >= 2)	{ mess_crit(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
     if(iid == "messAlert" && prms.size() >= 2)	{ mess_alert(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
     if(iid == "messEmerg" && prms.size() >= 2)	{ mess_emerg(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
+
     // {string|int} system(string cmd, bool noPipe = false) - calls the console commands <cmd> of OS returning the result by the channel
     //  cmd - command text
     //  noPipe - pipe result disable for background call
@@ -2844,6 +2931,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	    mess_warning(nodePath().c_str(), _("Closing the pipe %p error '%s (%d)'!"), fp, strerror(errno), errno);
 	return rez;
     }
+
     // int fileSize( string file ) - Return the <file> size.
     if(iid == "fileSize" && prms.size() >= 1) {
 	int hd = open(prms[0].getS().c_str(), O_RDONLY);
@@ -2855,6 +2943,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	}
 	return rez;
     }
+
     // string fileRead( string file, int off = 0, int sz = -1 ) - Return the <file> content from offset <off> and for the block size <sz>.
     if(iid == "fileRead" && prms.size() >= 1) {
 	char buf[prmStrBuf_SZ];
@@ -2874,6 +2963,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	}
 	return rez;
     }
+
     // int fileWrite( string file, string str, bool append = false ) - Write <str> to <file>, remove presented or <append>.
     //	  Return wrote bytes count.
     if(iid == "fileWrite" && prms.size() >= 2) {
@@ -2889,12 +2979,15 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	}
 	return wcnt;
     }
+
     // int fileRemove( string file ) - Remove <file>.
     //	  Return the removing result.
     if(iid == "fileRemove" && prms.size()) return remove(prms[0].getS().c_str());
+
     // XMLNodeObj XMLNode(string name = "") - creation of the XML node object with the name <name>
     //  name - XML node name
     if(iid == "XMLNode") return new XMLNodeObj((prms.size()>=1) ? prms[0].getS() : "");
+
     // string cntrReq(XMLNodeObj req, string stat = "") - request of the control interface to the program via XML
     //  req - request's XML node
     //  stat - remote OpenSCADA-station for request
@@ -2916,17 +3009,20 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	xnd.at().fromXMLNode(req);
 	return "0";
     }
+
     // string lang(string full) - returns the system language in two symbols and the full language in <full>
     //  full - microseconds of time
     if(iid == "lang") {
 	if(prms.size() >= 1) { prms[0].setS(Mess->lang()); prms[0].setModify(); }
 	return Mess->langCode();
     }
+
     // int sleep(real tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.
     //  tm - wait time in seconds (precised up to nanoseconds), up to prmInterf_TM(7 seconds)
     //  ntm - wait time part in nanoseconds
     if(iid == "sleep" && prms.size() >= 1)
 	return sysSleep(fmin(prms[0].getR()+1e-9*((prms.size()>=2)?prms[1].getI():0),(double)prmInterf_TM));
+
     // int time(int usec) - returns absolute time in seconds from the epoch of 1/1/1970 and in microseconds, if <usec> is specified
     //  usec - microseconds of time
     if(iid == "time") {
@@ -2935,9 +3031,11 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	prms[0].setI(tm%1000000); prms[0].setModify();
 	return (int64_t)(tm/1000000);
     }
+
     // int utime(); int mtime(); - return absolute time in microseconds and milliseconds from the epoch of 1/1/1970
     if(iid == "utime") return (int64_t)curTime();
     if(iid == "mtime") return (int64_t)curTime()/1000;
+
     // int {localtime|gmtime}(int fullsec, int sec, int min, int hour, int mday, int month, int year, int wday, int yday, int isdst)
     //      - returns the full date based on the absolute time in seconds <fullsec> from the epoch 1.1.1970
     //  fullsec - source time ins seconds from the epoch 1.1.1970
@@ -2967,7 +3065,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	if(prms.size() >= 10) 	{ prms[9].setI(tm_tm.tm_isdst); prms[9].setModify(); }
 	return 0;
     }
-    // int mktime(int sec, int min, int hour, int mday, int month, int year, int wday, int yday, int isdst)
+
+    // int mktime( int sec, int min, int hour, int mday, int month, int year, int wday, int yday, int isdst )
     //      - return time since the Epoch 1.1.1970 converted from broken-down time
     //  sec - seconds
     //  min - minutes
@@ -3002,38 +3101,19 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 
 	return (int64_t)rez;
     }
+
     // string {strftime|strftimegm}(int sec, string form = "%Y-%m-%d %H:%M:%S")
     //      - converts an absolute time <sec> to the string of the desired format <form>
     //  sec - time ins seconds from the epoch 1.1.1970
     //  form - result string format
-    if((iid == "strftime" || (alt1=(iid=="strftimegm"))) && !prms.empty()) {
-	time_t tm_t = prms[0].getI();
-	struct tm tm_tm;
-	if(alt1) gmtime_r(&tm_t, &tm_tm);
-	else localtime_r(&tm_t, &tm_tm);
-	char buf[1000];
-	int rez = 0;
-#if HAVE_DECL_NEWLOCALE
-	string lang = TSYS::strLine(user_lang, 1);
-	if(lang.size()) {
-	    lang = Mess->langToLocale(lang);
-	    //!?!? Prepare the locales cache to speed up. Use in new locale string functions of conversion real numbers
-	    locale_t dLoc = newlocale(LC_TIME_MASK, lang.c_str(), 0);
-	    if(dLoc != 0) {
-		rez = strftime_l(buf, sizeof(buf), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &tm_tm, dLoc);
-		freelocale(dLoc);
-		return (rez > 0) ? string(buf,rez) : "";
-	    }
-	}
-#endif
-	rez = strftime(buf, sizeof(buf), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &tm_tm);
-	return (rez > 0) ? string(buf,rez) : "";
-    }
+    if((iid == "strftime" || (alt1=(iid=="strftimegm"))) && prms.size())
+	return atime2str(prms[0].getI(), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", alt1, user_lang);
+
     // int {strptime|strptimegm}(string str, string form = "%Y-%m-%d %H:%M:%S") - returns the time in seconds from the epoch of 1/1/1970,
     //      based on the string record of time <str>, in accordance with the specified template <form>
     //  str - source time in string
     //  form - string's time template in format POSIX-function "strptime"
-    if((iid == "strptime" || (alt1=(iid=="strptimegm"))) && !prms.empty()) {
+    if((iid == "strptime" || (alt1=(iid=="strptimegm"))) && prms.size()) {
 	struct tm stm;
 	stm.tm_isdst = -1;
 	stm.tm_mon = 0;					//Default month January(1)
@@ -3042,12 +3122,42 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	strptime(prms[0].getS().c_str(), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &stm);
 	return (int64_t)(alt1 ? timegm(&stm) : mktime(&stm));
     }
+
     // int cron(string cronreq, int base = 0) - returns the time, planned in the format of the standard Cron <cronreq>,
     //      beginning from basic time <base> or from the current, if the basic is not specified
     //  cronreq - shedule in standard Cron format
     //  base - base time
-    if(iid == "cron" && !prms.empty())
+    if(iid == "cron" && prms.size())
 	return (int64_t)cron(prms[0].getS(), (prms.size()>=2) ? prms[1].getI() : 0);
+
+    // string time2str( real tm, bool inParts = true ) - converts the time interval <tm> in seconds to human string
+    //    like "1hour 23minutes 10s" at setting <inParts> or "1.5 hour" else.
+    //  tm - real number of the relative time in seconds;
+    //  inParts - divide the text time per days, hours, minutes and seconds.
+    if(iid == "time2str" && prms.size()) {
+	TrCtxAlloc trCtx;
+	if(Mess->translDyn()) trCtx.hold(user_lang);
+	return time2str(prms[0].getR(), (prms.size()>=2) ? prms[1].getB() : true);
+    }
+
+    // string cpct2str( real cnt ) - converts the capacity <cnt> in bytes to the human representing string.
+    //  cnt - real number of the capacity in bytes.
+    if(iid == "cpct2str" && prms.size()) {
+	TrCtxAlloc trCtx;
+	if(Mess->translDyn()) trCtx.hold(user_lang);
+	return cpct2str(prms[0].getR());
+    }
+
+    // string str2time( string val, bool inParts = true ) - converts the human representing relative time <val>
+    //    of the function time2str() to the time in seconds, with parsing parts at setting <inParts>.
+    //  val - human representing relative time in corresponding with time2str();
+    //  inParts - parse as divided the text time per days, hours, minutes and seconds.
+    if(iid == "str2time" && prms.size()) {
+	TrCtxAlloc trCtx;
+	if(Mess->translDyn()) trCtx.hold(user_lang);
+	return str2time(prms[0].getS(), (prms.size()>=2) ? prms[1].getB() : true);
+    }
+
     // string strFromCharCode(int char1, int char2, int char3, ...) - string creation from symbol's codes
     //  char1, char2. char3 - symbol's codes
     if(iid == "strFromCharCode") {
@@ -3056,6 +3166,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	    rez += (unsigned char)prms[iP].getI();
 	return rez;
     }
+
     // string strFromCharUTF([string type = "UTF-8",] int char1, int char2, int char3, ...) - string creation from UTF codes
     //  type - symbol type, (UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, UTF-32BE)
     //  char1, char2. char3 - symbol's codes
@@ -3085,6 +3196,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 
 	return rez;
     }
+
     // string strCodeConv( string src, string fromCP, string toCP ) - String text encode from codepage <fromCP> to codepage <toCP>.
     //  src - source text;
     //  fromCP - from codepage, empty for use internal codepage;
@@ -3092,6 +3204,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if(iid == "strCodeConv" && prms.size() >= 3)
 	return Mess->codeConv((prms[1].getS().size() ? prms[1].getS() : Mess->charset()),
 			(prms[2].getS().size() ? prms[2].getS() : Mess->charset()), prms[0].getS());
+
     // string strEncode( string src, string tp = "Bin", string opt = "" ) - String encode from <src> by <tp> and options <opt>.
     //  src - source;
     //  tp  - encode type: "PathEl", "HttpURL", "HTML", "JavaScript", "SQL", "Custom", "Base64", "FormatPrint",
@@ -3118,6 +3231,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	else return "";
 	return strEncode(prms[0].getS(), tp, (prms.size()>2) ? prms[2].getS() : "");
     }
+
     // string strDecode( string src, string tp = "Bin", string opt = "" ) - String decode from <src> by <tp> and options <opt>.
     //  src - source;
     //  tp  - encode type: "PathEl", "HttpURL", "Custom", "Base64", "Bin", "ShieldSymb"
@@ -3940,6 +4054,6 @@ int main( int argc, char *argv[] )
     //Free OpenSCADA root object
     if(SYS) delete SYS;
 
-    return rez;
+    return EXIT_SUCCESS; //rez;
 }
 #endif

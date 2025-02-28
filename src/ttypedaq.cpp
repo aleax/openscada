@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttypedaq.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,7 +40,7 @@ TTypeDAQ::TTypeDAQ( const string &id ) : TModule(id)
 
     fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
+    fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     fldAdd(new TFld("ENABLE",trS("To enable"),TFld::Boolean,0,"1","0"));
     fldAdd(new TFld("START",trS("To start"),TFld::Boolean,0,"1","0"));
     fldAdd(new TFld("MESS_LEV",trS("Messages level"),TFld::Integer,0,"1","3"));
@@ -155,9 +155,11 @@ void TTypeDAQ::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TModule::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/cntr_",_("Controller"),RWRWR_,"root",SDAQ_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
-	if(ctrMkNode("area",opt,0,"/tctr",_("Controllers")))
+	if(ctrMkNode("area",opt,0,"/tctr",_("Controllers"))) {
+	    ctrMkNode("fld",opt,-1,"/tctr/nmb",_("Number"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/tctr/ctr",_("Controllers"),RWRWR_,"root",SDAQ_ID,5,
 		"tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","cntr_","idSz",i2s(limObjID_SZ).c_str());
+	}
 	return;
     }
     //Process command to page
@@ -172,6 +174,26 @@ void TTypeDAQ::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ opt->setAttr("id", add(opt->attr("id"))); at(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mCntr, opt->attr("id"), -1, NodeRemove);
     }
+    else if(a_path == "/tctr/nmb" && ctrChkNode(opt)) {
+	vector<string> c_list;
+	list(c_list);
+	unsigned enCnt = 0, stCnt = 0;
+	map<int, unsigned> errCnt;
+	for(unsigned iCntr = 0; iCntr < c_list.size(); iCntr++) {
+	    AutoHD<TController> cntrO = at(c_list[iCntr]);
+	    if(cntrO.at().enableStat()) enCnt++;
+	    if(cntrO.at().startStat()) {
+		stCnt++;
+		int errSt = s2i(cntrO.at().getStatus());
+		if(errSt) errCnt[errSt]++;
+	    }
+	}
+	string errs;
+	for(map<int, unsigned>::iterator iE = errCnt.begin(); iE != errCnt.end(); ++iE)
+	    errs += (errs.size()?", ":"") + i2s(iE->first)+"="+i2s(iE->second);
+	opt->setText(TSYS::strMess(_("all %d, running %d, enabled %d%s"),
+			c_list.size(),stCnt,enCnt,errs.size()?(string("; ")+_("Errors: ")+errs).c_str():""));
+    }
     else TModule::cntrCmdProc(opt);
 }
 
@@ -185,7 +207,7 @@ TTypeParam::TTypeParam( const char *iid, const char *iname, const char *idb, boo
     fldAdd(new TFld("SHIFR",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     fldAdd(new TFld("OWNER",trS("Owner"),TFld::String,TCfg::Key|TCfg::NoVal|TFld::NoWrite,i2s(limObjID_SZ*5).c_str()));
     fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
+    fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,TCfg::NoVal,"1","0"));
     fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec|TCfg::NoVal));
 }

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-13 22:36+0200\n"
+"POT-Creation-Date: 2025-02-15 20:33+0200\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -403,11 +403,14 @@ msgstr "KodierungsTyp"
 msgid "Binary"
 msgstr "Binär"
 
+msgid "Security policies"
+msgstr "Sicherheitspolitik"
+
 msgid "URL"
 msgstr "URL"
 
-msgid "Security policies"
-msgstr "Sicherheitspolitik"
+msgid "Anonymous user"
+msgstr "Anonymer Benutzer"
 
 msgid "Server certificate (PEM)"
 msgstr "Zertifikat des Servers (PEM)"
@@ -485,6 +488,11 @@ msgstr "Entfernen von '%s'"
 msgid "Configuration"
 msgstr "Konfiguration"
 
+msgid "Select a user of anonymous access, set empty only for authentication."
+msgstr ""
+"Wählen Sie einen Benutzer mit anonymem Zugriff aus und lassen Sie "
+"das Feld nur für die Authentifizierung leer."
+
 msgid "Policy"
 msgstr "Politik"
 
@@ -510,9 +518,11 @@ msgid "Set to 0 for automatic by cntrKeepAlive*publInterv"
 msgstr "0 für die automatische Setzen von cntrKeepAlive*publInterv"
 
 #, c-format
-msgid "%d(%s): at %s(live %s), secure channel %u; Publish requests %u"
-msgstr ""
-"%d(%s): bei %s(live %s), sicherer Kanal %u; Anfragen veröffentlichen %u"
+msgid "%d(%s): from '%s' at %s(live %s), secure channel %u; Publish requests %u"
+msgstr "%d(%s): von „%s“ bei %s(live %s), sicherer Kanal %u; Anfragen veröffentlichen %u"
+
+msgid "<PASSIVE>"
+msgstr "<PASSIV>"
 
 msgid "Closed"
 msgstr "Geschlossen"
@@ -558,3 +568,4 @@ msgstr "Server OPC-UA"
 
 msgid "Provides OPC-UA server service implementation."
 msgstr "Bietet OPC-UA Server-Service-Implementierung."
+

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcntrnode.h
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -97,7 +97,7 @@ class TConfig;
 //#pragma pack(push,1)
 class TCntrNode
 {
-    //* Controll scenaries language section *
+    //* Section of the Control Interface *
     public:
 	//Methods
 	TCntrNode( TCntrNode *prev = NULL );
@@ -113,15 +113,18 @@ class TCntrNode
 	// Static functions
 	//  Controll Field
 	static XMLNode *ctrId( XMLNode *inf, const string &n_id, bool noex = false );		//get node for it full identifier
-	static XMLNode *ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *req, const string &dscr,
-	    int perm = RWRWRW, const char *user = "root", const char *grp = "root", int n_attr = 0, ... );
-	static XMLNode *ctrMkNode2( const char *n_nd, XMLNode *nd, int pos, const char *req, const string &dscr,
-	    int perm = RWRWRW, const char *user = "root", const char *grp = "root", ... );	//End by zero pointer
-	static XMLNode *_ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *req, const string &dscr,
-	    int perm = RWRWRW, const char *user = "root", const char *grp = "root" );
+	XMLNode *ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &dscr,
+	    int perm = RWRWRW, const char *owner = "root", const char *group = "root", int n_attr = 0, ... );
+	XMLNode *ctrMkNode2( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &dscr,
+	    int perm = RWRWRW, const char *owner = "root", const char *group = "root", ... );	//End by zero pointer
+	XMLNode *ctrMkNode3( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &dscr,
+	    int mode_perm = SEC_RD|SEC_WR, ... ); //End by zero pointer
+	XMLNode *_ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &dscr,
+	    int perm = RWRWRW, const char *owner = "root", const char *group = "root" );
 	static bool ctrRemoveNode( XMLNode *nd, const char *path );
-	static bool ctrChkNode( XMLNode *nd, const char *cmd = "get", int perm = R_R_R_, const char *user = "root",
-	    const char *grp = "root", char mode = SEC_RD );
+	bool ctrChkNode( XMLNode *nd, const char *cmd = "get", int perm = R_R_R_, const char *owner = "root",
+	    const char *group = "root", char mode = SEC_RD );
+	bool ctrChkNode2( XMLNode *nd, const char *cmd = "get", char mode = SEC_RD );
 
     protected:
 	//Methods
@@ -175,6 +178,12 @@ class TCntrNode
 	unsigned nodeUse( bool selfOnly = false );
 	unsigned nodePos( )		{ return mOi; }
 
+	virtual char nodeAccess( const string &user, const string &owner = "", const string &group = "", int perm = -1 );
+	bool nodeLoadACL( const string &text );	//Checking an entry "ACL: {usr}[:{groups}[:{perm}]]" in <text>
+						//  and setting the properly object's properties for nodeAccess(),
+						//  where <perm> can be both in digital like to 0777 or string like to RWXRWXRWX
+	void nodeLoadACLSnthHgl( XMLNode &shgl );
+
 	// Modify process methods
 	int  isModify( int mflg = TCntrNode::All ) const;	//Check for modify want
 	void modif( bool save = false, bool forceLoad = false );//Set Modified the node
@@ -192,9 +201,13 @@ class TCntrNode
 	TError err_sys( const char *fmt,  ... ) const;
 	TError err_sys( int cod, const char *fmt,  ... ) const;
 
+	// Properties
+	TVariant property( const string &id, const TVariant &val, const string &grp = "sys" );
+	void propertyClrGrp( const string &idPref = "", const string &grp = "sys" );
+
 	// User object access
 	virtual TVariant objPropGet( const string &id );
-	virtual void objPropSet( const string &id, TVariant val );
+	virtual void objPropSet( const string &id, const TVariant &val );
 	virtual TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	// Childs
@@ -264,6 +277,8 @@ class TCntrNode
 	unsigned short int	mOi;	//Order index
 
 	char	mFlg;
+
+	map<string, TVariant>	*mProps;
 };
 //#pragma pack(pop)
 

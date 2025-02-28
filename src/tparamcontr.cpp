@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tparamcontr.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -302,7 +302,11 @@ void TParamContr::save_( )
 
 bool TParamContr::cfgChange( TCfg &co, const TVariant &pc )
 {
-    if(co.getS() != pc.getS()) modif();
+    if(co.getS() != pc.getS()) {
+	if(co.name() == "DESCR") nodeLoadACL(co.getS());
+
+	modif();
+    }
 
     return type().cfgChange(this, co);
 }
@@ -463,9 +467,9 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	TValue::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter: ")+trD(name()),RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("branches",opt,-1,"/br","",R_R_R_);
-	if(ctrMkNode("area",opt,0,"/prm",_("Parameter"))) {
-	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
-		ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),((!enableStat()&&owner().owner().tpPrmSize()>1)?RWRWR_:R_R_R_),"root",SDAQ_ID,4,
+	if(ctrMkNode("area",opt,0,"/prm",_("Parameter"),R_R_R_)) {
+	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"),R_R_R_)) {
+		ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),((!enableStat()&&owner().owner().tpPrmSize()>1)?RWRWR_:R_R_R_),"","",4,
 		    "tp","str","dest","select","select","/prm/tpLst",
 		    "help",_("The type changing leads to lose some data of the specific configurations."));
 		/*if(!enableStat() && owner().owner().tpPrmSize() > 1)
@@ -473,11 +477,12 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 			"help",_("The type changing leads to lose some data of the specific configurations."));
 		else ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),R_R_R_,"root",SDAQ_ID,1,"tp","str");*/
 		if(owner().enableStat())
-		    ctrMkNode("fld",opt,-1,"/prm/st/en",_("Enabled"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/prm/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
+		    ctrMkNode3("fld",opt,-1,"/prm/st/en",_("Enabled"),SEC_RD|SEC_WR, "tp","bool", NULL);
+		ctrMkNode("fld",opt,-1,"/prm/st/timestamp",_("Date of modification"),R_R_R_,"","",1, "tp","time");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
-		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",SDAQ_ID,RWRWR_);
+	    if(ctrMkNode3("area",opt,-1,"/prm/cfg",_("Configuration"),SEC_RD,NULL)) {
+		TConfig::cntrCmdMake(this,opt,"/prm/cfg",0,"","",SEC_RD|SEC_WR);
+		ctrMkNode3("fld",opt,-1,"/prm/cfg/DESCR",EVAL_STR,SEC_RD|SEC_WR, "SnthHgl","1", NULL);
 		ctrRemoveNode(opt,"/prm/cfg/OWNER");
 		ctrRemoveNode(opt,"/prm/cfg/TIMESTAMP");
 	    }
@@ -486,11 +491,11 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	type().cntrCmdProc(this, opt);
 
 	if(mPrm >= 0) {
-	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),RWRWR_,"root",SDAQ_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
-	    if(ctrMkNode("area",opt,-1,"/iPrms",_("Inclusion"))) {
-		ctrMkNode("fld",opt,-1,"/iPrms/nmb",_("Number"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/iPrms/prm",_("Parameters"),RWRWR_,"root",SDAQ_ID,5,
-		    "tp","br","idm",i2s(limObjNm_SZ).c_str(),"s_com","add,del","br_pref","prm_","idSz",i2s(limObjID_SZ).c_str());
+	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),RWRWR_,"","",2, "idm",i2s(limObjNm_SZ).c_str(), "idSz",i2s(limObjID_SZ).c_str());
+	    if(ctrMkNode("area",opt,-1,"/iPrms",_("Inclusion"),R_R_R_)) {
+		ctrMkNode("fld",opt,-1,"/iPrms/nmb",_("Number"),R_R_R_,"","",1, "tp","str");
+		ctrMkNode("list",opt,-1,"/iPrms/prm",_("Parameters"),RWRWR_,"","",5,
+		    "tp","br", "idm",i2s(limObjNm_SZ).c_str(), "s_com","add,del", "br_pref","prm_", "idSz",i2s(limObjID_SZ).c_str());
 	    }
 	}
 
@@ -498,18 +503,18 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     if(a_path == "/prm/st/type") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(type().name);
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setType(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"","",SEC_RD)) opt->setText(type().name);
+	if(ctrChkNode(opt,"set",RWRWR_,"","",SEC_WR)) setType(opt->text());
     }
     else if(a_path == "/prm/st/en") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(enableStat()?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
+	if(ctrChkNode2(opt,"get",SEC_RD)) opt->setText(enableStat()?"1":"0");
+	if(ctrChkNode2(opt,"set",SEC_WR)) {
 	    if(!owner().enableStat())	throw err_sys(_("Controller is not running!"));
 	    else s2i(opt->text()) ? enable() : disable();
 	}
     }
-    else if(a_path == "/prm/st/timestamp" && ctrChkNode(opt))	opt->setText(i2s(timeStamp()));
-    else if(mPrm >= 0 && a_path == "/iPrms/nmb" && ctrChkNode(opt)) {
+    else if(a_path == "/prm/st/timestamp" && ctrChkNode(opt,"get")) opt->setText(i2s(timeStamp()));
+    else if(mPrm >= 0 && a_path == "/iPrms/nmb" && ctrChkNode(opt,"get")) {
 	vector<string> c_list;
 	list(c_list);
 	unsigned eC = 0;
@@ -518,7 +523,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),eC));
     }
     else if((a_path == "/br/prm_" || a_path == "/iPrms/prm")) {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
+	if(ctrChkNode(opt,"get",RWRWR_,"","",SEC_RD)) {
 	    vector<string> c_list;
 	    list(c_list);
 	    for(unsigned iA = 0; iA < c_list.size(); iA++) {
@@ -529,12 +534,13 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 		cN->setName("el")->setAttr("path","")->setAttr("rez","")->setAttr("recurs","")->setText("");
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) { opt->setAttr("id", add(opt->attr("id"))); at(opt->attr("id")).at().setName(opt->text()); }
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	del(opt->attr("id"), NodeRemove);
+	if(ctrChkNode(opt,"add",RWRWR_,"","",SEC_WR)) { opt->setAttr("id", add(opt->attr("id"))); at(opt->attr("id")).at().setName(opt->text()); }
+	if(ctrChkNode(opt,"del",RWRWR_,"","",SEC_WR)) del(opt->attr("id"), NodeRemove);
     }
     else if(type().cntrCmdProc(this, opt)) /* Process OK */;
-    else if(a_path.find("/prm/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SDAQ_ID, RWRWR_);
-    else if(a_path == "/prm/tmplList" && ctrChkNode(opt)) {
+    else if(a_path == "/prm/cfg/DESCR" && ctrChkNode2(opt,"SnthHgl",SEC_RD)) nodeLoadACLSnthHgl(*opt);
+    else if(a_path.find("/prm/cfg") == 0) TConfig::cntrCmdProc(this, opt, TSYS::pathLev(a_path,2), "", "", -1);
+    else if(a_path == "/prm/tmplList" && ctrChkNode(opt,"get",R_R_R_)) {
 	opt->childAdd("el")->setText("");
 	vector<string> lls, ls;
 	SYS->daq().at().tmplLibList(lls);
@@ -544,7 +550,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 		opt->childAdd("el")->setText(lls[iL]+"."+ls[iT]);
 	}
     }
-    else if(a_path == "/prm/tpLst" && ctrChkNode(opt))
+    else if(a_path == "/prm/tpLst" && ctrChkNode(opt,"get",R_R_R_))
 	for(unsigned iTp = 0; iTp < owner().owner().tpPrmSize(); iTp++)
 	    opt->childAdd("el")->setAttr("id",owner().owner().tpPrmAt(iTp).name)->setText(owner().owner().tpPrmAt(iTp).descr);
     else TValue::cntrCmdProc(opt);

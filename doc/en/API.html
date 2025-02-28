@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/API</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint nomobile" dir="ltr" lang="en">This page contains <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Documents/API&amp;oldid=85475&amp;diff=87043" rel="nofollow noreferrer noopener" target="_blank">changes</a></span> which are not marked for translation.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/API.html" title="Документы/API (2% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../uk/API.html" title="Документи/API (32% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/API.html" title="Документы/API (2% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../uk/API.html" title="Документи/API (32% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
@@ -357,7 +357,7 @@ Information variables of the program:
 <li> <i>static bool taskEndRun( );</i> — Check for the task endrun by signal <i>SIGUSR1</i>.</li>
 <li> <i>static const STask&amp; taskDescr( );</i> — Get reference to the task's descriptor.</li>
 <li> <i>static int sysSleep( float tm );</i> — System sleep in seconds up to nanoseconds (1e-9).</li>
-<li> <i>time_t sysTm( bool *hasJump = NULL, time_t last = 0 );</i> — System time fast access from updating cell and with a function of detection time jumps <i>hasJump</i> from <i>last</i> used time.</li>
+<li> <i>time_t sysTm( );</i> <i>time_t sysTmJmp( bool *hasJump = NULL, time_t last = 0 );</i> — System time fast access from updating cell and with a function of detection time jumps <i>hasJump</i> from <i>last</i> used time.</li>
 <li> <i>static int64_t curTime( clockid_t clc = CLOCK_REALTIME );</i> — The clock <i>clc</i> time in microseconds from the beginning of the era (01.01.1970).</li>
 <li> <i>static uint64_t curTimeN( clockid_t clc = CLOCK_REALTIME );</i> — The clock <i>clc</i> time in nanoseconds from the beginning of the era (01.01.1970).</li>
 <li> <i>string prjUserDir( );</i> — Directory of the user projects.</li>
@@ -393,10 +393,11 @@ Information variables of the program:
 <li> <i>static string real2str( double val, int prec=15, char tp='g');</i> — Real transformation with an accuracy <i>prec</i> signs and type <i>tp</i> to the string.</li>
 <li> <i>static double realRound( double val, int dig=0, bool toint=false );</i> — Rounding the real number to the specified digit <i>dig</i> after the decimal point with the possibility of transformation to integer after rounding <i>toint</i>.</li>
 <li> <i>static string atime2str( time_t tm, const string &amp;format = "", bool gmt = false, const string &amp;user_lang = "" );</i> — Astronomic UNIX time <i>tm</i> conversion to string in the <i>format</i> of the POSIX-function "strftime()" or "gmtime()" for <i>gmt</i>, also can be localised for the user and language <i>user_lang</i> or from the messages translation context.</li>
-<li> <i>static string time2str( double tm );</i> — Convert time interval, in seconds, to string like "1hour 23min 10sec".</li>
+<li> <i>static string time2str( double tm, bool inParts = true );</i> — Converts the time interval <i>tm</i> in seconds to human string like "1hour 23minutes 10s" at setting <i>inParts</i> or "1.5 hour" else.</li>
 <li> <i>static string cpct2str( double cnt );</i> — Traffic counter <i>cnt</i> (bytes) convert to string like "12.5KiB".</li>
 <li> <i>static double str2real( const string &amp;val );</i> — String transformation to the real.</li>
 <li> <i>static time_t str2atime( const string &amp;val, const string &amp;format = "", bool gmt = false )</i> — String time <i>val</i> conversion to an astronomic UNIX time, in the <i>format</i> of the POSIX-function "strptime()", and by the function "mktime()" or "timegm()", for <i>gmt</i>.</li>
+<li> <i>static double str2time( const string &amp;val, bool inParts = true );</i> — Converts the human representing relative time <i>val</i> of the function <i>time2str()</i> to the time in seconds, with parsing parts at setting <i>inParts</i>.</li>
 <li> <i>static string addr2str( void *addr );</i> — Convert addresses into string.</li>
 <li> <i>static void *str2addr( const string &amp;str );</i> — Convert string into the address.</li>
 <li> <i>static string strTrim( const string &amp;val, const string &amp;cfg = " \n\t\r" );</i> — Deletes from the original string <i>val</i> pointed into <i>cfg</i> (mostly empty) characters at the beginning and end of it.</li>
@@ -432,7 +433,8 @@ Information variables of the program:
 <li> <i>static void ctrListFS( XMLNode *nd, const string &amp;fsBase, const string &amp;fileExt = "" );</i> — Browsing list for file system's items from base <i>fsBase</i>, for the files with extensions <i>fileExt</i> in list "png;jpeg;gif;".</li></ul>
 <p><b>Public attributes:</b>
 </p>
-<ul><li> <i>AutoHD&lt;TModule&gt; mainThr;</i> — Connection to a module executing in the main thread.</li></ul>
+<ul><li> <i>AutoHD&lt;TModule&gt; mainThr;</i> — Connection to a module executing in the main thread.</li>
+<li> <i>unsigned f_useEnv&nbsp;:1;</i> — Use environment variable <i>OSCADA_{cmd}</i> for default commadline options and generic parameters, sets itself by <i>OSCADA_CMD_EN</i>.</li></ul>
 <p><b>Short calls for global functions into "OSCADA" namespace:</b>
 </p>
 <ul><li> <i>template &lt;class fVal&gt; fVal fmin( fVal a, fVal b ); template &lt;class fVal&gt; fVal fmax( fVal a, fVal b );</i> — functional templates for obtain of two values minimum and maximum.</li>
@@ -556,7 +558,7 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>bool translItSplit( const string &amp;base, const string &amp;srcFltr = "" );</i> — Splitting the BASE message <i>base</i> per it sources and only for matched ones to <i>srcFltr</i>.</li>
 <li> <i>bool translItRemTrs( const string &amp;base, const string &amp;srcFltr = "" );</i> — Removing the BASE message <i>base</i> from the individual messages table "Trs" and only for matched sources to <i>srcFltr</i>.</li>
 <li> <i>string trCtx( const string &amp;user_lang = mess_TrModifMark, bool *hold = NULL );</i> — Getting (by default) and registering(no empty)/clearing(empty) the translation context <i>user_lang</i> bound to the call pthread. <i>hold</i> can be pointed to detect the context already registered and do not clear that.</li>
-<li> <i>static string labStorFromCode( const string &amp;code ); static string labStor( ); static string labStorRem( const string &amp;cnt ); static string labSecCRON( ); static string labSecCRONsel( ); static string labTaskPrior( ); static string labMessCat( ); static string labStdOutTrs( );</i> — Common help labels.</li>
+<li> <i>static string labStorFromCode( const string &amp;code ); static string labStor( ); static string labStorRem( const string &amp;cnt ); static string labSecCRON( ); static string labSecCRONsel( ); static string labTaskPrior( ); static string labStdOutTrs( ); static string labMessCat( ); static string labTime( ); static string labTimeSel( );</i> — Common help labels.</li>
 <li> <i>int getUTF8( const string &amp;str, int off = 0, int32_t *symb = NULL );</i> — Get and parse a UTF-8 symbol.</li>
 <li> <i>static string setUTF8( int32_t symb );</i> — Set, form and return a UTF-8 symbol from their code <i>symb</i>.</li></ul>
 <h3><span class="mw-headline" id="Object_subsystem_.28TSubSYS.29"><span class="mw-headline-number">2.3</span> <span id="TSubSYS" title="#TSubSYS">Object subsystem (TSubSYS)</span></span></h3>
@@ -1105,8 +1107,8 @@ Additional flags to the object <a href="#TFld">#TFld</a> (enum TVal::AttrFlag):
 <li> <i>AutoHD&lt;TVArchive&gt; arch( );</i> — Getting the associated with the value archive.</li>
 <li> <i>void setArch( const AutoHD&lt;TVArchive&gt; &amp;vl );</i> — Setting the associated with the value archive.</li>
 <li> <i>string setArch( const string &amp;nm = "" );</i> — Setting/creation new archive with proposed name <i>nm</i> or automatic, if name empty.</li>
-<li> <i>bool reqFlg( ); bool resB1( ); bool resB2( )</i> — Get some realisation-specific flags.</li>
-<li> <i>void setReqFlg( bool vl ); void setResB1( bool vl ); void setResB2( bool vl )</i> — Set some realization-specific flags.</li>
+<li> <i>bool reqFlg( );</i> — Get the request flag.</li>
+<li> <i>void setReqFlg( bool vl );</i> — Set the request flag.</li>
 <li> <i>TFld &amp;fld( );</i> — Descriptor of the attribute's structure.</li></ul>
 <h3><span class="mw-headline" id="Object_of_the_templates_library_of_parameters_of_the_.22DAQ.22_subsystem_.28TPrmTmplLib.29"><span class="mw-headline-number">4.8</span> <span id="TPrmTmplLib" title="#TPrmTmplLib">Object of the templates library of parameters of the "DAQ" subsystem (TPrmTmplLib)</span></span></h3>
 <table class="wikitable">
@@ -1625,7 +1627,7 @@ Definitions of space the Transport subsystem (definition):
 <li> <i>TElem &amp;outEl( );</i> — DB structure of the output transports.</li>
 <li> <i>AutoHD&lt;TTypeTransport&gt; at( const string &amp;id ) const;</i> — Addressing/connection to the type of transport <i>id</i>.</li>
 <li> <i>static TVariant prm( string &amp;cnt, const string &amp;id, const TVariant &amp;val = TVariant(), bool toWr = false );</i> — Getting for value the addition parameter <i>id</i> with default one <i>val</i>, or setting to the value <i>val</i> at <i>toWr</i>. The additional parameters can store the connection time parameters at pointing <i>id</i> in the form "{id}\n{SRC}[\n{NAME}[\n{HELP}]]". The additional parameters stored in the XML-container <i>cnt</i> and this function used from <a href="#TTransportIn">TTransportIn</a>::prm() and <a href="#TTransportOut">TTransportOut</a>::prm() for the configuration field "A_PRMS" as a container.</li>
-<li> <i>static string cntrCmdPrm( XMLNode *opt, const string &amp;path, const string &amp;cnt );</i> — Providing the OpenSCADA Control Interface in <i>opt</i> and <i>path</i> for the addition parameters in the input container. Changed container content is returned.</li></ul>
+<li> <i>static string cntrCmdPrm( TCntrNode *cntrO, XMLNode *opt, const string &amp;path, const string &amp;cnt );</i> — Providing the OpenSCADA Control Interface in <i>opt</i> and <i>path</i> for the addition parameters in the input container. Changed container content is returned.</li></ul>
 <h3><span class="mw-headline" id="The_modular_object_of_the_transports.27_type_.28TTypeTransport.29"><span class="mw-headline-number">6.2</span> <span id="TTypeTransport" title="#TTypeTransport">The modular object of the transports' type (TTypeTransport)</span></span></h3>
 <table class="wikitable">
 
@@ -1687,7 +1689,7 @@ Stages of the new Associated Output Transports processing (enum — TTransportIn
 <li> <i>virtual unsigned keepAliveReqs( );</i> — Maximum Keep Alive requests.</li>
 <li> <i>virtual unsigned keepAliveTm( );</i> — Keep Alive time.</li>
 <li> <i>TVariant prm( const string &amp;id, const TVariant &amp;val = TVariant(), bool toWr = false );</i> — Getting for value the addition parameter <i>id</i> with default one <i>val</i>, or setting to the value <i>val</i> at <i>toWr</i>. The additional parameters can store the connection time parameters at pointing <i>id</i> in the form "{id}\n{SRC}[\n{NAME}[\n{HELP}]]". The additional parameters stored in XML of the configuration field "A_PRMS".</li>
-<li> <i>TVariant conPrm( const string &amp;id, const TVariant &amp;val = TVariant(), const string &amp;cfg = "" );</i> — Getting for value the connection time parameter <i>id</i> and setting the parameter at specifying the value <i>val</i>. If the connection time parameter also is a configuration from an external source, you specify the argument <i>cfg</i> in the form "{SRC}[\n{NAME}[\n{HELP}]]". Configuration of the external sources is read only by this function with setting the value <i>val</i> and configuration <i>cfg</i> once at initialisation, all changes for value the configuration performed by user from control interface of the transport.</li>
+<li> <i>TVariant conPrm( const string &amp;id, const TVariant &amp;val = TVariant(), const string &amp;cfg = "" );</i> — Getting for value the connection time parameter <i>id</i> and setting the parameter at specifying the value <i>val</i>. It uses now <a href="#TCntrNode">TCntrNode</a>::property() as the objects container in the "con" group. If the connection time parameter also is a configuration from an external source, you specify the argument <i>cfg</i> in the form "{SRC}[\n{NAME}[\n{HELP}]]". Configuration of the external sources is read only by this function with setting the value <i>val</i> and configuration <i>cfg</i> once at initialisation, all changes for value the configuration performed by user from control interface of the transport.</li>
 <li> <i>virtual string getStatus( );</i> — Getting the status of the input transport.</li>
 <li> <i>bool toStart( );</i> — The sign "To start".</li>
 <li> <i>bool startStat( );</i> — The status "Running".</li>
@@ -1698,7 +1700,7 @@ Stages of the new Associated Output Transports processing (enum — TTransportIn
 <li> <i>void setDscr( const string &amp;idscr );</i> — Setting the description of transport in <i>idscr</i>.</li>
 <li> <i>void setAddr( const string &amp;addr );</i> — Setting the address of transport in <i>addr</i>.</li>
 <li> <i>void setProtocols( const string &amp;prt );</i> — Setting of the linked transport protocols.</li>
-<li> <i>void clearConPrm( const string &amp;id = "" );</i> — Clearing the connection time parameter <i>id</i> at non empty, all ones at empty and the external source configuration at "CFG:".</li>
+<li> <i>void clearConPrm( const string &amp;id = "" );</i> — Clearing the connection time parameter <i>id</i> at non empty, all ones at empty and the external source configuration at "CFG:". It uses now <a href="#TCntrNode">TCntrNode</a>::property() as the objects container in the "con" group.</li>
 <li> <i>void setToStart( bool val );</i> — Setting of the sign "To start".</li>
 <li> <i>void setDB( const string &amp;vl, bool qTop = false );</i> — Setting of the transport's storage address, <i>qTop</i> for the storage queue top.</li>
 <li> <i>virtual void start( );</i> — Start of the transport.</li>
@@ -1732,6 +1734,7 @@ Stages of the new Associated Output Transports processing (enum — TTransportIn
 </p>
 <ul><li> <i>TTransportOut( const string &amp;id, const string &amp;db, TElem *el );</i> — Initializing constructor.</li>
 <li> <i>bool isNetwork( );</i> — The sign — "The transport is network one", what is specified by the timeouts in seconds.</li>
+<li> <i>bool isFromInput( );</i> — The sign of the output transport created by the input transport for the initiative connection.</li>
 <li> <i>string id( );</i> — Transport's Id.</li>
 <li> <i>string workId( );</i> — Full ID including the ID of the module.</li>
 <li> <i>string name( );</i> — Transport name.</li>
@@ -1740,7 +1743,7 @@ Stages of the new Associated Output Transports processing (enum — TTransportIn
 <li> <i>virtual string timings( );</i> — Transport timeouts.</li>
 <li> <i>virtual unsigned short attempts( );</i> — Connection attempts.</li>
 <li> <i>TVariant prm( const string &amp;id, const TVariant &amp;val = TVariant(), bool toWr = false );</i> — Getting for value the addition parameter <i>id</i> with default one <i>val</i>, or setting to the value <i>val</i> at <i>toWr</i>. The additional parameters can store the connection time parameters at pointing <i>id</i> in the form "{id}\n{SRC}[\n{NAME}[\n{HELP}]]". The additional parameters stored in XML of the configuration field "A_PRMS".</li>
-<li> <i>TVariant conPrm( const string &amp;id, const TVariant &amp;val = TVariant(), const string &amp;cfg = "" );</i> — Getting for value the connection time parameter <i>id</i> and setting the parameter at specifying the value <i>val</i>. If the connection time parameter also is a configuration from an external source, you specify the argument <i>cfg</i> in the form "{SRC}[\n{NAME}[\n{HELP}]]". Configuration of the external sources is read only by this function with setting the value <i>val</i> and configuration <i>cfg</i> once at initialisation, all changes for value the configuration performed by user from control interface of the transport.</li>
+<li> <i>TVariant conPrm( const string &amp;id, const TVariant &amp;val = TVariant(), const string &amp;cfg = "" );</i> — Getting for value the connection time parameter <i>id</i> and setting the parameter at specifying the value <i>val</i>. It uses now <a href="#TCntrNode">TCntrNode</a>::property() as the objects container in the "con" group. If the connection time parameter also is a configuration from an external source, you specify the argument <i>cfg</i> in the form "{SRC}[\n{NAME}[\n{HELP}]]". Configuration of the external sources is read only by this function with setting the value <i>val</i> and configuration <i>cfg</i> once at initialisation, all changes for value the configuration performed by user from control interface of the transport.</li>
 <li> <i>bool startStat( );</i> — Status "Running".</li>
 <li> <i>time_t startTm( );</i> — Status "Time of starting/connection".</li>
 <li> <i>int64_t lstReqTm( );</i> — Status "Last request time".</li>
@@ -1753,7 +1756,7 @@ Stages of the new Associated Output Transports processing (enum — TTransportIn
 <li> <i>void setAddr( const string &amp;addr );</i> — Setting the address of transport.</li>
 <li> <i>virtual void setTimings( const string &amp;vl, bool isDef = false );</i> — Setting the transport timeouts, as default one for <i>isDef</i>.</li>
 <li> <i>virtual void setAttempts( unsigned short vl );</i> — Setting the connection attempts.</li>
-<li> <i>void clearConPrm( const string &amp;id = "" );</i> — Clearing the connection time parameter <i>id</i> at non empty, all ones at empty and the external source configuration at "CFG:".</li>
+<li> <i>void clearConPrm( const string &amp;id = "" );</i> — Clearing the connection time parameter <i>id</i> at non empty, all ones at empty and the external source configuration at "CFG:". It uses now <a href="#TCntrNode">TCntrNode</a>::property() as the objects container in the "con" group.</li>
 <li> <i>void setDB( const string &amp;vl, bool qTop = false );</i> — Setting of the transport's storage address, <i>qTop</i> for the storage queue top.</li>
 <li> <i>virtual void start( int time = 0 );</i> — Starting the transport with the connection timeout <i>time</i>. When you start the output transport the actual connection to the remote station is established for the interfaces that works by the connection. At this time the errors can occur if the connection is impossible and the transport should return to the stopped state.</li>
 <li> <i>virtual void stop( );</i> — Stopping the transport.</li>
@@ -1913,7 +1916,7 @@ Requests parameters (enum — GetOpts):
 <ul><li> <i>SEC_HASH_MAGIC</i> — String-pointer (prefix) of the passwords in the hash.</li></ul>
 <p><b>Public methods:</b>
 </p>
-<ul><li> <i>bool access( const string &amp;user, char mode, int owner, int groups, int access );</i> — Check the access of the <i>user</i> in the <i>mode</i> to the resource with the <i>owner</i>, <i>groups</i> (separated ',') and permition <i>access</i>.</li>
+<ul><li> <i>char access( const string &amp;user, char mode, const string &amp;owner, const string &amp;group, int perm );</i> — Checking the access of the <i>user</i> in the <i>mode</i> to the resource with the <i>owner</i>, <i>group</i> (several groups are separated by ',') and permition <i>perm</i>.</li>
 <li> <i>void usrList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the users <i>list</i>.</li>
 <li> <i>void usrGrpList( const string &amp;name, vector&lt;string&gt; &amp;list );</i> — The list of the users' groups <i>list</i>, in which the user <i>name</i> is included.</li>
 <li> <i>bool usrPresent( const string &amp;name ) const;</i> — Check fro the presence of the specified user <i>name</i>.</li>
@@ -2212,8 +2215,8 @@ Parameter's type (enum — IO::Type):
 <li> <i>void cfgToDefault( );</i> — Setting all not key and view fields to the default value.</li>
 <li> <i>TElem &amp;elem( );</i> — The using structure.</li>
 <li> <i>void setElem( TElem *Elements, bool first = false );</i> — Setting the structure in <i>Elements</i>.</li>
-<li> <i>void cntrCmdMake( XMLNode *fld, const string &amp;path, int pos, const string &amp;user = "root", const string &amp;grp = "root", int perm = 0664 );</i> — Formation of the information description of elements of the configuration for the management interface of OpenSCADA.</li>
-<li> <i>void cntrCmdProc( XMLNode *fld, const string &amp;elem, const string &amp;user = "root", const string &amp;grp = "root", int perm = 0664 );</i> — Requests' of the OpenSCADA management interface to the elements of the configuration processing.</li>
+<li> <i>void cntrCmdMake( TCntrNode *cntrO, XMLNode *fld, const string &amp;path, int pos, const string &amp;owner = "root", const string &amp;group = "root", int perm = 0664 );</i> — Formation of the information description of elements of the configuration for the control interface of OpenSCADA.</li>
+<li> <i>void cntrCmdProc( TCntrNode *cntrO, XMLNode *fld, const string &amp;elem, const string &amp;owner = "root", const string &amp;group = "root", int perm = 0664 );</i> — Requests' of the OpenSCADA control interface to the elements of processing the configuration.</li>
 <li> <i>bool incomplTblStruct( );</i> — The DB struct incomplete flag.</li>
 <li> <i>void setIncmplTblStrct( bool vl );</i> — Setting the DB struct incomplete flag to <i>vl</i>.</li>
 <li> <i>bool reqKeys( );</i> — The sign "Requests key", mark for using the request keys by the group items.</li>
@@ -2354,7 +2357,7 @@ Cell's type (enum – TFld::Type):
 <li> <i>void setValues( const string &amp;vls );</i> — Set the working range of value or the list of possible values for the selectable type (as — "vl1;vl2;vl3") to the <i>vls</i>.</li>
 <li> <i>void setSelNames( const string &amp;slnms );</i> — Set the list of values' names for the selectable type (as — "Value 1;Value 2;Value 3") to the <i>slnms</i>.</li>
 <li> <i>void setReserve( const string &amp;ires );</i> — Set of the reserve parameter to <i>res</i>.</li>
-<li> <i>XMLNode *cntrCmdMake( XMLNode *opt, const string &amp;path, int pos, const string &amp;user = "root", const string &amp;grp = "root", int perm = 0664 );</i> — Create a form element in accordance with the parameters of the cell.</li></ul>
+<li> <i>XMLNode *cntrCmdMake( TCntrNode *cntrO, XMLNode *opt, const string &amp;path, int pos, const string &amp;owner = "root", const string &amp;group = "root", int perm = 0664 );</i> — Create a form element in accordance with the parameters of the cell.</li></ul>
 <h3><span class="mw-headline" id="The_object_which_preacts_about_changing_of_the_structure_.28TValElem.29"><span class="mw-headline-number">13.6</span> <span id="TValElem" title="#TValElem">The object which preacts about changing of the structure (TValElem)</span></span></h3>
 <table class="wikitable">
 
@@ -2461,7 +2464,7 @@ Error values for the different data types (definition):
 </p><p>The container allows you to assemble several information structures and dynamic parts into one request, thereby optimizing the request time, especially on high-latency network interfaces.
 </p><p>The general Control Interface is built from individual nodes of the dynamic tree. Hierarchical inheritance from the object <a href="#TCntrNode">#TCntrNode</a> allows you to implement multi-level addition of the configuration of the Control Interface. The view of the dynamic tree of nodes is shown in Figure 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Enlarge" /></div>Fig.8. An example of the dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Enlarge"></a></div>Fig.8. An example of the dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
 <p>Nodes, containing data for the Control Interface, should also be connected to the dynamic object tree.
 </p><p>Connection of the node to the dynamic tree is done as follows:
 </p>
@@ -2934,9 +2937,10 @@ RESP: <i>&lt;get path="{path}" rez="<b>0</b>"&gt;<b>{lnkVal}</b>&lt;/get&gt;</i>
 </pre></div>
 <p><b><u> <span id="CntrCommSet" title="#CntrCommSet">Invoking</span> the command</u></b><br />
 Allowed at the SEC_WR permition.<br />
-REQ: <i>&lt;set path="<b>{path}</b>"&gt;<b>{fields}</b>&lt;/set&gt;</i><br />
+REQ: <i>&lt;set path="<b>{path}</b>" tp="<b>comm</b>"&gt;<b>{fields}</b>&lt;/set&gt;</i><br />
 </p>
-<ul><li> <i>fields</i> — the command fields in the "fld" tags.</li></ul>
+<ul><li> <i>tp</i> — forced to the "comm" value for correct commands detection in logs;</li>
+<li> <i>fields</i> — the command fields in the "fld" tags.</li></ul>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/sub_Archive/mod_FSArch/val_1s/%2farch%2fexp"</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"arch"</span><span class="nt">&gt;</span>CPULoad_load<span class="nt">&lt;/fld&gt;</span>
   <span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"beg"</span><span class="nt">&gt;</span>1673942400<span class="nt">&lt;/fld&gt;</span>
@@ -4055,12 +4059,14 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 <li> <i>virtual TCntrNode &amp;operator=( const TCntrNode &amp;node );</i> — Virtual copy function of the dynamic tree nodes.</li>
 <li> <i>void cntrCmd( XMLNode *opt, int lev = 0, const string &amp;path = "", int off = 0 );</i> — Command of work with the control interface of the system. The transport transitions to the full path of the following form are supported: "**/sub_Security/usr_root/%2fgen**" где <i>%2fgen</i> — encoded sub-path to a particular field of the page (/gen).</li>
 <li> <i>static XMLNode *ctrId( XMLNode *inf, const string &amp;n_id, bool noex = false );</i> — Getting the XML node by the attribute's value "id" <i>n_id</i>. XML requests of the node by the full path to it are supported (node1/node2/node3).</li>
-<li> <i>static XMLNode *_ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *req, const string &amp;dscr, int perm = RWRWRW, const char *user = "root", const char *grp = "root" );</i></li></ul>
-<dl><dd><i>static XMLNode *ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *req, const string &amp;dscr int perm = RWRWRW, const char *user = "root", const char *grp = "root", int n_attr = 0, ... );</i></dd>
-<dd><i>static XMLNode *ctrMkNode2( const char *n_nd, XMLNode *nd, int pos, const char *req, const string &amp;dscr, int perm = RWRWRW, const char *user = "root", const char *grp = "root", ... );</i> — Adding the control element to the page. It is possible to specify the set of additional attributes in the number of  <i>n_attr</i> as follows: "<b>{attribute1},{values1},{attribute2},{values2},...</b>" or by zero pointer at the end of the pair sequence.</dd></dl>
+<li> <i>XMLNode *_ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &amp;dscr, int perm = RWRWRW, const char *owner = "root", const char *group = "root" );</i></li></ul>
+<dl><dd><i>XMLNode *ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &amp;dscr, int perm = RWRWRW, const char *owner = "root", const char *group = "root", int n_attr = 0, ... );</i></dd>
+<dd><i>XMLNode *ctrMkNode2( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &amp;dscr, int perm = RWRWRW, const char *owner = "root", const char *group = "root", ... );</i></dd>
+<dd><i>XMLNode *ctrMkNode3( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &amp;dscr, int mode_perm = SEC_RD|SEC_WR, ... );</i> — Adding the control element to the page. It is possible to specify the set of additional attributes in the number of  <i>n_attr</i> as follows: "<b>{attribute1},{values1}, {attribute2},{values2},...</b>" or by zero pointer at the end of the pair sequence. The attributes <i>owner</i> and <i>group</i> can be in empty string (as in <b>ctrMkNode3()</b>) and <i>perm</i> in -1 for their taking from the <b>nodeAccess()</b> function. The <i>perm</i> attribute also can be both in whole permition form like to <b>RWRWRW</b> or in access bits <b>SEC_RD|SEC_WR</b> for specifying the access mask of the field to the generic node permition.</dd></dl>
 <ul><li> <i>bool ctrRemoveNode( XMLNode *nd, const char *path );</i> — Removing the control element <i>path</i> from the page <i>nd</i>.</li>
-<li> <i>static bool ctrChkNode( XMLNode *nd, const char *cmd = "get", int perm = R_R_R_, const char *user = "root", const char *grp = "root", char mode = SEC_RD );</i> — Checking for the dynamic command getting <i>cmd</i> and for the existence of rights to its execution.</li>
-<li> <i>ResMtx &amp;dataRes( );</i> — Mutex for using resources of the node in common purpose.</li>
+<li> <i>bool ctrChkNode( XMLNode *nd, const char *cmd = "get", int perm = R_R_R_, const char *owner = "root", const char *group = "root", char mode = SEC_RD );</i></li></ul>
+<dl><dd><i>bool ctrChkNode2( XMLNode *nd, const char *cmd = "get", char mode = SEC_RD );</i> — Checking for getting the dynamic command <i>cmd</i> and for the existence of rights to its execution. The attributes <i>owner</i> and <i>group</i> can be in empty string and <i>perm</i> in -1 (as in <b>ctrChkNode2()</b>) for their taking from the <b>nodeAccess()</b> function.</dd></dl>
+<ul><li> <i>ResMtx &amp;dataRes( );</i> — Mutex for using resources of the node in common purpose.</li>
 <li> <i>virtual const char *nodeName( ) const;</i> — Node's name.</li>
 <li> <i>virtual const char *nodeNameSYSM( ) const;</i> — System message's location entry name, to place it to the system's message text by function "mess_sys" and "err_sys". Empty value, by default, to pass the node.</li>
 <li> <i>string nodePath( char sep = 0, bool from_root = true ) const;</i> — Getting the full path to the node, beginning from the root <i>from_root</i>, and using the separator <i>sep</i> or standard path recording.</li>
@@ -4074,6 +4080,9 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 <li> <i>char nodeMode( ) const;</i> — Node's status.</li>
 <li> <i>unsigned nodeUse( bool selfOnly );</i> — Number of the connections to the node. <i>selfOnly</i> — only self connections, without childs.</li>
 <li> <i>unsigned nodePos( );</i> — The position of the node in the parent-node's container. It is valid only for ordered containers.</li>
+<li> <i>virtual char nodeAccess( const string &amp;user, const string &amp;owner = "", const string &amp;group = "", int perm = -1 );</i> — Getting access to the node through hierarchically checking <i>owner</i>, <i>group</i> and <i>perm</i>, which are resolved whether through the node corresponding properties or redefinition on the first top node or set in <b>"root:root"-RWXRWX___</b> on the root.</li>
+<li> <i>bool nodeLoadACL( const string &amp;text );</i> — Loading the ACL rule from <i>text</i> in line of the form "<b>ACL: {owner}[:{group}[:{perm}]]</b>", where <i>text</i> often is the configuration field of the node description. At successfully loading for the node are set corresponding properties for using by <b>nodeAccess()</b>.</li>
+<li> <i>void nodeLoadACLSnthHgl( XMLNode &amp;shgl );</i> — Rules of the syntax highlighting for ACL line in text fields.</li>
 <li> <i>int isModify( int mflg = TCntrNode::All ) const;</i> — Checking for the modification of the node or nodes' branch.</li>
 <li> <i>void modif( bool save = false, bool forceLoad = false );</i> — Setting the modification sign of the node, with saving <i>save</i> the sign at the loading and marking for the force loading <i>forceLoad</i>.</li>
 <li> <i>void modifG( bool forceLoad = false );</i> — Setting the modification sign of the node branch, with marking for the force loading <i>forceLoad</i>.</li>
@@ -4085,8 +4094,10 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 <li> <i>virtual bool AHDDisConnect( );</i> — Disсonnection from the node (release of the resource). Resource will remove on zero result.</li>
 <li> <i>void mess_sys( int8_t level, const char *fmt,  ... );</i> — The system message forms for the node path as the category, the <i>level</i>, the formatted message <i>fmt</i> appended by the node location and followed arguments.</li>
 <li> <i>TError err_sys( const char *fmt,  ... ) const; TError err_sys( int cod, const char *fmt,  ... ) const;</i> — The error object forms for the node path as the category, the code <i>cod</i>, the formatted message <i>fmt</i> appended by the node location and followed arguments.</li>
-<li> <i>virtual TVariant objPropGet( const string &amp;id );</i> — Request of the node's property as the user's object.</li>
-<li> <i>virtual void objPropSet( const string &amp;id, TVariant val );</i> — Setting the node's property as the user's object.</li>
+<li> <i>TVariant property( const string &amp;id, const TVariant &amp;val, const string &amp;grp = "sys" );</i> — returns of the object's property <i>id</i> of the Control Interface for the group <i>grp</i> with setting its at <i>val</i> non NULL and EVAL. Where <i>val</i> in EVAL is clearing the property and NULL (TVariant without arguments) just doesn't set nothing.</li>
+<li> <i>void propertyClrGrp( const string &amp;idPref = "", const string &amp;grp = "sys" );</i> — clearing the group <i>grp</i> properties at the prefix <i>idPref</i>, that is at empty <i>idPref</i> there are cleared all properties in the <i>grp</i> group. The property container is deleting also with clearing all properties.</li>
+<li> <i>virtual TVariant objPropGet( const string &amp;id );</i> — Request of the node's property <i>id</i> as the user's object. It uses now <i>TCntrNode::property()</i> as the objects container in the "usr" group.</li>
+<li> <i>virtual void objPropSet( const string &amp;id, const TVariant &amp;val );</i> — Setting the node's property <i>id</i> as the user's object. It uses now <i>TCntrNode::property()</i> as the objects container in the "usr" group.</li>
 <li> <i>virtual TVariant objFuncCall( const string &amp;id, vector&lt;TVariant&gt; &amp;prms, const string &amp;user_lang );</i> — Node function <i>id</i> call with the parameters <i>prms</i> and for user/language <i>user_lang</i> ("{user}\n{lang}").</li>
 <li> <i>int8_t grpSize( );</i> — Number of the containers with the child nodes.</li>
 <li> <i>int8_t grpId( const string &amp;sid );</i> — Getting the index of the group by its ID.</li>
@@ -4245,7 +4256,7 @@ Options for XML-file loading (enum — XMLNode::LoadFlgs):
 <li> <i>XMLNode* childGet( const string &amp;name, const int numb = 0, bool noex = false ) const;</i> — Getting of the included <i>numb</i> indexed tag by the tag's name <i>name</i>. <i>noex</i> indicates the prohibition of the generation of exception in the case of absence of the tag.</li>
 <li> <i>XMLNode* childGet( const string &amp;attr, const string &amp;vl, bool noex = false ) const;</i> — Getting the included <i>numb</i> indexed tag by its value <i>vl</i> of the attribute <i>attr</i>. <i>noex</i> indicates the prohibition of the generation of exception in the case of absence of the tag.</li>
 <li> <i>XMLNode* getElementBy( const string &amp;attr, const string &amp;val );</i> — Included node search by the value <i>val</i> of the attribute <i>attr</i>.</li>
-<li> <i>void getElementsBy( const string &amp;tag, const string &amp;attr, const string &amp;val, TArrayObj *rez );</i> — get elements array <i>rez</i> from the tree by <i>tag</i> (empty for all) and attribute <i>attr</i> value <i>val</i> (empty for pass).</li>
+<li> <i>void getElementsBy( const string &amp;tag, const string &amp;attr, const string &amp;val, TArrayObj *rez, unsigned limit = 0, unsigned *from = NULL );</i> — get elements array <i>rez</i> from the tree by <i>tag</i> (empty for all) and attribute <i>attr</i> value <i>val</i> (empty for pass), also starting the tag number <i>from</i> and limiting them number in <i>limit</i> (zero for no limit).</li>
 <li> <i>XMLNode* parent( );</i> — Parent tag of the tag.</li>
 <li> <i>XMLNode* root( );</i> — Root tag of the tag.</li></ul>
 <h3><span class="mw-headline" id="Error_exception_.28TError.29"><span class="mw-headline-number">16.2</span> <span id="TError" title="#TError">Error exception (TError)</span></span></h3>
@@ -5009,5 +5020,5 @@ Error codes (enum — TError::Codes):
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.8</td></tr></table></body>
 </html>

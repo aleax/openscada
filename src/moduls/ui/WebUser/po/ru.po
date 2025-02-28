@@ -123,6 +123,10 @@ msgstr "Этот объект"
 msgid "Protocol's object"
 msgstr "Объект протокола"
 
+#, fuzzy
+msgid "Transport's object"
+msgstr "Объект протокола"
+
 msgid "Scheduling the next service call"
 msgstr ""
 

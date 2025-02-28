@@ -2,38 +2,92 @@
 
 argHelp()
 {
-    echo "Projects management script of OpenSCADA mostly designed to call from OpenSCADA but also can be used independently.
-The script is mostly software platform specific and relates now for Linux.
+    echo "The project management script of OpenSCADA mostly designed to call from OpenSCADA itself, but it also can be used independently.
+The script is mostly software platform specific and this one is related for Linux.
+
 openscada-proj list
-openscada-proj proc|create|remove|update {ProjName}
+openscada-proj proc|create|remove|snapshot|crash|cores|update {ProjName}
  Commands:
-  list   - allowed projects list;
-  proc   - proceed for copy RO projects to WR, create desktop links, process core dumps;
-  create - create new projects or copy RO projects to WR, create desktop links;
-  remove - remove project;
-  update - update from 0.8.0 LTS;
+  list   - list of the accessible projects;
+  proc   - performing of the RO project copying to WR, creating desktop link, processing core dumps;
+  create - creating new project or copying the RO project to WR, creating desktop link;
+  remove - removing the project;
+  snapshot|crash|cores - creating the hot crash snapshot to the running project,
+           where the 'crash' variant to call from OpenSCADA,
+                 the 'cores' variant to call from 'proc' for processing the core-files;
+  update - updating from 0.8.0 LTS.
  Arguments:
   ProjName - project name;
  Environment variables:
   dPrj     - directory of projects OpenSCADA, can be RO;
   dPrjUser - directory of projects OpenSCADA of the user, WR;
   dSysCfg  - directory of system configuration;
-  dData    - directory of system data;
+  dData    - directory of system data.
 
 openscada-proj backup|backupRestore {ProjName} [{BackupName}]
 openscada-proj backupList {ProjName}
  Commands:
-  backup - backup the selected project <ProjName> to the name <BackupName>, or to the current date at missing;
-  backupRestore - restore the selected project <ProjName> from the pointed backup name <BackupName>, or from the last one at missing;
-  backupList	- list the project <ProjName> backups.
+  backup	- backup the project <ProjName> under the name <BackupName>, or with the current date at missing;
+  backupRestore - restore the project <ProjName> from the backup name <BackupName>, or from the last one at missing;
+  backupList	- list of backups of the project <ProjName>.
  Arguments:
   ProjName   - project name;
-  BackupName - the backup archive name.
+  BackupName - name of the backup archive.
  Environment variables:
   OSCD_TAR_ComprPrg - TAR compression program, by default gzip;
   OSCD_TAR_Args     - TAR extra arguments, by default \"--exclude=lock --exclude=ARCHIVES\";
   OSCD_BackLim      - Backups limit, by default 10.
 ";
+}
+
+gdbCall()
+{
+    gdb $@ --batch --quiet \
+	-ex "echo \n==== (gdb) info thread ====\n" -ex "info thread" \
+	-ex "echo \n==== (gdb) thread apply all bt full ====\n" -ex "thread apply all bt full" \
+	-ex "echo \n==== (gdb) info sharedlibrary ====\n" -ex "info sharedlibrary"
+}
+
+crashHandler()
+{
+    if test -z "$(which gdb 2> /dev/null)"; then echo "No GDB program present!"; return 0; fi
+
+    prjNm=$1
+    dPrjRez=$dPrj/$prjNm
+    if test -n "$dPrjUser" -a -d $dPrjUser/$prjNm; then dPrjRez=$dPrjUser/$prjNm; fi
+    cd $dPrjRez
+
+    if test "$2" = cores; then
+	for fit in `ls core* 2> /dev/null`; do
+	    resultFile="${prjNm}_${fit}_$(date +%F_%H.%M).crash"
+	    echo "Processing the core dump files for backtrace obtaining in the file $resultFile"
+	    gdbCall @bindir_full@/openscada --core ${fit} > $resultFile
+	    gzip $resultFile
+	    rm -f ${fit}
+	done
+	return 0
+    fi
+
+    if test "$2" != snapshot -a "$2" != crash; then echo "Unknown command $2 to the crash handler!"
+    elif test ! -f $dPrjRez/lock; then echo "The project is not running since missing the file $dPrjRez/lock!"
+    else
+	pid=`cat $dPrjRez/lock | sed -r 's/^0*([0-9]+).*/\1/'`
+	if ! ps -A -o "pid cmd" | grep "^ *$pid.*openscada" > /dev/null; then
+	    echo "No 'openscada' process at pid $pid!"
+	else
+	    cd $dPrjRez
+	    if test "$2" = crash; then
+		resultFile="${prjNm}_$(date +%F_%H.%M).crash"
+		echo "Processing the crashing project for backtrace obtaining in the file $resultFile"
+		rm $dPrjRez/lock
+	    else
+		resultFile="${prjNm}_$2_$(date +%F_%H.%M).crash"
+		echo "Processing the crash snapshot for backtrace obtaining in the file $resultFile"
+	    fi
+	    gdbCall -p $pid > $resultFile
+	    gzip $resultFile
+	fi
+    fi
 }
 
 if test $# -lt 1; then argHelp; exit 0; fi
@@ -61,31 +115,33 @@ case "$1" in
     prjNm=$2
     dPrjRez=$dPrj/$prjNm
 
-    #User projects directory processing
-    if test -n "$dPrjUser" -a ! -d $dPrjUser; then mkdir $dPrjUser; fi
-    if test ! -d $dPrjRez -o ! -w $dPrjRez && test -n "$dPrjUser" -a -w $dPrjUser; then
-	dPrjRez=$dPrjUser/$prjNm
-	#if test -d $dPrj/LibsDB -a ! -d $dPrjUser/LibsDB; then cp -R $dPrj/LibsDB $dPrjUser; fi
-	# Creating the user LibsDB folder and setting links to the system DB files of the libraries
-	mkdir -p $dPrjUser/LibsDB/
-	ln -s $dPrj/LibsDB/* $dPrjUser/LibsDB/ || cp $dPrj/LibsDB/* $dPrjUser/LibsDB/
+    # Processing the system projects' directory
+    if test ! -d $dPrjRez -a -w $dPrj -a -f $dSysCfg/oscada_$prjNm.xml; then mkdir -p $dPrjRez; fi
 
-	if test ! -d $dPrjRez -a -d $dPrj/$prjNm; then
+    # Processing the user projects' directory
+    if test ! -d $dPrjRez -o ! -w $dPrjRez && test -n "$dPrjUser"; then
+	if test ! -d $dPrjUser; then mkdir -p $dPrjUser; fi
+	if test ! -d $dPrjUser/LibsDB/; then
+	    mkdir -p $dPrjUser/LibsDB/
+	    ln -s $dPrj/LibsDB/* $dPrjUser/LibsDB/ || cp $dPrj/LibsDB/* $dPrjUser/LibsDB/
+	fi
+	dPrjRez=$dPrjUser/$prjNm
+	if test ! -d $dPrjRez; then
 	    mkdir -p $dPrjRez
-	    cp -R $dPrj/$prjNm/* $dPrjRez;
-	    if test ! -e $dPrjRez/oscada.xml; then cp $dSysCfg/oscada_$prjNm.xml $dPrjRez/oscada.xml; fi
+	    if test -d $dPrj/$prjNm; then
+		cp -R $dPrj/$prjNm/* $dPrjRez
+		if test ! -f $dPrjRez/oscada.xml; then cp $dSysCfg/oscada_$prjNm.xml $dPrjRez/oscada.xml; fi
+	    fi
 	fi
     fi
 
-    #Generic projects directory processing
-    if test ! -d $dPrjRez && test $1 = create -o -w $dSysCfg/oscada_$prjNm.xml; then mkdir -p $dPrjRez; fi
-    if test -d $dPrjRez; then
-	if test ! -e $dPrjRez/oscada.xml -a ! -w $dSysCfg/oscada_$prjNm.xml; then cp $dSysCfg/oscada_start.xml $dPrjRez/oscada.xml; fi
+    # Initiating common files and checking
+    if test -d $dPrjRez -a -w $dPrjRez; then
+	if test ! -f $dPrjRez/oscada.xml -a ! -w $dSysCfg/oscada_$prjNm.xml; then cp $dSysCfg/oscada_start.xml $dPrjRez/oscada.xml; fi
 	if test ! -d $dPrjRez/LibsDB -a ! -L $dPrjRez/LibsDB; then ln -s ../LibsDB $dPrjRez/LibsDB; fi
 	if test ! -d $dPrjRez/LibsDB -a ! -L $dPrjRez/LibsDB; then cp -R $dPrjRez/../LibsDB $dPrjRez/LibsDB; fi
-	if test ! -d $dPrjRez/ARCHIVES/MESS; then mkdir -p $dPrjRez/ARCHIVES/MESS; fi
-	if test ! -d $dPrjRez/ARCHIVES/VAL; then mkdir -p $dPrjRez/ARCHIVES/VAL; fi
-	if test -n "$(which xdg-user-dir)" && test -n "$(xdg-user-dir DESKTOP)" -a $1 = create; then
+	if test ! -d $dPrjRez/ARCHIVES/; then mkdir -p $dPrjRez/ARCHIVES/MESS $dPrjRez/ARCHIVES/VAL; fi
+	if test $1 = create -a -n "$(which xdg-user-dir)" && test -n "$(xdg-user-dir DESKTOP)"; then
 	    DESKTOP_DIR="$(xdg-user-dir DESKTOP)"
 	    if test -n "$DESKTOP_DIR"  -a ! -f "$DESKTOP_DIR/openscada_$prjNm.desktop"; then
 		cp $dData/applications/openscada.desktop "$DESKTOP_DIR/openscada_$prjNm.desktop"
@@ -93,27 +149,15 @@ case "$1" in
 		sed -i "s/\(^\(Generic\|\)Name\(=\|\\[.*\\]=\).*\)/\1: $prjNm/" "$DESKTOP_DIR/openscada_$prjNm.desktop"
 	    fi
 	fi
-    fi
 
-    #Checking for lost lock at it PID and openscada process in whole, and starting from the user directory
-    dPrjRez=$dPrjUser/$prjNm
-    if test ! -d $dPrjRez; then dPrjRez=$dPrj/$prjNm; fi
+	# Checking for lost lock at it PID and openscada process in whole, and starting from the user directory
+	if test -f $dPrjRez/lock; then
+	    pid=`cat $dPrjRez/lock | sed -r 's/^0*([0-9]+).*/\1/'`
+	    if ! ps -A -o "pid cmd" | grep "^ *$pid.*openscada" > /dev/null; then rm $dPrjRez/lock; fi
+	fi
 
-    if test -f $dPrjRez/lock; then
-	pid=`cat $dPrjRez/lock | sed -r 's/^0*([0-9]+).*/\1/'`
-	if ! ps -A -o "pid cmd" | grep "^ *$pid.*openscada" > /dev/null; then rm $dPrjRez/lock; fi
-    fi
-
-    # Core dump files "core[.*]" into work directory process
-    if test -n "$(which gdb 2> /dev/null)"; then
-	cd $dPrjRez
-	for fit in `ls core* 2> /dev/null`; do
-	    resultFile="${prjNm}_${fit}_$(date +%F_%H.%M).crash"
-	    echo "Core dump process for back trace purchase to the file $resultFile"
-	    gdb @bindir_full@/openscada --core ${fit} --batch --quiet -ex "thread apply all bt full" -ex "quit" > $resultFile
-	    gzip $resultFile
-	    rm -f ${fit}
-	done
+	# Processing the core dump files "core[.*]" in the work directory
+	crashHandler $prjNm cores
     fi
     ;;
   remove)
@@ -153,6 +197,11 @@ case "$1" in
 	    fi
 	fi
     else exit 1;
+    fi
+    ;;
+  snapshot|crash|cores)
+    if test $# -lt 2; then echo "Not enough arguments!"
+    else crashHandler $2 $1
     fi
     ;;
   backup)

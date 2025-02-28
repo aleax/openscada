@@ -1,3 +1,369 @@
+2025-03-01 Roman 0.9.8
+- New and significantly updated parts:
+    - OpenSCADA Core: 3:14:0 => 3:15:0
+    - OpenSCADA "Transports" subsystem: 20 => 21
+    - DAQ.DAQGate: 2.13 => 2.14
+    - Archive.FSArch: 3.8 => 3.9
+    - Transport.SSL: 4.5 => 5.0
+    - Transport.Sockets: 4.8 => 5.0
+    - Protocol.OPC_UA: 2.2 => 2.3
+    - Protocol.HTTP: 3.8 => 3.9
+    - UI.QTCfg: 6.0 => 6.1
+    - UI.VCAEngine: 7.13 => 7.15
+    - UI.Vision: 9.1 => 9.4
+    - UI.WebUser: 1.6 => 2.0
+    - UI.WebVision: 6.9 => 6.13
+    - LibsDB.OscadaLibs.base: 2.2 => 2.3
+	- initRemCntr: 1.0
+	- fileServerHTTP: 1.0 => 1.2
+    - LibsDB.OscadaLibs.LowDevLib: 1.5 => 1.6
+	- S1BP: 1.0
+	- 1W: 1.1
+	- UC96: 1.0 => 1.2
+    - LibsDB.OscadaLibs.DevLib: 3.0 => 3.1
+	- ergomera125: 0.5
+	- mbBase: 1.2 => 1.3
+    - LibsDB.vcaBase.Main
+	- grph_panel: 1.5 => 1.6
+	- doc_panel: 1.2 => 1.3
+	- storeHouse: 1.4 => 2.0
+    - LibsDB.vcaTest.test.docTestGasNodeDayRep: 1.0 => 1.1
+
+- CONCEPTUAL > Implementing properties of the Control Objects
+    !!!!SYS: TCntrNode: Appending of the object properties in groups by prefixes for different parts of OpenSCADA:
+	    system (sys), user (usr), connection (con), security (sec), ... .
+	!!!: Adding a User API function property() of accessing the object properties from user context
+	    in additional to the direct-natural way.
+    !!!!:Transports: Moving the connection parameters to the object properties in group "con".
+    !!!!:DAQ: Moving the TValue flags resB1() and resB2() to the object properties in group "DAQ",
+	that is removing such functions.
+
+- CONCEPTUAL > Implementing the custom ACLs to the control nodes
+    SYS: TCntrNode:
+	    - new functions nodeAccess(), nodeLoadACL(), nodeLoadACLSnthHgl();
+	    - moving from static with some improving and adaption to ACL with compatibility of the direct rules
+		for the functions of the control interface: ctrMkNode(), ctrMkNode2(), _ctrMkNode(), ctrChkNode();
+	    - new functions of the control interface for ACL: ctrMkNode3(), ctrChkNode2();
+	    - _ctrMkNode() switched to no exception at missing container nodes, just don't create and return NULL.
+	TFld: cntrCmdMake() added by an argument <cntrO> for linking with the Control Node,
+	    and all code adapted to that.
+	TConfig: cntrCmdMake() and cntrCmdProc() added by an argument <cntrO> for linking with the Control Node,
+	    and all code adapted to that.
+    Transports: TTransportS: cntrCmdPrm() added by an argument <cntrO> for linking with the Control Node, and all
+	code adapted to that.
+    DAQ: Initial adaptation to ACLs in the description fields of the Controller and Parameter Objects, default
+	owner-permition for the DAQ subsystem set to "root:DAQ"-0775.
+    Protocol.OPC_UA: Using ACL in checking the access.
+
+- CONCEPTUAL > Concentration of the different OpenSCADA-hosts on the common server, both for IoT on OpenSCADA and not
+    !!!!:LibsDB.OscadaLibs:
+	!!!!: tmplib_base: Appended by a template "Control the remote initiative connections (initRemCntr)".
+	!!: Appended of the user "RemCntr" with password "RemCntr" and in the group DAQ for use in
+	    the initiative remote connections to the OpenSCADA server.
+	!!: Appended of the disabled transports "RemCntr" to Transport.Sockets and Transport.SSL,
+	    that is when you want to provide data of your station, you just enable one of them.
+    ModelsDB/{AGLKS/oscada_AGLKS.xml,Boiler/oscada_Boiler.xml}: Removing system groups without users,
+	than allow the groups specify in libraries.
+    !!:FIX:Transports: TTransportOut appended by the function isFromInput() to detect automatically created
+	    objects from the input transport.
+	!!:FIX: The external initiative connections of the OpenSCADA hosts prevented from stop.
+
+- CONCEPTUAL > Expanding the project management
+    !!!!:data/openscada-proj.in: Expanding by the commands snapshot, crash, cores with unification of preparing
+		the crash reports also for the crashing processes from itself.
+	    Appending the crash-reports by "info thread" and "info sharedlibrary".
+	!!: Refactoring the algorithm of processing the projects in the System and User directory, that is fixing
+	    of creation the project directory in the System directory at presence the System configuration file.
+    !!!!:SYS: Enabled in processing the signals SIGFPE and SIGSEGV with call "openscada-proj crash {ProjID}"
+	    to prepare the crash report immediately for SIGFPE, SIGABRT and SIGSEGV.
+	The process return-exit result for success is forced to EXIT_SUCCESS and for fail to EXIT_FAILURE.
+
+- CONCEPTUAL > Messages Translation (fixes of the conceptual changes of the previous updates)
+    LibsDB.OscadaLibs: Automatic updating some translation.
+    FIX:LibsDB.vcaBase.wlb_Main.RootPgSo: The attribute "Procedure of the Demo play (demoPlayProc)" set to
+	the type "Text (translate)".
+    LibsDB.vcaBase.wlb_Main: Appended of the dynamic messages with Ukrainian translation for main ones of DiskSMART
+	and UPS during representing by "Object properties (objProps)".
+    FIX:DAQ.OPC_UA,Protocol.HTTP,UI.{QTCfg,Vision}: Fixing and improving some original messages.
+    !:FIX:DAQ: Fixing-finishing the dynamic translation for title of the controller and parameter object.
+	FIX: Templates fixed-adapted to the dynamic translation in using the IO names.
+	FIX:DAQGate: Some fixed in Ukrainian translation.
+	FIX:JavaLikeCalk: Some improved in the translation.
+    FIX:Protocol.OPC_UA: Adaption to the dynamic translation in data requests.
+    FIX:UI.{QTCfg,Vision}: The messages "Load from DB" and "Save to DB" renamed to "Load" and "Save"
+	and with "storage" instead "DB" in full messages.
+    FIX:UI.VCAEngine: The session User API function this.attr() fixed in checking the translation
+	    flag TFld::TransltText.
+	FIX: Templates fixed-adapted to the dynamic translation in using the configuration template of
+	    the attributes.
+
+- OpenSCADA libraries and projects:
+    FIX:LibsDB.OscadaLibs:
+	!!!!:tmplib_DevLib: Appended by the template "Ergomera 125 (ergomera125)" with initial
+		implementation the own protocol and documenting.
+	    !!!:mbBase: Expanded for support Input Registers by function 4.
+	    !!!:FIX:VSE002: Rewrote in the packages sequential reading mode, that is detection
+		    all packages with notifying unknown.
+		FIX: Fixed in non reconnection at leaving partial data in the buffer.
+		The B16 packages' data renamed to B8 and appended by signatures "74 00" and "6E 00".
+		Appended implementation the B12 packages with signatures "6F 00" and "71 00".
+		Appended by configuring the initiate sequence.
+	    FIX:Incubator: Fixing value of the 'Transport (transport)' field.
+	!!!!:tmplib_LowDevLib: Appended by the template "BT: ATORCH S1BP (S1BP)" with documenting
+		and completed translation to Ukrainian.
+	    !!: Appended by the template "1-Wire (1W)", which merged from 1W_DS9097 and 1W_DS9097U before
+		appending I2C Drivers and expanded by an option "Only add attributes at scan",
+		with documenting and completed translation to Ukrainian.
+	    !!!:UC96: Expanded for support ATORCH UD24.
+		!!: Expanded by reading: "Volts maximum (Vup)", "Volts minimum (Vdwn)",
+		    "Data+, V (Dplus)", "Data-, V (Dminus)".
+		Default serial-port address changed to /dev/rfcomm1.
+	!!!:FIX:tmplib_base.fileServerHTTP: Expanded of big data transferring in chunks by the direct writing
+		    function writeTo().
+		For that appended by the attributes: "Transport (tr)", "Protocol (prt)" and "Sender (sender)".
+	    FIX: Fixed in returning the result through direct writing to the 'rez' attribute for templates.
+	!!!:FIX:flb_doc.diagram: Adding of drawing non periodic direct data like months.
+	    !!!: Implementing of rounding big interval points by the Besier Cubic Curves.
+	    FIX: Fixing of calculating bottom border for vertical scale.
+	    Changing the path sequence to without comas, which used in Cubic Curves.
+    LibsDB.vcaBase:
+	!!:wlb_Main: {grph_panel,doc_panel}: Moving in the size-depth field to the editable combobox with
+		the digital number and human text multiplier, based on the new User API function
+		time2str() and str2time(), that is removing the type field here.
+	    !:docRepDay,docRepMonth,docUsersSet,docRepInstVals,docDin,docRep2WorkSh,docAlarmsRep,docMessRep:
+		Adaptation to opening the document control panel after several seconds of starting-opening,
+		    that is for allowing the document control at displaying by QtWebengine.
+	    grpGraph,grpCadr,doc_panel,grph_panel,prescrEdit,prescrRun,prescrRunSimple,accept,
+		treeSelect,calendar,userManager,alarmsStReport,docRepDay,docRepMonth,docRepYear},
+		wlb_prescr.{prescrEdit,prescrRun,prescrRunSimple:
+		    The variable <ev_cur> renamed to <evCur>.
+	    !!!!:storeHouse: Expanded by support of including files both to the MySQL LONGTEXT field and to FS.
+		!!: Appending preview the loaded images in the form and the item report.
+		FIX: RO value of the ID field in the data form mode shortened twicely.
+		FIX: Some improved in generic items placing at geomZ.
+		FIX: Fixed in early setting the vertical position for the data table at changing the user.
+		FIX: Fixed in the space separator of the selectable items.
+		Period of the page processing set to -1 (from parent page) to prevent of sticking at user change.
+		Some reordered in the Z coordinate for concealing of the form elements appearing and disappearing.
+		Appended of resetting filters at the page restart or user change.
+		The whole-table report appended of limiting cells' text in 30 symbols, that is like to the edition table.
+		The item report appended by hiding empty fields.
+		Appended of updating the selection context of the form items at change such item value.
+	    FIX:grpGraph10: Fixed in the geomZ attribute for the included widgets "el9" and "el10".
+	    FIX:RootPgSo: Improved by pause the demo-procedure's execution at no requests on WEB,
+		    so preventing of opening all pages before real close.
+		The direct pages list append by checking the pages permission.
+	    FIX:grpGraph: Fixed in the geomZ attribute for the "trnd1" and "arh" included widgets.
+	    FIX:weather: Appending by icons of representing different states.
+		FIX: Fixed in guaranty receiving the hourly data at the connection problems.
+		Adjusted for even work both on UI.Vision and UI.WEBVision.
+	    treeSelect: Updating icon of the frame with improving the name.
+	wlb_doc.docRepYear: Switching the direct data drawing on the diagram to the non periodic mode.
+    LibsDB.vcaTest.wlb_test.docTestGasNodeDayRep: Adaptation to opening the document control panel at setting
+	the "pgOpen" attribute and not setting the "pgOpen" attribute in the panel, due to the document is archiving,
+	that is for allowing the document control at displaying by QtWebengine.
+    ModelsDB.AGLKS:
+	wlb_doc.{docRepMonth,docRepDay}: Set to no process periodically.
+	wlb_test.docTestGasNodeDayRep: Set to process with period 10 seconds.
+
+- API:
+    !!!!:Changes:
+	SYS: Type of the limit variables limUserFile_SZ, limUserIts_N changed to unsigned.
+	    TCntrNode: Moving from static with renaming some arguments: ctrMkNode(), ctrMkNode2(),
+		    _ctrMkNode(), ctrChkNode().
+		Changing prototype of the objPropSet() function in the <val> argument.
+	    TFld: cntrCmdMake() added by an argument <cntrO> with renaming some arguments.
+	    TConfig: cntrCmdMake() and cntrCmdProc() added by an argument <cntrO> with renaming some arguments.
+	Security: Renaming the function TSecurity::access() argument "access" to "perm", also for User API.
+	Transports: TTransportS::cntrCmdPrm() added by an argument <cntrO>.
+	DAQ: Moving the TValue flags resB1() and resB2() to the object properties in group "DAQ",
+	    that is removing such functions.
+    Appends:
+	SYS: Appending the sysTmJmp() function as a variant of sysTm().
+	    Appended by the DEF_HTaskPer definition.
+	    TCntrNode: New functions: nodeAccess(), nodeLoadACL(), nodeLoadACLSnthHgl(),
+		    ctrMkNode3(), ctrChkNode2(), property(), propertyClrGrp().
+		Adding a User API function property().
+	    Appended by the limiting option limObjDscr_SZ for the description configuration fields (DESCR).
+	    Adding function str2time() with parsing the human time from time2str(), which added also
+		by the "inParts" argument.
+	    Adding new User API functions with representing the system ones in the user space:
+		time2str(), cpct2str(), str2time().
+	    XMLNodeObj: getElementsBy() and its User API variant expanded by arguments "limit" and "from".
+	    Mess: Adding the global label functions labTime(), labTimeSel().
+	Transports: TTransportOut appended by the function isFromInput().
+
+- SYS:
+    !!!!:Building: configure.ac: Core library version risen to 3:15:0 and the program version risen to 0.9.8.
+	!!!!: The module version of the subsystem "Transports" risen to 21.
+	!!:acinclude.m4: The autoconf macro AX_LIB_MYSQL added of using PKG_CONFIG when presence
+		the configuration file, to build together MySQL in cross-compiling environments
+		with binary mysql_config or mariadb_config.
+	    Removing the spare macroses: AX_LIB_SQLITE3, BNV_HAVE_QT.
+	    Some improving the macro AX_LIB_POSTGRESQL.
+	!!!:data/{debian,debian_mod}: Appending openscada-server.service and openscada-plc.service,
+		also as a commented entry dh_installsystemd in "rules",
+		and that switched to use in Debian 12,11,10 and Ubuntu 24.04,22.04,20.04.
+	    Appending MySQL default dependency as default-libmysqlclient-dev.
+	!:.,DAQ.{DAQGate,JavaLikeCalc,OPC_UA.libOPC_UA,System},Protocol.ModBus,Transport.SSL,
+	    UI.{QTCfg,QTStarter,Vision,WebCfgD,WebVision}: The source code some cleaned from building warnings.
+	FIX:data/{debian/control,openscada.spec,openscada_mod_ALT.spec,openscada_mod_RH.spec}:
+	    Fixed in the word "built".
+	data/: Appending a service file template openscada.service directly to SystemD.
+    !!!:FIX:LibsDB.OscadaLibs.tmplib_base.fileServerHTTP,UI.WebVision: Unified in processing the data transferring
+	in the sequence: ranges of media in the head, big data by chunks, simple single package for small data.
+    !!:Archive.{MessArchive,MessArchiver,ValArchive},DAQ: Moving in the size-depth field of the Control Interface
+	to the editable combobox with the digital number and human text multiplier, based on the new function
+	time2str() and str2time().
+    !!:.,DAQ.{BlockCalc,JavaLikeCalc},Protocol.{ModBus,OPC_UA,UserProtocol},UI.{VCAEngine,WebUser}:
+	Appended by the limiting option limObjDscr_SZ for the description configuration fields (DESCR)
+	    with default value 1000 and range [300...1000000].
+    TCntrNode,UI.{QTCfg,WebCfgD}: To "<set />" control requests for commands an attribute "tp" in value "comm"
+	is appended for detection the commands in log.
+    Transport.{Sockets,SSL},Protocol.SelfSystem: Switched to the limit parameter prmStrBuf_SZ in the buffer size
+	instead direct value or such definition.
+    Protocol.UserProtocol,UI.WebUser: Switched to the limit parameter prmServTask_PER instead such definition.
+    Protocol.HTTP,UI.{WebUser,WebCfg}: Switched to "HTTP/1.1".
+    .,DAQ.JavaLikeCalc: Appending the sysTmJmp() function as a variant of sysTm() for detection of time jumps
+	after suspending and what used in DAQ.JavaLikeCalc for preventing false messages
+	"Calculation time has been exceeded ...".
+    !!!!: The commandline options appended by getting default value from the environment variable "OSCADA_{cmd}",
+	what is enabled itself by the environment variable "OSCADA_CMD_EN".
+    The User API functions strftime() and strftimegm() switched to the generic implementation of TSYS::atime2str().
+    FIX:TFunction: Fixing return value of the User API function calc() by replacing TVariant(), what is NULL,
+	to EVAL_REAL, for preventing the spare checking for calculation need.
+    FIX:XMLNode: The "a" tag appended to "script" and "div" for preventing the tags wrapping.
+	XMLNodeObj::getElementsBy() and its UserAPI variant expanded by arguments "limit" and "from" of
+	    the XML-tree partial processing.
+
+- !!:FIX:DB.SQLite: The error code SQLITE_CORRUPT added for reconnection the DB file,
+    since this error can be appeared with changing the DB-file structure from an external source.
+
+- DAQ:
+    !!:FIX: Fixed in remote archives detection for temporarily empty ones, that is no source.
+    FIX: TController::alarmSet(): TSYS::curTime() used instead TSYS::sysTm() to set single source.
+    The "Controllers" tab of the DAQ-modules appended of a field of quantity the controller objects
+	with quantity of all, started, enabled and errors per the error code.
+    The function execution form added by the measuring minimum and maximum and combined
+	in the measuring information and the calculation quantity.
+    The TValFunc::mCalc flag moved from a bit to a separate bool attribute, since access here must be
+	maximum fast.
+    !!:DAQGate: Improving algorithm of the archives detection with providing an information field with list of
+	    the archieving attributes.
+	Added of detection of changing the syncing periodicity in the CRON mode for fast applying
+	    after long intervals.
+	The configuration field "Synchronization time with the remote station, seconds"
+	    expanded in the range to [-1...9999].
+    !!:FIX:ModBus: Fixed in complete processing strings with encoding, that is registering all registers.
+	!!:The data requesting improved in the TCP variant for waiting tail to any first package size,
+	    that is not only the MBAP header in 7 bytes size.
+    FIX:System: Preventing the error status of the Sensors Source at presence direct sources.
+	FIX: The CPU DA source appended by the "nice" part in item of the whole load.
+    FIX:JavaLikeCalc: Fixed in processing default value of the limit argument of the User API
+	function string.split().
+
+- Archives-History:
+    !!: The value archives appended of detection the doubly links and their all removing.
+    FIX: The word "DB" renamed to "storage".
+    FIX: Values requesting in the control interface tab "Values" of the value archive appended by the time limit
+	in prmInterf_TM (7) to prevent hangs (long processing) on very big ranges.
+    TVArchive::makeTrendImg() added by limiting begin and end arguments in the least zero value.
+    The "Size, seconds" configuration field added by the range [0...2600000].
+    !!:FSArch: The archives unpacking function appended by the error message unification
+	and a possibility to remove error archives, currently only at checking the value archive files.
+
+- Transports:
+    !!: The IO log items appended by whole package (or aggregation) size and the aggregation default time
+	    set to 1 second.
+	Using the variables "ReqTm", "ReqMode", "ToTmOut", "InBufSz", "ReqAnsw" moved to the individual space
+	    of the transport object.
+    !!!!:Sockets,SSL: TTransSock::getAddr() renamed to TTransSock::addrGet() and the address resolving moved
+	    to a new function TTransSock::addrResolve() with direct resolving the static addresses and dynamic
+	    resolving by gethostbyname() due to getaddrinfo() has problems with reenteranting (on old systems)
+	    and global lock causes long hangs on all addresses at problems with DNS.
+	    Also appended a commandline option "--getaddrinfo" to enable it for yourself.
+	!!!!:FIX: Resolving a hard-detected problem of substitution wrong addresses during the addresses resolving
+	    by getservbyname_r() from other thread, that is from GLibC 2.24 there forced using getaddrinfo()
+	    as more correct or inet_pton() + locked getservbyname_r() on old systems.
+	Improved in parsing address by appending the functions TTransSock::{addrHost,addrPort}()
+	    and switching to TTransSock::addrGet() everywhere.
+	Switching TTransSock::addrGet() completely to getnameinfo() and appending of detection wrong family addresses.
+    !!:SSL: Appended of implementation TTransportIn::writeTo() with moving to map in holding the SSockIn structure.
+	!!: Input part of the transports switched to use unified TTransSock::addrResolve() for precursory
+	    resolving all dynamic addresses and pass ready static addresses to BIO_new_accept().
+    FIX:Serial: Fixed in return EVAL as (char)EVAL_BOOL in the User API functions.
+	All options in the address field marked optional.
+    Sockets: Some improved in implementation TTransportIn::writeTo() with disabling wrToRes.
+
+- Transport Protocols:
+    !!!!:FIX:OPC_UA: Implementing the true authentication with checking permission to the DAQ-Nodes for the user:
+	    - libOPC_UA: implementing the authentication through UA::Server::EP::sessActivate()
+		and the property <identTkn>, from which there is taken the user in the attribute "userAuthenticated"
+		and that is written to UA::Server::Sess::{user,idPolicyId};
+	    - libOPC_UA: all data requests by reqData() appended in <req> by an attribute "sesTokId" with session
+		identifier here and for accessing the user;
+	    - appending a configuration field "Anonymous user" for representing the anonymous authentication.
+	FIX: Fixing description of the "Security policies" field.
+    !!!:HTTP: Appended by the generic function of transition any method to WEB-modules - HTTP().
+
+- UI:
+    TUIS::mimeGet() added by MIME "image/webp", "video/webm".
+    !!!:FIX:Vision,WebVision: Implementing of rounding big interval points by the Besier Cubic Curves.
+	FIX: Fixing of calculating bottom border for vertical scale.
+    !!:VCAEngine,Vision,WebVision: The type Image of the primitive Media appended by the attribute
+	"Keep aspect ratio at fitting (keepAspect)".
+    !!:FIX:VCAEngine,Vision: Adding an option in the "Styles" tab of the projects with control the writing to styles
+	in the execution context. And the writing to the styles disabled on the project side.
+    QTCfg,Vision: The ComboBox fields appended by locking mouse wheel forcibly for QTCfg and at no focus
+	for Vision in runtime, and all these to prevent changes at generic page scroll.
+    QTStarter,QTCfg,Vision: The "About ..." help item appended by Qt version.
+    !!:FIX:WebVision: Requesting data of the resources added by support chunks for big data and conversion
+	    only for small images.
+	!!: The Save type of the buttons appended by support the media ranges with storing the data
+	    in WebVision context for retries.
+	!:FIX: The Button primitive expanded for adaptive "line-height: 1.2" or "line-height: 1.0"
+	    depending name multiline.
+	FIX: The Button view of the FormEl primitive allowed for images in the Load type.
+	FIX: Custom Fields fixed in processing fifth field emptiness.
+	FIX: Fields of the Text primitive improved in vertical centering for single line of the non HTML mode,
+	    for which there is set "line-height: 1.0".
+	FIX: The Table view of the FormEl primitive is fixed for selection in whole after resort.
+	Moving the ElFigure functions bezierDeltaT() and bezier() to the generic object's VCAObj space.
+    !!:FIX:WebUser: Switched to the generic function HTTP() of transition from Protocol.HTTP.
+	!!: Appended by an optional attribute "Transport (tr)" of the processing procedures and templates,
+	    taken from the protocol object.
+	!!: The attribute "Result (rez)" allowed in empty value to prevent sending any response,
+	    that is meaning direct writing by TTransportIn::writeTo().
+	FIX: Fixed containing the socket identifier in the second line of the attribute "Sender (sender)".
+	FIX: Appended of disabling the page node at changing language/template.
+    !!:QTCfg: The Back and Forward buttons expanded by a menu of the direct items accessing.
+	Added for processing range of values for real.
+	Switched to the limit parameter limObjID_SZ instead such definition.
+	The operation of selection wrong item prevented from setting the previous item.
+	Depth of the back and forward lists expanded to 30 items.
+    !!:FIX:Vision: Preventing fullscreen mode fault in some XOrg conditions, when the fullscreen
+	    Qt-flag occasionally cleared, that is the flag was doubled internally.
+	    Reproduced often with Qt6 on Debian 12.
+	FIX: Appending of resetting maximum geometry of included pages for allow their dynamic
+	    increasing with increasing content.
+	FIX: The table fitting of the view Table of the primitive FormEl fixed in shrink the last column
+	    at resetting setStretchLastSection() to false on Qt4.
+	FIX: Improved in transporting mouse events to the underlying active widgets like to form elements.
+	FIX: The primitive Text rewrote in processing the arguments for direct replacing marks %1, %2, ...,
+	    since Qt doesn't trace the numbers missing.
+	The acknowledge dialogue of the items removing added by status information about the removing items
+	    for fast checking.
+	The error message "Error authenticating the user ..." appended by the error detalization.
+	Switched to the global parameter prmWait_TM instead such definition.
+    FIX:VCAEngine: Selection by the extensions for the "file:" prefix of the media sources is
+	    fixed for "mp4", renamed for "ogv" to "ogm" and added by "webp", "webm".
+	FIX: Appended of the resources checking from the included widgets (dynamically created)
+	    on the owner page.
+	Session::uiCmd() and its User API variant append by the permission checking of the listing and group pages.
+    WebCfgD: The page refreshing action appended also by the tree updating.
+	Added for processing range of values for dec, oct, hex, real.
+
+
 2025-02-01 Roman 0.9.7.5
 - !!!:FIX:LibsDB.OscadaLibs.flb_doc.diagram: Adding of drawing non periodic direct data like months.
     !!!: Implementing of rounding big interval points by the Besier Cubic Curves.
@@ -49,7 +415,7 @@
 	the range to [-1...9999].
 - Protocol.ModBus: The data requesting improved in the TCP variant for waiting tail to any first package size,
     that is not only the MBAP header in 7 bytes size.
-- !!:FIX:Transports: The IO log items appended by whole package (or agregation) size and the agregation default
+- !!:FIX:Transports: The IO log items appended by whole package (or aggregation) size and the aggregation default
 	time set to 1.
     !: TTransportOut appended by the function isFromInput() to detect automatically created objects
 	from the input transport.
@@ -67,7 +433,7 @@
 	Switched to the global parameter prmWait_TM instead such definition.
     FIX:VCAEngine: Appended of the resources checking from the included widgets (dynamically created)
 	    on the owner page.
-	FIX: The session UserAPI function this.attr() fixed in checking the translation flag TFld::TransltText.
+	FIX: The session User API function this.attr() fixed in checking the translation flag TFld::TransltText.
     FIX:WebVision: The Button view of the FormEl primitive allowed for images in the Load type.
 
 
@@ -99,7 +465,7 @@
 - FIX:Archive: Values requesting in the control interface tab "Values" of the value archive appended
     by the time limit in prmInterf_TM (7) to prevent hangs (long processing) on very big ranges.
 - !:FIX:DAQ: Fixing-finishing the dynamic translation for title of the controller and parameter object.
-- FIX:DAQ.JavaLikeCalc: Fixed in processing default value of the limit argument of the UserAPI function string.split().
+- FIX:DAQ.JavaLikeCalc: Fixed in processing default value of the limit argument of the User API function string.split().
 - FIX:UI.WebVision: Fields of the Text primitive improved in vertical centering for single line of the non HTML mode,
     for which there is set "line-height: 1.0".
 
@@ -242,8 +608,27 @@
     - UI.Vision: 8.6 => 9.1
     - UI.WebCfgD: 2.4 => 2.5
     - UI.WebVision: 6.8 => 6.9
+    - LibsDB.OscadaLibs.base: 2.1 => 2.2
+	- fileServerHTTP: 1.0
+	- weather: 1.0
     - LibsDB.OscadaLibs.DevLib: 2.6 => 3.0
-    - LibsDB.vcaBase.Main.storeHouse: 1.3 => 1.4
+	- Incubator: 1.0
+	- VSE002: 1.1
+	- FF_LE: 0.9
+	- ergomera625: 0.1
+	- Goboy1M: 1.0
+	- AutoPILOT: 1.0
+	- AutoPILOT_old: 1.0
+	- CorBK: 1.0
+	- TDS: 1.0
+	- UltraMag: 1.0
+	- enronDaniel: 1.0
+	- FlowGAS: 1.0
+    - LibsDB.OscadaLibs.LowDevLib: 1.4 => 1.5
+	- UC96: 1.0
+    - LibsDB.vcaBase.Main: 2.1 => 2.2
+	- weather: 1.0
+	- storeHouse: 1.3 => 1.4
 
 - CONCEPTUAL > Unification the building with adaption to Debian 12, Qt6, QtWebEngine, QtMultimediaEngine, OpenSSL3, MIPS
     !!!!:FIX: Finished in true building with the core library only in static:
@@ -389,7 +774,7 @@
 		with implementing the HTTP File Server in OpenSCADA, currently that is only reading resources with support partiality.
 	    digAlarm,manInUnif,anUnif,pidUnifImp,anUnifSt,pidUnif,codeState,SNMP,UPS:
 		The NAME IO set to the type "String (translate)" and the DESCR IO to the type "Text (translate)".
-	!!:tmplib_LowDevLib: Appended by the template "BT: ATORCH UC96".
+	!!:tmplib_LowDevLib: Appended by the template "BT: ATORCH UC96 (UC96)".
 	    RDTech: Nondouble commands set to send the command twicely for stable applying by the device,
 		postcommand delay set to 0.2 and moved in common.
 	tmplib_base.ntf: Expanded by a possibility of specifying messages to exclude from the notification.

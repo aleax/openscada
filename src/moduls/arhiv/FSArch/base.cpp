@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.FSArch file: base.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <signal.h>
 #include <string.h>
 #include <string>
@@ -103,14 +104,15 @@ string ModArch::packArch( const string &anm, bool replace )
     //signal(SIGCHLD,prevs);
     if(sysres) {
 	remove(rez_nm.c_str());
-	throw err_sys(_("Error compressing for '%s': %d!"), anm.c_str(), sysres);
+	if(!WIFEXITED(sysres)) throw TError(nodePath().c_str(), _("Error call the packing program!"));
+	throw TError(nodePath().c_str(), _("Error compressing for '%s': %d!"), anm.c_str(), WEXITSTATUS(sysres));
     }
     if(replace) remove(anm.c_str());
 
     return rez_nm;
 }
 
-string ModArch::unPackArch( const string &anm, bool replace )
+string ModArch::unPackArch( const string &anm, bool replace, bool removeOrigAtErr )
 {
     string rez_nm = anm.substr(0, anm.size()-3);
 
@@ -119,7 +121,9 @@ string ModArch::unPackArch( const string &anm, bool replace )
     //signal(SIGCHLD,prevs);
     if(sysres) {
 	remove(rez_nm.c_str());
-	throw err_sys(_("Error decompressing for '%s': %d!"), anm.c_str(), sysres);
+	if(removeOrigAtErr) remove(anm.c_str());
+	if(!WIFEXITED(sysres)) throw TError(nodePath().c_str(), _("Error call the packing program!"));
+	throw TError(nodePath().c_str(), _("Error decompressing for '%s': %d!"), anm.c_str(), WEXITSTATUS(sysres));
     }
     if(replace) remove(anm.c_str());
 

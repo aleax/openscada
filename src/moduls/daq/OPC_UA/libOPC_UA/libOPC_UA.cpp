@@ -3562,7 +3562,8 @@ nextReq:
 
 			    if(!nOK) continue;
 			    //    Browse request for nodes
-			    req.clear()->setAttr("node", sN.toAddr())->
+			    req.clear()->setAttr("sesTokId", uint2str(sesTokId))->
+					 setAttr("node", sN.toAddr())->
 					 setAttr("BrDir", uint2str(inv?BD_INVERSE:BD_FORWARD))->
 					 setAttr("RefTpId", rTpId.toAddr());
 			    wep->reqData(OpcUa_BrowseRequest, req);
@@ -3656,8 +3657,9 @@ nextReq:
 
 			if(rtId.numbVal() && rtId.numbVal() != OpcUa_HierarchicalReferences && rtId.numbVal() != OpcUa_References) continue;
 
-			req.clear()->setAttr("node", nid.toAddr())->setAttr("BrDir", uint2str(bd))->setAttr("RefTpId", rtId.toAddr())->
-				    setAttr("ClassMask", uint2str(nClass))->setAttr("rPn", uint2str(rPn));
+			req.clear()->setAttr("sesTokId", uint2str(sesTokId))->
+				     setAttr("node", nid.toAddr())->setAttr("BrDir", uint2str(bd))->setAttr("RefTpId", rtId.toAddr())->
+				     setAttr("ClassMask", uint2str(nClass))->setAttr("rPn", uint2str(rPn));
 			stCode = wep->reqData(reqTp, req);
 			refNumb = req.childSize();
 			for(unsigned iRef = 0; !stCode && iRef < req.childSize(); iRef++) {
@@ -3704,9 +3706,10 @@ nextReq:
 			Sess::ContPoint cPo = wep->sessCpGet(sesTokId, cp);
 
 			if(!cPo.empty()) {
-			    req.clear()->setAttr("node", cPo.brNode)->setAttr("LastNode", cPo.lstNode)->
-					setAttr("BrDir", uint2str(cPo.brDir))->setAttr("RefTpId", cPo.refTypeId)->
-					setAttr("ClassMask", uint2str(cPo.nClassMask))->setAttr("rPn", uint2str(cPo.refPerN));
+			    req.clear()->setAttr("sesTokId", uint2str(sesTokId))->
+					 setAttr("node", cPo.brNode)->setAttr("LastNode", cPo.lstNode)->
+					 setAttr("BrDir", uint2str(cPo.brDir))->setAttr("RefTpId", cPo.refTypeId)->
+					 setAttr("ClassMask", uint2str(cPo.nClassMask))->setAttr("rPn", uint2str(cPo.refPerN));
 			    stCode = wep->reqData(reqTp, req);
 			    refNumb = req.childSize();
 			    for(unsigned iRef = 0; !stCode && iRef < req.childSize(); iRef++) {
@@ -3740,6 +3743,7 @@ nextReq:
 		}
 		case OpcUa_ReadRequest: {
 		    XML_N req("data");
+		    req.setAttr("sesTokId", uint2str(sesTokId));
 		    //  Request
 		    iR(rb, off, 8);				//maxAge
 		    uint32_t tmStRet = iNu(rb, off, 4);		//timestampsTo Return
@@ -3775,6 +3779,7 @@ nextReq:
 		}
 		case OpcUa_WriteRequest: {
 		    XML_N req("data");
+		    req.setAttr("sesTokId", uint2str(sesTokId));
 		    //  Request
 							//> nodesToWrite []
 		    uint32_t nc = iNu(rb, off, 4);	//nodes
@@ -4349,6 +4354,7 @@ void Server::EP::subScrCycle( unsigned cntr )
 	// Monitored items processing
 	bool hasData = false;
 	XML_N req("data");
+	req.setAttr("sesTokId", uint2str(scr.sess));
 	for(unsigned iM = 0; iM < scr.mItems.size(); ++iM) {
 	    Subscr::MonitItem &mIt = scr.mItems[iM];
 
@@ -4471,6 +4477,12 @@ uint32_t Server::EP::sessActivate( int sid, uint32_t secCnl, bool check, const s
 			mSess[iS].inPrtId = "";
 	    }
 	    rez = 0;
+
+	    // Authentication accepting
+	    if(identTkn.attr("userAuthenticated").size()) {
+		mSess[sid-1].idPolicyId = identTkn.attr("policyId");
+		mSess[sid-1].user = identTkn.attr("userAuthenticated");
+	    }
 	}
     }
 
@@ -4613,7 +4625,8 @@ uint32_t Server::EP::mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md, c
 
 	//Checkings for data
 	XML_N req("data");
-	req.setAttr("node", mIt.nd.toAddr())->setAttr("aid", uint2str(mIt.aid))->setAttr("dtPerGet", (smplItv==0)?"1":"0");
+	req.setAttr("sesTokId", uint2str(ss.sess))->
+	    setAttr("node", mIt.nd.toAddr())->setAttr("aid", uint2str(mIt.aid))->setAttr("dtPerGet", (smplItv==0)?"1":"0");
 	uint32_t rez = reqData(OpcUa_ReadRequest, req);
 	if(rez == OpcUa_BadNodeIdUnknown)		mIt.nd = NodeId();
 	else if(rez == OpcUa_BadAttributeIdInvalid)	mIt.aid = Aid_Error;

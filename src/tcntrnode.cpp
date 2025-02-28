@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcntrnode.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,7 +40,7 @@ using namespace OSCADA;
 
 //*************************************************
 //* Controll scenaries language section           *
-TCntrNode::TCntrNode( TCntrNode *iprev ) : mChM(true), mDataM(true), chGrp(NULL), mUse(0), mOi(USHRT_MAX), mFlg(0)
+TCntrNode::TCntrNode( TCntrNode *iprev ) : mChM(true), mDataM(true), chGrp(NULL), mUse(0), mOi(USHRT_MAX), mFlg(0), mProps(NULL)
 {
     setNodeMode(Disabled);
     prev.node = iprev;
@@ -50,7 +50,7 @@ TCntrNode::TCntrNode( TCntrNode *iprev ) : mChM(true), mDataM(true), chGrp(NULL)
     if(SYS && this != SYS && mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
 
-TCntrNode::TCntrNode( const TCntrNode &src ) : mChM(true), mDataM(true), chGrp(NULL), mUse(0), mOi(USHRT_MAX), mFlg(0)
+TCntrNode::TCntrNode( const TCntrNode &src ) : mChM(true), mDataM(true), chGrp(NULL), mUse(0), mOi(USHRT_MAX), mFlg(0), mProps(NULL)
 {
     setNodeMode(Disabled);
     prev.node = NULL;
@@ -63,7 +63,8 @@ TCntrNode::TCntrNode( const TCntrNode &src ) : mChM(true), mDataM(true), chGrp(N
 TCntrNode::~TCntrNode( )
 {
     nodeDelAll();
-    if(chGrp) delete chGrp;
+    if(chGrp)	delete chGrp;
+    if(mProps)	delete mProps;
 
     if(this != SYS && mess_lev() == TMess::Debug) SYS->cntrIter(objName(), -1);
 }
@@ -237,6 +238,7 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 			logMess += " " + opt->childGet(iCh)->attr("id") + "='" + opt->childGet(iCh)->text() + "',";
 		    logMess += ".";
 		}
+		else if(opt->attr("tp") == "comm") logMess = _("command.");
 		else logMess = TSYS::strMess(_("set to '%s'."),
 			(((logMess=TSYS::strEncode(opt->text(),TSYS::Limit,"100"))==opt->text())?logMess:logMess+"...").c_str());
 	    }
@@ -799,6 +801,81 @@ TCntrNode *TCntrNode::nodePrev( bool noex ) const
     throw err_sys(_("Node root or not connected!"));
 }
 
+char TCntrNode::nodeAccess( const string &user, const string &owner, const string &group, int perm )
+{
+    string  tOwner = owner.size() ? owner : property("owner",TVariant(),"sec").getS(),
+	    tGroup = group.size() ? group : property("group",TVariant(),"sec").getS();
+    int64_t tPerm  = (perm >= 0) ? (int64_t)perm : property("perm",TVariant(),"sec").getI();
+
+    bool askPrev = false;
+    if(tOwner == EVAL_STR || tOwner.empty()) {
+	if(nodePrev()) askPrev = true, tOwner = "";
+	else tOwner = "root";
+    }
+    if(tGroup == EVAL_STR || tGroup.empty()) {
+	if(nodePrev()) askPrev = true, tGroup = "";
+	else tGroup = "root";
+    }
+    if(tPerm == EVAL_INT || tPerm < 0) {
+	if(nodePrev()) askPrev = true, tPerm = -1;
+	else tPerm = 0770;	//RWXRWX___
+    }
+
+    return (askPrev && nodePrev()) ? nodePrev()->nodeAccess(user,tOwner,tGroup,tPerm)
+				   : SYS->security().at().access(user,SEC_RD|SEC_WR|SEC_XT,tOwner,tGroup,tPerm);
+}
+
+bool TCntrNode::nodeLoadACL( const string &text )
+{
+    bool rez = false;
+
+    //Cleaning previous ACL values
+    property("owner", EVAL_STR, "sec");
+    property("group", EVAL_STR, "sec");
+    property("perm", (int64_t)EVAL_INT, "sec");
+
+    //Scanning the ACL rule
+    TRegExp acl("^ACL: *(.+?)$", "gm");
+    TArrayObj *aclAr = acl.match(text);
+    if(!aclAr) return false;
+    else if(aclAr->arSize() >= 2) {
+	int off = 0;
+	string tVl = TSYS::strParse(aclAr->arGet(1).getS(), 0, ":", &off);
+	if(tVl.size()) { rez = true; property("owner", tVl, "sec"); }
+	tVl = TSYS::strParse(aclAr->arGet(1).getS(), 0, ":", &off);
+	if(tVl.size()) { rez = true; property("group", tVl, "sec"); }
+	tVl = TSYS::strTrim(TSYS::strParse(aclAr->arGet(1).getS(),0,":",&off));
+	if(tVl.size()) {
+	    unsigned permCode = s2u(tVl, 0);
+
+	    if(!permCode && tVl.size() >= 9)
+		for(unsigned iChar = 0; iChar < vmin(9,tVl.size()); ) {
+		    if((iChar%3) == 0 && (tVl[iChar] == 'R' || tVl[iChar] == 'r'))	permCode |= SEC_RD;
+		    else if((iChar%3) == 1 && (tVl[iChar] == 'W' || tVl[iChar] == 'w'))	permCode |= SEC_WR;
+		    else if((iChar%3) == 2 && (tVl[iChar] == 'X' || tVl[iChar] == 'x'))	permCode |= SEC_XT;
+		    if(((++iChar)%3) == 0 && iChar < vmin(9,tVl.size())) permCode <<= 3;
+		}
+
+	    if(permCode) { rez = true; property("perm",(int64_t)permCode,"sec"); }
+	}
+    }
+
+    delete aclAr;
+
+    return rez;
+}
+
+void TCntrNode::nodeLoadACLSnthHgl( XMLNode &shgl )
+{
+    XMLNode *g0 = shgl.childAdd("rule")->setAttr("expr","^ACL: *.+$")->setAttr("font_weight","1")->
+		       childAdd("rule")->setAttr("expr","(?<=:).*");
+	g0->childAdd("rule")->setAttr("expr","[^:]*")->setAttr("font_weight","0")->setAttr("color","green");
+	XMLNode *g1 = g0->childAdd("rule")->setAttr("expr","(?<=:).*");
+	    g1->childAdd("rule")->setAttr("expr","[^:]*")->setAttr("color","blue");
+	    g1->childAdd("rule")->setAttr("expr","(?<=:)[rR_][wW_][xX_][rR_][wW_][xX_][rR_][wW_][xX_]")->setAttr("color","red");
+	    g1->childAdd("rule")->setAttr("expr","(?<=:)0[0-7][0-7][0-7]")->setAttr("color","darkorange");
+}
+
 AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const string &user ) const
 {
     if(nodeMode() == Disabled)	throw err_sys("Node is disabled!");
@@ -991,12 +1068,53 @@ bool TCntrNode::AHDDisConnect( )
     return false;
 }
 
-TVariant TCntrNode::objPropGet( const string &id )			{ return TVariant(); }
+TVariant TCntrNode::property( const string &id, const TVariant &val, const string &grp )
+{
+    if(!mProps && (val.isNull() || val.isEVal())) return (char)EVAL_BOOL;
 
-void TCntrNode::objPropSet( const string &id, TVariant val )		{ }
+    MtxAlloc res(dataRes(), true);
+    if(!mProps) mProps = new map<string, TVariant>;
+
+    string fid = (grp.size()?grp+":":"") + id;
+    //Erasing the property at EVAL setting and deleting the properties container at no more properties
+    if(!val.isNull() && val.isEVal()) {
+	mProps->erase(fid);
+	if(!mProps->size()) { delete mProps; mProps = NULL; }
+	return (char)EVAL_BOOL;
+    }
+    //Setting the value
+    else if(!val.isNull()) (*mProps)[fid] = val;
+
+    map<string, TVariant>::iterator iprop = mProps->find(fid);
+    return (iprop != mProps->end()) ? iprop->second : TVariant((char)EVAL_BOOL);
+}
+
+void TCntrNode::propertyClrGrp( const string &idPref, const string &grp )
+{
+    MtxAlloc res(dataRes(), true);
+    if(!mProps)	return;
+    else if(grp.empty() && idPref.empty()) { delete mProps; mProps = NULL; }
+    else {
+	for(map<string, TVariant>::iterator ip = mProps->begin(); ip != mProps->end(); )
+	    if(ip->first.find((grp.size()?grp+":":"")+idPref) == 0) mProps->erase(ip++);
+	    else ++ip;
+	if(!mProps->size()) { delete mProps; mProps = NULL; }
+    }
+}
+
+TVariant TCntrNode::objPropGet( const string &id )			{ return property(id, TVariant(), "usr"); }
+
+void TCntrNode::objPropSet( const string &id, const TVariant &val )	{ property(id, val, "usr"); }
 
 TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
+    // PropTp property(string id, PropTp val = NULL) - returns of the object's property <id> for the group <grp>
+    //    with setting its at val non NULL and EVAL. Where val in EVAL is clearing the property and NULL (no the argument)
+    //    just doesn't set nothing.
+    //  id - property identifier;
+    //  val - setting to the value at presence.
+    if(iid == "property" && prms.size() >= 1)
+	return property(prms[0].getS(), (prms.size()>=2)?prms[1]:TVariant(), "usr");
     // TArrayObj nodeList(string grp = "", string path = "") - child nodes list
     //  grp - nodes group
     //  path - path to source node
@@ -1039,7 +1157,7 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 }
 
 XMLNode *TCntrNode::_ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &dscr,
-    int perm, const char *user, const char *grp )
+    int perm, const char *owner, const char *group )
 {
     int woff = 0;
     string req = nd->attr("path");
@@ -1055,7 +1173,13 @@ XMLNode *TCntrNode::_ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const ch
 	}
 
     //Check for permission
-    char n_acs = SYS->security().at().access(nd->attr("user"), SEC_RD|SEC_WR|SEC_XT, user, grp, perm);
+    char n_acs = 0;
+    if(strlen(owner) && strlen(group) && perm >= 0)
+	n_acs = SYS->security().at().access(nd->attr("user"), SEC_RD|SEC_WR|SEC_XT, owner, group, perm);
+    else {
+	n_acs = nodeAccess(nd->attr("user"), owner, group, (perm > (SEC_RD|SEC_WR|SEC_XT))?perm:-1);
+	if(perm <= (SEC_RD|SEC_WR|SEC_XT)) n_acs &= perm;
+    }
     if(!(n_acs&SEC_RD)) {
 	if(nd->name() == "info") ctrRemoveNode(nd, path);	//To prevent the node's presence with changed here permission to RO.
 	return NULL;
@@ -1073,9 +1197,8 @@ XMLNode *TCntrNode::_ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const ch
     for(int itN = 0; (reqt=TSYS::pathLev(path,0,true,&woff)).size(); reqt1 = reqt, itN++) {
 	XMLNode *obj1 = obj->childGet("id", reqt, true);
 	if(obj1) { obj = obj1; continue; }
-	//int wofft = woff;
-	if(TSYS::pathLev(path,0,true,&woff).size())
-	    throw TError("ContrItfc", _("Item %d of the path '%s' is missing!"), itN, path);
+	if(TSYS::pathLev(path,0,true,&woff).size())	return NULL;
+	    //throw TError("ContrItfc", _("Item %d of the path '%s' is missing!"), itN, path);
 	if(pos == -1)	obj = obj->childAdd();
 	else obj = obj->childIns((pos<0)?pos+1:pos);
     }
@@ -1086,16 +1209,16 @@ XMLNode *TCntrNode::_ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const ch
 }
 
 XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &dscr,
-    int perm, const char *user, const char *grp, int n_attr, ... )
+    int perm, const char *owner, const char *group, int n_attr, ... )
 {
-    XMLNode *obj = _ctrMkNode(n_nd, nd, pos, path, dscr, perm, user, grp);
+    XMLNode *obj = _ctrMkNode(n_nd, nd, pos, path, dscr, perm, owner, group);
 
     //Get addon attributes
     if(obj && n_attr) {
 	char *atr_id, *atr_vl;
 	va_list argptr;
 	va_start(argptr,n_attr);
-	for(int i_a = 0; i_a < n_attr; i_a++) {
+	for(int iA = 0; iA < n_attr; iA++) {
 	    if(!(atr_id=va_arg(argptr,char*)) || !(atr_vl=va_arg(argptr, char*))) break;
 	    obj->setAttr(atr_id, atr_vl);
 	}
@@ -1106,15 +1229,34 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
 }
 
 XMLNode *TCntrNode::ctrMkNode2( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &dscr,
-    int perm, const char *user, const char *grp, ... )
+    int perm, const char *owner, const char *group, ... )
 {
-    XMLNode *obj = _ctrMkNode(n_nd, nd, pos, path, dscr, perm, user, grp);
+    XMLNode *obj = _ctrMkNode(n_nd, nd, pos, path, dscr, perm, owner, group);
 
     //Get addon attributes
     if(obj) {
 	char *atr_id, *atr_vl;
 	va_list argptr;
-	va_start(argptr, grp);
+	va_start(argptr, group);
+	while(true) {
+	    if(!(atr_id=va_arg(argptr,char*)) || !(atr_vl=va_arg(argptr,char*))) break;
+	    obj->setAttr(atr_id, atr_vl);
+	}
+	va_end(argptr);
+    }
+
+    return obj;
+}
+
+XMLNode *TCntrNode::ctrMkNode3( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &dscr, int mode_perm, ... )
+{
+    XMLNode *obj = _ctrMkNode(n_nd, nd, pos, path, dscr, mode_perm, "", "");
+
+    //Get addon attributes
+    if(obj) {
+	char *atr_id, *atr_vl;
+	va_list argptr;
+	va_start(argptr, mode_perm);
 	while(true) {
 	    if(!(atr_id=va_arg(argptr,char*)) || !(atr_vl=va_arg(argptr,char*))) break;
 	    obj->setAttr(atr_id, atr_vl);
@@ -1150,14 +1292,27 @@ bool TCntrNode::ctrRemoveNode( XMLNode *nd, const char *path )
     return true;
 }
 
-bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *user, const char *grp, char mode )
+bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *owner, const char *group, char mode )
 {
     if(nd->name() != cmd) return false;
-    if(((char)perm&mode) != mode && SYS->security().at().access(nd->attr("user"),mode,user,grp,perm) != mode)
+
+    bool hasAccess = (((char)perm&mode) == mode);	//Other has such access
+    if(!hasAccess) {					//Else check user and group
+	if(strlen(owner) && strlen(group) && perm >= 0)
+	    hasAccess = (SYS->security().at().access(nd->attr("user"),mode,owner,group,perm) == mode);
+	else hasAccess = ((nodeAccess(nd->attr("user"),owner,group,perm)&mode) == mode);
+    }
+    //if(((char)perm&mode) != mode && SYS->security().at().access(nd->attr("user"),mode,owner,group,perm) != mode)
+    if(!hasAccess)
 	throw TError("ContrItfc", _("Error accessing item '%s'!"), nd->attr("path").c_str());
     nd->setAttr("rez", i2s(TError::NoError));
 
     return true;
+}
+
+bool TCntrNode::ctrChkNode2( XMLNode *nd, const char *cmd, char mode )
+{
+    return ctrChkNode(nd, cmd, -1, "", "", mode);
 }
 
 void TCntrNode::cntrCmdProc( XMLNode *opt )

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 22:21+0300\n"
+"POT-Creation-Date: 2025-02-15 22:39+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -230,8 +230,9 @@ msgstr ""
 msgid "View"
 msgstr "Просмотр"
 
-msgid "Time, size (seconds) and level"
-msgstr "Время, размер (секунд) и уровень"
+#, fuzzy
+msgid "Time, depth and level"
+msgstr "Время, размер и уровень"
 
 msgid ""
 "Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);"
@@ -320,10 +321,13 @@ msgstr ""
 msgid "Remove all lost archives - empty storage"
 msgstr ""
 
+msgid "Remove all doubly linked"
+msgstr ""
+
 #, c-format
 msgid ""
 "all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost "
-"(empty storage) %d"
+"(empty storage) %d, doubly linked %d"
 msgstr ""
 
 msgid "<High level>"
@@ -473,8 +477,8 @@ msgstr "Период, секунд"
 msgid "Microseconds"
 msgstr "Микросекунды"
 
-msgid "Size, seconds"
-msgstr "Размер, секунд"
+msgid "Depth"
+msgstr ""
 
 msgid ""
 "Values archiver.\n"
@@ -533,8 +537,8 @@ msgstr ""
 "обработке буфера - только прямая запись."
 
 msgid ""
-"Selection of a priority of the archiver for using in the source mode \"All"
-"\". Set to zero for full the selection disabling."
+"Selection of a priority of the archiver for using in the source mode "
+"\"All\". Set to zero for full the selection disabling."
 msgstr ""
 "Приоритет выбора архиватора для режима использования источника \"Все\". "
 "Установить в нуль для полного исключения из выбора."
@@ -727,6 +731,9 @@ msgstr ""
 msgid "command with arguments:"
 msgstr ""
 
+msgid "command."
+msgstr ""
+
 #, c-format
 msgid "set to '%s'."
 msgstr ""
@@ -897,10 +904,6 @@ msgstr "Очень много пользователей у узла!!!"
 #, c-format
 msgid "Error the function '%s' or missing its parameters."
 msgstr "Ошибка функции '%s' или не достаточно параметров для неё."
-
-#, c-format
-msgid "Item %d of the path '%s' is missing!"
-msgstr "Элемент %d пути '%s' отсутствует!"
 
 #, c-format
 msgid "Error accessing item '%s'!"
@@ -1200,11 +1203,8 @@ msgstr "По умолчанию"
 msgid "Execute"
 msgstr "Исполнить"
 
-msgid "Number of calculations"
-msgstr "Количество исполнения"
-
-msgid "Spent time"
-msgstr "Затрачено времени"
+msgid "Executions, spent time"
+msgstr ""
 
 msgid "Text"
 msgstr "Текст"
@@ -1330,8 +1330,8 @@ msgid ""
 "  0         - standard userspace priority;\n"
 "  1...99    - realtime priority level (round-robin), often allowed only for "
 "\"root\";\n"
-"  100...199 - realtime priority level (FIFO), often allowed only for \"root"
-"\"."
+"  100...199 - realtime priority level (FIFO), often allowed only for "
+"\"root\"."
 msgstr ""
 "Уровень приоритета задачи (-1...199), где:\n"
 "  -1        - минимальный приоритет, фоновая политика;\n"
@@ -1363,6 +1363,24 @@ msgstr ""
 "  '?' - любой символ.\n"
 "Регулярное выражение заключается между символами '/' (/mod_(System|"
 "LogicLev)/)."
+
+msgid ""
+"In the field you set time both with the real number and the natural text "
+"multiplier also translated and in base language:\n"
+"- day, days (*86400)    - one and multiple days;\n"
+"- hour, hours (*3600)   - one and multiple hours;\n"
+"- minute, minutes (*60) - one and multiple minutes;\n"
+"- millisecond, milliseconds, ms (*1e-3) - one and multiple milliseconds;\n"
+"- microsecond, microseconds, us (*1e-6) - one and multiple microseconds;\n"
+"- nanosecond, nanoseconds, ns (*1e-9)   - one and multiple nanoseconds;\n"
+"- and all other are meant as seconds with substitution by 'second', "
+"'seconds' or 's'."
+msgstr ""
+
+msgid ""
+"1 second;10 seconds;30 seconds;1 minute;10 minutes;30 minutes;1 hour;12 "
+"hours;1 day;10 days"
+msgstr ""
 
 #, c-format
 msgid "Closing the thread %d error '%s (%d)'!"
@@ -1809,23 +1827,65 @@ msgstr "Доступ только на чтение к файлу '%s'."
 msgid "day"
 msgstr "день"
 
+msgid "days"
+msgstr ""
+
 msgid "hour"
 msgstr "час"
 
-msgid "min"
-msgstr "мин"
+#, fuzzy
+msgid "hours"
+msgstr "час"
+
+msgid "minute"
+msgstr ""
+
+msgid "minutes"
+msgstr ""
 
 msgid "s"
 msgstr "с"
 
+#, fuzzy
+msgid "second"
+msgstr "Размер, секунд"
+
+#, fuzzy
+msgid "seconds"
+msgstr "Размер, секунд"
+
 msgid "ms"
 msgstr "мс"
+
+#, fuzzy
+msgid "millisecond"
+msgstr "Микросекунды"
+
+#, fuzzy
+msgid "milliseconds"
+msgstr "Микросекунды"
 
 msgid "us"
 msgstr "мкс"
 
+#, fuzzy
+msgid "microsecond"
+msgstr "Микросекунды"
+
+#, fuzzy
+msgid "microseconds"
+msgstr "Микросекунды"
+
 msgid "ns"
 msgstr "нс"
+
+#, fuzzy
+msgid "nanosecond"
+msgstr "Размер, секунд"
+
+#, fuzzy
+msgid "nanoseconds"
+msgstr "Размер, секунд"
 
 msgid "YiB"
 msgstr "ЙиБ"
@@ -1936,6 +1996,7 @@ msgid ""
 "limObjNm_SZ\t[*100...200] NAME size of the OpenSCADA objects.\n"
 "\t\tWARNING! Change that once before use on DBs with the fixed type "
 "\"char({N})\"!\n"
+"limObjDscr_SZ\t[300...*1000...1000000] DESCR size of the OpenSCADA objects.\n"
 "limArchID_SZ\t[*50...90] ID size of the value archive objects.\n"
 "\t\tWARNING! Increase it only, else you can get problems on Archive.FSArch!\n"
 "\t\t\t Change that once before use on DBs with the fixed type "
@@ -2133,18 +2194,19 @@ msgstr "Ошибка останова подсистемы '%s'."
 msgid "Termination signal is received. Stopping the program!"
 msgstr "Получен сигнал прерывания. Остановка станции!"
 
-msgid "Floating point exception is caught!"
-msgstr "Исключение операции с плавающей точкой!"
-
 #, c-format
 msgid "Close the process %d of the child!"
 msgstr "Закрытие дочернего процесса %d!"
 
-msgid "Segmentation fault signal!"
-msgstr "Сигнал нарушения сегментации памяти!"
+#, fuzzy
+msgid "Floating point exception!"
+msgstr "Исключение операции с плавающей точкой!"
 
 msgid "Program aborted!"
 msgstr "Программа прервана!"
+
+msgid "Segmentation fault signal!"
+msgstr "Сигнал нарушения сегментации памяти!"
 
 #, c-format
 msgid "Unknown signal %d!"
@@ -2898,6 +2960,14 @@ msgstr "Ошибка подключения нового контроллера 
 msgid "Module does not support compilation of the programming language."
 msgstr "Модуль не поддерживает функцию компиляции языков программирования."
 
+#, c-format
+msgid "all %d, running %d, enabled %d%s"
+msgstr ""
+
+#, fuzzy
+msgid "Errors: "
+msgstr "Ошибка"
+
 msgid "Owner"
 msgstr "Владелец"
 
@@ -3133,6 +3203,25 @@ msgstr "Имя проекта установлено в:"
 
 msgid "already started."
 msgstr "уже запущен."
+
+#, c-format
+#~ msgid "Item %d of the path '%s' is missing!"
+#~ msgstr "Элемент %d пути '%s' отсутствует!"
+
+#~ msgid "Time, size (seconds) and level"
+#~ msgstr "Время, размер (секунд) и уровень"
+
+#~ msgid "Size, seconds"
+#~ msgstr "Размер, секунд"
+
+#~ msgid "min"
+#~ msgstr "мин"
+
+#~ msgid "Number of calculations"
+#~ msgstr "Количество исполнения"
+
+#~ msgid "Spent time"
+#~ msgstr "Затрачено времени"
 
 #~ msgid "Element type is not selective!"
 #~ msgstr "Тип элемента не выбираем!"

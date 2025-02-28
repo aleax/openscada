@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 22:21+0300\n"
+"POT-Creation-Date: 2025-02-15 22:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -208,7 +208,7 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-msgid "Time, size (seconds) and level"
+msgid "Time, depth and level"
 msgstr ""
 
 msgid "Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X]);Information (1[X]), ALARMS;Notice (2[X]), ALARMS;Warning (3[X]), ALARMS;Error (4[X]), ALARMS;Critical (5[X]), ALARMS;Alert (6[X]), ALARMS;Emergency (7[X]), ALARMS"
@@ -280,8 +280,11 @@ msgstr ""
 msgid "Remove all lost archives - empty storage"
 msgstr ""
 
+msgid "Remove all doubly linked"
+msgstr ""
+
 #, c-format
-msgid "all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost (empty storage) %d"
+msgid "all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost (empty storage) %d, doubly linked %d"
 msgstr ""
 
 msgid "<High level>"
@@ -414,7 +417,7 @@ msgstr ""
 msgid "Microseconds"
 msgstr ""
 
-msgid "Size, seconds"
+msgid "Depth"
 msgstr ""
 
 msgid ""
@@ -634,6 +637,9 @@ msgstr ""
 msgid "command with arguments:"
 msgstr ""
 
+msgid "command."
+msgstr ""
+
 #, c-format
 msgid "set to '%s'."
 msgstr ""
@@ -795,10 +801,6 @@ msgstr ""
 
 #, c-format
 msgid "Error the function '%s' or missing its parameters."
-msgstr ""
-
-#, c-format
-msgid "Item %d of the path '%s' is missing!"
 msgstr ""
 
 #, c-format
@@ -1076,10 +1078,7 @@ msgstr ""
 msgid "Execute"
 msgstr ""
 
-msgid "Number of calculations"
-msgstr ""
-
-msgid "Spent time"
+msgid "Executions, spent time"
 msgstr ""
 
 msgid "Text"
@@ -1191,6 +1190,20 @@ msgid ""
 "  '*' - any substring;\n"
 "  '?' - any character.\n"
 "Regular expression enclosed between the symbols '/' (/mod_(System|LogicLev)/)."
+msgstr ""
+
+msgid ""
+"In the field you set time both with the real number and the natural text multiplier also translated and in base language:\n"
+"- day, days (*86400)    - one and multiple days;\n"
+"- hour, hours (*3600)   - one and multiple hours;\n"
+"- minute, minutes (*60) - one and multiple minutes;\n"
+"- millisecond, milliseconds, ms (*1e-3) - one and multiple milliseconds;\n"
+"- microsecond, microseconds, us (*1e-6) - one and multiple microseconds;\n"
+"- nanosecond, nanoseconds, ns (*1e-9)   - one and multiple nanoseconds;\n"
+"- and all other are meant as seconds with substitution by 'second', 'seconds' or 's'."
+msgstr ""
+
+msgid "1 second;10 seconds;30 seconds;1 minute;10 minutes;30 minutes;1 hour;12 hours;1 day;10 days"
 msgstr ""
 
 #, c-format
@@ -1567,22 +1580,55 @@ msgstr ""
 msgid "day"
 msgstr ""
 
+msgid "days"
+msgstr ""
+
 msgid "hour"
 msgstr ""
 
-msgid "min"
+msgid "hours"
+msgstr ""
+
+msgid "minute"
+msgstr ""
+
+msgid "minutes"
 msgstr ""
 
 msgid "s"
 msgstr ""
 
+msgid "second"
+msgstr ""
+
+msgid "seconds"
+msgstr ""
+
 msgid "ms"
+msgstr ""
+
+msgid "millisecond"
+msgstr ""
+
+msgid "milliseconds"
 msgstr ""
 
 msgid "us"
 msgstr ""
 
+msgid "microsecond"
+msgstr ""
+
+msgid "microseconds"
+msgstr ""
+
 msgid "ns"
+msgstr ""
+
+msgid "nanosecond"
+msgstr ""
+
+msgid "nanoseconds"
 msgstr ""
 
 msgid "YiB"
@@ -1676,6 +1722,7 @@ msgid ""
 "\t\t\t Change that once before use on DBs with the fixed type \"char({N})\"!\n"
 "limObjNm_SZ\t[*100...200] NAME size of the OpenSCADA objects.\n"
 "\t\tWARNING! Change that once before use on DBs with the fixed type \"char({N})\"!\n"
+"limObjDscr_SZ\t[300...*1000...1000000] DESCR size of the OpenSCADA objects.\n"
 "limArchID_SZ\t[*50...90] ID size of the value archive objects.\n"
 "\t\tWARNING! Increase it only, else you can get problems on Archive.FSArch!\n"
 "\t\t\t Change that once before use on DBs with the fixed type \"char({N})\"!\n"
@@ -1757,17 +1804,17 @@ msgstr ""
 msgid "Termination signal is received. Stopping the program!"
 msgstr ""
 
-msgid "Floating point exception is caught!"
-msgstr ""
-
 #, c-format
 msgid "Close the process %d of the child!"
 msgstr ""
 
-msgid "Segmentation fault signal!"
+msgid "Floating point exception!"
 msgstr ""
 
 msgid "Program aborted!"
+msgstr ""
+
+msgid "Segmentation fault signal!"
 msgstr ""
 
 #, c-format
@@ -2412,6 +2459,13 @@ msgid "Error attaching the new controller '%s'."
 msgstr ""
 
 msgid "Module does not support compilation of the programming language."
+msgstr ""
+
+#, c-format
+msgid "all %d, running %d, enabled %d%s"
+msgstr ""
+
+msgid "Errors: "
 msgstr ""
 
 msgid "Owner"

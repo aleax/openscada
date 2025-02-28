@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebCfgD file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2008-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1270,7 +1270,7 @@ function selectChildRecArea( node, aPath, cBlk )
 			selectPage('/'+pathLev(selPath,0)+dataReq.textContent);
 		    }
 		    else {
-			var com = '<set>';
+			var com = "<set tp='"+this.srcNode.nodeName.toLowerCase()+"'>";
 			for(var f_com = 0; f_com < this.srcNode.childNodes.length; f_com++)
 			    com += "<"+this.srcNode.childNodes[f_com].nodeName+" id='"+this.srcNode.childNodes[f_com].getAttribute('id')+"'>"+
 				this.srcNode.childNodes[f_com].textContent+"</"+this.srcNode.childNodes[f_com].nodeName+">";
@@ -2283,7 +2283,7 @@ if(actTreeUpdt) {
 }
 //  Update actions
 var actUpdate = document.getElementById('actUpdate');
-if(actUpdate) actUpdate.onclick = function()	{ if(this.className=='active') pageRefresh(); return false; }
+if(actUpdate) actUpdate.onclick = function()	{ if(this.className=='active') pageRefresh(); treeUpdate(); return false; }
 var actStart = document.getElementById('actStart');
 if(actStart) actStart.onclick = function()	{ if(this.className=='active') pageCyclRefrStart(); return false; }
 var actStop = document.getElementById('actStop');

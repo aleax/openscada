@@ -30,7 +30,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Visual control area engine
 </td>
-<td> 7.13 </td>
+<td> 7.15 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -230,9 +230,9 @@
 </p><p>User can create many themes, each of which will keep the color, font and other properties of the frame elements. Simple changing of the theme will allow you to change the interface of VC, and the possibility of appointing an individual theme in the user's profile allows to take in the account his individual features.
 </p><p>To realize this opportunity, when creating a frame, it is necessary for the properties of color, font and others set the "Configuration" (of the table in the "Process" tab) in the value of "From style". And in the parameter "Configuration template" to specify the identifier of the style field. Next, this field will automatically appear in the style manager and can be modified there. The style manager is available on the project configuration page in the tab "Styles". In this tab, you can the styles create, delete and edit, delete their fields.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:683px;"><a class="image" href="http://oscada.org/wiki/File:VCA_prj_stl.png"><img class="thumbimage" height="658" src="../files/VCA_prj_stl.png" width="681" /></a>  <div class="thumbcaption">Figure. Tab "Styles" of the configuration page of the project.</div></div></div></div>
-<p>In general, the styles are available from the project level. At the level of the widget libraries you can only define the style fields for the widgets. At the project level, at the choice of style, it is started the work with styles, which includes access to the fields of styles instead of direct attribute values. In fact, this means that when reading or writing a widget attribute these operations will be carried out with the corresponding field of the chosen style.
-</p><p>When starting a project, the project-style will be used. In the future, the user can choose a style from the list of available. The user-selected style will be saved and used the next time the project is launched.
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:768px;"><a class="image" href="http://oscada.org/wiki/File:VCA_prj_stl.png"><img class="thumbimage" height="719" src="../files/VCA_prj_stl.png" width="766" /></a>  <div class="thumbcaption">Figure. Tab "Styles" of the configuration page of the project.</div></div></div></div>
+<p>In general, the styles are available from the project level. At the level of the widget libraries you can only define the style fields for the widgets. At the project level, at the choice of style, it is started the work with styles, which includes access to the fields of styles instead of direct attribute values. In fact, this means that when reading or writing a widget attribute these operations will be carried out with the corresponding field of the chosen style. The configuration field "Write to style in the execution context" allows of dynamic changing the style fields in the execution context by writing to the proper attributes, but that can be done in wrong, so that is why the field is disabled by default.
+</p><p>When starting a project, the project-style will be used. The user can choose a style from the list of available styles of the running project. The user-selected style will be saved and used in next time the project is launched.
 </p><p><br />
 </p>
 <h3><span class="mw-headline" id="Events.2C_their_processing_and_the_events.27_maps"><span class="mw-headline-number">3.5</span> Events, their processing and the events' maps</span></h3>
@@ -1634,8 +1634,8 @@ Where:
 <ul><li> "Standard" — repeating parameters of events on holding <b>{delay}-{interval}</b>, time in milliseconds;</li>
 <li> "Checkable" — toggle value;</li>
 <li> "Menu" — list of addresses of the menu elements like to <b>/grp1/grp2/item1</b>;</li>
-<li> "Load" — description line <b>{FilesTemplate}|{Header}|{FileByDefaultAndLoaded}|{FileMime}</b> and loaded file content. The files template like to "Images (*.png *.xpm *.jpg);;CSV-file (*.csv)".</li>
-<li> "Save" — description line <b>{FilesTemplate}|{Header}|{FileByDefault}|{FileMime}</b> and saving file content. The files template like to before one.</li></ul>
+<li> "Load" — description line <b>{FilesTemplate}|{Header}|{FileByDefaultAndLoaded}|{FileMime}</b> and loaded file content from next line. The files template like to "Images (*.png *.xpm *.jpg);;CSV-file (*.csv)".</li>
+<li> "Save" — description line <b>{FilesTemplate}|{Header}|{FileByDefault}|{FileMime}</b> and saving file content from next line. The files template like to before one.</li></ul>
 </td></tr>
 <tr>
 <td> img </td>
@@ -2067,7 +2067,13 @@ Where:
 <td> fit </td>
 <td> Fit to the widget size </td>
 <td> 26 </td>
-<td> Sign "Coordinate the contents with the widget size".
+<td> Sign of coordination the contents with the widget size.
+</td></tr>
+<tr>
+<td> keepAspect </td>
+<td> Keep aspect ratio at fitting </td>
+<td> 35 </td>
+<td> Sign of keeping image aspect ratio at fitting to whole size of the widget.
 </td></tr>
 <tr>
 <td colspan="4"> <i>Attributes of the animation-video (Animation)</i>
@@ -2076,7 +2082,7 @@ Where:
 <td> fit </td>
 <td> Fit to the widget size </td>
 <td> 26 </td>
-<td> Sign "Coordinate the contents with the widget size".
+<td> Sign of coordination the contents with the widget size.
 </td></tr>
 <tr>
 <td> speed </td>
@@ -3580,5 +3586,5 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/en">Modules/VCAEngine/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/en">Modules/VCAEngine/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.8</td></tr></table></body>
 </html>

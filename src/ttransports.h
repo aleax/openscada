@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttransports.h
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,12 +21,13 @@
 #ifndef TTRANSPORTS_H
 #define TTRANSPORTS_H
 
-#define STR_VER		20		//TransportS type modules version
+#define STR_VER		21		//TransportS type modules version
 #define STR_ID		"Transport"
 #define STR_IN_PREF	"in_"
 #define STR_OUT_PREF	"out_"
 #define STR_A_PRM	"prms"
-#define STR_A_PRM_CFGP	"CFG:"
+#define STR_A_PRM_CFGP	"cfg:"
+#define STR_PROP_GRP	"con"
 
 #include <string>
 
@@ -136,8 +137,6 @@ class TTransportIn : public TCntrNode, public TConfig
 	ResMtx	mLogRes;
 	vector<AutoHD<TTransportOut> >	mAssociateTrO;
 
-	map<string, TVariant>	mConPrms;
-
 	// IO log
 	int	mLogLen		:15;
 	int	mLogItLim	:21;
@@ -238,7 +237,6 @@ class TTransportOut : public TCntrNode, public TConfig
 	string	mDB;
 
 	time_t	mStartTm;
-	map<string, TVariant>	mConPrms;
 	ResMtx	mReqRes, mLogRes;
 
 	AutoHD<TTransportIn>	mAssociateSrcO;
@@ -376,7 +374,7 @@ class TTransportS : public TSubSYS
 	AutoHD<TTypeTransport> at( const string &iid ) const	{ return modAt(iid); }
 
 	static TVariant prm( string &cnt, const string &id, const TVariant &val = TVariant(), bool toWr = false );
-	static string cntrCmdPrm( XMLNode *opt, const string &path, const string &cnt );
+	static string cntrCmdPrm( TCntrNode *cntrO, XMLNode *opt, const string &path, const string &cnt );
 
     protected:
 	void load_( );

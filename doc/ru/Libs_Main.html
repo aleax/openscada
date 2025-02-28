@@ -27,18 +27,20 @@
 <tr>
 <td> <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">Основная библиотека</a>
 </td>
-<td> 2.2 </td>
+<td> 2.3 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_base </td>
 <td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td>
-<td> Library of the main templates of the DAQ-sources processing and related services.
-<ul><li> <b>Founded:</b> January 2006</li>
-<li> <b>Sponsored by:</b> depending on the item ...</li>
-<li> <b>Used by:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">most projects on OpenSCADA</a></li></ul>
-<dl><dd>- finish of implementation the Partial Content requests in <a href="Libs_Main.html#fileServerHTTP" title="Special:MyLanguage/Libs/Main">WebUser: HTTP File Server</a> after support the HEAD request in <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a>.</dd></dl>
+<td> Библиотека основных шаблонов обработки DAQ-источников и производных сервисов.
+<ul><li> <b>Основано:</b> Январь 2006</li>
+<li> <b>Спонсировано:</b> зависимо от элемента ...</li>
+<li> <b>Использовано:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">большинство проектов на OpenSCADA</a></li>
+<li> <b><a href="../en/To_do.html" title="Special:MyLanguage/Works/To do">Задачи (To Do)</a>:</b></li></ul>
+<p><br />
+</p>
 </td></tr></table>
 <p>Библиотека создана для предоставления основных шаблонов обработки DAQ-источников и производных сервисов.
 </p><p>Названия элементов и их параметров доступны на языках: Английский, Украинский и mRussian. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода <i>tr()</i> и перевод этих сообщений также доступен Английским, Украинским и mRussian.
@@ -77,8 +79,9 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <li class="toclevel-1 tocsection-3"><a href="#Services"><span class="tocnumber">3</span> <span class="toctext">Services</span></a>
 <ul>
 <li class="toclevel-2"><a href="#Notificator_by_SMS.2C_EMail-SMTP_.28ntf.29"><span class="tocnumber">3.1</span> <span class="toctext">Notificator by SMS, EMail-SMTP (ntf)</span></a></li>
-<li class="toclevel-2"><a href="#Initiative_connections_processing_for_the_associated_output_transports_.28initConAssociateTrs.29"><span class="tocnumber">3.2</span> <span class="toctext">Initiative connections processing for the associated output transports (initConAssociateTrs)</span></a></li>
-<li class="toclevel-2"><a href="#Weather_.28weather.29"><span class="tocnumber">3.3</span> <span class="toctext">Weather (weather)</span></a></li>
+<li class="toclevel-2"><a href="#Control_the_remote_initiative_connections_.28initRemCntr.29"><span class="tocnumber">3.2</span> <span class="toctext">Control the remote initiative connections (initRemCntr)</span></a></li>
+<li class="toclevel-2"><a href="#Initiative_connections_processing_for_the_associated_output_transports_.28initConAssociateTrs.29"><span class="tocnumber">3.3</span> <span class="toctext">Initiative connections processing for the associated output transports (initConAssociateTrs)</span></a></li>
+<li class="toclevel-2"><a href="#Weather_.28weather.29"><span class="tocnumber">3.4</span> <span class="toctext">Weather (weather)</span></a></li>
 </ul>
 </li>
 <li class="toclevel-1 tocsection-4"><a href="#For_WebUser"><span class="tocnumber">4</span> <span class="toctext">For WebUser</span></a>
@@ -504,7 +507,7 @@ no;last;substitute<br />
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainAnUnifCfg.png" title="Configuration."><img alt="Configuration." height="452" src="../en/files/LibsMainAnUnifCfg.png" width="385" /></a></div>
 <p><b><u>Configuring and using</u></b><br />
 </p>
-<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the need scheduling properties.</dd>
 <dd>2. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select this template for it. Enable the parameter.</dd>
 <dd>3. Into the tab "Template configuration" of the logical parameter object you need to set:
 <ul><li> <i>Input</i> — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">link to a source of the "raw" signal</a>.</li>
@@ -556,7 +559,7 @@ no;last;substitute<br />
 <li> <i>Border up/down alarm/warning</i> — set when it is necessary to generate violations at the exceeding of the alarm/warning borders.</li>
 <li> <i>Hysteresis of borders violation</i> — set the hysteresis of removing the violation, that is, removal of the violations occurs at the specified percentage later, in order to prevent the frequent generation by fluctuating the value near the border.</li>
 <li> <i>Motion speed</i> — set if it is necessary to warn about fast change of value.</li>
-<li> <i>Name, Description, Dimension, Precision, Logarithmic scale</i> — set this information as needed when displayed, or as an element of the passport.</li></ul></dd></dl>
+<li> <i>Name, Description, Dimension, Precision, Logarithmic scale</i> — set this information as need when displayed, or as an element of the passport.</li></ul></dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -985,7 +988,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainManInUnifCfg.png" title="Configuration."><img alt="Configuration." height="299" src="../en/files/LibsMainManInUnifCfg.png" width="381" /></a></div>
 <p><b><u>Configuring and using</u></b><br />
 </p>
-<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the need scheduling properties.</dd>
 <dd>2. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select this template for it. Enable the parameter.</dd>
 <dd>3. Into the tab "Template configuration" of the logical parameter object you need to set:
 <ul><li> <i>Input/Output</i> — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">link to a source of the "raw" IO signal</a>, or do not link for the stand-alone mode.</li>
@@ -1002,7 +1005,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <li> <i>Border up/down alarm/warning</i> — set when it is necessary to generate violations at the exceeding of the alarm/warning borders.</li>
 <li> <i>Hysteresis of borders violation</i> — set the hysteresis of removing the violation, that is, removal of the violations occurs at the specified percentage later, in order to prevent the frequent generation by fluctuating the value near the border.</li>
 <li> <i>Motion speed</i> — set if it is necessary to warn about fast change of value.</li>
-<li> <i>Name, Description, Dimension, Precision, Logarithmic scale</i> — set this information as needed when displayed, or as an element of the passport.</li></ul></dd></dl>
+<li> <i>Name, Description, Dimension, Precision, Logarithmic scale</i> — set this information as need when displayed, or as an element of the passport.</li></ul></dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -1170,7 +1173,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainDigitBlockUnifCfg.png" title="Configuration."><img alt="Configuration." height="301" src="../en/files/LibsMainDigitBlockUnifCfg.png" width="410" /></a></div>
 <p><b><u>Configuring and using</u></b><br />
 </p>
-<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the need scheduling properties.</dd>
 <dd>2. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select this template for it. Enable the parameter.</dd>
 <dd>3. Into the tab "Template configuration" of the logical parameter object you need to set:
 <ul><li> All the states and commands — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">link to a source of the "raw" signal</a>.</li>
@@ -1374,7 +1377,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainDigAlarmCfg.png" title="Configuration."><img alt="Configuration." height="309" src="../en/files/LibsMainDigAlarmCfg.png" width="418" /></a></div>
 <p><b><u>Configuring and using</u></b><br />
 </p>
-<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the need scheduling properties.</dd>
 <dd>2. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select this template for it. Enable the parameter.</dd>
 <dd>3. Into the tab "Template configuration" of the logical parameter object you need to set:
 <ul><li> "Alarm "{st}:{lev}:{mess}" — define the criterion for the violation formation, leave blank to disable the violations generation.</li>
@@ -1612,7 +1615,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainCodeStateCfg.png" title="Configuration."><img alt="Configuration." height="303" src="../en/files/LibsMainCodeStateCfg.png" width="324" /></a></div>
 <p><b><u>Configuring and using</u></b><br />
 </p>
-<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the need scheduling properties.</dd>
 <dd>2. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select this template for it. Enable the parameter.</dd>
 <dd>3. Into the tab "Template configuration" of the logical parameter object you need to set:
 <ul><li> <i>Input</i> and <i>Output</i> — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">link to a source of the "raw" signal</a>.</li>
@@ -2211,7 +2214,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainPidUnifCfg.png" title="Configuration."><img alt="Configuration." height="885" src="../en/files/LibsMainPidUnifCfg.png" width="506" /></a></div>
 <p><b><u>Configuring and using</u></b><br />
 </p>
-<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the need scheduling properties.</dd>
 <dd>2. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select this template for it. Enable the parameter.</dd>
 <dd>3. Into the tab "Template configuration" of the logical parameter object you need to set:
 <ul><li> <i>Input</i> — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">link to a source of the "raw" analog signal</a>.</li>
@@ -2229,7 +2232,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <li> <i>Border up/down alarm/warning</i> — set when it is necessary to generate violations at the exceeding of the alarm/warning borders.</li>
 <li> <i>Hysteresis of borders violation</i> — set the hysteresis of removing the violation, that is, removal of the violations occurs at the specified percentage later, in order to prevent the frequent generation by fluctuating the value near the border.</li>
 <li> <i>Motion speed</i> — set if it is necessary to warn about fast change of value.</li>
-<li> <i>Name, Description, Dimension, Precision, Logarithmic scale</i> — set this information as needed when displayed, or as an element of the passport.</li></ul></dd></dl>
+<li> <i>Name, Description, Dimension, Precision, Logarithmic scale</i> — set this information as need when displayed, or as an element of the passport.</li></ul></dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -2605,7 +2608,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 </p>
 <dl><dd>1. Create a source controller object in the module "<a href="../en/Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>" and set its identifier like to "SYSData".</dd>
 <dd>2. Create a source parameter object in the previous controller object and set its identifier like to "UPS".</dd>
-<dd>3. Create and start a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>3. Create and start a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical controller object</a> or use any presented one with the need scheduling properties.</dd>
 <dd>4. Create a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical parameter object</a> and select the template for it. Enable the parameter.</dd>
 <dd>5. In the tab "Template configuration" of the logical parameter object you need to set:
 <ul><li> <i>Source object's address</i> — to address of the source UPS parameter object (see to step 1) like to "System.SYSData.UPS".</li></ul></dd>
@@ -2765,7 +2768,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 </p>
 <dl><dd>1. Create a source controller object in the module "<a href="Modules/SNMP.html" title="Special:MyLanguage/Modules/SNMP">SNMP</a>" and set its identifier like to "SYSData".</dd>
 <dd>2. Create a source parameter object in the previous controller object and set its identifier like to "DEV".</dd>
-<dd>3. Create and start a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>3. Create and start a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical controller object</a> or use any presented one with the need scheduling properties.</dd>
 <dd>4. Create a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical parameter object</a> and select the template for it. Enable the parameter.</dd>
 <dd>5. In the tab "Template configuration" of the logical parameter object you need to set:
 <ul><li> <i>Source object's address</i> — to address of the source SNMP device parameter object (see to step 1) like to "SNMP.SYSData.DEV".</li>
@@ -2905,7 +2908,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <p><b><u>Configuring and using</u></b><br />
 </p>
 <dl><dd>1. Create a source controller object in the module "<a href="../en/Modules/System.html" title="Special:MyLanguage/Modules/System">System</a>" and set its identifier like to "SYSData", set the property "Auto create active data sources" to "All sources" and start by setting "Running".</dd>
-<dd>2. Create and start a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>2. Create and start a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical controller object</a> or use any presented one with the need scheduling properties.</dd>
 <dd>3. Create a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical parameter object</a> and select the template for it. Enable the parameter.</dd>
 <dd>4. In the tab "Template configuration" of the logical parameter object you need to set:
 <ul><li> <i>Source object's address</i> — to address of the source disk SMART parameter object like to "System.SYSData.DiskSMARTsda".</li></ul></dd>
@@ -3180,7 +3183,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 </p>
 <dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "SMS", one transport suitable for more receivers.</dd>
 <dd>2. Set for proper address. The serial port speed, asynchronous data format and timeouts will adjusted by the function.</dd>
-<dd>3. Create of needed <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">user protocol object</a> based on the templates, with Identifier like to "SMS".</dd>
+<dd>3. Create of need <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">user protocol object</a> based on the templates, with Identifier like to "SMS".</dd>
 <dd>4. Place some requesting commands directly into presented or a new internal OpenSCADA-procedure like to:</dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="nx">req</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">XMLNode</span><span class="p">(</span><span class="s2">"send"</span><span class="p">);</span> <span class="nx">req</span><span class="p">.</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"ProtIt"</span><span class="p">,</span><span class="s2">"SMS"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"pin"</span><span class="p">,</span><span class="s2">"1111"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"tel"</span><span class="p">,</span><span class="s2">"+380XXXXXXXXX"</span><span class="p">).</span><span class="nx">setText</span><span class="p">(</span><span class="s2">"Notify message"</span><span class="p">);</span>
 <span class="nx">SYS</span><span class="p">.</span><span class="nx">Transport</span><span class="p">.</span><span class="nx">Serial</span><span class="p">.</span><span class="nx">out_SMS</span><span class="p">.</span><span class="nx">messIO</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="s2">"UserProtocol"</span><span class="p">);</span>
@@ -3201,7 +3204,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 </p>
 <dl><dd>1. Create an output transport of the type "<a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" or "<a href="../en/Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a>" and set its Identifier like to "SMTP", one transport suitable for more receivers. </dd>
 <dd>2. Set-up for proper address, for Sockets(25) or SSL(465). The transport timeouts will be adjusted by the function.</dd>
-<dd>3. Create of needed <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">user protocol object</a> based on the templates, with Identifier like to "SMTP".</dd>
+<dd>3. Create of need <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">user protocol object</a> based on the templates, with Identifier like to "SMTP".</dd>
 <dd>4. Place some requesting commands directly into allowed or a new internal OpenSCADA procedure like to:</dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="nx">req</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">XMLNode</span><span class="p">(</span><span class="s2">"send"</span><span class="p">);</span>
 <span class="nx">req</span><span class="p">.</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"ProtIt"</span><span class="p">,</span><span class="s2">"SMTP"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"from"</span><span class="p">,</span><span class="s2">"noreply@oscada.org"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"to"</span><span class="p">,</span><span class="s2">"oscada@oscada.org"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"topic"</span><span class="p">,</span><span class="s2">"My topic"</span><span class="p">).</span><span class="nx">setText</span><span class="p">(</span><span class="s2">"My message"</span><span class="p">);</span>
@@ -3214,7 +3217,162 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <table class="wikitable">
 
 <tr>
-<td> <span id="initConAssociateTrs" title="#initConAssociateTrs"><h3><span class="mw-headline" id="Initiative_connections_processing_for_the_associated_output_transports_.28initConAssociateTrs.29"><span class="mw-headline-number">3.2</span> Initiative connections processing for the associated output transports (<a href="Libs_Main.html#initConAssociateTrs" title="Special:MyLanguage/Libs/Main">initConAssociateTrs</a>)</span></h3></span>
+<td> <span id="initRemCntr" title="#initRemCntr"><h3><span class="mw-headline" id="Control_the_remote_initiative_connections_.28initRemCntr.29"><span class="mw-headline-number">3.2</span> Control the remote initiative connections (<a href="Libs_Main.html#initRemCntr" title="Special:MyLanguage/Libs/Main">initRemCntr</a>)</span></h3></span>
+</td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainInitRemCntrOp.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="1011" src="../en/files/LibsMainInitRemCntrOp.png" width="433" /></a></div>
+<p>The template of processing input initiative connections expands early one template <a href="#initConAssociateTrs">initiative connections processing for the associated output transports</a> by complete representing data of the remote OpenSCADA hosts on some aggregation server and with a possibility of control the remote hosts through the server, that is finishing the <a href="DAQ.html#PassiveAndInitiative" title="Special:MyLanguage/Documents/DAQ">conception of data acquisition in the passive mode and the initiative connection</a>.
+</p><p>The template does in whole:
+</p>
+<ul><li> detecting a new connection from remote host, which has no ID;</li>
+<li> sending an acquaintance direct request to the established connection for getting KEY of the host, when it was already connected early, and for getting information about the host for creating ID of the host;</li>
+<li> setting ID for the connection;</li>
+<li> creating a record in the OpenSCADA hosts table for the connection and sending all followed requests already through the host;</li>
+<li> creating on the remote host a representative Logical Controller;</li>
+<li> creating on the remote host a representative DAQ.System Controller Object in the automatic mode, at missing any other there;</li>
+<li> processing the present DAQ.System Controller Objects to link the Logical Level parameters to them and creating some processing logical parameters;</li>
+<li> writing the generated key by a line "<b>SrcKey: {KEY}</b>" to description of the Logical Controller as a sign of finalising the initialisation;</li>
+<li> creating a Controller Object in DAQ.DAQGate with connection to the remote Logical Controller.</li></ul>
+<p>ID of the remote host is formed in the view "<b>{HostDomain}{StatName}{RandKey}</b>" and with limiting to 20 symbols, where:
+</p>
+<ul><li> <i>HostDomain</i> — network host name-domain;</li>
+<li> <i>StatName</i> — station name of the OpenSCADA project;</li>
+<li> <i>RandKey</i> — random key in three digits.</li></ul>
+<p>Data model of the representative Logical Controller can contain both the generated links with processing parameters, and custom parameters, when the user is decided to publish some extra data. The generated items from DAQ.System are represents sources currently:
+</p>
+<ul><li> "CPU", "MEM", "sensors", "Power", "uptime" =&gt; links in the "System (SYS)" container parameter;</li>
+<li> "fs", "hddstat", "hddsmart" =&gt; links in the "Disk (DISK)" container parameter with a processing one for "hddsmart" by the template <a href="Libs_Main.html#DiskSMART" title="Special:MyLanguage/Libs/Main">base.DiskSMART</a>;</li>
+<li> "netstat" =&gt; links in the "Network (NET)" container parameter;</li>
+<li> "ups" =&gt; links in the root with a processing one by the template <a href="Libs_Main.html#UPS" title="Special:MyLanguage/Libs/Main">base.UPS</a>.</li></ul>
+<p>The aggregated data in <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQ.GAQGate</a> can be lifted to up, or used in derivative DAQ objects, or whether directly on custom frames, or in future on a Dynamic Frame, which scheduled to implement; and without any additional action you will get notification about violations on the hosts.
+</p><p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> inTransport </td>
+<td> Input transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> Sockets.InitRemCntr
+</td></tr>
+<tr>
+<td> conTm </td>
+<td> Connection time, ms </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 5000
+</td></tr>
+<tr>
+<td> cntrUser </td>
+<td> Access: user </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> root
+</td></tr>
+<tr>
+<td> cntrPass </td>
+<td> Access: password </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> openscada
+</td></tr>
+<tr>
+<td> cntrObj </td>
+<td> Control object in DAQ.LogicLev and DAQ.System </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> RemCntr
+</td></tr>
+<tr>
+<td> prcTr </td>
+<td> Processed connections </td>
+<td> Text </td>
+<td> Output </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainInitRemCntrCfg.png" title="Configuration."><img alt="Configuration." height="311" src="../en/files/LibsMainInitRemCntrCfg.png" width="423" /></a></div>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Create an input transport of receiving the initiative connections of the module "<a href="Modules/Sockets.html#InTr" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" or "<a href="../en/Modules/SSL.html#InTr" title="Special:MyLanguage/Modules/SSL">SSL</a>" with the name like to "Sockets.InitRemCntr".</dd>
+<dd>2. Set the previously created transport to the need address of opening the input socket and move it to the mode of creating the associative output transports, leaving the protocol field in empty.</dd>
+<dd>3. For this template create and run a logical controller object or use any available with the required scheduling properties.</dd>
+<dd>4. Create a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical parameter object</a> and select this template for it. Enable the parameter.</dd>
+<dd>5. In the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Input transport</i> — to value of the identifier of the input transport, created in the item 1, like to "Sockets.InitRemCntr";</li>
+<li> <i>Connection time</i> — timeout of connection to the initiative hosts after that to close the connection;</li>
+<li> <i>Access: user and password</i> — user and password of the remote host with permition of creation there Logical Controller and DAQ.System Controller Object, that is the user must be included to the "DAQ" group;</li>
+<li> <i>Control object in DAQ.LogicLev and DAQ.System</i> — to ID of managed-created Controller Objects on the remote hosts.</li></ul></dd>
+<dd>6. RESULT: Starting the controller object (where this parameter was created) and when it was not started, we should get checking the specifying input transport for initiative connections and their initialisation in described above way and with notification processed connection in the attribute "Processed connections".</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="initConAssociateTrs" title="#initConAssociateTrs"><h3><span class="mw-headline" id="Initiative_connections_processing_for_the_associated_output_transports_.28initConAssociateTrs.29"><span class="mw-headline-number">3.3</span> Initiative connections processing for the associated output transports (<a href="Libs_Main.html#initConAssociateTrs" title="Special:MyLanguage/Libs/Main">initConAssociateTrs</a>)</span></h3></span>
 </td>
 <td> 1.2 </td>
 <td> GPLv2 </td>
@@ -3330,12 +3488,12 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <p><b><u>Configuring and using</u></b><br />
 </p>
 <dl><dd>1. Create an input transport of receiving the initiative connections of <a href="Modules/Sockets.html#InTr" title="Special:MyLanguage/Modules/Sockets">the module "Sockets"</a> with the name like to "InitiateCons".</dd>
-<dd>2. Set the previously created transport to the needed address of opening the input socket and move it to the mode of creating the associative output transports, leaving the protocol field in empty.</dd>
+<dd>2. Set the previously created transport to the need address of opening the input socket and move it to the mode of creating the associative output transports, leaving the protocol field in empty.</dd>
 <dd>3. Provide a container of the data sources to which associative transports must be connected, which can be either a DAQ-module (such as "DAQ.ModBus"), or a logical controller (such as "DAQ.LogicLev.Sources"), or a parameter in it (such as "DAQ.LogicLev.PLC.Sources"), with logical level parameters representing the data source.</dd>
 <dd>4. For this template create and run a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical controller object</a> or use any available with the required scheduling properties.</dd>
 <dd>5. Create a <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">logical parameter object</a> and select this template for it. Enable the parameter.</dd>
 <dd>6. In the tab "Template configuration" of the logical parameter object you need to set:
-<ul><li> <i>Input transport</i> — to value of the identifier of the input transport, created in the item 1, like to "InitiateCons;</li>
+<ul><li> <i>Input transport</i> — to value of the identifier of the input transport, created in the item 1, like to "InitiateCons";</li>
 <li> <i>Output transport timeouts</i> — increase the first digit for very slow connections and typical is normal in most situations</li>
 <li> <i>Source objects path</i> — set according to the item 3, for the first part, and to the control field path, for the second part, for example, and typically for for "ModBus", is — "ModBus:%2fcntr%2fcfg%2fADDR".</li></ul></dd>
 <dd>6. RESULT: Starting the controller object (where this parameter was created) and when it was not started, we should get, in the attribute <i>prcTr</i> of the parameter for information about the processed and therefore successfully transport-linked data sources. In case of some violations, we will get the corresponding information in the attribute <i>err</i> of the parameter. The absence of a representative object for the received identifier is placed in the protocol of messages.</dd></dl>
@@ -3344,7 +3502,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <table class="wikitable">
 
 <tr>
-<td> <span id="weather" title="#weather"><h3><span class="mw-headline" id="Weather_.28weather.29"><span class="mw-headline-number">3.3</span> Weather (<a href="Libs_Main.html#weather" title="Special:MyLanguage/Libs/Main">weather</a>)</span></h3></span>
+<td> <span id="weather" title="#weather"><h3><span class="mw-headline" id="Weather_.28weather.29"><span class="mw-headline-number">3.4</span> Weather (<a href="Libs_Main.html#weather" title="Special:MyLanguage/Libs/Main">weather</a>)</span></h3></span>
 </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
@@ -3474,7 +3632,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <tr>
 <td> <span id="fileServerHTTP" title="#fileServerHTTP"><h3><span class="mw-headline" id="WebUser:_HTTP_File_Server_.28fileServerHTTP.29"><span class="mw-headline-number">4.1</span> WebUser: HTTP File Server (<a href="Libs_Main.html#fileServerHTTP" title="Special:MyLanguage/Libs/Main">fileServerHTTP</a>)</span></h3></span>
 </td>
-<td> 1.0 </td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk 
@@ -3482,7 +3640,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
 <p>The template for implementing a HTTP File Server directly in OpenSCADA, which is suitable one at missing a full-featured one for functions of servicing file requests from OpenSCADA Web-interfaces.
-</p><p>Currently there implemented only requesting files by the GET request of HTTP. There are supported also the Partial Content requests in single range and with forcing to this mode at some configured file size. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> That is work properly only for video and audio files and doesn't work for other files especially documents, so you have to configure the file size limit for solid reading in maximum size of your documents. For proper working the Partial Content requests we need to implement the HTTP request HEAD in the module <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> before implementing here!
+</p><p>Currently there implemented only requesting files by the GET request of HTTP. There are supported also chunks and the Partial Content requests in single range and with forcing to this mode at some configured file size.
 </p><p><b><u>Template IOs</u></b><br />
 </p>
 <table class="wikitable">
@@ -3524,6 +3682,15 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <td>
 </td></tr>
 <tr>
+<td> sender </td>
+<td> Sender </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
 <td> page </td>
 <td> WWW-page </td>
 <td> String </td>
@@ -3558,6 +3725,24 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <td> Not attribute </td>
 <td> Constant </td>
 <td> 10e6
+</td></tr>
+<tr>
+<td> tr </td>
+<td> Transport </td>
+<td> Object </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> prt </td>
+<td> Protocol </td>
+<td> Object </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
 </td></tr>
 <tr>
 <td> f_start </td>
@@ -3608,5 +3793,5 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/ru">Libs/Main/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/ru">Libs/Main/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.8</td></tr></table></body>
 </html>

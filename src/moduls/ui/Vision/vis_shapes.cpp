@@ -1804,8 +1804,13 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 	    break;
 	case A_MediaFit:
 	    shD->mediaFit = (bool)s2i(val);
-	    lab = dynamic_cast<QLabel*>(shD->addrWdg);
-	    if(lab) lab->setScaledContents(shD->mediaFit);
+	    if(shD->mediaType == FM_IMG) reld_cfg = true;
+	    else if((lab=dynamic_cast<QLabel*>(shD->addrWdg)))
+		lab->setScaledContents(shD->mediaFit);
+	    break;
+	case A_MediaKeepAspect:
+	    shD->mediaKeepAspect = (bool)s2i(val);
+	    reld_cfg = true;
 	    break;
 	case A_MediaType:
 	    if(shD->mediaType == s2i(val))	break;
@@ -1911,14 +1916,19 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val, const str
 		lab = dynamic_cast<QLabel*>(shD->addrWdg);
 		if(!lab) break;
 		lab->setAlignment(Qt::AlignCenter);
+		lab->setScaledContents(false);
 		if(!sdata.empty() && img.loadFromData((const uchar*)sdata.data(),sdata.size())) {
-		    lab->setPixmap(QPixmap::fromImage(img.scaled(
-			(int)((float)img.width()*w->xScale(true)),
-			(int)((float)img.height()*w->yScale(true)),
-			Qt::KeepAspectRatio,Qt::SmoothTransformation)));
-		    lab->setScaledContents(shD->mediaFit);
-		}
-		else lab->setPixmap(QPixmap());
+		    if(shD->mediaFit)
+			lab->setPixmap(QPixmap::fromImage(img.scaled(
+			    w->width()-2*shD->geomMargin,w->height()-2*shD->geomMargin,
+			    (shD->mediaKeepAspect?Qt::KeepAspectRatio:Qt::IgnoreAspectRatio),
+			    Qt::SmoothTransformation)));
+		    else lab->setPixmap(QPixmap::fromImage(img.scaled(
+			    (int)((float)img.width()*w->xScale(true)),
+			    (int)((float)img.height()*w->yScale(true)),
+			    Qt::KeepAspectRatio,Qt::SmoothTransformation)));
+		    //lab->setScaledContents(shD->mediaFit);
+		} else lab->setPixmap(QPixmap());
 		break;
 	    }
 	    case FM_ANIM: {

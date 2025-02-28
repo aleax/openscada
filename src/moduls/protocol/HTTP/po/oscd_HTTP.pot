@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-15 20:43+0300\n"
+"POT-Creation-Date: 2025-02-04 10:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -163,6 +163,10 @@ msgstr ""
 msgid "No HTTP POST function in the module '%s'!"
 msgstr ""
 
+#, c-format
+msgid "Method '%s' is not implemented by this server!"
+msgstr ""
+
 msgid "Login"
 msgstr ""
 
@@ -174,7 +178,7 @@ msgstr ""
 msgid "Select the necessary Web-module from the list below, <a href='%s'>logout</a> or <a href='%s'>login as an another user</a>."
 msgstr ""
 
-msgid "You are not logged in the system!"
+msgid "You are not logged in!"
 msgstr ""
 
 #, c-format

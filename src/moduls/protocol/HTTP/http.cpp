@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.HTTP file: http.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.8.13"
+#define MOD_VER		"3.9.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -176,7 +176,7 @@ TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	}
 	return false;
     }
-    //string pgCreator( string cnt, string rcode = "200 OK", string httpattrs = "Content-Type: text/html;charset={SYS}",
+    //string pgCreator( string cnt, string rcode = "", string httpattrs = "Content-Type: text/html;charset={SYS}",
     //                 string htmlHeadEls = "", string forceTmplFile = "" ) -
     //    Forming page or resource from content <cnt>, wrapped to HTTP result <rcode>, with HTTP additional attributes <httpattrs>,
     //    HTML additional head's element <htmlHeadEls> and forced template file <forceTmplFile>.
@@ -294,7 +294,7 @@ TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 
 	if(prms.size() < 2 || !prms[1].getS().size()) return answer;
 
-	return "HTTP/1.0 " + prms[1].getS() + "\x0D\x0A"
+	return "HTTP/1.1 " + prms[1].getS() + "\x0D\x0A"
 	   "Server: " + PACKAGE_STRING + "\x0D\x0A"
 	   "Accept-Ranges: bytes\x0D\x0A"
 	   "Content-Length: " + i2s(answer.size()) + "\x0D\x0A" +
@@ -871,8 +871,17 @@ bool TProtIn::mess( const string &reqst, string &answer )
 
 	    vars.push_back("oscd_lang: "+lang());
 
-	    // Check metods
-	    if(method == "GET") {
+	    // Generic request
+	    if(pos < request.size()) answer = request.substr(pos);
+	    void(TModule::*HTTP)(const string &meth, const string &uri, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt);
+	    if(wwwmod.at().modFunc("void HTTP(const string&,const string&,string&,vector<string>&,const string&,TProtocolIn*);",
+			(void (TModule::**)()) &HTTP, true))
+	    {
+		((&wwwmod.at())->*HTTP)(method, uri+prms, answer, vars, user+(userPrev.size()?"\n"+userPrev:""), this);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "Request:\n%s", request.c_str());
+	    }
+	    // Checking the metods
+	    else if(method == "GET") {
 		void(TModule::*HttpGet)(const string &uri, string &page, const string &sender, vector<string> &vars, const string &user);	//????[v1.0] Remove
 		void(TModule::*HTTP_GET)(const string &uri, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt);
 
@@ -889,7 +898,6 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		void(TModule::*HttpPost)(const string &uri, string &page, const string &sender, vector<string> &vars, const string &user);	//????[v1.0] Remove
 		void(TModule::*HTTP_POST)(const string &uri, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt);
 
-		answer = request.substr(pos);
 		if(wwwmod.at().modFunc("void HTTP_POST(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
 			(void (TModule::**)()) &HTTP_POST,true))
 		    ((&wwwmod.at())->*HTTP_POST)(uri+prms, answer, vars, user+(userPrev.size()?"\n"+userPrev:""), this);
@@ -899,7 +907,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		else throw TError(nodePath().c_str(), _("No HTTP POST function in the module '%s'!"), name_mod.c_str());
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "Post Content:\n%s", request.c_str());
 	    }
-	    else answer = pgCreator("<div class='error'>Method '"+method+"' isn't implemented by this server!</div>\n",
+	    else answer = pgCreator("<div class='error'>"+TSYS::strMess(_("Method '%s' is not implemented by this server!"),method.c_str())+"</div>\n",
 				    "501 Method Not Implemented");
 	} catch(TError &err) {
 	    //Check to direct file request for template
@@ -970,7 +978,7 @@ string TProtIn::getIndex( const string &user, const string &sender )
 	    "<p>"+TSYS::strMess(_("Select the necessary Web-module from the list below, <a href='%s'>logout</a> or <a href='%s'>login as an another user</a>."),("/logout"+prms).c_str(),("/login"+prms).c_str())+"</p>";
     else {
 	answer = answer +
-	    "<p style='color: #CF8122;'>"+_("You are not logged in the system!")+"</p>"
+	    "<p style='color: #CF8122;'>"+_("You are not logged in!")+"</p>"
 	    "<p>"+TSYS::strMess(_("To use some modules you must be logged in. <a href='%s'>Login now</a>."),("/login"+prms).c_str())+"</p>";
 	string a_log = mod->autoLogGet(sender);
 	if(!a_log.empty())

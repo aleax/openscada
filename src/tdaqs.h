@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tdaqs.h
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -52,6 +52,9 @@ class TDAQS : public TSubSYS
 
 	string subName( ) const	{ return _("Data Acquisition"); }
 	int subVer( ) const	{ return SDAQ_VER; }
+
+	char nodeAccess( const string &user, const string &owner = "", const string &group = "", int perm = -1 )
+	{ return TCntrNode::nodeAccess(user, owner.size()?owner:"root", group.size()?group:SDAQ_ID, (perm >= 0)?perm:0775); }
 
 	void unload( );
 

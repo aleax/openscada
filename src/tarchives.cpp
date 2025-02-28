@@ -62,7 +62,7 @@ TArchiveS::TArchiveS( ) :
     elMess.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     elMess.fldAdd(new TFld("MODUL",trS("Module(plugin) name"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     elMess.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    elMess.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
+    elMess.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     elMess.fldAdd(new TFld("START",trS("To start"),TFld::Boolean,0,"1"));
     elMess.fldAdd(new TFld("CATEG",trS("Messages categories"),TFld::String,0,"100"));
     elMess.fldAdd(new TFld("LEVEL",trS("Messages level"),TFld::Integer,TFld::Selectable,"1","0",
@@ -75,7 +75,7 @@ TArchiveS::TArchiveS( ) :
     elVal.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     elVal.fldAdd(new TFld("MODUL",trS("Module(plugin) name"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     elVal.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    elVal.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
+    elVal.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     elVal.fldAdd(new TFld("START",trS("To start"),TFld::Boolean,0,"1","0"));
     elVal.fldAdd(new TFld("ADDR",trS("Address"),TFld::String,0,"100"));
     elVal.fldAdd(new TFld("V_PER",trS("Period of the values, seconds"),TFld::Real,0,"12.6","1","0;100000"));
@@ -85,7 +85,7 @@ TArchiveS::TArchiveS( ) :
     //Value archive DB structure
     elAval.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limArchID_SZ).c_str()));
     elAval.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    elAval.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
+    elAval.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     elAval.fldAdd(new TFld("START",trS("To start"),TFld::Boolean,0,"1","0"));
     elAval.fldAdd(new TFld("SrcMode",trS("Source"),TFld::Integer,TFld::Selectable,"1","0",
 	TSYS::strMess("%d;%d;%d",TVArchive::Passive,TVArchive::DAQAttr,TVArchive::ActiveAttr),
@@ -1048,8 +1048,9 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/m_arch/clrAlrmDays",_("Days of the alarms automatic clearing"),RWRWR_,"root",SARH_ID,3,"tp","dec", "min","0",
 		"help",_("After that term the alarms are meant as forgotten and inactual,\nso removed from the table of the active alarms.\nZero disables the automatic clearing."));
 	    if(ctrMkNode("area",opt,-1,"/m_arch/view",_("View"),R_R___,"root",SARH_ID)) {
-		ctrMkNode("fld",opt,-1,"/m_arch/view/tm",_("Time, size (seconds) and level"),RWRW__,"root",SARH_ID,1,"tp","time");
-		ctrMkNode("fld",opt,-1,"/m_arch/view/size","",RWRW__,"root",SARH_ID,1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/m_arch/view/tm",_("Time, depth and level"),RWRW__,"root",SARH_ID,1,"tp","time");
+		ctrMkNode("fld",opt,-1,"/m_arch/view/size","",RWRW__,"root",SARH_ID,5,"tp","str","len","10",
+		    "dest","sel_ed","sel_list",TMess::labTimeSel().c_str(),"help",TMess::labTime().c_str());
 		ctrMkNode("fld",opt,-1,"/m_arch/view/lvl","",RWRW__,"root",SARH_ID,5,"tp","dec", "dest","select",
 		    "sel_id","0;1;2;3;4;5;6;7;-1;-2;-3;-4;-5;-6;-7",
 		    "sel_list",_("Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X]);"
@@ -1085,6 +1086,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("comm",opt,-1,"/v_arch/delSrcNo",_("Remove all with no source - passive"),RWRW__,"root",SARH_ID);
 	    ctrMkNode("comm",opt,-1,"/v_arch/delSrcErr",_("Remove all with error source - missing source"),RWRW__,"root",SARH_ID);
 	    ctrMkNode("comm",opt,-1,"/v_arch/delLost",_("Remove all lost archives - empty storage"),RWRW__,"root",SARH_ID);
+	    ctrMkNode("comm",opt,-1,"/v_arch/delDblLnks",_("Remove all doubly linked"),RWRW__,"root",SARH_ID);
 	}
 	return;
     }
@@ -1111,8 +1113,10 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    TBDS::genPrmSet(nodePath()+"messTm",(s2i(opt->text())>=TSYS::curTime()/1000000)?"0":opt->text(),opt->attr("user"));
     }
     else if(a_path == "/m_arch/view/size") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"messSize",DEF_messSize,opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(nodePath()+"messSize",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))
+	    opt->setText(TSYS::time2str(s2i(TBDS::genPrmGet(nodePath()+"messSize",DEF_messSize,opt->attr("user"))),false));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))
+	    TBDS::genPrmSet(nodePath()+"messSize",i2s(TSYS::str2time(opt->text(),false)),opt->attr("user"));
     }
     else if(a_path == "/m_arch/view/cat") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"messCat",DEF_messCat,opt->attr("user")));
@@ -1207,29 +1211,35 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/v_arch/nmb" && ctrChkNode(opt)) {
 	vector<string> list;
 	valList(list);
-	unsigned enCnt = 0, srcErrCnt = 0, srcNoCnt = 0, lostCnt = 0;
+	unsigned enCnt = 0, srcErrCnt = 0, srcNoCnt = 0, lostCnt = 0, dblLnkCnt = 0;
 	for(unsigned iA = 0; iA < list.size(); iA++) {
 	    AutoHD<TVArchive> vo = valAt(list[iA]);
 	    if(vo.at().startStat()) enCnt++;
-	    else if(vo.at().srcMode() != TVArchive::Passive && SYS->daq().at().attrAt(vo.at().srcData(),'.',true).freeStat())
-		srcErrCnt++;
+	    else if(vo.at().srcMode() != TVArchive::Passive) {
+		if(SYS->daq().at().attrAt(vo.at().srcData(),'.',true).freeStat()) srcErrCnt++;
+		else dblLnkCnt++;
+	    }
 	    if(vo.at().srcMode() == TVArchive::Passive)	srcNoCnt++;
 	    if(vo.at().DB().empty())	lostCnt++;
 	}
-	opt->setText(TSYS::strMess(_("all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost (empty storage) %d"),
-					list.size(),enCnt,srcNoCnt,srcErrCnt,lostCnt));
+	opt->setText(TSYS::strMess(_("all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost (empty storage) %d, doubly linked %d"),
+					list.size(),enCnt,srcNoCnt,srcErrCnt,lostCnt,dblLnkCnt));
     }
     else if(a_path.find("/v_arch/del") == 0 && ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR)) {
 	bool SrcNo = (a_path.find("delSrcNo") != string::npos);
 	bool SrcErr = (a_path.find("delSrcErr") != string::npos);
 	bool Lost = (a_path.find("delLost") != string::npos);
+	bool dblLnks = (a_path.find("delDblLnks") != string::npos);
+	bool tmpSign = false;
 
 	vector<string> list;
 	valList(list);
 	for(unsigned iA = 0; iA < list.size(); iA++) {
 	    AutoHD<TVArchive> vo = valAt(list[iA]);
 	    if(!((SrcNo && vo.at().srcMode() == TVArchive::Passive) ||
-		    (SrcErr && vo.at().srcMode() != TVArchive::Passive && SYS->daq().at().attrAt(vo.at().srcData(),'.',true).freeStat()) ||
+		    (vo.at().srcMode() != TVArchive::Passive && !vo.at().startStat() &&
+			(((tmpSign=SYS->daq().at().attrAt(vo.at().srcData(),'.',true).freeStat()) && SrcErr) ||
+			(dblLnks && !tmpSign))) ||
 		    (Lost && vo.at().DB().empty())))
 		continue;
 
@@ -1623,7 +1633,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/st/beg",_("Begin"),R_R_R_,"root","root",1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
-		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",SARH_ID,RWRWR_);
+		TConfig::cntrCmdMake(this,opt,"/prm/cfg",0,"root",SARH_ID,RWRWR_);
 		ctrRemoveNode(opt,"/prm/cfg/MODUL");
 		ctrRemoveNode(opt,"/prm/cfg/REDNT");
 		ctrRemoveNode(opt,"/prm/cfg/REDNT_RUN");
@@ -1633,8 +1643,9 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(runSt && ctrMkNode("area",opt,-1,"/mess",_("Messages"),R_R___,"root",SARH_ID)) {
-	    ctrMkNode("fld",opt,-1,"/mess/tm",_("Time, size (seconds) and level"),RWRW__,"root",SARH_ID,1,"tp","time");
-	    ctrMkNode("fld",opt,-1,"/mess/size","",RWRW__,"root",SARH_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/mess/tm",_("Time, depth and level"),RWRW__,"root",SARH_ID,1,"tp","time");
+	    ctrMkNode("fld",opt,-1,"/mess/size","",RWRW__,"root",SARH_ID,5,"tp","str","len","10",
+		"dest","sel_ed","sel_list",TMess::labTimeSel().c_str(),"help",TMess::labTime().c_str());
 	    ctrMkNode("fld",opt,-1,"/mess/lvl","",RWRW__,"root",SARH_ID,5,"tp","dec", "dest","select",
 		"sel_id","0;1;2;3;4;5;6;7",
 		"sel_list",_("Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X])"),
@@ -1664,7 +1675,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/prm/st/end" && ctrChkNode(opt))		opt->setText(i2s(end()));
     else if(a_path == "/prm/st/beg" && ctrChkNode(opt))		opt->setText(i2s(begin()));
-    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SARH_ID,RWRWR_);
+    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(this,opt,TSYS::pathLev(a_path,2),"root",SARH_ID,RWRWR_);
     else if(a_path == "/mess/tm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD)) {
 	    opt->setText(TBDS::genPrmGet(nodePath()+"messTm",DEF_messTm,opt->attr("user")));
@@ -1674,8 +1685,10 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	    TBDS::genPrmSet(nodePath()+"messTm",(s2i(opt->text())>=TSYS::curTime()/1000000)?"0":opt->text(),opt->attr("user"));
     }
     else if(a_path == "/mess/size") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"messSize",DEF_messSize,opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(nodePath()+"messSize",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))
+	    opt->setText(TSYS::time2str(s2i(TBDS::genPrmGet(nodePath()+"messSize",DEF_messSize,opt->attr("user"))),false));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))
+	    TBDS::genPrmSet(nodePath()+"messSize",i2s(TSYS::str2time(opt->text(),false)),opt->attr("user"));
     }
     else if(a_path == "/mess/cat") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"messCat",DEF_messCat,opt->attr("user")));

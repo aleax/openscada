@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.FSArch file: val.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,7 +41,8 @@ using namespace FSArch;
 //*************************************************
 ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
     TVArchivator(iid,idb,cf_el), chkANow(false), infoTbl(dataRes()),
-    time_size(800), mNumbFiles(100), mMaxCapacity(0), round_proc(0.01), mChkTm(60), mPackTm(10), mPackInfoFiles(false), mLstCheck(0)
+    time_size(800), mNumbFiles(100), mMaxCapacity(0), round_proc(0.01), mChkTm(60), mPackTm(10),
+    mPackInfoFiles(false), mRemoveOrigAtUnpackErr(false), mLstCheck(0)
 {
     setSelPrior(1000);
     if(SYS->prjNm().size()) setAddr("ARCHIVES/VAL/"+iid);
@@ -84,6 +85,7 @@ void ModVArch::load_( )
 	vl = prmNd.attr("PackTm");	if(!vl.empty()) setPackTm(s2i(vl));
 	vl = prmNd.attr("CheckTm");	if(!vl.empty()) setCheckTm(s2i(vl));
 	vl = prmNd.attr("PackInfoFiles"); if(!vl.empty()) setPackInfoFiles(s2i(vl));
+	vl = prmNd.attr("RemoveOrigAtUnpackErr"); if(!vl.empty()) setRemoveOrigAtUnpackErr(s2i(vl));
     } catch(...) { }
 }
 
@@ -97,6 +99,7 @@ void ModVArch::save_( )
     prmNd.setAttr("PackTm", i2s(packTm()));
     prmNd.setAttr("CheckTm", i2s(checkTm()));
     prmNd.setAttr("PackInfoFiles", i2s(packInfoFiles()));
+    prmNd.setAttr("RemoveOrigAtUnpackErr", i2s(removeOrigAtUnpackErr()));
     cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TVArchivator::save_();
@@ -245,8 +248,8 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 
 	try {
 	    mess_sys(TMess::Info, _("Unpacking '%s' for information."), anm.c_str());
-	    a_fnm = mod->unPackArch(anm, false);
-	} catch(TError&) { return false; }
+	    a_fnm = mod->unPackArch(anm, false, removeOrigAtUnpackErr());
+	} catch(TError &err) { mess_warning(nodePath().c_str(), "%s", err.mess.c_str()); return false; }
 	unpck = true;
     }
     //Get params from file
@@ -581,6 +584,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 		_("Specifies whether to create a file with information about the packed archive files by gzip-archiver.\n"
 		  "When copying the files of archive to another station, this info file can speed up the target station "
 		  "process of first run by eliminating the need to decompress by gzip-archiver in order to obtain the information."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/rmOrigUnpackErr",_("Remove original archive file at error unpacking"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 	    ctrMkNode("comm",opt,-1,"/prm/add/chk_nw",_("Check now for the directory of the archiver"),RWRW__,"root",SARH_ID,1,"help",
 		_("The command, which allows you to immediately start for checking the archives, "
 		  "for example, after some manual changes in the directory of the archiver."));
@@ -638,6 +642,10 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/add/pack_info_fl") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(i2s(packInfoFiles()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setPackInfoFiles(s2i(opt->text()));
+    }
+    else if(a_path == "/prm/add/rmOrigUnpackErr") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(i2s(removeOrigAtUnpackErr()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setRemoveOrigAtUnpackErr(s2i(opt->text()));
     }
     else if(a_path == "/prm/add/chk_nw" && ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	checkArchivator(true);
     else if(a_path == "/arch/arch" && ctrChkNode(opt)) {

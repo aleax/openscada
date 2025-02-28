@@ -122,6 +122,9 @@ msgstr "Цей об'єкт"
 msgid "Protocol's object"
 msgstr "Об'єкт протоколу"
 
+msgid "Transport's object"
+msgstr "Об'єкт транспорту"
+
 msgid "Scheduling the next service call"
 msgstr "Планування сервісного виклику"
 

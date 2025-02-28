@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tdaqs.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,13 +39,13 @@ TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID, true), mElErr("Error"), mRdRestDtTm(1)
     //Templates lib db structure
     mElLib.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
     mElLib.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mElLib.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
+    mElLib.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     mElLib.fldAdd(new TFld("DB",trS("Data base"),TFld::String,TFld::NoFlag,"30"));	//????[v1.0] Remove
 
     //Template DB structure
     mElTmpl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
     mElTmpl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mElTmpl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
+    mElTmpl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     mElTmpl.fldAdd(new TFld("MAXCALCTM",trS("Maximum calculate time, seconds"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
     mElTmpl.fldAdd(new TFld("PR_TR",trS("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
     mElTmpl.fldAdd(new TFld("PROGRAM",trS("Procedure"),TFld::String,TFld::TransltText,"1000000"));

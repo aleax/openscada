@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/FSArch</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/FSArch.html" title="Модули/Архивация на ФС (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/FSArch.html" title="Модулі/Архівація на ФС (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/FSArch.html" title="Модули/Архивация на ФС (98% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/FSArch.html" title="Модулі/Архівація на ФС (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -206,7 +206,7 @@ FSArch 3.2.0    UTF-8 5aec2095 5aec2097
 </p><p>In order to save disk space, archivers support packaging, in addition to the sequential packaging, of old archives by the gzip packer. Packaging is carried out after a long non-use of the archive. To allow fast connection of large archives to another station, it is possible to enable the use of an information file for the packaged files, which prevents the previous unpacking of all files at another station.
 </p><p>The module provides additional settings for the archiving process, Figure 4.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:830px;"><a class="image" href="http://oscada.org/wiki/File:FSArch_val_a_prm.png"><img class="thumbimage" height="783" src="../files/FSArch_val_a_prm.png" width="828" /></a>  <div class="thumbcaption">Fig.4. Additional settings of the value archiving process.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:768px;"><a class="image" href="http://oscada.org/wiki/File:FSArch_val_a_prm.png"><img class="thumbimage" height="893" src="../files/FSArch_val_a_prm.png" width="766" /></a>  <div class="thumbcaption">Fig.4. Additional settings of the value archiving process.</div></div></div></div>
 <p>These additional parameters:
 </p>
 <ul><li> <i>Time size of the archive files, in hours</i> — the parameter is set automatically when the value periodicity of the archiver is changed and is generally proportional to the periodicity of the values of the archiver.</li></ul>
@@ -217,6 +217,7 @@ FSArch 3.2.0    UTF-8 5aec2095 5aec2097
 <li> <i>Timeout packaging archive files, in minutes</i> — sets the time after which, in the absence of requests, the archive file will be packaged in a gzip archive. Set to zero for disabling the packaging by gzip.</li>
 <li> <i>Period of the archives checking, in minutes</i> — sets the periodicity of checking archives for the appearance or deletion in the archive files folder, as well as exceeding the limits and removing old archives files.</li>
 <li> <i>Use info file for packaged archives</i> — points to the need to create a file containing information about the packed gzip-archiver archive files. When copying the archive files to another station, this information file allows you to accelerate the process of first launching the destination station by eliminating the need to unzip the gzip-archives for the information.</li>
+<li> <i>Remove original archive file at error unpacking</i> — removing is performed during the archives checking and that is useful for broken archive files.</li>
 <li> <i>Check now for the directory of the archiver</i> — command that allows you to run the archives checking immediately, for example, after manually modifying the archiver folder.</li></ul>
 <p>To control the archiver files you can view the tab "Files", Figure 5.
 </p>
@@ -312,5 +313,5 @@ FSArch 3.2.0    UTF-8 5aec2095 5aec2097
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/FSArch/en">Modules/FSArch/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/FSArch/en">Modules/FSArch/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.8</td></tr></table></body>
 </html>

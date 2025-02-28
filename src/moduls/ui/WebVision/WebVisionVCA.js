@@ -976,7 +976,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    if(this.attrs['seek'] && (toInit || this.attrsMdf["seek"]) && Math.abs(parseFloat(this.attrs['seek'])-medObj.currentTime) > 10)
 		medObj.currentTime = parseFloat(this.attrs['seek']);
 	    if(this.attrs['volume'] && (toInit || this.attrsMdf["volume"])) medObj.volume = parseFloat(this.attrs['volume'])/100;
-	    if(toInit || this.attrsMdf["src"] || this.attrsMdf["fit"] || this.attrsMdf["play"] || !pgBr) {
+	    if(toInit || this.attrsMdf["src"] || this.attrsMdf["fit"] || (this.attrs['fit'] == 1 && this.attrsMdf["keepAspect"]) || this.attrsMdf["play"] || !pgBr) {
 		if(!this.attrs['src'].length || (this.attrs['play'] && !parseInt(this.attrs['play'])))	medObj.src = "";
 		else if(this.attrs['src'].indexOf("http://") == 0 || this.attrs['src'].indexOf("https://") == 0)
 		    medObj.src = this.attrs['src'];
@@ -992,11 +992,19 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		}
 		this.perUpdtEn(parseInt(this.attrs['play']));
 	    }
-	    if(toInit || this.attrsMdf["fit"] || !pgBr) {
+	    if(toInit || this.attrsMdf["fit"] || (this.attrs['fit'] == 1 && this.attrsMdf["keepAspect"]) || !pgBr) {
 		if(this.attrs['fit'] == 1) {
 		    medObj.width = geomW; medObj.height = geomH;
+		    medObj.style.display = medObj.style.maxWidth = medObj.style.maxHeight = medObj.style.width = medObj.style.height = null;
+		    if(this.attrs['keepAspect'] == 1) {
+			medObj.removeAttribute("width"); medObj.removeAttribute("height");
+			medObj.style.display = "block";
+			medObj.style.maxWidth = geomW+"px";
+			medObj.style.maxHeight = geomH+"px";
+			medObj.style.width = medObj.style.height = "auto";
+		    }
 		    // Only for the type "Image(0)"
-		    if(this.attrs['src'].length && this.attrs['type'] == 0 && this.attrs['src'].indexOf("data:") != 0)
+		    else if(this.attrs['src'].length && this.attrs['type'] == 0 && this.attrs['src'].indexOf("data:") != 0)
 			medObj.src += "&size="+geomH;
 		    medObj.onload = null;
 		}

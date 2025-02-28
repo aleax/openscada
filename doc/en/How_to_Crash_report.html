@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/How to/Crash report</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/How_to_Crash_report.html" title="Документы/Как/Отчитаться про аварийное завершение (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/How_to_Crash_report.html" title="Документи/Як/Звітувати про аварійне завершення (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/How_to_Crash_report.html" title="Документы/Как/Отчитаться про аварийное завершение (87% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/How_to_Crash_report.html" title="Документи/Як/Звітувати про аварійне завершення (100% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a> </li></ul>
 </div>
@@ -21,7 +21,7 @@
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#The_reporting_conditions_and_variants"><span class="tocnumber">1</span> <span class="toctext">The reporting conditions and variants</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#Requirements_for_the_error_report"><span class="tocnumber">2</span> <span class="toctext">Requirements for the error report</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#Obtaining_the_file_of_the_pre-mortem_dump_and_its_processing"><span class="tocnumber">3</span> <span class="toctext">Obtaining the file of the pre-mortem dump and its processing</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Obtaining_the_file_of_the_pre-mortem_dump_and_its_processing_.28DEPRECATED.29"><span class="tocnumber">3</span> <span class="toctext">Obtaining the file of the pre-mortem dump and its processing (DEPRECATED)</span></a></li>
 </ul>
 </div>
 
@@ -42,18 +42,19 @@
 <h2><span class="mw-headline" id="Requirements_for_the_error_report"><span class="mw-headline-number">2</span> Requirements for the error report</span></h2>
 <p>In order to exclude unnecessary overhead questions, or even premature closure of the error in the state "Not a bug", and to speed up the process of localization of the problem, it is recommended to follow the following requirements for the report:
 </p>
-<ul><li> Specify the environment of the execution of OpenSCADA, that is: Distribution and version of the operating system.</li>
+<ul><li> Specify the environment of the execution of OpenSCADA, that is: distribution and version of the operating system.</li>
 <li> Specify the version of OpenSCADA, including the SVN revision of the working branch.</li>
 <li> Specify the configuration and execution features.</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> In the case of free support, it is mandatory to reproduce the problem in standard configurations and in the <a href="Quick_start.html" title="Special:MyLanguage/Documents/Quick start">demo database</a>, especially if it is an emergency crash and it is not possible to generate a crash report or it is indescribable.</dd></dl>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> In the case of free support, it is mandatory to reproduce the problem in standard configurations and in the <a href="Quick_start.html" title="Special:MyLanguage/Documents/Quick start">demo database</a>, especially when it is an emergency crash and it is not possible to generate a crash report or it is indescribable.</dd></dl>
 <ul><li> Describe the actions that cause the error.</li>
 <li> Attach the OpenSCADA message protocol for a session with the error.</li>
-<li> Generate a program crash report — unroll the stack at the time of the crash.
-<ul><li> the report is usually generated automatically by generating it from the pre-mortem memory dump; refer to the next section to enable the dump generation and manual generation of the report from it;</li>
-<li> for problems related to the blocking of one or more OpenSCADA threads, it may be useful to manually interrupt the program by the "SIGSEGV" signal, which will cause the formation of the death dump and the fall-down report with the information about the hangover;</li>
-<li> to significantly increase the use of the stack unrolling, you must add debugging information, by setting the "-g" option during compilation, or install the ready debug package <b>openscada-dbg</b>.</li></ul></li></ul>
-<h2><span class="mw-headline" id="Obtaining_the_file_of_the_pre-mortem_dump_and_its_processing"><span class="mw-headline-number">3</span> Obtaining the file of the pre-mortem dump and its processing</span></h2>
-<p>In the case of an emergency exit of a program, the kernel of the Linux operating system can form a pre-mortem memory dump of the program. With this dump, you can often find a place in the program that caused the emergency stop. To enable the possibility of generating the pre-mortem memory dump of program by the Linux kernel, you need to execute the commands:
+<li> Include report of the program crash — unroll the stack at the time of the crash.
+<ul><li> the report is usually generated automatically by generating it from the crashing process or pre-mortem memory dump (earlier) — just install <b>GDB</b>; refer to the next section for some specific here;</li>
+<li> to increase significantly the use of the stack unrolling, you must add debugging information, by setting the "-g" option during compilation, or install the ready debug package <b>openscada-dbg</b>;</li>
+<li> for problems, related to the blocking of one or more OpenSCADA threads, it may be useful to manually interrupt the program by call <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em; white-space: nowrap;">openscada-proj snapshot {ProjID} </span> or the "SIGSEGV" signal, which will cause the formation of the fall-down report with the information about the hangover.</li></ul></li></ul>
+<h2><span class="mw-headline" id="Obtaining_the_file_of_the_pre-mortem_dump_and_its_processing_.28DEPRECATED.29"><span class="mw-headline-number">3</span> Obtaining the file of the pre-mortem dump and its processing (DEPRECATED)</span></h2>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The section is not actual more for new versions of OpenSCADA, but you can use its content for old versions or in specific and manual learning the crashes!
+</p><p>In the case of an emergency exit of a program, the kernel of the Linux operating system can form a pre-mortem memory dump of the program. With this dump, you can often find a place in the program that caused the emergency stop. To enable the possibility of generating the pre-mortem memory dump of program by the Linux kernel, you need to execute the commands:
 </p>
 <div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c"># Check the possibility of generation of memory dumps</span>
 <span class="c"># Specifies the "core" if it is enabled</span>
@@ -91,5 +92,5 @@ cat /proc/sys/kernel/core_pattern
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Crash_report/en">Documents/How_to/Crash_report/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Crash_report/en">Documents/How_to/Crash_report/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.8</td></tr></table></body>
 </html>

@@ -1,12 +1,12 @@
 # OpenSCADA core translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA package.
 #
-# Roman Savochenko <roman@oscada.org>, 2003-2023.
+# Roman Savochenko <roman@oscada.org>, 2003-2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 22:21+0300\n"
+"POT-Creation-Date: 2025-02-15 22:39+0200\n"
 "PO-Revision-Date: 2020-10-25 10:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team:  <uk@li.org>\n"
@@ -187,7 +187,8 @@ msgid "Redundancy"
 msgstr "Резервування"
 
 msgid "Overtime of the reserve history reload at start, days"
-msgstr "Глибина примусового перевантаження історії резерву при запуску, в добах."
+msgstr ""
+"Глибина примусового перевантаження історії резерву при запуску, в добах."
 
 msgid "Message archivers"
 msgstr "Архіватори повідомлень"
@@ -231,8 +232,8 @@ msgstr ""
 msgid "View"
 msgstr "Перегляд"
 
-msgid "Time, size (seconds) and level"
-msgstr "Час, розмір (секунд) та рівень"
+msgid "Time, depth and level"
+msgstr "Час, глибина і рівень"
 
 msgid ""
 "Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);"
@@ -320,13 +321,16 @@ msgstr "Видалити усе із помилкою джерела - джер�
 msgid "Remove all lost archives - empty storage"
 msgstr "Видалити усі втрачені архіви - порожнє сховище"
 
+msgid "Remove all doubly linked"
+msgstr "Видалити усі подвійні посилання"
+
 #, c-format
 msgid ""
 "all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost "
-"(empty storage) %d"
+"(empty storage) %d, doubly linked %d"
 msgstr ""
 "загалом %d, увімкнено %d; без джерела (пасивне) %d, помилка (відсутнє "
-"джерело) %d, втрачене (порожнє сховище) %d"
+"джерело) %d, втрачене (порожнє сховище) %d, подвійних посилань %d"
 
 msgid "<High level>"
 msgstr "<Високий рівень>"
@@ -477,8 +481,8 @@ msgstr "Період, секунд"
 msgid "Microseconds"
 msgstr "Мікросекунди"
 
-msgid "Size, seconds"
-msgstr "Розмір, секунд"
+msgid "Depth"
+msgstr "Глибина"
 
 msgid ""
 "Values archiver.\n"
@@ -536,8 +540,8 @@ msgstr ""
 "буферу - тільки прямий запис."
 
 msgid ""
-"Selection of a priority of the archiver for using in the source mode \"All"
-"\". Set to zero for full the selection disabling."
+"Selection of a priority of the archiver for using in the source mode "
+"\"All\". Set to zero for full the selection disabling."
 msgstr ""
 "Пріоритет обрання архіватору для режиму використання джерела \"Всі\". "
 "Встановити у нуль для повного виключення із обрання."
@@ -552,7 +556,8 @@ msgid "Last read buffer"
 msgstr "Останнє читання буферу"
 
 #, c-format
-msgid "Number of the setting items achieved the limit %d for time range [%lld:%lld]!"
+msgid ""
+"Number of the setting items achieved the limit %d for time range [%lld:%lld]!"
 msgstr ""
 "Кількість встановлюваних елементів досягнула обмеження %d для діапазону "
 "[%lld:%lld]!"
@@ -653,7 +658,8 @@ msgstr "Таблиці у БД, але не відкриті на цей час.
 msgid "Load the program from this DB"
 msgstr "Завантажити програму з цієї БД"
 
-msgid "Codepage of data in the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
+msgid ""
+"Codepage of data in the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr "Кодування даних у БД. Наприклад: UTF-8, KOI8-R, KOI8-U ... ."
 
 msgid ""
@@ -728,6 +734,9 @@ msgstr "встановлення комірки ['%s':%s] у '%s'."
 
 msgid "command with arguments:"
 msgstr "команда із аргументами:"
+
+msgid "command."
+msgstr "команда."
 
 #, c-format
 msgid "set to '%s'."
@@ -899,10 +908,6 @@ msgstr "Дуже багато користувачів у вузла!!!"
 #, c-format
 msgid "Error the function '%s' or missing its parameters."
 msgstr "Помилка функції '%s' або недостатньо параметрів для неї."
-
-#, c-format
-msgid "Item %d of the path '%s' is missing!"
-msgstr "Елемент %d шляху '%s' відсутній!"
 
 #, c-format
 msgid "Error accessing item '%s'!"
@@ -1202,11 +1207,8 @@ msgstr "По замовченню"
 msgid "Execute"
 msgstr "Виконати"
 
-msgid "Number of calculations"
-msgstr "Кількість виконань"
-
-msgid "Spent time"
-msgstr "Витрачено часу"
+msgid "Executions, spent time"
+msgstr "Виконання, витрачено часу"
 
 msgid "Text"
 msgstr "Текст"
@@ -1263,7 +1265,8 @@ msgstr "Загальне Сховище"
 msgid "Configuration File"
 msgstr "Конфігураційний Файл"
 
-msgid "Storage address in the format \"{DB module}.{DB name}\" or the common ones."
+msgid ""
+"Storage address in the format \"{DB module}.{DB name}\" or the common ones."
 msgstr "Адреса сховища у форматі \"{Модуль БД}.{Ім'я БД}\" або загальне."
 
 #, c-format
@@ -1329,8 +1332,8 @@ msgid ""
 "  0         - standard userspace priority;\n"
 "  1...99    - realtime priority level (round-robin), often allowed only for "
 "\"root\";\n"
-"  100...199 - realtime priority level (FIFO), often allowed only for \"root"
-"\"."
+"  100...199 - realtime priority level (FIFO), often allowed only for "
+"\"root\"."
 msgstr ""
 "Рівень пріоритету задачі (-1...199), де:\n"
 "  -1        - мінімальний пріоритет, фонова політика;\n"
@@ -1367,6 +1370,38 @@ msgstr ""
 "  '*' - будь який підрядок;\n"
 "  '?' - будь який символ.\n"
 "Регулярний вираз включається між символами '/' (/mod_(System|LogicLev)/)."
+
+msgid ""
+"In the field you set time both with the real number and the natural text "
+"multiplier also translated and in base language:\n"
+"- day, days (*86400)    - one and multiple days;\n"
+"- hour, hours (*3600)   - one and multiple hours;\n"
+"- minute, minutes (*60) - one and multiple minutes;\n"
+"- millisecond, milliseconds, ms (*1e-3) - one and multiple milliseconds;\n"
+"- microsecond, microseconds, us (*1e-6) - one and multiple microseconds;\n"
+"- nanosecond, nanoseconds, ns (*1e-9)   - one and multiple nanoseconds;\n"
+"- and all other are meant as seconds with substitution by 'second', "
+"'seconds' or 's'."
+msgstr ""
+"У полі ви встановлюєте час реальним числом і природнім текстовим множником, "
+"також перекладеним і базовою мовою:\n"
+"- день[day], днів[days] (*86400)         - один або декілька днів;\n"
+"- година[hour], годин[hours] (*3600)     - одна або декілька годин;\n"
+"- хвилина[minute], хвилин[minutes] (*60) - одна або декілька хвилин;\n"
+"- мілісекунда[millisecond], мілісекунд[milliseconds], мс[ms] (*1e-3)    - "
+"одна або декілька мілісекунд;\n"
+"- мікросекунда[microsecond], мікросекунд[microseconds], мкс[us] (*1e-6) - "
+"одна або декілька мікросекунд;\n"
+"- наносекунда[nanosecond], наносекунд[nanoseconds], нс[ns] (*1e-9)      - "
+"одна або декілька наносекунд;\n"
+"- і усе інше передбачає секунди із підстановкою 'секунда', 'секунд' або 'с'."
+
+msgid ""
+"1 second;10 seconds;30 seconds;1 minute;10 minutes;30 minutes;1 hour;12 "
+"hours;1 day;10 days"
+msgstr ""
+"секунда;10 секунд;30 секунд;хвилина;10 хвилин;30 хвилин;година;12 годин;"
+"день;10 днів"
 
 #, c-format
 msgid "Closing the thread %d error '%s (%d)'!"
@@ -1526,7 +1561,8 @@ msgstr "2:Збір зупинено."
 msgid "Parameter: "
 msgstr "Параметр: "
 
-msgid "The type changing leads to lose some data of the specific configurations."
+msgid ""
+"The type changing leads to lose some data of the specific configurations."
 msgstr "Зміна типу потягне за собою втрату даних специфічних конфігурацій."
 
 msgid "Inclusion"
@@ -1817,23 +1853,56 @@ msgstr "Доступ тільки на читання до файлу '%s'."
 msgid "day"
 msgstr "день"
 
-msgid "hour"
-msgstr "год"
+msgid "days"
+msgstr "днів"
 
-msgid "min"
-msgstr "хвил"
+msgid "hour"
+msgstr "година"
+
+msgid "hours"
+msgstr "годин"
+
+msgid "minute"
+msgstr "хвилина"
+
+msgid "minutes"
+msgstr "хвилин"
 
 msgid "s"
 msgstr "с"
 
+msgid "second"
+msgstr "секунда"
+
+msgid "seconds"
+msgstr "секунд"
+
 msgid "ms"
 msgstr "мс"
+
+msgid "millisecond"
+msgstr "мілісекунда"
+
+msgid "milliseconds"
+msgstr "мілісекунд"
 
 msgid "us"
 msgstr "мкс"
 
+msgid "microsecond"
+msgstr "мікросекунда"
+
+msgid "microseconds"
+msgstr "мікросекунд"
+
 msgid "ns"
 msgstr "нс"
+
+msgid "nanosecond"
+msgstr "наносекунда"
+
+msgid "nanoseconds"
+msgstr "наносекунд"
 
 msgid "YiB"
 msgstr "ЙіБ"
@@ -1944,6 +2013,7 @@ msgid ""
 "limObjNm_SZ\t[*100...200] NAME size of the OpenSCADA objects.\n"
 "\t\tWARNING! Change that once before use on DBs with the fixed type "
 "\"char({N})\"!\n"
+"limObjDscr_SZ\t[300...*1000...1000000] DESCR size of the OpenSCADA objects.\n"
 "limArchID_SZ\t[*50...90] ID size of the value archive objects.\n"
 "\t\tWARNING! Increase it only, else you can get problems on Archive.FSArch!\n"
 "\t\t\t Change that once before use on DBs with the fixed type "
@@ -2048,6 +2118,7 @@ msgstr ""
 "limObjNm_SZ\t[*100...200] Розмір НАЗВИ об'єктів OpenSCADA.\n"
 "\t\tУВАГА! Змініть це лише одноразово перед використанням на БД із "
 "фіксованим типом \"char({N})\"!\n"
+"limObjDscr_SZ\t[300...*1000...1000000] Розмір ОПИСУ об'єктів OpenSCADA.\n"
 "limArchID_SZ\t[*50...90] Розмір ІД об'єктів архіву значень.\n"
 "\t\tУВАГА! Лише збільшуйте його, інакше можете отримати проблеми у Archive."
 "FSArch!\n"
@@ -2099,7 +2170,8 @@ msgid "Error writing the configuration file '%s': %s"
 msgstr "Помилка запису до конфігураційного файлу '%s': %s"
 
 #, c-format
-msgid "Impossible to hold the project lock! Seems the project '%s' already running."
+msgid ""
+"Impossible to hold the project lock! Seems the project '%s' already running."
 msgstr "Неможливо захопити замок проєкту! Схоже проєкт '%s' вже виконується."
 
 msgid "Loading."
@@ -2138,18 +2210,18 @@ msgstr "Помилка зупинки підсистеми '%s'."
 msgid "Termination signal is received. Stopping the program!"
 msgstr "Отримано сигнал переривання роботи. Зупинка програми!"
 
-msgid "Floating point exception is caught!"
-msgstr "Виключення операції з плаваючою крапкою!"
-
 #, c-format
 msgid "Close the process %d of the child!"
 msgstr "Закриття процесу нащадка %d!"
 
-msgid "Segmentation fault signal!"
-msgstr "Сигнал помилки сегментації пам'яті!"
+msgid "Floating point exception!"
+msgstr "Виключення з плаваючою крапкою!"
 
 msgid "Program aborted!"
 msgstr "Програму перевано!"
+
+msgid "Segmentation fault signal!"
+msgstr "Сигнал помилки сегментації пам'яті!"
 
 #, c-format
 msgid "Unknown signal %d!"
@@ -2707,7 +2779,8 @@ msgid "User;System;User and System"
 msgstr "Корист.;Системн.;Корист. та Системн."
 
 msgid "Initial connection identifier to what bind for control."
-msgstr "Ідентифікатор ініціативного підключення до якого зв'язуватися для керування."
+msgstr ""
+"Ідентифікатор ініціативного підключення до якого зв'язуватися для керування."
 
 msgid "New external host"
 msgstr "Новий зовнішній хост"
@@ -2893,6 +2966,13 @@ msgstr "Помилка підключення нового контролера 
 
 msgid "Module does not support compilation of the programming language."
 msgstr "Модуль не підтримує функцію компіляції мови програмування."
+
+#, c-format
+msgid "all %d, running %d, enabled %d%s"
+msgstr "загалом %d, виконується %d, увімкнено %d%s"
+
+msgid "Errors: "
+msgstr "Помилки: "
 
 msgid "Owner"
 msgstr "Власник"
@@ -3131,3 +3211,9 @@ msgstr "Встановлено назву проєкту у:"
 msgid "already started."
 msgstr "вже запущено."
 
+#, c-format
+#~ msgid "Item %d of the path '%s' is missing!"
+#~ msgstr "Елемент %d шляху '%s' відсутній!"
+
+#~ msgid "Time, size (seconds) and level"
+#~ msgstr "Час, розмір (секунд) та рівень"

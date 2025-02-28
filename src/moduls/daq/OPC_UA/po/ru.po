@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-13 22:36+0200\n"
+"POT-Creation-Date: 2025-02-15 20:33+0200\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -398,11 +398,14 @@ msgstr "Тип кодирования"
 msgid "Binary"
 msgstr "Бинарный"
 
+msgid "Security policies"
+msgstr "Политики безопасности"
+
 msgid "URL"
 msgstr "URL"
 
-msgid "Security policies"
-msgstr "Политики безопасности"
+msgid "Anonymous user"
+msgstr ""
 
 msgid "Server certificate (PEM)"
 msgstr "Сертификат сервера (PEM)"
@@ -480,6 +483,9 @@ msgstr "Удалить из '%s'"
 msgid "Configuration"
 msgstr "Конфигурация"
 
+msgid "Select a user of anonymous access, set empty only for authentication."
+msgstr ""
+
 msgid "Policy"
 msgstr "Политика"
 
@@ -504,9 +510,13 @@ msgstr "Время очереди повторной передачи, сек."
 msgid "Set to 0 for automatic by cntrKeepAlive*publInterv"
 msgstr "Установить в 0 для автоматического по cntrKeepAlive*publInterv"
 
-#, c-format
-msgid "%d(%s): at %s(live %s), secure channel %u; Publish requests %u"
+#, fuzzy, c-format
+msgid ""
+"%d(%s): from '%s' at %s(live %s), secure channel %u; Publish requests %u"
 msgstr "%d(%s): от %s(живой %s), канал безопасности %u; Запросы публикации %u"
+
+msgid "<PASSIVE>"
+msgstr ""
 
 msgid "Closed"
 msgstr "Закрыто"

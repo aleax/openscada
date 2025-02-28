@@ -1,0 +1,16 @@
+[Unit]
+Description=OpenSCADA Server
+After=network.target
+
+[Service]
+Type=simple
+User=root
+PIDFile=/var/run/openscada_server.pid
+ExecStart=/usr/bin/openscada --projName=server --projUserDir --demon --pidFile=/var/run/openscada_server.pid
+Restart=always
+RestartSec=5
+StandardOutput=append:/var/log/openscada.log
+StandardError=append:/var/log/openscada.log
+
+[Install]
+WantedBy=multi-user.target

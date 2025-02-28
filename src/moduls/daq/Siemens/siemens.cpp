@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.Siemens file: siemens.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,7 +43,7 @@
 #define MOD_NAME	trS("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"4.5.1"
+#define MOD_VER		"4.5.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -2323,7 +2323,7 @@ bool TMdPrm::TLogCtx::cntrCmdProc( XMLNode *opt, const string &pref )
     if(a_path.compare(0,8,"/prm/pr_") == 0) {
 	int lnk_id = s2i(a_path.substr(8));
 	int db = 0, off = 0, isF = false;
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
+	if(obj->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    string addr = lnkAddr(lnk_id);
 	    if(sscanf(addr.c_str(),"DB%d.%i",&db,&off) == 2 || (isF=(sscanf(addr.c_str(),"F.%i",&off)==1))) {
 		int t_off = s2i(TSYS::strParse(TSYS::strLine(func()->io(lnk_id)->def(),0), 1, "|"));
@@ -2331,7 +2331,7 @@ bool TMdPrm::TLogCtx::cntrCmdProc( XMLNode *opt, const string &pref )
 		return true;
 	    }
 	}
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
+	if(obj->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    if(sscanf(opt->text().c_str(),"DB%d.%i",&db,&off) >= 1 || (isF=(opt->text()=="F"||sscanf(opt->text().c_str(),"F.%i",&off)>=1))) {
 		string p_nm = TSYS::strParse(TSYS::strLine(func()->io(lnk_id)->def(),0), 0, "|"), tVl;
 		bool set = false;

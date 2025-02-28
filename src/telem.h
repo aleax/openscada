@@ -1,7 +1,7 @@
 
 //OpenSCADA file: telem.h
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,6 +37,7 @@ namespace OSCADA
 //* TFld                                          *
 //*************************************************
 class XMLNode;
+class TCntrNode;
 
 class TFld
 {
@@ -107,8 +108,8 @@ class TFld
 	void setReserve( const string &ires )	{ mRes = ires; }
 
 	// Addition
-	XMLNode *cntrCmdMake( XMLNode *opt, const string &path, int pos,
-				const string &user = "root", const string &grp = "root", int perm = 0664 );
+	XMLNode *cntrCmdMake( TCntrNode *cntrO, XMLNode *opt, const string &path, int pos,
+				const string &owner = "root", const string &group = "root", int perm = 0664 );
 
     private:
 	//Attributes

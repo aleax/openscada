@@ -15,7 +15,7 @@ The library was created to provide main templates of the DAQ-sources processing 
 Author: Roman Savochenko <roman@oscada.org>
 Used by: Most projects on OpenSCADA
 Founded: January 2006
-Version: 2.2.0
+Version: 2.3.0
 License: GPLv2
 DOC: Libs_Main|Libs/Main','Бібліотека основних шаблонів опрацювання DAQ-джерел та похідних сервісів.
 
@@ -24,7 +24,7 @@ DOC: Libs_Main|Libs/Main','Бібліотека основних шаблоні�
 Автор: Роман Савоченко <roman@oscada.org>
 Використано: Більшість проектів OpenSCADA
 Засновано: Січень 2006
-Версія: 2.2.0
+Версія: 2.3.0
 Ліцензія: GPLv2
 DOC: Libs_Main|Libs/Main','tmplib_base','Основная библиотека','Библиотека основных шаблонов обработки DAQ-источников и производных сервисов.
 
@@ -33,20 +33,20 @@ DOC: Libs_Main|Libs/Main','tmplib_base','Основная библиотека',
 Автор: Роман Савоченко <roman@oscada.org>
 Использовано: Большинство проектов OpenSCADA
 Основано: Январь 2006
-Версия: 2.2.0
+Версия: 2.3.0
 Лицензия: GPLv2
 DOC: Libs_Main|Libs/Main');
 INSERT INTO ParamTemplLibs VALUES('DevLib','Industrial devices','Промислові пристрої','The user protocol devices library created to provide access to industrial device''s data through network, like to common industrial automation devices and wide resources counters, with protocols simple enough to implement into the User Protocol module, using the presented complex protocols (ModBus, OPC_UA, HTTP) or directly on the internal like to Java language.
 
 Author: Roman Savochenko <roman@oscada.org>, Constantine (IrmIngeneer) (2018), Arsen Zakojan (2017), Ruslan Yarmoliuk (2017)
 Founded: January 2010
-Version: 3.0.1
+Version: 3.1.1
 License: GPLv2
 DOC: Libs_Devices|Libs/Devices','Бібліотеку пристроїв користувацьких протоколів створено для надання доступу до даних промислових пристроїв через мережу із доволі простим протоколом, на кшталт пристроїв загальної промислової автоматики та лічильників різних ресурсів, із протоколом достатньо простим до реалізації у модулі користувацького протоколу, з використанням наявних комплексних протоколів (ModBus, OPC_UA, HTTP) або безпосередньо на внутрішній мові подібній до Java.
 
 Автор: Роман Савоченко <roman@oscada.org>, Константин (IrmIngeneer) (2018), Арсен Закоян (2017), Руслан Ярмолюк (2017)
 Засновано: Січень 2010
-Версія: 3.0.1
+Версія: 3.1.1
 Ліцензія: GPLv2
 DOC: Libs_Devices|Libs/Devices','tmplib_DevLib','Промышленные устройства','');
 INSERT INTO ParamTemplLibs VALUES('PrescrTempl','Prescriptions','Рецепти','The library is created to provide an environment of execution of scenarios of the technological operations — prescriptions, and frames of the user interface about them, including the frame of creation/edition the prescriptions and two frames of the execution control and reporting — "Prescription — run" and "Prescription — run, simple". The library is built on the basis primitives of the widgets and the internal programming language JavaLikeCalc, including templates and commands.
@@ -94,7 +94,7 @@ The template''s names and their parameters are available in languages: English, 
 
 Author: Roman Savochenko <roman@oscada.org>, Arcadiy Kisel (2017)
 Founded: Jul 2016
-Version: 1.5.1
+Version: 1.6.1
 License: GPLv2
 DOC: Libs_LowLevelDevices|Libs/LowLevelDevices','Бібліотека шаблонів надання доступу до даних пристроїв низькорівневих шин.
 
@@ -104,7 +104,7 @@ DOC: Libs_LowLevelDevices|Libs/LowLevelDevices','Бібліотека шабло
 
 Автор: Роман Савоченко <roman@oscada.org>, Аркадій Кисіль (2017)
 Засновано: Липень 2016
-Версія: 1.5.1
+Версія: 1.6.1
 Ліцензія: GPLv2
 DOC: Libs_LowLevelDevices|Libs/LowLevelDevices','tmplib_LowDevLib','Низкоуровневые устройства','Библиотека шаблонов предоставления доступа к данным устройств низкоуровневых шин.
 
@@ -114,7 +114,7 @@ DOC: Libs_LowLevelDevices|Libs/LowLevelDevices','tmplib_LowDevLib','Низкоу
 
 Автор: Роман Савоченко <roman@oscada.org>, Аркадий Кысиль (2017)
 Основано: Июль 2016
-Версия: 1.5.1
+Версия: 1.6.1
 Лицензия: GPLv2
 DOC: Libs_LowLevelDevices|Libs/LowLevelDevices');
 CREATE TABLE IF NOT EXISTS 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
@@ -4777,12 +4777,12 @@ else {
 
 if(t_err.toInt()) { f_err = t_err; type = P = EVAL; }
 else f_err = "0";','','',1603038629);
-INSERT INTO tmplib_DevLib VALUES('mbBase','ModBus base','','','ModBus base template of the protocol implementing on the Logical Level. Designed mostly to use in the base of creation specific ModBus-based protocols for the standard-part registers'' access (function 3 for reading and function 16 for writing) and appending the new protocol specific part. The template was designed to work both under control of the controller objects of the module ModBus and LogicLev and can be managed from the template of the initiative connections processing for assigned output transports.
+INSERT INTO tmplib_DevLib VALUES('mbBase','ModBus base','','','ModBus base template of the protocol implementing on the Logical Level. Designed mostly to use in the base of creation specific ModBus-based protocols for the standard-part registers'' access (function 3, 4 for reading and function 16 for writing) and appending the new protocol specific part. The template was designed to work both under control of the controller objects of the module ModBus and LogicLev and can be managed from the template of the initiative connections processing for assigned output transports.
 
 Author: Roman Savochenko <roman@oscada.org>
 Total complexity: 0.5 HD
 Sponsored by, for whole complexity: Elyor Turaboev, BLUE STAR GROUP Ltd
-Version: 1.2.1
+Version: 1.3.0
 License: GPLv2','','',30,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(PDU) {
@@ -4790,7 +4790,7 @@ function req(PDU) {
 	if(!transport.length)	return this.cntr().messIO(PDU);
 
 	// For other logical level
-	reqO = SYS.XMLNode(mbType).setAttr("id","Goboy").setAttr("node",addr).setText(PDU);
+	reqO = SYS.XMLNode(mbType).setAttr("id","MBBase").setAttr("node",addr).setText(PDU);
 	if((rez=tr.messIO(reqO,"ModBus")).length)	return "10:"+rez;
 	PDU = reqO.text();
 
@@ -4800,7 +4800,7 @@ function req(PDU) {
 if(f_start) {
 	transport_ = transport;
 	tr = EVAL;
-	dt = new Object();
+	dt = new Object(); dtI = new Object();
 	items_ = "";
 }
 
@@ -4808,8 +4808,11 @@ if(f_start) {
 if(items != items_) {
 	items_ = items;
 	// Mark for check to deletion needs
-	for(var iDt in dt)
-		if(iDt != "10000") dt[iDt].mark = false;
+	for(iSp = 0; iSp < 2; iSp++) {
+		dtW = (iSp == 1) ? dtI : dt;
+		for(var iDt in dtW)
+			if(iDt != "10000") dtW[iDt].mark = false;
+	}
 	// Append/Update present ones
 	for(off = 0; (sIt=items.parseLine(0,off)).length || off < items.length; ) {
 		if(!sIt.length || sIt[0] == "#")	continue;
@@ -4822,7 +4825,9 @@ if(items != items_) {
 		itO.id = sIt.parse(0, ":", off1);
 		itO.nm = sIt.slice(off1);
 		if(!itO.nm.length) itO.nm = itO.id;
-		dt[itO.addr.toString(16,5)] = itO;
+		if(itO.md.indexOf("i") >= 0)
+			dtI[itO.addr.toString(16,5)] = itO;
+		else dt[itO.addr.toString(16,5)] = itO;
 		if(itO.tp == "u" || itO.tp == "i" || itO.tp == "u2" || itO.tp == "i2")	{ wTp = "integer"; itO.sz = 2; }
 		else if(itO.tp == "u4" || itO.tp == "i4")	{ wTp = "integer"; itO.sz = 4; }
 		else if(itO.tp == "s")	{ wTp = "string"; itO.sz = 16; }
@@ -4835,15 +4840,18 @@ if(items != items_) {
 			this.attrAdd(itO.id, itO.nm, wTp);
 			if(itO.wr)	itO.val = this[itO.id].get();
 			itO.mark = true;
-			//SYS.messInfo("/ED","itO="+itO.id+"; tmpAddr="+tmpAddr+"; addr="+itO.addr);
+			//SYS.messInfo("/MB/"+this.cfg("SHIFR"),"itO="+itO.id+"; tmpAddr="+tmpAddr+"; addr="+itO.addr);
 		}
 	}
-	dt["10000"] = EVAL;
+	dt["10000"] = EVAL; dtI["10000"] = EVAL;
 	// Check, remove item and set to EVAL the attribute
-	for(var iDt in dt) {
-		if(iDt == "10000" || dt[iDt].mark)	continue;
-		this[dt[iDt].id].set(EVAL, 0, 0, true);
-		delete dt[iDt];
+	for(iSp = 0; iSp < 2; iSp++) {
+		dtW = (iSp == 1) ? dtI : dt;
+		for(var iDt in dtW) {
+			if(iDt == "10000" || dtW[iDt].mark)	continue;
+			this[dtW[iDt].id].set(EVAL, 0, 0, true);
+			delete dtW[iDt];
+		}
 	}
 }
 
@@ -4902,55 +4910,59 @@ else {
 			else	Special.FLibSYS.floatSplitWord(tVl, w1, w2);
 			PDU.wr(w1, "uint16").wr(w2, "uint16");
 		}
-		//SYS.messInfo("/ED","reqPDU="+SYS.strDecode(PDU.string,"Bin"," "));
+		//SYS.messInfo("/MB/"+this.cfg("SHIFR"),"reqPDU="+SYS.strDecode(PDU.string,"Bin"," "));
 		if(!req(PDU.string).toInt())	itO.val = tVl;
-		//SYS.messInfo("/ED","respPDU="+SYS.strDecode(PDU.string,"Bin"," "));
+		//SYS.messInfo("/MB/"+this.cfg("SHIFR"),"respPDU="+SYS.strDecode(PDU.string,"Bin"," "));
 	}
 
 	//Same requests for the data
-	blk = new Array();
-	for(var iDt in dt) {
-		isEOL = (iDt == "10000");
-		itO = dt[iDt];
-		//SYS.messInfo("/ED","iDt="+iDt+"; isEOL="+isEOL);
-		if(!isEOL && (!blk.length || (
-				(itO.addr-blk[0].addr+1+floor((itO.sz-2)/2)) <= floor(maxBlkSz/2) && (fragMerge || (itO.addr-blk[blk.length-1].addr-floor((blk[blk.length-1].sz-2)/2)) <= 1) ))) {
-			if(itO.rd) blk.push(itO);
-			continue;
-		}
-		//Send request for this block
-		if(blk.length) {
-			regN = (blk[blk.length-1].addr - blk[0].addr) + 1 + floor((blk[blk.length-1].sz-2)/2);
-			PDU = SYS.strFromCharCode(3, (blk[0].addr>>8)&0xFF, blk[0].addr&0xFF, 0, regN);
-			//SYS.messInfo("/ED","reqPDU="+SYS.strDecode(PDU,"Bin"," "));
-			if((tErr=req(PDU)).toInt()) break;
-			//SYS.messInfo("/ED","respPDU="+SYS.strDecode(PDU,"Bin"," "));
-			io = Special.FLibSYS.IO(PDU, "", "b");
-			rF = io.read("uint8", 1); rN = io.read("uint8", 1);
-			if(rF != 3 || (io.length-2) != rN) { tErr = "10:"+tr("Inconsistent respond''s length."); break; }
-			for(iB = 0; iB < blk.length; iB++) {
-				itO1 = blk[iB];
-				io.pos = 2 + (itO1.addr-blk[0].addr)*2;
-				if(itO1.tp == "u" || itO1.tp == "u2")			tVl = io.read("uint16", 1);
-				else if(itO1.tp == "i" || itO1.tp == "i2")	tVl = io.read("int16", 1);
-				else if(itO1.tp == "u4")
-					tVl = itO1.rev ? io.read("uint16", 1)*65536 + io.read("uint16", 1) :
-											io.read("uint16", 1) + io.read("uint16", 1)*65536;
-				else if(itO1.tp == "i4")
-					tVl = itO1.rev ? io.read("int16", 1)*65536 + io.read("uint16", 1) :
-											io.read("uint16", 1) + io.read("int16", 1)*65536;
-				else if(itO1.tp == "s")	tVl = io.read("char", blk[0].sz);
-				else {
-					w1 = io.read("uint16", 1); w2 = io.read("uint16", 1);
-					tVl = itO1.rev ? Special.FLibSYS.floatMergeWord(w2, w1) :
-											Special.FLibSYS.floatMergeWord(w1, w2);
-					//tVl = io.read("float", 1, "l");
-				}
-				if(itO1.wr && itO1.val != this[itO1.id].get())	{ itO1.val = tVl; continue; }
-				this[itO1.id].set(tVl, 0, 0, true);
-				itO1.val = tVl;
+	for(iSp = 0; iSp < 2; iSp++) {
+		dtW = (iSp == 1) ? dtI : dt;
+
+		blk = new Array();
+		for(var iDt in dtW) {
+			isEOL = (iDt == "10000");
+			itO = dtW[iDt];
+			//SYS.messInfo("/MB/"+this.cfg("SHIFR"),"iDt="+iDt+"; isEOL="+isEOL);
+			if(!isEOL && (!blk.length || (
+					(itO.addr-blk[0].addr+1+floor((itO.sz-2)/2)) <= floor(maxBlkSz/2) && (fragMerge || (itO.addr-blk[blk.length-1].addr-floor((blk[blk.length-1].sz-2)/2)) <= 1) ))) {
+				if(itO.rd) blk.push(itO);
+				continue;
 			}
-			blk = new Array(); blk.push(itO);
+			//Send request for this block
+			if(blk.length) {
+				regN = (blk[blk.length-1].addr - blk[0].addr) + 1 + floor((blk[blk.length-1].sz-2)/2);
+				PDU = SYS.strFromCharCode((iSp==1)?4:3, (blk[0].addr>>8)&0xFF, blk[0].addr&0xFF, 0, regN);
+				//SYS.messInfo("/MB/"+this.cfg("SHIFR"), "reqPDU="+SYS.strDecode(PDU,"Bin"," "));
+				if((tErr=req(PDU)).toInt()) break;
+				//SYS.messInfo("/MB/"+this.cfg("SHIFR"), "respPDU="+SYS.strDecode(PDU,"Bin"," "));
+				io = Special.FLibSYS.IO(PDU, "", "b");
+				rF = io.read("uint8", 1); rN = io.read("uint8", 1);
+				if(/*rF != 3 ||*/ (io.length-2) != rN) { tErr = "10:"+tr("Inconsistent respond''s length."); break; }
+				for(iB = 0; iB < blk.length; iB++) {
+					itO1 = blk[iB];
+					io.pos = 2 + (itO1.addr-blk[0].addr)*2;
+					if(itO1.tp == "u" || itO1.tp == "u2")			tVl = io.read("uint16", 1);
+					else if(itO1.tp == "i" || itO1.tp == "i2")	tVl = io.read("int16", 1);
+					else if(itO1.tp == "u4")
+						tVl = itO1.rev ? io.read("uint16", 1)*65536 + io.read("uint16", 1) :
+												io.read("uint16", 1) + io.read("uint16", 1)*65536;
+					else if(itO1.tp == "i4")
+						tVl = itO1.rev ? io.read("int16", 1)*65536 + io.read("uint16", 1) :
+											io.read("uint16", 1) + io.read("int16", 1)*65536;
+					else if(itO1.tp == "s")	tVl = io.read("char", blk[0].sz);
+					else {
+						w1 = io.read("uint16", 1); w2 = io.read("uint16", 1);
+						tVl = itO1.rev ? Special.FLibSYS.floatMergeWord(w2, w1) :
+												Special.FLibSYS.floatMergeWord(w1, w2);
+						//tVl = io.read("float", 1, "l");
+					}
+					if(itO1.wr && itO1.val != this[itO1.id].get())	{ itO1.val = tVl; continue; }
+					this[itO1.id].set(tVl, 0, 0, true);
+					itO1.val = tVl;
+				}
+				blk = new Array(); blk.push(itO);
+			}
 		}
 	}
 }
@@ -4959,13 +4971,16 @@ if(!tErr.length)	tErr = "0";
 if(tErr.toInt()) {
 	if(!tr.isEVal() && tr.start()) tr.start(false);
 	if(f_err != tErr)
-		for(var iDt in dt) {
-			itO = dt[iDt];
-			if(iDt == "10000")	continue;
-			this[itO.id].set(EVAL, 0, 0, true);
+		for(iSp = 0; iSp < 2; iSp++) {
+			dtW = (iSp == 1) ? dtI : dt;
+			for(var iDt in dtW) {
+				itO = dtW[iDt];
+				if(iDt == "10000")	continue;
+				this[itO.id].set(EVAL, 0, 0, true);
+			}
 		}
 }
-f_err = tErr;','','',1707471627);
+f_err = tErr;','','',1726384559);
 INSERT INTO tmplib_DevLib VALUES('SLOT','Slot LTD devices','','','The template implements support for counters and correctors of the "SLOT" LTD production. The devices protocol is flexible and uniform for implementation of reading all available archives also as setting the configuration fields, but currently there was need only for reading the hourly archives, so the template reads the daily and hourly archives and some set of the instantaneous parameters.
 
 The template includes also code for connect the counters through modems using the AT-commands.
@@ -5635,7 +5650,7 @@ The statistics of a separate machine include: the number of received and process
 Author: Roman Savochenko <roman@oscada.org>
 Total complexity: 4.3 HD
 Sponsored by: Vinnica Poultry Farm
-Version: 1.0.0
+Version: 1.0.1
 License: GPLv2','','',240,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(data, buf) {
@@ -8077,6 +8092,277 @@ if(tErr.toInt()) {
 		}
 }
 f_err = tErr+(arhSt.length?": "+arhSt:"");','','',1707747484);
+INSERT INTO tmplib_DevLib VALUES('ergomera125','Ergomera 125','','','The template implements support for Ergomera 125 Counters and for the manufacturer own protocol, due to the ModBus based protocol has obvious problems. Communication protocol of the devices is completely specific.
+
+<!!> Even the manufacturer own protocol have had problems on accessible to test devices, but mostly in reading the archives, so the template is not tested properly and it is considered as the initial implementation! The template reads the daily and hourly archives and some set of the instantaneous parameters.
+
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 0.5 HD
+Sponsored by: Vinnica Poultry Farm
+Version: 0.5.0
+License: GPLv2','','',240,0,'JavaLikeCalc.JavaScript
+//Same request to the device
+function req(data, cmd, waitSz) {
+	if(data == null || cmd == null || waitSz == null)	return tr("2:Empty request. ");
+	req = "EM"+cmd+" !125m"+addr.toString(10,4)+data+SYS.strFromCharCode(0x0D,rand(255));
+	//Calc and append the CRC
+	CRC = Special.FLibSYS.CRC(req, 16, 0x8005);
+	req += SYS.strFromCharCode(CRC&0xFF, CRC>>8);
+
+	SYS.messDebug("/EM125/"+this.cfg("SHIFR"), tr("Request")+": "+SYS.strDecode(req,"Bin"," "));
+
+	//Send and receive
+	for(resp = tr.messIO(req); resp.length && (!waitSz || resp.length < (waitSz+1)) && (tresp=tr.messIO("")).length; )
+		resp += tresp;
+	if(!resp.length)	return tr("3:No response. ");
+	else if(resp.length < (waitSz+1))	return tr("3:Response isn''t completed. ");
+	for(CRC = 0xA5, iCh = 0; iCh < (resp.length-1); iCh++)
+		CRC = CRC^resp.charCodeAt(iCh);
+	if(CRC != resp.charCodeAt(resp.length-1))
+	//if(Special.FLibSYS.CRC(resp.slice(0,-2),16,0x8005) != resp.charCodeAt(resp.length-2,"UTF-16LE"))
+		return tr("3:Error the response CRC. ");
+
+	SYS.messDebug("/EM125/"+this.cfg("SHIFR"), tr("Response")+": "+SYS.strDecode(resp,"Bin"," "));
+
+	data = resp.slice(0,-1);
+
+	return "0";
+}
+
+//Seting value to the archive
+function archSet(attr, vTm, vl, arh) {
+	SYS.messDebug("/EM125/"+this.cfg("SHIFR"), "attr="+attr+"; vTm="+SYS.strftime(vTm)+"; arh="+arh+"; vl="+vl);
+	atrO = this[attr];
+	if(!atrO || atrO.isEVal()) return;
+	arguments[attr] = vl;	//Set the current-last value
+	//if(vTm > atrO.time())	atrO.set(vl,vTm,0,true);
+	if(atrO.arch())	atrO.arch().setVal(vTm*1e6, vl, arh);
+}
+
+if(f_start) {
+	reset = arhSelH = arhSelD = false;
+	cTm = 0;
+	arhThresH = 60*60;
+	arhThresD = 2*24*60*60;
+}
+
+if(reset) {
+	reset = arhSelH = arhSelD = false, arhLastD = arhLastH = 0;
+	cTm = 0;
+}
+
+if(f_start || f_stop)	return;
+
+tErr = "";
+
+if(!(tr=SYS.Transport.outAt(transport)) || !tr.start(true))
+	tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else if(addr < 0 || addr > 9999)
+	tErr = "2:"+tr("Address ''%1'' out of range [0...9999].").replace("%1",addr.toString());
+else {
+	tmCur = SYS.time();
+
+	//Reading current values
+	if((tmCur-cTm) > arhTryPer) {
+		devDtTm = EVAL, devDtTm_ = 0;
+		G1 = G2 = q1 = q2 = q3 = q4 = m1 = m2 = m3 = m4 = T1 = T2 = T3 = P1 = P2 = P3 = dT1 = dT2 = EVAL;
+		Q1 = Q2 = V1 = V2 = V3 = V4 = M1 = M2 = M3 = M4 = EVAL;
+		cTm = tmCur;
+	}
+
+	data = "";
+	if(!devDtTm_ && !(tErr=req(data,"C",450)).toInt()) {
+		io = Special.FLibSYS.IO(data); io.pos = 0;
+		tmS = io.read("uint8", 1); tmM = io.read("uint8", 1); tmH = io.read("uint8", 1);
+		dtD = io.read("uint8", 1); dtM = io.read("uint8", 1); dtY = io.read("uint8", 1);
+		devDtTm = SYS.strftime(devDtTm_=SYS.mktime(tmS,tmM,tmH,dtD,dtM-1,2000+dtY));
+		io.pos += 10;
+		G1 = io.read("float", 1);
+		G2 = io.read("float", 1);
+		q1 = io.read("float", 1);
+		q2 = io.read("float", 1);
+		/*q3 =*/ io.read("float", 1);
+		/*q4 =*/ io.read("float", 1);
+		m1 = io.read("float", 1);
+		m2 = io.read("float", 1);
+		/*m3 =*/ io.read("float", 1);
+		/*m4 =*/ io.read("float", 1);
+		T1 = io.read("float", 1);
+		T2 = io.read("float", 1);
+		T3 = io.read("float", 1);
+		P1 = io.read("float", 1);
+		P2 = io.read("float", 1);
+		P3 = io.read("float", 1);
+		/*q1 =*/ io.read("float", 1);
+		/*q2 =*/ io.read("float", 1);
+		q3 = io.read("float", 1);
+		q4 = io.read("float", 1);
+		/*m1 =*/ io.read("float", 1);
+		/*m2 =*/ io.read("float", 1);
+		m3 = io.read("float", 1);
+		m4 = io.read("float", 1);
+		dT1 = io.read("float", 1);
+		dT2 = io.read("float", 1);
+		io.pos = 256;
+		Q1 = io.read("long", 1);
+		Q2 = io.read("long", 1);
+		V1 = io.read("long", 1);
+		V2 = io.read("long", 1);
+		V3 = io.read("long", 1);
+		V4 = io.read("long", 1);
+		M1 = io.read("long", 1);
+		M2 = io.read("long", 1);
+		M3 = io.read("long", 1);
+		M4 = io.read("long", 1);
+		Q1 += io.read("float", 1);
+		Q2 += io.read("float", 1);
+		V1 += io.read("float", 1);
+		V2 += io.read("float", 1);
+		V3 += io.read("float", 1);
+		V4 += io.read("float", 1);
+		M1 += io.read("float", 1);
+		M2 += io.read("float", 1);
+		M3 += io.read("float", 1);
+		M4 += io.read("float", 1);
+	}
+
+	//Requesting the hourly archive
+	if(devDtTm_ && !arhSelD && arhH.length && !tErr.toInt() && (devDtTm_-arhLastH) > arhThresH) {
+		toSave = false;
+
+		if(!arhSelH)
+			cmd = "A",	data = " %0 "+(arhLastH?SYS.strftime(arhLastH,"%d.%m.%y"):"1.01.00");
+		else cmd = "F", data = "";
+		while((SYS.time()-tmCur) < arhTmLim && !(tErr=req(data,cmd,130)).toInt()) {
+			io = Special.FLibSYS.IO(data); io.pos = 2;
+			tmH = io.read("uint8", 1);
+			dtD = io.read("uint8", 1); dtM = io.read("uint8", 1); dtY = io.read("uint8", 1);
+
+			if(tmH <= 24 && (arhLastH_=SYS.mktime(0,0,tmH,dtD,dtM-1,2000+dtY)) > arhLastH) {
+				arhLastH = arhLastH_;
+
+				archSet("dQ1", arhLastH, io.read("float", 1), arhH);
+				archSet("dQ2", arhLastH, io.read("float", 1), arhH);
+				archSet("dV1", arhLastH, io.read("float", 1), arhH);
+				archSet("dV2", arhLastH, io.read("float", 1), arhH);
+				archSet("dV3", arhLastH, io.read("float", 1), arhH);
+				archSet("dV4", arhLastH, io.read("float", 1), arhH);
+				archSet("dM1", arhLastH, io.read("float", 1), arhH);
+				archSet("dM2", arhLastH, io.read("float", 1), arhH);
+				archSet("dM3", arhLastH, io.read("float", 1), arhH);
+				archSet("dM4", arhLastH, io.read("float", 1), arhH);
+				archSet("dt1_work", arhLastH, io.read("long", 1), arhH);
+				archSet("dt2_work", arhLastH, io.read("long", 1), arhH);
+				archSet("dt3_work", arhLastH, io.read("long", 1), arhH);
+				archSet("dt4_work", arhLastH, io.read("long", 1), arhH);
+				archSet("dt1_idle", arhLastH, io.read("long", 1), arhH);
+				archSet("dt2_idle", arhLastH, io.read("long", 1), arhH);
+				archSet("dt3_idle", arhLastH, io.read("long", 1), arhH);
+				archSet("dt4_idle", arhLastH, io.read("long", 1), arhH);
+				archSet("dt1_cut", arhLastH, io.read("long", 1), arhH);
+				archSet("dt2_cut", arhLastH, io.read("long", 1), arhH);
+				archSet("dt1_rev", arhLastH, io.read("long", 1), arhH);
+				archSet("dt2_rev", arhLastH, io.read("long", 1), arhH);
+				archSet("dt1_up", arhLastH, io.read("long", 1), arhH);
+				archSet("dt2_up", arhLastH, io.read("long", 1), arhH);
+				archSet("dt_nopow", arhLastH, io.read("long", 1), arhH);
+				archSet("dT1", arhLastH, io.read("float", 1), arhH);
+				archSet("dT2", arhLastH, io.read("float", 1), arhH);
+				archSet("dT3", arhLastH, io.read("float", 1), arhH);
+				archSet("dP1", arhLastH, io.read("float", 1), arhH);
+				archSet("dP2", arhLastH, io.read("float", 1), arhH);
+				archSet("dP3", arhLastH, io.read("float", 1), arhH);
+
+				toSave = true;
+			}
+			cmd = "F", data = "";
+			arhSelH = ((devDtTm_-arhLastH) > arhThresH);
+		}
+		if(toSave)	SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
+	}
+	//Requesting the daily archive
+	else if(devDtTm_ && !arhSelH && arhD.length && !tErr.toInt() && (devDtTm_-arhLastD) > arhThresD) {
+		toSave = false;
+
+		if(!arhSelD)
+			cmd = "A",	data = " %1 "+(arhLastD?SYS.strftime(arhLastD,"%d.%m.%y"):"1.01.00");
+		else cmd = "F", data = "";
+		while((SYS.time()-tmCur) < arhTmLim && !(tErr=req(data,cmd,130)).toInt()) {
+			io = Special.FLibSYS.IO(data); io.pos = 3;
+			dtD = io.read("uint8", 1); dtM = io.read("uint8", 1); dtY = io.read("uint8", 1);
+
+			if((arhLastD_=SYS.mktime(0,0,0,dtD,dtM-1,2000+dtY)) > arhLastD) {
+				arhLastD = arhLastD_;
+
+				archSet("dQ1", arhLastD, io.read("float", 1), arhD);
+				archSet("dQ2", arhLastD, io.read("float", 1), arhD);
+				archSet("dV1", arhLastD, io.read("float", 1), arhD);
+				archSet("dV2", arhLastD, io.read("float", 1), arhD);
+				archSet("dV3", arhLastD, io.read("float", 1), arhD);
+				archSet("dV4", arhLastD, io.read("float", 1), arhD);
+				archSet("dM1", arhLastD, io.read("float", 1), arhD);
+				archSet("dM2", arhLastD, io.read("float", 1), arhD);
+				archSet("dM3", arhLastD, io.read("float", 1), arhD);
+				archSet("dM4", arhLastD, io.read("float", 1), arhD);
+				archSet("dt1_work", arhLastD, io.read("long", 1), arhD);
+				archSet("dt2_work", arhLastD, io.read("long", 1), arhD);
+				archSet("dt3_work", arhLastD, io.read("long", 1), arhD);
+				archSet("dt4_work", arhLastD, io.read("long", 1), arhD);
+				archSet("dt1_idle", arhLastD, io.read("long", 1), arhD);
+				archSet("dt2_idle", arhLastD, io.read("long", 1), arhD);
+				archSet("dt3_idle", arhLastD, io.read("long", 1), arhD);
+				archSet("dt4_idle", arhLastD, io.read("long", 1), arhD);
+				archSet("dt1_cut", arhLastD, io.read("long", 1), arhD);
+				archSet("dt2_cut", arhLastD, io.read("long", 1), arhD);
+				archSet("dt1_rev", arhLastD, io.read("long", 1), arhD);
+				archSet("dt2_rev", arhLastD, io.read("long", 1), arhD);
+				archSet("dt1_up", arhLastD, io.read("long", 1), arhD);
+				archSet("dt2_up", arhLastD, io.read("long", 1), arhD);
+				archSet("dt_nopow", arhLastD, io.read("long", 1), arhD);
+				archSet("dT1", arhLastD, io.read("float", 1), arhD);
+				archSet("dT2", arhLastD, io.read("float", 1), arhD);
+				archSet("dT3", arhLastD, io.read("float", 1), arhD);
+				archSet("dP1", arhLastD, io.read("float", 1), arhD);
+				archSet("dP2", arhLastD, io.read("float", 1), arhD);
+				archSet("dP3", arhLastD, io.read("float", 1), arhD);
+
+				toSave = true;
+			}
+
+			cmd = "F", data = "";
+			arhSelD = ((devDtTm_-arhLastD) > arhThresD);
+		}
+
+		if(toSave)	SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
+	}
+}
+
+//Error set
+if(!tErr.length)	tErr = "0";
+if(tErr.toInt()) {
+	if(!tr.isEVal() && tr.start()) tr.start(false);
+	if(f_err != tErr) {
+		SYS.messDebug("/EM125/"+this.cfg("SHIFR"), tr("Error")+": "+tErr);
+
+		//G1 = G2 = q1 = q2 = q3 = q4 = m1 = m2 = m3 = m4 = T1 = T2 = T3 = P1 = P2 = P3 = dT1 = dT2 = EVAL;
+		//Q1 = Q2 = V1 = V2 = V3 = V4 = M1 = M2 = M3 = M4 = EVAL;
+	}
+}
+prcSt = "";
+if(arhD.length) {
+	if(arhLastD && (devDtTm_-arhLastD) <= arhThresD)
+		prcSt += tr("Days: ") + tr("Trace for current time=%1").replace("%1",SYS.strftime(arhLastD,"%Y-%m-%d")) + "; ";
+	else {
+		prcSt += tr("Days: ") + tr("Reading in time=%1").replace("%1",SYS.strftime(arhLastD,"%Y-%m-%d")) + "; ";
+	}
+}
+if(arhH.length) {
+	if(arhLastH && (devDtTm_-arhLastH) <= arhThresH)
+		prcSt += tr("Hours: ") + tr("Trace for current time=%1").replace("%1",SYS.strftime(arhLastH,"%Y-%m-%d %H")) + "; ";
+	else
+		prcSt += tr("Hours: ") + tr("Reading in time=%1").replace("%1",SYS.strftime(arhLastH,"%Y-%m-%d %H")) + "; ";
+}
+f_err = tErr + (prcSt.length?((tErr=="0")?": ":" ")+prcSt:"");','','',1740065040);
 CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_PrescrTempl VALUES('timer','Command — Timer','Команда — Таймер','Команда — Таймер','Template of a command of the prescription typical timer. The timer is only designed to hold time between other action steps and for example, so it only has one attribute, "Time" in seconds.
 
@@ -10300,40 +10586,55 @@ if(tErr.length)	f_err = tErr;
 else f_err = "0";','','',1657998607);
 INSERT INTO tmplib_base VALUES('fileServerHTTP','WebUser: HTTP File Server','WebUser: HTTP Файловий Сервер','','The template for implementing a HTTP File Server directly in OpenSCADA, which is suitable one at missing a full-featured one for functions of servicing file requests from OpenSCADA Web-interfaces.
 
-Currently there implemented only requesting files by the GET request of HTTP. There are supported also the Partial Content requests in single range and with forcing to this mode at some configured file size. ￼That is work properly only for video and audio files and doesn''t work for other files especially documents, so you have to configure the file size limit for solid reading in maximum size of your documents. For proper working the Partial Content requests we need to implement the HTTP request HEAD in the module Protocol.HTTP before implementing here!
+Currently there implemented only requesting files by the GET request of HTTP. There are supported also chunks and the Partial Content requests in single range and with forcing to this mode at some configured file size.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.0
+Version: 1.2.0
 License: GPLv2','Шаблон для реалізації Файлового Серверу HTTP безпосередньо в OpenSCADA, який корисний за відсутності повнофункціонального для функцій обслуговування файлових запитів із OpenSCADA Web-інтерфейсів.
 
-Наразі реалізовано лише запити файлів HTTP запитом GET. Також реалізуються запити Часток Контенту за одним діапазоном зі змушуванням до цього режиму за певного налаштованого розміру файлу. Належним чином працює лише для відео і аудіо файлів і не працює для інших файлів, особливо документів, тож ви маєте налаштувати обмеження на розмір файлів для цілковитого читання у максимальний розмір ваших документів. Для належного функціювання запитів Часток Контенту ми маємо реалізувати HTTP запит HEAD у модулі Protocol.HTTP перед реалізацією тут!
+Наразі реалізовано лише запити файлів HTTP запитом GET. Також реалізуються шматки і запити Часток Контенту за одним діапазоном зі змушуванням до цього режиму за певного налаштованого розміру файлу.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.0
+Версія: 1.2.0
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
+if(HTTPreq != "GET") { rez = ""; return; }
+
 offPath = 0; url.parsePath(0, 0, offPath);
 reqF = url.slice(offPath);
 if(!(fSz=SYS.fileSize(baseD+reqF)))	{
 	page = "<center><h1>The file ''%1'' not found!</h1></center>".replace("%1", reqF);
 	HTTPvars["Content-Type"] = "text/html;charset=UTF-8";
-	return "404 Not Found";
+	rez = "404 Not Found";
+	return;
 }
 
+HTTPvars["Content-Type"] = SYS.UI.mimeGet(reqF);
+
 fSzLim = max(10e3, fSzSolidLim);	//File''s block size for reading
-fOff = 0;			//File offset
+
+//Range at request
 if(HTTPvars["Range"] != null) {
 	tVl = HTTPvars["Range"].parse(1, "bytes=");
 	fOff = tVl.parse(0,"-").toInt();
 	if((tVl=tVl.parse(1,"-")).toInt())	fSzLim = tVl.toInt() - fOff + 1;
+
+	page = SYS.fileRead(baseD+reqF, fOff, fSzLim);
+	HTTPvars["Content-Range"] = "bytes "+fOff+"-"+(fOff+page.length-1)+"/"+fSz;
+	rez = "206 Partial Content";
 }
-//SYS.messInfo("FileHTTP", "fOff="+fOff);
-
-page = SYS.fileRead(baseD+reqF, fOff, fSzLim);
-
-HTTPvars["Content-Type"] = SYS.UI.mimeGet(reqF);
-if(!fOff && fSz < fSzLim)	return "200 OK";
-HTTPvars["Content-Range"] = "bytes "+fOff+"-"+(fOff+page.length-1)+"/"+fSz;
-return "206 Partial Content";','','',1702149894);
+//By chunks with direct writing
+else if(fSz > fSzLim) {
+	tr.writeTo(sender, prt.pgCreator("","200 OK",
+			"Content-Type: "+HTTPvars["Content-Type"]+"\x0D\x0ATransfer-Encoding: chunked"));
+	for(fOff = 0; fOff < fSz; fOff += page.length) {
+		page = SYS.fileRead(baseD+reqF, fOff, fSzLim);
+		tr.writeTo(sender, page.length.toString(16)+"\x0D\x0A"+page+"\x0D\x0A");
+	}
+	tr.writeTo(sender, "0\x0D\x0A\x0D\x0A");
+	rez = "";
+}
+//Simple data in single package
+else { page = SYS.fileRead(baseD+reqF); rez = "200 OK"; }','','',1734640136);
 INSERT INTO tmplib_base VALUES('weather','Weather','Погода','','The template of acquiring weather data from different weather services in Internet and initially it is only Open Weather (https://openweathermap.org/).
 
 The weather data divided on current and forecast with their placing in corresponded objects, where current attributes placed directly in the root and forecast days (the "day" object) and times (the "time" object) inwardly corresponded day according to the current timezone. These data acquired at specified schedule independently for current and forecast, and by default the current ones are performed per hour when forecast ones per day. The data can be accessible by user both as directly and through a specially created widget of the main library.
@@ -10588,6 +10889,238 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 else if(f_err.toInt() && !tErr.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 f_err = tErr;','','',1714665209);
+INSERT INTO tmplib_base VALUES('initRemCntr','Control the remote initiative connections','Контроль віддалених ініціативних підключень','','The template of processing input initiative connections expands early one template initiative connections processing for the associated output transports by complete representing data of the remote OpenSCADA hosts on some aggregation server and with a possibility of control the remote hosts through the server, that is finishing the conception of data acquisition in the passive mode and the initiative connection.
+
+The template does in whole:
+- detecting a new connection from remote host, which has no ID;
+- sending an acquaintance direct request to the established connection for getting KEY of the host, when it was already connected early, and for getting information about the host for creating ID of the host;
+- setting ID for the connection;
+- creating a record in the OpenSCADA hosts table for the connection and sending all followed requests already through the host;
+- creating on the remote host a representative Logical Controller;
+- creating on the remote host a representative DAQ.System Controller Object in the automatic mode, at missing any other there;
+- processing the present DAQ.System Controller Objects to link the Logical Level parameters to them and creating some processing logical parameters;
+- writing the generated key by a line "SrcKey: {KEY}" to description of the Logical Controller as a sign of finalising the initialisation;
+- creating a Controller Object in DAQ.DAQGate with connection to the remote Logical Controller.
+
+ID of the remote host is formed in the view "{HostDomain}{StatName}{RandKey}" and with limiting to 20 symbols, where:
+- {HostDomain} — network host name-domain;
+- {StatName} — station name of the OpenSCADA project;
+- {RandKey} — random key in sixth digits.
+
+Data model of the representative Logical Controller can contain both the generated links with processing parameters, and custom parameters, when the user is decided to publish some extra data. The generated items from DAQ.System are represents sources currently:
+- "CPU", "MEM", "sensors", "Power", "uptime" => links in the "System (SYS)" container parameter;
+- "fs", "hddstat", "hddsmart" => links in the "Disk (DISK)" container parameter with a processing one for "hddsmart" by the template base.DiskSMART;
+- "netstat" => links in the "Network (NET)" container parameter;
+- "ups" => links in the root with a processing one by the template base.UPS.
+
+The aggregated data in DAQ.GAQGate can be lifted to up, or used in derivative DAQ objects, or whether directly on custom frames, or in future on a Dynamic Frame, which scheduled to implement; and without any additional action you will get notification about violations on the hosts.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.1
+License: GPLv2','Шаблон опрацювання вхідних ініціативних підключень розширює попередній шаблон опрацювання ініціативних підключень щодо асоційованих вихідних транспортів повним представлення даних віддалених хостів OpenSCADA на деякому агрегувальному сервері, чим завершуючи концепцію збору даних у пасивному режимі та ініціативного підключення.
+
+Шаблон загалом здійснює:
+- виявлення нового підключення від віддаленого хосту, яке не має ІД;
+- надсилання ознайомчого прямого запиту за встановленим підключенням для отримання КЛЮЧА хосту, якщо це підключення вже раніше було, і для отримання інформації щодо хосту для створення ІД хосту;
+- встановлення ІД для підключення;
+- створення запису у таблиці хостів OpenSCADA для підключення і надсилання подальших запитів вже через хост;
+- створення на віддаленому хості представницького Логічного Контролеру;
+- створення на віддаленому хості представницького Об''єкту Контролеру DAQ.System у автоматичному режимі, за відсутності інших там;
+- опрацювання наявних Об''єктів Контролеру DAQ.System щодо посилань параметрів Логічного Рівня на них і створення деяких логічних параметрів обробки;
+- запис згенерованого ключа рядком "SrcKey: {ID}" до опису Логічного Контролеру у якості ознаки завершення ініціалізації;
+- створення Об''єкту Контролеру у DAQ.DAQGate із підключенням до віддаленого Логічного Контролеру.
+
+ІД віддаленого хосту формується у вигляді "{HostDomain}{StatName}{RandKey}" і з обмеженням у 20ть символів, де:
+- {HostDomain} — мережеве ім''я-домен хосту;
+- {StatName} — ім''я станції проєкту OpenSCADA;
+- {RandKey} — випадковий ключ у шість цифр.
+
+Модель даних представницького Логічного Контролеру може містити як згенеровані посилання із параметрами обробки, так і користувацькі параметри, якщо користувач вирішить опублікцівати додаткові дані. Згенеровані із DAQ.System елементи наразі представляють джерела:
+- "CPU", "MEM", "sensors", "Power", "uptime" => посилання у контейнері параметрів "Система (SYS)";
+- "fs", "hddstat", "hddsmart" => посилання у контейнері параметрів "Диск (DISK)" із однією обробкою для "hddsmart" за шаблоном base.DiskSMART;
+- "netstat" => посилання у контейнері параметрів "Мережа (NET)";
+- "ups" => посилання у корені із однією обробкою за шаблоном base.UPS.
+
+Агреговані дані у DAQ.GAQGate можуть бути підняті на гору, або використані у похідних DAQ об''єктах, або прямо на користувацьких кадрах, або у майбутньому на Динамічному Кадрі, який заплановано до реалізації; та без жодних додаткових дій ви отримаєте сповіщення про порушення на хостах.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.0.1
+Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
+function prmAdd(req, path, pId, pNm, pTp, pSrc, pLogLnk) {
+	req.childAdd("add").setAttr("path",path+"/%2fbr%2fprm_").setAttr("id",pId).setText(pNm);
+	req.childAdd("set").setAttr("path",path+"/prm_"+pId+"/%2fprm%2fst%2ftype").setText(pTp);
+	req.childAdd("set").setAttr("path",path+"/prm_"+pId+"/%2fprm%2fcfg%2fEN").setText(1);
+	if(pTp == "Prm" && pSrc != null)
+		req.childAdd("set").setAttr("path",path+"/prm_"+pId+"/%2fprm%2fcfg%2fPRM").setText(pSrc);
+	if(pTp == "PrmRefl" && pSrc != null)
+		req.childAdd("set").setAttr("path",path+"/prm_"+pId+"/%2fprm%2fcfg%2fPSRC").setText(pSrc);
+	req.childAdd("set").setAttr("path",path+"/prm_"+pId+"/%2fprm%2fst%2fen").setText(1);
+	if(pTp == "Prm" && pLogLnk != null)
+		req.childAdd("set").setAttr("path",path+"/prm_"+pId+"/%2fcfg%2fprm%2fel_0").setText(pLogLnk);
+}
+
+if(f_start) {
+	inTransport_ = "", inTr = null;
+	prcTr = "";
+	return;	//Do no work on the start time
+}
+
+//Checking the transport change and connect
+tErr = "";
+if(inTr == null || inTransport != inTransport_) {
+	inTransport_ = inTransport;
+	inTr = SYS.Transport[inTransport.parse(0)]["in_"+inTransport.parse(1)];
+}
+
+if(inTr == null)	tErr = "1:"+tr("Input transport ''%1'' error.").replace("%1",inTransport);
+else {
+	outTrs = inTr.associateTrsList();
+	for(iTr = 0; iTr < outTrs.length; iTr++) {
+		oTrNm = outTrs[iTr];
+		if((oTrO=SYS.Transport[inTransport.parse(0)]["out_"+oTrNm]) == null || !oTrO.start() || oTrO.conPrm("initConID").length)
+			continue;
+
+		//Getting the host address
+		hostAddr = (hostAddr=oTrO.status().match(" ''(.+)''\\.")).length ? hostAddr[1] : "";
+		
+		//Getting the station name and the DataSource key
+		req = SYS.XMLNode("CntrReqs").setAttr("rqDir","1").setAttr("rqUser",cntrUser).setAttr("rqPass",cntrPass).setAttr("conTm",conTm)
+				.setAttr("path","/");
+		req.childAdd("get").setAttr("path","/%2fgen%2fstat");
+		req.childAdd("get").setAttr("path","/DAQ/LogicLev/"+cntrObj+"/%2fcntr%2fcfg%2fDESCR");
+		req.childAdd("get").setAttr("path","/%2fgen%2fenv%2fhost");
+		if((rez=oTrO.messIO(req,"SelfSystem")).length) {
+			SYS.messNote("initRemCntr", (tVl=tr("Error requesting the remote host ''%1'': %2. ").replace("%1",hostAddr).replace("%2",rez)));
+			tErr += (tErr.length?"":"10:") + tVl;
+			oTrO.start(false);
+			continue;
+		}
+		stSrcKey = rand(999).toString();
+		isSrcInited = isHostReqPresent = false;
+		if(!req.childGet(1).attr("rez").toInt() && (tVl=req.childGet(1).text().match("^SrcKey: *([^\\n]+)$","m")).length)
+			isSrcInited = true, stSrcKey = tVl[1];
+
+		stSrcId = req.childGet(2).text() + req.childGet(0).text() + stSrcKey;
+		for(stLen = req.childGet(2).text().length, hostLen = req.childGet(0).text().length; stSrcId.length > 20; ) {
+			if(stLen > hostLen)	stLen--; else hostLen--;
+			stSrcId = req.childGet(2).text().slice(0,stLen) + req.childGet(0).text().slice(0,hostLen) + stSrcKey;
+		}
+		stSrcId = oTrO.conPrm("initConID", SYS.strEncode(stSrcId,"OscdID"));
+		stNm = req.childGet(2).text()+"-"+req.childGet(0).text();
+
+		prcTr = prcTr.replace(new RegExp("^"+stSrcId+":.+$","g"), "");
+		prcTr += stSrcId+": "+oTrNm+", "+hostAddr+", "+SYS.strftime(SYS.time())+"\n";
+
+		//Record to the table of the OpenSCADA remote hosts
+		// Checking presence
+		req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost");
+		SYS.cntrReq(req);
+		for(iH = 0; iH < req.childGet(0).childSize(); iH++)
+			if(req.childGet(0).childGet(iH).text() == stSrcId)
+			{ isHostReqPresent = true; break; }
+
+		// Appending/updating
+		if(!isHostReqPresent) {
+			req = SYS.XMLNode("CntrReqs").setAttr("path","/Transport");
+			req.childAdd("add").setAttr("path","/%2fsub%2fehost");
+			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id","newHost").setAttr("col","id").setText(stSrcId);
+			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id",stSrcId).setAttr("col","name").setText(stNm+" ("+stSrcKey+")");
+			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id",stSrcId).setAttr("col","transp").setText(inTransport.parse(0)+".in_"+inTransport.parse(1));
+			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id",stSrcId).setAttr("col","addr").setText(stSrcId);
+			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id",stSrcId).setAttr("col","user").setText(cntrUser);
+			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id",stSrcId).setAttr("col","pass").setText(cntrPass);
+			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id",stSrcId).setAttr("col","mode").setText(2);
+			SYS.cntrReq(req);
+		}
+
+		//Initialisation
+		if(!isSrcInited) {
+			//Creating the main control object of the Data Sources
+			req = SYS.XMLNode("CntrReqs").setAttr("path","/DAQ/LogicLev");
+			req.childAdd("add").setAttr("path","/%2fbr%2fcntr_").setAttr("id",cntrObj).setText("Sources for remote aggregator");
+			req.childAdd("set").setAttr("path","/"+cntrObj+"/%2fcntr%2fst%2frunSt").setText(1);
+			req.childAdd("set").setAttr("path","/"+cntrObj+"/%2fcntr%2fcfg%2fSTART").setText(1);
+			req.childAdd("save").setAttr("path","/"+cntrObj+"/%2fobj");
+			SYS.cntrReq(req, stSrcId);
+
+			//Primary sources in DAQ.System
+			// Getting allowed ones
+			reqSys = SYS.XMLNode("get").setAttr("path","/DAQ/System/%2fbr%2fcntr_");
+			SYS.cntrReq(reqSys, stSrcId);
+
+			// Creation one at missing any one
+			if(!reqSys.childSize()) {
+				req = SYS.XMLNode("CntrReqs").setAttr("path","/DAQ/System");
+				req.childAdd("add").setAttr("path","/%2fbr%2fcntr_").setAttr("id",cntrObj).setText("Remote sources");
+				req.childAdd("set").setAttr("path","/"+cntrObj+"/%2fcntr%2fcfg%2fAUTO_FILL").setText(3);
+				req.childAdd("set").setAttr("path","/"+cntrObj+"/%2fcntr%2fst%2frunSt").setText(1);
+				req.childAdd("set").setAttr("path","/"+cntrObj+"/%2fcntr%2fcfg%2fSTART").setText(1);
+				req.childAdd("save").setAttr("path","/"+cntrObj+"/%2fobj");
+				SYS.cntrReq(req, stSrcId);
+				reqSys.childAdd("el").setAttr("id",cntrObj).setText("Remote sources");
+			}
+
+			// Reading lists of the parameters of the System sources with reading parameters of the sources
+			// and creation their representing on the Logical Level
+			reqLogic = SYS.XMLNode("CntrReqs").setAttr("path","/DAQ/LogicLev/"+cntrObj);
+			prmAdd(reqLogic, "/", "SYS", "System", "Prm");
+			prmAdd(reqLogic, "/", "DISK", "Disk", "Prm");
+			prmAdd(reqLogic, "/", "NET", "Network", "Prm");
+
+			for(iEl = 0; iEl < reqSys.childSize(); iEl++) {
+				cntrId = reqSys.childGet(iEl).attr("id");
+				reqSysPrms = SYS.XMLNode("get").setAttr("path","/DAQ/System/"+cntrId+"/%2fbr%2fprm_");
+				SYS.cntrReq(reqSysPrms, stSrcId);
+
+				for(iEl2 = 0; iEl2 < reqSysPrms.childSize(); iEl2++) {
+					pId = reqSysPrms.childGet(iEl2).attr("id");
+					req = SYS.XMLNode("get").setAttr("path","/DAQ/System/"+cntrId+"/prm_"+pId+"/%2fprm%2fcfg%2fTYPE");
+					SYS.cntrReq(req, stSrcId);
+
+					//  Completely reflected sources
+					if((tVl=req.text()) == "CPU" || tVl == "MEM" || tVl == "sensors" || tVl == "Power" || tVl == "uptime")
+						prmAdd(reqLogic, "/prm_SYS", pId, reqSysPrms.childGet(iEl2).text(), "PrmRefl", "System."+cntrId+"."+pId);
+					else if(tVl == "fs" || tVl == "hddstat" || tVl == "hddsmart") {
+						prmAdd(reqLogic, "/prm_DISK", pId, reqSysPrms.childGet(iEl2).text(), "PrmRefl", "System."+cntrId+"."+pId);
+						if(tVl == "hddsmart")
+							prmAdd(reqLogic, "/prm_DISK", "log_"+pId, reqSysPrms.childGet(iEl2).text()+" - processing", "Prm", "base.DiskSMART", "System."+cntrId+"."+pId);
+					}
+					else if(tVl == "netstat")
+						prmAdd(reqLogic, "/prm_NET", pId, reqSysPrms.childGet(iEl2).text(), "PrmRefl", "System."+cntrId+"."+pId);
+					else if(tVl == "ups") {
+						prmAdd(reqLogic, "/", pId, reqSysPrms.childGet(iEl2).text(), "PrmRefl", "System."+cntrId+"."+pId);
+						prmAdd(reqLogic, "/", "log_"+pId, reqSysPrms.childGet(iEl2).text()+" - processing", "Prm", "base.UPS", "System."+cntrId+"."+pId);
+					}
+					else SYS.messNote("initRemCntr", "Implement the type ''"+tVl+"''");
+				}
+			}
+
+			//Mark the Logical Level controller as finished in the initialisation and save
+			reqLogic.childAdd("set").setAttr("path","/%2fcntr%2fcfg%2fDESCR").setText("SrcKey: "+stSrcKey+"\n");
+			reqLogic.childAdd("save").setAttr("path","/%2fobj");
+			if(!SYS.cntrReq(reqLogic,stSrcId).toInt()) {
+				//Creation the DAQGate object in the end and no error
+				req = SYS.XMLNode("CntrReqs").setAttr("path","/DAQ/DAQGate");
+				req.childAdd("add").setAttr("path","/%2fbr%2fcntr_").setAttr("id",stSrcId).setText(stNm+" ("+stSrcKey+")");
+				req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fcfg%2fSTATIONS").setText(stSrcId);
+				req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fcfg%2fCNTRPRM").setText("LogicLev."+cntrObj);
+				req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fcfg%2fSTART").setText(1);
+				req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fst%2frunSt").setText(1);
+				req.childAdd("save").setAttr("path","/"+stSrcId+"/%2fobj");
+				SYS.cntrReq(req);
+			}
+			delete reqLogic;
+			delete reqSysPrms;
+			delete reqSys;
+		}
+		delete req;
+	}
+	delete oTrO;
+}
+
+//Error set
+if(tErr.length)	f_err = tErr;
+else f_err = "0";','','',1740407474);
 CREATE TABLE IF NOT EXISTS 'flb_Controller' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO flb_Controller VALUES('prescr','Prescriptions manager (moved)','','','!!!!: Moved and replaced by the template PrescrTempl.manager. Will be removed soon
 Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
@@ -15877,6 +16410,13 @@ INSERT INTO Trs VALUES('Hard disk is overheated','Жорсткий диск пе
 INSERT INTO Trs VALUES('Too many pending sectors','Забагато секторів у очікувані','','');
 INSERT INTO Trs VALUES('Some pending sectors are presented','Дещо секторів у очікувані присутньо','','');
 INSERT INTO Trs VALUES('NORMA','НОРМА','','');
+INSERT INTO Trs VALUES('Output Serial transport ''%1'' error.','','','');
+INSERT INTO Trs VALUES('2:Empty request. ','','','');
+INSERT INTO Trs VALUES('3:No response. ','','','');
+INSERT INTO Trs VALUES('3:Response isn''t completed. ','','','');
+INSERT INTO Trs VALUES('Address ''%1'' out of range [0...9999].','','','');
+INSERT INTO Trs VALUES('Reading in time=%1','','','');
+INSERT INTO Trs VALUES('Error requesting the remote host ''%1'': %2. ','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_base_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_base_io VALUES('digAlarm','in','Input',3,144,'Input|in',2,'Вхід','','Вход','','');
 INSERT INTO tmplib_base_io VALUES('simleBoard','in','Input',2,128,'Parameter|var',0,'Вхід','','Вход','','');
@@ -16198,23 +16738,32 @@ INSERT INTO tmplib_base_io VALUES('ntf','messCatExcl','Message exclusion categor
 INSERT INTO tmplib_base_io VALUES('fileServerHTTP','rez','Result',0,0,'200 OK',0,'Результат','','Результат','','');
 INSERT INTO tmplib_base_io VALUES('fileServerHTTP','HTTPreq','HTTP request',0,0,'',1,'HTTP запит','','','','');
 INSERT INTO tmplib_base_io VALUES('fileServerHTTP','url','URL',0,0,'',2,'','','','','');
-INSERT INTO tmplib_base_io VALUES('fileServerHTTP','page','WWW-page',0,1,'',3,'WWW-сторінка','','','','');
-INSERT INTO tmplib_base_io VALUES('fileServerHTTP','HTTPvars','HTTP variables',4,1,'',4,'HTTP змінні','','','','');
-INSERT INTO tmplib_base_io VALUES('fileServerHTTP','baseD','Base directory',0,64,'/data/share_res/local/Lib/',5,'Базовий каталог','','','','');
-INSERT INTO tmplib_base_io VALUES('fileServerHTTP','fSzSolidLim','File size limit for solid reading, else enables the partial content',2,64,'10e6',6,'Обмеження на розмір файлу для читання цілком, інакше вмикається вміст частками','','','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','page','WWW-page',0,1,'',4,'WWW-сторінка','','','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','HTTPvars','HTTP variables',4,1,'',5,'HTTP змінні','','','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','baseD','Base directory',0,64,'/data/share_res/local/Lib/',6,'Базовий каталог','','','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','fSzSolidLim','File size limit for solid reading, else enables the partial content',2,64,'10e6',7,'Обмеження на розмір файлу для читання цілком, інакше вмикається вміст частками','','','','');
 INSERT INTO tmplib_base_io VALUES('weather','city','City ID',0,32,'709932',2,'ІД Міста','','','','');
-INSERT INTO tmplib_base_io VALUES('weather','this','Parameter',4,0,'0',5,'Параметр','','','','');
+INSERT INTO tmplib_base_io VALUES('weather','this','Parameter',4,0,'0',5,'Параметр','','Параметр','','');
 INSERT INTO tmplib_base_io VALUES('weather','schedCur','Scheduling at CRON of current update',0,64,'0 8-20 * * * ',0,'Планування за CRON оновлення поточних даних','','','','');
 INSERT INTO tmplib_base_io VALUES('weather','schedFC','Scheduling at CRON of forecast update',0,64,'0 8 * * *',1,'Планування за CRON оновлення прогнозованих даних','','','','');
-INSERT INTO tmplib_base_io VALUES('weather','current','Current',4,16,'',3,'Поточне','','','','');
+INSERT INTO tmplib_base_io VALUES('weather','current','Current',4,16,'',3,'Поточне','','Текущее','','');
 INSERT INTO tmplib_base_io VALUES('weather','forecast','Forecast',4,16,'',4,'Прогноз','','','','');
-INSERT INTO tmplib_base_io VALUES('DiskSMART','srcAddr','Source object''s address',0,64,'',0,'Адреса вихідного об''єкту','','','','');
-INSERT INTO tmplib_base_io VALUES('DiskSMART','items','All items',4,33,'',1,'Всі елементи','','','','');
+INSERT INTO tmplib_base_io VALUES('DiskSMART','srcAddr','Source object''s address',0,64,'',0,'Адреса вихідного об''єкту','','Адрес исходного объекта','','');
+INSERT INTO tmplib_base_io VALUES('DiskSMART','items','All items',4,33,'',1,'Всі елементи','','Все элементы','','');
 INSERT INTO tmplib_base_io VALUES('DiskSMART','defs','Item definitions',0,36,'',2,'Визначення елементів','','','','');
-INSERT INTO tmplib_base_io VALUES('DiskSMART','this','The object',4,0,'',3,'Об''єкт','','','','');
-INSERT INTO tmplib_base_io VALUES('DiskSMART','SHIFR','Code',0,0,'',4,'Шифр','','','','');
-INSERT INTO tmplib_base_io VALUES('DiskSMART','NAME','Name',0,0,'',5,'Назва','','','','');
-INSERT INTO tmplib_base_io VALUES('DiskSMART','DESCR','Description',0,0,'',6,'Опис','','','','');
+INSERT INTO tmplib_base_io VALUES('DiskSMART','this','The object',4,0,'',3,'Об''єкт','','Объект','','');
+INSERT INTO tmplib_base_io VALUES('DiskSMART','SHIFR','Code',0,0,'',4,'Шифр','','Шифр','','');
+INSERT INTO tmplib_base_io VALUES('DiskSMART','NAME','Name',0,0,'',5,'Назва','','Имя','','');
+INSERT INTO tmplib_base_io VALUES('DiskSMART','DESCR','Description',0,0,'',6,'Опис','','Описание','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','tr','Transport',4,1,'',8,'Транспорт','','Транспорт','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','prt','Protocol',4,1,'',9,'Протокол','','','','');
+INSERT INTO tmplib_base_io VALUES('fileServerHTTP','sender','Sender',0,0,'',3,'Відправник','','Отправитель','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','inTransport','Input transport',0,64,'Sockets.InitRemCntr',0,'Вхідний транспорт','','Входной транспорт','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','prcTr','Processed connections',0,21,'',5,'Опрацьовані підключення','','','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','cntrUser','Access: user',0,64,'root',2,'Доступ: користувач','','','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','cntrPass','Access: password',0,64,'openscada',3,'Доступ: пароль','','','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','cntrObj','Control object in DAQ.LogicLev and DAQ.System',0,64,'RemCntr',4,'Об''єкт контролю у DAQ.LogicLev і DAQ.System','','','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','conTm','Connection time, ms',1,64,'5000',1,'Час підключення, мс','','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_DevLib_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_DevLib_io VALUES('SCU750','transport','Transport',0,64,'SCU750',0,'Транспорт','','Транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('SCU750','addr','Device address (-1...255)',1,64,'1',1,'Адрес устройства (-1...255)','','Адреса пристрою (-1...255)','','');
@@ -16760,11 +17309,11 @@ INSERT INTO tmplib_DevLib_io VALUES('mbBase','mbType','ModBus type [RTU|ASCII|TC
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','maxBlkSz','ModBus maximum block size [10...200]',1,64,'200',3,'Максимальный размер блока ModBus [10...200]','','Максимальний розмір блоку ModBus [10...200]','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','fragMerge','ModBus blocks merging',3,64,'1',4,'Объединение блоков ModBus','','Поєднання блоків ModBus','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','items','Items set
-Rows in the form "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".',0,36,'#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr=":[rw~]*:" color="red"/><rule expr=":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)" color="blue"/><rule expr="^(u|i|u2|i2|u4|i4|r|s)" color="darkorange"/><rule expr="\\:" color="blue"/></SnthHgl>
+Rows in the form "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~|i}:{id}[:{nm}]".',0,36,'#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr=":[rw~i]*:" color="red"/><rule expr=":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)" color="blue"/><rule expr="^(u|i|u2|i2|u4|i4|r|s)" color="darkorange"/><rule expr="\\:" color="blue"/></SnthHgl>
 
 ',5,'Набор элементов
-Строки в формате "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".','','Набір елементів
-Рядки у форматі "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".','','');
+Строки в формате "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~|i}:{id}[:{nm}]".','','Набір елементів
+Рядки у форматі "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~|i}:{id}[:{nm}]".','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','tr','Output transport',4,0,'',6,'Выходной транспорт','','Вихідний транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','this','Object',4,0,'',7,'Объект','','Об''єкт','','');
 INSERT INTO tmplib_DevLib_io VALUES('MTP4D','zeroP','Set zero',3,32,'',4,'Установить ноль','','Встановити нуль','','');
@@ -16878,7 +17427,7 @@ Rows in the form "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".',0,36,'#<Sn
 Рядки у форматі "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".','','');
 INSERT INTO tmplib_DevLib_io VALUES('ergomera625','tr','Output transport',4,0,'',6,'Выходной транспорт','','Вихідний транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('ergomera625','this','Object',4,0,'',7,'Объект','','Об''єкт','','');
-INSERT INTO tmplib_DevLib_io VALUES('Incubator','transport','Transport',0,64,'Sockets.LE:10.39.170.2:9761',0,'Транспорт','','Транспорт','','');
+INSERT INTO tmplib_DevLib_io VALUES('Incubator','transport','Transport',0,64,'Sockets.Inkubator:10.39.170.20:4001',0,'Транспорт','','Транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('Incubator','addr','Device address [0...255], and -1 for the passive mode',1,64,'1',1,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('Incubator','tmCon','Reconnection time, data missing for passive, in seconds',1,64,'10',2,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('Incubator','tmToEVAL','Time of missing the machine data to set EVAL',1,64,'120',3,'','','','','');
@@ -16894,7 +17443,7 @@ INSERT INTO tmplib_DevLib_io VALUES('VSE002','tr','Output transport',4,1,'',4,'�
 INSERT INTO tmplib_DevLib_io VALUES('VSE002','custSignO','Object of the user signals',4,1,'',5,'','','Об''єкт корист. сигналів','','');
 INSERT INTO tmplib_DevLib_io VALUES('VSE002','this','Object',4,0,'',6,'Объект','','Об''єкт','','');
 INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','transport','Transport',0,64,'Serial.goboy',0,'Транспорт','','Transport','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','addr','Device address [0...247]',1,64,'1',1,'Адрес устройства [0...247]','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','addr','Device address [0...247]',1,64,'1',1,'Адрес устройства [0...247]','','Адреса пристрою [0...247]','','');
 INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',2,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhD','OpenSCADA archiver for device''s archive of days',0,64,'',3,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhM','OpenSCADA archiver for device''s archive of months',0,64,'',4,'','','','','');
@@ -16914,7 +17463,7 @@ INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','p','Gas P, kPa [arh]',2,16,'',17,
 INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','t','Gas T, °С [arh]',2,16,'',18,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','coefCompr','Coefficient of the compression',2,16,'',19,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','notWorkTm','Not work time [arh]',1,16,'',20,'','','','','');
-INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','curTm','Current time',0,32,'',21,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','curTm','Current time',0,32,'',21,'Текущее время','','Поточний час','','');
 INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhStart','Archive begin',0,16,'',22,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhLastH','Archive last hour',0,16,'',23,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('Goboy1M','arhLastD','Archive last day',0,16,'',24,'','','','','');
@@ -17044,7 +17593,7 @@ INSERT INTO tmplib_DevLib_io VALUES('TDS','fResult','Flow: resume',2,16,'',8,'',
 INSERT INTO tmplib_DevLib_io VALUES('TDS','tr','Output transport',4,1,'',9,'Выходной транспорт','','Output transport','','');
 INSERT INTO tmplib_DevLib_io VALUES('TDS','this','Object of the parameter',4,0,'',10,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('UltraMag','transport','Transport',0,64,'Serial.umag',0,'Транспорт','','Transport','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','addr','Device address [0...247]',1,64,'1',1,'Адрес устройства [0...247]','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','addr','Device address [0...247]',1,64,'1',1,'Адрес устройства [0...247]','','Адреса пристрою [0...247]','','');
 INSERT INTO tmplib_DevLib_io VALUES('UltraMag','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',2,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('UltraMag','arhD','OpenSCADA archiver for device''s archive of days',0,64,'',3,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('UltraMag','arhM','OpenSCADA archiver for device''s archive of months',0,64,'',4,'','','','','');
@@ -17058,7 +17607,7 @@ INSERT INTO tmplib_DevLib_io VALUES('UltraMag','sensT_SN','Sensor T SN',0,16,'',
 INSERT INTO tmplib_DevLib_io VALUES('UltraMag','p','Gas P, kPa [arh]',2,16,'',12,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('UltraMag','t','Gas T, °С [arh]',2,16,'',13,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('UltraMag','coefCor','Coefficient of the correction',2,16,'',14,'','','','','');
-INSERT INTO tmplib_DevLib_io VALUES('UltraMag','curTm','Current time',0,16,'',15,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('UltraMag','curTm','Current time',0,16,'',15,'Текущее время','','Поточний час','','');
 INSERT INTO tmplib_DevLib_io VALUES('UltraMag','vWork','Volume: work, m3 [arh]',2,16,'',16,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('UltraMag','vAccWork','Volume: accumulated work [arh]',2,16,'',17,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('UltraMag','vResult','Volume: standard, m3 [arh]',2,16,'',18,'','','','','');
@@ -17069,7 +17618,7 @@ INSERT INTO tmplib_DevLib_io VALUES('UltraMag','arhs','Archives object',4,1,'',2
 INSERT INTO tmplib_DevLib_io VALUES('UltraMag','tr','Output transport',4,1,'',23,'Выходной транспорт','','Output transport','','');
 INSERT INTO tmplib_DevLib_io VALUES('UltraMag','this','Object of the parameter',4,0,'',24,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','transport','Transport',0,64,'Sockets.enron',0,'Транспорт','','Transport','','');
-INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','addr','Device address [0...247]',1,64,'1',1,'Адрес устройства [0...247]','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','addr','Device address [0...247]',1,64,'1',1,'Адрес устройства [0...247]','','Адреса пристрою [0...247]','','');
 INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','mbType','ModBus type [RTU|ASCII|TCP]',0,64,'RTU',2,'Тип ModBus [RTU|ASCII|TCP]','','Тип ModBus [RTU|ASCII|TCP]','','');
 INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','maxBlkSz','ModBus maximum block size [10...200]',1,64,'12',3,'Максимальный размер блока ModBus [10...200]','','Максимальний розмір блоку ModBus [10...200]','','');
 INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','fragMerge','ModBus blocks merging',3,64,'0',4,'Объединение блоков ModBus','','ModBus blocks merging','','');
@@ -17077,7 +17626,7 @@ INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','items','Items set "[u|i|r|s]:
 INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','tr','Output transport',4,0,'',6,'Выходной транспорт','','Output transport','','');
 INSERT INTO tmplib_DevLib_io VALUES('enronDaniel','this','Object',4,0,'',7,'Объект','','Object','','');
 INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','transport','Transport',0,64,'Sockets.fgas',0,'Транспорт','','','','');
-INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','addr','Device address [0...247]',1,64,'1',1,'Адрес устройства [0...247]','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','addr','Device address [0...247]',1,64,'1',1,'Адрес устройства [0...247]','','Адреса пристрою [0...247]','','');
 INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','mbType','ModBus type [RTU|ASCII|TCP]',0,64,'RTU',2,'Тип ModBus [RTU|ASCII|TCP]','','Тип ModBus [RTU|ASCII|TCP]','','');
 INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','maxBlkSz','ModBus maximum block size [10...200]',1,64,'200',3,'Максимальный размер блока ModBus [10...200]','','Максимальний розмір блоку ModBus [10...200]','','');
 INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',4,'','','','','');
@@ -17094,6 +17643,75 @@ INSERT INTO tmplib_DevLib_io VALUES('FlowGAS','this','Object',4,0,'',14,'Объ�
 INSERT INTO tmplib_DevLib_io VALUES('VSE002','initSeq','Initiation sequence',0,68,'2c 00 00 00 00 00 00 ff 03 00 00 00 00 00 00 00
 00 00 00 00 00 00 00 00 00 00 ff ff ff fe 42 01
 00 00 00 00',2,'','','Ініціююча послідовність','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','transport','Transport',0,64,'Sockets.e125:10.39.170.3:5555',0,'Транспорт','','Транспорт','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','addr','Device address [0...9999]',1,64,'2212',1,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','arhTryPer','Currents try period, seconds',1,64,'3600',2,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','arhTmLim','Time limit of processing the archiving, seconds',1,64,'120',3,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','arhD','OpenSCADA archiver for device archive of days',0,64,'',4,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',5,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','reset','Reset the archives reading',3,32,'',6,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','tr','Вихідний транспорт',4,1,'',7,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','devDtTm','Device date and time',0,16,'',8,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','G1','Heat power 1',2,16,'',9,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','G2','Heat power 2',2,16,'',10,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','q1','Value flow 1',2,16,'',11,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','q2','Value flow 2',2,16,'',12,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','q3','Value flow 3',2,16,'',13,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','q4','Value flow 4',2,16,'',14,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','m1','Mass flow 1',2,16,'',15,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','m2','Mass flow 2',2,16,'',16,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','m3','Mass flow 3',2,16,'',17,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','m4','Mass flow 4',2,16,'',18,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','T1','Temperature 1',2,16,'',19,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','T2','Temperature 2',2,16,'',20,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','T3','Temperature 3',2,16,'',21,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','P1','Pressure 1',2,16,'',22,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','P2','Pressure 2',2,16,'',23,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','P3','Pressure 3',2,16,'',24,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','Q1','Q1, gDj',2,16,'',25,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','Q2','Q2, gDj',2,16,'',26,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','V1','V1, m3',2,16,'',27,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','V2','V2, m3',2,16,'',28,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','V3','V3, m3',2,16,'',29,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','V4','V4, m3',2,16,'',30,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','M1','M1, ton',2,16,'',31,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','M2','M2, ton',2,16,'',32,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','M3','M3, ton',2,16,'',33,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','M4','M4, ton',2,16,'',34,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dQ1','dQ1, gDj [arh]',2,16,'',35,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dQ2','dQ2, gDj [arh]',2,16,'',36,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dV1','dV1, m3 [arh]',2,16,'',37,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dV2','dV2, m3 [arh]',2,16,'',38,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dV3','dV3, m3 [arh]',2,16,'',39,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dV4','dV4, m3 [arh]',2,16,'',40,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dM1','dM1, ton [arh]',2,16,'',41,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dM2','dM2, ton [arh]',2,16,'',42,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dM3','dM3, ton [arh]',2,16,'',43,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dM4','dM4, ton [arh]',2,16,'',44,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dt1_work','dt1 work, sec [arh]',1,16,'',45,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dt2_work','dt2 work, sec [arh]',1,16,'',46,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dt3_work','dt3 work, sec [arh]',1,16,'',47,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dt4_work','dt4 work, sec [arh]',1,16,'',48,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dt1_idle','dt1 idle, sec [arh]',1,16,'',49,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dt2_idle','dt2 idle, sec [arh]',1,16,'',50,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dt3_idle','dt3 idle, sec [arh]',1,16,'',51,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dt4_idle','dt4 idle, sec [arh]',1,16,'',52,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dt1_cut','dt1 cut, sec [arh]',1,16,'',53,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dt2_cut','dt2 cut, sec [arh]',1,16,'',54,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dt1_rev','dt1 rev, sec [arh]',1,16,'',55,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dt2_rev','dt2 rev, sec [arh]',1,16,'',56,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dt1_up','dt1 up, sec [arh]',1,16,'',57,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dt2_up','dt2 up, sec [arh]',1,16,'',58,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dt_nopow','dt no power, sec [arh]',1,16,'',59,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dT1','Temperature difference 1, °C [arh]',2,16,'',60,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dT2','Temperature difference 2, °C [arh]',2,16,'',61,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dT3','Temperature difference 3, °C [arh]',2,16,'',62,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dP1','Pressure difference 1, °C [arh]',2,16,'',63,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dP2','Pressure difference 2, °C [arh]',2,16,'',64,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','dP3','Pressure difference 3, °C [arh]',2,16,'',65,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','arhLastD','Daily archive last item',1,0,'0',66,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','arhLastH','Hourly archive last item',1,0,'0',67,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('ergomera125','this','The object',4,0,'',68,'Объект','','Об''єкт','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_LowDevLib_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '0' ,"FLAGS" INTEGER DEFAULT '0' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '0' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_LowDevLib_io VALUES('1602A','transport','Transport of the I2C, Serial (i2c) or
 GPIO address with function put(), mostly it''s BCM2835 (DAQ.BCM2835.pi.pi)',0,64,'i2c',0,'','','','','');
@@ -17107,15 +17725,15 @@ INSERT INTO tmplib_LowDevLib_io VALUES('1602A','D7','GPIO Pin: Data7',1,64,'18',
 INSERT INTO tmplib_LowDevLib_io VALUES('1602A','ln1','Line 1',0,32,'',8,'','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('1602A','ln2','Line 2',0,32,'',9,'','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097','transport','Transport of the One Wire bus, Serial',0,64,'oneWire',0,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097','tmResc','Rescan period, s',2,64,'60',1,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097','tryEVAL','Tries after which set value to EVAL',1,64,'3',2,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097','power','Power, for temperature',3,16,'',3,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097','tmResc','Rescan period, s',2,64,'60',1,'Період сканування, секунд','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097','tryEVAL','Tries after which set value to EVAL',1,64,'3',2,'Спроб, після який встановлити значення у EVAL','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097','power','Power, for temperature',3,16,'',3,'Живлення, для температур','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097','this','Object',4,0,'',4,'Об''єкт','Объект','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','transport','Transport of the One Wire bus, Serial',0,64,'oneWire',0,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','tmResc','Rescan period, s',2,64,'60',1,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','tryEVAL','Tries after which set value to EVAL',1,64,'3',2,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','power','Power, for temperature',3,16,'',3,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','isData','In data mode',3,0,'0',4,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','tmResc','Rescan period, s',2,64,'60',1,'Період сканування, секунд','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','tryEVAL','Tries after which set value to EVAL',1,64,'3',2,'Спроб, після який встановлити значення у EVAL','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','power','Power, for temperature',3,16,'',3,'Живлення, для температур','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','isData','In data mode',3,0,'0',4,'У режимі даних','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','this','Object',4,0,'',5,'Об''єкт','Объект','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('BMP180','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('BMP180','addr','Device address [0...119]',1,64,'119',1,'','','','','');
@@ -17220,16 +17838,48 @@ INSERT INTO tmplib_LowDevLib_io VALUES('UC96','dev','Device to bind
 Like to "58:F4:04:33:D5:FD" for binding by "rfcomm bind {N} 58:F4:04:33:D5:FD".',0,64,'',1,'Пристрій для зв''язування
 На кшталт "58:F4:04:33:D5:FD" для зв''язування за допомогою "rfcomm bind {N} 58:F4:04:33:D5:FD".','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','V','Volts',2,16,'',3,'Вольти','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','A','Amperes',2,16,'',4,'Ампери','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','T','Temperature, °С',1,16,'',7,'Температура, °С','Температура, °С','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Ah','Capacity, Ah',2,16,'',8,'Ємність, Аг','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Wh','Capacity, Wh',2,16,'',9,'Ємність, ВтГ','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Tm','Time, seconds',1,16,'',10,'Час, секунди','Время, секунд','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','clear','Clear',3,32,'',11,'Очистити','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','this','Object',4,0,'',12,'Об''єкт','Объект','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','W','Watts',2,16,'',5,'Вати','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','A','Amperes',2,16,'',6,'Ампери','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','T','Temperature, °С',1,16,'',9,'Температура, °С','Температура, °С','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Ah','Capacity, Ah',2,16,'',10,'Ємність, Аг','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Wh','Capacity, Wh',2,16,'',11,'Ємність, ВтГ','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Tm','Time, seconds',1,16,'',12,'Час, секунди','Время, секунд','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','clear','Clear',3,32,'',15,'Очистити','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','this','Object',4,0,'',16,'Об''єкт','Объект','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','W','Watts',2,16,'',7,'Вати','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','noDataTm','No data detection time, seconds',1,64,'60',2,'Час виявлення відсутності даних, секунд','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('UC96','R','Resistance, Om',2,16,'',6,'Опір, Ом','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','R','Resistance, Om',2,16,'',8,'Опір, Ом','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','transport','Transport',0,64,'Serial.S1BP:/dev/rfcomm2:9600||1000:40-20',0,'Транспорт','Транспорт','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','dev','Device to bind
+Like to "40:2B:6D:EF:48:A7" for binding by "rfcomm bind {N} 40:2B:6D:EF:48:A7".',0,64,'',1,'Пристрій для зв''язування
+На кшталт "40:2B:6D:EF:48:A7" для зв''язування за допомогою "rfcomm bind {N} 40:2B:6D:EF:48:A7".','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','noDataTm','No data detection time, seconds',1,64,'60',2,'Час виявлення відсутності даних, секунд','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','V','Volts',2,16,'',3,'Вольти','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','A','Amperes',2,16,'',4,'Ампери','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','W','Watts',2,16,'',5,'Вати','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','T','Temperature, °С',1,16,'',9,'Температура, °С','Температура, °С','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','Tm','Time, seconds',1,16,'',10,'Час, секунди','Время, секунд','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','clear','Clear',3,32,'',11,'Очистити','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','this','Object',4,0,'',13,'Об''єкт','Объект','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','KWh','Energy, KWh',2,16,'',6,'Енергія, кВт*годин','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','Hz','Frequency, Hz',2,16,'',7,'Частота, Гц','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','Pf','Power factor, Pf',2,16,'',8,'Фактор потужності, Pf','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','power','Power mode switch Off/Auto/On',3,32,'',12,'Перемкнути режим живлення Вимкн/Авто/Увімкн','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W','transport','Transport',0,64,'1Wire:/dev/ttyS0',0,'Транспорт','Транспорт','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W','tmResc','Rescan period, seconds',2,64,'60',1,'Період сканування, секунд','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W','tryEVAL','Tries after which set value to EVAL',1,64,'3',3,'Спроб, після яких встановлювати значення у EVAL','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W','adapter','Type of the detected adaptor
+0 - DS9097
+1 - DS9097U',1,16,'-1',4,'Тип виявленого адаптеру
+0 - DS9097
+1 - DS9097U','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W','power','Power, for temperature',3,16,'',5,'Живлення, для температур','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W','this','Object',4,0,'',7,'Об''єкт','Объект','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W','isData','In data mode',3,0,'0',6,'У режимі даних','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W','onlyAddAtScan','Only add at scan',3,64,'0',2,'Додавати лише при скануванні','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Vup','Volts maximum',2,16,'',4,'Вольти максимум','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Vdwn','Volts minimum',2,16,'',5,'Вольти мінімум','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Dplus','Data+, V',2,16,'',13,'Дата+, В','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Dminus','Data-, V',2,16,'',14,'Дата-, В','','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_tests_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_tests_io VALUES('ai_simple','val_cod','Value''s source code',1,128,'',0,'Вихідний код значення','','Исходный код значения','','');
 INSERT INTO tmplib_tests_io VALUES('ai_simple','val','Value',2,16,'0',1,'Значення','','Значение','','Вредност');
@@ -17932,7 +18582,9 @@ else if(ln1 != ln1_ || ln2 != ln2_) {
 }
 
 f_err = t_err;','',1509990639);
-INSERT INTO tmplib_LowDevLib VALUES('1W_DS9097','One Wire by DS9097','','One Wire sensors bus implementing by 1Wire-adapter DS9097. Supported direct and parasite powering for the temperature sensors.
+INSERT INTO tmplib_LowDevLib VALUES('1W_DS9097','One Wire by DS9097 (obsolete)','','Obsolete after merging to the generic template "1-Wire (1W)"!
+
+One Wire sensors bus implementing by 1Wire-adapter DS9097. Supported direct and parasite powering for the temperature sensors.
 Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.1','',30,0,'JavaLikeCalc.JavaScript
@@ -18372,8 +19024,10 @@ else {
 	}
 }
 
-f_err = t_err;','',1509990639);
-INSERT INTO tmplib_LowDevLib VALUES('1W_DS9097U','One Wire by DS9097U','','One Wire sensors bus implementing by 1Wire-adapter DS9097U. Supported direct and parasite powering for the temperature sensors.
+f_err = t_err;','',1740056826);
+INSERT INTO tmplib_LowDevLib VALUES('1W_DS9097U','One Wire by DS9097U (obsolete)','','Obsolete after merging to the generic template "1-Wire (1W)"!
+
+One Wire sensors bus implementing by 1Wire-adapter DS9097U. Supported direct and parasite powering for the temperature sensors.
 Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.1','',30,0,'JavaLikeCalc.JavaScript
@@ -18843,7 +19497,7 @@ else {
 	}
 }
 
-f_err = t_err;','',1509990639);
+f_err = t_err;','',1740056824);
 INSERT INTO tmplib_LowDevLib VALUES('BMP180','I2C: BMP180','','I2C Pressure and Temperature sensor. Connect through a Serial output transport into the I2C mode.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1','',10,0,'JavaLikeCalc.JavaScript
@@ -19642,30 +20296,30 @@ if(tErr.length) {
 	grps = EVAL;
 }
 else f_err = "0";','',1700566043);
-INSERT INTO tmplib_LowDevLib VALUES('UC96','BT: ATORCH UC96','','ATORCH UC96 BlueTooth interface template.
+INSERT INTO tmplib_LowDevLib VALUES('UC96','BT: ATORCH UC96, UD24','','ATORCH UC96, UD24 BlueTooth interface template.
 
-The ATORCH UC96 are low-cost USB pass-through power measurement device with many interfaces and supporting a decent number of collection features, as well as control via Bluetooth. This template implements only the clearing data command and data collection by the device''s Bluetooth interface.
+The ATORCH UC96, UD24 are low-cost USB pass-through power measurement device with many interfaces and supporting a decent number of collection features, as well as control via Bluetooth. This template implements only the clearing data command and data collection by the device''s Bluetooth interface.
 
 The device sends data packages not at a request and just after establishing the connection, that is broadcasting with one second period. The device may not to send the data packages at enable not in the first screen, so you need to switch the first screen for the data appearance. The data can be missed also after suspending the PC, so this template in the first time implements the data missing detection and reconnection.
 
 Author: Roman Savochenko <roman@oscada.org>
 Total complexity: 0.3 HD
-Version: 1.0.1
-License: GPLv2','Шаблон BlueTooth інтерфейсу ATORCH UC96.
+Version: 1.2.0
+License: GPLv2','Шаблон BlueTooth інтерфейсу ATORCH UC96, UD24.
 
-ATORCH UC96 є недорогим пристроєм вимірювання прохідної потужності на USB із багатьма інтерфейсами і підтримкою достатньої колекції властивостей, як і контролем через Bluetooth. Цей шаблон реалізує лише команду очищення даних і збір даних через Bluetooth інтерфейс пристрою.
+ATORCH UC96, UD24 є недорогим пристроєм вимірювання прохідної потужності на USB із багатьма інтерфейсами і підтримкою достатньої колекції властивостей, як і контролем через Bluetooth. Цей шаблон реалізує лише команду очищення даних і збір даних через Bluetooth інтерфейс пристрою.
 
-Пристрій надсилає пакети даних не за запитом, тобто розсилає із періодом у одну секунду. Пристрій може не надсилати пакети даних при увімкнені не на першому екрані, тож вам необхідно перемкнутися на перший екран для появи даних. Дані також можуть бути відсутні після присипляння ПК, тож цей шаблон першим реалізує виявлення відсутності даних і перепідключення.
+Пристрій надсилає пакети даних не за запитом, а просто розсилає із періодом у одну секунду після встановлення підключення. Пристрій може не надсилати пакети даних при увімкнені не на першому екрані, тож вам необхідно перемкнутися на перший екран для появи даних. Дані також можуть бути відсутні після присипляння ПК, тож цей шаблон першим реалізує виявлення відсутності даних і перепідключення.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Загальна працемісткість: 0.3 ЛД
-Версія: 1.0.1
+Версія: 1.2.0
 Ліцензія: GPLv2',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	isBound = -1;
 	tr = false;
 	dataTm = SYS.time();
-	V = A = W = R = T = Ah = Wh = Tm = EVAL;
+	V = Vup = Vdwn = A = W = R = T = Ah = Wh = Tm = Dplus = Dminus = EVAL;
 	clear = false;
 	conCntr = 0;
 }
@@ -19679,7 +20333,7 @@ if(f_stop || (tr && (SYS.time()-dataTm) > noDataTm)) {
 	if(isBound >= 0)	{ SYS.system("rfcomm release "+isBound, true); isBound = -1; }
 
 	tErr = "2:"+tr("No data, reconnection. Switch to the first screen of the device for the data receive!");
-	V = A = W = R = T = Ah = Wh = Tm = EVAL;
+	V = Vup = Vdwn = A = W = R = T = Ah = Wh = Tm = Dplus = Dminus = EVAL;
 }
 else {
 	if(isBound < 0 && dev.match("^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$").length &&
@@ -19690,12 +20344,13 @@ else {
 		tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
 	else {
 		for(ibuf = tr.messIO("",-10e-3); ibuf.length && ibuf.length < 36 &&
-				ibuf.slice(-9,-1) != "\x3C\x0C\x80\x00\x00\x03\x20\x00" && (rd=tr.messIO()).length; )
+				(ibuf.slice(-4,-1) != "\x03\x20\x00" || ibuf.slice(-4,-1) != "\x03\xDD\x00") &&
+				(rd=tr.messIO()).length; )
 			ibuf += rd;
 
 		while(ibuf.length)
 			if(ibuf.slice(0,5) == "\xFF\x55\x01\x03\x00" && ibuf.length >= 36 &&
-				ibuf.slice(27,27+8) == "\x3C\x0C\x80\x00\x00\x03\x20\x00")
+				(ibuf.slice(32,32+3) == "\x03\x20\x00" || ibuf.slice(32,32+3) == "\x03\xDD\x00"))
 			{
 				dataTm = SYS.time();
 				data = ibuf.slice(0, 36);
@@ -19709,9 +20364,13 @@ else {
 				io.pos -= 1;
 				Ah = (io.read("uint32",1)&0xFFFFFF)/1000;
 				Wh = io.read("uint32",1)/100;
-				io.pos += 4;
+				Dminus = io.read("uint16",1)/100;
+				Dplus = io.read("uint16",1)/100;
 				T = io.read("uint16",1);
 				Tm = io.read("uint16",1)*3600 + io.read("uint8",1)*60 + io.read("uint8",1);
+				io.pos += 1;
+				Vup = io.read("uint16",1)/100;
+				Vdwn = io.read("uint16",1)/100;
 
 				W = V*A;
 				R = A ? V/A : 9999;
@@ -19730,7 +20389,636 @@ else {
 
 if(tErr.length) {
 	f_err = tErr + " ";
-	V = A = W = R = T = Ah = Wh = Tm = EVAL;
+	V = Vup = Vdwn = A = W = R = T = Ah = Wh = Tm = Dplus = Dminus = EVAL;
 } else f_err = "0:";
-f_err += tr("Reconnects %1, left %2s.").replace("%1",conCntr.toString()).replace("%2",(noDataTm-(SYS.time()-dataTm)).toString());','',1718391021);
+f_err += tr("Reconnects %1, left %2s.").replace("%1",conCntr.toString()).replace("%2",(noDataTm-(SYS.time()-dataTm)).toString());','',1740067401);
+INSERT INTO tmplib_LowDevLib VALUES('S1BP','BT: ATORCH S1BP','','ATORCH S1BP BlueTooth interface template.
+
+The ATORCH S1BP is low-cost AC energy measurement device with supporting a decent number of collection features, as well as control via Bluetooth. This template implements the command of the data clearing and switching the power mode, also as collection the data by the device''s Bluetooth interface.
+
+The device sends data packages not at a request and just after establishing the connection, that is broadcasting with one second period.
+
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 0.1 HD
+Version: 1.0.0
+License: GPLv2','Шаблон BlueTooth інтерфейсу ATORCH S1BP
+
+ATORCH S1BP є недорогим пристроєм вимірювання енергії змінного струму (AC) із підтримкою достатньої колекції властивостей, як і контролем через Bluetooth. Цей шаблон реалізує команду очищення даних і перемикання режиму живлення, як і збір даних через Bluetooth інтерфейс пристрою.
+
+Пристрій надсилає пакети даних не за запитом, а просто розсилає із періодом у одну секунду після встановлення підключення.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Загальна працемісткість: 0.1 ЛД
+Версія: 1.0.0
+Ліцензія: GPLv2',10,0,'JavaLikeCalc.JavaScript
+if(f_start) {
+	isBound = -1;
+	tr = false;
+	dataTm = SYS.time();
+	V = A = W = R = T = Ah = Wh = Tm = EVAL;
+	clear = power = false;
+	conCntr = 0;
+}
+
+tErr = "";
+
+if(f_stop || (tr && (SYS.time()-dataTm) > noDataTm)) {
+	conCntr++;
+	dataTm = SYS.time();
+	if(tr) tr.start(false);
+	if(isBound >= 0)	{ SYS.system("rfcomm release "+isBound, true); isBound = -1; }
+
+	tErr = "2:"+tr("No data, reconnection. Switch to the first screen of the device for the data receive!");
+	V = A = W = KWh = Hz = Pf = T = Tm = EVAL;
+}
+else {
+	if(isBound < 0 && dev.match("^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$").length &&
+			(tVl=transport.match("/dev/rfcomm(\\d)")).length && SYS.system("rfcomm bind "+tVl[1]+" "+dev,true) == 0)
+		isBound = tVl[1];
+
+	if(!(tr=SYS.Transport.outAt(transport)) || !tr.start(true))
+		tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+	else {
+		for(ibuf = tr.messIO("",-10e-3); ibuf.length && ibuf.length < 36 &&
+				ibuf.slice(-6,-1) != "\x3C\x00\x00\x00\x00" && (rd=tr.messIO()).length; )
+			ibuf += rd;
+
+		while(ibuf.length)
+			if(ibuf.slice(0,5) == "\xFF\x55\x01\x01\x00" && ibuf.length >= 36 &&
+				ibuf.slice(30,30+5) == "\x3C\x00\x00\x00\x00")
+			{
+				dataTm = SYS.time();
+				data = ibuf.slice(0, 36);
+				//SYS.messInfo("/UC96/"+this.cfg("SHIFR"), tr("Data")+": "+SYS.strDecode(data,"Bin"," "));
+
+				io = Special.FLibSYS.IO(data, "", "b");
+				io.pos = 5;
+				V = io.read("uint16",1)/10;
+				io.pos -= 1;
+				A = (io.read("uint32",1)&0xFFFFFF)/1000;
+				io.pos -= 1;
+				W = (io.read("uint32",1)&0xFFFFFF)/10;
+				KWh = io.read("uint32",1)/100;
+				io.pos += 3;
+				Hz = io.read("uint16",1)/10;
+				Pf = io.read("uint16",1)/1000;
+				T = io.read("uint16",1);
+				Tm = io.read("uint16",1)*3600 + io.read("uint8",1)*60 + io.read("uint8",1);
+
+				ibuf = ibuf.slice(36);
+			} else ibuf = "";
+
+		if(clear) { clear = false; tr.messIO("\xff\x55\x11\x03\x01\x00\x00\x00\x00\x51", 0, 0); }
+		if(power) { power = false; tr.messIO("\xff\x55\x11\x03\x02\x00\x00\x00\x00\x52", 0, 0); }
+	}
+}
+
+if(tErr.length) {
+	f_err = tErr + " ";
+	V = A = W = KWh = Hz = Pf = T = Tm = EVAL;
+} else f_err = "0:";
+f_err += tr("Reconnects %1, left %2s.").replace("%1",conCntr.toString()).replace("%2",(noDataTm-(SYS.time()-dataTm)).toString());','',1740069928);
+INSERT INTO tmplib_LowDevLib VALUES('1W','1-Wire','1-Дріт','One Wire sensors bus implementing by 1Wire adapters DS9097 and DS9097U. Supported direct and parasite powering for the temperature sensors.
+
+Supported 1Wire devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.1.0','Сенсори Одно Дротової шини реалізуються 1Дротовими адаптерами DS9097 і DS9097U. Підтримується пряме і паразитне живлення для температурних сенсорів.
+
+Підтримуються 1Дротові пристрої: DS1820, DS1820/DS18S20/DS1920 (не перевірено), DS1822 (не перевірено), DS2413, DS2408, DS2450, DS2438.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2',30,0,'JavaLikeCalc.JavaScript
+//Functions
+function setEVAL(dP) {
+	aLs = dP.nodeList("a_");
+	for(iA = 0; iA < aLs.length; iA++)
+		if(!dP[aLs[iA]].isCfg()) dP[aLs[iA]].set(EVAL, 0, 0, true);
+}
+
+function reset(tr) {
+	if(adapter == 0) {
+		tr.addr(tr.addr().parse(0,":")+":9600:8N1"); tr.start(true);
+		rez = tr.messIO(SYS.strFromCharCode(0xF0));
+		tr.addr(tr.addr().parse(0,":")+":115200:8N1"); tr.timings("100:2-0"); tr.start(true);
+		tr.messIO("");
+		return rez.length && rez.charCodeAt(0) != 0xF0;
+	}
+	else if(adapter == 1) {
+		req = (isData?SYS.strFromCharCode(0xE3):"") +
+					SYS.strFromCharCode(0xC5);	//CMD_COMM(0x81) | FUNCTSEL_RESET(0x40) | SPEEDSEL_FLEX(0x04)
+		isData = false;
+		resp = tr.messIO(req);
+		return (resp.charCodeAt(0)&0x03) == 0x01;	//RB_PRESENCE
+	}
+}
+
+function io(tr, mess, bits) {
+	if(adapter == 0) {
+		if(bits == EVAL) bits = mess.length * 8;
+		req = "";
+		for(iB = 0; iB < ceil(bits/8); iB++) {
+			vB = mess.charCodeAt(iB);
+			bB = ((iB+1)*8 > bits) ? bits-floor(bits/8)*8 : 8;
+			for(iBi = 0; iBi < bB; iBi++) req += SYS.strFromCharCode((vB&(1<<iBi)) ? 0xFF : 0x00);
+		}
+		//SYS.messInfo("OneWire","bits="+bits+"; req="+SYS.strDecode(req,"Bin"," "));
+		for(resp = tr.messIO(req); resp.length < req.length && (tresp=tr.messIO("")).length; resp += tresp) ;
+		//SYS.messInfo("OneWire","bits="+bits+"; resp="+SYS.strDecode(resp,"Bin"," "));
+		rez = "";
+		for(iR = 0; iR < resp.length; ) {
+			vB = 0;
+			for(ib = 0; ib < 8 && iR < resp.length; iR++, ib++)
+				if(resp.charCodeAt(iR)&1) vB = vB | (1<<ib);
+			rez += SYS.strFromCharCode(vB);
+		}
+	}
+	else if(adapter == 1) {
+		if(bits == EVAL) {
+			req = isData ? "" : SYS.strFromCharCode(0xE1);	//MODE_DATA
+			isData = true;
+			for(iB = 0; iB < mess.length; iB++) {
+				req += SYS.strFromCharCode(tVl=mess.charCodeAt(iB));
+				if(tVl == 0xE3) req += SYS.strFromCharCode(0xE3);	//duplication to the COMMAND mode
+			}
+			for(resp = tr.messIO(req); resp.length && resp.length < mess.length && (tresp=tr.messIO("")).length; resp += tresp) ;
+			return resp;
+		}
+		else {
+			req = (isData?SYS.strFromCharCode(0xE3):"") + SYS.strFromCharCode(0x3F);	//MODE_COMMAND, CMD_CONFIG(0x01) | PARMSEL_5VPULSE(0x30) | PARMSET_infinite(0x0E)
+			isData = false;
+			for(iB = 0; iB < ceil(bits/8); iB++) {
+				vB = mess.charCodeAt(iB);
+				bB = ((iB+1)*8 > bits) ? bits-floor(bits/8)*8 : 8;
+				for(iBi = 0; iBi < bB; iBi++)
+					//{BITPOL_ONE(0x10)|BITPOL_ZERO(0x00)}|CMD_COMM(0x81)|FUNCTSEL_BIT(0x00)|SPEEDSEL_FLEX(0x04)|{PRIME5V_TRUE(0x02)|PRIME5V_FALSE(0x00)}
+					req += SYS.strFromCharCode(((vB&(1<<iBi))?0x10:0x00)|0x85/*|((iB==(ceil(bits/8)-1)&&iBi==(bB-1))?0x02:0x00)*/);
+			}
+			for(resp = tr.messIO(req); resp.length && resp.length < (bits+1) && (tresp=tr.messIO("")).length; resp += tresp) ;
+			rez = "";
+			if(resp.length && !(resp.charCodeAt(0)&0x81))
+				for(iR = 1;  iR < resp.length; ) {
+					vB = 0;
+					for(ib = 0; ib < 8 && iR < resp.length; iR++, ib++)
+						if(resp.charCodeAt(iR)&1) vB = vB | (1<<ib);
+					rez += SYS.strFromCharCode(vB);
+				}
+		}
+	}
+
+	return rez;
+}
+
+function scan(tr, sn, lstDiscr) {
+	if(!reset(tr)) return "";
+
+	if(adapter == 0) {
+		io(tr, SYS.strFromCharCode(0xF0));
+		for(nByte = 0, nBit = 1, tBit = 0, sDir = false, mskByte = 1, lstZero = 0; nByte < 8; ) {
+			tBit = io(tr, SYS.strFromCharCode(0xFF), 1).charCodeAt(0) << 1;
+			tBit = tBit | io(tr, SYS.strFromCharCode(0xFF), 1).charCodeAt(0);
+			//SYS.messInfo("OneWire","nByte="+nByte+"; nBit="+nBit+"; tBit="+tBit);
+			if(tBit == 3) break;
+			if(tBit > 0) sDir = !(tBit&0x01);
+			else {
+				//SYS.messInfo("OneWire","nByte="+nByte+"; nBit="+nBit+"; lstDiscr="+lstDiscr);
+				if(nBit < lstDiscr) sDir = sn[nByte]&mskByte;
+				else sDir = (nBit == lstDiscr);
+				if(!sDir) lstZero = nBit;
+				//if(lstZero < 9) lstDiscr = lstZero;
+				//SYS.messInfo("OneWire","nByte="+nByte+"; nBit="+nBit+"; sDir="+sDir+"; mskByte="+mskByte);
+			}
+			if(sDir) sn[nByte] = sn[nByte] | mskByte;
+			else sn[nByte] = sn[nByte] & (~mskByte);
+			tr.messIO(SYS.strFromCharCode(sDir?0xFF:0x00));
+			nBit++;
+			mskByte = (mskByte<<1)&0xFF;
+			if(!mskByte) { nByte++; mskByte = 1; }
+		}
+
+		rez = "";
+		if(nByte == 8) {
+			for(iB = 0; iB < nByte; iB++) rez += SYS.strFromCharCode(sn[iB]);
+			if(!Special.FLibSYS.CRC(rez,0x8C,8,0))	lstDiscr = lstZero;
+			else { rez = ""; lstDiscr = 0; }
+		}
+	}
+	else if(adapter == 1) {
+		//Set the bits in the added buffer
+		asn = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+		for(i = 0; lstDiscr >= 0 && i < 64; i++)
+			if((i < (lstDiscr-1) && sn[floor(i/8)]&(1<<(i%8))) || i == (lstDiscr-1))
+				asn[(i*2+1)/8] = asn[(i*2+1)/8] | (1<<((i*2+1)%8));
+
+		req = isData ? "" : SYS.strFromCharCode(0xE1);	//MODE_DATA
+		req += SYS.strFromCharCode(0xF0, 0xE3, 0xB5, 0xE1,
+					asn[0], asn[1], asn[2], asn[3], asn[4], asn[5], asn[6], asn[7],
+					asn[8], asn[9], asn[10], asn[11], asn[12], asn[13], asn[14], asn[15],
+					0xE3, 0xA5);
+		isData = false;
+		for(resp = tr.messIO(req); resp.length && resp.length < 17 && (tresp=tr.messIO("")).length; resp += tresp) ;
+
+		tmpLastDesc = -1;
+		for(i = 0; i < 64; i++) {
+			if(resp.charCodeAt(floor((i*2+1)/8)+1)&(1<<((i*2+1)%8)))	sn[floor(i/8)] = sn[floor(i/8)] | (1<<(i%8));
+			else sn[floor(i/8)] = sn[floor(i/8)] & (~(1<<(i%8)));
+			// Check LastDiscrepancy
+			if((resp.charCodeAt(floor((i*2)/8)+1)&(1<<((i*2)%8))) && !(resp.charCodeAt(floor((i*2+1)/8)+1)&(1<<((i*2+1)%8))))
+				tmpLastDesc = i + 1;
+		}
+
+		rez = "";
+		for(iB = 0; iB < 8; iB++) rez += SYS.strFromCharCode(sn[iB]);
+		if(sn[0] && lstDiscr != 63 && !Special.FLibSYS.CRC(rez,0x8C,8,0))	lstDiscr = tmpLastDesc;
+		else { rez = ""; lstDiscr = 0; }
+	}
+
+	return rez;
+}
+
+//Set transport and init
+if(f_start) adapter = -1, tmResc_ = 0, devLs = new Object();
+if(f_stop) {
+	for(var devID in devLs)
+		if(!(dO=devLs[devID]).isEVal())
+			setEVAL(dO.dP);
+	devLs = tr = false;
+	return;
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!(tr=SYS.Transport.outAt("Serial."+transport)) || !tr.start(true))
+	tErr = "1:"+tr("Output Serial transport ''%1'' error.").replace("%1",transport);
+else {
+	//Try DS2480 of DS9097U
+	if(adapter == -1)	{
+		tr.addr(tr.addr().parse(0,":")+":9600:8N1"); tr.timings("500:20");
+		if(tr.start(true)) {
+			tr.sendbreak(); SYS.sleep(2e-3);
+			tr.messIO(SYS.strFromCharCode(0xC1));	SYS.sleep(4e-3);	//Send timing byte
+			//PDSRC=1.37Vus; W1LT=10us; DSO/WORT=8us;
+			//read the baud rate (to test command block); do 1 bit operation (to test 1-Wire block)
+			req = SYS.strFromCharCode(0x17, 0x45, 0x5B, 0x0F, 0x91);
+			for(resp = tr.messIO(req); resp.length && resp.length < 5 && (tresp=tr.messIO("")).length; resp += tresp) ;
+			if(resp.length == 5 && (resp.charCodeAt(3)&0xF1) == 0x00 && (resp.charCodeAt(3)&0x0E) == 0x00/*9600*/ &&
+					(resp.charCodeAt(4)&0xF0) == 0x90 && (resp.charCodeAt(4)&0x0C) == 0x00/*9600*/)
+				adapter = 1;
+			else adapter = 0;
+		}
+		isData = false;
+	}
+
+	//Generic information update.
+	if(f_start || (tmResc && (tmResc_=tmResc_-1/f_frq) <= 0)) {
+		tmResc_ = tmResc;
+		tmSc = SYS.time();
+		// Check for power
+		if(!reset(tr) ||
+		 	io(tr,(req=SYS.strFromCharCode(0xCC))) != req ||
+			io(tr,(req=SYS.strFromCharCode(0xB4))) != req ||
+			!(resp=io(tr,SYS.strFromCharCode(1),1)).length) power = EVAL;
+		else power = resp.charCodeAt(0);
+		// Scan for allowed devices on the bus.
+		sn = new Array(0, 0, 0, 0, 0, 0, 0, 0);
+		for(devID = "start", lstDiscr = 0; devID.length && lstDiscr >= 0; ) {
+			if((devID=scan(tr,sn,lstDiscr)).length)	{
+				//SYS.messInfo("OneWire","lstDiscr="+lstDiscr+"; devID="+SYS.strDecode(devID,"Bin"," "));
+				if((dO=devLs[devID]).isEVal()) {
+					devLs[devID] = dO = new Object();
+					devFamily = devID.charCodeAt(0)&0x7F; devNm = tr("1W device"); dO.isT = false;
+					if(devFamily == 0x10)			{ devNm = "DS1820/DS18S20/DS1920"; dO.isT = true; }
+					else if(devFamily == 0x20)	devNm = "DS2450";		//4AI
+					else if(devFamily == 0x22)	{ devNm = "DS1822"; dO.isT = true; }
+					else if(devFamily == 0x26)	devNm = "DS2438";		//SmartBat
+					else if(devFamily == 0x28)	{ devNm = "DS18B20"; dO.isT = true; }
+					else if(devFamily == 0x29)	devNm = "DS2408";		//8DIO
+					else if(devFamily == 0x3A)	devNm = "DS2413";		//2DIO
+
+					// Create the device''s parameter object
+					decId = SYS.strDecode(devID,"Bin","");
+					SYS.cntrReq(SYS.XMLNode("add").setAttr("path",this.nodePath()+"/%2fbr%2fprm_").setAttr("id",decId).setText(devNm+": "+decId));
+					SYS.cntrReq(SYS.XMLNode("set").setAttr("path",this.nodePath()+"/prm_"+decId+"/%2fprm%2fst%2fen").setText("1"));
+					// Create the device''s proper attributes
+					dO.dP = dP = this["prm_"+decId];
+					if(dO.isT) {	//Temperature
+						dP.attrAdd("val", tr("Temperature, °С"), "real|ro");
+						dP.attrAdd("m", tr("User cell [0...65535]"), "integer");
+						dP.attrAdd("res", tr("Resolution")+" [9...12]", "integer");
+					}
+					else if(devFamily == 0x20)		//DS2450
+						for(iN = 0; iN < 4; iN++) {
+							dP.attrAdd("ai"+iN, tr("AI, V")+iN, "real|ro");
+							dP.attrAdd("res"+iN, tr("Resolution")+iN+" [1...16]", "integer");
+							dP.attrAdd("md"+iN, tr("Mode")+iN, "integer|sel", "0;1;2\n2.55V;5.10V;DO");
+							dP.attrAdd("do"+iN, tr("DO")+iN, "boolean");
+						}
+					else if(devFamily == 0x26) {	//DS2438
+						dP.attrAdd("t", tr("Temperature, °С"), "real|ro");
+						dP.attrAdd("v", tr("Voltage, V"), "real|ro");
+						dP.attrAdd("i", tr("Current, A"), "real|ro");
+						dP.attrAdd("ICA", tr("Current Accumulator"), "integer");
+						dP.attrAdd("thr", tr("Accumulation threshold"), "integer|sel", "0;1;2;3\nNone;±2LSB;±4LSB;±8LSB");
+						dP.attrAdd("ETM", tr("Elapsed time meter"), "integer");
+						dP.attrAdd("TM_DISC", tr("Disconnect time"), "integer");
+						dP.attrAdd("TM_END", tr("End of charge time"), "integer");
+						dP.attrAdd("OFF", tr("Current Offset"), "integer");
+						dP.attrAdd("IAD", tr("Enable Current A/D"), "boolean");
+						dP.attrAdd("CA", tr("Enable Current Accumulator"), "boolean");
+						dP.attrAdd("EE", tr("Enable Current Accumulator Shadow"), "boolean");
+						dP.attrAdd("AD", tr("Voltage A/D (0-VAD,1-VDD)"), "boolean");
+					}
+					else if(devFamily == 0x29)		//DS2408
+						for(iD = 0; iD < 8; iD++) {
+							dP.attrAdd("di"+iD, tr("DI")+iD, "boolean|ro");
+							dP.attrAdd("do"+iD, tr("DO")+iD, "boolean");
+						}
+					else if(devFamily == 0x3A)		//DS2413
+						for(iD = 0; iD < 2; iD++) {
+							dP.attrAdd("di"+iD, tr("DI")+iD, "boolean|ro");
+							dP.attrAdd("do"+iD, tr("DO")+iD, "boolean");
+						}
+				}
+				if(dO.tmSc == tmSc)	break;	//Something wrong in the scan but repeat, interruption
+				dO.tmSc = tmSc;
+				dO.try = tryEVAL;
+			}
+		}
+		//Check for removed devices
+		if(!onlyAddAtScan)
+			for(devID in devLs)
+				if(!(dO=devLs[devID]).isEVal() && dO.tmSc != tmSc) {
+					setEVAL(dO.dP);
+					devLs[devID] = EVAL;
+				}
+	}
+	else {
+		//Process devices for reading current value and set modifable
+		for(devID in devLs) {
+			if((dO=devLs[devID]).isEVal()) continue;
+			devFamily = devID.charCodeAt(0)&0x7F;
+			if(dO.isT) {	//Temperature
+				dP = dO.dP;
+				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
+				//Check for a modifications
+				isMdf = false;
+				m_ = dP.m.get(), res_ = max(9,min(12,dP.res.get()));
+				if(!dO.m.isEVal() && !dO.res.isEVal() && (m_ != dO.m || res_ != dO.res)) {
+					//Set scratchpad
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x4E,m_&0xFF,(m_>>8)&0xFF,((res_-9)<<5)|0x1F))) != req) continue;
+					//Copy scratchpad part to the EEPROM
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x48))) != req) continue;
+					isMdf = true;
+				}
+
+				//Read current
+				// Call the transmission
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x44))) != req) continue;
+				if(!power) SYS.sleep(0.094*pow(2,(dO.res.isEVal()?12:dO.res)-9));
+				// Get scratchpad
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				io(tr, SYS.strFromCharCode(0xBE));
+				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				if(!Special.FLibSYS.CRC(resp,0x8C,8,0)) {
+					val = resp.charCodeAt(1)*256 + resp.charCodeAt(0);
+					if(val > 32767) val -= 65536;
+					dP.val.set(val/16, 0, 0, true);
+					if(dO.m.isEVal() || dO.res.isEVal() || isMdf) {
+						dO.m = resp.charCodeAt(3)*256 + resp.charCodeAt(2); dP.m.set(dO.m, 0, 0, true);
+						dO.res = ((resp.charCodeAt(4)>>5)&0x3)+9; dP.res.set(dO.res, 0, 0, true);
+					}
+					dO.try = 0;
+				}
+				else if((dO.try=dO.try+1) > tryEVAL) {
+					dP.val.set(EVAL, 0, 0, true); dP.m.set(EVAL, 0, 0, true); dP.res.set(EVAL, 0, 0, true);
+					dO.m = dO.res = EVAL;
+				}
+			}
+			else if(devFamily == 0x20) {	//DS2450
+				dP = dO.dP;
+				//Check for a modifications
+				for(iN = 0; iN < 4; iN++) {
+					if(dO["st1"+iN].isEVal())	continue;
+					if((tRes=max(0,min(16,dP["res"+iN].get()))) == 16)	tRes = 0;
+					tSt = (dO["st1"+iN]&(~0xCF)) + tRes + ((dP["md"+iN].get()==2)?0x80:0) + (dP["do"+iN].get()?0x40:0);
+					if(tSt != dO["st1"+iN]) {	//Same write and check the result
+						if(!reset(tr)) continue;
+						if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+						if(io(tr,(req=SYS.strFromCharCode(0x55,8+iN*2,0,tSt))) != req) continue;
+						resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF));
+						if(((~((resp.charCodeAt(1)<<8) + resp.charCodeAt(0)))&0xFFFF) == Special.FLibSYS.CRC(req,0xA001,16,0) && resp.charCodeAt(2) == tSt)
+							dO["st1"+iN] = tSt;
+					}
+					tSt = (dO["st2"+iN]&(~0x01)) + (dP["md"+iN].get()?1:0);
+					if(tSt != dO["st2"+iN]) {	//Same write and check the result
+						if(!reset(tr)) continue;
+						if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+						if(io(tr,(req=SYS.strFromCharCode(0x55,8+iN*2+1,0,tSt))) != req) continue;
+						resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF));
+						if(((~((resp.charCodeAt(1)<<8) + resp.charCodeAt(0)))&0xFFFF) == Special.FLibSYS.CRC(req,0xA001,16,0) && resp.charCodeAt(2) == tSt)
+							dO["st2"+iN] = tSt;
+					}
+				}
+
+				//Read control status data
+				if(dP["res0"].get().isEVal()) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xAA,0x08,0x00))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+					CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
+					CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xAA,0x08,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
+					for(iN = 0; iN < 4; iN++) {
+						dP["res"+iN].set(CRC_OK?((tVl=resp.charCodeAt(iN*2)&0xF)?tVl:16):EVAL, 0, 0, true);
+						dP["md"+iN].set(CRC_OK?((resp.charCodeAt(iN*2)&0x80)?2:resp.charCodeAt(iN*2+1)&1):EVAL, 0, 0, true);
+						dP["do"+iN].set(CRC_OK?((resp.charCodeAt(iN*2)&0x40)?true:false):EVAL, 0, 0, true);
+						dO["st1"+iN] = resp.charCodeAt(iN*2); dO["st2"+iN] = resp.charCodeAt(iN*2+1);
+					}
+				} else CRC_OK = true;
+
+				//Read AI value
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xAA,0x00,0x00))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+					//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," ")/*+"; CRC="+Special.FLibSYS.CRC(SYS.strFromCharCode(0x3C,0x08,0x00)/*+resp.slice(0,-2),0xA001,16,0).toString(16)*/);
+					CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
+					CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xAA,0x00,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
+				}
+				for(iN = 0; iN < 4; iN++)
+					if(CRC_OK) {
+						tVl = (resp.charCodeAt(iN*2+1)<<8) + resp.charCodeAt(iN*2);
+						vlMax = dP["md"+iN].get() ? 5.1 : 2.55;
+						dP["ai"+iN].set(tVl*vlMax/65536, 0, 0, true);
+					} else dP["ai"+iN].set(EVAL, 0, 0, true);
+
+				//Start A/D conversion for prepare data for next iteration
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x3C,0x0F,0x00))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF));
+				}
+			}
+			else if(devFamily == 0x26) {	//DS2438
+				dP = dO.dP;
+				//Check for a modifications
+				//????
+
+				//Recall memory page 0
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0xB8,0))) != req) continue;
+				//Read current state
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0xBE,0))) != req) continue;
+				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+				CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
+				if(CRC_OK) {
+					if((tVl=(resp.charCodeAt(2)<<8)+resp.charCodeAt(1)) >= 32767) tVl -= 65536;
+					dP["t"].set(tVl/256, 0, 0, true);
+					if((tVl=(resp.charCodeAt(6)<<8)+resp.charCodeAt(5)) >= 32767) tVl -= 65536;
+					dP["i"].set(tVl, 0, 0, true);
+				}
+				else {
+					dP["t"].set(EVAL, 0, 0, true);
+					dP["i"].set(EVAL, 0, 0, true);
+				}
+				dP["v"].set(CRC_OK?((resp.charCodeAt(4)<<8)+resp.charCodeAt(3))/100:EVAL, 0, 0, true);
+				dP["IAD"].set(CRC_OK?(resp.charCodeAt(0)&0x01):EVAL, 0, 0, true);
+				dP["CA"].set(CRC_OK?(resp.charCodeAt(0)&0x02):EVAL, 0, 0, true);
+				dP["EE"].set(CRC_OK?(resp.charCodeAt(0)&0x04):EVAL, 0, 0, true);
+				dP["AD"].set(CRC_OK?(resp.charCodeAt(0)&0x08):EVAL, 0, 0, true);
+				dP["thr"].set(CRC_OK?(resp.charCodeAt(7)>>6):EVAL, 0, 0, true);
+
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xBE,1))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+					CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
+					SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				}
+				dP["ETM"].set(CRC_OK?((resp.charCodeAt(3)<<24)+(resp.charCodeAt(2)<<16)+(resp.charCodeAt(1)<<8)+resp.charCodeAt(0)):EVAL, 0, 0, true);
+				dP["ICA"].set(CRC_OK?resp.charCodeAt(4):EVAL, 0, 0, true);
+				if(CRC_OK) {
+					if((tVl=(resp.charCodeAt(6)<<8)+resp.charCodeAt(5)) >= 32767) tVl -= 65536;
+					dP["OFF"].set(tVl, 0, 0, true);
+				} else dP["OFF"].set(EVAL, 0, 0, true);
+
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xBE,2))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+					CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
+					SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				}
+				dP["TM_DISC"].set(CRC_OK?((resp.charCodeAt(3)<<24)+(resp.charCodeAt(2)<<16)+(resp.charCodeAt(1)<<8)+resp.charCodeAt(0)):EVAL, 0, 0, true);
+				dP["TM_END"].set(CRC_OK?((resp.charCodeAt(7)<<24)+(resp.charCodeAt(6)<<16)+(resp.charCodeAt(5)<<8)+resp.charCodeAt(4)):EVAL, 0, 0, true);
+
+				//Start T ant V conversion for prepare the data for next iteration
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x44))) != req) continue;
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xB4))) != req) continue;
+				}
+			}
+			else if(devFamily == 0x29) {	//DS2408
+				dP = dO.dP;
+				//Check for a modifications
+				isMdf = false; tVl = 0; do_ = new Array();
+				for(iD = 0; iD < 8; iD++) {
+					if(dO["do"+iD].isEVal())	{ isMdf = false; break; }
+					do_[iD] = dP["do"+iD].get();
+					if(do_[iD] != dO["do"+iD])	isMdf = true;
+					if(do_[iD])	tVl = tVl | (1<<iD);
+				}
+				if(isMdf) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x5A,tVl,~tVl))) != req) continue;
+					// Verify the correct writing, pass by that can be wrong
+					//resp = io(tr, SYS.strFromCharCode(0xFF,0xFF));
+					//SYS.messInfo("OneWire","Write resp="+SYS.strDecode(resp,"Bin"," "));
+				}
+
+				//Read current state
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0xF0,0x88,0x00))) != req) continue;
+				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," ")+"; CRC="+Special.FLibSYS.CRC(SYS.strFromCharCode(0xF0,0x88,0x00)+resp.slice(0,-2),0xA001,16,0).toString(16));
+				CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
+				CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xF0,0x88,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
+				for(iD = 0; iD < 8; iD++) {
+					dP["di"+iD].set(CRC_OK?resp.charCodeAt(0)&(1<<iD):EVAL, 0, 0, true);
+					if(dO["do"+iD].isEVal() || isMdf || !CRC_OK) {
+						dO["do"+iD] = CRC_OK ? ((resp.charCodeAt(1)&(1<<iD))?true:false) : EVAL;
+						dP["do"+iD].set(dO["do"+iD], 0, 0, true);
+					}
+				}
+			}
+			else if(devFamily == 0x3A) {	//DS2413
+				dP = dO.dP;
+				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
+				//Check for a modifications
+				isMdf = false;
+				do0_ = dP.do0.get(), do1_ = dP.do1.get();
+				if(!dO.do0.isEVal() && !dO.do1.isEVal() && (do0_ != dO.do0 || do1_ != dO.do1)) {
+					tVl = (do1_<<1) | do0_;
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x5A,tVl,(~tVl)&0xFF))) != req) continue;
+					isMdf = true;
+				}
+
+				//Read current state
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0xF5))) != req) continue;
+				resp = io(tr, SYS.strFromCharCode(0xFF));
+				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				if(((tVl=resp.charCodeAt(0))&0xF) == ((~(tVl>>4))&0xF)) {
+					dP.di0.set(tVl&0x01, 0, 0, true); dP.di1.set(tVl&0x04, 0, 0, true);
+					if(dO.do0.isEVal() || dO.do1.isEVal() || isMdf) {
+						dO.do0 = (tVl&0x02)?true:false; dP.do0.set(dO.do0, 0, 0, true);
+						dO.do1 = (tVl&0x08)?true:false; dP.do1.set(dO.do1, 0, 0, true);
+					}
+				}
+				else {
+					dP.di0.set(EVAL, 0, 0, true); dP.di1.set(EVAL, 0, 0, true);
+					dP.do0.set(EVAL, 0, 0, true); dP.do1.set(EVAL, 0, 0, true);
+					dO.do0 = dO.do1 = EVAL;
+				}
+			}
+		}
+	}
+}
+
+f_err = t_err;','',1740070050);
+CREATE TABLE IF NOT EXISTS 'Security_user' ("NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"LONGDESCR" TEXT DEFAULT '' ,"PASS" TEXT DEFAULT '' ,"LANG" TEXT DEFAULT '' ,"PICTURE" TEXT DEFAULT '' , PRIMARY KEY ("NAME"));
+INSERT INTO Security_user VALUES('RemCntr','','','$1$RemCntr$zHNN3UJtPPDtt4oUCPcyS1','','');
+CREATE TABLE IF NOT EXISTS 'Security_grp' ("NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"LONGDESCR" TEXT DEFAULT '' ,"USERS" TEXT DEFAULT '' , PRIMARY KEY ("NAME"));
+INSERT INTO Security_grp VALUES('DAQ','Data Acquisition','','root;RemCntr;');
+CREATE TABLE IF NOT EXISTS 'Transport_in' ("ID" TEXT DEFAULT '' ,"MODULE" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCRIPT" TEXT DEFAULT '' ,"ADDR" TEXT DEFAULT '' ,"PROT" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '0' ,"A_PRMS" TEXT DEFAULT '' , PRIMARY KEY ("ID","MODULE"));
+INSERT INTO Transport_in VALUES('RemCntr','Sockets','Remote Control','','oscada:3142:2','SelfSystem',0,'<prms InBufLen="0" MSS="0" MaxQueue="10" MaxClients="20" MaxClientsPerHost="0" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
+');
+INSERT INTO Transport_in VALUES('RemCntr','SSL','Remote Control','','oscada:3145:2','SelfSystem',0,'<prms MaxClients="20" MaxClientsPerHost="0" InBufLen="0" MSS="0" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
+');
 COMMIT;

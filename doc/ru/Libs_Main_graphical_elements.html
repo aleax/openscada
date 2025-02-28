@@ -46,7 +46,8 @@
 <li> <b>Изначально создано:</b> в <a class="external text" href="http://wiki.oscada.org/Using/GraphicElementsLibraries/MainElements" rel="nofollow noreferrer noopener" target="_blank">старой Wiki</a></li>
 <li> <b>Использовано:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">большинство проектов на OpenSCADA</a></li>
 <li> <b><a href="../en/To_do.html" title="Special:MyLanguage/Works/To do">Задачи (To Do)</a>:</b></li></ul>
-<dl><dd> -</dd></dl>
+<p><br />
+</p>
 </td></tr></table>
 <p>Библиотека создаётся для предоставления основных элементов пользовательского интерфейса и содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Строится библиотека на основе <a href="Modules/VCAEngine.html#WidgetPrimitives" title="Special:MyLanguage/Modules/VCAEngine">примитивов виджетов</a> и языка внутреннего программирования <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>.
 </p><p>Названия элементов и их параметров доступны на языках: Английский, Украинский и mRussian. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода <i>tr()</i> и перевод этих сообщений также доступен Английским, Украинским и mRussian.
@@ -2285,7 +2286,7 @@ Though this widget is not intended for independent use in isolation from <a href
 <td> en, uk
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a> </td>
-<td> -2 ms (disabled)
+<td> -1 ms (parent)
 </td></tr></table>
 <p>The element-frame, shown in Figure 3.8, serves to manage of storehouses on different classes-categories of the storing-managing things. Initially that was developed and tested on the class "Library". The frame means of the direct accessing the DB by SQL and currently supports only MySQL/MariaDB.
 </p><p>During the frame implementing, the view "Table" of <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">the primitive "FormEl"</a> significantly expanded on both visualizers for:
@@ -2327,13 +2328,18 @@ The frame provides currently and in future for next features:
 <li> generation of the report document of the selected item, which is ready to print and convenient in complete observing;</li>
 <li> generation of the report document of the main table with accounting the filter settings and natural show the specific fields;</li>
 <li> detailed control panel-form of the selected item with the specific fields.</li></ul></li></ul>
-<p>The storehouse classes store in the table "classes" with the fixed table structure "<u><b>CLASS</b></u>, <u><b>ID</b></u>, <b>NAME</b>, <b>TP</b> , <b>TBL</b>, <b>FILTER</b>, <b>PROC</b>", where:
+<p>The storehouse classes are stored in the table "classes" with the fixed table structure "<u><b>CLASS</b></u>, <u><b>ID</b></u>, <b>NAME</b>, <b>TP</b> , <b>TBL</b>, <b>FILTER</b>, <b>PROC</b>", where:
 </p>
 <ul><li> <i>CLASS</i> [varchar(20)] — class ID;</li>
 <li> <i>ID</i> [varchar(20)] — specific field ID of the class;</li>
 <li> <i>NAME</i> [text] — specific field localised name of the class, where the first line for the default value and the next lines form in the view <b>{2SymbolLang}:{LocalizedText}</b>;</li>
-<li> <i>TP</i> [varchar(100)] — specific field type of the class, which correspond now directly to the MySQL DB types;</li>
-<li> <i>TBL</i> [varchar(100)] — specific field properties of representing data in the table, has the format <b>{align}:{width}:{pos}</b>, where:</li></ul>
+<li> <i>TP</i> [varchar(100)] — specific field type of the class, which correspond directly to the MySQL data types and some specific ones:</li></ul>
+<dl><dd><ul><li> "<b>file[:{max}[:{storage}[:{MIME}[:{OverViewSz}]]]]</b>" — attaching files with the parameters:</li></ul>
+<dl><dd><ul><li> <i>max</i> — maximum files allowed to attach;</li>
+<li> <i>storage</i> — storage of the files on the File System with the specified path, and empty to store directly in the DB field of the type LONGTEXT;</li>
+<li> <i>MIME</i> — files type, allowed to attach-load, where empty for any and like to "image/*" for only images;</li>
+<li> <i>OverViewSz</i> — enable a field of the image files overview on the item form with the specified size in pixels.</li></ul></dd></dl></dd></dl>
+<ul><li> <i>TBL</i> [varchar(100)] — specific field properties of representing data in the table, has the format <b>{align}:{width}:{pos}</b>, where:</li></ul>
 <dl><dd><ul><li> <i>align</i> — column alignment, supports the values: "left", "center", "right"; where the "left" value is default one for strings and "center" for other;</li>
 <li> <i>width</i> — forced width for the column, in percents at symbol "%" in the end or in pixels;</li>
 <li> <i>pos</i> — the column position in the string view, so you can write that like to "005" for true sort.</li></ul></dd></dl>
@@ -2366,11 +2372,11 @@ In the runtime mode you will see a single big table for class (Fig.3.8b) and dat
 </p><p>In the class edition mode, the users, allowed to edit, can add new and remove present (after removing the last item) classes; and add, remove the specific class fields and edit properties of that fields.
 </p><p>For user access limitation there provided now only a mechanism of including the allowed for the class and data edition users to the group "ITW".
 </p><p>To generate a separate report, the user can click a characteristic button in the top right corner.
-</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> The frame supports now of working with very big "Periodic processing" value and that value is set now to disabled (the value -2). That is possible by a mechanism of the events early processing and the possibility of control the processing periodicity from the procedure.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> The frame supports now of working with very big "Periodic processing" value and that value is set now to from parent (the value -1). That is possible by a mechanism of the events early processing and the possibility of control the processing periodicity from the procedure.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseClassR.png"><img class="thumbimage" height="580" src="../en/files/LibMainEls_storeHouseClassR.png" width="900" /></a>  <div class="thumbcaption">Fig.3.8b. The "Storehouse" frame in the runtime mode at the class representing.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseDataR.png"><img class="thumbimage" height="580" src="../en/files/LibMainEls_storeHouseDataR.png" width="900" /></a>  <div class="thumbcaption">Fig.3.8c. The "Storehouse" frame in the runtime mode at the data representing.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseDataRf.png"><img class="thumbimage" height="580" src="../en/files/LibMainEls_storeHouseDataRf.png" width="900" /></a>  <div class="thumbcaption">Fig.3.8d. The "Storehouse" frame in the runtime mode at the item edition form.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseDataRf.png"><img class="thumbimage" height="761" src="../en/files/LibMainEls_storeHouseDataRf.png" width="900" /></a>  <div class="thumbcaption">Fig.3.8d. The "Storehouse" frame in the runtime mode at the item edition form.</div></div></div></div>
 <p><b><u>Linking and configuring the attributes</u></b><br />
 </p>
 <table class="wikitable">
@@ -2860,7 +2866,7 @@ In the runtime mode you will see a single big table for class (Fig.3.8b) and dat
 <tr>
 <td> <span id="grph_panel" title="#grph_panel"><h3><span class="mw-headline" id=".D0.9F.D0.B0.D0.BD.D0.B5.D0.BB.D1.8C_.D0.B3.D1.80.D0.B0.D1.84.D0.B8.D0.BA.D0.BE.D0.B2_.28grph_panel.29"><span class="mw-headline-number">4.5</span> Панель графиков (<a href="Libs_Main_graphical_elements.html#grph_panel" title="Special:MyLanguage/Libs/Main graphical elements">grph_panel</a>)</span></h3></span>
 </td>
-<td> 1.5 </td>
+<td> 1.6 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru
@@ -3008,7 +3014,7 @@ The panel allows the user to:
 <tr>
 <td> <span id="doc_panel" title="#doc_panel"><h3><span class="mw-headline" id=".D0.9F.D0.B0.D0.BD.D0.B5.D0.BB.D1.8C_.D0.B4.D0.BE.D0.BA.D1.83.D0.BC.D0.B5.D0.BD.D1.82.D0.BE.D0.B2_.28doc_panel.29"><span class="mw-headline-number">4.6</span> Панель документов (<a href="Libs_Main_graphical_elements.html#doc_panel" title="Special:MyLanguage/Libs/Main graphical elements">doc_panel</a>)</span></h3></span>
 </td>
-<td> 1.2 </td>
+<td> 1.3 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru
@@ -3018,7 +3024,7 @@ The panel allows the user to:
 </td></tr></table>
 <p>Элемент, представленный на рисунке 4.6, является специализированной панелью динамического управления основными пользовательскими свойствами <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Document" title="Special:MyLanguage/Sub-projects/VCA">примитива "Документ"</a>. Так, панель позволяет управлять документами и осуществлять навигацию по их истории; поддерживаются динамические и архивные документы.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_doc_panel_ru.png"><img class="thumbimage" height="300" src="files/LibMainEls_doc_panel_ru.png" width="400" /></a>  <div class="thumbcaption">Рис.4.6. Панель документов в режиме разработки и исполнения (динамический и архивный), слева направа.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_doc_panel.png"><img class="thumbimage" height="300" src="../en/files/LibMainEls_doc_panel.png" width="400" /></a>  <div class="thumbcaption">Рис.4.6. Панель документов в режиме разработки и исполнения (динамический и архивный), слева направа.</div></div></div></div>
 <p><b><u>Использование — разработка</u></b><br />
 Панель не предусматривает специальной конфигурации пользователем, она должна лишь быть размещена в каталоге панелей дерева проекта <a href="#RootPgSo">концепции объектов сигнализации корневой страницы "RootPgSo"</a>, что будет предусматривать её динамический вызов и открытие в контейнере панелей управлений корневой страницы.
 </p><p>Идентификатор панели, при размещении, должен сохраняться и строка её вызова, при получении фокуса, в атрибуте обработки событий "evProc" первичного виджета приобретёт вид "ws_FocusIn::open:/pg_control/pg_doc_panel".
@@ -3223,5 +3229,5 @@ The panel allows the user to:
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/ru">Libs/Main_graphical_elements/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/ru">Libs/Main_graphical_elements/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.8</td></tr></table></body>
 </html>

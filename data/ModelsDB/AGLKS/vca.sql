@@ -6327,20 +6327,18 @@ CREATE TABLE IF NOT EXISTS 'wlb_AGLKS_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT D
 CREATE TABLE IF NOT EXISTS 'wlb_AGLKS_uio' ("IDW" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","IDC","ID"));
 INSERT INTO wlb_AGLKS_uio VALUES('comprEn','','pVar','Variable',131073,'<EVAL>|0;0|',10,'Parameter|var','','Переменная','','','','Змінна','','','');
 CREATE TABLE IF NOT EXISTS 'prj_AGLKS' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO prj_AGLKS VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',1000,1,'pgOpen;defUser;demoPlayProc;',1712643625);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so','1','','root',1,'','','',-1,5,'name;dscr;geomX;',1616334878);
+INSERT INTO prj_AGLKS VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',1000,1,'pgOpen;defUser;demoPlayProc;',1737313581);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so','1','','root',1,'','','',-1,5,'name;dscr;geomX;',1737313581);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1582550254);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1582550254);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/ggraph','2','','..',1,'','','',-1,0,'name;dscr;',1582550254);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1','doc','','root',1,'
-','
-','
-',-1,5,'name;dscr;',1582544092);
+','','',-1,5,'name;dscr;',1737313581);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','1','','/wlb_doc/wdg_docRepInstVals',1,'','','',-1,0,'name;geomYsc;',1580920441);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','2','','/wlb_doc/wdg_docUsersSet',1,'','','',-1,0,'geomYsc;',1400852515);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','3','','/wlb_doc/wdg_docRepDay',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;n;',1582543524);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','4','','/wlb_doc/wdg_docRepMonth',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;n;',1582543531);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','5','','/wlb_test/wdg_docTestGasNodeDayRep',1,'','','',-1,0,'name;geomYsc;',1580649241);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','3','','/wlb_doc/wdg_docRepDay',1,'','','',-2,0,'name;geomYsc;n;',1737313581);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','4','','/wlb_doc/wdg_docRepMonth',1,'','','',-2,0,'name;geomYsc;n;',1737313581);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','5','','/wlb_test/wdg_docTestGasNodeDayRep',1,'','','',10000,0,'name;geomYsc;pgNoOpenProc;',1737313581);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1','mn','','root',1,'','','',-1,5,'name;dscr;',1616334878);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/mn','1','','/wlb_AGLKS/wdg_KCH_MN1',1,'','','',-1,0,'name;evProc;pgOpen;pgNoOpenProc;pgGrp;',1616311191);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/mn','10','','/wlb_test/wdg_mn_gen',1,'','','',-1,0,'pgNoOpenProc;pgGrp;',1584730410);
@@ -6545,7 +6543,7 @@ INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','runWin','','Run window',131
 INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','keepAspectRatio','','Keep aspect ratio on scale',131072,'1',128,'','');
 INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','stBarNoShow','','Not show status bar',131072,'0',128,'','');
 INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','winPosCntrSave','','Windows position control and save',131072,'1',128,'','');
-INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','prjDoc','','Project document',131077,'AGLCS|Using/Model_AGLKS',0,'','');
+INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','prjDoc','','Project document',131077,'AGLCS|Using/Model_AGLKS',128,'','');
 CREATE TABLE IF NOT EXISTS 'prj_AGLKS_stls' ("IDS" INTEGER DEFAULT '0' ,"ID" TEXT DEFAULT '' ,"VAL" TEXT DEFAULT '' ,"uk#VAL" TEXT DEFAULT '' ,"ru#VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDS","ID"));
 INSERT INTO prj_AGLKS_stls VALUES(0,'<Styles>','Default','Типове','Типовое');
 INSERT INTO prj_AGLKS_stls VALUES(0,'backColor','gray','','');

@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.ModBus file: modbus_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,7 +47,7 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
     //Node DB structure
     mNodeEl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
     mNodeEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mNodeEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
+    mNodeEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,i2s(limObjDscr_SZ).c_str()));
     mNodeEl.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,0,"1","0"));
     mNodeEl.fldAdd(new TFld("ADDR",trS("Address"),TFld::Integer,0,"3","1","1;247"));
     mNodeEl.fldAdd(new TFld("InTR",trS("Input transport"),TFld::String,0,i2s(limObjID_SZ).c_str(),"*"));
@@ -1397,7 +1397,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/nd/st/timestamp",_("Date of modification"),R_R_R_,"root",SPRT_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/nd/cfg",_("Configuration"))) {
-		TConfig::cntrCmdMake(opt, "/nd/cfg", 0, "root", SPRT_ID, RWRWR_);
+		TConfig::cntrCmdMake(this, opt, "/nd/cfg", 0, "root", SPRT_ID, RWRWR_);
 		ctrMkNode("fld",opt,-1,"/nd/cfg/MODE",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 		// Append configuration properties
 		XMLNode *xt = ctrId(opt->childGet(0),"/nd/cfg/InTR",true);
@@ -1485,7 +1485,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(progLang());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setProgLang(opt->text());
     }
-    else if(a_path.find("/nd/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SPRT_ID, RWRWR_);
+    else if(a_path.find("/nd/cfg") == 0) TConfig::cntrCmdProc(this, opt, TSYS::pathLev(a_path,2), "root", SPRT_ID, RWRWR_);
     else if(a_path == "/plang/list") {
 	vector<string> lls, ls;
 	//Templates

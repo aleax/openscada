@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvariant.h
 /***************************************************************************
- *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2024 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -317,7 +317,8 @@ class XMLNodeObj : public TVarObj
 	void fromXMLNode( XMLNode &nd );
 
 	AutoHD<XMLNodeObj> getElementBy( const string &attr, const string &val );
-	void getElementsBy( const string &tag, const string &attr, const string &val, TArrayObj *rez );
+	void getElementsBy( const string &tag, const string &attr, const string &val, TArrayObj *rez,
+			    unsigned limit = 0, unsigned *from = NULL );
 
     private:
 	//Attributes

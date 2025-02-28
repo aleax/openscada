@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/JavaLikeCalc</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/JavaLikeCalc.html" title="Модули/Вычислитель похожий на Java (89% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/JavaLikeCalc.html" title="Модулі/Обчислювач подібний до Java (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/JavaLikeCalc.html" title="Модули/Вычислитель похожий на Java (87% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/JavaLikeCalc.html" title="Модулі/Обчислювач подібний до Java (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -314,8 +314,8 @@ Where:
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="kd">var</span> <span class="nx">rez</span> <span class="o">=</span> <span class="s2">"1 plus 2 plus 3"</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">"\\d+"</span><span class="p">,</span><span class="s2">"g"</span><span class="p">));</span>  <span class="c1">// rez = [1], [2], [3]</span>
 </pre></div>
 <dl><dd><ul><li> <i>string slice( int beg, int end ); string substring( int beg, int end );</i> — returns the string extracted from the original one starting from the <i>beg</i> position and ending before the <i>end</i> (not included), numbering from zero. If the begin or end is negative, then the count is conducted from the end of the line. If the end is not specified, then the end is the end of the line. For example, the construction <b>substring(-2)</b> return two last symbols of the string.</li>
-<li> <i>Array split( string sep, int limit );</i> — returns the array of strings separated by <i>sep</i> with the <i>limit</i> of the number of elements.</li>
-<li> <i>Array split( RegExp pat, int limit );</i> — returns the array of strings separated by the RegExp pattern <i>pat</i> with the <i>limit</i> of the number of elements.</li></ul></dd></dl>
+<li> <i>Array split( string sep, int limit = 0 );</i> — returns the array of strings separated by <i>sep</i> with the <i>limit</i> of the number of elements (0 for no limit).</li>
+<li> <i>Array split( RegExp pat, int limit = 0 );</i> — returns the array of strings separated by the RegExp pattern <i>pat</i> with the <i>limit</i> of the number of elements (0 for no limit).</li></ul></dd></dl>
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="nx">rez</span> <span class="o">=</span> <span class="s2">"1,2, 3 , 4 ,5"</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">"\\s*,\\s*"</span><span class="p">));</span>  <span class="c1">// rez = [1], [2], [3], [4], [5]</span>
 </pre></div>
 <dl><dd><ul><li> <i>string insert( int pos, string substr );</i> — inserts the substring <i>substr</i> into this string's position <i>pos</i>.</li>
@@ -610,5 +610,5 @@ REQ[<b>root-DAQ</b>]: <i>&lt;set path="/DAQ/JavaLikeCalc/<b>{CNTR}</b>/%2fserv%2
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/JavaLikeCalc/en">Modules/JavaLikeCalc/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2024</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.7</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/JavaLikeCalc/en">Modules/JavaLikeCalc/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.8</td></tr></table></body>
 </html>

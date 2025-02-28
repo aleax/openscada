@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"6.10.10"
+#define MOD_VER		"6.13.2"
 #define AUTHORS		trS("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	trS("Visual operation user interface, based on the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -322,7 +322,7 @@ void TWEB::perSYSCall( unsigned int cnt )
     } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
-string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode, const string &httpattrs,
+string TWEB::pgCreator( TProtocolIn *prt, const string &cnt, const string &rcode, const string &httpattrs,
     const string &htmlHeadEls, const string &forceTmplFile, const string &lang )
 {
     /*if(httpattrs.size() && httpattrs.find("Content-Type: text/html") == string::npos)
@@ -336,7 +336,7 @@ string TWEB::pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcod
     vector<TVariant> prms;
     prms.push_back(cnt); prms.push_back(rcode); prms.push_back(httpattrs); prms.push_back(htmlHeadEls); prms.push_back(forceTmplFile);
 
-    return iprt->objFuncCall("pgCreator", prms, "root\n"+lang).getS();
+    return prt->objFuncCall("pgCreator", prms, "root\n"+lang).getS();
 }
 
 bool TWEB::pgAccess( TProtocolIn *iprt, const string &URL )

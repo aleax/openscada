@@ -303,6 +303,7 @@ class ShapeMedia : public WdgShape
 		short	bordStyle	:5;
 		short	mediaType	:3;
 		short	mediaFit	:1;
+		short	mediaKeepAspect	:1;
 		short	mediaSpeed	:8;
 		short	videoPlay	:1;
 		short	videoRoll	:1;
