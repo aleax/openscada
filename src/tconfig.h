@@ -68,6 +68,7 @@ class TCfg : public TVariant
 
 	bool	view( ) const		{ return mView; }
 	bool	keyUse( ) const		{ return mKeyUse; }
+	bool	isTransl( ) const	{ return (fld().type() == TFld::String && (fld().flg()&TFld::TransltText) && !noTransl()); }
 	bool	noTransl( ) const	{ return mNoTransl; }
 	bool	reqKey( ) const		{ return mReqKey; }
 	bool	isKey( ) const;						//Whether real or request key test

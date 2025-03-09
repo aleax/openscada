@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.MySQL file: my_sql.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,7 +34,7 @@
 #define MOD_NAME	trS("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"4.0.10"
+#define MOD_VER		"4.0.11"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -593,8 +593,8 @@ void MTable::setSQLVal( TCfg &cf, const string &ival, bool tr )
 	    break;
 	case TFld::String:
 	    if(!cf.extVal()) {
-		if(!tr || (cf.fld().flg()&TFld::TransltText && !cf.noTransl())) cf.setS(val);
-		if(!tr && cf.fld().flg()&TFld::TransltText && !cf.noTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
+		if(!tr || cf.isTransl()) cf.setS(val);
+		if(!tr && cf.isTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
 	    }
 	    else {
 		if(!tr) {

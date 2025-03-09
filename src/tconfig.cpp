@@ -195,13 +195,11 @@ void TConfig::cntrCmdProc( TCntrNode *cntrO, XMLNode *opt, const string &elem, c
 {
     TCfg &cel = cfg(elem);
     if(cntrO->ctrChkNode(opt,"get",(cel.fld().flg()&TFld::NoWrite)?(perm&~_W_W_W):perm,owner.c_str(),group.c_str(),SEC_RD)) {
-	if(cel.fld().type() == TFld::String && (cel.fld().flg()&TFld::TransltText))
-	    opt->setText(trD(cel.getS()));
+	if(cel.isTransl()) opt->setText(trD(cel.getS()));
 	else opt->setText(cel.getS());
     }
     if(cntrO->ctrChkNode(opt,"set",(cel.fld().flg()&TFld::NoWrite)?(perm&~_W_W_W):perm,owner.c_str(),group.c_str(),SEC_WR)) {
-	if(cel.fld().type() == TFld::String && (cel.fld().flg()&TFld::TransltText))
-	    cel.setS(trDSet(cel.getS(),opt->text()));
+	if(cel.isTransl()) cel.setS(trDSet(cel.getS(),opt->text()));
 	else cel.setS(opt->text());
     }
 }
@@ -356,7 +354,7 @@ string TCfg::getS( ) const
     mOwner.mRes.unlock();
     if(!extVal()) return rez;
     else {
-	if((fld().flg()&TFld::TransltText) && !noTransl()) {
+	if(isTransl()) {
 	    string rezT = TSYS::strSepParse(rez, 1, 0), rezSrc = TSYS::strSepParse(rez, 2, 0);
 	    rez = TSYS::strSepParse(rez, 0, 0);
 	    if(rez.size() && rezSrc.size()) Mess->translReg(rez, rezSrc);	//!!!! Can be very busy
@@ -413,7 +411,7 @@ void TCfg::setS( const string &ival )
 	case TVariant::String: {
 	    mOwner.mRes.lock();
 	    string tVal = TVariant::getS();
-	    if(extVal() && (fld().flg()&TFld::TransltText) && !noTransl() && ival.find(char(0)) == string::npos) {
+	    if(extVal() && isTransl() && ival.find(char(0)) == string::npos) {
 		if(Mess->langCode() == Mess->langCodeBase()) TVariant::setS(ival+string(2,0)+getS(ExtValThree));
 		else TVariant::setS(getS(ExtValOne)+string(1,0)+ival+string(1,0)+getS(ExtValThree));
 	    }

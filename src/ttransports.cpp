@@ -976,7 +976,7 @@ void TTransportIn::clearConPrm( const string &id )
 {
     if(id.empty()) propertyClrGrp("", STR_PROP_GRP);				//Clearing all connection properties
     else if(id == STR_A_PRM_CFGP) propertyClrGrp(STR_A_PRM_CFGP, STR_PROP_GRP);	//... all configuration properties
-    else property(id, EVAL_BOOL, STR_PROP_GRP);					//... concrete <id> property
+    else property(id, (char)EVAL_BOOL, STR_PROP_GRP);				//... concrete <id> property
 }
 
 string TTransportIn::workId( )		{ return owner().modId()+"."+id(); }
@@ -1439,7 +1439,7 @@ void TTransportOut::clearConPrm( const string &id )
 {
     if(id.empty()) propertyClrGrp("", STR_PROP_GRP);				//Clearing all connection properties
     else if(id == STR_A_PRM_CFGP) propertyClrGrp(STR_A_PRM_CFGP, STR_PROP_GRP);	//... all configuration properties
-    else property(id, EVAL_BOOL, STR_PROP_GRP);					//... concrete <id> property
+    else property(id, (char)EVAL_BOOL, STR_PROP_GRP);				//... concrete <id> property
 }
 
 void TTransportOut::start( int time )	{ mStartTm = SYS->sysTm(); mLogLstDt = 0; }
@@ -1581,7 +1581,7 @@ TVariant TTransportOut::objFuncCall( const string &id, vector<TVariant> &prms, c
 	    AutoHD<XMLNodeObj>(prms[0].getO()).at().toXMLNode(req);
 	    messProtIO(req, prms[1].getS());
 	    AutoHD<XMLNodeObj>(prms[0].getO()).at().fromXMLNode(req);
-	} catch(TError &err) { return err.mess; }
+	} catch(TError &err) { return s2i(err.mess) ? err.mess : i2s(TError::Tr_ErrUnknown)+":"+err.mess; }
 	return "";
     }
     // bool isNetwork( ) - the transport network type

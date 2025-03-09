@@ -3219,7 +3219,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <tr>
 <td> <span id="initRemCntr" title="#initRemCntr"><h3><span class="mw-headline" id="Control_the_remote_initiative_connections_.28initRemCntr.29"><span class="mw-headline-number">3.2</span> Control the remote initiative connections (<a href="Libs_Main.html#initRemCntr" title="Special:MyLanguage/Libs/Main">initRemCntr</a>)</span></h3></span>
 </td>
-<td> 1.0 </td>
+<td> 1.1 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk 
@@ -3233,12 +3233,12 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <ul><li> detecting a new connection from remote host, which has no ID;</li>
 <li> sending an acquaintance direct request to the established connection for getting KEY of the host, when it was already connected early, and for getting information about the host for creating ID of the host;</li>
 <li> setting ID for the connection;</li>
-<li> creating a record in the OpenSCADA hosts table for the connection and sending all followed requests already through the host;</li>
-<li> creating on the remote host a representative Logical Controller;</li>
-<li> creating on the remote host a representative DAQ.System Controller Object in the automatic mode, at missing any other there;</li>
+<li> creating a record in the <a href="Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">OpenSCADA hosts table</a> for the connection and sending all followed requests already through the host;</li>
+<li> creating on the remote host a representative <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">Logical Controller</a>;</li>
+<li> creating on the remote host a representative <a href="../en/Modules/System.html" title="Special:MyLanguage/Modules/System">DAQ.System Controller Object</a> in the automatic mode, at missing any other there;</li>
 <li> processing the present DAQ.System Controller Objects to link the Logical Level parameters to them and creating some processing logical parameters;</li>
 <li> writing the generated key by a line "<b>SrcKey: {KEY}</b>" to description of the Logical Controller as a sign of finalising the initialisation;</li>
-<li> creating a Controller Object in DAQ.DAQGate with connection to the remote Logical Controller.</li></ul>
+<li> creating a Controller Object in <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQ.DAQGate</a> with connection to the remote Logical Controller.</li></ul>
 <p>ID of the remote host is formed in the view "<b>{HostDomain}{StatName}{RandKey}</b>" and with limiting to 20 symbols, where:
 </p>
 <ul><li> <i>HostDomain</i> — network host name-domain;</li>
@@ -3283,6 +3283,19 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <td> 5000
 </td></tr>
 <tr>
+<td> accessTm </td>
+<td> Timeout of accessing, hours
+<p>Used for repeating to create representative objects of not accessed hosts and for removing old connections.<br />
+Zero or negative value for disabling the control!
+</p>
+</td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 24
+</td></tr>
+<tr>
 <td> cntrUser </td>
 <td> Access: user </td>
 <td> String </td>
@@ -3319,27 +3332,18 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <td>
 </td></tr>
 <tr>
+<td> this </td>
+<td> Object </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
 <td> f_stop </td>
 <td> Function stop flag </td>
 <td> Boolean </td>
-<td> Input </td>
-<td> Not attribute </td>
-<td> Variable </td>
-<td> 0
-</td></tr>
-<tr>
-<td> f_start </td>
-<td> Function start flag </td>
-<td> Boolean </td>
-<td> Input </td>
-<td> Not attribute </td>
-<td> Variable </td>
-<td> 0
-</td></tr>
-<tr>
-<td> f_err </td>
-<td> Function error </td>
-<td> String </td>
 <td> Input </td>
 <td> Not attribute </td>
 <td> Variable </td>
@@ -3353,8 +3357,26 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <td> Not attribute </td>
 <td> Variable </td>
 <td> 1000
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
 </td></tr></table>
-<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainInitRemCntrCfg.png" title="Configuration."><img alt="Configuration." height="311" src="../en/files/LibsMainInitRemCntrCfg.png" width="423" /></a></div>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainInitRemCntrCfg.png" title="Configuration."><img alt="Configuration." height="338" src="../en/files/LibsMainInitRemCntrCfg.png" width="402" /></a></div>
 <p><b><u>Configuring and using</u></b><br />
 </p>
 <dl><dd>1. Create an input transport of receiving the initiative connections of the module "<a href="Modules/Sockets.html#InTr" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" or "<a href="../en/Modules/SSL.html#InTr" title="Special:MyLanguage/Modules/SSL">SSL</a>" with the name like to "Sockets.InitRemCntr".</dd>
@@ -3364,6 +3386,7 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 <dd>5. In the tab "Template configuration" of the logical parameter object you need to set:
 <ul><li> <i>Input transport</i> — to value of the identifier of the input transport, created in the item 1, like to "Sockets.InitRemCntr";</li>
 <li> <i>Connection time</i> — timeout of connection to the initiative hosts after that to close the connection;</li>
+<li> <i>Timeout of accessing</i> — used for repeating to create representative objects of not accessed hosts and for removing old connections; zero or negative value for disabling the control;</li>
 <li> <i>Access: user and password</i> — user and password of the remote host with permition of creation there Logical Controller and DAQ.System Controller Object, that is the user must be included to the "DAQ" group;</li>
 <li> <i>Control object in DAQ.LogicLev and DAQ.System</i> — to ID of managed-created Controller Objects on the remote hosts.</li></ul></dd>
 <dd>6. RESULT: Starting the controller object (where this parameter was created) and when it was not started, we should get checking the specifying input transport for initiative connections and their initialisation in described above way and with notification processed connection in the attribute "Processed connections".</dd></dl>
@@ -3793,5 +3816,5 @@ Mostly the same as the basic template "<a href="#pidUnif">PID signal, unified, v
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/ru">Libs/Main/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.8</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/ru">Libs/Main/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2025</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.8</td></tr></table></body>
 </html>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-23 15:36+0300\n"
+"POT-Creation-Date: 2025-03-08 17:38+0200\n"
 "PO-Revision-Date: 2007-10-23 18:19+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -106,6 +106,9 @@ msgstr "REQ весь ответ %d"
 #, fuzzy, c-format
 msgid "the response '%s' is not suitable to the request '%s'."
 msgstr "Ответ '%s' не соответствует запросу '%s'."
+
+msgid "Host error: "
+msgstr ""
 
 #, c-format
 msgid "Error the request: %s"

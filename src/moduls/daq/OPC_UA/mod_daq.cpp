@@ -1422,8 +1422,14 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	disable();
 	modif();
     }
-    else if(isLogic() && enableStat() && lCtx->func() && lCtx->cntrCmdProc(opt))	;
-    else TParamContr::cntrCmdProc(opt);
+    else if(isLogic() && enableStat() && lCtx->func() && lCtx->cntrCmdProc(opt)) {
+	if(owner().period()) opt->setAttr("updTm", r2s(1.5e-9*owner().period()));
+    }
+    else {
+	TParamContr::cntrCmdProc(opt);
+	if(a_path.find("/val/") == 0 && owner().period())
+	    opt->setAttr("updTm", r2s(1.5e-9*owner().period()));
+    }
 }
 
 //***************************************************

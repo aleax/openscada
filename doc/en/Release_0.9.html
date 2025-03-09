@@ -338,7 +338,7 @@
 <h2><span class="mw-headline" id="Updates"><span class="mw-headline-number">7</span> Updates</span></h2>
 <h3><span class="mw-headline" id=".5B01.01.7533.2F01.03.2025.5D_The_EIGHTH_update"><span class="mw-headline-number">7.1</span> [01.01.7533/01.03.2025] The EIGHTH update</span></h3>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
-<ul><li> <b>State:</b> <span style="color:red">preparing and building ...</span></li></ul>
+<ul><li> <b>State:</b> <span style="color:red">testing and post-building ...</span></li></ul>
 <p>The common releasing process for the users to estimate your expectations and for the developers to remind the tasks:<br />
 <b><u>1. The preparing and building week:</u></b><br />
 </p>
@@ -354,17 +354,16 @@
 <li> Copying the significant changes from the formed LTS ChangeLog to the related page of the release-update, taking the changes in the level more or even than "!!".</li>
 <li> Translating the release-update page(s), updating the <a href="To_do.html" title="Special:MyLanguage/Works/To do">ToDo</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Works/Road_map" title="Special:MyLanguage/Works/Road map">RoadMap</a>.</li>
 <li> Generating the actual offline documentation using the service procedure "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
-<li> Committing the LTS tree changes to the repository and building that.</li>
-<li> Announcing the release-update, also on <a class="external text" href="https://www.facebook.com/Roman.Savochenko" rel="nofollow noreferrer noopener" target="_blank">FaceBook</a> and <a class="external text" href="https://www.linkedin.com/in/roman-savochenko-71b50272/" rel="nofollow noreferrer noopener" target="_blank">LinkedIn</a>.</li>
-<li> Updating the <a class="external text" href="http://oscada.org/en/main/download/" rel="nofollow noreferrer noopener" target="_blank">Download page</a>.</li></ul>
+<li> Committing the LTS tree changes to the repository and building that.</li></ul>
 <p><b><u>2. The testing and post-building week(s):</u></b><br />
 </p>
-<ul><li> Hot testing the release build.</li>
+<ul><li> Announcing the release-update, also on <a class="external text" href="https://www.facebook.com/Roman.Savochenko" rel="nofollow noreferrer noopener" target="_blank">FaceBook</a> and <a class="external text" href="https://www.linkedin.com/in/roman-savochenko-71b50272/" rel="nofollow noreferrer noopener" target="_blank">LinkedIn</a>.</li>
+<li> Hot testing the release build.</li>
 <li> Finishing and fixing the ChangeLog translating and the documentation.</li>
 <li> Generating the actual offline documentation using the service procedure "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
-<li> Committing the release fixes to the repository and building that for the second build, and for each week of appearing critical fixes — the first week without the critical fixes means the final the LTS releasing, so, USERS — test closely the LTS release for do not complain to it final build!</li></ul>
+<li> Committing the release fixes to the repository and building that for the second build, and for each week of appearing critical fixes — the first week without the critical fixes means the final of the LTS releasing, so, USERS — test closely the LTS release for do not complain to its final build!</li></ul>
 </div>
-<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 70 bugs and appends MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=3010" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
+<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 70 bugs and appends MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=3011" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
 </p><p><b><u><a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Automation Linux distributive of the project OpenSCADA</a></u></b><br />
 </p>
 <ul><li> updating TDE to 14.1.3;</li>
@@ -404,7 +403,7 @@
 <ul><li> OpenSCADA "Transports" subsystem: 20 =&gt; <b>21</b></li>
 <li> DAQ.DAQGate: 2.13 =&gt; <b>2.14</b></li>
 <li> Archive.FSArch: 3.8 =&gt; <b>3.9</b></li>
-<li> Transport.SSL: 4.5 =&gt; <b style="color: red">5.0</b></li></ul>
+<li> Transport.SSL: 4.5 =&gt; <b style="color: red">5.1</b></li></ul>
 <dl><dd> (<a href="#Upd8SSLSockAddrResolv">Unification and overriding the address resolving in different ways</a>)</dd></dl>
 <ul><li> Transport.Sockets: 4.8 =&gt; <b style="color: red">5.0</b></li></ul>
 <dl><dd> (<a href="#Upd8SSLSockAddrResolv">Unification and overriding the address resolving in different ways</a>)</dd></dl>
@@ -417,8 +416,9 @@
 <li> UI.WebUser: 1.6 =&gt; <b style="color: red">2.0</b></li></ul>
 <dl><dd> (<a href="#Upd8WebUserExt">Expanding for support direct writing</a>)</dd></dl>
 <ul><li> UI.WebVision: 6.9 =&gt; <b>6.13</b></li>
+<li> UI.WebCfgD: 2.6 =&gt; <b>2.7</b></li>
 <li> LibsDB.OscadaLibs.base: 2.2 =&gt; <b>2.3</b></li></ul>
-<dl><dd><ul><li> initRemCntr: <b style="color: red">1.0</b></li>
+<dl><dd><ul><li> initRemCntr: <b style="color: red">1.1</b></li>
 <li> fileServerHTTP: 1.0 =&gt; <b>1.2</b></li></ul></dd></dl>
 <ul><li> LibsDB.OscadaLibs.LowDevLib: 1.5 =&gt; <b>1.6</b></li></ul>
 <dl><dd><ul><li> S1BP: <b style="color: red">1.0</b></li>
@@ -459,6 +459,7 @@
 <ul><li> tmplib_base: Appended by a template "Control the remote initiative connections (initRemCntr)", with documenting and completed translation to Ukrainian.</li>
 <li> Appended of the user "RemCntr" with password "RemCntr" and in the group DAQ for use in the initiative remote connections to the OpenSCADA server.</li>
 <li> Appended of the disabled transports "RemCntr" to Transport.Sockets and Transport.SSL, that is when you want to provide data of your station, you just enable one of them.</li></ul></li>
+<li> ModelsDB/{AGLKS/oscada_AGLKS.xml,Boiler/oscada_Boiler.xml}: Removing system groups without users, than allow the groups specify in libraries.</li>
 <li> FIX:Transports: TTransportOut appended by the function isFromInput() to detect automatically created objects from the input transport. The external initiative connections of the OpenSCADA hosts prevented from stop.</li></ul>
 <p><b><u><span id="Upd8ExpProjMan" title="#Upd8ExpProjMan">CONCEPTUAL &gt; Expanding the project management</span> </u></b><br />
 </p>
@@ -471,9 +472,19 @@
 <ul><li> LibsDB.OscadaLibs: Automatic updating some translation.</li>
 <li> FIX:LibsDB.vcaBase.wlb_Main.RootPgSo: The attribute "Procedure of the Demo play (demoPlayProc)" set to the type "Text (translate)".</li>
 <li> LibsDB.vcaBase.wlb_Main: Appended of the dynamic messages with Ukrainian translation for main ones of DiskSMART and UPS during representing by "Object properties (objProps)".</li>
+<li> SYS,DAQ,UI.VCAEngine: Implementing of disabling translation of string configuration fields, DAQ attributes, UI attributes at changing in the dynamic execution:
+<ul><li> SYS,DAQ,DB.{FireBird,MySQL,ODBC,PostgreSQL,SQLite}: appending the unified method <i>{TCfg,TVal}::isTransl()</i> of checking translation the element, and moving on its everywhere;</li>
+<li> TVal: appending the "mNoTransl" flag and functions of its treating: <i>noTransl()</i>, <i>setNoTransl()</i>, <i>TValue::setNoTransl()</i>;</li>
+<li> UI.VCAEngine::Attr: appending the "NoTransl" flag and its treating in <i>isTransl()</i>;</li>
+<li> translation is disabled:
+<ul><li> at writing through links of implementation the templates in <i>TPrmTempl::Impl::lnkOutput()</i>;</li>
+<li> at the User API call <i>TVal::set()</i>;</li>
+<li> UI.VCAEngine: at Widget attribute change in the Session context for widgets in processing and at writing to DAQ attribute by links.</li></ul></li>
+<li> the DAQ Parameters added of restoring the translation of dynamically changed configuration fields at load.</li></ul></li>
 <li> FIX:DAQ.OPC_UA,Protocol.HTTP,UI.{QTCfg,Vision}: Fixing and improving some original messages.</li>
 <li> FIX:DAQ: Fixing-finishing the dynamic translation for title of the controller and parameter object.
 <ul><li> FIX: Templates fixed-adapted to the dynamic translation in using the IO names.</li>
+<li> FIX: Fixing-finishing the dynamic translation of values requesting in the Control Request <b>TValue::"get:/serv/attr"</b> for non archiving elements.</li>
 <li> FIX:DAQGate: Some fixed in Ukrainian translation.</li>
 <li> FIX:JavaLikeCalk: Some improved in the translation.</li></ul></li>
 <li> FIX:Protocol.OPC_UA: Adaption to the dynamic translation in data requests.</li>
@@ -494,7 +505,7 @@
 <li> FIX:flb_doc.diagram: Adding of drawing non periodic direct data like months. Implementing of rounding big interval points by the Besier Cubic Curves.</li></ul></li>
 <li> LibsDB.vcaBase:
 <ul><li> wlb_Main:
-<ul><li> grph_panel,doc_panel: Moving in the size-depth field to the editable combobox with the digital number and human text multiplier, based on the new User API function <i>time2str()</i> and <i>str2time()</i>, that is removing the type field here.</li>
+<ul><li> grph_panel,doc_panel: Adding of checking for activity the controlled trend or document, and closing at its inactivity. Moving in the size-depth field to the editable combobox with the digital number and human text multiplier, based on the new User API function <i>time2str()</i> and <i>str2time()</i>, that is removing the type field here.</li>
 <li> docRepDay,docRepMonth,docUsersSet,docRepInstVals,docDin,docRep2WorkSh,docAlarmsRep,docMessRep: Adaptation to opening the document control panel after several seconds of starting-opening, that is for allowing the document control at displaying by QtWebengine.</li>
 <li> grpGraph,grpCadr,doc_panel,grph_panel,prescrEdit,prescrRun,prescrRunSimple,accept,treeSelect,calendar,userManager,alarmsStReport,docRepDay,docRepMonth,docRepYear},wlb_prescr.{prescrEdit,prescrRun,prescrRunSimple: The variable <i>ev_cur</i> renamed to <i>evCur</i>.</li>
 <li> <span id="Upd8StoreHouse" title="#Upd8StoreHouse">storeHouse</span>: Expanded by support of including files both to the MySQL LONGTEXT field and to FS. Appending preview the loaded images in the form and the item report.</li>
@@ -513,6 +524,7 @@
 </p>
 <ul><li> SYS: Type of the limit variables "limUserFile_SZ", "limUserIts_N" changed to unsigned.
 <ul><li> TCntrNode: Moving from static with renaming some arguments: <i>ctrMkNode()</i>, <i>ctrMkNode2()</i>, <i>_ctrMkNode()</i>, <i>ctrChkNode()</i>. Changing prototype of the <i>objPropSet()</i> function in the "val" argument.</li>
+<li> TVal: Moving to constant for <i>fld()</i>.</li>
 <li> TFld: <i>cntrCmdMake()</i> added by an argument "cntrO" with renaming some arguments.</li>
 <li> TConfig: <i>cntrCmdMake()</i> and <i>cntrCmdProc()</i> added by an argument "cntrO" with renaming some arguments.</li></ul></li>
 <li> Security: Renaming the function <i>TSecurity::access()</i> argument "access" to "perm", also for User API.</li>
@@ -522,6 +534,10 @@
 </p>
 <ul><li> SYS: Appending the <i>sysTmJmp()</i> function as a variant of <i>sysTm()</i>.
 <ul><li> Appended by the "DEF_HTaskPer" definition.</li>
+<li> TError: New error "Tr_ErrUnknown".</li>
+<li> TCfg,TVal: New unified method <i>isTransl()</i>.</li>
+<li> TVal: New functions: <i>noTransl()</i>, <i>setNoTransl()</i>.</li>
+<li> TValue: New function <i>setNoTransl()</i>.</li>
 <li> TCntrNode: New functions: <i>nodeAccess()</i>, <i>nodeLoadACL()</i>, <i>nodeLoadACLSnthHgl()</i>, <i>ctrMkNode3()</i>, <i>ctrChkNode2()</i>, <i>property()</i>, <i>propertyClrGrp()</i>. Adding a User API function <i>property()</i>.</li>
 <li> Appended by the limiting option "limObjDscr_SZ" for the description configuration fields (DESCR).</li>
 <li> Adding function <i>str2time()</i> with parsing the human time from <i>time2str()</i>, which added also by the "inParts" argument.</li>
@@ -538,6 +554,8 @@
 <li> FIX:LibsDB.OscadaLibs.tmplib_base.fileServerHTTP,UI.WebVision: Unified in processing the data transferring in the sequence: ranges of media in the head, big data by chunks, simple single package for small data.</li>
 <li> Archive.{MessArchive,MessArchiver,ValArchive},DAQ: Moving in the size-depth field of the Control Interface to the editable combobox with the digital number and human text multiplier, based on the new function <i>time2str()</i> and <i>str2time()</i>.</li>
 <li> .,DAQ.{BlockCalc,JavaLikeCalc},Protocol.{ModBus,OPC_UA,UserProtocol},UI.{VCAEngine,WebUser}: Appended by the limiting option "limObjDscr_SZ" for the description configuration fields (DESCR) with default value 1000 and range [300...1000000].</li>
+<li> DAQ.{LogicLev,ModBus,OPC_UA,Siemens},UI.{QTCfg,WebCfgD}: Implementing of ordering value of the updating time of the configuration interface of the calculated objects, to update after the object processing.</li>
+<li> FIX:Transports,Protocols: Unification of errors generation in calls <i>messProtIO()</i> and its User API variant <i>messIO(XMLNodeObj req, string prt)</i> in accordance the documentation, that is obligatory with the error code.</li>
 <li> The commandline options appended by getting default value from the environment variable "OSCADA_{cmd}", what is enabled itself by the environment variable "OSCADA_CMD_EN".</li></ul>
 <p><b><u>DB</u></b><br />
 </p>
@@ -556,7 +574,9 @@
 <ul><li> The IO log items appended by whole package (or aggregation) size and the aggregation default time set to 1 second. Using the variables "ReqTm", "ReqMode", "ToTmOut", "InBufSz", "ReqAnsw" moved to the individual space of the transport object.</li>
 <li> <span id="Upd8SSLSockAddrResolv" title="#Upd8SSLSockAddrResolv">Sockets,SSL</span>: <i>TTransSock::getAddr()</i> renamed to <i>TTransSock::addrGet()</i> and the address resolving moved to a new function <i>TTransSock::addrResolve()</i> with direct resolving the static addresses and dynamic resolving by <i>gethostbyname()</i> due to <i>getaddrinfo()</i> has problems with reenteranting (on old systems) and global lock causes long hangs on all addresses at problems with DNS. Also appended a commandline option "--getaddrinfo" to enable it for yourself.
 <ul><li> FIX: Resolving a hard-detected problem of substitution wrong addresses during the addresses resolving by <i>getservbyname_r()</i> from other thread, that is from GLibC 2.24 there forced using <i>getaddrinfo()</i> as more correct or <i>inet_pton()</i> + locked <i>getservbyname_r()</i> on old systems.</li></ul></li>
-<li> SSL: Appended of implementation <i>TTransportIn::writeTo()</i> with moving to map in holding the SSockIn structure. Input part of the transports switched to use unified <i>TTransSock::addrResolve()</i> for precursory resolving all dynamic addresses and pass ready static addresses to <i>BIO_new_accept()</i>.</li></ul>
+<li> FIX:SSL: Fixed in processing responses of the output transports from initiative connections, especially for no response.
+<ul><li> Appended of implementation <i>TTransportIn::writeTo()</i> with moving to map in holding the SSockIn structure.</li>
+<li> Input part of the transports switched to use unified <i>TTransSock::addrResolve()</i> for precursory resolving all dynamic addresses and pass ready static addresses to <i>BIO_new_accept()</i>.</li></ul></li></ul>
 <p><b><u>Transport Protocols</u></b><br />
 </p>
 <ul><li> <span id="Upd8OPC_UA" title="#Upd8OPC_UA">OPC_UA</span>: Implementing the true authentication with checking permission to the DAQ-Nodes for the user:
@@ -572,7 +592,8 @@
 <li> FIX:WebVision: Requesting data of the resources added by support chunks for big data and conversion only for small images. The Save type of the buttons appended by support the media ranges with storing the data in WebVision context for retries.</li>
 <li> <span id="Upd8WebUserExt" title="#Upd8WebUserExt">WebUser</span>: Switched to the generic function <i>HTTP()</i> of transition from Protocol.HTTP. Appended by an optional attribute "Transport (tr)" of the processing procedures and templates, taken from the protocol object. The attribute "Result (rez)" allowed in empty value to prevent sending any response, that is meaning direct writing by <i>TTransportIn::writeTo()</i>.</li>
 <li> QTCfg: The Back and Forward buttons expanded by a menu of the direct items accessing.</li>
-<li> FIX:Vision: Preventing fullscreen mode fault in some XOrg conditions, when the fullscreen Qt-flag occasionally cleared, that is the flag was doubled internally. Reproduced often with Qt6 on Debian 12.</li></ul>
+<li> FIX:Vision: Preventing fullscreen mode fault in some XOrg conditions, when the fullscreen Qt-flag occasionally cleared, that is the flag was doubled internally. Reproduced often with Qt6 on Debian 12.</li>
+<li> WebCfgD: Expanding of call <i>pageRefresh()</i> by integrating the lag time.</li></ul>
 <h3><span class="mw-headline" id=".5B01.01.7532.2F01.03.2024.5D_The_SEVENTH_update"><span class="mw-headline-number">7.2</span> [01.01.7532/01.03.2024] The SEVENTH update</span></h3>
 <p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 60 bugs and appends VERY MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2967" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> <b><u>User significant actions on the update</u></b><br />
@@ -2335,5 +2356,5 @@ FIX: The "Translations" tab expansion and fixing for:
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/en">Documents/Release_0.9/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.8</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/en">Documents/Release_0.9/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2025</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.8</td></tr></table></body>
 </html>

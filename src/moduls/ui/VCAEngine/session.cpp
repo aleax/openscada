@@ -2256,8 +2256,7 @@ void SessWdg::calc( bool first, bool last, int pos )
 		    s_attr  = TSYS::pathLev(func()->io(iIO)->rez(), 1);
 		    try {
 			attr = (sw_attr == ".") ? attrAt(s_attr) : wdgAt(sw_attr).at().attrAt(s_attr);
-			if(attr.at().type() == TFld::String && attr.at().flgGlob()&TFld::TransltText)
-			    set(iIO, trD_LU(attr.at().getS(),reqLang,reqUser));
+			if(attr.at().isTransl()) set(iIO, trD_LU(attr.at().getS(),reqLang,reqUser));
 			else set(iIO, attr.at().get());
 		    } catch(TError &) { }
 		}
@@ -2378,13 +2377,22 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
 		if(vl.at().fld().type() == TFld::Object && detOff < (int)cfg.cfgVal().size()) {
 		    vl.at().getO().at().propSet(cfg.cfgVal().substr(detOff), 0, cfg.get());
 		    vl.at().setO(vl.at().getO());	//For modify object sign
-		} else vl.at().set(cfg.get());
+		}
+		else {
+		    //Disabling the attributes translation at change
+		    if(vl.at().isTransl()) vl.at().setNoTransl(true);
+
+		    vl.at().set(cfg.get());
+		}
 
 		//SYS->daq().at().attrAt(cfg.cfgVal().substr(obj_tp.size()),0,true).at().set(cfg.get());
 	    }
 	    else if(obj_tp == "wdg:")	attrAt(cfg.cfgVal().substr(obj_tp.size()),0).at().set(cfg.get());
 	} catch(...)	{ }
     }
+
+    //Disabling the attributes translation at change during running
+    if(cfg.isTransl() && process()) cfg.setFlgSelf((Attr::SelfAttrFlgs)(cfg.flgSelf()|Attr::NoTransl), true);
 
     return true;
 }
@@ -2461,8 +2469,8 @@ TVariant SessWdg::objFuncCall( const string &id, vector<TVariant> &prms, const s
 	if(prms.size() > 1 && prms[1].getB())	return sessAttr(prms[0].getS());
 	else if(attrPresent(prms[0].getS())){
 	    AutoHD<Attr> a = attrAt(prms[0].getS());
-	    if(a.at().type() == TFld::String && a.at().flgGlob()&TFld::TransltText)
-		return trD_LU(a.at().getS(), ownerSess()->reqLang(),ownerSess()->reqUser());
+	    if(a.at().isTransl())
+		return trD_LU(a.at().getS(), ownerSess()->reqLang(), ownerSess()->reqUser());
 	    else return a.at().get();
 	}
 	return string("");

@@ -1190,8 +1190,6 @@ void TSYS::setTaskInvPhs( int vl )
 
 void TSYS::sighandler( int signal, siginfo_t *siginfo, void *context )
 {
-    bool isPrc = false;
-
     switch(signal) {
 	case SIGINT:
 	    SYS->mStopSignal = signal;
@@ -1214,15 +1212,8 @@ void TSYS::sighandler( int signal, siginfo_t *siginfo, void *context )
 	//Signals with call the crash handler
 	//----------------------------------
 	case SIGFPE:
-	    if(!isPrc) SYS->mess_sys(TMess::Warning, _("Floating point exception!"));
-	    isPrc = true;
 	case SIGABRT:
-	    if(!isPrc) SYS->mess_sys(TMess::Emerg, _("Program aborted!"));
-	    isPrc = true;
 	case SIGSEGV:
-	    if(!isPrc) SYS->mess_sys(TMess::Emerg, _("Segmentation fault signal!"));
-	    isPrc = true;
-
 	    // Call the crash handler
 	    system((string("dPrj=") + oscd_datadir_full +
 		" dPrjUser=" + SYS->prjUserDir() +

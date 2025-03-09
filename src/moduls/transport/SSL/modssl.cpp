@@ -56,7 +56,7 @@
 #define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"5.0.2"
+#define MOD_VER		"5.1.0"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and supported SSL-TLS depending on the library version.")
@@ -1656,16 +1656,32 @@ repeate:
 		throw TError(nodePath().c_str(),_("Error reading (select): %s"), err.c_str());
 	    }
 	    else if(FD_ISSET(sockFd,&rd_fd)) {
-		while((ret=BIO_read(conn,iBuf,iLen)) == -1 && errno == EAGAIN) sched_yield();
-		if(ret < 0) {
+		//!!!! Reading in that way since some time read() return < 0 after the select() pass,
+		//     especially from initiative connections.
+		// * Force waiting any data in the request mode and not EAGAIN
+		for(int iRtr = 0; (ret=BIO_read(conn,iBuf,iLen)) == -1 && errno == EAGAIN && iRtr < /*time*/mTmNext; ++iRtr)
+		    TSYS::sysSleep(1e-3);
+
+		// * Force errors
+		// * Retry if any data was wrote, but no reply there in the request mode
+		if(ret < 0 || (ret == 0 && writeReq && !notReq)) {
 		    err = (ret < 0) ? TSYS::strMess("%s (%d)",strerror(errno),errno) : _("No data, the connection seems closed");
-		    stop();
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error reading: %s"), err.c_str());
 		    if(logLen()) pushLogMess(TSYS::strMess(_("Error reading: %s"),err.c_str()));
-		    // * Pass to retry in the request mode and on the successful writing
-		    if(!writeReq || notReq) throw TError(nodePath().c_str(),_("Error reading: %s"), err.c_str());
-		    start();
-		    goto repeate;
+		    if(!notReq && writeReq) {
+			//!!!! For the initial input connection we must keep the connection up to the last
+			if(addr().find(S_NM_SOCKET ":") != string::npos) {
+			    if(reqTry >= wAttempts) stop();
+			    else goto repeate;
+			}
+			//!!!! Must be reconnected to prevent the possibility of getting response of the previous request.
+			else {
+			    stop();
+			    if(ret == 0 && wAttempts == 1) wAttempts = 2;	//!!!! To restore the lost connections
+			    if(reqTry < wAttempts) { start(); goto repeate; }
+			}
+		    }
+		    throw TError(nodePath(), err);
 		}
 		trIn += vmax(0, ret);
 	    }

@@ -320,7 +320,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			rez.append(buf, resp_len);
 		    }
 		} catch(TError &er) {	//By possible the send request breakdown and no response
-		    if(err.empty()) err = i2s(TError::Tr_ErrDevice)+":"+_("Device error: ") + er.mess;
+		    if(err.empty()) err = i2s(TError::Tr_ErrDevice)+":"+_("Host error: ") + er.mess;
 		    else if(err.find(er.mess) == string::npos) err += "; " + er.mess;
 		    continue;
 		}
@@ -352,7 +352,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			rez.append(buf, resp_len);
 		    }
 		} catch(TError &er) {	//By possible the send request breakdown and no response
-		    if(err.empty()) err = i2s(TError::Tr_ErrDevice)+":"+_("Device error: ") + er.mess;
+		    if(err.empty()) err = i2s(TError::Tr_ErrDevice)+":"+_("Host error: ") + er.mess;
 		    else if(err.find(er.mess) != string::npos) err += "; " + er.mess;
 		    continue;
 		}
@@ -386,10 +386,9 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    default: err = TSYS::strMess(_("12:%02X:Unknown error."),(unsigned char)(pdu[1]));	break;
 		}
 	}
-    } catch(TError &er) { err = i2s(TError::Tr_ErrDevice)+":"+_("Device error: ") + er.mess; }
+    } catch(TError &er) { err = i2s(TError::Tr_ErrDevice)+":"+_("Host error: ") + er.mess; }
 
     io.setText(err.empty()?pdu:"");
-    if(!err.empty()) io.setAttr("err", err);
 
     //Prepare log
     if(prtLen() || debugCat.size()) {
@@ -407,6 +406,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    pushPrtMess(atm2s(time(NULL))+" "+prt+": '"+sid+"' --> "+i2s(node)+"("+tro.workId()+")\n"+mess+"\n");
 	if(debugCat.size()) mess_debug_(debugCat.c_str(), mess.c_str());
     }
+
+    if(!err.empty()) { io.setAttr("err", err); throw TError(nodePath(), err); }
 }
 
 void TProt::setPrtLen( int vl )

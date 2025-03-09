@@ -3219,7 +3219,7 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <tr>
 <td> <span id="initRemCntr" title="#initRemCntr"><h3><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D1.8C_.D0.B2.D1.96.D0.B4.D0.B4.D0.B0.D0.BB.D0.B5.D0.BD.D0.B8.D1.85_.D1.96.D0.BD.D1.96.D1.86.D1.96.D0.B0.D1.82.D0.B8.D0.B2.D0.BD.D0.B8.D1.85_.D0.BF.D1.96.D0.B4.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D1.8C_.28initRemCntr.29"><span class="mw-headline-number">3.2</span> Контроль віддалених ініціативних підключень (<a href="Libs_Main.html#initRemCntr" title="Special:MyLanguage/Libs/Main">initRemCntr</a>)</span></h3></span>
 </td>
-<td> 1.0 </td>
+<td> 1.1 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk 
@@ -3233,12 +3233,12 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <ul><li> виявлення нового підключення від віддаленого хосту, яке не має ІД;</li>
 <li> надсилання ознайомчого прямого запиту за встановленим підключенням для отримання КЛЮЧА хосту, якщо це підключення вже раніше було, і для отримання інформації щодо хосту для створення ІД хосту;</li>
 <li> встановлення ІД для підключення;</li>
-<li> створення запису у таблиці хостів OpenSCADA для підключення і надсилання подальших запитів вже через хост;</li>
-<li> створення на віддаленому хості представницького Логічного Контролеру;</li>
-<li> створення на віддаленому хості представницького Об'єкту Контролеру DAQ.System у автоматичному режимі, за відсутності інших там;</li>
+<li> створення запису у <a href="Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">таблиці хостів OpenSCADA</a> для підключення і надсилання подальших запитів вже через хост;</li>
+<li> створення на віддаленому хості представницького <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">Логічного Контролеру</a>;</li>
+<li> створення на віддаленому хості представницького <a href="Modules/System.html" title="Special:MyLanguage/Modules/System">Об'єкту Контролеру DAQ.System</a> у автоматичному режимі, за відсутності інших там;</li>
 <li> опрацювання наявних Об'єктів Контролеру DAQ.System щодо посилань параметрів Логічного Рівня на них і створення деяких логічних параметрів обробки;</li>
 <li> запис згенерованого ключа рядком "<b>SrcKey: {ID}</b>" до опису Логічного Контролеру у якості ознаки завершення ініціалізації;</li>
-<li> створення Об'єкту Контролеру у DAQ.DAQGate із підключенням до віддаленого Логічного Контролеру.</li></ul>
+<li> створення Об'єкту Контролеру у <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQ.DAQGate</a> із підключенням до віддаленого Логічного Контролеру.</li></ul>
 <p>ІД віддаленого хосту формується у вигляді "<b>{HostDomain}{StatName}{RandKey}</b>" і з обмеженням у 20ть символів, де:
 </p>
 <ul><li> <i>HostDomain</i> — мережеве ім'я-домен хосту;</li>
@@ -3283,6 +3283,19 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <td> 5000
 </td></tr>
 <tr>
+<td> accessTm </td>
+<td> Час доступу, години
+<p>Використовується для повтору створення представницьких об'єктів недоступних хостів і для видалення старих підключень.<br />
+Нуль або негативне для вимкнення контролю!
+</p>
+</td>
+<td> Цілий </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Константа </td>
+<td> 24
+</td></tr>
+<tr>
 <td> cntrUser </td>
 <td> Доступ: користувач </td>
 <td> Рядок </td>
@@ -3317,6 +3330,15 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <td> Тільки читання </td>
 <td> Змінна </td>
 <td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Об'єкт </td>
+<td> Об'єкт </td>
+<td> Вхід </td>
+<td> Не атрибут </td>
+<td> Змінна </td>
+<td> 0
 </td></tr>
 <tr>
 <td> f_stop </td>
@@ -3354,7 +3376,7 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <td> Змінна </td>
 <td> 1000
 </td></tr></table>
-<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainInitRemCntrCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="312" src="files/LibsMainInitRemCntrCfg_uk.png" width="437" /></a></div>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainInitRemCntrCfg_uk.png" title="Конфігурація."><img alt="Конфігурація." height="340" src="files/LibsMainInitRemCntrCfg_uk.png" width="390" /></a></div>
 <p><b><u>Конфігурація та використання</u></b><br />
 </p>
 <dl><dd>1. Створити вхідний транспорт прийняття ініціативних підключень у модулі "<a href="Modules/Sockets.html#InTr" title="Special:MyLanguage/Modules/Sockets">Сокети</a>" або "<a href="Modules/Sockets.html#InTr" title="Special:MyLanguage/Modules/Sockets">SSL</a>" із назвою на кшталт "Sockets.InitRemCntr".</dd>
@@ -3364,6 +3386,7 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <dd>5. У вкладці "Конфігурація шаблону" об'єкту логічного параметру маєте встановити:
 <ul><li> <i>Вхідний транспорт</i> — у значення ідентифікатору вхідного транспорту, створеного у пункті 1, на кшталт "Sockets.InitRemCntr";</li>
 <li> <i>Час підключення</i> — час підключення до ініціативних хостів після якого закривати підключення;</li>
+<li> <i>Час доступу</i> — використовується для повтору створення представницьких об'єктів недоступних хостів і для видалення старих підключень; нуль або негативне для вимкнення контролю;</li>
 <li> <i>Доступ: користувач і пароль</i> — користувач і пароль віддаленого хосту із правами створення там Логічного Контролеру і Об'єкту Контролеру DAQ.System, тобто користувач мусить бути включеним до групи "DAQ";</li>
 <li> <i>Об'єкт контролю у DAQ.LogicLev і DAQ.System</i> — у ІД контрольованого-створюваного Об'єкту Контролеру на віддаленому хості.</li></ul></dd>
 <dd>6. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати перевірку визначеного вхідного транспорту на предмет ініціативних підключень і їх ініціалізацію у описаний вище спосіб, та із зауваженням опрацьованих підключень у атрибуті "Опрацьовані підключення".</dd></dl>
@@ -3794,5 +3817,5 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/uk">Libs/Main/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.8</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/uk">Libs/Main/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2025</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.8</td></tr></table></body>
 </html>

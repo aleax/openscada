@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ModBus file: modbus_daq.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1587,8 +1587,14 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	disable();
 	modif();
     }
-    else if(isLogic() && enableStat() && lCtx->func() && lCtx->cntrCmdProc(opt)) ;
-    else TParamContr::cntrCmdProc(opt);
+    else if(isLogic() && enableStat() && lCtx->func() && lCtx->cntrCmdProc(opt)) {
+	if(owner().period()) opt->setAttr("updTm", r2s(1.5e-9*owner().period()));
+    }
+    else {
+	TParamContr::cntrCmdProc(opt);
+	if(a_path.find("/val/") == 0 && owner().period())
+	    opt->setAttr("updTm", r2s(1.5e-9*owner().period()));
+    }
 }
 
 //***************************************************

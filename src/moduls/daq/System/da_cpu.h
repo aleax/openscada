@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_cpu.h
 /***************************************************************************
- *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,12 +34,12 @@ class CPU: public DA
     public:
 	//Data
 	struct tval {
-	    tval( long iuser = 0, long inice = 0, long isys = 0, long iidle = 0 ) :
+	    tval( long long unsigned iuser = 0, long long unsigned inice = 0, long long unsigned isys = 0, long long unsigned iidle = 0 ) :
 		user(iuser), nice(inice), sys(isys), idle(iidle) { }
-	    long user;
-	    long nice;
-	    long sys;
-	    long idle;
+	    long long unsigned user;
+	    long long unsigned nice;
+	    long long unsigned sys;
+	    long long unsigned idle;
 	};
 
 	//Methods

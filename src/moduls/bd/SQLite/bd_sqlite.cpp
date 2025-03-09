@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"4.0.13"
+#define MOD_VER		"4.0.14"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -508,8 +508,8 @@ void MTable::setSQLVal( TCfg &cf, const string &ival, bool tr )
     switch(cf.fld().type()) {
 	case TFld::String:
 	    if(!cf.extVal()) {
-		if(!tr || (cf.fld().flg()&TFld::TransltText && !cf.noTransl())) cf.setS(val);
-		if(!tr && cf.fld().flg()&TFld::TransltText && !cf.noTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
+		if(!tr || cf.isTransl()) cf.setS(val);
+		if(!tr && cf.isTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
 	    }
 	    else {
 		if(!tr) {

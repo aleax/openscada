@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.UserProtocol file: user_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.6.9"
+#define MOD_VER		"1.6.10"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -429,29 +429,36 @@ void UserPrt::outMess( XMLNode &io, TTransportOut &tro )
 {
     if(ioTrOut < 0 || ioIO < 0) return;
 
-    TValFunc funcV;
+    try {
+	TValFunc funcV;
 
-    //Get user protocol for using
-    if(DAQTmpl().size())
-	funcV.setFunc(&SYS->daq().at().tmplLibAt(TSYS::strParse(DAQTmpl(),0,".")).at().at(TSYS::strParse(DAQTmpl(),1,".")).at().func().at());
-    else funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(workOutProg())).at());
+	//Get user protocol for using
+	if(DAQTmpl().size())
+	    funcV.setFunc(&SYS->daq().at().tmplLibAt(TSYS::strParse(DAQTmpl(),0,".")).at().at(TSYS::strParse(DAQTmpl(),1,".")).at().func().at());
+	else funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(workOutProg())).at());
 
-    // Restoring the function running for stopping early by the safety timeout
-    if(funcV.func() && !funcV.func()->startStat()) funcV.func()->setStart(true);
+	// Restoring the function running for stopping early by the safety timeout
+	if(funcV.func() && !funcV.func()->startStat()) funcV.func()->setStart(true);
 
-    MtxAlloc res(tro.reqRes(), true);
+	MtxAlloc res(tro.reqRes(), true);
 
-    //Load inputs
-    AutoHD<XMLNodeObj> xnd(new XMLNodeObj());
-    funcV.setO(ioIO, xnd);
-    xnd.at().fromXMLNode(io);
-    funcV.setO(ioTrOut, new TCntrNodeObj(AutoHD<TCntrNode>(&tro),"root"));
-    //Call processing
-    funcV.calc();
-    //Get outputs
-    xnd.at().toXMLNode(io);
+	//Load inputs
+	AutoHD<XMLNodeObj> xnd(new XMLNodeObj());
+	funcV.setO(ioIO, xnd);
+	xnd.at().fromXMLNode(io);
+	funcV.setO(ioTrOut, new TCntrNodeObj(AutoHD<TCntrNode>(&tro),"root"));
+	//Call processing
+	funcV.calc();
+	//Get outputs
+	xnd.at().toXMLNode(io);
 
-    cntOutReq++;
+	cntOutReq++;
+    }
+    catch(TError &err) {
+	if(!s2i(err.mess)) err.mess = (TError::Tr_ErrUnknown)+":"+err.mess;
+	io.setAttr("err", err.mess);
+	throw TError(nodePath(), err.mess);
+    }
 }
 
 void UserPrt::perSYSCall( )

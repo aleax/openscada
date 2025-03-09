@@ -436,7 +436,7 @@ bool TUser::cfgChange( TCfg &co, const TVariant &pc )
 
 void TUser::load_( TConfig *icfg )
 {
-    if(!SYS->chkSelDB(DB())) throw TError();
+    if(!icfg && !SYS->chkSelDB(DB())) throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
     else TBDS::dataGet(fullDB(), owner().nodePath()+tbl(), *this);
@@ -585,7 +585,7 @@ string TGroup::tbl( ) const		{ return owner().subId()+"_grp"; }
 
 void TGroup::load_( TConfig *icfg )
 {
-    if(!SYS->chkSelDB(DB())) throw TError();
+    if(!icfg && !SYS->chkSelDB(DB())) throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
     else TBDS::dataGet(fullDB(), owner().nodePath()+tbl(), *this);

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.SelfSystem 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-23 15:36+0300\n"
+"POT-Creation-Date: 2025-03-08 17:38+0200\n"
 "PO-Revision-Date: 2009-08-19 09:06+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -107,6 +107,9 @@ msgstr "REQ volle Antwort %d"
 msgid "the response '%s' is not suitable to the request '%s'."
 msgstr "die Antwort '%s' ist nicht für die Anfrage '%s' geeignet."
 
+msgid "Host error: "
+msgstr "Hostfehler: "
+
 #, c-format
 msgid "Error the request: %s"
 msgstr "Fehler bei der Anfrage: %s"
@@ -141,8 +144,5 @@ msgstr "Anfrage bearbeitet: '%s', Zeit: %g ms."
 
 #, c-format
 msgid "Response saved to a stream and packed: '%s': %d, time: %g ms."
-msgstr ""
-"Antwort in einem Stream gespeichert und gepackt: '%s': %d, Zeit: %g ms."
+msgstr "Antwort in einem Stream gespeichert und gepackt: '%s': %d, Zeit: %g ms."
 
-#~ msgid "Lower limit of compression"
-#~ msgstr "Untergrenze der Komprimierung"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-09 23:31+0200\n"
+"POT-Creation-Date: 2025-03-08 19:15+0200\n"
 "PO-Revision-Date: 2008-10-13 19:06+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -28,13 +28,15 @@ msgstr ""
 "Надає транспорт, заснований на безпечному шарі сокетів. Використано OpenSSL "
 "та підтримуються SSL-TLS залежно від версії бібліотеки."
 
+#, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "    --getaddrinfo[=<on>] Use getaddrinfo() for resolving all addresses.\n"
 "\n"
 msgstr ""
 "======================= Опції модуля <%s:%s> =============================\n"
-"    --getaddrinfo[=<on>] Використати getaddrinfo() для вирішення усіх адрес.\n"
+"    --getaddrinfo[=<on>] Використати getaddrinfo() для вирішення усіх "
+"адрес.\n"
 "\n"
 
 msgid "State"
@@ -146,7 +148,8 @@ msgstr "Адреса хосту '%s'. "
 
 #, c-format
 msgid "Connections %d, opened %d, last %s, closed by the limit %d. "
-msgstr "Підключень %d, відкрито %d, останнє %s, закрито з'єднань за лімітом %d. "
+msgstr ""
+"Підключень %d, відкрито %d, останнє %s, закрито з'єднань за лімітом %d. "
 
 #, c-format
 msgid "Traffic in %s, out %s. "
@@ -179,7 +182,8 @@ msgstr "Помилка запису файлу '%s'."
 msgid ""
 "Specify a certificate file or directly the certificates and private key with "
 "password!"
-msgstr "Визначте файл сертифікатів або прямо сертифікати і приватний ключ із паролем!"
+msgstr ""
+"Визначте файл сертифікатів або прямо сертифікати і приватний ключ із паролем!"
 
 msgid "Connected"
 msgstr "Під'єднано"
@@ -478,4 +482,3 @@ msgstr "Інтервали часу"
 
 msgid "Attempts"
 msgstr "Спроб"
-

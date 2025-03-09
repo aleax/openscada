@@ -277,7 +277,7 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
 			    vl = (fnd?fnd:nd)->text(true), isPresent = true;
 
 			// Checking for the translation
-			if(cf.fld().flg()&TFld::TransltText && !cf.noTransl() && (!isPrm || cf_el[iEl] == "val")) {
+			if(cf.isTransl() && (!isPrm || cf_el[iEl] == "val")) {
 			    vl_tr = "";
 			    if(!Mess->translDyn()) {
 				// From attribute
@@ -373,7 +373,7 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, char f
 			    vl = (fnd?fnd:nd)->text(true), isPresent = true;
 
 			//  Checking for the translation
-			if(cf.fld().flg()&TFld::TransltText && !cf.noTransl() && (!isPrm || cf_el[iEl] == "val")) {
+			if(cf.isTransl() && (!isPrm || cf_el[iEl] == "val")) {
 			    vl_tr = "";
 			    if(!Mess->translDyn()) {
 				//  From attribute
@@ -529,7 +529,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char f
 			    wel->setAttr(vnm+"_ext", cf.getS(TCfg::ExtValTwo));
 
 			// Updating the translation cache of the dynamic mode
-			if(Mess->translDyn() && cf.fld().flg()&TFld::TransltText && !cf.noTransl()) {
+			if(Mess->translDyn() && cf.isTransl()) {
 			    tVl = isPrm ? wel->text(true) :
 					  ((tVl=wel->text(true)).size() ? tVl : wel->attr(vnm));
 			    Mess->translIdxCacheUpd(tVl, "", svalBASE, "cfg:"+path+"#"+vnm);
@@ -1627,7 +1627,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
 
 		// Translation
 		string svalRAW = u_cfg.getS(), toLang = Mess->langCode(), svalBASE = sval, svalBASE_RAW = svalRAW;
-		bool isTransl = (u_cfg.fld().flg()&TFld::TransltText && !u_cfg.noTransl() && Mess->isMessTranslable(sval));
+		bool isTransl = (u_cfg.isTransl() && Mess->isMessTranslable(sval));
 		//  ... system prestored
 		bool isSysPreStor = (isTransl && TSYS::strParse(svalRAW,0,string(1,0)) != svalRAW && TSYS::strParse(svalRAW,2,string(1,0)).empty());
 		if(isSysPreStor) {
@@ -1670,7 +1670,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
 		}
 
 		// Filling the translation fields in the DYNAMIC tanslation mode
-		if(Mess->translDyn() && !u_cfg.isKey() && u_cfg.view() && u_cfg.fld().flg()&TFld::TransltText && !u_cfg.noTransl()) {
+		if(Mess->translDyn() && !u_cfg.isKey() && u_cfg.view() && u_cfg.isTransl()) {
 		    trCacheUpd.push_back(u_cfg.name()+string(1,0)+svalBASE_RAW+string(1,0)+svalRAW+(isTransl?string(1,0)+toLang:""));
 		    for(unsigned iFld = 0; iFld < tblStrct.size(); iFld++)
 			if(tblStrct[iFld].nm.size() > 3 && TSYS::strParse(tblStrct[iFld].nm,1,"#") == cf_el[iEl] &&

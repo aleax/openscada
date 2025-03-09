@@ -43,7 +43,7 @@
 #define MOD_NAME	trS("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"4.5.2"
+#define MOD_VER		"4.5.3"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -2191,8 +2191,14 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	disable();
 	modif();
     }
-    else if(isLogic() && enableStat() && lCtx->cntrCmdProc(opt))	;
-    else TParamContr::cntrCmdProc(opt);
+    else if(isLogic() && enableStat() && lCtx->cntrCmdProc(opt)) {
+	if(owner().period()) opt->setAttr("updTm", r2s(1.5e-9*owner().period()));
+    }
+    else {
+	TParamContr::cntrCmdProc(opt);
+	if(a_path.find("/val/") == 0 && owner().period())
+	    opt->setAttr("updTm", r2s(1.5e-9*owner().period()));
+    }
 }
 
 //***************************************************

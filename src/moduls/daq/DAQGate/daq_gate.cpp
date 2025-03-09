@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.14.2"
+#define MOD_VER		"2.14.4"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -1167,8 +1167,11 @@ void TMdPrm::load_( )
 	    XMLNode *aEl = attrsNd.childGet(iEl);
 	    string aId = aEl->attr("id");
 	    if(vlPresent(aId)) continue;
-	    pEl.fldAdd(new TFld(aId.c_str(),aEl->attr("nm").c_str(),(TFld::Type)s2i(aEl->attr("tp")),
-		s2i(aEl->attr("flg")),"","",aEl->attr("vals"),aEl->attr("names")));
+	    TFld::Type aTp = (TFld::Type)s2i(aEl->attr("tp"));
+	    int aFlg = s2i(aEl->attr("flg"));
+	    if(aTp == TFld::String) aFlg &= (~TFld::TransltText);	//There is no sense in translation obtained from remote host
+	    pEl.fldAdd(new TFld(aId.c_str(),aEl->attr("nm").c_str(),aTp,aFlg,
+				"","",aEl->attr("vals"),aEl->attr("names")));
 	    vlAt(aId).at().setHasArch((char)EVAL_BOOL);
 	    //vlAt(aEl->attr("id")).at().setS(aEl->text());
 	}
@@ -1234,9 +1237,11 @@ void TMdPrm::sync( )
 		als.push_back(aId);
 
 		if(!vlPresent(aId)) {
-		    TFld::Type tp = (TFld::Type)s2i(ael->attr("tp"));
-		    pEl.fldAdd(new TFld(aId.c_str(),ael->attr("nm").c_str(),tp,
-			(s2i(ael->attr("flg"))&(TFld::Selectable|TFld::NoWrite|TFld::HexDec|TFld::OctDec|TFld::FullText))|TVal::DirWrite|TVal::DirRead,
+		    TFld::Type aTp = (TFld::Type)s2i(ael->attr("tp"));
+		    int aFlg = s2i(ael->attr("flg"));
+		    if(aTp == TFld::String) aFlg &= (TFld::Selectable|TFld::NoWrite|TFld::FullText);
+		    else aFlg &= (TFld::Selectable|TFld::NoWrite|TFld::HexDec|TFld::OctDec);
+		    pEl.fldAdd(new TFld(aId.c_str(),ael->attr("nm").c_str(),aTp,aFlg|TVal::DirWrite|TVal::DirRead,
 			"","",ael->attr("vals"),ael->attr("names")));
 		    modif(true);
 		}
@@ -1301,7 +1306,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 	    XMLNode req("set");
 	    req.clear()->setAttr("path",scntr+"/DAQ/"+prmAddr()+"/%2fserv%2fattr")->
 		childAdd("el")->setAttr("id",vo.name())->
-				setText((vo.fld().type()==TFld::String && vo.fld().flg()&TFld::TransltText) ? trD(vl.getS()) : vl.getS());
+				setText(vo.isTransl() ? trD(vl.getS()) : vl.getS());
 	    if(owner().cntrIfCmd(req))	throw TError(req.attr("mcat"), req.text());
 	    st->second.numW++;
 	} catch(TError &err) { continue; }

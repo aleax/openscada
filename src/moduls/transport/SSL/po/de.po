@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-09 23:31+0200\n"
+"POT-Creation-Date: 2025-03-08 19:15+0200\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -29,13 +29,15 @@ msgstr ""
 "Stellt Transport basierend auf der Secure-Sockets-Schicht bereit. Abhängig "
 "von der Bibliotheksversion wird OpenSSL verwendet und SSL-TLS unterstützt."
 
+#, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "    --getaddrinfo[=<on>] Use getaddrinfo() for resolving all addresses.\n"
 "\n"
 msgstr ""
 "======================= Module <%s:%s> options =======================\n"
-"    --getaddrinfo[=<on>] Verwenden Sie getaddrinfo() zum Auflösen aller Adressen.\n"
+"    --getaddrinfo[=<on>] Verwenden Sie getaddrinfo() zum Auflösen aller "
+"Adressen.\n"
 "\n"
 
 msgid "State"
@@ -153,7 +155,8 @@ msgstr "Die Hostadresse '%s'. "
 
 #, c-format
 msgid "Connections %d, opened %d, last %s, closed by the limit %d. "
-msgstr "Verbindungen %d, geöffnet %d, zuletzt %s, geschlossen durch das Limit %d. "
+msgstr ""
+"Verbindungen %d, geöffnet %d, zuletzt %s, geschlossen durch das Limit %d. "
 
 #, c-format
 msgid "Traffic in %s, out %s. "
@@ -489,4 +492,3 @@ msgstr "Zeitabstände"
 
 msgid "Attempts"
 msgstr "Versuche"
-

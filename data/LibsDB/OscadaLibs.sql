@@ -10916,7 +10916,7 @@ Data model of the representative Logical Controller can contain both the generat
 The aggregated data in DAQ.GAQGate can be lifted to up, or used in derivative DAQ objects, or whether directly on custom frames, or in future on a Dynamic Frame, which scheduled to implement; and without any additional action you will get notification about violations on the hosts.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.1
+Version: 1.1.0
 License: GPLv2','Шаблон опрацювання вхідних ініціативних підключень розширює попередній шаблон опрацювання ініціативних підключень щодо асоційованих вихідних транспортів повним представлення даних віддалених хостів OpenSCADA на деякому агрегувальному сервері, чим завершуючи концепцію збору даних у пасивному режимі та ініціативного підключення.
 
 Шаблон загалом здійснює:
@@ -10944,7 +10944,7 @@ License: GPLv2','Шаблон опрацювання вхідних ініціа
 Агреговані дані у DAQ.GAQGate можуть бути підняті на гору, або використані у похідних DAQ об''єктах, або прямо на користувацьких кадрах, або у майбутньому на Динамічному Кадрі, який заплановано до реалізації; та без жодних додаткових дій ви отримаєте сповіщення про порушення на хостах.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.1
+Версія: 1.1.0
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 function prmAdd(req, path, pId, pNm, pTp, pSrc, pLogLnk) {
 	req.childAdd("add").setAttr("path",path+"/%2fbr%2fprm_").setAttr("id",pId).setText(pNm);
@@ -10962,6 +10962,8 @@ function prmAdd(req, path, pId, pNm, pTp, pSrc, pLogLnk) {
 if(f_start) {
 	inTransport_ = "", inTr = null;
 	prcTr = "";
+	prcCon = new Object();
+	noAccess = new Object();
 	return;	//Do no work on the start time
 }
 
@@ -10974,6 +10976,7 @@ if(inTr == null || inTransport != inTransport_) {
 
 if(inTr == null)	tErr = "1:"+tr("Input transport ''%1'' error.").replace("%1",inTransport);
 else {
+	//Processing the input connections
 	outTrs = inTr.associateTrsList();
 	for(iTr = 0; iTr < outTrs.length; iTr++) {
 		oTrNm = outTrs[iTr];
@@ -10989,12 +10992,20 @@ else {
 		req.childAdd("get").setAttr("path","/%2fgen%2fstat");
 		req.childAdd("get").setAttr("path","/DAQ/LogicLev/"+cntrObj+"/%2fcntr%2fcfg%2fDESCR");
 		req.childAdd("get").setAttr("path","/%2fgen%2fenv%2fhost");
-		if((rez=oTrO.messIO(req,"SelfSystem")).length) {
-			SYS.messNote("initRemCntr", (tVl=tr("Error requesting the remote host ''%1'': %2. ").replace("%1",hostAddr).replace("%2",rez)));
-			tErr += (tErr.length?"":"10:") + tVl;
-			oTrO.start(false);
-			continue;
+		if((rez=oTrO.messIO(req,"SelfSystem")).toInt()) {
+			SYS.messNote("/InitRem/"+this.cfg("SHIFR"), (tVl=tr("Error requesting the remote host ''%1'': %2")
+									.replace("%1",hostAddr).replace("%2",rez)));
+			//tErr += (tErr.length?"":"10:") + tVl;
 		}
+		else {
+			stNm = req.childGet(2).text()+"-"+req.childGet(0).text();
+			if(noAccess[stNm] != null && accessTm >= 0 && (SYS.time()-noAccess[stNm]) > accessTm*60*60) {
+				delete noAccess[stNm];
+				delete prcCon[stNm];
+			}
+		}
+		if(rez.toInt() || noAccess[stNm] != null) { oTrO.start(false); continue; }
+
 		stSrcKey = rand(999).toString();
 		isSrcInited = isHostReqPresent = false;
 		if(!req.childGet(1).attr("rez").toInt() && (tVl=req.childGet(1).text().match("^SrcKey: *([^\\n]+)$","m")).length)
@@ -11006,10 +11017,7 @@ else {
 			stSrcId = req.childGet(2).text().slice(0,stLen) + req.childGet(0).text().slice(0,hostLen) + stSrcKey;
 		}
 		stSrcId = oTrO.conPrm("initConID", SYS.strEncode(stSrcId,"OscdID"));
-		stNm = req.childGet(2).text()+"-"+req.childGet(0).text();
-
-		prcTr = prcTr.replace(new RegExp("^"+stSrcId+":.+$","g"), "");
-		prcTr += stSrcId+": "+oTrNm+", "+hostAddr+", "+SYS.strftime(SYS.time())+"\n";
+		prcCon[stSrcId] = stSrcId+": "+oTrNm+", "+hostAddr+", "+SYS.strftime(SYS.time());
 
 		//Record to the table of the OpenSCADA remote hosts
 		// Checking presence
@@ -11020,7 +11028,7 @@ else {
 			{ isHostReqPresent = true; break; }
 
 		// Appending/updating
-		if(!isHostReqPresent) {
+		if(!rez.toInt() && !isHostReqPresent) {
 			req = SYS.XMLNode("CntrReqs").setAttr("path","/Transport");
 			req.childAdd("add").setAttr("path","/%2fsub%2fehost");
 			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id","newHost").setAttr("col","id").setText(stSrcId);
@@ -11030,33 +11038,52 @@ else {
 			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id",stSrcId).setAttr("col","user").setText(cntrUser);
 			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id",stSrcId).setAttr("col","pass").setText(cntrPass);
 			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id",stSrcId).setAttr("col","mode").setText(2);
+			req.childAdd("save").setAttr("path","/%2fobj");
 			SYS.cntrReq(req);
 		}
 
 		//Initialisation
-		if(!isSrcInited) {
-			//Creating the main control object of the Data Sources
+		if(!rez.toInt() && !isSrcInited) {
+			// Creating the main control object of the Data Sources
 			req = SYS.XMLNode("CntrReqs").setAttr("path","/DAQ/LogicLev");
 			req.childAdd("add").setAttr("path","/%2fbr%2fcntr_").setAttr("id",cntrObj).setText("Sources for remote aggregator");
 			req.childAdd("set").setAttr("path","/"+cntrObj+"/%2fcntr%2fst%2frunSt").setText(1);
 			req.childAdd("set").setAttr("path","/"+cntrObj+"/%2fcntr%2fcfg%2fSTART").setText(1);
 			req.childAdd("save").setAttr("path","/"+cntrObj+"/%2fobj");
-			SYS.cntrReq(req, stSrcId);
+			rez = SYS.cntrReq(req, stSrcId);
+
+			//No access
+			if(!rez.toInt() && req.childGet(0).attr("rez").toInt()) {
+				req = SYS.XMLNode("CntrReqs").setAttr("path","/Transport");
+				req.childAdd("del").setAttr("path","/%2fsub%2fehost").setAttr("key_id",stSrcId);
+				req.childAdd("save").setAttr("path","/%2fobj");
+				SYS.cntrReq(req);
+
+				noAccess[stNm] = SYS.time();
+				delete prcCon[stSrcId];
+				prcCon[stNm] = stSrcId+": "+oTrNm+", "+hostAddr+", "+SYS.strftime(SYS.time())+" - NO ACCESS";
+
+				SYS.messNote("/InitRem/"+this.cfg("SHIFR"), (tVl=tr("Error accessing the remote station ''%1'': %2. ")
+											.replace("%1",stNm).replace("%2",req.childGet(0).text())));
+
+				oTrO.start(false);
+				continue;
+			}
 
 			//Primary sources in DAQ.System
 			// Getting allowed ones
 			reqSys = SYS.XMLNode("get").setAttr("path","/DAQ/System/%2fbr%2fcntr_");
-			SYS.cntrReq(reqSys, stSrcId);
+			rez = SYS.cntrReq(reqSys, stSrcId);
 
 			// Creation one at missing any one
-			if(!reqSys.childSize()) {
+			if(!rez.toInt() && !reqSys.childSize()) {
 				req = SYS.XMLNode("CntrReqs").setAttr("path","/DAQ/System");
 				req.childAdd("add").setAttr("path","/%2fbr%2fcntr_").setAttr("id",cntrObj).setText("Remote sources");
 				req.childAdd("set").setAttr("path","/"+cntrObj+"/%2fcntr%2fcfg%2fAUTO_FILL").setText(3);
 				req.childAdd("set").setAttr("path","/"+cntrObj+"/%2fcntr%2fst%2frunSt").setText(1);
 				req.childAdd("set").setAttr("path","/"+cntrObj+"/%2fcntr%2fcfg%2fSTART").setText(1);
 				req.childAdd("save").setAttr("path","/"+cntrObj+"/%2fobj");
-				SYS.cntrReq(req, stSrcId);
+				rez = SYS.cntrReq(req, stSrcId);
 				reqSys.childAdd("el").setAttr("id",cntrObj).setText("Remote sources");
 			}
 
@@ -11067,15 +11094,15 @@ else {
 			prmAdd(reqLogic, "/", "DISK", "Disk", "Prm");
 			prmAdd(reqLogic, "/", "NET", "Network", "Prm");
 
-			for(iEl = 0; iEl < reqSys.childSize(); iEl++) {
+			for(iEl = 0; !rez.toInt() && iEl < reqSys.childSize(); iEl++) {
 				cntrId = reqSys.childGet(iEl).attr("id");
 				reqSysPrms = SYS.XMLNode("get").setAttr("path","/DAQ/System/"+cntrId+"/%2fbr%2fprm_");
-				SYS.cntrReq(reqSysPrms, stSrcId);
+				rez = SYS.cntrReq(reqSysPrms, stSrcId);
 
-				for(iEl2 = 0; iEl2 < reqSysPrms.childSize(); iEl2++) {
+				for(iEl2 = 0; !rez.toInt() && iEl2 < reqSysPrms.childSize(); iEl2++) {
 					pId = reqSysPrms.childGet(iEl2).attr("id");
 					req = SYS.XMLNode("get").setAttr("path","/DAQ/System/"+cntrId+"/prm_"+pId+"/%2fprm%2fcfg%2fTYPE");
-					SYS.cntrReq(req, stSrcId);
+					rez = SYS.cntrReq(req, stSrcId);
 
 					//  Completely reflected sources
 					if((tVl=req.text()) == "CPU" || tVl == "MEM" || tVl == "sensors" || tVl == "Power" || tVl == "uptime")
@@ -11091,36 +11118,65 @@ else {
 						prmAdd(reqLogic, "/", pId, reqSysPrms.childGet(iEl2).text(), "PrmRefl", "System."+cntrId+"."+pId);
 						prmAdd(reqLogic, "/", "log_"+pId, reqSysPrms.childGet(iEl2).text()+" - processing", "Prm", "base.UPS", "System."+cntrId+"."+pId);
 					}
-					else SYS.messNote("initRemCntr", "Implement the type ''"+tVl+"''");
+					else SYS.messNote("/InitRem/"+this.cfg("SHIFR"), "Implement the type ''"+tVl+"''");
 				}
 			}
 
 			//Mark the Logical Level controller as finished in the initialisation and save
 			reqLogic.childAdd("set").setAttr("path","/%2fcntr%2fcfg%2fDESCR").setText("SrcKey: "+stSrcKey+"\n");
 			reqLogic.childAdd("save").setAttr("path","/%2fobj");
-			if(!SYS.cntrReq(reqLogic,stSrcId).toInt()) {
-				//Creation the DAQGate object in the end and no error
-				req = SYS.XMLNode("CntrReqs").setAttr("path","/DAQ/DAQGate");
-				req.childAdd("add").setAttr("path","/%2fbr%2fcntr_").setAttr("id",stSrcId).setText(stNm+" ("+stSrcKey+")");
-				req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fcfg%2fSTATIONS").setText(stSrcId);
-				req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fcfg%2fCNTRPRM").setText("LogicLev."+cntrObj);
-				req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fcfg%2fSTART").setText(1);
-				req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fst%2frunSt").setText(1);
-				req.childAdd("save").setAttr("path","/"+stSrcId+"/%2fobj");
-				SYS.cntrReq(req);
-			}
+			rez = SYS.cntrReq(reqLogic, stSrcId);
 			delete reqLogic;
 			delete reqSysPrms;
 			delete reqSys;
 		}
+
+		//Creation the DAQGate object
+		if(!rez.toInt() && SYS.DAQ.DAQGate[stSrcId] == null) {
+			//Creation the DAQGate object in the end and no error
+			req = SYS.XMLNode("CntrReqs").setAttr("path","/DAQ/DAQGate");
+			req.childAdd("add").setAttr("path","/%2fbr%2fcntr_").setAttr("id",stSrcId).setText(stNm+" ("+stSrcKey+")");
+			req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fcfg%2fSTATIONS").setText(stSrcId);
+			req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fcfg%2fCNTRPRM").setText("LogicLev."+cntrObj);
+			req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fcfg%2fSTART").setText(1);
+			req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fst%2frunSt").setText(1);
+			req.childAdd("save").setAttr("path","/"+stSrcId+"/%2fobj");
+			SYS.cntrReq(req);
+		}
+
 		delete req;
 	}
 	delete oTrO;
+
+	//Checking live of the established connections
+	if(accessTm > 0) {
+		daqs = SYS.DAQ.DAQGate.nodeList("cntr_");
+		for(iEl = 0; iEl < daqs.length; iEl++)
+			if((daqO=SYS.DAQ.DAQGate[daqs[iEl]]).cfg("CNTRPRM") == "LogicLev.RemCntr" &&
+					daqO.status().toInt() && prcCon[(daqID=daqs[iEl].slice(5))] != null &&
+					(tVl=daqO.status().match("([0-9]{2}-[0-9]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2})")).length &&
+					(tVl=SYS.strptime(tVl[1],"%d-%m-%Y %H:%M:%S")) > 24*60*60 && (SYS.time()-tVl) > accessTm*60*60)
+			{
+				delete daqO;
+				delete prcCon[daqID];
+
+				req = SYS.XMLNode("CntrReqs").setAttr("path","/");
+				req.childAdd("del").setAttr("path","/DAQ/DAQGate/%2fbr%2fcntr_").setAttr("id",daqID);
+				req.childAdd("del").setAttr("path","/Transport/%2fsub%2fehost").setAttr("key_id",daqID);
+				SYS.cntrReq(req);
+			}
+		delete daqO;
+	}
 }
+
+//Updating the processed list
+prcTr = "";
+for(var iEl in prcCon)
+	prcTr += (prcTr.length?"\n":"") + prcCon[iEl];
 
 //Error set
 if(tErr.length)	f_err = tErr;
-else f_err = "0";','','',1740407474);
+else f_err = "0";','','',1741452855);
 CREATE TABLE IF NOT EXISTS 'flb_Controller' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO flb_Controller VALUES('prescr','Prescriptions manager (moved)','','','!!!!: Moved and replaced by the template PrescrTempl.manager. Will be removed soon
 Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
@@ -16401,7 +16457,7 @@ INSERT INTO Trs VALUES('No data, reconnection. Switch to the first screen of the
 INSERT INTO Trs VALUES('Reconnects %1, left %2s.','','','');
 INSERT INTO Trs VALUES('Missed by an error - ','','','');
 INSERT INTO Trs VALUES('Initial reading in pos=%1(%2)','','','');
-INSERT INTO Trs VALUES('No powernet','Відсутня мережа','','');
+INSERT INTO Trs VALUES('No powernet','Відсутнє живлення','','');
 INSERT INTO Trs VALUES('Scheduled currents call','План запиту поточного','','');
 INSERT INTO Trs VALUES('Scheduled forecast call','План запиту прогнозу','','');
 INSERT INTO Trs VALUES('Too many realocated sectors','Забагато переміщених секторів','','');
@@ -16416,7 +16472,8 @@ INSERT INTO Trs VALUES('3:No response. ','','','');
 INSERT INTO Trs VALUES('3:Response isn''t completed. ','','','');
 INSERT INTO Trs VALUES('Address ''%1'' out of range [0...9999].','','','');
 INSERT INTO Trs VALUES('Reading in time=%1','','','');
-INSERT INTO Trs VALUES('Error requesting the remote host ''%1'': %2. ','','','');
+INSERT INTO Trs VALUES('Error accessing the remote station ''%1'': %2. ','Помилка доступу до віддаленої станції ''%1'': %2.','','');
+INSERT INTO Trs VALUES('Error requesting the remote host ''%1'': %2','Помилка запиту віддаленого хосту ''%1'': %2','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_base_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_base_io VALUES('digAlarm','in','Input',3,144,'Input|in',2,'Вхід','','Вход','','');
 INSERT INTO tmplib_base_io VALUES('simleBoard','in','Input',2,128,'Parameter|var',0,'Вхід','','Вход','','');
@@ -16759,11 +16816,19 @@ INSERT INTO tmplib_base_io VALUES('fileServerHTTP','tr','Transport',4,1,'',8,'Т
 INSERT INTO tmplib_base_io VALUES('fileServerHTTP','prt','Protocol',4,1,'',9,'Протокол','','','','');
 INSERT INTO tmplib_base_io VALUES('fileServerHTTP','sender','Sender',0,0,'',3,'Відправник','','Отправитель','','');
 INSERT INTO tmplib_base_io VALUES('initRemCntr','inTransport','Input transport',0,64,'Sockets.InitRemCntr',0,'Вхідний транспорт','','Входной транспорт','','');
-INSERT INTO tmplib_base_io VALUES('initRemCntr','prcTr','Processed connections',0,21,'',5,'Опрацьовані підключення','','','','');
-INSERT INTO tmplib_base_io VALUES('initRemCntr','cntrUser','Access: user',0,64,'root',2,'Доступ: користувач','','','','');
-INSERT INTO tmplib_base_io VALUES('initRemCntr','cntrPass','Access: password',0,64,'openscada',3,'Доступ: пароль','','','','');
-INSERT INTO tmplib_base_io VALUES('initRemCntr','cntrObj','Control object in DAQ.LogicLev and DAQ.System',0,64,'RemCntr',4,'Об''єкт контролю у DAQ.LogicLev і DAQ.System','','','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','prcTr','Processed connections',0,21,'',6,'Опрацьовані підключення','','','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','cntrUser','Access: user',0,64,'root',3,'Доступ: користувач','','','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','cntrPass','Access: password',0,64,'openscada',4,'Доступ: пароль','','','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','cntrObj','Control object in DAQ.LogicLev and DAQ.System',0,64,'RemCntr',5,'Об''єкт контролю у DAQ.LogicLev і DAQ.System','','','','');
 INSERT INTO tmplib_base_io VALUES('initRemCntr','conTm','Connection time, ms',1,64,'5000',1,'Час підключення, мс','','','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','accessTm','Timeout of accessing, hours
+Used for repeating to create representative objects of not accessed hosts
+and for removing old connections.
+Zero or negative value for disabling the control!',1,64,'24',2,'Час доступу, години
+Використовується для повтору створення представницьких об''єктів недоступних хостів
+і для видалення старих підключень.
+Нуль або негативне для вимкнення контролю!','','','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','this','Object',4,0,'0',7,'Об''єкт','','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_DevLib_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_DevLib_io VALUES('SCU750','transport','Transport',0,64,'SCU750',0,'Транспорт','','Транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('SCU750','addr','Device address (-1...255)',1,64,'1',1,'Адрес устройства (-1...255)','','Адреса пристрою (-1...255)','','');

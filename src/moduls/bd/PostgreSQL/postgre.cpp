@@ -1,7 +1,7 @@
 // 
 //OpenSCADA module BD.PostgreSQL file: postgre.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2023 by Roman Savochenko, roman@oscada.org         *
+ *   Copyright (C) 2013-2025 by Roman Savochenko, roman@oscada.org         *
  *                 2010-2011 by Maxim Lysenko, mlisenko@oscada.org         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.1.3"
+#define MOD_VER		"3.1.4"
 #define AUTHORS		trS("Roman Savochenko, Maxim Lysenko (2010-2011)")
 #define DESCRIPTION	trS("DB module. Provides support of the DBMS PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -684,8 +684,8 @@ void MTable::setSQLVal( TCfg &cf, const string &ival, bool tr )
 	    break;
 	case TFld::String:
 	    if(!cf.extVal()) {
-		if(!tr || (cf.fld().flg()&TFld::TransltText && !cf.noTransl())) cf.setS(val);
-		if(!tr && cf.fld().flg()&TFld::TransltText && !cf.noTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
+		if(!tr || cf.isTransl()) cf.setS(val);
+		if(!tr && cf.isTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
 	    }
 	    else {
 		if(!tr) {

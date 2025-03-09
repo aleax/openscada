@@ -1064,7 +1064,8 @@ Flags of the enabling/disabling modes of the node (enum TParamContr::EnDisFlag):
 <li> <i>virtual TVal* vlNew( );</i> — Called at the stage of a new attribute creation. It can be overridden to implement the particular behaviour within its own, inherited from the <b>TVal</b>, class during the access of the attribute.</li>
 <li> <i>virtual void vlGet( TVal &amp;vo );</i> — Called for an attribute with the direct reading mode <b>TVal::DirRead</b> (synchronous mode, or reading from an internal buffer of the object) when reading the value in order to directly read the value from the physical source or the object buffer.</li>
 <li> <i>virtual void vlSet( TVal &amp;vo, const TVariant &amp;vl, const TVariant &amp;pvl );</i> — Called for the attribute <i>vo</i> with the direct recording mode <b>TVal::DirWrite</b> (synchronous or writing to an internal buffer of the object) when set to immediate record the value <i>vl</i> to the physical source or buffer object, with the previous value <i>pvl</i>.</li>
-<li> <i>virtual void vlArchMake( TVal &amp;val );</i> — Called at the stage of creation the value archive with the <i>val</i> attribute as the source in the order to initialise the qualitative characteristics of the archive buffer according to the characteristics of the data source and polling.</li></ul>
+<li> <i>virtual void vlArchMake( TVal &amp;val );</i> — Called at the stage of creation the value archive with the <i>val</i> attribute as the source in the order to initialise the qualitative characteristics of the archive buffer according to the characteristics of the data source and polling.</li>
+<li> <i>void setNoTransl( bool vl );</i> — Setting of the sign "No translation" for all elements to <i>vl</i>.</li></ul>
 <h3><span class="mw-headline" id="Attribute.27s_object_.28TVal.29"><span class="mw-headline-number">4.7</span> <span id="TVal" title="#TVal">Attribute's object (TVal)</span></span></h3>
 <table class="wikitable">
 
@@ -1092,6 +1093,9 @@ Additional flags to the object <a href="#TFld">#TFld</a> (enum TVal::AttrFlag):
 <li> <i>void setTime( int64_t vl );</i> — Setting the timestamp outside the value setting.</li>
 <li> <i>bool isCfg( );</i> — Sign of the value object created in base of a configuration element.</li>
 <li> <i>bool dataActive( );</i> — Activity (updatable) flag of data.</li>
+<li> <i>bool isTransl( ) const;</i> — Complex control of the field translation, that is taking into account all factors.</li>
+<li> <i>bool noTransl( ) const;</i> — The sign "No translation" is provided to disable the translation of text variables for the element.</li>
+<li> <i>void setNoTransl( bool vl );</i> — Setting of the sign "No translation".</li>
 <li> <i>TVariant get( long long *tm = NULL, bool sys = false );</i> — Request of the value for the specified time <i>tm</i>. If NULL then it will be returned the last value.</li>
 <li> <i>string getS( long long *tm = NULL, bool sys = false );</i> — Request of the string type value for the specified time <i>tm</i>. If NULL then it will be returned the last value.</li>
 <li> <i>double getR( long long *tm = NULL, bool sys = false );</i> — Request of the real type value for the specified time <i>tm</i>. If NULL then it will be returned the last value.</li>
@@ -1109,7 +1113,7 @@ Additional flags to the object <a href="#TFld">#TFld</a> (enum TVal::AttrFlag):
 <li> <i>string setArch( const string &amp;nm = "" );</i> — Setting/creation new archive with proposed name <i>nm</i> or automatic, if name empty.</li>
 <li> <i>bool reqFlg( );</i> — Get the request flag.</li>
 <li> <i>void setReqFlg( bool vl );</i> — Set the request flag.</li>
-<li> <i>TFld &amp;fld( );</i> — Descriptor of the attribute's structure.</li></ul>
+<li> <i>TFld &amp;fld( ) const;</i> — Descriptor of the attribute's structure.</li></ul>
 <h3><span class="mw-headline" id="Object_of_the_templates_library_of_parameters_of_the_.22DAQ.22_subsystem_.28TPrmTmplLib.29"><span class="mw-headline-number">4.8</span> <span id="TPrmTmplLib" title="#TPrmTmplLib">Object of the templates library of parameters of the "DAQ" subsystem (TPrmTmplLib)</span></span></h3>
 <table class="wikitable">
 
@@ -1761,7 +1765,7 @@ Stages of the new Associated Output Transports processing (enum — TTransportIn
 <li> <i>virtual void start( int time = 0 );</i> — Starting the transport with the connection timeout <i>time</i>. When you start the output transport the actual connection to the remote station is established for the interfaces that works by the connection. At this time the errors can occur if the connection is impossible and the transport should return to the stopped state.</li>
 <li> <i>virtual void stop( );</i> — Stopping the transport.</li>
 <li> <i>virtual int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 );</i> — Sending of the data over the transport. The waiting timeout <i>time</i> of the connection in milliseconds. The <i>time</i> in negative disables the transport's request/respond mode and allows for the independently reading/writing to a buffer IO, with the reading timeout <i>time</i> in absolute.</li>
-<li> <i>void messProtIO( XMLNode &amp;io, const string &amp;prot );</i> — Sending of the data in the XML tree <i>in</i> over the transport using the transport protocol <i>prot</i>.</li>
+<li> <i>void messProtIO( XMLNode &amp;io, const string &amp;prot );</i> — Sending of the data in the XML tree <i>in</i> over the transport using the transport protocol <i>prot</i>. The developer must generate errors in the format "<b>{errCod}:{errText}</b>", write the error to the "err" attribute of <i>io</i> and generate a <a href="#TError">TError</a> exception with the error in message.</li>
 <li> <i>TTypeTransport &amp;owner( ) const;</i> — Type of transport - the owner of output transport.</li>
 <li> <i>ResMtx &amp;reqRes( );</i> — The requesting resource, needs to global lock into protocols with fragments receiving.</li></ul>
 <p><b>Protected methods:</b>
@@ -2256,6 +2260,7 @@ Additional flags to <a href="#TFld">#TFld</a> (enum — TCfg::AttrFlg):
 <li> <i>TCfg &amp;operator=( const TCfg &amp;cfg );</i> — Copying of the cells.</li>
 <li> <i>bool view( ) const;</i> — The sign - "Cell is visible".</li>
 <li> <i>bool keyUse( ) const;</i> — The sign - "Use the key" for the dataSeek() and dataDel() requests.</li>
+<li> <i>bool isTransl( ) const;</i> — Complex control of the field translation, that is taking into account all factors.</li>
 <li> <i>bool noTransl( ) const;</i> — The sign "No translation" is provided to disable the translation of text variables for the record.</li>
 <li> <i>bool reqKey( ) const;</i> — The sign "Requests key", for group operations produce by the field as key.</li>
 <li> <i>bool isKey( ) const;</i> — Common sign of the field as key, depends from mode "Requests key" for the group.</li>
@@ -2696,10 +2701,12 @@ Error values for the different data types (definition):
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/sub_Security/usr_user/%2fprm%2fDESCR"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"root"</span><span class="nt">&gt;</span>Простий користувач<span class="nt">&lt;/get&gt;</span>
 </pre></div>
 <p><b><u> <span id="CntrFldSet" title="#CntrFldSet">Встановлення</span> поля</u></b><br />
-ЗАП: <i>&lt;set path="<b>{path}</b>"&gt;<b>{value}</b>&lt;/set&gt;</i>
+ЗАП: <i>&lt;set path="<b>{path}</b>"&gt;<b>{value}</b>&lt;/set&gt;</i><br />
+ВІДП: <i>&lt;set path="{path}" updTm="<b>{updTm}</b>" rez="<b>0</b>"&gt;{value}&lt;/set&gt;</i>
 </p>
-<ul><li> <i>value</i> — значення встановлення у формі рядка.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/sub_Security/usr_user/%2fprm%2fDESCR"</span><span class="nt">&gt;</span>Перейменований користувач<span class="nt">&lt;/set&gt;</span>
+<ul><li> <i>value</i> — значення встановлення у формі рядка;</li>
+<li> <i>updTm</i> — час у секундах для замовлення оновлення конфігураційної сторінки відповідно до динаміки об'єкту, коли за відсутності сторінка оновлюється негайно після зміни.</li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/sub_Security/usr_user/%2fprm%2fDESCR"</span> <span class="na">updTm=</span><span class="s">"3"</span> <span class="na">rez=</span><span class="s">"0"</span><span class="nt">&gt;</span>Перейменований користувач<span class="nt">&lt;/set&gt;</span>
 </pre></div>
 <p><b><u> <span id="SnthHgl" title="#SnthHgl">Отримання правил підсвітлення синтаксису</span> текстового поля</u></b><br />
 Доступне за встановлення атрибуту "SnthHgl" у відповідному інформаційному полі.<br />
@@ -4259,6 +4266,7 @@ Error codes (enum — TError::Codes):
 <li> <i>TError::Tr_ErrTransport (12)</i> — transport level, transport error;</li>
 <li> <i>TError::Tr_ErrResponse (13)</i> — transport level, response error;</li>
 <li> <i>TError::Tr_ErrDevice (14)</i> — transport level, device error;</li>
+<li> <i>TError::Tr_ErrUnknown (15)</i> — transport level, unknown error;</li>
 <li> <i>TError::DB_SQL_Connect (20)</i> — DB level, error the SQL-connection;</li>
 <li> <i>TError::DB_SQL_Query (21)</i> — DB level, error the SQL-query;</li>
 <li> <i>TError::DB_ReadOnly (23)</i> — DB in the Read Only mode;</li>
@@ -5005,5 +5013,5 @@ Error codes (enum — TError::Codes):
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/uk">Documents/API/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.8</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/uk">Documents/API/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2025</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.8</td></tr></table></body>
 </html>

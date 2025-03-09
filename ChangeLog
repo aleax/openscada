@@ -1,3 +1,52 @@
+2025-03-08 Roman 0.9.8
+- !!!:LibsDB.OscadaLibs: tmplib_base.initRemCntr: Added of access control on the remote connection
+	and blocking the not permitted host during configurable time.
+    !!!: Added of removing dead connections during configurable time.
+    General improving in saving and processing errors.
+- !:LibsDB.vcaBase: wlb_Main.{grph_panel,doc_panel}: Adding of checking for activity the controlled
+    trend or document, and closing at its inactivity.
+- !!!!:SYS,DAQ,UI.VCAEngine: Implementing of disabling translation of string configuration fields,
+	DAQ attributes, UI attributes at changing in the dynamic execution:
+    - SYS,DAQ,DB.{FireBird,MySQL,ODBC,PostgreSQL,SQLite}: appending the unified method {TCfg,TVal}::isTransl()
+	of checking translation the element, and moving on its everywhere;
+    - TVal: appending the "mNoTransl" flag and functions of its treating:
+	noTransl(), setNoTransl(), TValue::setNoTransl();
+    - UI.VCAEngine::Attr: appending the "NoTransl" flag and its treating in isTransl();
+    - translation is disabled:
+	- at writing through links of implementation the templates in TPrmTempl::Impl::lnkOutput();
+	- at the User API call TVal::set();
+	- UI.VCAEngine: at Widget attribute change in the Session context for widgets in processing
+	    and at writing to DAQ attribute by links.
+    - the DAQ Parameters added of restoring the translation of dynamically changed configuration fields at load.
+- !!:DAQ.{LogicLev,ModBus,OPC_UA,Siemens},UI.{QTCfg,WebCfgD}: Implementing of ordering value of the updating time
+	of the configuration interface of the calculated objects, to update after the object processing:
+    - time of the ordered update is passed in seconds through the "updTm" attribute in result to the "set" commands
+	of fields;
+    - implemented for the tab "Attributes (/val)" and "Parameter templates (/tmpl)" of the Logical Based sources
+	and in the periodic mode.
+- !!:FIX:Transports,Protocols: Unification of errors generation in calls messProtIO() and its User API variant
+	    messIO(XMLNodeObj req, string prt) in accordance the documentation,
+	    that is obligatory with the error code:
+	- adding en error code Tr_ErrUnknown for unknown transport side errors;
+	- Protocol.{ModBus,HTTP,SelfSystem,UserProtocol}: adapted-updated to the errors generation with the error code.
+- FIX:SYS: Preventing any messages generation during processing events: SIGFPE, SIGABRT, SIGSEGV.
+    That is only call the crashhandler and exit.
+- FIX:TSecurity,UI.VCAEngine: Fixed in loading non initiated (without storage) users and groups at force reloading.
+- !:FIX:DAQ: The TPrmTempl object is set to stop at changing the procedure text also after loading.
+    !:FIX: Fixing-finishing the dynamic translation of values requesting in the Control Request
+	TValue::"get:/serv/attr" for non archiving elements.
+    TVal: fld() is set to constant.
+    !:FIX:System: Fixed in the CPU DA about limiting in time of obtaining the CPU load by reading the counters as uint32
+	and storing previous in int32, that is the counters are both read and stored now in uint64.
+    !:FIX:DAQGate: Preventing of marking the translation of the string fields, since there is no sense.
+- !!!:FIX:Transports: Fixing of clearing the connection properties in {TTransportIn,TTransportOut}::clearConPrm().
+    !!!:FIX:SSL: Fixed in processing responses of the output transports from initiative connections,
+	especially for no response. The true code got from Sockets with some improving for tries.
+    FIX:Sockets: Some improved for tries in the code of processing responses of the output transports from initiative
+	connections, especially for no response.
+- !!:UI.WebCfgD: Expanding of call pageRefresh() by integrating the lag time.
+
+
 2025-03-01 Roman 0.9.8
 - New and significantly updated parts:
     - OpenSCADA Core: 3:14:0 => 3:15:0
