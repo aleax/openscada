@@ -333,8 +333,8 @@ void MTable::setSQLVal( TCfg &cf, const string &ival, bool tr )
     switch(cf.fld().type()) {
 	case TFld::String:
 	    if(!cf.extVal()) {
-		if(!tr || (cf.fld().flg()&TFld::TransltText && !cf.noTransl())) cf.setS(val);
-		if(!tr && cf.fld().flg()&TFld::TransltText && !cf.noTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
+		if(!tr || cf.isTransl()) cf.setS(val);
+		if(!tr && cf.isTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
 	    }
 	    else {
 		if(!tr) {

@@ -73,7 +73,7 @@
 #define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"5.0.1"
+#define MOD_VER		"5.0.3"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov(2014)")
 #define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -158,6 +158,7 @@ string TTransSock::addrResolve( const string &host, const string &port, vector<s
     string aErr;
     static struct sockaddr_storage ss;
 
+#if !defined(__ANDROID__)
     if(!mod->use_getaddrinfo) {
 	// Checking for port
 	char sBuf[256];
@@ -239,6 +240,7 @@ string TTransSock::addrResolve( const string &host, const string &port, vector<s
 
 	return aErr;
     }
+#endif
 
     //Dynamic by getaddrinfo()
     struct addrinfo hints, *res = NULL;
@@ -1629,41 +1631,34 @@ repeate:
 		throw TError(nodePath().c_str(),_("Error reading (select): %s"), err.c_str());
 	    }
 	    else if(FD_ISSET(sockFd,&rw_fd)) {
-		//!! Reading in that way but some time read() return < 0 after the select() pass.
+		//!!!! Reading in that way since some time read() return < 0 after the select() pass,
+		//     especially from initiative connections.
 		// * Force waiting any data in the request mode and not EAGAIN
 		for(int iRtr = 0; (iB=read(sockFd,iBuf,iLen)) < 0 && errno == EAGAIN && iRtr < /*time*/mTmNext; ++iRtr)
 		    TSYS::sysSleep(1e-3);
 
-		//!! Reading in that way but some time read() return 0 after the select() pass.
-		//!!> Commented due there is not any sense to wait any data after zero return, which proven on: VPN
-		// * Force wait any data in the request mode or EAGAIN
-		// * No wait any data in the not request mode but it can get the data later
-		/*bool stZero = false;
-		for(int iRtr = 0; (((iB=read(sockFd,iBuf,iLen)) == 0 && !notReq) || (iB < 0 && errno == EAGAIN)) && iRtr < mTmNext; ++iRtr) {
-		    stZero = (iB == 0);
-		    if(iRtr == 1 && iB == 0) {	//Check for same socket's errors
-			int sockError = 0, sockLen = sizeof(sockError);
-			getsockopt(sockFd, SOL_SOCKET, SO_ERROR, (char*)&sockError, (socklen_t*)&sockLen);
-			if(sockError && sockError != EAGAIN) { errno = sockError; break; }
-		    }
-		    TSYS::sysSleep(1e-3);
-		}
-		if(stZero && iB > 0)	printf("Have waited after zero for %d.\n", iB);*/
-
 		// * Force errors
-		// * Retry if any data was wrote but no a reply there in the request mode
-		// * !!: Zero can be also after disconection by peer and possible undetected here for the not request mode,
-		//	what can be easily tested on stopping the ModBus input service
+		// * Retry if any data was wrote, but no reply there in the request mode
+		//!!!! Zero can be also after disconection by peer and possible undetected here for the not request mode,
+		//     that can be easily tested on stopping the ModBus input service
 		if(iB < 0 || (iB == 0 && writeReq && !notReq)) {
 		    err = (iB < 0) ? TSYS::strMess(_("Error reading '%s (%d)'"),strerror(errno),errno) : TSYS::strMess(_("No data, the connection seems closed"));
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error reading: %s"), err.c_str());
 		    if(logLen()) pushLogMess(TSYS::strMess(_("Error reading: %s"), err.c_str()));
-		    stop();
-		    // * Pass to retry in the request mode and on the successful writing
-		    if(!writeReq || notReq) throw TError(nodePath().c_str(),_("Error reading: %s"), err.c_str());
-		    start();
-		    if(iB == 0 && wAttempts == 1) wAttempts = 2;	//!!!! To restore the lost connections
-		    goto repeate;
+		    if(!notReq && writeReq) {
+			//!!!! For the initial input connection we must keep the connection up to the last
+			if(addr().find(S_NM_SOCKET ":") != string::npos) {
+			    if(reqTry >= wAttempts) stop();
+			    else goto repeate;
+			}
+			//!!!! Must be reconnected to prevent the possibility of getting response of the previous request.
+			else {
+			    stop();
+			    if(iB == 0 && wAttempts == 1) wAttempts = 2;	//!!!! To restore the lost connections
+			    if(reqTry < wAttempts) { start(); goto repeate; }
+			}
+		    }
+		    throw TError(nodePath(), err);
 		}
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,iB)).c_str());
 		if(iB > 0 && logLen()) pushLogMess(_("< Received from\n"), string(iBuf,iB), -1);

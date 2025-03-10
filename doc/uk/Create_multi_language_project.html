@@ -41,7 +41,6 @@
 <li class="toclevel-2 tocsection-8"><a href="#.D0.9E.D0.BA.D1.80.D0.B5.D0.BC.D1.96_.D0.BF.D0.BE.D0.B2.D1.96.D0.B4.D0.BE.D0.BC.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.28.D0.BA.D0.BE.D0.BD.D1.82.D0.B5.D0.B9.D0.BD.D0.B5.D1.80-.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.8F_.22Trs.22.29"><span class="tocnumber">6.2</span> <span class="toctext">Окремі повідомлення (контейнер-таблиця "Trs")</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-9"><a href="#.D0.97.D0.B0.D0.B2.D0.B4.D0.B0.D0.BD.D0.BD.D1.8F_.D1.96.D0.B7_.D0.B2.D0.B4.D0.BE.D1.81.D0.BA.D0.BE.D0.BD.D0.B0.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D1.8E_.D0.BF.D0.B5.D1.80.D0.B5.D0.BA.D0.BB.D0.B0.D0.B4.D0.B0.D0.BC.D0.B8_.D1.82.D0.B0_.D0.BF.D1.96.D0.B4.D0.B2.D0.B8.D1.89.D0.B5.D0.BD.D0.BD.D1.8F_.D1.80.D1.96.D0.B2.D0.BD.D1.8F_.D0.BE.D1.85.D0.BE.D0.BF.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F"><span class="tocnumber">7</span> <span class="toctext">Завдання із вдосконалення контролю перекладами та підвищення рівня охоплення</span></a></li>
 </ul>
 </div>
 
@@ -111,14 +110,10 @@
 </p><p>Для зберігання перекладу повідомлень такого кшталту спеціально передбачено окремий контейнер-таблицю "Trs", яка розташовується у сховку-БД що пов'язано із об'єктом OpenSCADA із такою процедурою. Повідомлення огорнуті функцією <i>tr()</i> потрапляють до таблиці "Trs" під час виконання цієї процедури або компіляції, для строкових літералів, та самі ці повідомлення у процедурі мають бути БАЗОВОЮ мовою. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Наразі відсутня можливість відстеження зміни повідомлень, огорнутих функцією <i>tr()</i>, тому всі вони після виконання будуть там накопичуватися, але ви можете видалити їх вручну із контекстного меню менеджеру.
 </p><p>Копіювання об'єкту OpenSCADA із процедурами з одного сховку-БД до іншого не призводить до копіювання і перекладів між окремими контейнерами-таблицями "Trs", але ви можете виконати цю процедуру нового об'єкту, чим додати її до "Trs", а потім скопіювати й переклади за допомогою менеджеру перекладів (Рис.1).
 </p>
-<h3><span class="mw-headline" id=".D0.97.D0.B0.D0.B2.D0.B4.D0.B0.D0.BD.D0.BD.D1.8F_.D1.96.D0.B7_.D0.B2.D0.B4.D0.BE.D1.81.D0.BA.D0.BE.D0.BD.D0.B0.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D1.8E_.D0.BF.D0.B5.D1.80.D0.B5.D0.BA.D0.BB.D0.B0.D0.B4.D0.B0.D0.BC.D0.B8_.D1.82.D0.B0_.D0.BF.D1.96.D0.B4.D0.B2.D0.B8.D1.89.D0.B5.D0.BD.D0.BD.D1.8F_.D1.80.D1.96.D0.B2.D0.BD.D1.8F_.D0.BE.D1.85.D0.BE.D0.BF.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">7</span> Завдання із вдосконалення контролю перекладами та підвищення рівня охоплення</span></h3>
-<dl><dd> - розробити механізм відстеження неактуальності повідомлень у таблиці "Trs"
-<dl><dd>&nbsp;?&gt; можливо додати до таблиці "Trs" поле опцій, де позначати час оновлення-реєстрації та при компіляції або виконанні, відповідно очищати надто старі та оновлювані-реєстровані при компіляції</dd></dl></dd></dl>
 
 
 
 
 
-
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Create_multi_language_project/uk">Documents/How_to/Create_multi_language_project/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3009</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Create_multi_language_project/uk">Documents/How_to/Create_multi_language_project/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2025</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3012</td></tr></table></body>
 </html>

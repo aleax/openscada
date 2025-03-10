@@ -3002,7 +3002,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <span class="nx">nw</span><span class="p">.</span><span class="nx">attrSet</span><span class="p">(</span><span class="s2">"geomX"</span><span class="p">,</span> <span class="mi">50</span><span class="p">).</span><span class="nx">attrSet</span><span class="p">(</span><span class="s2">"geomY"</span><span class="p">,</span> <span class="mi">50</span><span class="p">);</span>
 </pre></div>
 <ul><li> <i>bool wdgDel( string wid )</i> — видаляє віджет <i>wid</i>.</li>
-<li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — підключається до дочірнього або глобального віджету, за посередництвом шляху <i>byPath</i>. У випадку глобального підключення можна використати абсолютний або відносний шлях до віджету. Точкою відліку абсолютної адреси виступає об'єкт кореня модуля "VCAEngine", а значить, першим елементом абсолютної адреси є ідентифікатор сеансу, який опускається. Відносна адреса бере відлік від поточного віджету. Спеціальним елементом відносної адреси є елемент вищестоящого вузла "..".</li>
+<li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — підключається до дочірнього або глобального віджету, за посередництвом шляху <i>byPath</i>. Для відсутніх і некоректних віджетів ця функція повертатиме "false", тоді як коректний віджет при перетворені у BOOLEAN повертатиме "true". У випадку глобального підключення можна використати абсолютний або відносний шлях до віджету. Точкою відліку абсолютної адреси виступає об'єкт кореня модуля "VCAEngine", а значить, першим елементом абсолютної адреси є ідентифікатор сеансу, який опускається. Відносна адреса бере відлік від поточного віджету. Спеціальним елементом відносної адреси є елемент вищестоящого вузла "..".</li>
 <li> <i>Array attrList()</i> — перелік атрибутів віджету.</li>
 <li> <i>bool attrPresent( string attr )</i> — перевіряє атрибут віджета <i>attr</i> на факт присутності.</li>
 <li> <i>ElTp attr( string attr, bool fromSess = false )</i> — значення атрибуту віджету <i>attr</i> або з сеансу <i>fromSess</i>. Для відсутніх атрибутів повертає порожній рядок.</li>
@@ -3607,5 +3607,5 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/uk">Modules/VCAEngine/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3009</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/uk">Modules/VCAEngine/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2025</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3012</td></tr></table></body>
 </html>

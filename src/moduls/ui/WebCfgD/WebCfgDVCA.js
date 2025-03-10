@@ -22,6 +22,9 @@
 var MOD_ID = 'WebCfgD';	//Module identifier
 var stTmID = null;	//Status line timer identifier
 var pgRefrTmID = null;	//Periodic current page update timer identifier
+var pgRefrTmPer = 5000;	//Time of the periodic update
+var pgRefrTmDef = 200;	//Time of the typical refresh after
+var pgRefrTmMax = 10000;//Maximum ordered time of refreshing after some change
 var dlgWin = null;	//Opened window dialog
 var selPath = '';	//Selected node path
 var queSZ = 20;		//Previous and next arrays queue size
@@ -827,9 +830,9 @@ function selectChildRecArea( node, aPath, cBlk )
 			dlgWin.document.getElementById('wDlgName').style.display = '';
 			dlgWin.document.getElementById('wDlgActOk').type = 'submit';
 			if(!isKonq) dlgWin.document.getElementById('wDlgFormBlk').onsubmit = function( )
-			{ setTimeout('document.body.dlgWin.close(); pageRefresh();',200); }
+			{ setTimeout('document.body.dlgWin.close(); pageRefresh();',pgRefrTmDef); }
 			else dlgWin.document.getElementById('wDlgActCancel').onclick = function( )
-			{ setTimeout('document.body.dlgWin.close(); pageRefresh();',200); }
+			{ setTimeout('document.body.dlgWin.close(); pageRefresh();',pgRefrTmDef); }
 			return false;
 		    }
 		}
@@ -875,7 +878,7 @@ function selectChildRecArea( node, aPath, cBlk )
 			var rez = servSet(this.itPath, 'com=com', com, true);
 			if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
 			else this.srcNode.childNodes[col].childNodes[row].innerText = val;
-			if(!parseInt(rez.getAttribute('noReload'))) setTimeout('pageRefresh()', 500);
+			if(!parseInt(rez.getAttribute('noReload'))) pageRefresh(pgRefrTmDef);
 			else this.setElements(true);
 		    }
 		}
@@ -1067,7 +1070,7 @@ function selectChildRecArea( node, aPath, cBlk )
 					    if(com.length) {
 						var rez = servSet(this.itPath,'com=com',com,true);
 						if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
-						if(!parseInt(rez.getAttribute('noReload'))) setTimeout('pageRefresh()', 200);
+						if(!parseInt(rez.getAttribute('noReload'))) pageRefresh(pgRefrTmDef);
 					    }
 					    return false;
 					}
@@ -1338,9 +1341,12 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 		    var selVal = this.options[this.selectedIndex].innerText;
 		    if(this.itComm) this.srcNode.textContent = selId ? selId : selVal;
 		    else {
+			var updTm = pgRefrTmDef;
 			var rez = servSet(this.itPath, 'com=com', '<set>'+strEncode(selId?selId:selVal)+'</set>', true);
 			if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
-			setTimeout('pageRefresh()', 500);
+			else if(rez.getAttribute('updTm'))
+			    updTm = Math.min(pgRefrTmMax,parseFloat(rez.getAttribute('updTm'))*1000);
+			pageRefresh(updTm);
 		    }
 		    return false;
 		}
@@ -1422,11 +1428,14 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 		    val_w.childNodes[0].onclick = function( ) {
 			if(this.itComm) this.srcNode.textContent = this.checked ? '1' : '0';
 			else {
+			    var updTm = pgRefrTmDef;
 			    var rez = servSet(this.itPath, 'com=com', '<set>'+(this.checked?'1':'0')+'</set>', true);
 			    if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
-			    setTimeout('pageRefresh()', 500);
+			    else if(rez.getAttribute('updTm'))
+				updTm = Math.min(pgRefrTmMax,parseFloat(rez.getAttribute('updTm'))*1000);
+			    pageRefresh(updTm);
 			}
-			return false;
+			return true;
 		    }
 		    val_w.StatusTip = selPath + '/' + brPath; val_w.onmouseover = function() { setStatus(this.StatusTip,10000); }
 		}
@@ -1480,10 +1489,15 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 			var btApply = document.createElement('input'); btApply.type = 'button'; btApply.value = 'Apply';
 			btApply.onclick = function( ) {
 			    var wEl = this.parentNode.parentNode;
+			    var updTm = pgRefrTmDef;
 			    var rez = servSet(wEl.childNodes[2].itPath, 'com=com', '<set>'+strEncode(wEl.childNodes[2].value,'html')+'</set>', true);
 			    if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
-			    else wEl.childNodes[2].defaultValue = wEl.childNodes[2].value;
-			    setTimeout('pageRefresh()',500);
+			    else {
+				wEl.childNodes[2].defaultValue = wEl.childNodes[2].value;
+				if(rez.getAttribute('updTm'))
+				    updTm = Math.min(pgRefrTmMax,parseFloat(rez.getAttribute('updTm'))*1000);
+			    }
+			    pageRefresh(updTm);
 			    wEl.removeChild(this.parentNode);
 			    wEl.childNodes[2].isChanged = false;
 			    return false;
@@ -1563,9 +1577,12 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 			    vT = val_w.childNodes[0].value.split("T")[1].split(":");
 			    while(vT.length < 3) vT.push(0);
 			    var dt = new Date(parseInt(vD[0]), parseInt(vD[1])-1, parseInt(vD[2]), parseInt(vT[0]), parseInt(vT[1]), parseInt(vT[2]));
+			    var updTm = pgRefrTmDef;
 			    var rez = servSet(val_w.itPath, 'com=com', '<set>'+Math.floor(dt.getTime()/1000)+'</set>', true);
 			    if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
-			    setTimeout('pageRefresh()', 500);
+			    else if(rez.getAttribute('updTm'))
+				updTm = Math.min(pgRefrTmMax,parseFloat(rez.getAttribute('updTm'))*1000);
+			    pageRefresh(updTm);
 			    val_w.removeChild(this);
 			    val_w.isEdited = false;
 			    return false;
@@ -1650,9 +1667,12 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 				this.edFld.value = this.options[this.selectedIndex].value;
 				if(this.edFld.parentNode.itComm) this.edFld.parentNode.srcNode.textContent = this.edFld.value;
 				else {
+				    var updTm = pgRefrTmDef;
 				    var rez = servSet(this.edFld.parentNode.itPath, 'com=com', '<set>'+this.edFld.value+'</set>', true);
 				    if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
-				    setTimeout('pageRefresh()', 500);
+				    else if(rez.getAttribute('updTm'))
+					updTm = Math.min(pgRefrTmMax,parseFloat(rez.getAttribute('updTm'))*1000);
+				    pageRefresh(updTm);
 				}
 				return false;
 			    }
@@ -1712,9 +1732,12 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 				if((tVl2=this.parentNode.srcNode.getAttribute('min')) != null)	curVal = Math.max(parseFloat(tVl2), curVal);
 				if((tVl2=this.parentNode.srcNode.getAttribute('max')) != null)	curVal = Math.min(parseFloat(tVl2), curVal);
 			    }
+			    var updTm = pgRefrTmDef;
 			    var rez = servSet(this.parentNode.itPath, 'com=com', '<set>'+curVal+'</set>', true);
 			    if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
-			    setTimeout('pageRefresh()', 500);
+			    else if(rez.getAttribute('updTm'))
+				updTm = Math.min(pgRefrTmMax,parseFloat(rez.getAttribute('updTm'))*1000);
+			    pageRefresh(updTm);
 			    this.parentNode.isEdited = false;
 			    this.parentNode.removeChild(this);
 			    return false;
@@ -1773,11 +1796,15 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 function actEnable( act, vl )
 {
     var actEl = document.getElementById(act);
-    if(!actEl) return;
-    actEl.disabled = !vl;
-    actEl.className = vl ? 'active' : 'inactive';
-    actEl.childNodes[0].src = vl ? actEl.childNodes[0].src.replace('filtr=unact','filtr=none') :
-				   actEl.childNodes[0].src.replace('filtr=none','filtr=unact');
+    if(!actEl) return null;
+    if(vl != null) {
+	actEl.disabled = !vl;
+	actEl.className = vl ? 'active' : 'inactive';
+	actEl.childNodes[0].src = vl ? actEl.childNodes[0].src.replace('filtr=unact','filtr=none') :
+				       actEl.childNodes[0].src.replace('filtr=none','filtr=unact');
+    }
+
+    return !actEl.disabled;
 }
 /***************************************************
  * chkStruct - Info page tree check structure.     *
@@ -1928,18 +1955,31 @@ function getCombo( )
 /**************************************************
  * pageRefresh - Curent page refrash call.        *
  **************************************************/
-function pageRefresh( isComplete )
+function pageRefresh( toTm )
 {
-    pageDisplay(selPath, isComplete);
-    if(pgRefrTmID) pgRefrTmID = setTimeout('pageRefresh();', 5000);
+    //Immediately update with the completion sign in <toTm>
+    if(typeof(toTm) == 'boolean') pageDisplay(selPath, toTm);
+    //Periodic update is enabled
+    else if(!actEnable('actStart')) {
+	pageDisplay(selPath);
+	pgRefrTmID = setTimeout('pageRefresh();', pgRefrTmPer);
+    }
+    else if(toTm == null) {
+	pageDisplay(selPath);
+	if(pgRefrTmID) { clearTimeout(pgRefrTmID); pgRefrTmID = null; }
+    }
+    else {
+	if(pgRefrTmID) { clearTimeout(pgRefrTmID); pgRefrTmID = null; }
+	pgRefrTmID = setTimeout('pageRefresh();', toTm);
+    }
 }
 /********************************************************
  * pageCyclRefrStart - Start current page cyclic refrash.*
  ********************************************************/
 function pageCyclRefrStart( )
 {
-    if(!pgRefrTmID) pgRefrTmID = setTimeout('pageRefresh();',5000);
     actEnable('actUpdate',false); actEnable('actStart',false); actEnable('actStop',true);
+    pageRefresh();
 }
 /********************************************************
  * pageCyclRefrStop - Stop current page cyclic refrash.  *
@@ -1956,7 +1996,7 @@ function itDBLoad( )
 {
     var rez = servSet(selPath+'/%2fobj', 'com=com', '<load/>', true);
     if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
-    else setTimeout('pageRefresh()', 500);
+    else pageRefresh(pgRefrTmDef);
 }
 /**************************************************
  * itDBSave - Save current page to DB.             *
@@ -1965,7 +2005,7 @@ function itDBSave( )
 {
     var rez = servSet(selPath+'/%2fobj', 'com=com', '<save/>', true);
     if(rez && parseInt(rez.getAttribute('rez')) != Er_NoError) alertCntr(rez);
-    else setTimeout('pageRefresh()', 500);
+    else pageRefresh(pgRefrTmDef);
 }
 /**************************************************
  * pageUp - Select up page.                       *
@@ -2318,7 +2358,7 @@ if(actAbout && gPrms.length) actAbout.href += gPrms;
 
 pageDisplay(hostsUpdate());
 
-setStatus('###Page loaded.###', 5000);
+setStatus('###Page loaded.###', pgRefrTmPer);
 
 /**********************************************************
  * Design specific part					  */

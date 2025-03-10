@@ -10895,7 +10895,11 @@ event = ev_rez;
 date_value = time;
 if(n == 0 && prevTime != time) { bTime = time - szVal; doc=""; }
 size_value = SYS.time2str(szVal, false);
-dateBeg_value = date_value - szVal;','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;',1737295464);
+dateBeg_value = date_value - szVal;
+
+//Checking for correct linking with document
+if(this.attr("pgOpen") && this.attr("pgOpenSrc").length && (tVl=this.wdgAt(this.attr("pgOpenSrc"),true)) && !tVl.ownerPage().attr("pgOpen"))
+	this.wdgAt("/s/pg_control/pg_terminator",true).attrSet("pgOpen", true);','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;',1741337145);
 INSERT INTO wlb_Main VALUES('terminator','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAAx1AAAMdQEteJR1AAAA
 2UlEQVRYhe3QsWrFMAwFUDlVsGWDDa/ZAvn5138K+QEPITVkiSEJ8hvcoUPpUG9Fd5NAh4vU8/mR
 UoKGOOcwpZTSZ4sCAF3jvSiiiCLKb0rOOcbIzH9WEAC2bTPGzPPMzESUc3bOXdfVdd00TcuyWGvv
@@ -11012,7 +11016,11 @@ if(cursor_en && type == 1) cursor_arg0val = tr("Frequency")+":\n"+(1e6/(1e6*curS
 type_value = (type==1)?tr("Spectrum"):((type==2)?tr("XY"):tr("Graph"));
 xScaleInfo_en = xZoomIn_en = xZoomOut_en = xZoomOffRight_en = xZoomOffLeft_en = xZoomDef_en = (type==2);
 selWin_en = (type == 0 && !sclWin.isEVal());
-if(selWin_en)	selWin_value = sclWin;','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1737295461);
+if(selWin_en)	selWin_value = sclWin;
+
+//Checking for correct linking with trend
+if(this.attr("pgOpen") && this.attr("pgOpenSrc").length && (tVl=this.wdgAt(this.attr("pgOpenSrc"),true)) && !tVl.ownerPage().attr("pgOpen"))
+	this.wdgAt("/s/pg_control/pg_terminator",true).attrSet("pgOpen", true);','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1741337145);
 INSERT INTO wlb_Main VALUES('cntrPasp','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAAYElEQVRoge3PQQ0AIBDAMMC/50MEj4ZkVbDtmVk/OzrgVQNaA1oDWgNa
 A1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgPaBXKq
@@ -22803,15 +22811,15 @@ License: GPLv2',32,'','','','Елемент реалізує діалог кор
 INSERT INTO wlb_Main_io VALUES('grph_panel','dscr','The element is a specialized panel for dynamic control of basic user properties of the primitive "Diagram". So, the panel allows you to view graphs of the history for the required period of time and the desired resolution, supports: the scale, the selection of archiver for display and the graphs presentation in a spectrum of present frequencies or XY.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.6.0
+Version: 1.6.1
 License: GPLv2',32,'','','','Елемент є спеціалізованою панеллю динамічного керування основними користувацькими властивостями примітиву "Діаграма". Так, панель дозволяє переглянути графіки історії за потрібний проміжок часу та на потрібну роздільну здатність, підтримується: масштабування шкали, вибір архіваторів для відображення, а також надання графіків у вигляді спектру присутніх частот або XY.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.6.0
+Версія: 1.6.1
 Ліцензія: GPLv2','','Элемент является специализированной панелью динамического управления основными пользовательскими свойствами примитива "Диаграмма". Так, панель позволяет просмотреть графики истории за необходимый период времени и в нужном разрешении, поддерживается: масштабирование шкалы, выбор архиваторов для отображения, а также представление графиков в виде спектра присутствующих частот или XY.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.6.0
+Версия: 1.6.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('objProps','dscr','The element serves to display the properties of the data source in tabular form and to highlight them in color, as an object, and to allow the values of the recordable properties to be changed. This element also generates violation notifications according to the features of the object. The element generally uses and represents a representative structure "Complex objects" of the DAQ-templates.
 
@@ -24041,15 +24049,15 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для нал�
 INSERT INTO wlb_Main_io VALUES('doc_panel','dscr','The element is a specialized panel for dynamic control of basic user properties of the primitive "Document". So, the panel allows you to manage documents and navigate through their histories; supported dynamic and archival documents.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.0
+Version: 1.3.1
 License: GPLv2',32,'','','','Елемент є спеціалізованою панеллю динамічного керування основними користувацькими властивостями примітиву "Документ". Так, панель дозволяє керувати документами та здійснювати навігації за їх історією; підтримуються динамічні та архівні документи.
 
 Автор: Роман Савоченко <roman@oscada,org>
-Версія: 1.3.0
+Версія: 1.3.1
 Ліцензія: GPLv2','','Элемент является специализированной панелью динамического управления основными пользовательскими свойствами примитива "Документ". Так, панель позволяет управлять документами и осуществлять навигацию по их истории; поддерживаются динамические и архивные документы.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.3.0
+Версия: 1.3.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('terminator','dscr','The panel element serves to fill the panel container space when no active visual control element is selected in the main frame, since closing or clearing frames in the container area is not provided, only the replacement.
 

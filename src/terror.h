@@ -47,6 +47,7 @@ class TError
 	    Tr_ErrTransport = 12,
 	    Tr_ErrResponse = 13,
 	    Tr_ErrDevice = 14,
+	    Tr_ErrUnknown = 15,
 	    DB_SQL_Connect = 20,
 	    DB_SQL_Query = 21,
 	    DB_ReadOnly = 23,

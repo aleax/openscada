@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_cpu.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -57,11 +57,11 @@ void CPU::updGen( bool cntr )
 
 	// Updating
 	string resLoad, resSys, resUser, resIdle;
-	long unsigned user, nice, sys, idle, iowait;
+	long long unsigned user, nice, sys, idle, iowait;
 	char buf[256];
 	for(int n = 0, unit = -1; fgets(buf,sizeof(buf),f) != NULL; ) {
-	    if(!isdigit(buf[3]) && (n=sscanf(buf,"cpu %lu %lu %lu %lu %lu\n",&user,&nice,&sys,&idle,&iowait))) unit = -1;
-	    else if((n=sscanf(buf,"cpu%d %lu %lu %lu %lu %lu\n",&unit,&user,&nice,&sys,&idle,&iowait))) ;
+	    if(!isdigit(buf[3]) && (n=sscanf(buf,"cpu %llu %llu %llu %llu %llu\n",&user,&nice,&sys,&idle,&iowait))) unit = -1;
+	    else if((n=sscanf(buf,"cpu%d %llu %llu %llu %llu %llu\n",&unit,&user,&nice,&sys,&idle,&iowait))) ;
 	    else continue;
 
 	    while(load.size() < (unit+2)) load.push_back(tval());

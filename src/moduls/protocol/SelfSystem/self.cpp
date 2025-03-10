@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.SelfSystem file: self.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,7 +32,7 @@
 #define MOD_NAME	trS("Own protocol of OpenSCADA")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"2.0.4"
+#define MOD_VER		"2.0.5"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -244,10 +244,10 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		if(TSYS::strParse(resp,0," ",&off) == "REZ") {
 		    if((rez=s2i(TSYS::strParse(resp,0," ",&off))) > 0 || off >= (int)resp.size()) {
 			if(rez == atoi(ERR_AUTH)) { io.setAttr("rez", i2s(rez))->setText(resp.substr(off)); break; }
-			throw TError(nodePath().c_str(), _("Station %s error: %s."), tro.id().c_str(), resp.substr(off).c_str());
+			throw TError(nodePath().c_str(), (i2s(TError::Tr_ErrResponse)+":"+_("Station %s error: %s.")).c_str(), tro.id().c_str(), resp.substr(off).c_str());
 		    }
 		    tro.conPrm("auth"+user, (authID=s2i(resp.substr(off))));
-		} else throw TError(nodePath().c_str(), _("Station %s error: %s."), tro.id().c_str(), _("error the header format."));
+		} else throw TError(nodePath().c_str(), (i2s(TError::Tr_ErrResponse)+":"+_("Station %s error: %s.")).c_str(), tro.id().c_str(), _("error the header format."));
 	    }
 
 	    //The same Request
@@ -272,14 +272,14 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    // Processing the header
 	    off = 0;
 	    if(TSYS::strParse(header,0," ",&off) != "REZ")
-		throw TError(nodePath().c_str(), _("Station %s error: %s."), tro.id().c_str(), _("error the header format."));
+		throw TError(nodePath().c_str(), (i2s(TError::Tr_ErrResponse)+":"+_("Station %s error: %s.")).c_str(), tro.id().c_str(), _("error the header format."));
 	    if((rez=s2i(TSYS::strParse(header,0," ",&off))) == atoi(ERR_AUTH)) {
 		tro.conPrm("auth"+user, (authID=EVAL_INT));
 		if(isDir) { io.setAttr("rez", i2s(rez))->setText(header.substr(off)); break; }
 		else { errTr = _("error authentication."); if(!iTr) reqTrs++; continue; }	//Reauth and one additional try for reauth
 	    }
 	    if(rez > 0 || off >= (int)header.size())
-		throw TError(nodePath().c_str(),_("Station %s error: %s."), tro.id().c_str(), header.substr(off).c_str());
+		throw TError(nodePath().c_str(), (i2s(TError::Tr_ErrResponse)+":"+_("Station %s error: %s.")).c_str(), tro.id().c_str(), header.substr(off).c_str());
 
 	    int head_end = header.size() + 1,
 		resp_size = s2i(header.substr(off));
@@ -302,12 +302,18 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    return;
 	}
 
-	if(iTr >= reqTrs) throw TError(nodePath().c_str(), _("Station %s error: %s."), tro.id().c_str(), errTr.c_str());
+	if(iTr >= reqTrs) throw TError(nodePath().c_str(), (i2s(TError::Tr_ErrResponse)+":"+_("Station %s error: %s.")).c_str(), tro.id().c_str(), errTr.c_str());
 
     } catch(TError &err) {
+	//Appending the error code
+	if(!s2i(err.mess)) err.mess = i2s(TError::Tr_ErrDevice)+":"+_("Host error: ")+err.mess;
+
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error the request: %s"), err.mess.c_str());
+
 	tro.stop();
-	throw;
+
+	io.setAttr("err", err.mess);
+	throw TError(nodePath(), err.mess);
     }
 }
 

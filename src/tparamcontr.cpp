@@ -278,6 +278,7 @@ void TParamContr::load_( TConfig *icfg )
 		}
 
 	//cfgViewAll(true);
+	TValue::setNoTransl(false);
 	cfg("OWNER") = ownerPath();
 	TBDS::dataGet(owner().DB()+"."+owner().tbl(type()), owner().owner().nodePath()+owner().tbl(type()), *this);
     }

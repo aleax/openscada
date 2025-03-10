@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.FSArch file: base.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <signal.h>
 #include <string.h>
 #include <string>

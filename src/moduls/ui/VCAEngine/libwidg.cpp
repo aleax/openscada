@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: libwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -151,7 +151,7 @@ void WidgetLib::setFullDB( const string &vl )
 
 void WidgetLib::load_( TConfig *icfg )
 {
-    if(!SYS->chkSelDB(DB())) throw TError();
+    if(!icfg && !SYS->chkSelDB(DB())) throw TError();
 
     mess_debug(nodePath().c_str(), _("Loading widgets library."));
 

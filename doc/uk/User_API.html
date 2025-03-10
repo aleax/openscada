@@ -507,7 +507,7 @@
 </p>
 <ul><li> <i>PropTp property(string id, PropTp val = NULL);</i> — Повертає властивість <i>id</i> об'єкту для групи <i>grp</i> із встановленням її у <i>val</i> не NULL і EVAL. Де <i>val</i> у EVAL очищує властивість і NULL (без аргументу) просто нічого не встановлює. Ви можете <a href="#Object">звертатися прямо</a> до властивостей об'єктів TCntrNode, звісно за їх відсутності у Моделі Об'єктів.</li>
 <li> <i>TArrayObj nodeList( string grp = "", string path = "" );</i> — повертає перелік повних ідентифікаторів дочірніх вузлів для групи <i>grp</i> та вузла за шляхом <i>path</i>. Якщо <i>grp</i> порожня то повертаються вузли всіх груп. Повний ідентифікатор, це "{grp}{nID}".</li>
-<li> <i>TCntrNodeObj nodeAt( string path, string sep = "" );</i> — під'єднує до вузла <i>path</i> у дереві об'єктів OpenSCADA (рис.1). Якщо вказується роздільник у <i>sep</i> то шлях обробляється як рядок з роздільником. Для відсутніх та некоректних вузлів ця функція повертатиме "false", тоді як коректний вузол, при перетворені у BOOLEAN, повертатиме "true".</li>
+<li> <i>TCntrNodeObj nodeAt( string path, string sep = "" );</i> — під'єднує до вузла <i>path</i> у дереві об'єктів OpenSCADA (рис.1). Якщо вказується роздільник у <i>sep</i> то шлях обробляється як рядок з роздільником. Для відсутніх і некоректних вузлів ця функція повертатиме "false", тоді як коректний вузол при перетворені у BOOLEAN повертатиме "true".</li>
 <li> <i>TCntrNodeObj nodePrev( );</i> — повертає попередній-батьківський вузол.</li>
 <li> <i>string nodePath( string sep = "", bool from_root = true );</i> — повертає шлях до поточного вузла у дереві об'єктів OpenSCADA (рис.1). Символ роздільника вказується у <i>sep</i>, для отримання шляху через роздільник, наприклад — "DAQ.ModBus.PLC1.P1.var", інакше — "/DAQ/ModBus/PLC1/P1/var". <i>from_root</i> вказує на необхідність формувати шлях від кореня та без вказання ідентифікатору станції.</li>
 <li> <i>int messSys( int level, string mess )</i> — формує системне повідомлення <i>mess</i> з рівнем <i>level</i>, зі шляхом вузла у якості категорії та з читабельним шляхом перед повідомленням.</li></ul>
@@ -827,7 +827,7 @@
 <span class="nx">nw</span><span class="p">.</span><span class="nx">attrSet</span><span class="p">(</span><span class="s2">"geomX"</span><span class="p">,</span> <span class="mi">50</span><span class="p">).</span><span class="nx">attrSet</span><span class="p">(</span><span class="s2">"geomY"</span><span class="p">,</span> <span class="mi">50</span><span class="p">);</span>
 </pre></div>
 <ul><li> <i>bool wdgDel( string wid )</i> — видаляє віджет <i>wid</i>.</li>
-<li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — підключається до дочірнього або глобального віджету, за посередництвом шляху <i>byPath</i>. У випадку глобального підключення можна використати абсолютний або відносний шлях до віджету. Точкою відліку абсолютної адреси виступає об'єкт кореня модуля "VCAEngine", а значить, першим елементом абсолютної адреси є ідентифікатор сеансу, який опускається. Відносна адреса бере відлік від поточного віджету. Спеціальним елементом відносної адреси є елемент вищестоящого вузла "..".</li>
+<li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — підключається до дочірнього або глобального віджету, за посередництвом шляху <i>byPath</i>. Для відсутніх і некоректних віджетів ця функція повертатиме "false", тоді як коректний віджет при перетворені у BOOLEAN повертатиме "true". У випадку глобального підключення можна використати абсолютний або відносний шлях до віджету. Точкою відліку абсолютної адреси виступає об'єкт кореня модуля "VCAEngine", а значить, першим елементом абсолютної адреси є ідентифікатор сеансу, який опускається. Відносна адреса бере відлік від поточного віджету. Спеціальним елементом відносної адреси є елемент вищестоящого вузла "..".</li>
 <li> <i>Array attrList()</i> — перелік атрибутів віджету.</li>
 <li> <i>bool attrPresent( string attr )</i> — перевіряє атрибут віджета <i>attr</i> на факт присутності.</li>
 <li> <i>ElTp attr( string attr, bool fromSess = false )</i> — значення атрибуту віджету <i>attr</i> або з сеансу <i>fromSess</i>. Для відсутніх атрибутів повертає порожній рядок.</li>
@@ -902,7 +902,7 @@
 <tr>
 <td> <a href="Libs_Devices.html" title="Special:MyLanguage/Libs/Devices">Бібліотека промислових пристроїв</a>
 </td>
-<td> 3.0 </td>
+<td> 3.1 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_DevLib
 </td>
@@ -1019,5 +1019,5 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/uk">Documents/User_API/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3009</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/uk">Documents/User_API/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2025</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3012</td></tr></table></body>
 </html>

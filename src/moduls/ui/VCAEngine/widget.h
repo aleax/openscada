@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: widget.h
 /***************************************************************************
- *   Copyright (C) 2006-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -76,7 +76,8 @@ class Attr
 	    VizerSpec	= 0x80,		//Visualizer specified attribute, for allow it to modification control and transmit to the visualizer.
 					//Sets at and by a session of running project activation.
 	    SessAttrInh	= 0x10,		//Inherited attribute into the running session
-	    IsInher	= 0x20		//Inherited attribute
+	    IsInher	= 0x20,		//Inherited attribute
+	    NoTransl	= 0x40		//No text translation, mostly to disable the dynamic translation and in sessions
 	};
 
 	//Methods
@@ -99,8 +100,12 @@ class Attr
 		!(flgGlb&(Attr::OnlyRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
 		(flgSelf == -1 || (flgSelf&(Attr::CfgConst|Attr::CfgLnkIn))));
 	}
-	bool isTransl( bool cfg = false )	{ return Attr::isTransl(type(), flgGlob(), (cfg?flgSelf():-1)); }
-
+	bool isTransl( bool cfg = false ) {
+	    return (type() == TFld::String && (flgGlob()&(TFld::TransltText/*|Attr::IsUser*/)) &&
+		!(flgGlob()&(Attr::OnlyRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
+		!(flgSelf()&Attr::NoTransl) &&
+		(!cfg || (flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn))));
+	}
 	void setFlgSelf( SelfAttrFlgs flg, bool sys = false );
 	void setAModif( bool force = false );
 	void setAModif_( uint32_t set )	{ mModif = set; }
@@ -145,7 +150,7 @@ class Attr
 	TFld		*mFld;		//Base field
 	uint32_t	mModif;		//Counter of the modifications
 	unsigned short	mFlgSelf;	//Self attributes flags
-	unsigned short	mOi	:ATTR_OI_DEPTH;		//Order index, up to 256 attributes
+	unsigned short	mOi	:ATTR_OI_DEPTH;		//Order index
 	unsigned short	mConn	:ATTR_CON_DEPTH;	//Connections counter
 
 	string	cfg;			//Configuration template and value

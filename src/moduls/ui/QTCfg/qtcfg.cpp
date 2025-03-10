@@ -66,7 +66,8 @@
 # define setSecsSinceEpoch(tm)	setTime_t(tm)
 #endif
 
-#define CH_REFR_TM	100
+#define CH_REFR_TM	100	//Typical refresh time
+#define CH_REFR_TM_MAX	10000	//Maximum ordered refresh time
 #define GRP_SHOW_OP_LIM	10
 
 #undef _
@@ -3018,6 +3019,7 @@ void ConfApp::initHosts( bool toReconnect )
 void ConfApp::checkBoxStChange( int stat )
 {
     QCheckBox *box = (QCheckBox *)sender();
+    int updTm = CH_REFR_TM;
 
     if(stat == Qt::PartiallyChecked) return;
     try {
@@ -3035,15 +3037,18 @@ void ConfApp::checkBoxStChange( int stat )
 	    if(cntrIfCmd(req)) { mod->postMessCntr(req, this); return; }
 
 	    if(req.text() == val) return;
-	    mess_info(mod->nodePath().c_str(), _("%s| Set '%s' to '%s'!"), user().c_str(), (selPath+"/"+path).c_str(), val.c_str());
+	    mess_info(mod->nodePath().c_str(), _("%s| Set '%s' to '%s'!"),
+		user().c_str(), (selPath+"/"+path).c_str(), val.c_str());
 
 	    req.setName("set")->setAttr("primaryCmd", "1")->setText(val);
 	    if(cntrIfCmd(req))	mod->postMessCntr(req, this);
+	    else if(req.attr("updTm").size())
+		updTm = vmin(CH_REFR_TM_MAX, s2r(req.attr("updTm"))*1000);
 	}
     } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 
     //Redraw
-    pageRefresh(CH_REFR_TM);
+    pageRefresh(updTm);
 }
 
 void ConfApp::buttonClicked( )
@@ -3090,6 +3095,7 @@ void ConfApp::combBoxActivate( int ival )
     XMLNode *n_el;
     QComboBox *comb = (QComboBox *)sender();
     string val = comb->itemText(ival).toStdString();
+    int updTm = CH_REFR_TM;
 
     try {
 	string path = comb->objectName().toStdString();
@@ -3135,11 +3141,13 @@ void ConfApp::combBoxActivate( int ival )
 
 	    req.setName("set")->setAttr("primaryCmd", "1")->setText(val);
 	    if(cntrIfCmd(req)) mod->postMessCntr(req, this);
+	    else if(req.attr("updTm").size())
+		updTm = vmin(CH_REFR_TM_MAX, s2r(req.attr("updTm"))*1000);
 	}
     } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 
     //Redraw
-    pageRefresh(CH_REFR_TM);
+    pageRefresh(updTm);
 }
 
 void ConfApp::listBoxPopup( )
@@ -3278,7 +3286,6 @@ void ConfApp::listBoxPopup( )
 			user().c_str(), el_path.c_str(), c_id, c_new);
 	    }
 	    if(cntrIfCmd(n_el1)) { mod->postMessCntr(n_el1, this); return; }
-
 	    pageRefresh(CH_REFR_TM);	//Redraw
 
 	    if(n_el->attr("tp") == "br" && (rez == actAdd || rez == actIns || rez == actEd || rez == actDel))
@@ -3302,8 +3309,8 @@ void ConfApp::tablePopup( const QPoint &pos )
     last_it = actAdd = actIns = actDel = actMoveUp = actMoveDown = actCopy = actCopyForMWiki = actFind = actFindNext = NULL;
 
     int row = tbl->currentRow();
-
     bool noReload = false;
+
     try {
 	XMLNode *n_el = SYS->ctrId(root, TSYS::strDecode(tbl->objectName().toStdString(),TSYS::PathEl));
 
@@ -3681,8 +3688,8 @@ void ConfApp::editChange( const QString& txt )
 void ConfApp::applyButton( )
 {
     QWidget *bwidg = (QWidget*)sender();
-
     string path = bwidg->objectName().toStdString();
+    int updTm = CH_REFR_TM;
 
     try {
 	XMLNode *el = SYS->ctrId(root, TSYS::strDecode(path,TSYS::PathEl));
@@ -3713,10 +3720,12 @@ void ConfApp::applyButton( )
 	XMLNode n_el("set");
 	n_el.setAttr("path", selPath+"/"+path)->setAttr("primaryCmd", "1")->setText(sval);
 	if(cntrIfCmd(n_el)) mod->postMessCntr(n_el, this);
+	else if(n_el.attr("updTm").size())
+	    updTm = vmin(CH_REFR_TM_MAX, s2r(n_el.attr("updTm"))*1000);
     } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 
     //Redraw only for changing in same this widget
-    pageRefresh(CH_REFR_TM);
+    pageRefresh(updTm);
 }
 
 void ConfApp::cancelButton( )

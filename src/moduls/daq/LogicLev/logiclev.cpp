@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.LogicLev file: logiclev.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2024 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@
 #define MOD_NAME	trS("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.9.1"
+#define MOD_VER		"2.9.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -781,6 +781,12 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
     else if((a_path == "/prm/cfg/prmp_lst" || a_path == "/prm/cfg/prmpLst") && ctrChkNode(opt))
 	SYS->daq().at().ctrListPrmAttr(opt, cfg("PSRC").getS(), true, '.');
-    else if(isStd() && tmpl->func() && tmpl->TPrmTempl::Impl::cntrCmdProc(opt))	;
-    else TParamContr::cntrCmdProc(opt);
+    else if(isStd() && tmpl->func() && tmpl->TPrmTempl::Impl::cntrCmdProc(opt)) {
+	if(owner().period()) opt->setAttr("updTm", r2s(1.5e-9*owner().period()));
+    }
+    else {
+	TParamContr::cntrCmdProc(opt);
+	if(a_path.find("/val/") == 0 && owner().period())
+	    opt->setAttr("updTm", r2s(1.5e-9*owner().period()));
+    }
 }

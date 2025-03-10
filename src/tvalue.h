@@ -70,6 +70,9 @@ class TVal: public TCntrNode
 	void	setTime( int64_t vl );
 	bool	isCfg( )	{ return mCfg; }
 	bool	dataActive( );
+	bool	isTransl( ) const { return (fld().type() == TFld::String && fld().flg()&TFld::TransltText && !noTransl()); }
+	bool	noTransl( ) const { return mNoTransl; }
+	void	setNoTransl( bool vl );
 
 	// Read current value (direct)
 	TVariant get( int64_t *tm = NULL, bool sys = false );
@@ -95,7 +98,7 @@ class TVal: public TCntrNode
 	void setReqFlg( bool vl )	{ mReqFlg = vl; }
 
 	TValue &owner( ) const;
-	TFld &fld( );
+	TFld &fld( ) const;
 
     protected:
 	//Methods
@@ -117,8 +120,9 @@ class TVal: public TCntrNode
 	    AutoHD<TVarObj> *o;		//Object value
 	} val;
 
-	unsigned char	mCfg	: 1;	//Configuration id
-	unsigned char	mReqFlg	: 1;	//Request to attribute flag
+	unsigned char mCfg	: 1;	//Flag of linking the configuration
+	unsigned char mNoTransl	: 1;	//No text translation, mostly to disable the dynamic translation and at change from calculation
+	unsigned char mReqFlg	: 1;	//Flag of the requesting
 	union {
 	    TFld *fld;
 	    TCfg *cfg;
@@ -168,6 +172,8 @@ class TValue: public TCntrNode, public TValElem
 	virtual void vlGet( TVal &vo )		{ };
 	virtual void vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )		{ };
 	virtual void vlArchMake( TVal &val )	{ };
+
+	void setNoTransl( bool vl );
 
     private:
 	//Methods

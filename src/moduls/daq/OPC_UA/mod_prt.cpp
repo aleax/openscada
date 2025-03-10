@@ -664,7 +664,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 				    case TFld::Real:	req.setAttr("type", i2s(OpcUa_Double))->setText(nVal->getS(&tm));	break;
 				    case TFld::String:
 					req.setAttr("type", i2s(OpcUa_String))->
-					    setText((nVal->fld().flg()&TFld::TransltText)?trD(nVal->getS(&tm)):nVal->getS(&tm));
+					    setText(nVal->isTransl()?trD(nVal->getS(&tm)):nVal->getS(&tm));
 					break;
 				    case TFld::Object: {	//?!?! With structures support append the detection ones
 					AutoHD<TArrayObj> arr = nVal->getO(&tm);
@@ -816,7 +816,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 		}
 		vNd.at().setO(arr);
 	    }
-	    else if(vNd.at().fld().type() == TFld::String && (vNd.at().fld().flg()&TFld::TransltText))
+	    else if(vNd.at().isTransl())
 		vNd.at().setS(trDSet(vNd.at().getS(),req.text()));
 	    else vNd.at().setS(req.text());
 

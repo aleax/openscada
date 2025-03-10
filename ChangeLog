@@ -1,3 +1,63 @@
+2025-03-01 Roman (stable)
+- !!!:LibsDB.OscadaLibs:
+    !!: Appended of the user "RemCntr" with password "RemCntr" and in the group DAQ for use in
+	the initiative remote connections to the OpenSCADA server.
+    !!: Appended of the disabled transports "RemCntr" to Transport.Sockets and Transport.SSL,
+	that is when you want to provide data of your station, you just enable one of them.
+    !!!:tmplib_base.initRemCntr: Added of access control on the remote connection and blocking
+	    the not permitted host during configurable time.
+	!!!: Added of removing dead connections during configurable time.
+	General improving in saving and processing errors.
+	Added of limiting size of the remote host ID in 20 symbols and description.
+    tmplib_DevLib.ergomera125: Added of description.
+    LowDevLib.{S1BP,1W}: Translated to Ukrainian and added of description.
+- !:LibsDB.vcaBase: wlb_Main.{grph_panel,doc_panel}: Adding of checking for activity the controlled
+    trend or document, and closing at its inactivity.
+- !!!!:SYS,DAQ,UI.VCAEngine: Implementing of disabling translation of string configuration fields,
+	DAQ attributes, UI attributes at changing in the dynamic execution:
+    - SYS,DAQ,DB.{FireBird,MySQL,ODBC,PostgreSQL,SQLite}: appending the unified method {TCfg,TVal}::isTransl()
+	of checking translation the element, and moving on its everywhere;
+    - TVal: appending the "mNoTransl" flag and functions of its treating:
+	noTransl(), setNoTransl(), TValue::setNoTransl();
+    - UI.VCAEngine::Attr: appending the "NoTransl" flag and its treating in isTransl();
+    - translation is disabled:
+	- at writing through links of implementation the templates in TPrmTempl::Impl::lnkOutput();
+	- at the User API call TVal::set();
+	- UI.VCAEngine: at Widget attribute change in the Session context for widgets in processing
+	    and at writing to DAQ attribute by links.
+    - the DAQ Parameters added of restoring the translation of dynamically changed configuration fields at load.
+- !!:FIX:Transports,Protocols: Unification of errors generation in calls messProtIO() and its User API variant
+	    messIO(XMLNodeObj req, string prt) in accordance the documentation,
+	    that is obligatory with the error code:
+	- adding en error code Tr_ErrUnknown for unknown transport side errors;
+	- Protocol.{ModBus,HTTP,SelfSystem,UserProtocol}: adapted-updated to the errors generation with the error code.
+- !!:DAQ.{LogicLev,ModBus,OPC_UA,Siemens},UI.{QTCfg,WebCfgD}: Implementing of ordering value of the updating time
+	of the configuration interface of the calculated objects, to update after the object processing:
+    - time of the ordered update is passed in seconds through the "updTm" attribute in result to the "set" commands
+	of fields;
+    - implemented for the tab "Attributes (/val)" and "Parameter templates (/tmpl)" of the Logical Based sources
+	and in the periodic mode.
+- FIX:TSecurity,UI.VCAEngine: Fixed in loading non initiated (without storage) users and groups at force reloading.
+- FIX:Archive.FSArch,Transport.{Sockets,SSL}: Fixed in building for Android.
+- ModelsDB/{AGLKS/oscada_AGLKS.xml,Boiler/oscada_Boiler.xml}: Removing system groups without users,
+    than allow the groups specify in libraries.
+- FIX:SYS: Preventing any messages generation during processing events: SIGFPE, SIGABRT, SIGSEGV.
+    That is only call the crashhandler and exit.
+- !:FIX:DAQ: The TPrmTempl object is set to stop at changing the procedure text also after loading.
+    !:FIX: Fixing-finishing the dynamic translation of values requesting in the Control Request
+	TValue::"get:/serv/attr" for non archiving elements.
+    TVal: fld() is set to constant.
+    !:FIX:System: Fixed in the CPU DA about limiting in time of obtaining the CPU load by reading the counters as uint32
+	and storing previous in int32, that is the counters are both read and stored now in uint64.
+    !:FIX:DAQGate: Preventing of marking the translation of the string fields, since there is no sense.
+- !!!:FIX:Transports: Fixing of clearing the connection properties in {TTransportIn,TTransportOut}::clearConPrm().
+    !!!:FIX:SSL: Fixed in processing responses of the output transports from initiative connections,
+	especially for no response. The true code got from Sockets with some improving for tries.
+    FIX:Sockets: Some improved for tries in the code of processing responses of the output transports from initiative
+	connections, especially for no response.
+- !!:UI.WebCfgD: Expanding of call pageRefresh() by integrating the lag time.
+
+
 2025-02-15 Roman (stable)
 - FIX:SYS,DAQ.{MMS.libMMS,OPC_UA.libOPC_UA},Special.SystemTests: Restoring functions with arguments of
     the printf() format by removing the argument "__attribute__ ((format (printf, 3, 4)))",
@@ -10,14 +70,14 @@
 	- TCntrNode: new functions of the control interface for ACL: ctrMkNode3(), ctrChkNode2();
 	- TCntrNode: _ctrMkNode() switched to no exception at missing container nodes,
 	    just don't create and return NULL;
-	- TFld: cntrCmdMake() added by an argument cntrO for linking with
+	- TFld: cntrCmdMake() added by an argument <cntrO> for linking with
 	    the Control Node, and all code adapted to that;
-	- TConfig: cntrCmdMake() and cntrCmdProc() added by an argument cntrO for linking with
+	- TConfig: cntrCmdMake() and cntrCmdProc() added by an argument <cntrO> for linking with
 	    the Control Node, and all code adapted to that;
-	- TTransportS: cntrCmdPrm() added by an argument cntrO for linking with
+	- TTransportS: cntrCmdPrm() added by an argument <cntrO> for linking with
 	    the Control Node, and all code adapted to that;
 	- DAQ: initial adaptation to ACLs in the description fields of the Controller and Parameter Objects,
-	    default owner-permition for the DAQ subsytem set to "root:DAQ"-0775;
+	    default owner-permition for the DAQ subsystem set to "root:DAQ"-0775;
     !!:SYS:Building: configure.ac: Core library version risen to 4:11:0.
 - FIX:TSecurity: Renaming the function access() argument "access" to "perm" and "groups" to "group",
     also for User API.
@@ -31,7 +91,7 @@
 	    and that is written to UA::Server::Sess::{user,idPolicyId};
 	- libOPC_UA: all data requests by reqData() appended in <req> by an attribute "sesTokId" with session
 	    identifier here and for accessing the user;
-	- appending a configuration field "Anonymous user" for representing the anonymous authentication;
+	- appending a configuration field "Anonymous user" for representing the anonymous authentication.
     FIX: Adaption to the dynamic translation in data requests.
     FIX: Fixing description of the "Security policies" field.
 
@@ -48,7 +108,7 @@
     DAQ.DAQGate: Added of detection of changing the syncing periodicity in the CRON mode for fast applying
 	after long intervals.
 - Protocol.HTTP: Improving some original messages.
-- !!!!:FIX:Transport.{SSL,Sockets}: Fixing a hard-detected problem of substitition wrong addresses during
+- !!!!:FIX:Transport.{SSL,Sockets}: Fixing a hard-detected problem of substitution wrong addresses during
 	the addresses resolving by getservbyname_r() from other thread, that is from GLibC 2.24 there forced
 	using getaddrinfo() as more correct or inet_pton() + locked getservbyname_r() on old systems.
     FIX: Fixing of using htons() and ntohs() and several improvement of treating the structures
@@ -82,6 +142,8 @@
 - !!!!:SYS:
     !!!!:TCntrNode: Appending of the object properties in groups by prefixes for different parts of OpenSCADA:
 	    system (sys), user (usr), connection (con), ... .
+	!!!: Adding a User API function property() of accessing the object properties from user context
+	    in additional to the direct-natural way.
 	Changing prototype of the objPropSet() function in the <val> argument.
     !!: Adding a new function str2time() with parsing the human time from time2str(),
 	which added also by the "inParts" argument.
@@ -122,7 +184,7 @@
 - !!:FIX:DB.SQLite: The error code SQLITE_CORRUPT appended for reconnection the DB file,
     since this error can be appeared with changing the DB-file structure from an external source.
 - FIX:DAQ.OPC_UA: Fixing and improving some original messages.
-- !!:FIX:UI.{VCAEngine,Vision}: Adding an option in the "Processing" tab of the projects with control
+- !!:FIX:UI.{VCAEngine,Vision}: Adding an option in the "Styles" tab of the projects with control
     the writing to styles in the execution context. And the writing disabled on the project side.
 - !!!:FIX:UI.{Vision,WebVision}: Implementing of rounding big interval points by the Besier Cubic Curves.
     FIX: Fixing of calculating bottom border for vertical scale.
@@ -158,7 +220,7 @@
 - !!!!:data/openscada-proj.in: Expanding by the commands snapshot, crash, cores with unification
     of preparing the crash reports also for the crashing processes from itself.
 - !!!!:SYS: Enabled in processing the signals SIGFPE and SIGSEGV with call "openscada-proj crash {ProjID}"
-	to prepare the crash report immediatly for SIGFPE, SIGABRT and SIGSEGV.
+	to prepare the crash report immediately for SIGFPE, SIGABRT and SIGSEGV.
     The process return-exit result for success is forced to EXIT_SUCCESS and for fail to EXIT_FAILURE.
 - !!:Archive: The value archives appended of detection the doubly links and their all removing.
     !:FSArch: The archives unpacking function appended by the error message unification
@@ -217,7 +279,7 @@
 2024-10-19 Roman (stable)
 - FIX:UI.VCAEngine: Appended of the resources checking from the included widgets (dynamically created)
 	on the owner page.
-    FIX: The session UserAPI function this.attr() fixed in checking the translation flag TFld::TransltText.
+    FIX: The session User API function this.attr() fixed in checking the translation flag TFld::TransltText.
 - FIX:UI.WebVision: The Button view of the FormEl primitive allowed for images in the Load type.
 
 
@@ -230,7 +292,7 @@
 	by the direct writing function writeTo(), that performed for non video files.
 	For that appended by the attributes: Transport (tr), Protocol (prt) and Sender (sender).
     FIX: Fixed in returning the result through direct writing to the 'rez' attribute for templates.
-- !!:LibsDB.OscadaLibs.tmplib_LowDevLib_io.UC96: Expanded by reading:
+- !!:LibsDB.OscadaLibs.tmplib_LowDevLib.UC96: Expanded by reading:
     Volts maximum (Vup), Volts minimum (Vdwn), Data+ (Dplus), Data- (Dminus).
 - FIX:LibsDB.vcaBase: wlb_Main.RootPgSo: Improved by pause the demo-procedures execution at no requests on WEB,
     so preventing of opening all pages before real close.
@@ -238,8 +300,8 @@
     instead direct value or such definition.
 - Protocol.UserProtocol,UI.WebUser: Switched to the limit parameter prmServTask_PER instead such definition.
 - Protocol.HTTP,UI.{WebUser,WebCfg}: Switched to "HTTP/1.1".
-- !!:Transports: The IO log items appended by whole package (or agregation) size
-	and the agregation default time set to 1.
+- !!:Transports: The IO log items appended by whole package (or aggregation) size
+	and the aggregation default time set to 1.
     !!: SSL: Appended of implementation TTransportIn::writeTo() with moving to map in holding the SSockIn structure.
     Sockets: Some improved in implementation TTransportIn::writeTo() with disabling wrToRes.
 - !!:Protocol.HTTP: Appended by the generic function of transition any methods to WEB-modules - HTTP().
@@ -300,7 +362,7 @@
 2024-08-12 Roman (stable)
 - !!!!:LibsDB.OscadaLibs: The library tmplib_DevLib appended by the template "Ergomera 125 (ergomera125)" with initial
 	implementation the own protocol.
-    !!: The library tmplib_LowDevLib_io appended by the template "1-Wire (1W)" merged from 1W_DS9097 and 1W_DS9097U before
+    !!: The library tmplib_LowDevLib appended by the template "1-Wire (1W)" merged from 1W_DS9097 and 1W_DS9097U before
 	appending I2C Drivers.
 - Transport.Serial: All options in the address field marked optional.
 
@@ -319,7 +381,7 @@
 2024-07-20 Roman (stable)
 - LibsDB.vcaBase: wlb_Main.RootPgSo: Direct pages list append by checking the pages permission.
 - FIX:Transport.{Sockets,SSL}: Corrected in obtaining true bytes sequence after getservbyname_r().
-- UI.VCAEngine: Session::uiCmd() and its UserAPI variant append by the permission checking of the listing and group pages.
+- UI.VCAEngine: Session::uiCmd() and its User API variant append by the permission checking of the listing and group pages.
 
 
 2024-07-20 Roman (stable)
@@ -331,15 +393,15 @@
 
 
 2024-07-10 Roman (stable)
-- !!!!:FIX:SYS: The commandline options appended by getting default value from the environmet variable "OSCADA_{cmd}",
-	what enabled by the environmet variable OSCADA_CMD_EN.
+- !!!!:FIX:SYS: The commandline options appended by getting default value from the environment variable "OSCADA_{cmd}",
+	what enabled by the environment variable "OSCADA_CMD_EN".
     FIX: Fixed type of the limit variable limObjDscr_SZ.
 - !!!!:Transport.{Sockets,SSL}: TTransSock::getAddr() renamed to TTransSock::addrGet()
 	and the address resolving moved to a new function TTransSock::addrResolve() with direct resolving the static addresses
 	and dynamic resolving by gethostbyname() due to getaddrinfo() has problems with reenteranting and global lock causes
-	long hungs on all addresses at problems with DNS. Also appended a commandline option --getaddrinfo to enable it for yourself.
+	long hangs on all addresses at problems with DNS. Also appended a commandline option --getaddrinfo to enable it for yourself.
     !!:Transport.SSL: Input part of the transports switched to use unified TTransSock::addrResolve()
-	for precursory resolving all dynamic addresses and pass ready static adresses to BIO_new_accept().
+	for precursory resolving all dynamic addresses and pass ready static addresses to BIO_new_accept().
 
 
 2024-07-10 Roman (stable)
@@ -353,12 +415,12 @@
 
 2024-06-23 Roman (stable)
 - !!:SYS,DAQ.{BlockCalc,JavaLikeCalc},Protocol.{ModBus,OPC_UA,UserProtocol},UI.{VCAEngine,WebUser}:
-    Appended by the limiting option limObjDscr_SZ for description configuration fields (DESCR)
+    Appended by the limiting option limObjDscr_SZ for the description configuration fields (DESCR)
 	with default value 1000 and range [300...1000000].
 
 
 2024-06-23 Roman (stable)
-- !!!!:FIX:LibsDB.OscadaLibs: The library tmplib_LowDevLib appended by the template "BT: ATORCH S1BP6".
+- !!!!:FIX:LibsDB.OscadaLibs: The library tmplib_LowDevLib appended by the template "BT: ATORCH S1BP (S1BP)".
     !!!:FIX:DevLib.VSE002: Rewrote in the packages sequential reading mode,
 	    that is detection all packages with notifying unknown.
 	The B16 packages' data renamed to B8 and appended by signatures "74 00" and "6E 00".
@@ -368,7 +430,7 @@
 - FIX:Archive: Values requesting in the control interface tab "Values" of the value archive appended
     by the time limit in prmInterf_TM (7) to prevent hangs (long processing) on very big ranges.
 - !:FIX:DAQ: Fixing-finishing the dynamic translation for title of the controller and parameter object.
-- FIX:DAQ.JavaLikeCalc: Fixed in processing default value of the limit argument of the UserAPI function string.split().
+- FIX:DAQ.JavaLikeCalc: Fixed in processing default value of the limit argument of the User API function string.split().
 - FIX:UI.WebVision: Fields of the Text primitive improved in vertical centering for single line of the non HTML mode,
     for which there is set "line-height: 1.0".
 
@@ -378,7 +440,7 @@
 - FIX:DAQ.JavaLikeCalk: Some improved in the translation.
 - LibsDB.vcaBase: wlb_Main.{grpGraph,grpCadr,doc_panel,grph_panel,prescrEdit,prescrRun,prescrRunSimple,accept,treeSelect,calendar,
 	userManager,alarmsStReport,docRepDay,docRepMonth,docRepYear},wlb_prescr.{prescrEdit,prescrRun,prescrRunSimple}:
-    The variable ev_cur renamed to evCur.
+    The variable <ev_cur> renamed to <evCur>.
 - SYS: XMLNodeObj::getElementsBy() and its UserAPI variant expanded by arguments "limit" and "from" of the XML-tree partial processing.
 - FIX:UI.{QTCfg,Vision}: The messages "Load from DB" and "Save to DB" renamed to "Load" and "Save"
     and with "storage" instead "DB" in full messages.
@@ -468,7 +530,7 @@
 
 2024-03-27 Roman (stable)
 - !!:DAQ.System: Switched to the soft mode of parameters automatic creation,
-    that is you allowed to create the source parameters automatically,
+    that is you are allowed to create the source parameters automatically,
     save forcibly need ones and next switch to the manual mode, than preventing continued scanning.
 
 
@@ -5069,7 +5131,7 @@
 - !!!:Transport.{Sockets,SSL}: Expanded for support IPv6 both for input and output transports using getaddrinfo().
     The output transport address expanded by global arguments which can be the timings and attempts.
     Appended for processing (connecting) all IP addresses resolved from the symbolic one, especially for the output transports.
-    Output transports appended for direct definition several host adresses.
+    Output transports appended for direct definition several host addresses.
     Output transports' IO log expanded for starting errors.
 - !:Transport.SSL: The output transport status appended for the last connection time.
     The default port set to 10045.

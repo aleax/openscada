@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.ODBC file: odbc.cpp
 /***************************************************************************
- *   Copyright (C) 2015-2023 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2015-2025 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,7 +34,7 @@
 #define MOD_NAME	trS("DB by ODBC")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.2.17"
+#define MOD_VER		"0.2.18"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("BD module. Provides support of different databases by the ODBC connectors and drivers to the databases.")
 #define MOD_LICENSE	"GPL2"
@@ -539,8 +539,8 @@ void MTable::setVal( TCfg &cf, const string &val, bool tr )
 	    break;
 	case TFld::String:
 	    if(!cf.extVal()) {
-		if(!tr || (cf.fld().flg()&TFld::TransltText && !cf.noTransl())) cf.setS(val);
-		if(!tr && cf.fld().flg()&TFld::TransltText && !cf.noTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
+		if(!tr || cf.isTransl()) cf.setS(val);
+		if(!tr && cf.isTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
 	    }
 	    else {
 		cf.setS(val, (tr?TCfg::ExtValTwo:TCfg::ExtValOne));

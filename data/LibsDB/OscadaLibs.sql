@@ -40,13 +40,13 @@ INSERT INTO ParamTemplLibs VALUES('DevLib','Industrial devices','Промисл�
 
 Author: Roman Savochenko <roman@oscada.org>, Constantine (IrmIngeneer) (2018), Arsen Zakojan (2017), Ruslan Yarmoliuk (2017)
 Founded: January 2010
-Version: 3.0.1
+Version: 3.1.1
 License: GPLv2
 DOC: Libs_Devices|Libs/Devices','Бібліотеку пристроїв користувацьких протоколів створено для надання доступу до даних промислових пристроїв через мережу із доволі простим протоколом, на кшталт пристроїв загальної промислової автоматики та лічильників різних ресурсів, із протоколом достатньо простим до реалізації у модулі користувацького протоколу, з використанням наявних комплексних протоколів (ModBus, OPC_UA, HTTP) або безпосередньо на внутрішній мові подібній до Java.
 
 Автор: Роман Савоченко <roman@oscada.org>, Константин (IrmIngeneer) (2018), Арсен Закоян (2017), Руслан Ярмолюк (2017)
 Засновано: Січень 2010
-Версія: 3.0.1
+Версія: 3.1.1
 Ліцензія: GPLv2
 DOC: Libs_Devices|Libs/Devices','tmplib_DevLib','Промышленные устройства','');
 INSERT INTO ParamTemplLibs VALUES('PrescrTempl','Prescriptions','Рецепти','The library is created to provide an environment of execution of scenarios of the technological operations — prescriptions, and frames of the user interface about them, including the frame of creation/edition the prescriptions and two frames of the execution control and reporting — "Prescription — run" and "Prescription — run, simple". The library is built on the basis primitives of the widgets and the internal programming language JavaLikeCalc, including templates and commands.
@@ -8091,7 +8091,15 @@ if(tErr.toInt()) {
 		}
 }
 f_err = tErr+(arhSt.length?": "+arhSt:"");','','',1707747484);
-INSERT INTO tmplib_DevLib VALUES('ergomera125','Ergomera 125','','','','','',240,0,'JavaLikeCalc.JavaScript
+INSERT INTO tmplib_DevLib VALUES('ergomera125','Ergomera 125','','','The template implements support for Ergomera 125 Counters and for the manufacturer own protocol, due to the ModBus based protocol has obvious problems. Communication protocol of the devices is completely specific.
+
+<!!> Even the manufacturer own protocol have had problems on accessible to test devices, but mostly in reading the archives, so the template is not tested properly and it is considered as the initial implementation! The template reads the daily and hourly archives and some set of the instantaneous parameters.
+
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 0.5 HD
+Sponsored by: Vinnica Poultry Farm
+Version: 0.5.0
+License: GPLv2','','',240,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(data, cmd, waitSz) {
 	if(data == null || cmd == null || waitSz == null)	return tr("2:Empty request. ");
@@ -8353,7 +8361,7 @@ if(arhH.length) {
 	else
 		prcSt += tr("Hours: ") + tr("Reading in time=%1").replace("%1",SYS.strftime(arhLastH,"%Y-%m-%d %H")) + "; ";
 }
-f_err = tErr + (prcSt.length?((tErr=="0")?": ":" ")+prcSt:"");','','',1723380946);
+f_err = tErr + (prcSt.length?((tErr=="0")?": ":" ")+prcSt:"");','','',1740065040);
 CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_PrescrTempl VALUES('timer','Command — Timer','Команда — Таймер','Команда — Таймер','Template of a command of the prescription typical timer. The timer is only designed to hold time between other action steps and for example, so it only has one attribute, "Time" in seconds.
 
@@ -10880,10 +10888,62 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 else if(f_err.toInt() && !tErr.toInt())
 	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 f_err = tErr;','','',1714665209);
-INSERT INTO tmplib_base VALUES('initRemCntr','Control the remote initiative connections','Контроль віддалених ініціативних підключень','','Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.1
-License: GPLv2','Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.1
+INSERT INTO tmplib_base VALUES('initRemCntr','Control the remote initiative connections','Контроль віддалених ініціативних підключень','','The template of processing input initiative connections expands early one template initiative connections processing for the associated output transports by complete representing data of the remote OpenSCADA hosts on some aggregation server and with a possibility of control the remote hosts through the server, that is finishing the conception of data acquisition in the passive mode and the initiative connection.
+
+The template does in whole:
+- detecting a new connection from remote host, which has no ID;
+- sending an acquaintance direct request to the established connection for getting KEY of the host, when it was already connected early, and for getting information about the host for creating ID of the host;
+- setting ID for the connection;
+- creating a record in the OpenSCADA hosts table for the connection and sending all followed requests already through the host;
+- creating on the remote host a representative Logical Controller;
+- creating on the remote host a representative DAQ.System Controller Object in the automatic mode, at missing any other there;
+- processing the present DAQ.System Controller Objects to link the Logical Level parameters to them and creating some processing logical parameters;
+- writing the generated key by a line "SrcKey: {KEY}" to description of the Logical Controller as a sign of finalising the initialisation;
+- creating a Controller Object in DAQ.DAQGate with connection to the remote Logical Controller.
+
+ID of the remote host is formed in the view "{HostDomain}{StatName}{RandKey}" and with limiting to 20 symbols, where:
+- {HostDomain} — network host name-domain;
+- {StatName} — station name of the OpenSCADA project;
+- {RandKey} — random key in sixth digits.
+
+Data model of the representative Logical Controller can contain both the generated links with processing parameters, and custom parameters, when the user is decided to publish some extra data. The generated items from DAQ.System are represents sources currently:
+- "CPU", "MEM", "sensors", "Power", "uptime" => links in the "System (SYS)" container parameter;
+- "fs", "hddstat", "hddsmart" => links in the "Disk (DISK)" container parameter with a processing one for "hddsmart" by the template base.DiskSMART;
+- "netstat" => links in the "Network (NET)" container parameter;
+- "ups" => links in the root with a processing one by the template base.UPS.
+
+The aggregated data in DAQ.GAQGate can be lifted to up, or used in derivative DAQ objects, or whether directly on custom frames, or in future on a Dynamic Frame, which scheduled to implement; and without any additional action you will get notification about violations on the hosts.
+
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.1.0
+License: GPLv2','Шаблон опрацювання вхідних ініціативних підключень розширює попередній шаблон опрацювання ініціативних підключень щодо асоційованих вихідних транспортів повним представлення даних віддалених хостів OpenSCADA на деякому агрегувальному сервері, чим завершуючи концепцію збору даних у пасивному режимі та ініціативного підключення.
+
+Шаблон загалом здійснює:
+- виявлення нового підключення від віддаленого хосту, яке не має ІД;
+- надсилання ознайомчого прямого запиту за встановленим підключенням для отримання КЛЮЧА хосту, якщо це підключення вже раніше було, і для отримання інформації щодо хосту для створення ІД хосту;
+- встановлення ІД для підключення;
+- створення запису у таблиці хостів OpenSCADA для підключення і надсилання подальших запитів вже через хост;
+- створення на віддаленому хості представницького Логічного Контролеру;
+- створення на віддаленому хості представницького Об''єкту Контролеру DAQ.System у автоматичному режимі, за відсутності інших там;
+- опрацювання наявних Об''єктів Контролеру DAQ.System щодо посилань параметрів Логічного Рівня на них і створення деяких логічних параметрів обробки;
+- запис згенерованого ключа рядком "SrcKey: {ID}" до опису Логічного Контролеру у якості ознаки завершення ініціалізації;
+- створення Об''єкту Контролеру у DAQ.DAQGate із підключенням до віддаленого Логічного Контролеру.
+
+ІД віддаленого хосту формується у вигляді "{HostDomain}{StatName}{RandKey}" і з обмеженням у 20ть символів, де:
+- {HostDomain} — мережеве ім''я-домен хосту;
+- {StatName} — ім''я станції проєкту OpenSCADA;
+- {RandKey} — випадковий ключ у шість цифр.
+
+Модель даних представницького Логічного Контролеру може містити як згенеровані посилання із параметрами обробки, так і користувацькі параметри, якщо користувач вирішить опублікцівати додаткові дані. Згенеровані із DAQ.System елементи наразі представляють джерела:
+- "CPU", "MEM", "sensors", "Power", "uptime" => посилання у контейнері параметрів "Система (SYS)";
+- "fs", "hddstat", "hddsmart" => посилання у контейнері параметрів "Диск (DISK)" із однією обробкою для "hddsmart" за шаблоном base.DiskSMART;
+- "netstat" => посилання у контейнері параметрів "Мережа (NET)";
+- "ups" => посилання у корені із однією обробкою за шаблоном base.UPS.
+
+Агреговані дані у DAQ.GAQGate можуть бути підняті на гору, або використані у похідних DAQ об''єктах, або прямо на користувацьких кадрах, або у майбутньому на Динамічному Кадрі, який заплановано до реалізації; та без жодних додаткових дій ви отримаєте сповіщення про порушення на хостах.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 function prmAdd(req, path, pId, pNm, pTp, pSrc, pLogLnk) {
 	req.childAdd("add").setAttr("path",path+"/%2fbr%2fprm_").setAttr("id",pId).setText(pNm);
@@ -10901,6 +10961,8 @@ function prmAdd(req, path, pId, pNm, pTp, pSrc, pLogLnk) {
 if(f_start) {
 	inTransport_ = "", inTr = null;
 	prcTr = "";
+	prcCon = new Object();
+	noAccess = new Object();
 	return;	//Do no work on the start time
 }
 
@@ -10913,6 +10975,7 @@ if(inTr == null || inTransport != inTransport_) {
 
 if(inTr == null)	tErr = "1:"+tr("Input transport ''%1'' error.").replace("%1",inTransport);
 else {
+	//Processing the input connections
 	outTrs = inTr.associateTrsList();
 	for(iTr = 0; iTr < outTrs.length; iTr++) {
 		oTrNm = outTrs[iTr];
@@ -10928,21 +10991,32 @@ else {
 		req.childAdd("get").setAttr("path","/%2fgen%2fstat");
 		req.childAdd("get").setAttr("path","/DAQ/LogicLev/"+cntrObj+"/%2fcntr%2fcfg%2fDESCR");
 		req.childAdd("get").setAttr("path","/%2fgen%2fenv%2fhost");
-		if((rez=oTrO.messIO(req,"SelfSystem")).length) {
-			SYS.messNote("initRemCntr", (tVl=tr("Error requesting the remote host ''%1'': %2. ").replace("%1",hostAddr).replace("%2",rez)));
-			tErr += (tErr.length?"":"10:") + tVl;
-			oTrO.start(false);
-			continue;
+		if((rez=oTrO.messIO(req,"SelfSystem")).toInt()) {
+			SYS.messNote("/InitRem/"+this.cfg("SHIFR"), (tVl=tr("Error requesting the remote host ''%1'': %2")
+									.replace("%1",hostAddr).replace("%2",rez)));
+			//tErr += (tErr.length?"":"10:") + tVl;
 		}
-		stNm = req.childGet(2).text()+"_"+req.childGet(0).text();
-		stSrcKey = rand(999999).toString();
+		else {
+			stNm = req.childGet(2).text()+"-"+req.childGet(0).text();
+			if(noAccess[stNm] != null && accessTm >= 0 && (SYS.time()-noAccess[stNm]) > accessTm*60*60) {
+				delete noAccess[stNm];
+				delete prcCon[stNm];
+			}
+		}
+		if(rez.toInt() || noAccess[stNm] != null) { oTrO.start(false); continue; }
+
+		stSrcKey = rand(999).toString();
 		isSrcInited = isHostReqPresent = false;
 		if(!req.childGet(1).attr("rez").toInt() && (tVl=req.childGet(1).text().match("^SrcKey: *([^\\n]+)$","m")).length)
 			isSrcInited = true, stSrcKey = tVl[1];
-		stSrcId = oTrO.conPrm("initConID", stNm+"_"+stSrcKey);
 
-		prcTr = prcTr.replace(new RegExp("^"+stSrcId+":.+$","g"), "");
-		prcTr += stSrcId+": "+oTrNm+", "+hostAddr+", "+SYS.strftime(SYS.time())+"\n";
+		stSrcId = req.childGet(2).text() + req.childGet(0).text() + stSrcKey;
+		for(stLen = req.childGet(2).text().length, hostLen = req.childGet(0).text().length; stSrcId.length > 20; ) {
+			if(stLen > hostLen)	stLen--; else hostLen--;
+			stSrcId = req.childGet(2).text().slice(0,stLen) + req.childGet(0).text().slice(0,hostLen) + stSrcKey;
+		}
+		stSrcId = oTrO.conPrm("initConID", SYS.strEncode(stSrcId,"OscdID"));
+		prcCon[stSrcId] = stSrcId+": "+oTrNm+", "+hostAddr+", "+SYS.strftime(SYS.time());
 
 		//Record to the table of the OpenSCADA remote hosts
 		// Checking presence
@@ -10953,7 +11027,7 @@ else {
 			{ isHostReqPresent = true; break; }
 
 		// Appending/updating
-		if(!isHostReqPresent) {
+		if(!rez.toInt() && !isHostReqPresent) {
 			req = SYS.XMLNode("CntrReqs").setAttr("path","/Transport");
 			req.childAdd("add").setAttr("path","/%2fsub%2fehost");
 			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id","newHost").setAttr("col","id").setText(stSrcId);
@@ -10963,33 +11037,52 @@ else {
 			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id",stSrcId).setAttr("col","user").setText(cntrUser);
 			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id",stSrcId).setAttr("col","pass").setText(cntrPass);
 			req.childAdd("set").setAttr("path","/%2fsub%2fehost").setAttr("key_id",stSrcId).setAttr("col","mode").setText(2);
+			req.childAdd("save").setAttr("path","/%2fobj");
 			SYS.cntrReq(req);
 		}
 
 		//Initialisation
-		if(!isSrcInited) {
-			//Creating the main control object of the Data Sources
+		if(!rez.toInt() && !isSrcInited) {
+			// Creating the main control object of the Data Sources
 			req = SYS.XMLNode("CntrReqs").setAttr("path","/DAQ/LogicLev");
 			req.childAdd("add").setAttr("path","/%2fbr%2fcntr_").setAttr("id",cntrObj).setText("Sources for remote aggregator");
 			req.childAdd("set").setAttr("path","/"+cntrObj+"/%2fcntr%2fst%2frunSt").setText(1);
 			req.childAdd("set").setAttr("path","/"+cntrObj+"/%2fcntr%2fcfg%2fSTART").setText(1);
 			req.childAdd("save").setAttr("path","/"+cntrObj+"/%2fobj");
-			SYS.cntrReq(req, stSrcId);
+			rez = SYS.cntrReq(req, stSrcId);
+
+			//No access
+			if(!rez.toInt() && req.childGet(0).attr("rez").toInt()) {
+				req = SYS.XMLNode("CntrReqs").setAttr("path","/Transport");
+				req.childAdd("del").setAttr("path","/%2fsub%2fehost").setAttr("key_id",stSrcId);
+				req.childAdd("save").setAttr("path","/%2fobj");
+				SYS.cntrReq(req);
+
+				noAccess[stNm] = SYS.time();
+				delete prcCon[stSrcId];
+				prcCon[stNm] = stSrcId+": "+oTrNm+", "+hostAddr+", "+SYS.strftime(SYS.time())+" - NO ACCESS";
+
+				SYS.messNote("/InitRem/"+this.cfg("SHIFR"), (tVl=tr("Error accessing the remote station ''%1'': %2. ")
+											.replace("%1",stNm).replace("%2",req.childGet(0).text())));
+
+				oTrO.start(false);
+				continue;
+			}
 
 			//Primary sources in DAQ.System
 			// Getting allowed ones
 			reqSys = SYS.XMLNode("get").setAttr("path","/DAQ/System/%2fbr%2fcntr_");
-			SYS.cntrReq(reqSys, stSrcId);
+			rez = SYS.cntrReq(reqSys, stSrcId);
 
 			// Creation one at missing any one
-			if(!reqSys.childSize()) {
+			if(!rez.toInt() && !reqSys.childSize()) {
 				req = SYS.XMLNode("CntrReqs").setAttr("path","/DAQ/System");
 				req.childAdd("add").setAttr("path","/%2fbr%2fcntr_").setAttr("id",cntrObj).setText("Remote sources");
 				req.childAdd("set").setAttr("path","/"+cntrObj+"/%2fcntr%2fcfg%2fAUTO_FILL").setText(3);
 				req.childAdd("set").setAttr("path","/"+cntrObj+"/%2fcntr%2fst%2frunSt").setText(1);
 				req.childAdd("set").setAttr("path","/"+cntrObj+"/%2fcntr%2fcfg%2fSTART").setText(1);
 				req.childAdd("save").setAttr("path","/"+cntrObj+"/%2fobj");
-				SYS.cntrReq(req, stSrcId);
+				rez = SYS.cntrReq(req, stSrcId);
 				reqSys.childAdd("el").setAttr("id",cntrObj).setText("Remote sources");
 			}
 
@@ -11000,15 +11093,15 @@ else {
 			prmAdd(reqLogic, "/", "DISK", "Disk", "Prm");
 			prmAdd(reqLogic, "/", "NET", "Network", "Prm");
 
-			for(iEl = 0; iEl < reqSys.childSize(); iEl++) {
+			for(iEl = 0; !rez.toInt() && iEl < reqSys.childSize(); iEl++) {
 				cntrId = reqSys.childGet(iEl).attr("id");
 				reqSysPrms = SYS.XMLNode("get").setAttr("path","/DAQ/System/"+cntrId+"/%2fbr%2fprm_");
-				SYS.cntrReq(reqSysPrms, stSrcId);
+				rez = SYS.cntrReq(reqSysPrms, stSrcId);
 
-				for(iEl2 = 0; iEl2 < reqSysPrms.childSize(); iEl2++) {
+				for(iEl2 = 0; !rez.toInt() && iEl2 < reqSysPrms.childSize(); iEl2++) {
 					pId = reqSysPrms.childGet(iEl2).attr("id");
 					req = SYS.XMLNode("get").setAttr("path","/DAQ/System/"+cntrId+"/prm_"+pId+"/%2fprm%2fcfg%2fTYPE");
-					SYS.cntrReq(req, stSrcId);
+					rez = SYS.cntrReq(req, stSrcId);
 
 					//  Completely reflected sources
 					if((tVl=req.text()) == "CPU" || tVl == "MEM" || tVl == "sensors" || tVl == "Power" || tVl == "uptime")
@@ -11024,36 +11117,65 @@ else {
 						prmAdd(reqLogic, "/", pId, reqSysPrms.childGet(iEl2).text(), "PrmRefl", "System."+cntrId+"."+pId);
 						prmAdd(reqLogic, "/", "log_"+pId, reqSysPrms.childGet(iEl2).text()+" - processing", "Prm", "base.UPS", "System."+cntrId+"."+pId);
 					}
-					else SYS.messNote("initRemCntr", "Implement the type ''"+tVl+"''");
+					else SYS.messNote("/InitRem/"+this.cfg("SHIFR"), "Implement the type ''"+tVl+"''");
 				}
 			}
 
 			//Mark the Logical Level controller as finished in the initialisation and save
 			reqLogic.childAdd("set").setAttr("path","/%2fcntr%2fcfg%2fDESCR").setText("SrcKey: "+stSrcKey+"\n");
 			reqLogic.childAdd("save").setAttr("path","/%2fobj");
-			if(!SYS.cntrReq(reqLogic,stSrcId).toInt()) {
-				//Creation the DAQGate object in the end and no error
-				req = SYS.XMLNode("CntrReqs").setAttr("path","/DAQ/DAQGate");
-				req.childAdd("add").setAttr("path","/%2fbr%2fcntr_").setAttr("id",stSrcId).setText(stNm+" ("+stSrcKey+")");
-				req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fcfg%2fSTATIONS").setText(stSrcId);
-				req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fcfg%2fCNTRPRM").setText("LogicLev."+cntrObj);
-				req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fcfg%2fSTART").setText(1);
-				req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fst%2frunSt").setText(1);
-				req.childAdd("save").setAttr("path","/"+stSrcId+"/%2fobj");
-				SYS.cntrReq(req);
-			}
+			rez = SYS.cntrReq(reqLogic, stSrcId);
 			delete reqLogic;
 			delete reqSysPrms;
 			delete reqSys;
 		}
+
+		//Creation the DAQGate object
+		if(!rez.toInt() && SYS.DAQ.DAQGate[stSrcId] == null) {
+			//Creation the DAQGate object in the end and no error
+			req = SYS.XMLNode("CntrReqs").setAttr("path","/DAQ/DAQGate");
+			req.childAdd("add").setAttr("path","/%2fbr%2fcntr_").setAttr("id",stSrcId).setText(stNm+" ("+stSrcKey+")");
+			req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fcfg%2fSTATIONS").setText(stSrcId);
+			req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fcfg%2fCNTRPRM").setText("LogicLev."+cntrObj);
+			req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fcfg%2fSTART").setText(1);
+			req.childAdd("set").setAttr("path","/"+stSrcId+"/%2fcntr%2fst%2frunSt").setText(1);
+			req.childAdd("save").setAttr("path","/"+stSrcId+"/%2fobj");
+			SYS.cntrReq(req);
+		}
+
 		delete req;
 	}
 	delete oTrO;
+
+	//Checking live of the established connections
+	if(accessTm > 0) {
+		daqs = SYS.DAQ.DAQGate.nodeList("cntr_");
+		for(iEl = 0; iEl < daqs.length; iEl++)
+			if((daqO=SYS.DAQ.DAQGate[daqs[iEl]]).cfg("CNTRPRM") == "LogicLev.RemCntr" &&
+					daqO.status().toInt() && prcCon[(daqID=daqs[iEl].slice(5))] != null &&
+					(tVl=daqO.status().match("([0-9]{2}-[0-9]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2})")).length &&
+					(tVl=SYS.strptime(tVl[1],"%d-%m-%Y %H:%M:%S")) > 24*60*60 && (SYS.time()-tVl) > accessTm*60*60)
+			{
+				delete daqO;
+				delete prcCon[daqID];
+
+				req = SYS.XMLNode("CntrReqs").setAttr("path","/");
+				req.childAdd("del").setAttr("path","/DAQ/DAQGate/%2fbr%2fcntr_").setAttr("id",daqID);
+				req.childAdd("del").setAttr("path","/Transport/%2fsub%2fehost").setAttr("key_id",daqID);
+				SYS.cntrReq(req);
+			}
+		delete daqO;
+	}
 }
+
+//Updating the processed list
+prcTr = "";
+for(var iEl in prcCon)
+	prcTr += (prcTr.length?"\n":"") + prcCon[iEl];
 
 //Error set
 if(tErr.length)	f_err = tErr;
-else f_err = "0";','','',1732366136);
+else f_err = "0";','','',1741452855);
 CREATE TABLE IF NOT EXISTS 'flb_Controller' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO flb_Controller VALUES('prescr','Prescriptions manager (moved)','','','!!!!: Moved and replaced by the template PrescrTempl.manager. Will be removed soon
 Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
@@ -16334,7 +16456,7 @@ INSERT INTO Trs VALUES('No data, reconnection. Switch to the first screen of the
 INSERT INTO Trs VALUES('Reconnects %1, left %2s.','','','');
 INSERT INTO Trs VALUES('Missed by an error - ','','','');
 INSERT INTO Trs VALUES('Initial reading in pos=%1(%2)','','','');
-INSERT INTO Trs VALUES('No powernet','Відсутня мережа','','');
+INSERT INTO Trs VALUES('No powernet','Відсутнє живлення','','');
 INSERT INTO Trs VALUES('Scheduled currents call','План запиту поточного','','');
 INSERT INTO Trs VALUES('Scheduled forecast call','План запиту прогнозу','','');
 INSERT INTO Trs VALUES('Too many realocated sectors','Забагато переміщених секторів','','');
@@ -16349,7 +16471,8 @@ INSERT INTO Trs VALUES('3:No response. ','','','');
 INSERT INTO Trs VALUES('3:Response isn''t completed. ','','','');
 INSERT INTO Trs VALUES('Address ''%1'' out of range [0...9999].','','','');
 INSERT INTO Trs VALUES('Reading in time=%1','','','');
-INSERT INTO Trs VALUES('Error requesting the remote host ''%1'': %2. ','','','');
+INSERT INTO Trs VALUES('Error accessing the remote station ''%1'': %2. ','Помилка доступу до віддаленої станції ''%1'': %2. ','','');
+INSERT INTO Trs VALUES('Error requesting the remote host ''%1'': %2','Помилка запиту віддаленого хосту ''%1'': %2','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_base_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_base_io VALUES('digAlarm','in','Input',3,144,'Input|in',2,'Вхід','','Вход','','');
 INSERT INTO tmplib_base_io VALUES('simleBoard','in','Input',2,128,'Parameter|var',0,'Вхід','','Вход','','');
@@ -16692,11 +16815,19 @@ INSERT INTO tmplib_base_io VALUES('fileServerHTTP','tr','Transport',4,1,'',8,'Т
 INSERT INTO tmplib_base_io VALUES('fileServerHTTP','prt','Protocol',4,1,'',9,'Протокол','','','','');
 INSERT INTO tmplib_base_io VALUES('fileServerHTTP','sender','Sender',0,0,'',3,'Відправник','','Отправитель','','');
 INSERT INTO tmplib_base_io VALUES('initRemCntr','inTransport','Input transport',0,64,'Sockets.InitRemCntr',0,'Вхідний транспорт','','Входной транспорт','','');
-INSERT INTO tmplib_base_io VALUES('initRemCntr','prcTr','Processed connections',0,21,'',5,'Опрацьовані підключення','','','','');
-INSERT INTO tmplib_base_io VALUES('initRemCntr','cntrUser','Access: user',0,64,'root',2,'Доступ: користувач','','','','');
-INSERT INTO tmplib_base_io VALUES('initRemCntr','cntrPass','Access: password',0,64,'openscada',3,'Доступ: пароль','','','','');
-INSERT INTO tmplib_base_io VALUES('initRemCntr','cntrObj','Control object in DAQ.LogicLev and DAQ.System',0,64,'RemCntr',4,'Об''єкт контролю у DAQ.LogicLev і DAQ.System','','','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','prcTr','Processed connections',0,21,'',6,'Опрацьовані підключення','','','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','cntrUser','Access: user',0,64,'root',3,'Доступ: користувач','','','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','cntrPass','Access: password',0,64,'openscada',4,'Доступ: пароль','','','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','cntrObj','Control object in DAQ.LogicLev and DAQ.System',0,64,'RemCntr',5,'Об''єкт контролю у DAQ.LogicLev і DAQ.System','','','','');
 INSERT INTO tmplib_base_io VALUES('initRemCntr','conTm','Connection time, ms',1,64,'5000',1,'Час підключення, мс','','','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','accessTm','Timeout of accessing, hours
+Used for repeating to create representative objects of not accessed hosts
+and for removing old connections.
+Zero or negative value for disabling the control!',1,64,'24',2,'Час доступу, години
+Використовується для повтору створення представницьких об''єктів недоступних хостів
+і для видалення старих підключень.
+Нуль або негативне для вимкнення контролю!','','','','');
+INSERT INTO tmplib_base_io VALUES('initRemCntr','this','Object',4,0,'0',7,'Об''єкт','','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_DevLib_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_DevLib_io VALUES('SCU750','transport','Transport',0,64,'SCU750',0,'Транспорт','','Транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('SCU750','addr','Device address (-1...255)',1,64,'1',1,'Адрес устройства (-1...255)','','Адреса пристрою (-1...255)','','');
@@ -17658,15 +17789,15 @@ INSERT INTO tmplib_LowDevLib_io VALUES('1602A','D7','GPIO Pin: Data7',1,64,'18',
 INSERT INTO tmplib_LowDevLib_io VALUES('1602A','ln1','Line 1',0,32,'',8,'','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('1602A','ln2','Line 2',0,32,'',9,'','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097','transport','Transport of the One Wire bus, Serial',0,64,'oneWire',0,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097','tmResc','Rescan period, s',2,64,'60',1,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097','tryEVAL','Tries after which set value to EVAL',1,64,'3',2,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097','power','Power, for temperature',3,16,'',3,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097','tmResc','Rescan period, s',2,64,'60',1,'Період сканування, секунд','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097','tryEVAL','Tries after which set value to EVAL',1,64,'3',2,'Спроб, після який встановлити значення у EVAL','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097','power','Power, for temperature',3,16,'',3,'Живлення, для температур','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097','this','Object',4,0,'',4,'Об''єкт','Объект','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','transport','Transport of the One Wire bus, Serial',0,64,'oneWire',0,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','tmResc','Rescan period, s',2,64,'60',1,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','tryEVAL','Tries after which set value to EVAL',1,64,'3',2,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','power','Power, for temperature',3,16,'',3,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','isData','In data mode',3,0,'0',4,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','tmResc','Rescan period, s',2,64,'60',1,'Період сканування, секунд','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','tryEVAL','Tries after which set value to EVAL',1,64,'3',2,'Спроб, після який встановлити значення у EVAL','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','power','Power, for temperature',3,16,'',3,'Живлення, для температур','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','isData','In data mode',3,0,'0',4,'У режимі даних','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('1W_DS9097U','this','Object',4,0,'',5,'Об''єкт','Объект','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('BMP180','transport','Transport of the I2C, Serial',0,64,'i2c',0,'','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('BMP180','addr','Device address [0...119]',1,64,'119',1,'','','','','');
@@ -17781,31 +17912,34 @@ INSERT INTO tmplib_LowDevLib_io VALUES('UC96','this','Object',4,0,'',16,'Об''�
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','W','Watts',2,16,'',7,'Вати','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','noDataTm','No data detection time, seconds',1,64,'60',2,'Час виявлення відсутності даних, секунд','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','R','Resistance, Om',2,16,'',8,'Опір, Ом','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','transport','Transport',0,64,'Serial.S1BP:/dev/rfcomm2:9600||1000:40-20',0,'','Транспорт','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','transport','Transport',0,64,'Serial.S1BP:/dev/rfcomm2:9600||1000:40-20',0,'Транспорт','Транспорт','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','dev','Device to bind
-Like to "40:2B:6D:EF:48:A7" for binding by "rfcomm bind {N} 40:2B:6D:EF:48:A7".',0,64,'',1,'','','','','');
+Like to "40:2B:6D:EF:48:A7" for binding by "rfcomm bind {N} 40:2B:6D:EF:48:A7".',0,64,'',1,'Пристрій для зв''язування
+На кшталт "40:2B:6D:EF:48:A7" для зв''язування за допомогою "rfcomm bind {N} 40:2B:6D:EF:48:A7".','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','noDataTm','No data detection time, seconds',1,64,'60',2,'Час виявлення відсутності даних, секунд','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','V','Volts',2,16,'',3,'Вольти','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','A','Amperes',2,16,'',4,'Ампери','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','W','Watts',2,16,'',5,'Вати','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','T','Temperature, °С',1,16,'',9,'Температура, °С','Температура, °С','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','Tm','Time, seconds',1,16,'',10,'','Время, секунд','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','Tm','Time, seconds',1,16,'',10,'Час, секунди','Время, секунд','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','clear','Clear',3,32,'',11,'Очистити','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','this','Object',4,0,'',13,'','Объект','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','KWh','Capacity, KWh',2,16,'',6,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','Hz','Frequency, Hz',2,16,'',7,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','Pf','Factor, Pf',2,16,'',8,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','power','Power mode switch Off/Auto/On',3,32,'',12,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W','transport','Transport of the One Wire bus, Serial',0,64,'1Wire:/dev/ttyS0',0,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W','tmResc','Rescan period, s',2,64,'60',1,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W','tryEVAL','Tries after which set value to EVAL',1,64,'3',3,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W','adapter','Adapter type
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','this','Object',4,0,'',13,'Об''єкт','Объект','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','KWh','Energy, KWh',2,16,'',6,'Енергія, кВт*годин','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','Hz','Frequency, Hz',2,16,'',7,'Частота, Гц','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','Pf','Power factor, Pf',2,16,'',8,'Фактор потужності, Pf','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('S1BP','power','Power mode switch Off/Auto/On',3,32,'',12,'Перемкнути режим живлення Вимкн/Авто/Увімкн','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W','transport','Transport',0,64,'1Wire:/dev/ttyS0',0,'Транспорт','Транспорт','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W','tmResc','Rescan period, seconds',2,64,'60',1,'Період сканування, секунд','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W','tryEVAL','Tries after which set value to EVAL',1,64,'3',3,'Спроб, після яких встановлювати значення у EVAL','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W','adapter','Type of the detected adaptor
 0 - DS9097
-1 - DS9097U',1,16,'-1',4,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W','power','Power, for temperature',3,16,'',5,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W','this','Object',4,0,'',7,'','Объект','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W','isData','In data mode',3,0,'0',6,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('1W','onlyAddAtScan','Only add attributes at scan',3,64,'0',2,'','','','','');
+1 - DS9097U',1,16,'-1',4,'Тип виявленого адаптеру
+0 - DS9097
+1 - DS9097U','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W','power','Power, for temperature',3,16,'',5,'Живлення, для температур','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W','this','Object',4,0,'',7,'Об''єкт','Объект','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W','isData','In data mode',3,0,'0',6,'У режимі даних','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('1W','onlyAddAtScan','Only add at scan',3,64,'0',2,'Додавати лише при скануванні','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Vup','Volts maximum',2,16,'',4,'Вольти максимум','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Vdwn','Volts minimum',2,16,'',5,'Вольти мінімум','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('UC96','Dplus','Data+, V',2,16,'',13,'Дата+, В','','','','');
@@ -18512,7 +18646,9 @@ else if(ln1 != ln1_ || ln2 != ln2_) {
 }
 
 f_err = t_err;','',1509990639);
-INSERT INTO tmplib_LowDevLib VALUES('1W_DS9097','One Wire by DS9097','','One Wire sensors bus implementing by 1Wire-adapter DS9097. Supported direct and parasite powering for the temperature sensors.
+INSERT INTO tmplib_LowDevLib VALUES('1W_DS9097','One Wire by DS9097 (obsolete)','','Obsolete after merging to the generic template "1-Wire (1W)"!
+
+One Wire sensors bus implementing by 1Wire-adapter DS9097. Supported direct and parasite powering for the temperature sensors.
 Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.1','',30,0,'JavaLikeCalc.JavaScript
@@ -18952,8 +19088,10 @@ else {
 	}
 }
 
-f_err = t_err;','',1509990639);
-INSERT INTO tmplib_LowDevLib VALUES('1W_DS9097U','One Wire by DS9097U','','One Wire sensors bus implementing by 1Wire-adapter DS9097U. Supported direct and parasite powering for the temperature sensors.
+f_err = t_err;','',1740056826);
+INSERT INTO tmplib_LowDevLib VALUES('1W_DS9097U','One Wire by DS9097U (obsolete)','','Obsolete after merging to the generic template "1-Wire (1W)"!
+
+One Wire sensors bus implementing by 1Wire-adapter DS9097U. Supported direct and parasite powering for the temperature sensors.
 Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.1','',30,0,'JavaLikeCalc.JavaScript
@@ -19423,7 +19561,7 @@ else {
 	}
 }
 
-f_err = t_err;','',1509990639);
+f_err = t_err;','',1740056824);
 INSERT INTO tmplib_LowDevLib VALUES('BMP180','I2C: BMP180','','I2C Pressure and Temperature sensor. Connect through a Serial output transport into the I2C mode.
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.1','',10,0,'JavaLikeCalc.JavaScript
@@ -20235,7 +20373,7 @@ License: GPLv2','Шаблон BlueTooth інтерфейсу ATORCH UC96, UD24.
 
 ATORCH UC96, UD24 є недорогим пристроєм вимірювання прохідної потужності на USB із багатьма інтерфейсами і підтримкою достатньої колекції властивостей, як і контролем через Bluetooth. Цей шаблон реалізує лише команду очищення даних і збір даних через Bluetooth інтерфейс пристрою.
 
-Пристрій надсилає пакети даних не за запитом, тобто розсилає із періодом у одну секунду. Пристрій може не надсилати пакети даних при увімкнені не на першому екрані, тож вам необхідно перемкнутися на перший екран для появи даних. Дані також можуть бути відсутні після присипляння ПК, тож цей шаблон першим реалізує виявлення відсутності даних і перепідключення.
+Пристрій надсилає пакети даних не за запитом, а просто розсилає із періодом у одну секунду після встановлення підключення. Пристрій може не надсилати пакети даних при увімкнені не на першому екрані, тож вам необхідно перемкнутися на перший екран для появи даних. Дані також можуть бути відсутні після присипляння ПК, тож цей шаблон першим реалізує виявлення відсутності даних і перепідключення.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Загальна працемісткість: 0.3 ЛД
@@ -20317,9 +20455,26 @@ if(tErr.length) {
 	f_err = tErr + " ";
 	V = Vup = Vdwn = A = W = R = T = Ah = Wh = Tm = Dplus = Dminus = EVAL;
 } else f_err = "0:";
-f_err += tr("Reconnects %1, left %2s.").replace("%1",conCntr.toString()).replace("%2",(noDataTm-(SYS.time()-dataTm)).toString());','',1728026831);
+f_err += tr("Reconnects %1, left %2s.").replace("%1",conCntr.toString()).replace("%2",(noDataTm-(SYS.time()-dataTm)).toString());','',1740067401);
 INSERT INTO tmplib_LowDevLib VALUES('S1BP','BT: ATORCH S1BP','','ATORCH S1BP BlueTooth interface template.
-...','',10,0,'JavaLikeCalc.JavaScript
+
+The ATORCH S1BP is low-cost AC energy measurement device with supporting a decent number of collection features, as well as control via Bluetooth. This template implements the command of the data clearing and switching the power mode, also as collection the data by the device''s Bluetooth interface.
+
+The device sends data packages not at a request and just after establishing the connection, that is broadcasting with one second period.
+
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 0.1 HD
+Version: 1.0.0
+License: GPLv2','Шаблон BlueTooth інтерфейсу ATORCH S1BP
+
+ATORCH S1BP є недорогим пристроєм вимірювання енергії змінного струму (AC) із підтримкою достатньої колекції властивостей, як і контролем через Bluetooth. Цей шаблон реалізує команду очищення даних і перемикання режиму живлення, як і збір даних через Bluetooth інтерфейс пристрою.
+
+Пристрій надсилає пакети даних не за запитом, а просто розсилає із періодом у одну секунду після встановлення підключення.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Загальна працемісткість: 0.1 ЛД
+Версія: 1.0.0
+Ліцензія: GPLv2',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	isBound = -1;
 	tr = false;
@@ -20386,13 +20541,19 @@ if(tErr.length) {
 	f_err = tErr + " ";
 	V = A = W = KWh = Hz = Pf = T = Tm = EVAL;
 } else f_err = "0:";
-f_err += tr("Reconnects %1, left %2s.").replace("%1",conCntr.toString()).replace("%2",(noDataTm-(SYS.time()-dataTm)).toString());','',1718433912);
-INSERT INTO tmplib_LowDevLib VALUES('1W','1-Wire','','One Wire sensors bus implementing by 1Wire-adapters DS9097 and DS9097U. Supported direct and parasite powering for the temperature sensors.
+f_err += tr("Reconnects %1, left %2s.").replace("%1",conCntr.toString()).replace("%2",(noDataTm-(SYS.time()-dataTm)).toString());','',1740069928);
+INSERT INTO tmplib_LowDevLib VALUES('1W','1-Wire','1-Дріт','One Wire sensors bus implementing by 1Wire adapters DS9097 and DS9097U. Supported direct and parasite powering for the temperature sensors.
 
-Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
+Supported 1Wire devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.0','',30,0,'JavaLikeCalc.JavaScript
+Version: 1.1.0','Сенсори Одно Дротової шини реалізуються 1Дротовими адаптерами DS9097 і DS9097U. Підтримується пряме і паразитне живлення для температурних сенсорів.
+
+Підтримуються 1Дротові пристрої: DS1820, DS1820/DS18S20/DS1920 (не перевірено), DS1822 (не перевірено), DS2413, DS2408, DS2450, DS2438.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Версія: 1.1.0
+Ліцензія: GPLv2',30,0,'JavaLikeCalc.JavaScript
 //Functions
 function setEVAL(dP) {
 	aLs = dP.nodeList("a_");
@@ -20644,7 +20805,7 @@ else {
 							dP.attrAdd("do"+iD, tr("DO")+iD, "boolean");
 						}
 				}
-				if(dO.tmSc == tmSc)	break;	//Somthing wrong into the scan but repeat, interruption
+				if(dO.tmSc == tmSc)	break;	//Something wrong in the scan but repeat, interruption
 				dO.tmSc = tmSc;
 				dO.try = tryEVAL;
 			}
@@ -20914,5 +21075,14 @@ else {
 	}
 }
 
-f_err = t_err;','',1726227027);
+f_err = t_err;','',1740070050);
+CREATE TABLE IF NOT EXISTS 'Security_user' ("NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"LONGDESCR" TEXT DEFAULT '' ,"PASS" TEXT DEFAULT '' ,"LANG" TEXT DEFAULT '' ,"PICTURE" TEXT DEFAULT '' , PRIMARY KEY ("NAME"));
+INSERT INTO Security_user VALUES('RemCntr','','','$1$RemCntr$zHNN3UJtPPDtt4oUCPcyS1','','');
+CREATE TABLE IF NOT EXISTS 'Security_grp' ("NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"LONGDESCR" TEXT DEFAULT '' ,"USERS" TEXT DEFAULT '' , PRIMARY KEY ("NAME"));
+INSERT INTO Security_grp VALUES('DAQ','Data Acquisition','','root;RemCntr;');
+CREATE TABLE IF NOT EXISTS 'Transport_in' ("ID" TEXT DEFAULT '' ,"MODULE" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCRIPT" TEXT DEFAULT '' ,"ADDR" TEXT DEFAULT '' ,"PROT" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '0' ,"A_PRMS" TEXT DEFAULT '' , PRIMARY KEY ("ID","MODULE"));
+INSERT INTO Transport_in VALUES('RemCntr','Sockets','Remote Control','','oscada:3142:2','SelfSystem',0,'<prms InBufLen="0" MSS="0" MaxQueue="10" MaxClients="20" MaxClientsPerHost="0" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
+');
+INSERT INTO Transport_in VALUES('RemCntr','SSL','Remote Control','','oscada:3145:2','SelfSystem',0,'<prms MaxClients="20" MaxClientsPerHost="0" InBufLen="0" MSS="0" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
+');
 COMMIT;

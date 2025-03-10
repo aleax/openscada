@@ -50,6 +50,15 @@ string TValue::DAQPath( )	{ return nodeName(); }
 
 TVal* TValue::vlNew( )		{ return new TVal(); }
 
+void TValue::setNoTransl( bool vl )
+{
+    vector<string> vLs;
+
+    vlList(vLs);
+    for(unsigned iEl = 0; iEl < vLs.size(); iEl++)
+	vlAt(vLs[iEl]).at().setNoTransl(vl);
+}
+
 void TValue::detElem( TElem *el ) { vlElemDet(el); }
 
 void TValue::addFld( TElem *el, unsigned id_val )
@@ -181,6 +190,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		vl = vlAt(vLs[iEl]);
 		if(!sepReq) {
 		    vtm = 0; svl = vl.at().getS(&vtm);
+		    if(vl.at().isTransl()) svl = trD(svl);
 		    aNd = opt->childAdd("el")->setAttr("id", vLs[iEl])->setText(svl);
 		    if(!hostTm) aNd->setAttr("tm", ll2s(vtm));
 		}
@@ -205,6 +215,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		// Separated element request
 		if(aNd->name() == "el") {
 		    vtm = 0; svl = vl.at().getS(&vtm);
+		    if(vl.at().isTransl()) svl = trD(svl);
 		    aNd->setText(svl);
 		    if(!hostTm) aNd->setAttr("tm", ll2s(vtm));
 		    continue;
@@ -272,7 +283,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		    switch(vl.at().fld().type()) {
 			case TFld::String:
 			    sType = (vl.at().fld().flg()&TFld::FullText) ? _("Text") : _("String");
-			    if(vl.at().fld().flg()&TFld::TransltText)	sType = sType + " " + _("(translate)");
+			    if(vl.at().isTransl()) sType = sType + " " + _("(translate)");
 			    break;
 			case TFld::Integer:	sType = _("Integer");	break;
 			case TFld::Real:	sType = _("Real");	break;
@@ -323,10 +334,10 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",(vl.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SDAQ_ID,SEC_RD))
 	    opt->setText((vl.at().fld().type()==TFld::Real) ?
 		    ((vl.at().getR()==EVAL_REAL) ? EVAL_STR : r2s(vl.at().getR(),6)) :
-		    ((Mess->translDyn() && vl.at().fld().type() == TFld::String && vl.at().fld().flg()&TFld::TransltText) ? trD(vl.at().getS()) :
+		    ((/*Mess->translDyn() &&*/ vl.at().isTransl()) ? trD(vl.at().getS()) :
 		    vl.at().getS()));
 	if(ctrChkNode(opt,"set",(vl.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SDAQ_ID,SEC_WR)) {
-	    vl.at().setS((Mess->translDyn() && vl.at().fld().type() == TFld::String && vl.at().fld().flg()&TFld::TransltText) ?
+	    vl.at().setS((/*Mess->translDyn() &&*/ vl.at().isTransl()) ?
 			    trDSet(vl.at().getS(),opt->text()) :
 			    opt->text());
 	    if(!(vl.at().fld().flg()&TVal::NoSave)) modif();
@@ -387,13 +398,13 @@ void TValue::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TVal                                          *
 //*************************************************
-TVal::TVal( ) : mCfg(false), mReqFlg(false), mTime(0)
+TVal::TVal( ) : mCfg(false), mNoTransl(false), mReqFlg(false), mTime(0)
 {
     src.fld = NULL;
     modifClr();
 }
 
-TVal::TVal( TFld &fld ) : mCfg(false), mTime(0)
+TVal::TVal( TFld &fld ) : mCfg(false), mNoTransl(false), mTime(0)
 {
     src.fld = NULL;
     modifClr();
@@ -401,7 +412,7 @@ TVal::TVal( TFld &fld ) : mCfg(false), mTime(0)
     setFld(fld);
 }
 
-TVal::TVal( TCfg &cfg ) : mCfg(false), mTime(0)
+TVal::TVal( TCfg &cfg ) : mCfg(false), mNoTransl(false), mTime(0)
 {
     src.fld = NULL;
     modifClr();
@@ -469,9 +480,16 @@ string TVal::name( )			{ return mCfg ? src.cfg->name().c_str() : src.fld->name()
 
 bool TVal::dataActive( )		{ return owner().dataActive(); }
 
+void TVal::setNoTransl( bool vl )
+{
+    mNoTransl = vl;
+
+    if(isCfg()) src.cfg->setNoTransl(vl);
+}
+
 const char *TVal::nodeName( ) const	{ return mCfg ? src.cfg->name().c_str() : src.fld->name().c_str(); }
 
-TFld &TVal::fld( )			{ return mCfg ? src.cfg->fld() : *src.fld; }
+TFld &TVal::fld( ) const		{ return mCfg ? src.cfg->fld() : *src.fld; }
 
 AutoHD<TVArchive> TVal::arch( )		{ return mArch; }
 
@@ -841,7 +859,7 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	    bool isSys = false;
 	    if(prms.size() >= 3) isSys = prms[2].getB();
 	    rez = get(&tm, isSys);
-	    if(fld().type() == TFld::String && fld().flg()&TFld::TransltText)
+	    if(isTransl())
 		rez = trD_LU(rez, TSYS::strLine(user_lang,1), TSYS::strLine(user_lang,0));
 	    if(prms.size() >= 1) { prms[0].setI(tm/1000000); prms[0].setModify(); }
 	    if(prms.size() >= 2) { prms[1].setI(tm%1000000); prms[1].setModify(); }
@@ -862,9 +880,9 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	    bool isSys = false;
 	    if(prms.size() >= 4) isSys = prms[3].getB();
 	    if(isSys && isCfg() && fld().flg()&TFld::NoWrite) return false;
-	    if(fld().type() == TFld::String && fld().flg()&TFld::TransltText)
-		set(trDSet_LU(getS(),TSYS::strLine(user_lang,1),TSYS::strLine(user_lang,0),prms[0].getS()), tm, isSys);
-	    else set(prms[0], tm, isSys);
+	    //Disabling the attributes translation at change
+	    if(isTransl()) setNoTransl(true);
+	    set(prms[0], tm, isSys);
 	    return false;
 	} catch(...){ }
 	return true;

@@ -508,7 +508,7 @@
 </p>
 <ul><li> <i>PropTp property(string id, PropTp val = NULL);</i> — Returns of the object's property <i>id</i> for the group <i>grp</i> with setting its at <i>val</i> non NULL and EVAL. Where <i>val</i> in EVAL is clearing the property and NULL (no the argument) just sets nothing. You can <a href="#Object">access directly</a> the properties for the TCntrNode objects, of course at their absency in the Object Model.</li>
 <li> <i>TArrayObj nodeList( string grp = "", string path = "" );</i> — Get child nodes full identifiers list for group <i>grp</i> and node from path <i>path</i>. If <i>grp</i> empty then return nodes for all groups. The full identifier is "{grp}{nID}".</li>
-<li> <i>TCntrNodeObj nodeAt( string path, string sep="" );</i> — Attach to node <i>path</i> into OpenSCADA objects tree. If a separator set into <i>sep</i> then path process as separated string. For missed and invalid nodes the function will return "false" when a correct node in it conversion to BOOLEAN will return "true".</li>
+<li> <i>TCntrNodeObj nodeAt( string path, string sep="" );</i> — Attach to node <i>path</i> into OpenSCADA objects tree. If a separator set into <i>sep</i> then path process as separated string. For missing and invalid nodes the function will return "false" when a correct node in it conversion to BOOLEAN will return "true".</li>
 <li> <i>TCntrNodeObj nodePrev( );</i> — Get previous, parent, node.</li>
 <li> <i>string nodePath( string sep = "", bool from_root = true );</i> — Getting the path of the current node in the object tree OpenSCADA. One separator character is specified in <i>sep</i> to get the path through the separator, for example, "DAQ.ModBus.PLC1.P1.var", otherwise "/DAQ/ModBus/PLC1/P1/var". <i>from_root</i> indicates a need to form a path from the root, and without the Station ID.</li>
 <li> <i>int messSys( int level, string mess )</i> — Formation of the system message <i>mess</i> with the <i>level</i> with the node path as a category and with the human readable path before the message.</li></ul>
@@ -830,7 +830,7 @@
 <span class="nx">nw</span><span class="p">.</span><span class="nx">attrSet</span><span class="p">(</span><span class="s2">"geomX"</span><span class="p">,</span> <span class="mi">50</span><span class="p">).</span><span class="nx">attrSet</span><span class="p">(</span><span class="s2">"geomY"</span><span class="p">,</span> <span class="mi">50</span><span class="p">);</span>
 </pre></div>
 <ul><li> <i>bool wdgDel( string wid )</i> — deletes the widget <i>wid</i>.</li>
-<li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — attaches to child or global widget, by the path <i>byPath</i>. In the case of global connection, you can use absolute or relative path to the widget. For starting point of the absolute address acts the root object of the module "VCAEngine", which means the first element of the absolute address is session identifier, which is ignored. The relative address takes the countdown from the current widget. Special element of the relative address is an element of parent node "..".</li>
+<li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — attaches to child or global widget, by the path <i>byPath</i>. For missing and invalid widgets the function will return "false" when a correct widget in it conversion to BOOLEAN will return "true". In the case of global connection, you can use absolute or relative path to the widget. For starting point of the absolute address acts the root object of the module "VCAEngine", which means the first element of the absolute address is session identifier, which is ignored. The relative address takes the countdown from the current widget. Special element of the relative address is an element of parent node "..".</li>
 <li> <i>Array attrList()</i> — list of the widget attributes.</li>
 <li> <i>bool attrPresent( string attr )</i> — checks to presence fact of the attribute <i>attr</i> of the widget.</li>
 <li> <i>ElTp attr( string attr, bool fromSess = false )</i> — value of the attribute <i>attr</i> of the widget or from the session <i>fromSess</i>. For missing attributes will be return empty string.</li>
@@ -905,7 +905,7 @@
 <tr>
 <td> <a href="Libs_Devices.html" title="Special:MyLanguage/Libs/Devices">Библиотека промышленных устройств</a>
 </td>
-<td> 3.0 </td>
+<td> 3.1 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_DevLib
 </td>
@@ -1022,5 +1022,5 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/ru">Documents/User_API/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3009</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/ru">Documents/User_API/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2025</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3012</td></tr></table></body>
 </html>

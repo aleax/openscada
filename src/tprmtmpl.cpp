@@ -82,7 +82,12 @@ void TPrmTempl::postDisable( int flag )
 bool TPrmTempl::cfgChange( TCfg &co, const TVariant &pc )
 {
     if(co.name() == "PR_TR") cfg("PROGRAM").setNoTransl(!progTr());
-    modif();
+
+    if(co.getS() != pc.getS()) {
+	if(co.name() == "PROGRAM" && startStat()) setStart(false);
+	modif();
+    }
+
     return true;
 }
 
@@ -111,17 +116,9 @@ string TPrmTempl::prog( )
     return tPrg.substr((lngEnd==string::npos)?0:lngEnd+1);
 }
 
-void TPrmTempl::setProgLang( const string &ilng )
-{
-    if(startStat()) setStart(false);
-    cfg("PROGRAM").setS(ilng+"\n"+prog());
-}
+void TPrmTempl::setProgLang( const string &ilng ) { cfg("PROGRAM").setS(ilng+"\n"+prog()); }
 
-void TPrmTempl::setProg( const string &iprg )
-{
-    if(startStat()) setStart(false);
-    cfg("PROGRAM").setS(progLang()+"\n"+iprg);
-}
+void TPrmTempl::setProg( const string &iprg ) { cfg("PROGRAM").setS(progLang()+"\n"+iprg); }
 
 void TPrmTempl::setStart( bool vl )
 {
@@ -579,7 +576,13 @@ bool TPrmTempl::Impl::lnkOutput( int num, const TVariant &vl )
 	if(con.at().fld().type() == TFld::Object && objOff < (int)addr.size()) {
 	    con.at().getO().at().propSet(addr.substr(objOff), '.', vl);
 	    con.at().setO(con.at().getO());	//For the modifying object sign
-	} else con.at().set(vl);
+	}
+	else {
+	    //Disabling the attributes translation at change
+	    if(con.at().isTransl()) con.at().setNoTransl(true);
+
+	    con.at().set(vl);
+	}
     } catch(TError&) { }
 
     it->second.hops = 0;

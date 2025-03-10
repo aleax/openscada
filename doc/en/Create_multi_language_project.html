@@ -41,7 +41,6 @@ Creating a multilingual project is a non-trivial task that affects almost all as
 <li class="toclevel-2 tocsection-8"><a href="#Individual_messages_.28the_container-table_.22Trs.22.29"><span class="tocnumber">6.2</span> <span class="toctext">Individual messages (the container-table "Trs")</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-9"><a href="#Tasks_to_improve_the_translation_control_and_increase_coverage"><span class="tocnumber">7</span> <span class="toctext">Tasks to improve the translation control and increase coverage</span></a></li>
 </ul>
 </div>
 
@@ -112,14 +111,10 @@ Creating a multilingual project is a non-trivial task that affects almost all as
 </p><p>To store the translation of such messages, a separate container-table "Trs" is specially provided, which is located in the database-storage associated with the OpenSCADA object with such procedure. Messages wrapped with the "tr()" function are included in the "Trs" table at the time of this procedure execution or compilation, for string literals, and these messages in the procedure themselves must be the BASIC language. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> At this time, it is not possible to track changes of messages wrapped in the <i>tr()</i> function, so they will all accumulate there, but you can delete them manually from the manager context menu.
 </p><p>Copying of OpenSCADA objects with procedures from one storage-database to another does not copy also the translations between individual "Trs" containers-tables, but you can execute this procedure on the new object, than adding it to "Trs" and then copy the translations also with help of the translation manager (Fig.1).
 </p>
-<h3><span class="mw-headline" id="Tasks_to_improve_the_translation_control_and_increase_coverage"><span class="mw-headline-number">7</span> Tasks to improve the translation control and increase coverage</span></h3>
-<dl><dd> - develop a mechanism for tracking the irrelevance of messages in the table "Trs"
-<dl><dd>&nbsp;?&gt; it is possible to add to the table "Trs" a field of options where to specify time of update-registration and at compilation or execution, accordingly to clear too old and updated-registered at compilation</dd></dl></dd></dl>
 
 
 
 
 
-
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Create_multi_language_project/en">Documents/How_to/Create_multi_language_project/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2025</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3009</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Create_multi_language_project/en">Documents/How_to/Create_multi_language_project/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2025</td><td style="text-align: right;" width="40%">OpenSCADA 1+r3012</td></tr></table></body>
 </html>

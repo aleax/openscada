@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.9.2"
+#define MOD_VER		"3.9.3"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -484,7 +484,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    } else cnt = io.text();
 	    io.childAdd("prm")->setAttr("id","Content-Length")->setText(i2s(cnt.size()));
 	}
-	else throw TError(nodePath().c_str(),TSYS::strMess(_("Error or not supported the HTTP method '%s'."),io.name().c_str()).c_str());
+	else throw TError(nodePath(), i2s(TError::Tr_ErrResponse)+":"+TSYS::strMess(_("Error or not supported the HTTP method '%s'."), io.name().c_str()));
 
 	//Place HTTP head
 	req = TSYS::strMess("%s %s HTTP/1.1\x0D\x0A",io.name().c_str(),uri.c_str());
@@ -515,7 +515,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	string rcod	= TSYS::strParse(tw, 1, " ");
 	string rstr	= TSYS::strParse(tw, 2, " ");
 	if((protocol != "HTTP/1.0" && protocol != "HTTP/1.1") || rcod.empty() || rstr.empty())
-	    throw TError(nodePath(), _("Error the HTTP response"));
+	    throw TError(nodePath(), i2s(TError::Tr_ErrResponse)+":"+_("Error the HTTP response"));
 	io.setAttr("Protocol",protocol)->setAttr("RezCod",rcod)->setAttr("RezStr",rstr);
 
 	//Parse parameters
@@ -545,7 +545,7 @@ next_ch:
 	    (c_lng == -2 && ((int)(resp.size()-pos) < (ch_ln+5) || resp.find("\x0D\x0A",pos+ch_ln+2) == string::npos))))
 	{
 	    resp_len = tro.messIO(NULL, 0, buf, sizeof(buf));
-	    if(!resp_len) throw TError(nodePath(), _("Not full response."));
+	    if(!resp_len) throw TError(nodePath(), i2s(TError::Tr_ErrResponse)+":"+_("Not full response."));
 	    resp.append(buf, resp_len);
 	}
 
@@ -554,7 +554,12 @@ next_ch:
 
 	// Next chunk process
 	if(c_lng == -2 && ch_ln != 0) goto next_ch;
-    } catch(TError &err) { io.setAttr("err",err.mess); return; }
+    }
+    catch(TError &err) {
+	if(!s2i(err.mess)) err.mess = i2s(TError::Tr_ErrDevice)+":"+_("Host error: ")+err.mess;
+	io.setAttr("err", err.mess);
+	throw TError(nodePath(), err.mess);
+    }
 
     io.setAttr("err","");
 }
