@@ -3,17 +3,22 @@
 #
 # Roman Savochenko <roman@oscada.org>, 2003-2022.
 #
+# SPDX-FileCopyrightText: 2025 Alevtina <karashokovaaa@basealt.ru>
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-15 22:39+0200\n"
-"PO-Revision-Date: 2007-10-05 19:25+0300\n"
-"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
-"Language-Team: <ru@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2025-09-10 09:45+0300\n"
+"Last-Translator: Alevtina <alevkarash@altlinux.org>\n"
+"Language-Team: Basealt Translation Team\n"
+"Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<"
+"=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 msgid "Error opening the semaphore!"
 msgstr "Ошибка открытия семафора!"
@@ -28,7 +33,7 @@ msgid "Identifier"
 msgstr "Идентификатор"
 
 msgid "Module(plugin) name"
-msgstr "Имя модуля(плагина)"
+msgstr "Имя модуля (плагина)"
 
 msgid "Name"
 msgstr "Имя"
@@ -73,9 +78,8 @@ msgstr "Приоритет выбора"
 msgid "Source"
 msgstr "Источник"
 
-#, fuzzy
 msgid "Passive;DAQ Attribute;Active DAQ Attribute (DEPRECATED)"
-msgstr "Пассивный;Пассивный атрибут параметра;Активный атрибут параметра"
+msgstr "Пассивный;Атрибут DAQ;Активный Атрибут DAQ (УСТАРЕВШЕЕ)"
 
 msgid "Data combining mode"
 msgstr "Режим объединения данных"
@@ -118,7 +122,7 @@ msgstr "Ошибка загрузки архиваторов значений."
 msgid "Value archives load error."
 msgstr "Ошибка загрузки архивов значений."
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "======================== Subsystem \"Archives-History\" options "
 "===================\n"
@@ -133,13 +137,14 @@ msgid ""
 "history at startup, in days.\n"
 "\n"
 msgstr ""
-"==================== Опции подсистемы \"Архивы-История\" "
-"======================\n"
-"---------- Параметры секции '%s' конфигурационного файла ----------\n"
-"MessBufSize   <ед.>     Размер буфера сообщений.\n"
-"MessPeriod    <секунд>  Период архивирования сообщений.\n"
-"ValPeriod     <мсекунд> Период активного архивирования значений.\n"
-"ValPriority   <уровень> Уровень приоритета задачи активного архивирования "
+"======================== Опции подсистемы «Архивы-История» "
+"===================\n"
+"------ Параметры секции '%s' конфигурационного файла ------\n"
+"MessBufSize  <ед.>    Размер буфера сообщений.\n"
+"MessPeriod   <секунд>  Период архивирования сообщений.\n"
+"ClrAlrmDays  <дней>     Дни автоматической очистки нарушений.\n"
+"ValPeriod    <мсек> Период активного архивирования значений.\n"
+"ValPriority  <уровень>    Уровень приоритета задачи активного архивирования "
 "значений.\n"
 "RdRestDtOverTm <дней>   Глубина принудительной перезагрузки истории резерва "
 "при запуске, в днях.\n"
@@ -210,29 +215,29 @@ msgstr "Удалённый"
 msgid "Messages"
 msgstr "Сообщения"
 
-#, fuzzy
 msgid "Buffer size, archiving period"
-msgstr "Размер буфера, единиц"
+msgstr "Размер буфера, период архивации"
 
-#, fuzzy
 msgid "In seconds."
-msgstr "Размер, секунд"
+msgstr "В секундах."
 
 msgid "Days of the alarms automatic clearing"
-msgstr ""
+msgstr "Дни автоматической очистки нарушений"
 
 msgid ""
 "After that term the alarms are meant as forgotten and inactual,\n"
 "so removed from the table of the active alarms.\n"
 "Zero disables the automatic clearing."
 msgstr ""
+"После этого срока нарушения считаются забытыми и недействительными,\n"
+"поэтому удаляются из таблицы активных нарушений.\n"
+"Ноль отключает автоматическую очистку."
 
 msgid "View"
 msgstr "Просмотр"
 
-#, fuzzy
 msgid "Time, depth and level"
-msgstr "Время, размер и уровень"
+msgstr "Время, глубина и уровень"
 
 msgid ""
 "Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);"
@@ -313,22 +318,24 @@ msgid "Value archives"
 msgstr "Архивы значений"
 
 msgid "Remove all with no source - passive"
-msgstr ""
+msgstr "Удалить все без источника — пассивные"
 
 msgid "Remove all with error source - missing source"
-msgstr ""
+msgstr "Удалить все с ошибкой источника — источник отсутствует"
 
 msgid "Remove all lost archives - empty storage"
-msgstr ""
+msgstr "Удалить все потерянные архивы — пустое хранилище"
 
 msgid "Remove all doubly linked"
-msgstr ""
+msgstr "Удалить все двойные ссылки"
 
 #, c-format
 msgid ""
 "all %d, enabled %d; no source (passive) %d, error (missing source) %d, lost "
 "(empty storage) %d, doubly linked %d"
 msgstr ""
+"всего %d, включено %d; без источника (пассивные) %d, ошибка (отсутствует "
+"источник) %d, потеряно (пустое хранилище) %d, двойных ссылок %d"
 
 msgid "<High level>"
 msgstr "<Высокий уровень>"
@@ -358,7 +365,7 @@ msgid "Running"
 msgstr "Выполняется"
 
 msgid "Storage"
-msgstr ""
+msgstr "Хранилище"
 
 #, c-format
 msgid "Remove from '%s'"
@@ -375,13 +382,15 @@ msgstr "Конфигурация"
 
 #, c-format
 msgid "Requested %d records for time %s."
-msgstr "Запрошено %d записей в течении %s."
+msgstr "Запрошено записей в течение %s: %d."
 
 #, c-format
 msgid ""
 "Number of the copying items achieved the limit %d for time range [%lld:%lld]"
 "(%lld)!"
 msgstr ""
+"Количество копируемых элементов достигло предела %d для временного "
+"диапазона [%lld:%lld] (%lld)."
 
 #, c-format
 msgid ""
@@ -464,7 +473,7 @@ msgid ""
 "The passage values mostly fill by EVAL but sometime data periodicity of the "
 "source greater to the archive's one and it is normal."
 msgstr ""
-"В основном проходные значения заполняются EVAL однако иногда\n"
+"В основном проходные значения заполняются EVAL, однако иногда\n"
 "периодичность значений источника больше периодичности этого архива и это "
 "нормально."
 
@@ -478,7 +487,7 @@ msgid "Microseconds"
 msgstr "Микросекунды"
 
 msgid "Depth"
-msgstr ""
+msgstr "Глубина"
 
 msgid ""
 "Values archiver.\n"
@@ -488,7 +497,7 @@ msgid ""
 "archive buffer."
 msgstr ""
 "Архиватор значений.\n"
-"Если значение отсутствует то запрос будет обработан для буфера и всех "
+"Если значение отсутствует, то запрос будет обработан для буфера и всех "
 "архиваторов.\n"
 "Если указано \"<buffer>\", то запрос будет обработан только для буфера "
 "архива."
@@ -534,13 +543,13 @@ msgid ""
 "buffer - just a direct recording."
 msgstr ""
 "Установить нулевой период для отключения использования архиватора в "
-"обработке буфера - только прямая запись."
+"обработке буфера — только прямая запись."
 
 msgid ""
 "Selection of a priority of the archiver for using in the source mode "
 "\"All\". Set to zero for full the selection disabling."
 msgstr ""
-"Приоритет выбора архиватора для режима использования источника \"Все\". "
+"Приоритет выбора архиватора для режима использования источника «Все». "
 "Установить в нуль для полного исключения из выбора."
 
 msgid "Archives"
@@ -556,6 +565,8 @@ msgstr "Последнее чтение буфера"
 msgid ""
 "Number of the setting items achieved the limit %d for time range [%lld:%lld]!"
 msgstr ""
+"Количество элементов настройки достигло предела %d для временного "
+"диапазона [%lld:%lld]."
 
 msgid "DB type (module)"
 msgstr "Тип БД (модуль)"
@@ -582,9 +593,8 @@ msgstr "Закрытие транзакции: приоритет отдельн
 msgid "Error closing database '%s'!"
 msgstr "Ошибка закрытия БД '%s'!"
 
-#, fuzzy
 msgid "The node is not stored."
-msgstr "Не поддерживается режим данных '%d'"
+msgstr "Узел не сохраняется."
 
 msgid "The requested entry is missing."
 msgstr "Запрошенная запись отсутствует."
@@ -602,7 +612,7 @@ msgid ""
 "TblLifeTime  <seconds>  Opened tables lifetime (by default 600 seconds).\n"
 "\n"
 msgstr ""
-"========================= Опции подсистемы \"БД\" =========================\n"
+"========================= Опции подсистемы «БД» =========================\n"
 "---------- Параметры секции '%s' конфигурационного файла ----------\n"
 "TblLifeTime  <секунд>   Время жизни открытых таблиц (по умолчанию 600 "
 "секунд).\n"
@@ -662,8 +672,8 @@ msgid ""
 "Priority in the range [0...99]. Useful for libraries placed in several "
 "databases for specifying the priority of the project - used ones."
 msgstr ""
-"Приоритет в диапазоне [0...99]. Полезно для библиотек размещённых в "
-"нескольких базах данных для определения приоритетных - используемых."
+"Приоритет в диапазоне [0...99]. Полезно для библиотек, размещённых в "
+"нескольких базах данных для определения приоритетных — используемых."
 
 msgid "Tables"
 msgstr "Таблицы"
@@ -701,20 +711,20 @@ msgid "Table"
 msgstr "Таблица"
 
 msgid "Table offset, size"
-msgstr "Таблица - смещение, размер"
+msgstr "Таблица — смещение, размер"
 
 msgid "Data"
 msgstr "Данные"
 
 #, c-format
 msgid "Row \"%s\" is not present. Are you saved the object?"
-msgstr "Запись \"%s\" отсутствует. Вы сохраняли этот объект?"
+msgstr "Запись «%s» отсутствует. Вы сохраняли этот объект?"
 
 msgid "The DB is in the Read only mode."
-msgstr "БД в режиме Только для Чтения."
+msgstr "БД в режиме «Только для чтения»."
 
 msgid "A message completely cleaned for the base and all translations!"
-msgstr ""
+msgstr "Сообщение полностью очищено для базы и всех переводов."
 
 #, c-format
 msgid "Field id = %s(%s) is missing!"
@@ -726,93 +736,93 @@ msgstr "%s:%s:> Ошибка элемента управления '%s'!"
 
 #, c-format
 msgid "set the cell ['%s':%s] to '%s'."
-msgstr ""
+msgstr "установить ячейку ['%s':%s] в '%s'."
 
 msgid "command with arguments:"
-msgstr ""
+msgstr "команда с аргументами:"
 
 msgid "command."
-msgstr ""
+msgstr "команда."
 
 #, c-format
 msgid "set to '%s'."
-msgstr ""
+msgstr "установить в '%s'."
 
 #, c-format
 msgid "add item '%s (%s)'."
-msgstr ""
+msgstr "добавить элемент '%s (%s)'."
 
 #, c-format
 msgid "add item '%s'."
-msgstr ""
+msgstr "добавить элемент '%s'."
 
 msgid "add item."
-msgstr ""
+msgstr "добавить элемент"
 
 #, c-format
 msgid "insert item '%s (%s)' to position of item '%s'."
-msgstr ""
+msgstr "вставить элемент '%s (%s)' в позицию элемента '%s'."
 
 #, c-format
 msgid "insert item '%s' to position %s."
-msgstr ""
+msgstr "вставить элемент '%s' в позицию %s."
 
 #, c-format
 msgid "insert row '%s' to position of row %s."
-msgstr ""
+msgstr "вставить строку '%s' в позицию строки %s."
 
 #, c-format
 msgid "delete item in position %s."
-msgstr ""
+msgstr "удалить элемент в позиции %s."
 
 #, c-format
 msgid "delete item '%s'."
-msgstr ""
+msgstr "удалить элемент '%s'."
 
-#, fuzzy, c-format
+#, c-format
 msgid "delete row '%s'."
-msgstr "Удалить из '%s'"
+msgstr "удалить строку '%s'."
 
 #, c-format
 msgid "edit item in position %s to '%s'."
-msgstr ""
+msgstr "изменить элемент в позиции %s на '%s'."
 
-#, fuzzy, c-format
+#, c-format
 msgid "edit item '%s' to '%s (%s)'."
-msgstr "2:Ошибка открытия файла '%s': %s"
+msgstr "изменить элемент '%s' на '%s (%s)'."
 
 #, c-format
 msgid "edit item '%s' to '%s'."
-msgstr ""
+msgstr "изменить элемент '%s' на '%s'."
 
 #, c-format
 msgid "move item in position %s to %s."
-msgstr ""
+msgstr "переместить элемент в позиции %s в %s."
 
 #, c-format
 msgid "move row in position %s to %s."
-msgstr ""
+msgstr "переместить строку в позиции %s в %s."
 
 msgid "load"
-msgstr ""
+msgstr "загрузить"
 
 msgid " with forcibility"
-msgstr ""
+msgstr " в принудительном порядке"
 
 msgid "save"
-msgstr ""
+msgstr "сохранить"
 
-#, fuzzy, c-format
+#, c-format
 msgid "copy from '%s' to '%s'."
-msgstr "Копирование из '%s' в '%s' невозможно."
+msgstr "копировать из '%s' в '%s'."
 
 #, c-format
 msgid "user command '%s' to row '%s'."
-msgstr ""
+msgstr "пользовательскую команду '%s' в строку '%s'."
 
 #, c-format
 msgid "other command '%s'."
-msgstr ""
+msgstr "другая команда '%s'."
 
 msgid "The node is already being processed!"
 msgstr "Узел уже обрабатывается!"
@@ -846,7 +856,7 @@ msgid "Node is disabled!"
 msgstr "Узел отключен!"
 
 msgid "No childs in the node!"
-msgstr ""
+msgstr "Узел не имеет дочерних узлов."
 
 #, c-format
 msgid "The node '%s' is missing!"
@@ -903,7 +913,7 @@ msgstr "Очень много пользователей у узла!!!"
 
 #, c-format
 msgid "Error the function '%s' or missing its parameters."
-msgstr "Ошибка функции '%s' или не достаточно параметров для неё."
+msgstr "Ошибка функции '%s' или недостаточно параметров для неё."
 
 #, c-format
 msgid "Error accessing item '%s'!"
@@ -921,12 +931,12 @@ msgstr ""
 "Ошибка загрузки:\n"
 "%s"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning saving:\n"
 "%s"
 msgstr ""
-"Ошибка сохранения:\n"
+"Предупреждение сохранения:\n"
 "%s"
 
 #, c-format
@@ -1204,7 +1214,7 @@ msgid "Execute"
 msgstr "Исполнить"
 
 msgid "Executions, spent time"
-msgstr ""
+msgstr "Выполнение, затраченное время"
 
 msgid "Text"
 msgstr "Текст"
@@ -1253,32 +1263,29 @@ msgstr "Ошибка получения объекта из не объектн�
 
 #, c-format
 msgid "Closing the iconv handler error '%s (%d)'!"
-msgstr ""
+msgstr "Ошибка закрытия обработчика iconv '%s (%d)'."
 
 msgid "Generic Storage"
-msgstr ""
+msgstr "Общее хранилище"
 
-#, fuzzy
 msgid "Configuration File"
 msgstr "Конфигурационный файл"
 
-#, fuzzy
 msgid ""
 "Storage address in the format \"{DB module}.{DB name}\" or the common ones."
-msgstr "Адрес хранилища в формате \"{Модуль БД}.{Имя БД}\"."
+msgstr "Адрес хранилища в формате «{модуль БД}.{имя БД}» или общие адреса."
 
 #, c-format
 msgid "Whole list of the object storages is: %s."
-msgstr ""
+msgstr "Полный список хранилищ объектов: %s."
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Please note that removing from \"%s (%s)\" will cause the data removing both "
 "from \"%s (%s)\" and \"Work DB (%s)\"!"
 msgstr ""
-"Заметьте пожалуйста, что удаление из Общего Хранилища (*.*) приведёт к "
-"удалению данных как из Конфигурационного Файла (<cfg>), так и Рабочей БД "
-"(%s)!"
+"Обратите внимание, что удаление из «%s (%s)» приведёт к удалению данных как "
+"из «%s (%s)», так и из «Рабочей БД (%s)»."
 
 msgid ""
 "Schedule wrotes in seconds periodic form or in the standard CRON form.\n"
@@ -1348,6 +1355,12 @@ msgid ""
 "  \"{TrModule}.in_{TrID}:{RemConId}\" - initiative input with the connection "
 "identifier in <RemConId>."
 msgstr ""
+"Формат адреса выходного транспорта с использованием унифицированного"
+" соединения:\n"
+"  \"{TrModule}.[out_]{TrID}[:{TrAddr}]\" — типичный вывод с автоматическим "
+"созданием <TrID> при его отсутствии и предоставлением <TrAddr>;\n"
+"  \"{TrModule}.in_{TrID}:{RemConId}\" — инициативный ввод с идентификатором "
+"соединения в <RemConId>."
 
 msgid ""
 "Specifies the category of the requested messages.\n"
@@ -1376,15 +1389,28 @@ msgid ""
 "- and all other are meant as seconds with substitution by 'second', "
 "'seconds' or 's'."
 msgstr ""
+"В поле вы устанавливаете время как с помощью реального числа, так и с помощью"
+" естественного текстового "
+"множителя, также переведённого и в базовом языке:\n"
+"- день, дни (*86400) — один и несколько дней;\n"
+"- час, часы (*3600) — один и несколько часов;\n"
+"- минута, минуты (*60) — одна и несколько минут;\n"
+"- миллисекунда, миллисекунды, мс (*1e-3) — одна и несколько миллисекунд;\n"
+"- микросекунда, микросекунды, мкс (*1e-6) — одна и несколько микросекунд;\n"
+"- наносекунда, наносекунды, нс (*1e-9) — одна и несколько наносекунд;\n"
+"- все остальные значения понимаются как секунды с заменой на «секунда», "
+"«секунды» или «с»."
 
 msgid ""
 "1 second;10 seconds;30 seconds;1 minute;10 minutes;30 minutes;1 hour;12 "
 "hours;1 day;10 days"
 msgstr ""
+"1 секунда;10 секунд;30 секунд;1 минута;10 минут;30 минут;1 час;12 "
+"часов;1 день;10 дней"
 
 #, c-format
 msgid "Closing the thread %d error '%s (%d)'!"
-msgstr ""
+msgstr "Ошибка закрытия потока %d '%s (%d)'."
 
 #, c-format
 msgid ""
@@ -1406,14 +1432,14 @@ msgid ""
 "libraries(modules), 0 to disable.\n"
 "\n"
 msgstr ""
-"=================== Опции подсистемы \"Планировщик модулей\" "
+"=================== Опции подсистемы «Планировщик модулей» "
 "====================\n"
 "    --modPath=<путь>    Директории модулей, разделённые ';', и в конце могут "
 "содержать шаблон файлов.\n"
 "---------- Параметры секции '%s' конфигурационного файла ----------\n"
 "ModPath    <путь>       Директории модулей, разделённые ';', и в конце могут "
 "содержать шаблон файлов.\n"
-"                        Это синоним параметра уровня станции \"ModDir\".\n"
+"                        Это синоним параметра уровня станции «ModDir».\n"
 "ModAllow   <список>     Список разделяемых библиотек допустимых для "
 "автоматической загрузки, подключения и запуска (bd_DBF.so;daq_JavaLikeCalc."
 "so).\n"
@@ -1455,7 +1481,7 @@ msgid "Can not detach the library '%s'."
 msgstr "Невозможно отключить библиотеку '%s'."
 
 msgid "Path to the shared libraries(modules)"
-msgstr "Путь к разделяемым библиотекам(модулям)"
+msgstr "Путь к разделяемым библиотекам (модулям)"
 
 msgid "Denied modules"
 msgstr "Запрещённые модули"
@@ -1466,7 +1492,7 @@ msgid ""
 msgstr ""
 "Список разделяемых библиотек(модулей) запрещённых для автоматического "
 "подключения.\n"
-"Элементы разделены символом ';'."
+"Элементы разделены символом «;»."
 
 msgid "Allowed modules"
 msgstr "Разрешённые модули"
@@ -1476,10 +1502,10 @@ msgid ""
 "Elements are separated by the symbol ';'.\n"
 "The value '*' is used to allow all modules."
 msgstr ""
-"Список разделяемых библиотек(модулей) разрешённых для автоматического "
+"Список разделяемых библиотек (модулей), разрешённых для автоматического "
 "подключения.\n"
-"Элементы разделены символом ';'.\n"
-"Значение '*' используется для разрешения всех модулей."
+"Элементы разделены символом «;».\n"
+"Значение «*» используется для разрешения всех модулей."
 
 msgid "Period of checking of the modules, seconds"
 msgstr "Период проверки модулей, секунд"
@@ -1488,7 +1514,7 @@ msgid "Check the modules now."
 msgstr "Проверить модули сейчас."
 
 msgid "Shared libraries(modules)"
-msgstr "Разделяемые библиотеки(модули)"
+msgstr "Разделяемые библиотеки (модули)"
 
 msgid "Modules"
 msgstr "Модули"
@@ -1572,7 +1598,7 @@ msgid "Template"
 msgstr "Шаблон"
 
 msgid "The name's rows after the first one treat as help."
-msgstr ""
+msgstr "Строки имени после первой рассматриваются как справка."
 
 msgid ""
 "Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object;"
@@ -1624,9 +1650,8 @@ msgid "Error, recursive linking."
 msgstr "Ошибка, рекурсивное подключение."
 
 msgid "val:Constant value"
-msgstr ""
+msgstr "val:Постоянное значение"
 
-#, fuzzy
 msgid ""
 "Address to the DAQ attribute is written in the forms:\n"
 "  \"{Type}.{Cntr}.{Prm}[.{PrmN}].{Attr}\";\n"
@@ -1648,18 +1673,24 @@ msgid ""
 "and the individual attributes will be associated with the attributes of the "
 "container in accordance with this field.\n"
 msgstr ""
-"Адрес к DAQ атрибутам записывается в форме \"{Type}.{Cntr}.{Prm}[.{PrmN}]."
-"{Attr}\", где:\n"
-"    Type,Cntr,Prm,Attr - DAQ: тип, объект контроллера, параметр и атрибут.\n"
-"  Шаблон связи, колонки \"Значение\" на стороне формирования шаблона, "
-"записывается в форме \"{Parameter}|{attribute}\", где:\n"
-"    Parameter - указывает имя параметра как контейнера атрибутов;\n"
-"    attribute - атрибуты с одинаковым значением <Parameter> будут "
-"группироваться и позволят назначаться указанием только контейнера "
-"атрибутов,\n"
-"                а отдельные атрибуты будут связаны с атрибутами контейнера в "
-"соответствии с полем <attribute>.\n"
-"Связь на постоянное значение записывается в форме \"val:{Constant}\".\n"
+"Адрес атрибута DAQ записывается в следующих формах:\n"
+"  «{Type}.{Cntr}.{Prm}[.{PrmN}].{Attr}»;\n"
+"  «prm:/{Type}/{Cntr}/{Prm}[/{PrmN}]/{Attr}»;\n"
+"  «val:Постоянное значение».\n"
+"Где:\n"
+"  {Type},{Cntr},{Prm},{Attr} — тип, объект контроллера, параметр и "
+"атрибут DAQ;\n"
+"  «prm:» — префикс обычной формы пути, где можно использовать "
+"относительность с помощью «.» и «..»;\n"
+"  «val:» — префикс постоянного значения в ссылках.\n"
+"\n"
+"Шаблон ссылки, в столбце «Значение» на стороне формирования шаблона, "
+"записывается в виде «{Parameter}|{attribute}», где:\n"
+"  {Parameter} — указывает имя параметра в качестве контейнера атрибута;\n"
+"  {attribute} — атрибуты с равным значением <Parameter> будут сгруппированы "
+"и будут обозначаться только указанием контейнера атрибутов, "
+"а отдельные атрибуты будут связаны с атрибутами "
+"контейнера в соответствии с этим полем.\n"
 
 #, c-format
 msgid "Error starting the template '%s'."
@@ -1677,13 +1708,13 @@ msgstr "Библиотека"
 msgid "Library DB"
 msgstr "БД библиотеки"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Storage address in the format \"{DB module}.{DB name}.{Table name}\".\n"
 "To use %s, set '%s.{Table name}'."
 msgstr ""
-"Адрес хранилища в формате \"{Модуль БД}.{Имя БД}.{Имя Таблицы}\".\n"
-"Установить '*.*.{Имя Таблицы}' для использования Общего Хранилища."
+"Адрес хранилища в формате «{модуль БД}.{имя БД}.{имя таблицы}».\n"
+"Чтобы использовать %s, установите '%s.{имя таблицы}'."
 
 msgid "Parameter templates"
 msgstr "Шаблоны параметров"
@@ -1695,7 +1726,7 @@ msgid ""
 "=============== Subsystem \"Transport Protocols\" options =================\n"
 "\n"
 msgstr ""
-"============== Опции подсистемы \"Транспортные Протоколы\" ================\n"
+"============== Опции подсистемы «Транспортные протоколы» ================\n"
 "\n"
 
 msgid "Full name"
@@ -1741,7 +1772,7 @@ msgid ""
 "======================= Subsystem \"Security\" options ====================\n"
 "\n"
 msgstr ""
-"==================== Опции подсистемы \"Безопасности\" ====================\n"
+"==================== Опции подсистемы «Безопасность» ====================\n"
 "\n"
 
 msgid "Group"
@@ -1775,7 +1806,7 @@ msgid ""
 "=====================\n"
 "\n"
 msgstr ""
-"===================== Опции подсистемы \"Специальные\" ====================\n"
+"===================== Опции подсистемы «Специальные» ====================\n"
 "\n"
 
 msgid "Special"
@@ -1817,7 +1848,7 @@ msgid ""
 "Error changing working directory in '%s': %s. Perhaps the current directory "
 "is already correctly set to %s'."
 msgstr ""
-"Ошибка изменения рабочей директории в '%s': %s. Возможно текущая директория "
+"Ошибка изменения рабочей директории в '%s': %s. Возможно, текущая директория "
 "уже корректно установлена в '%s'."
 
 #, c-format
@@ -1828,64 +1859,55 @@ msgid "day"
 msgstr "день"
 
 msgid "days"
-msgstr ""
+msgstr "дней"
 
 msgid "hour"
 msgstr "час"
 
-#, fuzzy
 msgid "hours"
-msgstr "час"
+msgstr "часов"
 
 msgid "minute"
-msgstr ""
+msgstr "минута"
 
 msgid "minutes"
-msgstr ""
+msgstr "минут"
 
 msgid "s"
 msgstr "с"
 
-#, fuzzy
 msgid "second"
-msgstr "Размер, секунд"
+msgstr "секунда"
 
-#, fuzzy
 msgid "seconds"
-msgstr "Размер, секунд"
+msgstr "секунд"
 
 msgid "ms"
 msgstr "мс"
 
-#, fuzzy
 msgid "millisecond"
-msgstr "Микросекунды"
+msgstr "миллисекунда"
 
-#, fuzzy
 msgid "milliseconds"
-msgstr "Микросекунды"
+msgstr "миллисекунд"
 
 msgid "us"
 msgstr "мкс"
 
-#, fuzzy
 msgid "microsecond"
-msgstr "Микросекунды"
+msgstr "микросекунда"
 
-#, fuzzy
 msgid "microseconds"
-msgstr "Микросекунды"
+msgstr "микросекунд"
 
 msgid "ns"
 msgstr "нс"
 
-#, fuzzy
 msgid "nanosecond"
-msgstr "Размер, секунд"
+msgstr "наносекунда"
 
-#, fuzzy
 msgid "nanoseconds"
-msgstr "Размер, секунд"
+msgstr "наносекунд"
 
 msgid "YiB"
 msgstr "ЙиБ"
@@ -1914,7 +1936,7 @@ msgstr "КиБ"
 msgid "B"
 msgstr "Б"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"
@@ -2020,64 +2042,64 @@ msgid ""
 "\n"
 msgstr ""
 "***************************************************************************\n"
-"********** %s %s (%s-%s). *********\n"
+"********** %s v%s (%s-%s). *********\n"
 "***************************************************************************\n"
 "\n"
 "===========================================================================\n"
-"======================= Основные опции ====================================\n"
+"==================== Основные опции ======================================\n"
 "===========================================================================\n"
-"-h, --help\t\tЭтот текст помощи по опциям командной строки и параметрам "
+"-h, --help\t\tЭтот текст справки по опциям командной строки и параметрам "
 "конфигурационного файла программы.\n"
 "    --projName=<имя>\tИмя проекта OpenSCADA для переключения.\n"
-"\t\t\tДля такой операции также используется переменная окружение "
-"\"OSCADA_ProjName\" и имя бинарной программы \"openscada_{ProjName}\".\n"
+"\t\t\tДля такой операции также используется переменная окружения "
+"«OSCADA_ProjName» и имя бинарной программы «openscada_{ProjName}».\n"
 "    --projUserDir={дир.} Директория пользовательских проектов OpenSCADA "
-"(доступна для записи), по умолчанию \"~/.openscada\".\n"
+"(доступна для записи), по умолчанию «~/.openscada».\n"
 "    --projLock={per}\tИспользовать блокирование проектов созданием файла "
-"\"lock\" в директории проекта и его обновление с периодом <per>,\n"
-"\t\t\tпо умолчанию включено и период обновления <per> составляет 60 секунд. "
+"«lock» в директории проекта и его обновление с периодом <per>,\n"
+"\t\t\tпо умолчанию включено, и период обновления <per> составляет 60 секунд. "
 "Для отключения установить период обновления <per> в нуль.\n"
-"    --lang=<LANG>\tЯзык станции, в виде \"ru_RU.UTF-8\".\n"
+"    --lang=<LANG>\tЯзык станции, в виде «ru_RU.UTF-8».\n"
 "    --config=<файл>\tКонфигурационный файл станции.\n"
 "    --station=<ид>\tИдентификатор станции.\n"
 "    --statName=<имя>\tИмя станции.\n"
-"    --modDir=<path>\tДиректории модулей, разделённые ';', и в конце могут "
+"    --modDir=<path>\tДиректории модулей, разделённые «;», и в конце могут "
 "содержать шаблон файлов.\n"
 "    --messLev=<уров>\tУровень обрабатываемых сообщений (0-7).\n"
 "    --log=<направл.>\tНаправление сообщений в, по битовому полю:\n"
-"\t\t\t  0x1 - системный логер (syslogd);\n"
-"\t\t\t  0x2 - стандартный выход (stdout);\n"
-"\t\t\t  0x4 - стандартный выход ошибок (stderr);\n"
-"\t\t\t  0x8 - архив сообщений.\n"
+"\t\t\t  0x1 — системный логер (syslogd);\n"
+"\t\t\t  0x2 — стандартный вывод (stdout);\n"
+"\t\t\t  0x4 — стандартный вывод ошибок (stderr);\n"
+"\t\t\t  0x8 — архив сообщений.\n"
 "    --consoleCharSet={CharSet} Принудительно установить кодовый набор "
 "символов консоли в <CharSet>, по умолчанию он системный.\n"
 "    --demon, --daemon\tЗапуск в режиме демона.\n"
 "    --pidFile=<файл>\tфайл для помещения ID процесса программы сюда.\n"
-"    --noCoreDump\tПредотвращать создание предсмертных дампов - не снимать "
+"    --noCoreDump\tПредотвращать создание предсмертных дампов — не снимать "
 "это ограничение.\n"
 "    --permCrtFiles={права} Права создаваемых OpenSCADA файлов, по умолчанию "
 "это 0755 (RWXRW_RW_).\n"
 "-------------- Параметры станции '%s(%s)' в конфигурационном файле "
 "------------\n"
 "StName     <имя>\tИмя станции.\n"
-"WorkDB     <Тип.Имя>\tРабочая БД (тип и имя).\n"
+"WorkDB     <Тип.Имя>\tРабочая БД (<тип> и <имя>).\n"
 "WorkDir    <path>\tРабочая директория.\n"
-"ModDir     <path>\tДиректории модулей, разделённые ';', и в конце могут "
+"ModDir     <path>\tДиректории модулей, разделённые «;», и в конце могут "
 "содержать шаблон файлов.\n"
 "IcoDir     <path>\tДиректория с иконками.\n"
 "DocDir     <path>\tДиректория с документами.\n"
 "MessLev    <уровень>\tУровень обрабатываемых сообщений (0-7).\n"
-"SelDebCats <список>\tСписок категорий отладки, разделены ';'.\n"
+"SelDebCats <список>\tСписок категорий отладки, разделены «;».\n"
 "LogTarget  <направл.>\tНаправление сообщений в, по битовому полю:\n"
-"\t\t\t  0x1 - системный логер (syslogd);\n"
-"\t\t\t  0x2 - стандартный выход (stdout);\n"
-"\t\t\t  0x4 - стандартный выход ошибок (stderr);\n"
-"\t\t\t  0x8 - архив сообщений.\n"
-"Lang       <язык>\tЯзык-локаль станции, в виде \"ru_RU.UTF-8\".\n"
-"LangBase   <язык>\tБазовый язык и перечень всех локалей (вроде \"ru_RU."
-"UTF-8\") проекта (опционально) разделённых ';', для многоязычного режима.\n"
+"\t\t\t  0x1 — системный логер (syslogd);\n"
+"\t\t\t  0x2 — стандартный вывод (stdout);\n"
+"\t\t\t  0x4 — стандартный вывод ошибок (stderr);\n"
+"\t\t\t  0x8 — архив сообщений.\n"
+"Lang       <язык>\tЯзык-локаль станции, в виде «ru_RU.UTF-8».\n"
+"LangBase   <язык>\tБазовый язык и перечень всех локалей (вроде «ru_RU."
+"UTF-8») проекта (опционально) разделённых «;», для многоязычного режима.\n"
 "MainCPUs   <список>\tОсновной перечень используемых процессоров, разделены "
-"':'.\n"
+"«:».\n"
 "TaskInvPhs <n>\t\tКоличество фаз вызова задач, 1 для отключения "
 "фазирования.\n"
 "ClockRT    <0|1>\tУстановить использование источника часов в REALTIME (иначе "
@@ -2087,26 +2109,26 @@ msgstr ""
 "ModifCalc  <0|1>\tУстанавливать модификацию для вычислительных объектов.\n"
 "RdStLevel  <уров>\tУровень резервирования текущей станции.\n"
 "RdTaskPer  <секунд>\tПериод вызова задачи обслуживания резервирования.\n"
-"RdRestConnTm <секунд>\tВремя восстановления соединения с \"мёртвой\" "
+"RdRestConnTm <секунд>\tВремя восстановления соединения с «мёртвой» "
 "резервной станцией.\n"
-"RdStList   <список>\tСписок резервных станций, разделённых символом ';' (st1;"
+"RdStList   <список>\tСписок резервных станций, разделённых символом «;» (st1;"
 "st2).\n"
 "RdPrimCmdTr <0|1>\tВключение транзита первичных команд на резервные "
 "станции.\n"
 "    Глобальные конфигурируемые лимиты:\n"
 "limObjID_SZ\t[*20..50] Размер ИД объектов OpenSCADA.\n"
-"\t\tВНИМАНИЕ! Большой размер может вызвать ошибку размера ключа на БД "
-"похожих на MySQL!\n"
-"\t\t\tИзмените это только один раз перед использованием на БД с "
-"фиксированным типом \"char({N})\"!\n"
+"\t\tВНИМАНИЕ! Большой размер может вызвать ошибку размера ключа в "
+"MySQL-подобных БД!\n"
+"\t\t\tИзмените это только один раз перед использованием в БД с "
+"фиксированным типом «char({N})»!\n"
 "limObjNm_SZ\t[*100...200] Размер НАЗВАНИЯ объектов OpenSCADA.\n"
-"\t\tВНИМАНИЕ! Измените это лишь один раз перед использованием на БД с "
-"фиксированным типом \"char({N})\"!\n"
+"\t\tВНИМАНИЕ! Измените это лишь один раз перед использованием в БД с "
+"фиксированным типом «char({N})»!\n"
 "limArchID_SZ\t[*50...90] Размер ИД объектов архива значений.\n"
 "\t\tВНИМАНИЕ! Только увеличивайте его, иначе можете получить проблемы в "
 "Archive.FSArch!\n"
-"\t\t\tИзмените это лишь один раз перед использованием на БД с фиксированным "
-"типом \"char({N})\"!\n"
+"\t\t\tИзмените это лишь один раз перед использованием в БД с фиксированным "
+"типом «char({N})»!\n"
 "limUserFile_SZ\t[1MB...*10MB...1000MB] Ограничение на размер файлов при "
 "загрузке и обработке в пространстве пользователя\n"
 "\t\tи размер частей передачи больших файлов.\n"
@@ -2119,7 +2141,7 @@ msgstr ""
 "prmStrBuf_SZ\t[1000...*10000...1000000] Длина строковых буферов, не "
 "строковых классов.\n"
 "prmWait_DL\t[0.001...*0.1...1] Время кванта циклов ожидания, секунд.\n"
-"prmWait_TM\t[*5...10] Стандартный размер таймаута ожидания, секунд.\n"
+"prmWait_TM\t[*5...10] Стандартная продолжительность ожидания, секунд.\n"
 "prmInterf_TM\t[*7...15] Время ожидания реакции интерфейса, секунд.\n"
 "prmServTask_PER [1...*10...120] Период сервисной задачи, секунд.\n"
 "\n"
@@ -2130,7 +2152,7 @@ msgstr "Ошибка конфигурационного файла '%s': %s"
 
 #, c-format
 msgid "Closing the file %d error '%s (%d)'!"
-msgstr ""
+msgstr "Ошибка закрытия файла %d '%s (%d)'."
 
 #, c-format
 msgid "Error loading the configuration file '%s'."
@@ -2156,13 +2178,14 @@ msgstr "Ошибка записи в конфигурационный файл '
 msgid ""
 "Impossible to hold the project lock! Seems the project '%s' already running."
 msgstr ""
-"Невозможно захватить замок проекта! Похоже проект '%s' уже исполняется."
+"Невозможно захватить замок проекта! Похоже, проект '%s' уже исполняется."
 
 msgid "Loading."
 msgstr "Загрузка."
 
 msgid "No module has been loaded, your configuration is likely to be broken!"
-msgstr "Ни одного модуля не загружено. Ваша конфигурация сломана!"
+msgstr ""
+"Ни одного модуля не загружено. Ваша конфигурация, вероятно, повреждена."
 
 #, c-format
 msgid "Error loading the subsystem '%s'."
@@ -2198,9 +2221,8 @@ msgstr "Получен сигнал прерывания. Остановка с�
 msgid "Close the process %d of the child!"
 msgstr "Закрытие дочернего процесса %d!"
 
-#, fuzzy
 msgid "Floating point exception!"
-msgstr "Исключение операции с плавающей точкой!"
+msgstr "Исключение операции с плавающей точкой."
 
 msgid "Program aborted!"
 msgstr "Программа прервана!"
@@ -2271,7 +2293,7 @@ msgstr "Системные часы изменены в '%s'. Коррекция
 
 #, c-format
 msgid "Closing the pipe %p error '%s (%d)'!"
-msgstr ""
+msgstr "Ошибка закрытия канала %p '%s (%d)'."
 
 msgid "1:Request is not an object!"
 msgstr "1:Запрос не объект!"
@@ -2306,22 +2328,20 @@ msgid "Documents directory"
 msgstr "Директория документов"
 
 msgid "Separate directory paths with documents by symbol ';'."
-msgstr "Отделять пути директорий с документами символом ';'."
+msgstr "Отделять пути директорий с документами символом «;»."
 
 msgid "Work DB"
 msgstr "Рабочая БД"
 
 msgid "Work DB address in the format \"{DB module}.{DB name}\"."
-msgstr "Адрес рабочей БД в формате \"{Модуль БД}.{Имя БД}\"."
+msgstr "Адрес рабочей БД в формате «{Модуль БД}.{Имя БД}»."
 
-#, fuzzy
 msgid "Save the program at exit, with the period"
-msgstr "Сохранить программу при выходе"
+msgstr "Сохранять программу при выходе, с периодом"
 
 msgid "Select for the program automatic saving to DB on exit."
 msgstr "Выбрать для автоматического сохранения программы в БД при выходе."
 
-#, fuzzy
 msgid ""
 "Use not a zero period in seconds to periodically save program changes to the "
 "storage."
@@ -2347,74 +2367,71 @@ msgid "Least messages level which is procesed by the program."
 msgstr "Наименьший уровень сообщений, который обрабатывается программой."
 
 msgid "To syslog"
-msgstr "В системный логер(syslog)"
+msgstr "В системный логер (syslog)"
 
 msgid "To stdout"
-msgstr "На стандартный выход(stdout)"
+msgstr "На стандартный выход (stdout)"
 
 msgid "To stderr"
-msgstr "На стандартный выход ошибок(stderr)"
+msgstr "На стандартный вывод ошибок (stderr)"
 
 msgid "To archive"
 msgstr "В архив"
 
 msgid "Environment"
-msgstr ""
+msgstr "Окружение"
 
 msgid "Program"
 msgstr "Программа"
 
-#, fuzzy
 msgid "System"
-msgstr "Подсистема"
+msgstr "Система"
 
-#, fuzzy
 msgid "System time"
-msgstr "Системный пользователь"
+msgstr "Системное время"
 
-#, fuzzy
 msgid "System planning clock"
-msgstr "Часы планирования задач"
+msgstr "Системные часы планирования"
 
 msgid "System user"
 msgstr "Системный пользователь"
 
-#, fuzzy
 msgid "System locale charset."
-msgstr "Внутренняя кодировка"
+msgstr "Системная кодировка локали"
 
 msgid ""
 "Complete locale information with language, country and charset in the view "
 "\"en_GB.UTF-8\"."
 msgstr ""
+"Полная информация о локали с языком, страной и кодировкой в виде "
+"«ru_RU.UTF-8»."
 
 msgid "Host name"
 msgstr "Имя хоста"
 
 msgid "CPU"
-msgstr "CPU"
+msgstr "ЦП"
 
-#, fuzzy
 msgid ""
 "Main CPUs set.\n"
 "To set up the processors you use, write a row of numbers separated by the "
 "character ':'.\n"
 "Processor numbers start at 0."
 msgstr ""
-"Для указания используемых процессоров записывайте строку номеров разделённых "
-"символом ':'.\n"
+"Основные процессоры установлены.\n"
+"Для указания используемых процессоров записывайте строку номеров, разделённых "
+"символом «:».\n"
 "Номера процессоров начинаются с 0."
 
 msgid "Number of phases of the task invoking"
 msgstr "Количество фаз вызова задач"
 
-#, fuzzy
 msgid ""
 "To set up phasing of the task invoking in the determined phases number,\n"
 " <= 0 to set optimal, 1 to disable the tasks phasing."
 msgstr ""
-"Для установки фазирования вызова задач в определённое количество фаз, <= 0 "
-"для установки оптимально, 1 для выключения фазирования задач."
+"Для установки фазирования вызова задач с определённым количеством фаз,\n"
+" <= 0 для установки оптимального, 1 для отключения фазирования задач."
 
 msgid "Subsystems"
 msgstr "Подсистемы"
@@ -2447,7 +2464,7 @@ msgid "Translations"
 msgstr "Переводы"
 
 msgid "Base language - locales list"
-msgstr "Базовый язык - перечень локалей"
+msgstr "Базовый язык — перечень локалей"
 
 msgid ""
 "Enables the multilingual support for text variables in the configuration DBs "
@@ -2458,11 +2475,11 @@ msgid ""
 "language English(en), so other base languages will break these DBs at change!"
 msgstr ""
 "Включает поддержку многоязычности текстовых переменных в конфигурационных БД "
-"через ввод базового языка и перечня всех локалей (вроде \"ru_RU.UTF-8\") "
-"проекта (опционально) разделённых ';'.\n"
-"Вы можете ввести тут другой язык кроме Английский(en), но имейте ввиду, что "
+"через ввод базового языка и перечня всех локалей (вроде «ru_RU.UTF-8») "
+"проекта (опционально) разделённых «;».\n"
+"Вы можете ввести тут другой язык кроме Английский(en), но имейте в виду, что "
 "все стандартные библиотеки OpenSCADA сформированы для базового языка "
-"Английский(en), т.е другой базовый язык будет портить эти БД при изменении!"
+"Английский(en), т. е. другой базовый язык будет портить эти БД при изменении!"
 
 msgid "dynamic translation"
 msgstr "динамический перевод"
@@ -2487,8 +2504,8 @@ msgid ""
 "List of the processing languages, in the two-character representation and "
 "separated by the character ';'."
 msgstr ""
-"Список обрабатываемых языков в двухсимвольном представлении и разделённые "
-"символом ';'."
+"Список обрабатываемых языков в двухсимвольном представлении и разделённых "
+"символом «;»."
 
 msgid "Source filter, check/fix, pass"
 msgstr "Фильтр источников, проверка/исправление, пропуск"
@@ -2500,7 +2517,6 @@ msgstr ""
 "Фильтр источников для ограничения работы менеджера некоторыми БД, источник "
 "должен просто содержать такую подстроку."
 
-#, fuzzy
 msgid ""
 "Enable for checking the base messages translation equality in different "
 "sources\n"
@@ -2510,19 +2526,17 @@ msgstr ""
 "Включить проверку на предмет одинаковости перевода базового сообщения в "
 "разных источниках\n"
 "и исправление на предмет: распространения перевода на пустые источники, "
-"очистки дублирования базовых сообщений и объединения базовых сообщений как "
-"переводы."
+"очистки дублирования базовых сообщений"
 
-#, fuzzy
 msgid "... and fixing by merging the base messages as the translations."
-msgstr "Объединение базового сообщения с переводом '%s' для '%s' > '%s'."
+msgstr "…и исправление путём объединения базовых сообщений как переводов."
 
 msgid ""
 "Pass the specified number of the table items from the top, useful for very "
 "big projects which are limited in time of the table complete processing."
 msgstr ""
 "Пропустить указанное количество элементов таблицы от начала, полезно для "
-"очень больших проектов которые ограничены во времени полной обработки "
+"очень больших проектов, которые ограничены во времени полной обработки "
 "таблицы."
 
 msgid "Remove from Trs"
@@ -2556,8 +2570,8 @@ msgid ""
 "To set up the processors you use, write a row of numbers separated by a ':' "
 "character."
 msgstr ""
-"Для указания используемых процессоров записывайте строку номеров разделённых "
-"символом ':'."
+"Для указания используемых процессоров записывайте строку номеров, разделённых "
+"символом «:»."
 
 msgid "Phase"
 msgstr "Фаза"
@@ -2620,7 +2634,7 @@ msgid "RT Round-robin"
 msgstr "РВ Round-robin"
 
 msgid "Style \"batch\""
-msgstr "Стиль \"batch\""
+msgstr "Стиль «batch»"
 
 #, c-format
 msgid "The task '%s' is missing."
@@ -2636,7 +2650,7 @@ msgid "SINGLELANGUAGE"
 msgstr "ОДНОЯЗЫЧНЫЙ"
 
 msgid "only use the already multilanguage DBs with their modification"
-msgstr "только использовать уже многоязычные БД с их модификацией"
+msgstr "использовать только уже многоязычные БД с их модификацией"
 
 msgid "MULTILANGUAGE-DYNAMIC"
 msgstr "МНОГОЯЗЫЧНЫЙ-ДИНАМИЧЕСКИЙ"
@@ -2649,7 +2663,7 @@ msgid ""
 "creating or modification the configuration DBs as multilanguage ones with "
 "the pointed base language '%s'"
 msgstr ""
-"создание или модификация конфигурационных БД как многоязычные с указанным "
+"создание или модификация конфигурационных БД как многоязычных с указанным "
 "базовым языком '%s'"
 
 #, c-format
@@ -2661,7 +2675,7 @@ msgid "Translation contexts %d."
 msgstr "Контекстов перевода %d."
 
 msgid "<<<SEVERAL VARIANTS>>>\n"
-msgstr ""
+msgstr "<<<НЕСКОЛЬКО ВАРИАНТОВ>>>\n"
 
 #, c-format
 msgid "Clearing the equel to base translation '%s' for '%s'."
@@ -2678,6 +2692,11 @@ msgid ""
 "So, remove the base message if that removed in the source code for tr() or "
 "ignore if the base is correct and it is equal to some translation."
 msgstr ""
+"Базовое сообщение '%s' находится только в исходном коде '%s (%s)' и не может "
+"быть изменено.\n"
+"Поэтому удалите базовое сообщение, если оно удалено в исходном коде для tr()"
+" или "
+"игнорируйте, если базовое сообщение верно и совпадает с некоторым переводом."
 
 #, c-format
 msgid "Merging the base message to the translation '%s' for '%s' > '%s'."
@@ -2687,7 +2706,7 @@ msgid "<<<Base changed>>>\n"
 msgstr "<<<База изменена>>>\n"
 
 msgid "Some fixes performed to the translation: "
-msgstr ""
+msgstr "Некоторые исправления, внесённые в перевод: "
 
 msgid "Transport type"
 msgstr "Тип транспорта"
@@ -2698,9 +2717,8 @@ msgstr "Транспортный протокол"
 msgid "To connect"
 msgstr "Подключаться"
 
-#, fuzzy
 msgid "Addition parameters"
-msgstr "Ошибка добавления параметра '%s'."
+msgstr "Дополнительные параметры"
 
 msgid "User that opens"
 msgstr "Открывающий пользователь"
@@ -2720,13 +2738,13 @@ msgstr "Пароль запросов"
 msgid "Level of lifting"
 msgstr "Уровень поднятия"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Error the output address '%s'!"
-msgstr "Ошибка удалённого хоста '%s'!"
+msgstr "Ошибка выходного адреса '%s'."
 
 #, c-format
 msgid "For %s"
-msgstr ""
+msgstr "Для %s"
 
 msgid "Error finding and creating new input transports."
 msgstr "Ошибка поиска и создания новых входных транспортов."
@@ -2753,7 +2771,7 @@ msgid ""
 "======================= Subsystem \"Transports\" options ==================\n"
 "\n"
 msgstr ""
-"====================== Опции подсистемы \"Транспорты\" ====================\n"
+"====================== Опции подсистемы «Транспорты» ====================\n"
 "\n"
 
 #, c-format
@@ -2761,17 +2779,18 @@ msgid "External hosts of %s"
 msgstr "Внешние хосты %s"
 
 msgid "Add host"
-msgstr ""
+msgstr "Добавить хост"
 
-#, fuzzy
 msgid "Remove host"
-msgstr "Удалить из Trs"
+msgstr "Удалить хост"
 
 msgid "User;System;User and System"
 msgstr "Пользов.;Системн.;Пользов. и Системн."
 
 msgid "Initial connection identifier to what bind for control."
 msgstr ""
+"Идентификатор первоначального подключения, к которому привязывается"
+" управление."
 
 msgid "New external host"
 msgstr "Новый внешний хост"
@@ -2794,7 +2813,7 @@ msgstr ""
 "========================== Опции модуля <%s:%s> ==========================\n"
 "------ Параметры модульной секции '%s' конфигурационного файла ------\n"
 "OutLifeTime  <секунд>   Время жизни выходного транспорта (по умолчанию 0 "
-"секунд), 0 - для выключения функции.\n"
+"секунд), 0 — для выключения функции.\n"
 "\n"
 
 msgid "Input transport"
@@ -2827,25 +2846,25 @@ msgstr "Отключено. "
 
 #, c-format
 msgid "Error deletion the node: %s"
-msgstr "Ошибка удаления узла: %s."
+msgstr "Ошибка удаления узла: %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "The initiative connection '%s' is not presented!"
-msgstr "Элемент '%s' отсутствует!"
+msgstr "Инициативное подключение '%s' отсутствует."
 
-#, fuzzy, c-format
+#, c-format
 msgid "Opening the file '%s' error '%s (%d)'!"
-msgstr "2:Ошибка открытия файла '%s': %s"
+msgstr "Ошибка открытия файла '%s' '%s (%d)'."
 
 #, c-format
 msgid "Writing the file %d error '%s (%d)'!"
-msgstr ""
+msgstr "Ошибка записи файла %d '%s (%d)'."
 
-#, fuzzy, c-format
+#, c-format
 msgid "Error connection the new associated node: %s"
 msgstr "Ошибка подключения нового назначенного узла: %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Error removing the associated node/connection: %s"
 msgstr "Ошибка удаления назначенного узла/подключения: %s"
 
@@ -2856,27 +2875,25 @@ msgid "Connect"
 msgstr "Подключение"
 
 msgid "Additional"
-msgstr ""
+msgstr "Дополнительно"
 
 msgid "Reset"
-msgstr ""
+msgstr "Сбросить"
 
 msgid "IO log"
 msgstr "Лог ВВ"
 
-#, fuzzy
 msgid "Log length, block limit, type, aggregation time"
-msgstr "Длина лога и ограничение блока"
+msgstr "Длина лога, ограничение блока, время агрегации"
 
-#, fuzzy
 msgid "Use zero (0) for the log disabling, -1 for writing to a file."
-msgstr "Используйте ноль для отключения лога."
+msgstr "Используйте ноль (0) для отключения лога, -1 для записи в файл."
 
 msgid "Binary & Text;Binary;Text"
-msgstr ""
+msgstr "Бинарный и текст;Бинарный;Текст"
 
 msgid "Aggregation time in seconds and zero disables its."
-msgstr ""
+msgstr "Время агрегации в секундах и ноль для её отключения."
 
 msgid "Log"
 msgstr "Лог"
@@ -2893,14 +2910,14 @@ msgstr "Установлено %s, последнее %s. "
 
 #, c-format
 msgid "Initiative connection ID '%s'. "
-msgstr ""
+msgstr "Идентификатор инициативного подключения '%s'. "
 
 #, c-format
 msgid "Transport protocol '%s' is missing"
 msgstr "Транспортный протокол '%s' отсутствует"
 
 msgid "Output transport: "
-msgstr "Выходной транспорт:"
+msgstr "Выходной транспорт: "
 
 msgid "Binary;Text(LF);Text(CR);Text(CR/LF)"
 msgstr "Бинарный;Текст(LF);Текст(CR);Текст(CR/LF)"
@@ -2921,7 +2938,7 @@ msgstr ""
 "ответа несколькими кусками.\n"
 "Без этого флага будет получен и отображён только первый кусок.\n"
 "При установке этого флага будет осуществлено ожидание всех кусков ответа, "
-"вплоть до отсутствия данных в течении таймаута дожидания транспорта."
+"вплоть до отсутствия данных в течении таймаута ожидания транспорта."
 
 msgid "Input buffer size, bytes"
 msgstr "Размер входного буфера, байт"
@@ -2931,7 +2948,7 @@ msgid ""
 "data - only to write."
 msgstr ""
 "Прямая установка размера входного буфера. Используйте 0 для отключения "
-"ожидания и чтения данных - только запись."
+"ожидания и чтения данных — только запись."
 
 msgid "Answer"
 msgstr "Ответ"
@@ -2962,11 +2979,10 @@ msgstr "Модуль не поддерживает функцию компиля
 
 #, c-format
 msgid "all %d, running %d, enabled %d%s"
-msgstr ""
+msgstr "всего %d, выполняется %d, включено %d%s"
 
-#, fuzzy
 msgid "Errors: "
-msgstr "Ошибка"
+msgstr "Ошибки: "
 
 msgid "Owner"
 msgstr "Владелец"
@@ -2979,10 +2995,10 @@ msgid ""
 "\"monospace\".\n"
 "\n"
 msgstr ""
-"============= Опции подсистемы \"Пользовательские интерфейсы\" ============\n"
+"============= Опции подсистемы «Пользовательские интерфейсы» ============\n"
 "---------- Параметры секции '%s' конфигурационного файла ----------\n"
-"FontSnthHglCode <шрифт>  Шрифт использованный в подсветке синтаксиса кода, "
-"по умолчанию \"monospace\".\n"
+"FontSnthHglCode <шрифт>  Шрифт, использованный в подсветке синтаксиса кода, "
+"по умолчанию «monospace».\n"
 "\n"
 
 msgid "Syntax highlight font for code"
@@ -3007,7 +3023,7 @@ msgstr "Логический"
 msgid "-select"
 msgstr "-выбор"
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Parameter attribute\n"
 "  ID: '%s'\n"
@@ -3020,7 +3036,8 @@ msgstr ""
 "  ID: '%s'\n"
 "  Имя: '%s'\n"
 "  Тип: '%s'\n"
-"  Только чтение: %d"
+"  Только чтение: %d\n"
+"  Временная метка: %s"
 
 msgid ""
 "\n"
@@ -3137,10 +3154,10 @@ msgid "Function '%s' is not supported!"
 msgstr "Функция '%s' не поддерживается!"
 
 msgid "Data Bases"
-msgstr "Базы Данных"
+msgstr "Базы данных"
 
 msgid "Data Acquisition"
-msgstr "Сбор Данных"
+msgstr "Сбор данных"
 
 #, c-format
 msgid "%s: No function set!"
@@ -3154,7 +3171,7 @@ msgid "Modules scheduler"
 msgstr "Диспетчер модулей"
 
 msgid "Transport Protocols"
-msgstr "Транспортные Протоколы"
+msgstr "Транспортные протоколы"
 
 msgid "Security"
 msgstr "Безопасность"
@@ -3172,10 +3189,10 @@ msgid "Input transport is not supported!"
 msgstr "Входной транспорт не поддерживается!"
 
 msgid "Output transport is not supported!"
-msgstr "Выходных транспорт не поддерживается!"
+msgstr "Выходной транспорт не поддерживается!"
 
 msgid "User Interfaces"
-msgstr "Интерфейсы Пользователя"
+msgstr "Интерфейсы пользователя"
 
 msgid "New project"
 msgstr "Новый проект"
@@ -3253,3 +3270,5 @@ msgstr "уже запущен."
 
 #~ msgid "Translation removed! Reload the base message."
 #~ msgstr "Перевод удалён! Перегрузите базовое сообщение."
+
+
